@@ -3,7 +3,12 @@
  */
 import { fetch } from './baseService';
 
-const loginApi = 'sys/login';                                            // 登录 method 'post'
+const loginApi = 'account/login';                                            // 登录 method 'post'
+const userDatilApi = 'account/getOperator';                                            // 登录 method 'post'
 
 // 登录
-export const login = (payload) => fetch.post(loginApi, payload);
+export const login = (payload) => fetch.get(loginApi,  { params: payload });
+
+
+// 用户详情
+export const getDEtail = (payload) => fetch.get(userDatilApi, { params: payload });

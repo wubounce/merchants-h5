@@ -1,20 +1,30 @@
 import axios from 'axios';
-import { MessageBox   } from 'mint-ui';
+import { Indicator, MessageBox } from 'mint-ui';
 import store from '../store';
 import { getToken } from '@/utils/tool';
-
-const baseUrl = process.env.NODE_ENV === 'production' ? '' : 'http://192.168.5.10:8090/ims/';
+import { qs } from 'qs';
+const baseUrl = process.env.NODE_ENV === 'production' ? '' : 'http://192.168.5.10:8089/merchant/';
 
 // 创建axios实例
 const http = axios.create({
   baseURL: baseUrl, // api的base_url
-  timeout: 5000 // 请求超时时间
+  timeout: 50000 // 请求超时时间
 });
 
 // request拦截器
 http.interceptors.request.use(config => {
-  if (store.getters.token) {
-    config.headers.Authorization = getToken(); // 让每个请求携带自定义token 请根据实际情况自行修改
+  console.log(config);
+  Indicator.open({
+    text: "加载中",
+    spinnerType: "fading-circle"
+  });
+  let token = getToken();
+  if (config.method === 'post' && config.headers['Content-Type'] !== 'multipart/form-data') {
+    config.params = qs.stringify(config.params);
+    config.headers['content-type'] = 'application/x-www-form-urlencoded';
+  }
+  if (token && config.headers['Content-Type'] !== 'multipart/form-data') {
+    config.params = Object.assign({},config.params,{token:token});
   }
   return config;
 }, error => {
@@ -26,6 +36,7 @@ http.interceptors.request.use(config => {
 http.interceptors.response.use(
   response => {
     if (response.status === 200) {
+      Indicator.close();
       return Promise.resolve(response.data);
     }else {
       // 50008:非法的token; 50012:其他客户端登录了;  50014:Token 过期了;
@@ -44,6 +55,7 @@ http.interceptors.response.use(
     }
   },
   error => {
+    Indicator.close();
     MessageBox.alert('服务器开小差了');
     return Promise.reject(error);
   }

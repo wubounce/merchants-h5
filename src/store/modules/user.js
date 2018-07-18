@@ -24,18 +24,17 @@ const user = {
 
   actions: {
     // 登录
-    login({ commit }, userInfo) {
-      setToken(userInfo.token);
-      setUser(userInfo.user);
-      commit('SET_TOKEN', userInfo.token);
-      commit('SET_NAME', userInfo.fullName);
-      commit('SET_ROLES', userInfo.roles);
-      commit('setUserInfo', userInfo.user);
-      return Promise.resolve();
+    login({ commit }, token) {
+      setToken(token);
+      commit('SET_TOKEN', token);
     },
 
     // 获取用户信息
-    getUser ({ state }) {
+    getUser ({ commit, state },userInfo) {
+      setUser(userInfo);
+      commit('SET_NAME', userInfo.userName);
+      commit('SET_ROLES', userInfo.roles);
+      commit('setUserInfo', userInfo);
       return Promise.resolve(state.userInfo);
     },
     // 前端 登出

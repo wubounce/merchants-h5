@@ -8,7 +8,8 @@ export default new Router({
   routes: [
     { path: "*", redirect: '/login' },
   	{ path: '/login', name: 'login', component: () => import('@/page/login') },
+  	{ path: '/reset', name: 'reset', component: () => import('@/page/reset/index') },
     { path: '/index', name: 'index', component: () => import('@/page/index/index') },
-    { path: '/report', name: 'report', component: () => import('@/page/report/report') }
+    { path: '/report', name: 'report', component: () => import('@/page/report/index') }
   ]
 });

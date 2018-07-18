@@ -51,17 +51,12 @@ export default {
   },
   mounted() {
     this.selfAdaption();
-    this.initbarChart();
-    this.initlineChart();
-    this.initpietypeChart();
-    this.initpiefunChart();
-  },
-  beforeDestroy() {
-    if (!this.barchart) {
-      return;
-    }
-    this.barchart.dispose();
-    this.barchart = null;
+    this.$nextTick(() => {
+      this.initbarChart();
+      this.initlineChart();
+      this.initpietypeChart();
+      this.initpiefunChart();
+    });
   },
   methods: {
     //echarts自适应
@@ -77,9 +72,9 @@ export default {
       }, 10);
     },
     initbarChart() {
-      this.barchart = echarts.init(document.getElementById('bar'));
+      let chart = echarts.init(document.getElementById('bar'));
       // 把配置和数据放这里
-      this.barchart.setOption({
+      chart.setOption({
         color: ['#3398DB'],
         tooltip: {
           trigger: 'axis',
@@ -149,9 +144,9 @@ export default {
       });
     },
     initlineChart() {
-      this.linechart = echarts.init(document.getElementById('line'));
+      let chart = echarts.init(document.getElementById('line'));
       // 把配置和数据放这里
-      this.linechart.setOption({
+      chart.setOption({
         title: {
             text: '收益收据'
         },
@@ -233,8 +228,8 @@ export default {
       });
     },
     initpietypeChart(){
-      this.pietypechart = echarts.init(document.getElementById('pietype'));
-      this.pietypechart.setOption({
+      let chart = echarts.init(document.getElementById('pietype'));
+      chart.setOption({
         tooltip: {
             trigger: 'item',
             formatter: "{a} <br/>{b}: {c} ({d}%)"
@@ -248,7 +243,6 @@ export default {
                 name:'脉冲',
                 icon : 'circle',
                 textStyle:{fontWeight:'normal', color:'#999'},
-                borderRadius:2
             },{
                 name:'串口',
                 icon : 'circle',
@@ -268,18 +262,19 @@ export default {
                       formatter: '{d}%',//模板变量有 {a}、{b}、{c}、{d}，分别表示系列名，数据名，数据值，百分比。{d}数据会根据value值计算百分比
                       color:'#333'
                   },
-                  emphasis: {
-                      show: true,
-                      textStyle: {
-                          fontSize: '14',
-                          fontWeight: 'normal'
-                      }
-                  }
+                  // emphasis: {
+                  //     show: true,
+                  //     textStyle: {
+                  //         fontSize: '14',
+                  //         fontWeight: 'normal'
+                  //     }
+                  // }
               },
               labelLine: {
                   normal: {
                       show: false,
-                      length:0.0001,
+                      length:7,
+                      length2:7,
                   }
               },
               data:[
@@ -292,8 +287,8 @@ export default {
       });
     },
     initpiefunChart(){
-      this.piefunchart = echarts.init(document.getElementById('piefun'));
-      this.piefunchart.setOption({
+      let chart = echarts.init(document.getElementById('piefun'));
+      chart.setOption({
         tooltip: {
             trigger: 'item',
             formatter: "{a} <br/>{b}: {c} ({d}%)"
@@ -338,18 +333,19 @@ export default {
                       formatter: '{d}%',//模板变量有 {a}、{b}、{c}、{d}，分别表示系列名，数据名，数据值，百分比。{d}数据会根据value值计算百分比
                       color:'#333'
                   },
-                  emphasis: {
-                      show: true,
-                      textStyle: {
-                          fontSize: '14',
-                          fontWeight: 'normal'
-                      }
-                  }
+                  // emphasis: {
+                  //     show: true,
+                  //     textStyle: {
+                  //         fontSize: '14',
+                  //         fontWeight: 'normal'
+                  //     }
+                  // }
               },
               labelLine: {
                   normal: {
                       show: false,
-                      length:0.0001,
+                      length:7,
+                      length2:7,
                   }
               },
               data:[
