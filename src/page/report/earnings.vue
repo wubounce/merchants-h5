@@ -117,7 +117,7 @@ export default {
     this.initChart();
   },
   created(){
-      this.getshopList();
+      // this.getshopList();
   },
   beforeDestroy() {
     if (!this.chart) {
@@ -318,6 +318,21 @@ export default {
   .echarts-warp {
     padding: 0.32rem;
   }
+  .echart-title {
+    font-size: 12px;
+    color:rgba(153,153,153,1);
+    text-align: center;
+    margin-top: 0.4rem;
+    span {
+      width: 0.2rem;
+      height: 0.2rem;
+      display: inline-block;;
+      background: #f60;
+      border-radius: 50%;
+      margin-right: 0.133333rem;
+      margin-left: 0.133333rem;
+    }
+  }
   .tabletit {
     background: #fff !important;
   }
@@ -396,6 +411,7 @@ export default {
       height: 0.746667rem;
       line-height: 0.746667rem;
       display: inline-block;
+      text-align: center;
     }
   }
   .timechoose {
