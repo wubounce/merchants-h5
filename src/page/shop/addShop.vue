@@ -7,7 +7,9 @@
         {{item.title}}
         <span>{{item.value == ''|| item.value==null? '暂无' : item.value}}</span>
       </li>
+      <p class="shopname-p"><span>详细地址</span><span><input type="text" class='addressInput' v-model="address" maxlength="12" placeholder="请填写详细地址"></span></p>
     </ul>
+    <li class="device" @click="addDevice">设备类型<span>{{machineTypeIds}}</span></li>
     <mt-picker class="picker" v-if="popupVisible" :slots="slots" @change="valuesChange" :showToolbar="true" ><p class="toolBar"><span @click="cancel">取消</span><span>店铺类型</span><span @click="shopTypeConfirm">确定</span></p></mt-picker>
   </section>
 </template>
@@ -17,6 +19,8 @@ export default {
   data() {
     return {
       shopName:'',
+      address:'',
+      machineTypeIds:'',
       title:'新增店铺',
       list: [
         {
@@ -102,33 +106,58 @@ export default {
     },
     cancel() {
       this.popupVisible = false;
+    },
+    addDevice() {
+      console.log(123);
     }
   },
   components:{
     QHeader
   }
 };
-<<<<<<< HEAD
 </script>
 <style lang="scss" scoped>
 .personal {
   .personal-list {
+    background-color: #fff;
     .shopname-p {
-      font-size: 0.32rem;
+      font-size: 0.35rem;
       border-bottom: 1px solid #dedede;
+      padding: 0.06rem;
       span {
         display: inline-block;
         &:first-child {
           margin-left: 0.3rem;
         }
         input {
-          margin-left:0.3rem;
+          margin-left:0.5rem;
           height: 1rem;
         }
+        ::-webkit-input-placeholder {
+          color: #dedede;
+          font-size: 0.35rem;
+        }
+        :-moz-placeholder {
+          /* Firefox 18- */
+          color: #dedede;
+          font-size: 0.35rem;
+        }
+        ::-moz-placeholder {
+          /* Firefox 19+ */
+          color: #dedede;
+          font-size: 0.35rem;
+        }
+        :-ms-input-placeholder {
+          color: #dedede;
+          font-size: 0.35rem;
+        }
+      }
+      &:last-child {
+        border-bottom: 1px solid #fff;
       }
     }
     .personal-item {
-      font-size: 0.32rem;
+      font-size: 0.35rem;
       padding: 0.3rem;
       border-bottom: 1px solid #dedede;
       background: url("../../../static/shop/right.png") no-repeat right
@@ -140,6 +169,22 @@ export default {
         font-size: 0.28rem;
         margin-right: 0.3rem;
       }
+    }
+  }
+  .device {
+    margin-top: 0.3rem;
+    font-size: 0.35rem;
+    padding: 0.3rem;
+    background-color: #fff;
+    border-bottom: 1px solid #dedede;
+    background: url("../../../static/shop/right.png") no-repeat right
+      0.3rem center;
+    background-size: 0.16rem 0.27rem;
+    span {
+      float: right;
+      color: #7f7f7f;
+      font-size: 0.28rem;
+      margin-right: 0.3rem;
     }
   }
   .picker {
@@ -165,6 +210,3 @@ export default {
   }
 }
 </style>
-=======
-</script>
->>>>>>> 54f8a390b552b205fcbb8bf6142ab33157bcea05
