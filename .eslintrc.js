@@ -39,5 +39,7 @@ module.exports = {
     // 禁止使用 console
     // @off console 的使用很常见
     'no-console': 0,
+    // // 关闭语句强制分号结尾
+    // "semi": [0],
   }
 }
