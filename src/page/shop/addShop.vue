@@ -108,6 +108,7 @@ export default {
     QHeader
   }
 };
+<<<<<<< HEAD
 </script>
 <style lang="scss" scoped>
 .personal {
@@ -164,3 +165,6 @@ export default {
   }
 }
 </style>
+=======
+</script>
+>>>>>>> 54f8a390b552b205fcbb8bf6142ab33157bcea05

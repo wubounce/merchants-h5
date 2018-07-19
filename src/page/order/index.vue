@@ -17,7 +17,7 @@
       <span class="ordernum-status">已支付</span>
     </section>
     <section class="order-list">  
-        <div class="title">紫金港路浙江大学时湖校区西区C4号<span class="go">icon</span></div>
+        <div class="title">紫金港路浙江大学时湖校区西区C4号<router-link :to="{ name: 'orderdetail'}" class="go">icon</router-link></div>
         <div class="detail">  
           <div class="orderpic"><img src="../../assets/img/home/icon_near2x.png" alt=""></div>
           <div class="content">
@@ -158,6 +158,7 @@ export default {
     }
     .go {
       float: right;
+      color: #D1D1D6;
     }
     .detail {
       display: flex;
