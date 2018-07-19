@@ -3,8 +3,8 @@
     
     <div class="page-header-main">
       <mt-header :title="title">
-        <router-link to="router.go(-1)" slot="left">
-          <mt-button icon="back"></mt-button>
+        <router-link to slot="left">
+          <mt-button icon="back" @click="$router.go(-1);"></mt-button>
         </router-link>
         <mt-button slot="right" icon="more"></mt-button>
       </mt-header>

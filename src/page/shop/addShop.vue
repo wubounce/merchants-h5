@@ -9,10 +9,10 @@ export default {
   data() {
     return {
       title:'新增店铺'
-    }
+    };
   },
   components:{
     QHeader
   }
-}
+};
 </script>

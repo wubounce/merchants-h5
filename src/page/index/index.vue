@@ -518,11 +518,13 @@ export default {
     float: right;
   }
 </style>
-<style> 
-.mint-header {
+<style lang="scss"> 
+.main {
+  .mint-header {
     background: #F2F2F2 !important;
   }
   .mint-popup {
     width: 100%;
   }
+}
 </style>

@@ -17,7 +17,7 @@ Vue.use(MintUI);
 
 Vue.config.productionTip = false;
 
-const whiteList = ['/login']; // 不重定向白名单
+const whiteList = ['/login','/reset']; // 不重定向白名单
 router.beforeEach((to, from, next) => {
   if (getToken()) {
       next();

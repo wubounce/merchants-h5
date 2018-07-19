@@ -1,8 +1,8 @@
 <template>
-<div>
+<div class="mang">
   <q-header :title="title"></q-header>
   <div class="alllist">
-    <router-link :to="{ name: 'order'}">
+    <router-link :to="{ name: 'shopList'}">
       <section class="order-list">  
           <div class="detail">  
             <div class="orderpic"><img src="../../../static/management/shop@2x.png" alt=""></div>
@@ -72,7 +72,7 @@
     </router-link>
   </div>
   <div class="alllist">
-    <router-link :to="{ name: 'order'}">
+    <router-link :to="{ name: 'member'}">
       <section class="order-list" style="border:none">  
           <div class="detail">  
             <div class="orderpic"><img src="../../../static/management/member@2x.png" alt=""></div>
@@ -166,7 +166,7 @@ export default {
   }
 </style>
 <style>
-  .mint-header {
+  .mang .mint-header {
     background: #fff !important;
     border-bottom:1px solid #DCE0E6;
   }
