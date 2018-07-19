@@ -9,11 +9,11 @@
 	        <img slot="icon" src="../assets/img/home/icon_near2x.png">
 	        报表
 	      </mt-tab-item>
-	      <mt-tab-item id="/">
+	      <mt-tab-item id="/management">
 	        <img slot="icon" src="../assets/img/home/icon_near2x.png">
 	        管理
 	      </mt-tab-item>
-	      <mt-tab-item id="/">
+	      <mt-tab-item id="/management">
 	        <img slot="icon" src="../assets/img/home/icon_near2x.png">
 	        我的
 	      </mt-tab-item>

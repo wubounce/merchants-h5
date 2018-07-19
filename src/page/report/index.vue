@@ -1,91 +1,79 @@
 <template>
 <div>
-  <div :class="className" :id="id" :style="{height:height,width:width}" ref="myEchart"></div>
+  <q-header :title="title"></q-header>
+  <mt-navbar class="page-part" v-model="selected">
+      <mt-tab-item id="1">收益</mt-tab-item>
+      <mt-tab-item id="2">退款</mt-tab-item>
+    </mt-navbar>
+    <mt-tab-container v-model="selected">
+      <mt-tab-container-item id="1">
+        <reporteaning></reporteaning>
+      </mt-tab-container-item>
+      <mt-tab-container-item id="2">
+        <refund></refund>
+      </mt-tab-container-item>
+    </mt-tab-container>
+ 
   <q-menu></q-menu>
 </div>
 </template>
 <script>
-// 引入 ECharts 主模块
-import echarts from 'echarts/lib/echarts';
-// 引入折线图
-import 'echarts/lib/chart/bar';
-// 引入提示框和图例组件
-import 'echarts/lib/component/tooltip';
-import 'echarts/lib/component/legendScroll';
 import QMenu from '@/components/menu';
+import QHeader from '@/components/header';
+import reporteaning from './earnings';
+import refund from './refund';
 export default {
-  props: {
-    className: {
-      type: String,
-      default: 'yourClassName'
-    },
-    id: {
-      type: String,
-      default: 'yourID'
-    },
-    width: {
-      type: String,
-      default: '100%'
-    },
-    height: {
-      type: String,
-      default: '500px'
-    }
-  },
   data() {
     return {
-      chart: null
+       title:'报表',
+       selected: '1'
     };
   },
-  mounted() {
-    this.initChart();
-  },
-  beforeDestroy() {
-    if (!this.chart) {
-      return;
-    }
-    this.chart.dispose();
-    this.chart = null;
+  created(){
   },
   methods: {
-    initChart() {
-      this.chart = echarts.init(this.$refs.myEchart);
-      // 把配置和数据放这里
-      this.chart.setOption({
-        color: ['#3398DB'],
-        tooltip: {
-          trigger: 'axis',
-          axisPointer: { // 坐标轴指示器，坐标轴触发有效
-            type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
-          }
-        },
-        grid: {
-          left: '3%',
-          right: '4%',
-          bottom: '3%',
-          containLabel: true
-        },
-        xAxis: [{
-          type: 'category',
-          data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-          axisTick: {
-            alignWithLabel: true
-          }
-        }],
-        yAxis: [{
-          type: 'value'
-        }],
-        series: [{
-          name: '直接访问',
-          type: 'bar',
-          barWidth: '60%',
-          data: [10, 52, 200, 334, 390, 330, 220]
-        }]
-      });
-    }
   },
   components:{
-    QMenu
+    QMenu,
+    QHeader,
+    reporteaning,
+    refund
   }
 };
 </script>
+<style lang="scss">
+  .echarts-warp {
+    padding: 0.32rem;
+  }
+  .echart {
+    border: 1px dashed #333;
+  }
+  .echart-title {
+    font-size: 12px;
+    color:rgba(153,153,153,1);
+    text-align: center;
+    margin-top: 0.4rem;
+    span {
+      width: 0.2rem;
+      height: 0.2rem;
+      display: inline-block;;
+      background: #f60;
+      border-radius: 50%;
+      margin-right: 0.133333rem;
+      margin-left: 0.133333rem;
+    }
+  }
+  .mint-header {
+    background: #F2F2F2 !important;
+  }
+  .tabletit {
+    background: #fff !important;
+  }
+  .mint-navbar{
+    height: 1.066667rem;
+    border:1px solid rgba(229,229,229,1);
+  }
+  .mint-tab-item-label {
+    font-size: 16px;
+  }
+</style>

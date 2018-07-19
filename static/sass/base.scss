@@ -3,8 +3,7 @@ html {
 }
 body {
   font: .28rem/1.428 "PingFang SC","Helvetica Neue",Helvetica,"Hiragino Sans GB","Microsoft YaHei",Arial,sans-serif;
-  color: #7f7f7f;
-  background: #F1F1F1;  
+  background: #F8F8F8;  
 }
 html,body {
   height: 100%;
@@ -38,4 +37,7 @@ input {
 }
 .select-popup {
   width: 100%;
+}
+a {
+  text-decoration:none;
 }

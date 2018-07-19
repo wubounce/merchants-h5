@@ -32,8 +32,8 @@ export default {
     data () {
       return {
         form: {
-          userName: '',
-          passWord: ''
+          userName: '18923842668',
+          passWord: '123456'
         }
       };
     },

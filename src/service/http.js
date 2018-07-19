@@ -13,7 +13,6 @@ const http = axios.create({
 
 // request拦截器
 http.interceptors.request.use(config => {
-  console.log(config);
   Indicator.open({
     text: "加载中",
     spinnerType: "fading-circle"
