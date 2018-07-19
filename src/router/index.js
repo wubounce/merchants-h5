@@ -14,5 +14,7 @@ export default new Router({
     { path: '/management', name: 'management', component: () => import('@/page/management/index') },
     { path: '/reportdetail', name: 'reportdetail', component: () => import('@/page/report/detail') },
     { path: '/order', name: 'order', component: () => import('@/page/order/index') }
+    { path: '/shoplist', name: 'shopList', component: () => import('@/page/shop/shopList') },
+    { path: '/addShop', name: 'addShop', component: () => import('@/page/shop/addShop') }
   ]
 });
