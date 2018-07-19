@@ -1,19 +1,19 @@
 <template>
-<div>
+<div class="report">
   <q-header :title="title"></q-header>
-  <mt-navbar class="page-part" v-model="selected">
-      <mt-tab-item id="1">收益</mt-tab-item>
-      <mt-tab-item id="2">退款</mt-tab-item>
-    </mt-navbar>
-    <mt-tab-container v-model="selected">
-      <mt-tab-container-item id="1">
-        <reporteaning></reporteaning>
-      </mt-tab-container-item>
-      <mt-tab-container-item id="2">
-        <refund></refund>
-      </mt-tab-container-item>
-    </mt-tab-container>
- 
+  <mt-navbar class="tab" v-model="selected">
+    <mt-tab-item id="1">收益</mt-tab-item>
+    <mt-tab-item id="2">退款</mt-tab-item>
+  </mt-navbar>
+  <mt-tab-container v-model="selected">
+    <mt-tab-container-item id="1">
+      <reporteaning></reporteaning>
+    </mt-tab-container-item>
+    <mt-tab-container-item id="2">
+      <refund></refund>
+    </mt-tab-container-item>
+  </mt-tab-container>
+  <div style="width:100%;height:1.73rem;"></div>
   <q-menu></q-menu>
 </div>
 </template>
@@ -41,39 +41,19 @@ export default {
   }
 };
 </script>
+<style lang="scss" scoped>
+  
+</style>
 <style lang="scss">
-  .echarts-warp {
-    padding: 0.32rem;
-  }
-  .echart {
-    border: 1px dashed #333;
-  }
-  .echart-title {
-    font-size: 12px;
-    color:rgba(153,153,153,1);
-    text-align: center;
-    margin-top: 0.4rem;
-    span {
-      width: 0.2rem;
-      height: 0.2rem;
-      display: inline-block;;
-      background: #f60;
-      border-radius: 50%;
-      margin-right: 0.133333rem;
-      margin-left: 0.133333rem;
-    }
-  }
-  .mint-header {
+  .report .mint-header {
     background: #F2F2F2 !important;
+    border-bottom:1px solid rgba(229,229,229,1);
   }
-  .tabletit {
-    background: #fff !important;
-  }
-  .mint-navbar{
-    height: 1.066667rem;
-    border:1px solid rgba(229,229,229,1);
-  }
-  .mint-tab-item-label {
-    font-size: 16px;
+  .tab {
+    border-bottom:1px solid rgba(229,229,229,1);
+    .mint-tab-item-label {
+      font-size: 16px;
+      color: #666;
+    }
   }
 </style>

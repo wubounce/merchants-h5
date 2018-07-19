@@ -1,74 +1,79 @@
-<!-- <template>
+<template>
   <div class="reset">
-    <mt-header title="忘记密码">
-      <router-link to="/" slot="left">
-        <mt-button icon="back"></mt-button>
-      </router-link>
-    </mt-header>
+    <q-header :title="title"></q-header>
     <div class="form-group">
       <input type="text" placeholder="请输入手机号码" v-model="reset.phone">
     </div>
     <div class="form-group">
-      <input type="text" placeholder="请输入手机验证码" v-model="reset.code">
-      <div class="r">
-        <p class="countdown" v-if="!btn">{{time}}s</p>
-        <p class="sendcode" @click="sendcode" v-if="btn">发送验证码</p>
+      <input type="text" placeholder="请输入验证码" v-model="reset.code">
+      <div class="verificode">
+        <p class="countdown" v-if="!btn">{{time}}s后重新获取</p>
+        <p class="sendcode" @click="sendcode" v-if="btn">获取验证码</p>
       </div>
     </div>
-    <div class="form-group">
-      <input type="text" placeholder="请输入新登录密码" v-model="reset.passWord">
-    </div>
     <p class="btn">
-      <Button @confirm="updatedConfirm" btn-type="default" btn-color="blue">确认修改并返回登录</Button>
+       <mt-button type="primary" class="btn-blue" @click.prevent="updatedConfirm">下一步</mt-button>
     </p>
   </div>
 </template>
 
 <script>
-  import {
-    api
-  } from "@/api/api";
-  import Button from "@/components/Button/Button";
+  // import {
+  //   api
+  // } from "@/api/api";
+  import { validatPhone } from '@/utils/validate';
+  import QHeader from '@/components/header';
   export default {
     data() {
       return {
         reset: {
           phone: "",
           code: "",
-          passWord: ""
         },
         timer: null,
         time: 60,
-        btn: true
+        btn: true,
+        title:'重置密码'
       };
     },
     methods: {
-      updatedConfirm() {},
+      validate() {
+        if (this.reset.phone === '') {
+          this.$toast({message: "请输入手机号码" });
+          return false;
+        }else if (!validatPhone(this.form.userName)) {
+          this.$toast({message: "请输入正确的手机号码" });
+          return false;
+        } 
+        return true;
+      },
       sendcode() {
-        this.http
-          .post(api.sendCode, {
-            phone: this.reset.phone,
-            type: 3,
-            templateId: "resetpwd"
-          })
-          .then(it => {
-            if (it.data.success) {
-              this.countdown();
-            } else {
-              this.$toast({
-                message: it.data.message,
-                position: "bottom",
-                duration: 3000
-              });
-            }
-          })
-          .catch(() => {
-            this.$toast({
-              message: "后台接口错误",
-              position: "bottom",
-              duration: 3000
-            });
-          });
+        if (this.validate()) {
+          // this.http
+          //   .post(api.sendCode, {
+          //     phone: this.reset.phone,
+          //     type: 3,
+          //     templateId: "resetpwd"
+          //   })
+          //   .then(it => {
+          //     if (it.data.success) {
+          //       this.countdown();
+          //     } else {
+          //       this.$toast({
+          //         message: it.data.message,
+          //         position: "bottom",
+          //         duration: 3000
+          //       });
+          //     }
+          //   })
+          //   .catch(() => {
+          //     this.$toast({
+          //       message: "后台接口错误",
+          //       position: "bottom",
+          //       duration: 3000
+          //     });
+          //   });
+        }
       },
       countdown() {
         this.timer = setInterval(() => {
@@ -80,42 +85,52 @@
       }
     },
     components: {
-      Button
+      QHeader
     }
   };
 </script>
 
 <style lang="scss" scoped>
   .reset {
+    background: #fff;
+     height: 100%;
     .form-group {
       position: relative;
-      border-bottom: 1px solid #dedede;
+      margin: 0 0.92rem;
+      height: 1.57rem;
+      border-bottom:1px solid rgba(229,229,229,1);
       input {
-        padding: 0.24rem;
+        height: 1.57rem;
+        font-size: 16px;
+        color: #1890FF;
       }
-      .r {
+      .verificode {
         position: absolute;
         right: 0.24rem;
         top: .07rem;
         p {
-          padding: 0.16rem;
-          margin: 0;
-          border-radius: 0.08rem;
-          line-height: 1;
+          line-height: 1.57rem;
+          font-size: 16px;
         }
         .countdown {
-          border: 1px solid #7f7f7f;
-          color: #7f7f7f;
+          color: #999;
         }
         .sendcode {
-          border: 1px solid #2c92fb;
-          color: #2c92fb;
+          color: #1890FF;
         }
       }
     }
     .btn {
-      margin: 0.5rem 0.55rem 0;
+      margin:1.47rem 0.92rem;
     }
   }
 </style>
- -->
+<style lang="scss">
+  .reset .mint-button-text {
+    font-size: 16px;
+  }
+  .reset .mint-button--primary {
+    display: block;
+    width: 100%;
+  }
+</style>

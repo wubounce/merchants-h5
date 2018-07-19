@@ -12,10 +12,19 @@ export default new Router({
     { path: '/index', name: 'index', component: () => import('@/page/index/index') },
     { path: '/report', name: 'report', component: () => import('@/page/report/index') },
     { path: '/management', name: 'management', component: () => import('@/page/management/index') },
+
     { path: '/reportdetail', name: 'reportdetail', component: () => import('@/page/report/detail') },
 
     // 设备管理
     { path: '/deviceMange', name: 'deviceMange', component: () => import('@/page/device/deviceMange/deviceMange') },
+
+
+    { path: '/member', name: 'member', component: () => import('@/page/member/index') },
+    { path: '/reportdetail', name: 'reportdetail', component: () => import('@/page/report/detail') },
+    { path: '/order', name: 'order', component: () => import('@/page/order/index') },
+    { path: '/orderdetail', name: 'orderdetail', component: () => import('@/page/order/orderdetail') },
+    { path: '/shoplist', name: 'shopList', component: () => import('@/page/shop/shopList') },
+    { path: '/addShop', name: 'addShop', component: () => import('@/page/shop/addShop') },
 
   ]
 });

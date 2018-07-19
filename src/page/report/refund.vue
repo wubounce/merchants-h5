@@ -10,7 +10,7 @@
   </div>
   <div class="echarts-warp">
     <div :class="className" :id="id" :style="{height:height,width:width}" ref="myEchart"></div>
-    <div class="echart-title"><span style="background:#1890FF"></span>收益金额<span style="background:#FACC14"></span>订单数量</div>
+    <div class="echart-title"><span style="background:#1890FF"></span>退款金额<span style="background:#FACC14"></span>订单数量</div>
   </div>
   <div class="tabledata">
     <div class="listcon">
@@ -117,7 +117,7 @@ export default {
     this.initChart();
   },
   created(){
-      this.getshopList();
+      // this.getshopList();
   },
   beforeDestroy() {
     if (!this.chart) {
@@ -318,8 +318,20 @@ export default {
   .echarts-warp {
     padding: 0.32rem;
   }
-  .echart {
-    border: 1px dashed #333;
+  .echart-title {
+    font-size: 12px;
+    color:rgba(153,153,153,1);
+    text-align: center;
+    margin-top: 0.4rem;
+    span {
+      width: 0.2rem;
+      height: 0.2rem;
+      display: inline-block;;
+      background: #f60;
+      border-radius: 50%;
+      margin-right: 0.133333rem;
+      margin-left: 0.133333rem;
+    }
   }
   .tabletit {
     background: #fff !important;
@@ -400,6 +412,7 @@ export default {
       height: 0.746667rem;
       line-height: 0.746667rem;
       display: inline-block;
+      text-align: center;
     }
   }
   .timechoose {

@@ -30,4 +30,8 @@ export function validatAlphabets(str) {
   const reg = /^[A-Za-z]+$/;
   return reg.test(str);
 }
+export function validatPhone(str) {
+  const reg = /^(13[0-9]|14[0-9]|15[0-9]|17[0-9]|18[0-9])\d{8}$/;
+  return reg.test(str);
+}
 

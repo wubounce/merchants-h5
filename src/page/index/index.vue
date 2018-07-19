@@ -2,7 +2,7 @@
   <div class="main">
     <q-header :title="title"></q-header>
     <div class="lineecharts-warp">
-      <div style="border: 1px dashed #333;">
+      <div>
         <div class="lineechart-title">
           <span class="linetitle">收益金额</span>
           <span class="linedata"><span class="linedatachoose linecurrent">今天</span><span class="linedatachoose">7天</span><span class="linedatachoose">30天</span></span>
@@ -13,27 +13,19 @@
     </div>
     <div class="pei-wrap">
         <div class="slectdata">
-          <span @click="popupVisible=true">{{currentTags?currentTags.shopName:'洗衣机'}}</span>
+          <span @click="machineVisible = true;">{{machinecurrentTags?machinecurrentTags:'洗衣机'}}</span>
+          <selectpickr :visible="machineVisible" :slots="machineSlots" @selectpicker="machineselectpicker" @onpickstatus="machineselectpickertatus"> </selectpickr>
+        </div>
         </div>
        <div class="piebox">
          <div class="pietype" id="pietype" :style="{height:pieheight,width:width}" ref="pietype"></div>
          <div class="piefun" id="piefun" :style="{height:pieheight,width:width}" ref="piefun"></div>
        </div>
-       <!--地址选择组件-->
-        <mt-popup v-model="popupVisible" position="bottom" >
-          <section class="shoppicker">
-            <div class="picker-toolbar">
-              <span class="mint-datetime-action mint-datetime-cancel" @click="popupVisible=false">取消</span>
-              <span class="mint-datetime-action mint-datetime-confirm" @click="onDateChange">确定</span>
-             </div>
-            <mt-picker :slots="shopSlots" ref="picker" valueKey="shopName" ></mt-picker>
-          </section>
-        </mt-popup>
-    </div>
     <div class="bar-wrap">
       <div class="">
         <span class="linetitle">设备监控<span  style="font-size: 14px;font-weight: 100;color: #3AA0FF;">(总设备100)</span></span>
-        <span class="equipment" @click="popupVisible=true">{{currentTags?currentTags.shopName:'全部'}}</span>
+        <span class="equipment" @click="equipmentVisible=true">{{equipmentcurrentTags?equipmentcurrentTags:'全部'}}</span>
+        <selectpickr :visible="equipmentVisible" :slots="equipmentSlots" @selectpicker="equipmentselectpicker" @onpickstatus="equipmentselectpickertatus"> </selectpickr>
       </div>
       <div class="bar" id="bar" :style="{height:height,width:width}" ref="bar"></div>
     </div>
@@ -52,6 +44,7 @@ import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/legendScroll';
 import QMenu from '@/components/menu';
 import QHeader from '@/components/header';
+import selectpickr from '@/components/selectPicker';
 
 export default {
   props: {
@@ -88,7 +81,27 @@ export default {
       pietypechart: null,
       piefunchart: null,
       popupVisible:false,
-      currentTags:null
+      machinecurrentTags:null,
+      machineVisible:false,
+      machineSlots:[
+        {
+            flex: 1,
+            values: ['洗衣机','吹风机'],
+            className: 'slot1',
+            textAlign: 'center'
+          }
+      ],
+      equipmentVisible:false,
+      equipmentcurrentTags:null,
+       equipmentSlots:[
+        {
+            flex: 1,
+            values: ['运行中','离线','故障'],
+            className: 'slot1',
+            textAlign: 'center'
+          }
+      ],
+
     };
   },
   mounted() {
@@ -398,22 +411,33 @@ export default {
           }
         ]
       });
-    }
+    },
+    machineselectpicker(data){
+      this.machinecurrentTags = data;
+    },
+    machineselectpickertatus(data){
+      this.machineVisible = data;
+    },
+    equipmentselectpicker(data){
+      this.equipmentcurrentTags = data;
+    },
+    equipmentselectpickertatus(data){
+      this.equipmentVisible = data;
+    },
   },
   components:{
     QMenu,
     QHeader,
-
+    selectpickr
   }
 };
 </script>
-<style type="text/css" lang="less" scoped>
+<style type="text/css" lang="scss" scoped>
  .main {
   height: 100%;
  }
   .lineecharts-warp {
       padding: 0.32rem;
-     
       background: #fff;
   }
   .lineechart-title {
@@ -470,17 +494,15 @@ export default {
   .piebox {
     display: flex;
     text-align: left;
+    background: #fff;
   }
   .piebox>div {
     flex: 1;
   }
-  .piefun {
-    border: 1px dashed #333;
-  }
   .bar-wrap {
     background: #fff;
     margin-top: 0.266667rem;
-    margin-bottom: 1.733333rem;
+    margin-bottom: 1.73rem;
     padding: 0.32rem;
   }
   .equipment {
@@ -496,8 +518,13 @@ export default {
     float: right;
   }
 </style>
-<style> 
-.mint-header {
+<style lang="scss"> 
+.main {
+  .mint-header {
     background: #F2F2F2 !important;
   }
+  .mint-popup {
+    width: 100%;
+  }
+}
 </style>
