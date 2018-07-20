@@ -163,7 +163,7 @@ export default {
           alert('该功能的实现依赖接口,接口暂无T^T');
           break;
         case 2:
-          //this.go()
+          this.go("mapSearch");
           break;
       }
     },
