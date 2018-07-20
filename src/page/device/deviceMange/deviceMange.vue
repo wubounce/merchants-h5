@@ -4,7 +4,6 @@
     <div class="search">
       <d-search></d-search>
     </div>
-
   </section>
 </template>
 <script>
@@ -13,7 +12,7 @@
   export default {
     data() {
       return {
-        title: '设备管理'
+        title: '设备管理',
       };
     },
     mounted() {

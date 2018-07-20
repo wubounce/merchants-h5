@@ -1,6 +1,5 @@
 <template>
   <div>
-    
     <div class="page-header-main">
       <mt-header :title="title">
         <router-link to slot="left">

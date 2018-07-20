@@ -17,10 +17,13 @@ export default new Router({
 
     // 设备管理
     { path: '/deviceMange', name: 'deviceMange', component: () => import('@/page/device/deviceMange/deviceMange') },
+    {path: '/batchFuntionSet',name: 'batchFuntionSet',component: ()=>import('@/page/device/batchFuntionSet/batchFuntionSet')},
+    { path: '/addDevice', name: 'addDevice', component: () => import('@/page/device/addDevice/addDevice') },
+    { path: '/editDevice', name: 'editDevice', component: () => import('@/page/device/editDevice/editDevice') },
+    { path: '/deviceDetail', name: 'deviceDetail', component: () => import('@/page/device/deviceDetail/deviceDetail') },
 
 
     { path: '/member', name: 'member', component: () => import('@/page/member/index') },
-    { path: '/reportdetail', name: 'reportdetail', component: () => import('@/page/report/detail') },
     { path: '/order', name: 'order', component: () => import('@/page/order/index') },
     { path: '/orderdetail', name: 'orderdetail', component: () => import('@/page/order/orderdetail') },
     { path: '/shoplist', name: 'shopList', component: () => import('@/page/shop/shopList') },
