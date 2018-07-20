@@ -14,7 +14,7 @@ export default {
   },
   data() {
     return {
-      x:'../../../static/image/center/add.png'
+      x:'../../../static/shop/add.png'
     };
   },
   methods: {
@@ -64,9 +64,9 @@ export default {
     border: 0;
     display: inline-block;
     .upLoad {
-      width: 2.23rem;
-      height: 2.23rem; 
-      border-radius: 10px;
+      width: 2rem;
+      height: 2rem; 
+      border-radius: 5px;
     }
   }
 }
