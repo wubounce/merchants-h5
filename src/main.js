@@ -15,7 +15,8 @@ import { getToken } from '@/utils/tool';
 
 Vue.use(MintUI);
 
-Vue.config.productionTip = false;
+Vue.config.productionTip = true;
+Vue.config.devtools = true;
 
 const whiteList = ['/login','/reset','/confimPwd']; // 不重定向白名单
 router.beforeEach((to, from, next) => {

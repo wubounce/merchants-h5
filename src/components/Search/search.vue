@@ -45,7 +45,7 @@
     },
     methods: {
       fetchData: function (e) {
-
+        console.log('获取数据')
       },
       selectClick: function (index) {
         this.keyword = this.myData[index];
@@ -54,15 +54,10 @@
       clearInput: function () {
         this.keyword = "";
         this.isResult = false
-      },
-      inputHandle(e) {
-        debugger
-        console.log(e)
       }
     },
     watch: {
-      keyword: function (val) {
-        debugger
+      keyword: function (newVal) {
         if (newVal) {
           delay(() => {
             this.fetchData();
@@ -70,15 +65,6 @@
           this.isResult = true
         }
       },
-      myData: function (val) {
-        debugger
-        if (newVal) {
-          delay(() => {
-            this.fetchData();
-          }, 300);
-          this.isResult = true
-        }
-      }
     }
   };
 

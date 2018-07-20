@@ -6,11 +6,11 @@ import {
 } from './baseService';
 
 //api
-const loginApi = 'account/login'; // 登录 method 'post'
+const deviceApi = 'account/login'; // 登录 method 'post'
 
 
 // 登录
-export const login = (payload) => fetch.get(loginApi, {
+export const device = (payload) => fetch.get(deviceApi, {
   params: payload
 });
 

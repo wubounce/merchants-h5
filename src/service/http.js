@@ -1,10 +1,10 @@
 import axios from 'axios';
 import { Indicator, MessageBox } from 'mint-ui';
-import store from '../store';
+// import store from '../store';
 import { getToken } from '@/utils/tool';
 import { qs } from 'qs';
-const baseUrl = process.env.NODE_ENV === 'production' ? '' : 'http://192.168.5.10:8089/merchant/';
-
+const baseUrl = process.env.NODE_ENV === 'production' ? '' : 'http://192.168.5.10:8089/merchant/'; 
+// const baseUrl = process.env.NODE_ENV === 'production' ? '' : 'http://47.97.188.150:8088/'; 
 // 创建axios实例
 const http = axios.create({
   baseURL: baseUrl, // api的base_url
@@ -32,32 +32,32 @@ http.interceptors.request.use(config => {
 });
 
 // respone拦截器
-http.interceptors.response.use(
-  response => {
-    if (response.status === 200) {
-      Indicator.close();
-      return Promise.resolve(response.data);
-    }else {
-      // 50008:非法的token; 50012:其他客户端登录了;  50014:Token 过期了;
-      if (response.data.code === 50008 || response.data.code === 50012 || response.data.code === 50014) {
-        MessageBox.confirm('你已被登出，可以取消继续留在该页面，或者重新登录', '确定登出', {
-          confirmButtonText: '重新登录',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          store.dispatch('FedLogOut').then(() => {
-            location.reload();// 为了重新实例化vue-router对象 避免bug
-          });
-        });
-      }
-      return Promise.reject(response.data);
-    }
-  },
-  error => {
-    Indicator.close();
-    MessageBox.alert('服务器开小差了');
-    return Promise.reject(error);
-  }
-);
+// http.interceptors.response.use(
+//   response => {
+//     if (response.status === 200) {
+//       Indicator.close();
+//       return Promise.resolve(response.data);
+//     }else {
+//       // 50008:非法的token; 50012:其他客户端登录了;  50014:Token 过期了;
+//       if (response.data.code === 50008 || response.data.code === 50012 || response.data.code === 50014) {
+//         MessageBox.confirm('你已被登出，可以取消继续留在该页面，或者重新登录', '确定登出', {
+//           confirmButtonText: '重新登录',
+//           cancelButtonText: '取消',
+//           type: 'warning'
+//         }).then(() => {
+//           store.dispatch('FedLogOut').then(() => {
+//             location.reload();// 为了重新实例化vue-router对象 避免bug
+//           });
+//         });
+//       }
+//       return Promise.reject(response.data);
+//     }
+//   },
+//   error => {
+//     Indicator.close();
+//     MessageBox.alert('服务器开小差了');
+//     return Promise.reject(error);
+//   }
+// );
 
 export default http;
