@@ -41,6 +41,9 @@ export default {
   },
   components:{
     QHeader
+  },
+  created() {
+    alert('UI未定稿，此页待设计图确定再行开发');
   }
 };
 </script>

@@ -28,6 +28,8 @@ export default new Router({
     { path: '/orderdetail', name: 'orderdetail', component: () => import('@/page/order/orderdetail') },
     { path: '/shoplist', name: 'shopList', component: () => import('@/page/shop/shopList') },
     { path: '/addShop', name: 'addShop', component: () => import('@/page/shop/addShop') },
-    { path: '/mapSearch', name: 'mapSearch', component: () => import('@/page/shop/mapSearch') }
+    { path: '/mapSearch', name: 'mapSearch', component: () => import('@/page/shop/mapSearch') },
+    { path: '/shopDetail', name: 'shopDetail', component: () => import('@/page/shop/shopDetail') },
+    { path: '/editShop', name: 'editShop', component: () => import('@/page/shop/editShop') }
   ]
 });
