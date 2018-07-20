@@ -26,6 +26,7 @@
       </div>
     </form>
   </div>
+  <footer class="company">企鹅商家管理后台</footer>
 </div>
 </template>
 
@@ -100,7 +101,6 @@ export default {
         this.typepwd = !this.typepwd;
       },
       goToReset() {
-        console.log(32142342);
         this.$router.push({name:'reset'});
       }
     },
@@ -151,7 +151,7 @@ export default {
         color:#979797;
       }
       .reset {
-        font-size: 0.24rem;
+        font-size: 14px;
         line-height: 1;
         color: #999;
         margin-top: 0.27rem;
@@ -160,6 +160,15 @@ export default {
       }
     }
   }
+}
+.company {
+  text-align: center;
+  font-size:14px;
+  color:#999;
+  position:absolute;
+  bottom: 0.53rem;
+  left: 50%;
+  transform: translateX(-50%);
 }
 </style>
 <style lang="scss">

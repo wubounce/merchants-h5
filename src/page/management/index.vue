@@ -16,7 +16,7 @@
     </router-link>
   </div>
   <div class="alllist">
-    <router-link :to="{ name: 'order'}">
+    <router-link :to="{ name: 'deviceMange'}">
       <section class="order-list">  
           <div class="detail">  
             <div class="orderpic"><img src="../../../static/management/machine@2x.png" alt=""></div>

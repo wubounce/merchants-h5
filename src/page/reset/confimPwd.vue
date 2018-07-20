@@ -2,33 +2,26 @@
   <div class="reset">
     <q-header :title="title"></q-header>
     <div class="form-group">
-      <input type="text" placeholder="请输入手机号码" v-model="reset.phone" require>
+      <input type="text" placeholder="请输入新密码" v-model="reset.password">
     </div>
     <div class="form-group">
-      <input type="text" placeholder="请输入验证码" v-model="reset.code" require>
-      <div class="verificode">
-        <p class="countdown" v-if="!btn">{{time}}s后重新获取</p>
-        <p class="sendcode" @click="sendcode" v-if="btn">获取验证码</p>
-      </div>
+      <input type="text" placeholder="请确认新密码" v-model="reset.newpassword">
     </div>
     <p class="btn">
-       <mt-button type="primary" class="btn-blue" @click.prevent="gotonext">下一步</mt-button>
+       <mt-button type="primary" class="btn-blue" @click.prevent="updatedConfirm">确定</mt-button>
     </p>
   </div>
 </template>
 
 <script>
-  // import {
-  //   api
-  // } from "@/api/api";
   import { validatPhone } from '@/utils/validate';
   import QHeader from '@/components/header';
   export default {
     data() {
       return {
         reset: {
-          phone: "",
-          code: "",
+          password: '',
+          newpassword: '',
         },
         timer: null,
         time: 60,
@@ -36,20 +29,23 @@
         title:'重置密码'
       };
     },
+    created(){
+      // let query = this.$route.query;
+      // console.log(query);
+    },
     methods: {
-      validatePhone() {
-        if (this.reset.phone === '') {
-          this.$toast({message: "请输入手机号码" });
+      validate() {
+        if (this.reset.password === '') {
+          this.$toast({message: "请输入新密码" });
           return false;
-        }else if (!validatPhone(this.reset.phone)) {
+        }else if (!validatPhone(this.form.userName)) {
           this.$toast({message: "请输入正确的手机号码" });
           return false;
         } 
         return true;
-      },          
+      },
       sendcode() {
-        if (this.validatePhone()) {
-
+        if (this.validate()) {
           // this.http
           //   .post(api.sendCode, {
           //     phone: this.reset.phone,
@@ -76,23 +72,6 @@
           //   });
         }
       },
-      countdown() {
-        this.timer = setInterval(() => {
-          if (--this.time <= 0) {
-            clearInterval(this.timer);
-            this.btn = true;
-          }
-        }, 1000);
-      },
-      gotonext(){
-        if (this.validatePhone()) {
-          if (this.reset.code === '') {
-            this.$toast({message: "请输入验证码" });
-            return false;
-          }
-          this.$router.push({name:'confimPwd',query:{phone:this.reset.phone,code:this.reset.code}});
-        }
-      }
     },
     components: {
       QHeader

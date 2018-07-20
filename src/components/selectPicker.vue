@@ -6,7 +6,7 @@
         <span class="mint-datetime-action mint-datetime-cancel" @click="ishow=false">取消</span>
         <span class="mint-datetime-action mint-datetime-confirm" @click="onDateChange">确定</span>
        </div>
-      <mt-picker :slots="datalist" ref="picker" valueKey="valueKey" ></mt-picker>
+      <mt-picker :slots="datalist" ref="picker" :valueKey="param"></mt-picker>
     </section>
   </mt-popup>
 </div>

@@ -6,6 +6,7 @@
     </div>
     <div class="slectdata shopchoose">
       <span @click="popupVisible=true">{{currentTags?currentTags.shopName:'请选择店铺'}}</span>
+      <selectpickr :visible="popupVisible" :slots="shopSlots" :valueKey="shopName" @selectpicker="shopselectpicker" @onpickstatus="shopselectpickertatus"> </selectpickr>
     </div>
   </div>
   <div class="echarts-warp">
@@ -51,16 +52,6 @@
   </div>
   <mt-datetime-picker ref="picker2" type="date" v-model="value2" @confirm="handleChange"></mt-datetime-picker>
   <mt-datetime-picker ref="picker3" type="date" v-model="value3" @confirm="handleChange"></mt-datetime-picker>
- <!--地址选择组件-->
-  <mt-popup v-model="popupVisible" position="bottom" >
-    <section class="shoppicker">
-      <div class="picker-toolbar">
-        <span class="mint-datetime-action mint-datetime-cancel" @click="popupVisible=false">取消</span>
-        <span class="mint-datetime-action mint-datetime-confirm" @click="onDateChange">确定</span>
-       </div>
-      <mt-picker :slots="shopSlots" ref="picker" valueKey="shopName" ></mt-picker>
-    </section>
-  </mt-popup>
 </div>
 </template>
 <script>
@@ -73,6 +64,7 @@ import 'echarts/lib/chart/line';
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/legendScroll';
 import { shopList } from '@/service/report';
+import selectpickr from '@/components/selectPicker';
 export default {
   name:'report-eaning',
   props: {
@@ -100,10 +92,13 @@ export default {
       value3: null,
       searchtime:null,
       searchtime2:null,
+      shopName:'shopName',
       shopSlots:[
         {
             flex: 1,
-            values: [],
+            values: [
+              {shopName:'企鹅一号店',id:12}
+            ],
             className: 'slot1',
             textAlign: 'center'
           }
@@ -305,12 +300,15 @@ export default {
       this.searchtime = this.value2 ? moment(this.value2).format('YYYY-MM-DD'):'';
       this.searchtime2 = this.value3 ? moment(this.value3).format('YYYY-MM-DD'):'';
     },
-    onDateChange() {
-      this.currentTags =this.$refs.picker.getValues()[0];
-      this.popupVisible=false;
-    }
+    shopselectpicker(data){
+      this.currentTags = data;
+    },
+    shopselectpickertatus(data){
+      this.popupVisible = data;
+    },
   },
   components:{
+    selectpickr
   }
 };
 </script>
