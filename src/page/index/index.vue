@@ -156,7 +156,6 @@ export default {
           data : ['03:00','06:00','09:00','12:00','15:00','18:00','21:00','24:00'],
           axisLabel: {
             textStyle: {color: '#999'},
-            interval: 0
           },
           axisLine:{
             show:false,
@@ -182,7 +181,10 @@ export default {
               show: false
           },
           axisLabel: {
-            textStyle: {color: '#999'}
+            textStyle: {color: '#999'},
+            formatter: function (value) {           
+              return value.toFixed(2);      
+            }   
           },
           splitLine:{  
             show:true,
