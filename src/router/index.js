@@ -32,6 +32,14 @@ export default new Router({
     { path: '/addShop', name: 'addShop', component: () => import('@/page/shop/addShop') },
     { path: '/mapSearch', name: 'mapSearch', component: () => import('@/page/shop/mapSearch') },
     { path: '/shopDetail', name: 'shopDetail', component: () => import('@/page/shop/shopDetail') },
-    { path: '/editShop', name: 'editShop', component: () => import('@/page/shop/editShop') }
+    { path: '/editShop', name: 'editShop', component: () => import('@/page/shop/editShop') },
+
+    // 我的
+    { path: '/user', name: 'user', component: () => import('@/page/user/user') },
+
+    //钱包
+    { path: '/wallet', name: 'wallet', component: () => import('@/page/wallet/wallet') },
+    { path: '/accountList', name: 'accountList', component: () => import('@/page/wallet/accountList') },
+
   ]
 });

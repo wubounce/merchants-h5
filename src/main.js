@@ -54,3 +54,9 @@ new Vue({
   components: { App },
   template: '<App/>'
 });
+//v-title
+Vue.directive('title', {
+  inserted: function (el, binding) {
+    document.title = binding.value;
+  }
+});

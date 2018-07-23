@@ -13,7 +13,7 @@
 	        <img slot="icon" src="../assets/img/home/icon_near2x.png">
 	        管理
 	      </mt-tab-item>
-	      <mt-tab-item id="/management">
+	      <mt-tab-item id="/user">
 	        <img slot="icon" src="../assets/img/home/icon_near2x.png">
 	        我的
 	      </mt-tab-item>
