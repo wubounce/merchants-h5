@@ -13,12 +13,27 @@ import store from './store';
 
 import { getToken } from '@/utils/tool';
 
+import VueAMap from 'vue-amap';
+Vue.use(VueAMap);
+import VueAwesomeSwiper from 'vue-awesome-swiper';
+Vue.use(VueAwesomeSwiper);
+import 'swiper/dist/css/swiper.css';
+// 初始化vue-amap
+VueAMap.initAMapApiLoader({
+// 高德的key
+key: 'c6456d57a6cac4a772d3ef0f25cceccb',
+// 插件集合
+plugin: ['AMap.Autocomplete', 'AMap.PlaceSearch', 'AMap.Scale', 'AMap.OverView', 'AMap.ToolBar', 'AMap.MapType', 'AMap.PolyEditor', 'AMap.CircleEditor'],
+// 高德 sdk 版本，默认为 1.4.4
+v: '1.4.4'
+});
+
 Vue.use(MintUI);
 
 Vue.config.productionTip = true;
 Vue.config.devtools = true;
 
-const whiteList = ['/login','/reset']; // 不重定向白名单
+const whiteList = ['/login','/reset','/confimPwd']; // 不重定向白名单
 router.beforeEach((to, from, next) => {
   if (getToken()) {
       next();
@@ -41,4 +56,10 @@ new Vue({
   store,
   components: { App },
   template: '<App/>'
+});
+//v-title
+Vue.directive('title', {
+  inserted: function (el, binding) {
+    document.title = binding.value;
+  }
 });

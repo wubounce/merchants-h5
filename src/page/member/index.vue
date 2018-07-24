@@ -1,35 +1,35 @@
 <template>
 <div class="member">
   <q-header :title="title"></q-header>
-  <div class="momber-wrap">
-    <div class="name">Janet</div>
-    <div class="phone">
-      <div>19420441735 </div>
-      <div><mt-switch v-model="value" class="check-switch"></mt-switch></div>
+  <div class="meber-list">
+    <div class="momber-wrap">
+      <div class="name">
+        <router-link :to="{name:'detailMember'}">
+          <p>Janet</p><p class="phonenum">19420441735 </p>
+        </router-link>
+      </div>
+      <div class="phone">
+        <div class="right"><mt-switch v-model="value" class="check-switch"></mt-switch></div>
+      </div>
     </div>
+    <p class="memberdesc">权限：首页，报表，店铺新增</p>
   </div>
-  <div class="momber-wrap">
-    <div class="name">Janet</div>
-    <div class="phone">
-      <div>19420441735 </div>
-      <div><mt-switch v-model="value" class="check-switch"></mt-switch></div>
+  <div class="meber-list">
+    <div class="momber-wrap">
+      <div class="name">
+        <router-link :to="{name:'detailMember'}">
+          <p>Janet</p><p class="phonenum">19420441735 </p>
+        </router-link>
+      </div>
+      <div class="phone">
+        <div class="right"><mt-switch v-model="value" class="check-switch"></mt-switch></div>
+      </div>
     </div>
+    <p class="memberdesc">权限：首页，报表，店铺新增</p>
   </div>
-  <div class="momber-wrap">
-    <div class="name">Janet</div>
-    <div class="phone">
-      <div>19420441735 </div>
-      <div><mt-switch v-model="value" class="check-switch"></mt-switch></div>
-    </div>
-  </div>
-  <div class="momber-wrap">
-    <div class="name">Janet</div>
-    <div class="phone">
-      <div>19420441735 </div>
-      <div><mt-switch v-model="value" class="check-switch"></mt-switch></div>
-    </div>
-  </div>
-  <div class="addmember">
+
+
+  <div class="addmember" @click="addmemeber">
     <span class="order-action iconfont icon-nextx"></span><br>
     <span>人员</span>
   </div>
@@ -50,7 +50,9 @@ export default {
   created(){
   },
   methods: {
-    
+    addmemeber(){
+      this.$router.push({name:'addMember'});
+    }
   },
   components:{
     QHeader,
@@ -58,27 +60,41 @@ export default {
 };
 </script>
 <style type="text/css" lang="less" scoped>
+  .meber-list {
+    padding:0.21rem 0.4rem;
+    background: #fff;
+    margin-bottom: 0.21rem;
+  }
   .momber-wrap {
-    height: 1.65rem;
-    line-height: 1.65rem;
     display: flex;
-    padding:0 0.4rem;
     font-size: 16px;
     color: #333;
     background: #fff;
-    margin-bottom: 0.13rem;
-    > div {
+    margin-bottom: 0.21rem;
+    .name , .phone {
       flex: 1;
     }
+  }
+  .name a {
+    color: #333;
   }
   .phone {
-    display: flex;
-    >div {
-      flex: 1;
+    .right {
+      float: right;
     }
   }
+  .phonenum {
+    font-size: 16px;
+    color: #999;
+  }
+  .memberdesc {
+    border-top:1px solid #DFE6FF;
+    font-size: 14px;
+    color: #999;
+    padding-top: 0.17rem;
+  }
   .check-switch {
-    margin-top: 0.37rem;
+    margin-top: 0.16rem;
     margin-left: 0.27rem;
   }
   .addmember {

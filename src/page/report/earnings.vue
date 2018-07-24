@@ -1,11 +1,12 @@
 <template>
-<div>
+<div class="earnings">
   <div class="search">
     <div class="slectdata timechoose">
-      <span @click="open('picker2')">{{searchtime}}</span>至<span @click="open('picker3')">{{searchtime2}}</span>
+      <span @click="open('picker2')">{{startDate}}</span>至<span @click="open('picker3')">{{endDate}}<i class="iconfont icon-nextx select-back"></i></span>
     </div>
     <div class="slectdata shopchoose">
-      <span @click="popupVisible=true">{{currentTags?currentTags.shopName:'请选择店铺'}}</span>
+      <span @click="popupVisible=true">{{currentTags?currentTags.shopName:'全部'}}<i class="iconfont icon-nextx select-back"></i></span>
+      <selectpickr :visible="popupVisible" :slots="shopSlots" :valueKey="shopName" @selectpicker="shopselectpicker" @onpickstatus="shopselectpickertatus"> </selectpickr>
     </div>
   </div>
   <div class="echarts-warp">
@@ -20,7 +21,7 @@
     </div>
     <div class="tableearn">
       <div class="listcon tableearn-list">
-        <router-link class="detail" to="/reportdetail" >
+        <router-link class="detail" :to="{name:'reportdetail', query:{date:'2018-06-04',type:1}}" >
           <span class="listtime">2018-06-04</span>
           <span>100</span>
           <span>300.00</span>
@@ -49,30 +50,24 @@
       </div>
     </div>
   </div>
-  <mt-datetime-picker ref="picker2" type="date" v-model="value2" @confirm="handleChange"></mt-datetime-picker>
-  <mt-datetime-picker ref="picker3" type="date" v-model="value3" @confirm="handleChange"></mt-datetime-picker>
- <!--地址选择组件-->
-  <mt-popup v-model="popupVisible" position="bottom" >
-    <section class="shoppicker">
-      <div class="picker-toolbar">
-        <span class="mint-datetime-action mint-datetime-cancel" @click="popupVisible=false">取消</span>
-        <span class="mint-datetime-action mint-datetime-confirm" @click="onDateChange">确定</span>
-       </div>
-      <mt-picker :slots="shopSlots" ref="picker" valueKey="shopName" ></mt-picker>
-    </section>
-  </mt-popup>
+  <mt-datetime-picker ref="picker2" type="date" v-model="searchStartDate" @confirm="handleChange"></mt-datetime-picker>
+  <mt-datetime-picker ref="picker3" type="date" v-model="searchEndDate" @confirm="handleChange"></mt-datetime-picker>
 </div>
 </template>
 <script>
-// 引入 ECharts 主模块
+
+import qs from 'qs';
 import moment from 'moment';
+// 引入 ECharts 主模块
 import echarts from 'echarts/lib/echarts';
 // 引入折线图
 import 'echarts/lib/chart/line';
 // 引入提示框和图例组件
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/legendScroll';
-import { shopList } from '@/service/report';
+import selectpickr from '@/components/selectPicker';
+import { dayReportFun, shopListFun } from '@/service/report';
+
 export default {
   name:'report-eaning',
   props: {
@@ -96,10 +91,11 @@ export default {
   data() {
     return {
       chart: null,
-      value2: null,
-      value3: null,
-      searchtime:null,
-      searchtime2:null,
+      searchStartDate: null,
+      searchEndDate: null,
+      startDate:moment().subtract('days',7).format('YYYY-MM-DD'),
+      endDate: moment().format('YYYY-MM-DD'),
+      shopName:'shopName',
       shopSlots:[
         {
             flex: 1,
@@ -108,16 +104,20 @@ export default {
             textAlign: 'center'
           }
       ],
+      lsitdata:[],
       popupVisible:false,
-      currentTags:null
-
+      currentTags:null,
+      reportDate:null,
+      reportCount:null,
+      reportMoney:null
     };
   },
   mounted() {
     this.initChart();
   },
   created(){
-      // this.getshopList();
+     this.dayReportFun();
+     this.shopListFun();
   },
   beforeDestroy() {
     if (!this.chart) {
@@ -129,6 +129,45 @@ export default {
   methods: {
     initChart() {
       this.chart = echarts.init(this.$refs.myEchart);
+    },
+    async shopListFun(){
+      let res = await shopListFun();
+      this.shopSlots[0].values = [{shopName:'全部'},...res.data];
+    },
+    async dayReportFun(shopId){
+      let payload = null;
+      if (shopId) {
+        payload = Object.assign({},{startDate:this.startDate,endDate:this.endDate,type:1,shopId:shopId});
+      } else {
+        payload = Object.assign({},{startDate:this.startDate,endDate:this.endDate,type:1});
+      }
+      let res = await dayReportFun(qs.stringify(payload));
+      if (res.code === 0) {
+        this.reportDate = res.data.date;
+        this.reportCount = res.data.count;
+        this.reportMoney = res.data.money;
+      }
+      this.chart.setOption(this.chartOption);
+    },
+    open(picker) {
+      this.$refs[picker].open();
+    },
+    handleChange() {
+      this.startDate = this.searchStartDate ? moment(this.searchStartDate).format('YYYY-MM-DD'):moment().subtract('days',7).format('YYYY-MM-DD');
+      this.endDate = this.searchEndDate ? moment(this.searchEndDate).format('YYYY-MM-DD'):moment().format('YYYY-MM-DD');
+      this.dayReportFun();
+    },
+    shopselectpicker(data){
+      this.currentTags = data;
+      let shopid = this.currentTags.shopName === '全部' ? '': this.currentTags.shopId=2;
+      this.dayReportFun(shopid);
+    },
+    shopselectpickertatus(data){
+      this.popupVisible = data;
+    },
+  },
+  computed:{
+    chartOption(){
       let option = {
         title: {
             text: '收益表'
@@ -150,33 +189,19 @@ export default {
             y2:10,
             containLabel: true,
         },
-        dataZoom : [
-        {
-            type: 'inside',
-            xAxisIndex: [0],
-            start: 1,
-            end: 35
-        },
-        {
-            type: 'inside',
-            yAxisIndex: [0],
-            start: 29,
-            end: 36
-        }
-        ],
+        dataZoom: [{
+          startValue: '05-29'
+        }, {
+          type: 'inside'
+        }],
         xAxis : [{
           type : 'category',
-          boundaryGap : false,
           offset:8,
-         data : ['05-29', '05-30','05-31','06-01','06-02','06-03','06-01','06-01','06-30','06-02','06-03','06-01','06-01','06-30', '05-29', '05-30','05-31','06-01','06-02','06-03','06-01','06-01','06-30','06-02','06-03','06-01','06-01','06-30','05-29', '05-30','05-31','06-01','06-02','06-03','06-01','06-01','06-30','06-02','06-03','06-01','06-01','06-30'].map(function (str) {
-                return str.replace(' ', '\n');
-            }),
+          data :this.reportDate,
           axisLabel: {
             textStyle: {color: '#999'},
-            interval: 0
           },
           axisLine:{
-            onZero: false,
             show:false,
             lineStyle:{
               color:'#e6e6e6',
@@ -201,7 +226,10 @@ export default {
                   show: false
               },
               axisLabel: {
-                textStyle: {color: '#999'}
+                textStyle: {color: '#999'},
+                formatter: function (value) {           
+                  return value.toFixed(2);      
+                }  
               },
               splitLine:{  
                 show:true,
@@ -243,21 +271,21 @@ export default {
                 type:'line',
                 stack: '总量',
                 symbol: 'circle',
-                data:[34, 35, 36, 37, 38, 39, 40, 41, 42,34, 35, 36, 37, 38, 39, 40, 41, 42,34, 35, 36, 37, 38, 39, 40, 41, 42],
+                data:this.reportMoney,
                 itemStyle: {
-                    normal: {
-                        color: "#1890ff",
-                        lineStyle: {
-                            color: "#1890ff",
-                        }
-                    }
+                  normal: {
+                      color: "#1890ff",
+                      lineStyle: {
+                          color: "#1890ff",
+                      }
+                  }
                 },
                 areaStyle: {
                   normal: {
                     color: new echarts.graphic.LinearGradient(0, 0, 0, 1,
                       [
-                          {offset: 0, color: '#1890ff'},
-                          {offset: 1, color: '#fff'}
+                        {offset: 0, color: '#1890ff'},
+                        {offset: 1, color: '#fff'}
                       ]
                     )
                   }
@@ -268,7 +296,7 @@ export default {
                 type:'line',
                 stack: '总量',
                 symbol: 'circle',
-                data:[34, 35, 36, 37, 38, 39, 40, 41, 42,34, 35, 36, 37, 38, 39, 40, 41, 42,34, 35, 36, 37, 38, 39, 40, 41, 42],
+                data:this.reportCount,
                 itemStyle: {
                     normal: {
                         color: "#FACC14",
@@ -281,8 +309,8 @@ export default {
                   normal: {
                     color: new echarts.graphic.LinearGradient(0, 0, 0, 1,
                       [
-                          {offset: 0, color: '#FACC14'},
-                          {offset: 1, color: '#fff'}
+                        {offset: 0, color: '#FACC14'},
+                        {offset: 1, color: '#fff'}
                       ]
                     )
                   }
@@ -290,31 +318,18 @@ export default {
             }
         ]
       };
-      this.chart.setOption(option);
-    },
-    async getshopList(){
-      let res = await shopList();
-      if (res.code === 0) {
-         this.shopSlots[0].values = res.data.items;
-      }
-    },
-    open(picker) {
-      this.$refs[picker].open();
-    },
-    handleChange() {
-      this.searchtime = this.value2 ? moment(this.value2).format('YYYY-MM-DD'):'';
-      this.searchtime2 = this.value3 ? moment(this.value3).format('YYYY-MM-DD'):'';
-    },
-    onDateChange() {
-      this.currentTags =this.$refs.picker.getValues()[0];
-      this.popupVisible=false;
+      return option;
     }
   },
   components:{
+    selectpickr
   }
 };
 </script>
 <style lang="scss" scoped>
+  .earnings {
+    background: #fff;
+  }
   .echarts-warp {
     padding: 0.32rem;
   }
@@ -400,7 +415,7 @@ export default {
   }
   .slectdata {
     display: flex;
-    border: 1px solid #e5e5e5;
+    border-bottom: 1px solid #e5e5e5;
     border-radius: 0.053333rem;
     height: 0.746667rem;
     line-height: 0.746667rem;
@@ -411,13 +426,13 @@ export default {
       height: 0.746667rem;
       line-height: 0.746667rem;
       display: inline-block;
-      text-align: center;
     }
   }
   .timechoose {
     width: 60%;
     span {
       width: 45%;
+      text-align: center;
     }
   }
   .shopchoose {
@@ -426,14 +441,13 @@ export default {
     span {
       width: 100% !important;
       display: inline-block;
+      color: #666;
     }
   }
   .mint-popup {
     width: 100%;
   }
-</style>
-<style>
-   .mint-header {
-    background: #F2F2F2 !important;
+  .select-back {
+    float: right;
   }
 </style>

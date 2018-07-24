@@ -71,7 +71,7 @@ export default {
       machineName:'',
       machineTypeIds:'',
       addBusinessTime:'',
-      title:'新增店铺',
+      title:'编辑店铺',
       list: [
         {
           title: "店铺类型",

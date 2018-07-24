@@ -9,35 +9,11 @@
           <span>订单金额</span>
         </div>
         <div class="tableearn">
-          <div class="listcon tableearn-list">
-            <span>海尔8kg</span>
-            <span>洗衣机</span>
-            <span>100</span>
-            <span>300.00</span>
-          </div>
-          <div class="listcon tableearn-list">
-            <span>海尔8kg</span>
-            <span>洗衣机</span>
-            <span>100</span>
-            <span>300.00</span>
-          </div>
-          <div class="listcon tableearn-list">
-            <span>海尔8kg</span>
-            <span>洗衣机</span>
-            <span>100</span>
-            <span>300.00</span>
-          </div>
-          <div class="listcon tableearn-list">
-            <span>海尔8kg</span>
-            <span>洗衣机</span>
-            <span>100</span>
-            <span>300.00</span>
-          </div>
-          <div class="listcon tableearn-list">
-            <span>海尔8kg</span>
-            <span>洗衣机</span>
-            <span>100</span>
-            <span>300.00</span>
+          <div class="listcon tableearn-list" v-for="(item,index) in list" :key="index">
+            <span>{{item.machineName}}</span>
+            <span>{{item.machineTypeName}}</span>
+            <span>{{item.count}}</span>
+            <span>{{item.money}}</span>
           </div>
         </div>
     </div>
@@ -46,16 +22,30 @@
 </template>
 <script>
 import QHeader from '@/components/header';
+import { machineReportFun } from '@/service/report';
+import qs from 'qs';
 export default {
   data() {
     return {
        title:'收益',
-       selected: '1'
+       list:[]
     };
   },
   created(){
+    let query = this.$route.query;
+    if (query.type === 1) {
+      this.title = '收益';
+    } else {
+      this.title = '退款';
+    }
+    this.getDetail(query.date,query.type);
   },
   methods: {
+    async getDetail(date,type){
+      let payload = Object.assign({},{date:date,type:type});
+      let res = await machineReportFun(qs.stringify(payload));
+      this.list = res.data;
+    }
   },
   components:{
     QHeader,
@@ -84,6 +74,7 @@ export default {
     position: relative;
     text-align: center;
     white-space: nowrap;
+    border-bottom:1px solid rgba(229,229,229,1);
     span {
       flex:1;
       font-weight: 600;

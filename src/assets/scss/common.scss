@@ -1,0 +1,35 @@
+
+// public color
+$first-color:#333333;
+$second-color:#666666;
+$third-color:#666666;
+
+// highlight
+$highlight-color:#1890ff;
+
+// public border
+$first-border:1px solid #e5e5e5;
+
+// public css
+
+//radius-btn
+.btn{
+    width: 9.066667rem;
+    margin: 0 auto;
+    text-align: center;
+    height: 1.173333rem;
+    line-height: 1.173333rem;
+    color: #fff;
+    font-size: .426667rem;
+    background-color: $highlight-color;
+    border-radius: .133333rem;
+}
+
+.copyright{
+    position: fixed;
+    width: 100%;
+    text-align: center;
+    font-size: .32rem;
+    color: $third-color;
+    bottom: .533333rem;
+}
