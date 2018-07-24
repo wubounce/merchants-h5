@@ -1,27 +1,30 @@
 <template>
   <div class="reset">
     <q-header :title="title"></q-header>
+    <form ref="resetForm" :model="reset">
     <div class="form-group">
-      <input type="text" placeholder="请输入新密码" v-model="reset.password">
+      <input type="password" placeholder="请输入旧密码" v-model="reset.oldPassword">
     </div>
     <div class="form-group">
-      <input type="text" placeholder="请确认新密码" v-model="reset.newpassword">
+      <input type="password" placeholder="请输入新密码" v-model="reset.password">
     </div>
+    </form>
     <p class="btn">
-       <mt-button type="primary" class="btn-blue" @click.prevent="updatedConfirm">确定</mt-button>
+       <mt-button type="primary" class="btn-blue" @click.prevent="changePwdConfirm">确定</mt-button>
     </p>
   </div>
 </template>
 
 <script>
-  import { validatPhone } from '@/utils/validate';
+  import { updatePwdFun } from '@/service/resetPwd';
+  import qs from 'qs';
   import QHeader from '@/components/header';
   export default {
     data() {
       return {
         reset: {
+          oldPassword: '',
           password: '',
-          newpassword: '',
         },
         timer: null,
         time: 60,
@@ -30,46 +33,36 @@
       };
     },
     created(){
-      // let query = this.$route.query;
-      // console.log(query);
     },
     methods: {
       validate() {
+        if (this.reset.oldPassword === '') {
+          this.$toast({message: "请输入旧密码" });
+          return false;
+        }
         if (this.reset.password === '') {
           this.$toast({message: "请输入新密码" });
           return false;
-        }else if (!validatPhone(this.form.userName)) {
-          this.$toast({message: "请输入正确的手机号码" });
+        }
+        if (this.reset.oldPassword === this.reset.password) {
+          this.$toast({message: " 旧密码和新密码不允许相同" });
           return false;
-        } 
+        }
         return true;
       },
-      sendcode() {
+      async changePwdConfirm() {
         if (this.validate()) {
-          // this.http
-          //   .post(api.sendCode, {
-          //     phone: this.reset.phone,
-          //     type: 3,
-          //     templateId: "resetpwd"
-          //   })
-          //   .then(it => {
-          //     if (it.data.success) {
-          //       this.countdown();
-          //     } else {
-          //       this.$toast({
-          //         message: it.data.message,
-          //         position: "bottom",
-          //         duration: 3000
-          //       });
-          //     }
-          //   })
-          //   .catch(() => {
-          //     this.$toast({
-          //       message: "后台接口错误",
-          //       position: "bottom",
-          //       duration: 3000
-          //     });
-          //   });
+          let payload = Object.assign({},this.reset);
+          let res = await updatePwdFun(qs.stringify(payload));
+          if (res.code===0) {
+               this.countdown();
+          }else {
+             this.$toast({
+              message: res.msg,
+              position: "bottom",
+              duration: 3000
+            });
+          }
         }
       },
     },

@@ -1,6 +1,5 @@
 <template>
 <div class="report">
-  <q-header :title="title"></q-header>
   <mt-navbar class="tab" v-model="selected">
     <mt-tab-item id="1">收益</mt-tab-item>
     <mt-tab-item id="2">退款</mt-tab-item>
@@ -19,7 +18,6 @@
 </template>
 <script>
 import QMenu from '@/components/menu';
-import QHeader from '@/components/header';
 import reporteaning from './earnings';
 import refund from './refund';
 export default {
@@ -35,7 +33,6 @@ export default {
   },
   components:{
     QMenu,
-    QHeader,
     reporteaning,
     refund
   }

@@ -41,5 +41,7 @@ module.exports = {
     'no-console': 0,
     // // 关闭语句强制分号结尾
     // "semi": [0],
+    'no-useless-escape':0,
+    'no-unreachable':0
   }
 }

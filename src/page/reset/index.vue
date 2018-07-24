@@ -1,6 +1,7 @@
 <template>
   <div class="reset">
     <q-header :title="title"></q-header>
+    <form ref="resetForm" :model="reset">
     <div class="form-group">
       <input type="text" placeholder="请输入手机号码" v-model="reset.phone" require>
     </div>
@@ -11,6 +12,7 @@
         <p class="sendcode" @click="sendcode" v-if="btn">获取验证码</p>
       </div>
     </div>
+    </form>
     <p class="btn">
        <mt-button type="primary" class="btn-blue" @click.prevent="gotonext">下一步</mt-button>
     </p>
@@ -18,17 +20,16 @@
 </template>
 
 <script>
-  // import {
-  //   api
-  // } from "@/api/api";
+  import { smscodeFun, forgetPwdFun } from '@/service/resetPwd';
   import { validatPhone } from '@/utils/validate';
   import QHeader from '@/components/header';
+  import qs from 'qs';
   export default {
     data() {
       return {
         reset: {
-          phone: "",
-          code: "",
+          phone: '',
+          code: '',
         },
         timer: null,
         time: 60,
@@ -47,36 +48,22 @@
         } 
         return true;
       },          
-      sendcode() {
+      async sendcode() {
         if (this.validatePhone()) {
-
-          // this.http
-          //   .post(api.sendCode, {
-          //     phone: this.reset.phone,
-          //     type: 3,
-          //     templateId: "resetpwd"
-          //   })
-          //   .then(it => {
-          //     if (it.data.success) {
-          //       this.countdown();
-          //     } else {
-          //       this.$toast({
-          //         message: it.data.message,
-          //         position: "bottom",
-          //         duration: 3000
-          //       });
-          //     }
-          //   })
-          //   .catch(() => {
-          //     this.$toast({
-          //       message: "后台接口错误",
-          //       position: "bottom",
-          //       duration: 3000
-          //     });
-          //   });
+          let res = await smscodeFun(qs.stringify({phone:this.reset.phone}));
+          if (res.code===0) {
+              this.countdown();
+          }else {
+             this.$toast({
+              message: res.msg,
+              position: "bottom",
+              duration: 3000
+            });
+          }
         }
       },
       countdown() {
+        this.btn = false;
         this.timer = setInterval(() => {
           if (--this.time <= 0) {
             clearInterval(this.timer);
@@ -84,13 +71,23 @@
           }
         }, 1000);
       },
-      gotonext(){
+      async gotonext(){
         if (this.validatePhone()) {
           if (this.reset.code === '') {
             this.$toast({message: "请输入验证码" });
             return false;
           }
-          this.$router.push({name:'confimPwd',query:{phone:this.reset.phone,code:this.reset.code}});
+          let payload = Object.assign({},{phone:this.reset.phone});
+          let res = await forgetPwdFun(qs.stringify(payload));
+          if (res.code===0) {
+            this.$router.push({name:'confimPwd'});
+          }else {
+             this.$toast({
+              message: res.msg,
+              position: "bottom",
+              duration: 3000
+            });
+          }
         }
       }
     },

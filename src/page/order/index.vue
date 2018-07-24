@@ -5,11 +5,7 @@
     <input type="text" v-model="searchData" placeholder="请输入用户手机号/订单号查询">
   </section>
   <section class="order-status">
-    <div><span class="current">全部</span></div>
-    <div><span >待支付</span></div>
-    <div><span>已支付</span></div>
-    <div><span>已失效</span></div>
-    <div><span>已退款</span></div>
+    <div v-for="(item,index) in titleArr" @click="titleClick(index)"><span :class="{current: titleIndex === index}">{{item}}</span></div>
   </section>
   <div class="alllist">
     <section class="ordermun">
@@ -78,14 +74,19 @@ export default {
   data() {
     return {
       title: '订单管理',
-      searchData:''
+      searchData:'',
+      titleArr:['全部','待支付','已支付','已失效','已退款',],
+      titleIndex:0,
+
     };
   },
   mounted() {
     
   },
   methods: {
-    
+    titleClick: function(index) {
+      this.titleIndex = index;
+    },
   },
   components:{
     QHeader,

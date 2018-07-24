@@ -44,7 +44,7 @@
     </router-link>
   </div>
   <div class="alllist">
-    <router-link :to="{ name: 'order'}">
+    <router-link :to="{ name: 'todolist'}">
       <section class="order-list">  
           <div class="detail">  
             <div class="orderpic  todo"><img src="../../../static/management/todo@2x.png" alt=""></div>
@@ -58,7 +58,7 @@
     </router-link>
   </div>
   <div class="alllist">
-    <router-link :to="{ name: 'order'}">
+    <router-link :to="{ name: 'marketing'}">
       <section class="order-list">  
           <div class="detail">  
             <div class="orderpic"><img src="../../../static/management/market@2x.png" alt=""></div>

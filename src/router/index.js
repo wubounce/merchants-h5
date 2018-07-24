@@ -32,6 +32,8 @@ export default new Router({
     { path: '/addShop', name: 'addShop', component: () => import('@/page/shop/addShop') },
     { path: '/mapSearch', name: 'mapSearch', component: () => import('@/page/shop/mapSearch') },
     { path: '/shopDetail', name: 'shopDetail', component: () => import('@/page/shop/shopDetail') },
-    { path: '/editShop', name: 'editShop', component: () => import('@/page/shop/editShop') }
+    { path: '/editShop', name: 'editShop', component: () => import('@/page/shop/editShop') },
+    { path: '/todolist', name: 'todolist', component: () => import('@/page/todolist/index') },
+    { path: '/marketing', name: 'marketing', component: () => import('@/page/marketing/index') },
   ]
 });

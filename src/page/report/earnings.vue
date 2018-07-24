@@ -1,11 +1,11 @@
 <template>
-<div>
+<div class="earnings">
   <div class="search">
     <div class="slectdata timechoose">
-      <span @click="open('picker2')">{{searchtime}}</span>至<span @click="open('picker3')">{{searchtime2}}</span>
+      <span @click="open('picker2')">{{searchtime}}</span>至<span @click="open('picker3')">{{searchtime2}}<i class="iconfont icon-nextx select-back"></i></span>
     </div>
     <div class="slectdata shopchoose">
-      <span @click="popupVisible=true">{{currentTags?currentTags.shopName:'请选择店铺'}}</span>
+      <span @click="popupVisible=true">{{currentTags?currentTags.shopName:'请选择店铺'}}<i class="iconfont icon-nextx select-back"></i></span>
       <selectpickr :visible="popupVisible" :slots="shopSlots" :valueKey="shopName" @selectpicker="shopselectpicker" @onpickstatus="shopselectpickertatus"> </selectpickr>
     </div>
   </div>
@@ -302,6 +302,9 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
+  .earnings {
+    background: #fff;
+  }
   .echarts-warp {
     padding: 0.32rem;
   }
@@ -387,7 +390,7 @@ export default {
   }
   .slectdata {
     display: flex;
-    border: 1px solid #e5e5e5;
+    border-bottom: 1px solid #e5e5e5;
     border-radius: 0.053333rem;
     height: 0.746667rem;
     line-height: 0.746667rem;
@@ -398,13 +401,13 @@ export default {
       height: 0.746667rem;
       line-height: 0.746667rem;
       display: inline-block;
-      text-align: center;
     }
   }
   .timechoose {
     width: 60%;
     span {
       width: 45%;
+      text-align: center;
     }
   }
   .shopchoose {
@@ -413,14 +416,13 @@ export default {
     span {
       width: 100% !important;
       display: inline-block;
+      color: #666;
     }
   }
   .mint-popup {
     width: 100%;
   }
-</style>
-<style>
-   .mint-header {
-    background: #F2F2F2 !important;
+  .select-back {
+    float: right;
   }
 </style>
