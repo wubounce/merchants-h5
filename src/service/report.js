@@ -1,10 +1,17 @@
 /**
- *  登录
+ *  报表
  */
 import { fetch } from './baseService';
 
-const shopListApi = 'shop/list';                                            // 登录 method 'get'
+const dayReportApi = 'operatorBalanceLog/dayReport';                                            // 报表-按天统计 method 'post'
+const machineReportApi = 'operatorBalanceLog/machineReport';                                    // 每天报表-按机器统计 method 'post'
+const shopListApi = '/shop/listShop';                                                           // 店铺列表 method 'post'
 
-// 登录
-export const shopList = (payload) => fetch.get(shopListApi,  { params: payload });
+// 按天统计
+export const dayReportFun = (payload) => fetch.post(dayReportApi, payload);
 
+//按机器统计
+export const machineReportFun = (payload) => fetch.post(machineReportApi, payload);
+
+//按机器统计
+export const shopListFun = (payload) => fetch.post(shopListApi, payload);

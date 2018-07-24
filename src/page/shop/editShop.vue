@@ -1,6 +1,5 @@
 <template>
   <section class="personal">
-    <div :class="{'showHide': isClass}"></div>
     <q-header :title="title"></q-header>
     <ul class="personal-list">
       <p class="shopname-p"><span>店铺名称</span><span><input type="text" class='addressInput' v-model="shopName" maxlength="12" placeholder="请填写店铺名称"></span></p>
@@ -14,7 +13,7 @@
       <li class="device business" @click="addDevice">设备类型<span>{{machineName}}</span></li>
       <p class="isReserve"><span>预约功能</span><span><mt-switch class="check-switch"></mt-switch></span></p>
       <p class="reserveTime"><span>预约时长</span><span><input type="text" class='timeInput'  maxlength="2" placeholder="请填写预约有效时长"></span></p>
-      <li class="business" @click="addTime">营业时间<span>{{addBusinessTime}}</span></li>
+      <li class="business" @click="chooseTime">营业时间<span>{{addBusinessTime}}</span></li>
       <p class="picture">
         <span>店铺照片</span>
         <span>
@@ -23,22 +22,49 @@
       </p>
     </div>
     <p class="blank"></p>
-    <button class="submit">确定</button>
-    <mt-picker class="picker" v-if="popupVisible" :slots="slots" @change="valuesChange" :showToolbar="true" ><p class="toolBar"><span @click="cancel">取消</span><span>店铺类型</span><span @click="confirmNews">确定</span></p></mt-picker>
-    <section class="deviceDetail" v-if="deviceDetail">
-      <p class="toolBar"><span @click="cancel">取消</span><span>店铺类型</span><span @click="confirmNews">确定</span></p>
+    <button class="submit" @click="submit">确定</button>
+
+    <!-- 店铺类型 -->
+    <mt-popup v-model="popupVisible" position="bottom" class="mint-popup">
+      <div class="prop-bd">
+        <div class="page-picker-wrapper">
+          <mt-picker class="picker" :slots="slots" @change="valuesChange" :showToolbar="true" ><p class="toolBar"><span @click="cancel">取消</span><span>店铺类型</span><span @click="confirmNews">确定</span></p></mt-picker>
+        </div>
+      </div>
+    </mt-popup>
+    
+    <!-- 所在地区 -->
+    <mt-popup v-model="placeVisible" position="bottom" class="mint-popup">
+      <div class="prop-bd">
+        <div class="page-picker-wrapper">
+          <mt-picker :slots="addressSlots" @change="onAddressChange" :showToolbar="true"><p class="toolBar"><span @click="cancel">取消</span><span>所在地区</span><span @click="confirmNews">确定</span></p></mt-picker>
+        </div>
+      </div>
+    </mt-popup>
+    
+    <!-- 设备类型 -->
+    <mt-popup v-model="deviceDetail" position="bottom" class="mint-popup">
+      <p class="toolBar"><span @click="cancel">取消</span><span>设备类型</span><span @click="confirmNews">确定</span></p>
       <mt-checklist align="right" :options="options" v-model="machine"></mt-checklist>
-    </section>
+    </mt-popup>
+
+    <!-- 营业时间 -->
+    <mt-popup v-model="timeVisible" position="bottom" class="mint-popup">
+       <mt-picker class="picker"  :slots="slotsTime" @change="changeTime" :showToolbar="true"><p class="toolBar"><span @click="cancel">取消</span><span @click="chooseDay" id="allDay">全天</span><span @click="confirmNews">确定</span></p></mt-picker>
+    </mt-popup>
+
   </section>
 </template>
+
 <script>
+
 import QHeader from '@/components/header';
 import UploadImg from "@/components/UploadImg/UploadImg";
+
 export default {
   data() {
     return {
       index:'',
-      isClass:false,
       deviceDetail:false,
       shopName:'',
       address:'',
@@ -63,6 +89,8 @@ export default {
       shopType: 1,
       shopTypeString:'',
       popupVisible:false,
+      placeVisible:false,
+      mapVisible:false,
       slots: [
         {
           flex: 1,
@@ -70,7 +98,38 @@ export default {
           className: 'shop-type',
           textAlign: 'center',
           position:'bottom',
-          name:'店铺类型'
+          name:'店铺类型',
+          defaultIndex:2
+        }
+      ],
+      addressSlots:[
+        {
+          flex: 1,
+          values: [1,2,3,4,5,6,7,8,9],
+          className: "slot1",
+          textAlign: "center"
+        },
+        {
+          divider: true,
+          content: "-",
+          className: "slot2"
+        },
+        {
+          flex: 1,
+          values: [],
+          className: "slot3",
+          textAlign: "center"
+        },
+        {
+          divider: true,
+          content: "-",
+          className: "slot4"
+        },
+        {
+          flex: 1,
+          values: [],
+          className: "slot5",
+          textAlign: "center"
         }
       ],
       imgId: {
@@ -115,7 +174,60 @@ export default {
           label: '想不到了',
           value: '想不到了'
         }
-      ]
+      ],
+      shopTime: {
+        startTime: "",
+        endTime: ""
+      },
+      slotsTime: [
+        {
+          flex: 1,
+          values: ['00 时','01 时', '02 时', '03 时', '04 时', '05 时', '06 时','07 时','08 时', '09 时', '10 时', '11 时', '12 时', '13 时','14 时','15 时','16 时','17 时','18 时','19 时','20 时','21 时','22 时','23 时'],
+          className: 'slot1',
+          textAlign: 'right',
+          defaultIndex:4
+        },
+        {
+          divider: true,
+          content: ':',
+          className: 'slot2'
+        },
+        {
+          flex: 1,
+          values: ['00 分','01 分', '02 分', '03 分', '04 分', '05 分', '06 分','07 分','08 分', '09 分', '10 分', '11 分', '12 分', '13 分','14 分','15 分','16 分','17 分','18 分','19 分','20 分','21 分','22 分','23 分','24 分','25 分','26 分','27 分','28 分','29 分',
+          '30 分','31 分', '32 分', '33 分', '34 分', '35 分', '36 分','37 分','38 分', '39 分', '40 分', '41 分', '42 分', '43 分','44 分','45 分','46 分','47 分','48 分','49 分','50 分','51 分','52 分','53 分','54 分','55 分','56 分','57 分','58 分','59 分'],
+          className: 'slot3',
+          textAlign: 'left',
+          defaultIndex:30
+        },
+        {
+          divider: true,
+          content: '—',
+          className: 'slot2'
+        },
+        {
+          flex: 1,
+          values: ['00 时','01 时', '02 时', '03 时', '04 时', '05 时', '06 时','07 时','08 时', '09 时', '10 时', '11 时', '12 时', '13 时','14 时','15 时','16 时','17 时','18 时','19 时','20 时','21 时','22 时','23 时'],
+          className: 'slot1',
+          textAlign: 'right',
+          defaultIndex:20
+        },
+        {
+          divider: true,
+          content: ':',
+          className: 'slot2'
+        },
+        {
+          flex: 1,
+          values: ['00 分','01 分', '02 分', '03 分', '04 分', '05 分', '06 分','07 分','08 分', '09 分', '10 分', '11 分', '12 分', '13 分','14 分','15 分','16 分','17 分','18 分','19 分','20 分','21 分','22 分','23 分','24 分','25 分','26 分','27 分','28 分','29 分',
+          '30 分','31 分', '32 分', '33 分', '34 分', '35 分', '36 分','37 分','38 分', '39 分', '40 分', '41 分', '42 分', '43 分','44 分','45 分','46 分','47 分','48 分','49 分','50 分','51 分','52 分','53 分','54 分','55 分','56 分','57 分','58 分','59 分'],
+          className: 'slot3',
+          textAlign: 'left',
+          defaultIndex:30
+        }
+      ],
+      timeVisible: false,
+      isTime:true
     };
   },
   methods:{
@@ -160,10 +272,12 @@ export default {
           this.isClass = true;
           break;
         case 1:
-          alert('该功能的实现依赖接口,接口暂无T^T');
+          this.placeVisible = true;
+          //alert('该功能的实现依赖接口,接口暂无T^T');
           break;
         case 2:
           this.go("mapSearch");
+          this.mapVisible = true;
           break;
       }
     },
@@ -190,7 +304,31 @@ export default {
           this.machineName = this.machine.join(' , ');
           break;
         case 4:
-          alert('功能暂无');
+          this.timeVisible = false;
+          if(parseInt(this.shopTime.startTime.slice(0,2)) < parseInt(this.shopTime.endTime.slice(0,2))) {
+            this.addBusinessTime = this.shopTime.startTime + '-' + this.shopTime.endTime;
+          }
+          else {
+            if(parseInt(this.shopTime.startTime.slice(0,2)) == parseInt(this.shopTime.endTime.slice(0,2))) {
+              if(parseInt(this.shopTime.startTime.slice(3,5)) < parseInt(this.shopTime.endTime.slice(3,5))) {
+                this.addBusinessTime = this.shopTime.startTime + '-' + this.shopTime.endTime;
+              }
+              else {
+                this.$toast({
+                  message: '营业的开始时间不得小于结束时间',
+                  position: "middle",
+                  duration: 3000
+                });
+              }
+            }
+            else {
+              this.$toast({
+                message: '营业的开始时间不得小于结束时间',
+                position: "middle",
+                duration: 3000
+              });
+            }
+          }
           break;
       }
     },
@@ -201,7 +339,7 @@ export default {
           this.popupVisible = false;
           break;
         case 1:
-          alert('功能暂无');
+          this.placeVisible = false;
           break;
         case 2:
           alert('功能暂无');
@@ -210,9 +348,12 @@ export default {
           this.deviceDetail = false;
           break;
         case 4:
-          alert('功能暂无');
+          this.timeVisible = false;
           break;
       }
+    },
+    onAddressChange() {
+
     },
     addDevice() {
       this.index = 3;
@@ -220,12 +361,32 @@ export default {
       this.isClass = true;
       this.deviceDetail = true;
     },
-    addTime() {
-      this.index = 4;
-      console.log('index:',this.index);
-    },
     UpdatedImgFiles(msg) {
       console.log(msg);
+    },
+    changeTime(picker, values) {
+      this.shopTime.startTime = values[0].slice(0,2) + ':' +values[1].slice(0,2);
+      this.shopTime.endTime = values[2].slice(0,2) + ':' +values[3].slice(0,2);
+    },
+    chooseDay() {
+      this.slotsTime[0].defaultIndex = 0;
+      this.slotsTime[2].defaultIndex = 0;
+      this.slotsTime[4].defaultIndex = 23;
+      this.slotsTime[6].defaultIndex = 59;
+    },
+    chooseTime() {
+      this.index = 4;
+      this.timeVisible = true;
+      this.isClass = true;
+    },
+    submit() {
+      let instance = this.$toast({
+        message: '添加成功',
+        iconClass: 'mint-toast-icon mintui mintui-success'
+      });
+      setTimeout(() => {
+        instance.close();
+      }, 1000);
     }
   },
   components:{
@@ -307,6 +468,8 @@ export default {
       justify-content: space-between;
     }
     .business {
+      display: flex;
+      justify-content: space-between;
       font-size: 0.35rem;
       padding: 0.3rem;
       background-color: #fff;
@@ -396,23 +559,26 @@ export default {
   .blank {
     height:2rem;
   }
-  .picker {
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    background-color: #fff;
-    z-index:2018;
-  }
   .toolBar {
+    display: flex;
+    justify-content: center;
+    padding-top: 0.2rem;
+    #allDay {
+      color: #fff;
+      background-color: #1890FF;
+      font-size: 0.45rem;
+      padding: 0.05rem 0.2rem;
+      padding-top: -1rem;
+      border-radius: 5px;
+    }
     span {
       &:nth-child(1) {
         font-size: 0.45rem;
         color: #999999;
-        padding-left: 0.42rem;
       }
       &:nth-child(2) {
         font-size: 0.5rem;
-        padding: 0 2.7rem;
+        margin: 0 2.7rem;
         color: #666666;
       }
       &:nth-child(3) {
@@ -421,12 +587,11 @@ export default {
       }
     }
   }
-  .deviceDetail {
-    position: fixed;
-    bottom: 0;
-    z-index: 2018;
+  .mint-popup {
     width: 100%;
-    background-color: #fff;
+    .prop-bd {
+      padding: 0.3rem;
+    }
   }
 }
 </style>

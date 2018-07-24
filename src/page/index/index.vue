@@ -1,31 +1,49 @@
 <template>
   <div class="main">
-    <q-header :title="title"></q-header>
+    <div class="earnings-wrap">
+      <div class="earning-type">
+        <p>总收益 (元)</p>
+        <p class="earning-type-size">{{allMoney}}</p>
+      </div>
+      <div class="today-earning">
+        <p style="margin-top: 0.35rem;">今日收益 (元)</p>
+        <p class="today-earning-size">{{todayMoney}}</p>
+      </div>
+      <div class="earning-type">
+        <p>当月收益 (元)</p>
+        <p class="earning-type-size">{{monthMoney}}</p>
+      </div>
+    </div>
     <div class="lineecharts-warp">
       <div>
         <div class="lineechart-title">
-          <span class="linetitle">收益金额</span>
-          <span class="linedata"><span class="linedatachoose linecurrent">今天</span><span class="linedatachoose">7天</span><span class="linedatachoose">30天</span></span>
+          <span class="linetitle">收益数据 <span @click="machineVisible = true;" class="choose-select">{{machinecurrentTags?machinecurrentTags.name:'全部'}}<i class="iconfont icon-nextx select-back"></i></span></span>
+          <span class="linedata">
+          <span :class="['linedatachoose', {linecurrent: lineSearchIndex === index}]" v-for="(item,index) in lineSearchTime" @click="lineTimeSearch(index)">{{item.lable}}</span>
+          </span>
+          <selectpickr :visible="machineVisible" :slots="equipmentSlots" :valueKey="machinepickername" @selectpicker="machineselectpicker" @onpickstatus="machineselectpickertatus"> </selectpickr>
         </div>
         <div class="line" id="line" :style="{height:lineheight,width:width}" ref="line"></div>
       </div>
-      
     </div>
     <div class="pei-wrap">
-        <div class="slectdata">
-          <span @click="machineVisible = true;">{{machinecurrentTags?machinecurrentTags:'洗衣机'}}</span>
-          <selectpickr :visible="machineVisible" :slots="machineSlots" @selectpicker="machineselectpicker" @onpickstatus="machineselectpickertatus"> </selectpickr>
-        </div>
-        </div>
-       <div class="piebox">
-         <div class="pietype" id="pietype" :style="{height:pieheight,width:width}" ref="pietype"></div>
-         <div class="piefun" id="piefun" :style="{height:pieheight,width:width}" ref="piefun"></div>
-       </div>
+      <div class="lineechart-title pie-title">
+        <span class="linetitle">收益分布 <span @click="distributionVisible = true;" class="choose-select">{{distributioncurrentTags?distributioncurrentTags.name:'洗衣机'}}<i class="iconfont icon-nextx select-back"></i></span></span>
+        <span class="linedata">
+           <span :class="['linedatachoose', {linecurrent: pieSearchIndex === index}]" v-for="(item,index) in lineSearchTime" @click="pieTimeSearch(index)">{{item.lable}}</span>
+        </span>
+         <selectpickr :visible="distributionVisible" :slots="distributionSlots" :valueKey="machinepickername" @selectpicker="distributionselectpicker" @onpickstatus="distributionselectpickertatus"> </selectpickr>
+      </div>
+      <div class="piebox">
+       <div class="pietype" id="pietype" :style="{height:pieheight,width:width}" ref="pietype"></div>
+       <div class="piefun" id="piefun" :style="{height:pieheight,width:width}" ref="piefun"></div>
+      </div>
+    </div>
     <div class="bar-wrap">
       <div class="">
         <span class="linetitle">设备监控<span  style="font-size: 14px;font-weight: 100;color: #3AA0FF;">(总设备100)</span></span>
-        <span class="equipment" @click="equipmentVisible=true">{{equipmentcurrentTags?equipmentcurrentTags:'全部'}}</span>
-        <selectpickr :visible="equipmentVisible" :slots="equipmentSlots" @selectpicker="equipmentselectpicker" @onpickstatus="equipmentselectpickertatus"> </selectpickr>
+        <span class="equipment" @click="equipmentVisible=true">{{equipmentcurrentTags?equipmentcurrentTags.name:'全部'}}<i class="iconfont icon-nextx select-back"></i></span>
+        <selectpickr :visible="equipmentVisible" :slots="equipmentSlots" :valueKey="machinepickername" @selectpicker="equipmentselectpicker" @onpickstatus="equipmentselectpickertatus"> </selectpickr>
       </div>
       <div class="bar" id="bar" :style="{height:height,width:width}" ref="bar"></div>
     </div>
@@ -33,6 +51,7 @@
   </div>
 </template>
 <script>
+import qs from 'qs';
 // 引入 ECharts 主模块
 import echarts from 'echarts/lib/echarts';
 // 引入折线图
@@ -43,19 +62,12 @@ import 'echarts/lib/chart/pie';
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/legendScroll';
 import QMenu from '@/components/menu';
-import QHeader from '@/components/header';
 import selectpickr from '@/components/selectPicker';
+import { ParentTypeFun, countMachineFun, totalProfitFun, timeProfitFun, typeProfitFun } from '@/service/index';
+import { MachineStatus, communicateType } from '@/utils/mapping';
 
 export default {
   props: {
-    className: {
-      type: String,
-      default: 'yourClassName'
-    },
-    id: {
-      type: String,
-      default: 'yourID'
-    },
     width: {
       type: String,
       default: '100%'
@@ -80,56 +92,190 @@ export default {
       linechart: null,
       pietypechart: null,
       piefunchart: null,
-      popupVisible:false,
+      washingMachineId:null,
       machinecurrentTags:null,
       machineVisible:false,
-      machineSlots:[
-        {
-            flex: 1,
-            values: ['洗衣机','吹风机'],
-            className: 'slot1',
-            textAlign: 'center'
-          }
-      ],
       equipmentVisible:false,
       equipmentcurrentTags:null,
-       equipmentSlots:[
+      distributioncurrentTags:null,
+      distributionVisible:false,
+      equipmentSlots:[ //设备类型
         {
             flex: 1,
-            values: ['运行中','离线','故障'],
+            values: [],
             className: 'slot1',
             textAlign: 'center'
           }
       ],
-
+     distributionSlots:[ //收益分布
+        {
+            flex: 1,
+            values: [],
+            className: 'slot1',
+            textAlign: 'center'
+          }
+      ],
+      machinepickername:'name',
+      barxAxisData:[],
+      barseriesData:[],
+      linexAxisData:[],
+      lineseriesData:[],
+      pietypeData:[],
+      piefunData:[],
+      piefunDatatitle:[],
+      allMoney:null, //总收益
+      monthMoney:null, //当月收益
+      todayMoney:null,//今日收益
+      lineSearchTime:[
+        {value:0,lable:'今天'},
+        {value:1,lable:'7天'},
+        {value:2,lable:'30天'}
+      ],
+      lineSearchIndex:0,
+      pieSearchIndex:0
     };
   },
   mounted() {
-    this.selfAdaption();
-    this.$nextTick(() => {
-      this.initbarChart();
-      this.initlineChart();
-      this.initpietypeChart();
-      this.initpiefunChart();
-    });
+    this.initChart();
   },
-  methods: {
-    //echarts自适应
-   selfAdaption ()  {
-     let _this = this;
-     setTimeout(() => {
-         window.addEventListener('resize', function () {
-            _this.$refs.bar.resize();
-            _this.$refs.pietype.resize();
-            _this.$refs.piefun.resize();
-            _this.$refs.line.resize();
-         });
-      }, 10);
+  created(){
+    this.ParentTypeFun();
+    this.countMachine();
+    this.totalProfitFun();
+    this.ProfitDate();
+  },
+  methods: { 
+    async ParentTypeFun(){ //获取设备类型
+        let res = await ParentTypeFun();
+        let pac = res.data.find(item=>item.name === '洗衣机');
+        this.washingMachineId = pac ? pac.id : '';
+        this.typeProfitData();
+        this.equipmentSlots[0].values = [{name:'全部'},...res.data];
+        this.distributionSlots[0].values = [...res.data];
     },
-    initlineChart() {
-      let chart = echarts.init(document.getElementById('line'));
+    async countMachine(parentTypeId){ //初始化全部设备监控图表
+      let res = null;
+      if (parentTypeId) {
+        let payload = Object.assign({},{parentTypeId:parentTypeId});
+        res = await countMachineFun(qs.stringify(payload));
+      } else {
+        res = await countMachineFun();
+      }
+      res.data.forEach(item=>{
+          this.barseriesData.push(item.count);
+          this.barxAxisData.push(MachineStatus(item.machineState));
+      });
       // 把配置和数据放这里
-      chart.setOption({
+      this.barchart.setOption(this.barOChartPtion);
+    },
+    async totalProfitFun(){
+      let res = await totalProfitFun();
+      this.allMoney = res.data.allMoney; //总收益
+      this.monthMoney = res.data.monthMoney; //当月收益
+      this.todayMoney = res.data.todayMoney;//今日收益
+    },
+    async ProfitDate(parentTypeId,type){ //收益数据
+      let payload = null;
+      if (parentTypeId !== undefined || parentTypeId !== null && type !== undefined) {
+        payload = Object.assign({},{parentTypeId:parentTypeId,type:type});
+      } else {
+        payload = Object.assign({},{type:0});
+      }
+      let res = await timeProfitFun(qs.stringify(payload));
+      res.data.forEach(item=>{
+          this.lineseriesData.push(item.sum);
+          this.linexAxisData.push(item.time);
+      });
+      
+      // 把配置和数据放这里
+      this.linechart.setOption(this.lineChartOption);
+    },
+    async typeProfitData(parentTypeId,type){ //收益分布
+      let payload = null;
+      if (parentTypeId !== undefined && type !== undefined) {
+        payload = Object.assign({},{parentTypeId:parentTypeId,type:type});
+      } else {
+        payload = Object.assign({},{parentTypeId:this.washingMachineId,type:0});
+      }
+      let res = await typeProfitFun(qs.stringify(payload));
+      res.data.communicateType.forEach(item=>{
+          this.pietypeData.push({
+            value: item.sum,
+            name: communicateType(Number(item.type))
+          });
+      });
+      res.data.machineType.forEach(item=>{
+        this.piefunDatatitle.push({
+          name:item.type,
+          icon : 'circle',
+          textStyle:{fontWeight:'normal', color:'#999',fontSize:12, padding:0},
+        });
+        this.piefunData.push({
+          value: item.sum,
+          name: item.type
+        });
+      });
+      // 把配置和数据放这里
+      this.pietypechart.setOption(this.pietypeChartOPtion);
+      this.piefunchart.setOption(this.piefunChartOption);
+    },
+    initChart() {
+      this.linechart = echarts.init(document.getElementById('line'));
+      this.barchart = echarts.init(document.getElementById('bar'));
+      this.pietypechart = echarts.init(document.getElementById('pietype'));
+      this.piefunchart = echarts.init(document.getElementById('piefun'));
+    },
+    machineselectpicker(data){ //收益收据选择设备类型搜索
+      this.machinecurrentTags = data;
+      this.linexAxisData=[];
+      this.lineseriesData=[];
+      let type = this.lineSearchTime[this.lineSearchIndex].value;
+      let parentTypeId = this.machinecurrentTags ? this.machinecurrentTags.id : null;
+      this.ProfitDate(parentTypeId,type);
+    },
+    machineselectpickertatus(data){
+      this.machineVisible = data;
+    },
+    lineTimeSearch: function(index) { //收益收据选择时间搜索
+      this.linexAxisData=[];
+      this.lineseriesData=[];
+      this.lineSearchIndex = index;
+      let type = this.lineSearchTime[index].value;
+      let parentTypeId = this.machinecurrentTags ? this.machinecurrentTags.id : null;
+      this.ProfitDate(parentTypeId,type);
+    },
+    distributionselectpicker(data){ //收益分布选择设备类型搜索
+      this.distributioncurrentTags = data;
+      this.pietypeData=[];
+      this.piefunData=[];
+      let type = this.lineSearchTime[this.pieSearchIndex].value;
+      console.log(this.distributioncurrentTags,type);
+      this.typeProfitData(this.distributioncurrentTags.id,type);
+    },
+    distributionselectpickertatus(data){
+      this.distributionVisible = data;
+    },
+    pieTimeSearch: function(index) { //收益分布选择时间搜索
+      this.pietypeData=[];
+      this.piefunData=[];
+      this.pieSearchIndex = index;
+      let type = this.lineSearchTime[index].value;
+      let parentTypeId = this.distributioncurrentTags ? this.distributioncurrentTags.id : this.washingMachineId;
+      this.typeProfitData(parentTypeId,type);
+    },
+    equipmentselectpicker(data){ //切换设备监控图表
+      this.equipmentcurrentTags = data;
+      this.barxAxisData=[];
+      this.barseriesData=[];
+      this.countMachine(this.equipmentcurrentTags.id);
+    },
+    equipmentselectpickertatus(data){
+      this.equipmentVisible = data;
+    },
+  },
+  computed:{
+    lineChartOption(){
+      let opt = {
         title: {
             text: '收益收据'
         },
@@ -153,7 +299,7 @@ export default {
           type : 'category',
           boundaryGap : false,
           offset:8,
-          data : ['03:00','06:00','09:00','12:00','15:00','18:00','21:00','24:00'],
+          data : this.linexAxisData,
           axisLabel: {
             textStyle: {color: '#999'},
           },
@@ -196,7 +342,7 @@ export default {
         }],
         series: [{
             symbol: 'circle',
-            data: [35, 23, 45, 69, 24, 38, 130,78],
+            data: this.lineseriesData,
             type: 'line',
              itemStyle: {
                 normal: {
@@ -217,12 +363,11 @@ export default {
               }
             }
         }]
-      });
+      };
+      return opt;
     },
-    initbarChart() {
-      let chart = echarts.init(document.getElementById('bar'));
-      // 把配置和数据放这里
-      chart.setOption({
+    barOChartPtion(){
+      let opt = {
         color: ['#3398DB'],
         tooltip: {
           trigger: 'axis',
@@ -243,7 +388,7 @@ export default {
         },
         xAxis: [{
           type: 'category',
-          data: ['运行中', '空闲', '故障', '离线', '未激活', '超时未工作'],
+          data: this.barxAxisData,
           axisTick: {
             alignWithLabel: true
           },
@@ -288,13 +433,13 @@ export default {
           name: '直接访问',
           type: 'bar',
           barWidth: '30%',
-          data: [23, 30, 41, 50, 2, 65]
+          data: this.barseriesData
         }]
-      });
+      };
+      return opt;
     },
-    initpietypeChart(){
-      let chart = echarts.init(document.getElementById('pietype'));
-      chart.setOption({
+    pietypeChartOPtion(){
+      let opt = {
         tooltip: {
             trigger: 'item',
             formatter: "{a} <br/>{b}: {c} ({d}%)"
@@ -304,6 +449,7 @@ export default {
             y: 'bottom',
             x:'center',
             bottom:'40%',
+            itemWidth:8,
             data:[{
                 name:'脉冲',
                 icon : 'circle',
@@ -316,7 +462,6 @@ export default {
         },
         series: [
             {
-              name:'通信类型',
               type:'pie',
               radius: ['50%', '70%'],
               avoidLabelOverlap: false,
@@ -331,22 +476,19 @@ export default {
               labelLine: {
                   normal: {
                       show: false,
-                      length:3,
-                      length2:3,
+                      length:1,
+                      length2:1,
                   }
               },
-              data:[
-                  {value:70, name:'脉冲'},
-                  {value:30, name:'串口'},
-              ],
+              data:this.pietypeData,
               color: ['rgb(59,161,255)','rgb(243,100,124)']
           }
         ]
-      });
+      };
+      return opt;
     },
-    initpiefunChart(){
-      let chart = echarts.init(document.getElementById('piefun'));
-      chart.setOption({
+    piefunChartOption(){
+      let opt = {
         tooltip: {
             trigger: 'item',
             formatter: "{a} <br/>{b}: {c} ({d}%)"
@@ -357,29 +499,9 @@ export default {
             x:'center',
             bottom:'40%',
             padding :0,
-            itemGap:3,
-            height:300,
-            data:[{
-                name:'单脱',
-                icon : 'circle',
-                textStyle:{fontWeight:'normal', color:'#999',fontSize:12, padding:0},
-            },{
-                name:'快洗',
-                icon : 'circle',
-                textStyle:{fontWeight:'normal', color:'#999',fontSize:12, padding:0}
-            },{
-                name:'标准杀菌',
-                icon : 'circle',
-                textStyle:{fontWeight:'normal', color:'#999',fontSize:12, padding:0},
-            },{
-                name:'标准洗',
-                icon : 'circle',
-                textStyle:{fontWeight:'normal', color:'#999',fontSize:12, padding:0}
-            },{
-                name:'大物洗',
-                icon : 'circle',
-                textStyle:{fontWeight:'normal', color:'#999',fontSize:12, padding:0}
-            }]
+            itemGap:4,
+            itemWidth:8,
+            data:this.piefunDatatitle
         },
         series: [
             {
@@ -398,38 +520,20 @@ export default {
               labelLine: {
                   normal: {
                       show: false,
-                      length:3,
-                      length2:3,
+                      length:1,
+                      length2:1,
                   }
               },
-              data:[
-                  {value:40, name:'单脱'},
-                  {value:21, name:'快洗'},
-                  {value:9, name:'标准杀菌'},
-                  {value:17, name:'标准洗'},
-                  {value:13, name:'大物洗'}
-              ],
+              data:this.piefunData,
               color: ['rgb(59,161,255)','#37CCCC','rgb(243,100,124)','#4ECC74','#FBD438']
           }
         ]
-      });
-    },
-    machineselectpicker(data){
-      this.machinecurrentTags = data;
-    },
-    machineselectpickertatus(data){
-      this.machineVisible = data;
-    },
-    equipmentselectpicker(data){
-      this.equipmentcurrentTags = data;
-    },
-    equipmentselectpickertatus(data){
-      this.equipmentVisible = data;
-    },
+      };
+      return opt;
+    }
   },
   components:{
     QMenu,
-    QHeader,
     selectpickr
   }
 };
@@ -445,12 +549,11 @@ export default {
   .lineechart-title {
     display: flex;
   }
-  .lineechart-title>span {
-    flex: 1;
-  }
+
   .linetitle {
     font-size: 16px;
     font-weight: 600;
+    width: 55%;
   }
   .linedata {
     font-size: 14px;
@@ -476,19 +579,26 @@ export default {
       line-height: 0.746667rem;
       text-align: right;
        padding-bottom: 0.32rem;
-      span {
-        display: inline-block;
-        font-size: 14px;
-        border:1px solid #e5e5e5;
-        width: 1.493333rem;
-        height: 0.746667rem;
-        line-height: 0.746667rem;
-        margin-right: 0.266667rem;
-        text-align: center;
-      }
+  }
+  .choose-select {
+    display: inline-block;
+    font-size: 14px;
+    border-bottom:1px solid #e5e5e5;
+    height: 0.746667rem;
+    line-height: 0.746667rem;
+    margin-left: 0.3rem;
+    color: #666;
+    font-weight: normal;
+  }
+  .select-back {
+    margin-left: 0.1rem;
   }
   .pei-wrap {
+    margin-top: 0.266667rem;
     background: #fff;
+    .pie-title {
+      padding: 0.32rem 0.32rem 0 0.32rem;
+    }
   }
   .bar-wrap {
     margin-bottom: 55px;
@@ -497,6 +607,7 @@ export default {
     display: flex;
     text-align: left;
     background: #fff;
+    padding-bottom: 0.32rem
   }
   .piebox>div {
     flex: 1;
@@ -512,12 +623,42 @@ export default {
     text-align: right;
     display: inline-block;
     font-size: 14px;
-    border: 1px solid #e5e5e5;
-    width: 1.466667rem;
+    border-bottom:1px solid #e5e5e5;
     height: 0.746667rem;
     line-height: 0.746667rem;
-    text-align: center;
+    text-align: left;
     float: right;
+    color:#666;
+  }
+  .earnings-wrap {
+    width:100%;
+    height:3.2rem;
+    background:linear-gradient(135deg,rgba(24,144,255,1),rgba(4,190,254,1));
+    display: flex;
+    p {
+      color: #fff;
+      font-size: 12px;
+      text-align: center;
+    }
+  }
+  .today-earning {
+    width:3.87rem;
+    background:rgba(255,255,255,0.16);
+    border-radius:0.27rem;
+    margin-top: 0.35rem;
+    height: 2.53rem;
+  }
+  .earning-type {
+    width: 3.07rem;
+    padding-top: 0.95rem;
+  }
+  .earning-type-size {
+    font-size: 24px !important;
+    font-family:PingFangSC-Regular;
+  }
+  .today-earning-size {
+    font-size: 32px !important;
+    font-family:PingFangSC-Regular;
   }
 </style>
 <style lang="scss"> 

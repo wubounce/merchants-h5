@@ -2,17 +2,14 @@
   <section>
     <q-header :title="title"></q-header>
     <div id="tip">
-      <input type="text" id="keyword" name="keyword" placeholder="查找小区/大厦/学校等" onfocus='this.value=""'/>
+      <input type="text" id="keyword" name="keyword" value="请输入关键字：(选定后搜索)" onfocus='this.value=""'/>
     </div>
-    <div class="map">
-       <el-amap vid="amapDemo"></el-amap>
-    </div>
+    <div id="mapContainer"></div>
   </section>
 </template>
 <script>
 /*eslint-disable*/
 import QHeader from '@/components/header';
-import VueAMap from 'vue-amap';
 export default {
   data() {
     return {
@@ -20,20 +17,44 @@ export default {
     };
   },
   methods: {
-    loadmap() {
-      var windowsArr = [];
-      var marker = [];
-      var map = new AMap.Map("amapDemo", {
+    loadMap() {
+      var map = new AMap.Map("mapContainer", {
         resizeEnable: true,
-        center: [116.397428, 39.90923],//地图中心点
         zoom: 13,//地图显示的缩放级别
-        keyboardEnable: false,
+        keyboardEnable: false
+      });
+
+      map.plugin('AMap.Geolocation',function() {
+        let geolocation = new AMap.Geolocation({
+          enableHighAccuracy: true,//是否使用高精度定位，默认:true
+          zoomToAccuracy: true,      //定位成功后调整地图视野范围使定位位置及精度范围视野内可见，默认：false
+        });
+        map.addControl(geolocation);
+        geolocation.getCurrentPosition();
+      });
+
+      AMap.plugin(['AMap.Autocomplete','AMap.PlaceSearch'],function(){
+      var autoOptions = {
+        input: "keyword"//使用联想输入的input的id
+      };
+      autocomplete= new AMap.Autocomplete(autoOptions);
+      var placeSearch = new AMap.PlaceSearch({
+          city:'北京',
+          map:map
+      })
+      
+      
+      AMap.event.addListener(autocomplete, "select", function(e){
+          //TODO 针对选中的poi实现自己的功能
+          console.log(123);
+          placeSearch.setCity(e.poi.adcode);
+          placeSearch.search(e.poi.name)
+        });
       });
     }
   },
   mounted() {
-    this.loadmap();
-    console.log(1234);
+    this.loadMap();
   },
   components:{
     QHeader
@@ -68,10 +89,9 @@ section {
       font-size: 0.35rem;
     }
   }
-  .map {
-    width: 90%;
-    height: 5rem;
-    margin: 0.3rem auto;
+  #mapContainer {
+    width: 100%;
+    height: 6rem;
   }
 }
 </style>
