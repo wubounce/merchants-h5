@@ -33,6 +33,8 @@ export default new Router({
     { path: '/mapSearch', name: 'mapSearch', component: () => import('@/page/shop/mapSearch') },
     { path: '/shopDetail', name: 'shopDetail', component: () => import('@/page/shop/shopDetail') },
     { path: '/editShop', name: 'editShop', component: () => import('@/page/shop/editShop') },
+    { path: '/todolist', name: 'todolist', component: () => import('@/page/todolist/index') },
+    { path: '/marketing', name: 'marketing', component: () => import('@/page/marketing/index') },
 
     // 我的
     { path: '/user', name: 'user', component: () => import('@/page/user/user') },

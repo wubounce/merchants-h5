@@ -14,8 +14,8 @@
         </p>
         <div class="passWord">
           <div class="pwdshow">
-            <input type="text" v-model.trim="form.passWord" v-if="typepwd" >
-            <input type="password" v-model.trim="form.passWord" v-on:input="pwdinputFunc" placeholder="请输入密码" v-else>
+            <input type="text" v-model.trim="form.password" v-if="typepwd" >
+            <input type="password" v-model.trim="form.password" v-on:input="pwdinputFunc" placeholder="请输入密码" v-else>
           </div>
           <div class="eyes iconfont icon-nextx"  @click="openpwd"></div>
         </div>
@@ -31,19 +31,20 @@
 </template>
 
 <script>
+import qs from "qs";
 import { mapActions } from 'vuex';
 import { removeToken, removeUser } from '@/utils/tool';
 import { validatPhone } from '@/utils/validate';
-import { login, getDEtail } from '@/service/login';
+import { login } from '@/service/login';
 import { MessageBox } from 'mint-ui';
 import Button from "@/components/Button/Button";
 export default {
-    name: 'page-field',
+    name: 'page-login',
     data () {
       return {
         form: {
-          userName: '18923842668',
-          passWord: '123456'
+          userName: '18948788872',
+          password: '123456'
         },
         isuser:false,
         typepwd:false,
@@ -70,7 +71,7 @@ export default {
           this.$toast({message: "请输入正确的手机号码" });
           return false;
         } 
-        if (this.form.passWord === '') {
+        if (this.form.password === '') {
           this.$toast({message: "请输入密码"  });
           return false;
         }
@@ -79,11 +80,9 @@ export default {
       async handleSubmit () {
         if (this.validate()) {
           let loginInfo = Object.assign({},this.form);
-          let res = await login(loginInfo);
+          let res = await login(qs.stringify(loginInfo));
           if (res.code===0) {
-              this.login(res.data.token);
-              let userinfor = await getDEtail();
-              this.getUser(userinfor.data);
+              this.login(res.data);
               this.$router.push('/index');
           }else {
               MessageBox.alert(res.msg);

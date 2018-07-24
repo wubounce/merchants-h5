@@ -1,7 +1,7 @@
 <template>
 <div class="order-detail">
   <q-header :title="title"></q-header>
-   <div class="order-status">已支付</div>
+   <div class="order-status">{{'已支付' | orserStatus}}</div>
     <div class="order-title">紫金港路浙江大学时湖校区西区C4号</div>
   <div class="alllist">
     <section class="order-list">  
@@ -36,15 +36,18 @@
     <span>下单时间：2018-06-13 11:08</span>
   </section>
    <section class="listaction"> 
-    <span>退款</span>
-    <span>启动</span>
-    <span>复位</span>
+    <span @click="orderRefund">退款</span>
+    <span @click="machineBoot">启动</span>
+    <span @click="machineReset">复位</span>
   </section>
 </div>
 </template>
 <script>
+import qs from 'qs';
 import QHeader from '@/components/header';
-// import { MessageBox } from 'mint-ui';
+import { orderStatus } from '@/utils/mapping';
+import { ordeRrefundFun, machineResetFun, machineBootFun } from '@/service/order';
+import { MessageBox } from 'mint-ui';
 export default {
   data() {
     return {
@@ -56,12 +59,41 @@ export default {
     
   },
   created(){
-    // MessageBox.confirm('确定执行此操作?').then(action => {
-    //     alert(123);
-    // })
+
   },
   methods: {
-    
+    machineReset(){ //设备复位
+      MessageBox.confirm('确定复位企鹅1号机？').then(async () => {
+          let query = this.$route.query;
+          let payload = {machineId:query.machineId,orderNo:query.orderNo};
+          let res = await machineResetFun(qs.stringify(payload));
+          console.log(res);
+      });
+      
+    },
+    async machineBoot(){ //设备启动
+      MessageBox.confirm('确定启动企鹅1号机？').then(async () => {
+        let query = this.$route.query;
+        let payload = {orderId:query.orderNo};
+        let res = await machineBootFun(qs.stringify(payload));
+         console.log(res);
+      });
+      
+    },
+    async orderRefund(){ //退款
+      MessageBox.confirm('确定退款？').then(async () => {
+        let query = this.$route.query;
+        let payload = {orderNo:query.orderNo};
+        let res = await ordeRrefundFun(qs.stringify(payload));
+         console.log(res);
+      });
+      
+    },
+  },
+  filters: {
+    orserStatus: function (value) {
+      return orderStatus(value);
+    },
   },
   components:{
     QHeader,

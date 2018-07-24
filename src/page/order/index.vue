@@ -5,11 +5,7 @@
     <input type="text" v-model="searchData" placeholder="请输入用户手机号/订单号查询">
   </section>
   <section class="order-status">
-    <div><span class="current">全部</span></div>
-    <div><span >待支付</span></div>
-    <div><span>已支付</span></div>
-    <div><span>已失效</span></div>
-    <div><span>已退款</span></div>
+    <div v-for="(item,index) in titleArr" @click="titleClick(index)"><span :class="{current: titleIndex === index}">{{item}}</span></div>
   </section>
   <div class="alllist">
     <section class="ordermun">
@@ -29,63 +25,73 @@
         </div>
     </section>
     <section class="listaction"> 
-        <span>退款</span>
-        <span>启动</span>
-        <span>复位</span>
+      <span @click="godetail()">退款</span>
+      <span @click="godetail()">启动</span>
+      <span @click="godetail()">复位</span>
     </section>
   </div>
-  <div class="alllist">
+  <div class="alllist" v-for="(item,index) in list" :key="index">
     <section class="ordermun">
-      <span class="odernmu-phone">1884372684<span style="padding:0 0.186667rem;color:#333333">|</span>2018-06-13 11:08</span>
-      <span class="ordernum-status">待支付</span>
+      <span class="odernmu-phone">{{item.userPhone}}<span style="padding:0 0.186667rem;color:#333333">|</span>{{item.createTime}}</span>
+      <span class="ordernum-status">{{item.orderStatus | orserStatus}}</span>
     </section>
     <section class="order-list">  
-        <div class="title">紫金港路浙江大学时湖校区西区C4号<span class="go">icon</span></div>
+        <div class="title">{{item.shopName}}<router-link :to="{ name: 'orderdetail'}" class="go">icon</router-link></div>
         <div class="detail">  
-          <div class="orderpic"><img src="../../assets/img/home/icon_near2x.png" alt=""></div>
+          <div class="orderpic"><img :src="item.ImageId" alt=""></div>
           <div class="content">
-              <p class="con-title">海尔8KgFh069Fd2F</p>
-              <p class="con-type">标准洗<span style="padding:0 0.346667rem">|</span>时长40分钟</p>
-              <p class="con-price">¥560</p>
+              <p class="con-title">{{item.subType}}</p>
+              <p class="con-type">{{item.machineFunctionName}}<span style="padding:0 0.346667rem">|</span>时长{{item.markMinutes}}分钟</p>
+              <p class="con-price">¥{{item.discountPrice}}</p>
           </div>
-          <div class="order-action">预约</div>
+          <div class="order-action" v-if="item.orderType">预约</div>
         </div>
     </section>
-  </div>
-  <div class="alllist">
-    <section class="ordermun">
-      <span class="odernmu-phone">1884372684<span style="padding:0 0.186667rem;color:#333333">|</span>2018-06-13 11:08</span>
-      <span class="ordernum-status">已失效</span>
-    </section>
-    <section class="order-list">  
-        <div class="title">紫金港路浙江大学时湖校区西区C4号<span class="go">icon</span></div>
-        <div class="detail">  
-          <div class="orderpic"><img src="../../assets/img/home/icon_near2x.png" alt=""></div>
-          <div class="content">
-              <p class="con-title">海尔8KgFh069Fd2F</p>
-              <p class="con-type">标准洗<span style="padding:0 0.346667rem">|</span>时长40分钟</p>
-              <p class="con-price">¥560</p>
-          </div>
-          <div class="order-action">预约</div>
-        </div>
+    <section class="listaction" v-if="item.orderStatus === 2"> 
+        <span @click="godetail(item.machineId,item.id)">退款</span>
+        <span @click="godetail(item.machineId,item.id)">启动</span>
+        <span @click="godetail(item.machineId,item.id)">复位</span>
     </section>
   </div>
 </div>
 </template>
 <script>
 import QHeader from '@/components/header';
+import { orderStatus } from '@/utils/mapping';
+import { orderListFun } from '@/service/order';
 export default {
   data() {
     return {
       title: '订单管理',
-      searchData:''
+      searchData:'',
+      titleArr:['全部','待支付','已支付','已失效','已退款'],
+      list:[],
+      titleIndex:0,
+
     };
   },
   mounted() {
     
   },
+  created(){
+    this.getOrderList();
+  },
   methods: {
-    
+    titleClick: function(index) {
+      this.titleIndex = index;
+    },
+    async getOrderList(){
+      let res = await orderListFun();
+      console.log(res);
+    },
+    godetail(oederno,machineId){
+      this.$router.push({name: 'orderdetail',query:{orderNo:oederno,machineId:machineId}});
+    }
+  },
+  filters: {
+    orserStatus: function (value) {
+      return orderStatus(value);
+    },
   },
   components:{
     QHeader,
