@@ -33,6 +33,26 @@ export const communicateType = (ststus)=>{
 	}
 };
 
+// 订单状态类型
+export const orderStatus = (ststus)=>{
+	switch (ststus){
+		case 0:
+			return '未支付';
+		case 1:
+		  	return '已失效';
+		case 2:
+		 	 return '已支付 ';
+		case 3:
+		  	return '已完成';
+		case 4:
+		  	return '申请退款';
+		case 5:
+		 	return '已退款';
+		default:
+  			return ststus;
+	}
+};
+
 
 
 

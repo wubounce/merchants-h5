@@ -32,7 +32,7 @@
         <span class="linedata">
            <span :class="['linedatachoose', {linecurrent: pieSearchIndex === index}]" v-for="(item,index) in lineSearchTime" @click="pieTimeSearch(index)">{{item.lable}}</span>
         </span>
-         <selectpickr :visible="distributionVisible" :slots="equipmentSlots" :valueKey="machinepickername" @selectpicker="distributionselectpicker" @onpickstatus="distributionselectpickertatus"> </selectpickr>
+         <selectpickr :visible="distributionVisible" :slots="distributionSlots" :valueKey="machinepickername" @selectpicker="distributionselectpicker" @onpickstatus="distributionselectpickertatus"> </selectpickr>
       </div>
       <div class="piebox">
        <div class="pietype" id="pietype" :style="{height:pieheight,width:width}" ref="pietype"></div>
@@ -52,7 +52,6 @@
 </template>
 <script>
 import qs from 'qs';
-import moment from 'moment';
 // 引入 ECharts 主模块
 import echarts from 'echarts/lib/echarts';
 // 引入折线图
@@ -108,6 +107,14 @@ export default {
             textAlign: 'center'
           }
       ],
+     distributionSlots:[ //收益分布
+        {
+            flex: 1,
+            values: [],
+            className: 'slot1',
+            textAlign: 'center'
+          }
+      ],
       machinepickername:'name',
       barxAxisData:[],
       barseriesData:[],
@@ -115,6 +122,7 @@ export default {
       lineseriesData:[],
       pietypeData:[],
       piefunData:[],
+      piefunDatatitle:[],
       allMoney:null, //总收益
       monthMoney:null, //当月收益
       todayMoney:null,//今日收益
@@ -142,7 +150,8 @@ export default {
         let pac = res.data.find(item=>item.name === '洗衣机');
         this.washingMachineId = pac ? pac.id : '';
         this.typeProfitData();
-        this.equipmentSlots[0].values = res.data;
+        this.equipmentSlots[0].values = [{name:'全部'},...res.data];
+        this.distributionSlots[0].values = [...res.data];
     },
     async countMachine(parentTypeId){ //初始化全部设备监控图表
       let res = null;
@@ -166,35 +175,29 @@ export default {
       this.todayMoney = res.data.todayMoney;//今日收益
     },
     async ProfitDate(parentTypeId,type){ //收益数据
-      let res = null;
-      if (parentTypeId !== undefined && type !== undefined) {
-        let payload = Object.assign({},{parentTypeId:parentTypeId,type:type});
-        res = await timeProfitFun(qs.stringify(payload));
+      let payload = null;
+      if (parentTypeId !== undefined || parentTypeId !== null && type !== undefined) {
+        payload = Object.assign({},{parentTypeId:parentTypeId,type:type});
       } else {
-        let opt = Object.assign({},{type:0});
-        res = await timeProfitFun(qs.stringify(opt));
+        payload = Object.assign({},{type:0});
       }
-      if (res.data.length>0) {
-        res.data.forEach(item=>{
-            this.lineseriesData.push(item.sum);
-            this.linexAxisData.push(item.time);
-        });
-      } else {
-        this.lineseriesData.push(0);
-        this.linexAxisData.push(moment().format('MM-DD'));
-      }
+      let res = await timeProfitFun(qs.stringify(payload));
+      res.data.forEach(item=>{
+          this.lineseriesData.push(item.sum);
+          this.linexAxisData.push(item.time);
+      });
+      
       // 把配置和数据放这里
       this.linechart.setOption(this.lineChartOption);
     },
     async typeProfitData(parentTypeId,type){ //收益分布
-      let res = null;
+      let payload = null;
       if (parentTypeId !== undefined && type !== undefined) {
-        let payload = Object.assign({},{parentTypeId:parentTypeId,type:type});
-        res = await typeProfitFun(qs.stringify(payload));
+        payload = Object.assign({},{parentTypeId:parentTypeId,type:type});
       } else {
-        let opt = Object.assign({},{parentTypeId:this.washingMachineId,type:0});
-        res = await typeProfitFun(qs.stringify(opt));
+        payload = Object.assign({},{parentTypeId:this.washingMachineId,type:0});
       }
+      let res = await typeProfitFun(qs.stringify(payload));
       res.data.communicateType.forEach(item=>{
           this.pietypeData.push({
             value: item.sum,
@@ -202,10 +205,15 @@ export default {
           });
       });
       res.data.machineType.forEach(item=>{
-          this.piefunData.push({
-            value: item.sum,
-            name: item.type
-          });
+        this.piefunDatatitle.push({
+          name:item.type,
+          icon : 'circle',
+          textStyle:{fontWeight:'normal', color:'#999',fontSize:12, padding:0},
+        });
+        this.piefunData.push({
+          value: item.sum,
+          name: item.type
+        });
       });
       // 把配置和数据放这里
       this.pietypechart.setOption(this.pietypeChartOPtion);
@@ -222,7 +230,8 @@ export default {
       this.linexAxisData=[];
       this.lineseriesData=[];
       let type = this.lineSearchTime[this.lineSearchIndex].value;
-      this.ProfitDate(this.machinecurrentTags.id,type);
+      let parentTypeId = this.machinecurrentTags ? this.machinecurrentTags.id : null;
+      this.ProfitDate(parentTypeId,type);
     },
     machineselectpickertatus(data){
       this.machineVisible = data;
@@ -232,7 +241,7 @@ export default {
       this.lineseriesData=[];
       this.lineSearchIndex = index;
       let type = this.lineSearchTime[index].value;
-      let parentTypeId = this.machinecurrentTags ? this.machinecurrentTags.id : '';
+      let parentTypeId = this.machinecurrentTags ? this.machinecurrentTags.id : null;
       this.ProfitDate(parentTypeId,type);
     },
     distributionselectpicker(data){ //收益分布选择设备类型搜索
@@ -251,7 +260,7 @@ export default {
       this.piefunData=[];
       this.pieSearchIndex = index;
       let type = this.lineSearchTime[index].value;
-      let parentTypeId = this.distributioncurrentTags ? this.distributioncurrentTags.id : '';
+      let parentTypeId = this.distributioncurrentTags ? this.distributioncurrentTags.id : this.washingMachineId;
       this.typeProfitData(parentTypeId,type);
     },
     equipmentselectpicker(data){ //切换设备监控图表
@@ -440,6 +449,7 @@ export default {
             y: 'bottom',
             x:'center',
             bottom:'40%',
+            itemWidth:8,
             data:[{
                 name:'脉冲',
                 icon : 'circle',
@@ -489,29 +499,9 @@ export default {
             x:'center',
             bottom:'40%',
             padding :0,
-            itemGap:3,
-            height:300,
-            data:[{
-                name:'单脱',
-                icon : 'circle',
-                textStyle:{fontWeight:'normal', color:'#999',fontSize:12, padding:0},
-            },{
-                name:'快洗',
-                icon : 'circle',
-                textStyle:{fontWeight:'normal', color:'#999',fontSize:12, padding:0}
-            },{
-                name:'标准杀菌',
-                icon : 'circle',
-                textStyle:{fontWeight:'normal', color:'#999',fontSize:12, padding:0},
-            },{
-                name:'标准洗',
-                icon : 'circle',
-                textStyle:{fontWeight:'normal', color:'#999',fontSize:12, padding:0}
-            },{
-                name:'大物洗',
-                icon : 'circle',
-                textStyle:{fontWeight:'normal', color:'#999',fontSize:12, padding:0}
-            }]
+            itemGap:4,
+            itemWidth:8,
+            data:this.piefunDatatitle
         },
         series: [
             {

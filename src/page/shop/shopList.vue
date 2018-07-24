@@ -76,12 +76,12 @@ export default {
     toShopDetail() {
       this.$router.push({
         name:'shopDetail'
-      })
+      });
     },
     toAddShop() {
       this.$router.push({
         name:'addShop'
-      })
+      });
     }
   },
   components: {

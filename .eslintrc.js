@@ -42,6 +42,8 @@ module.exports = {
     // // 关闭语句强制分号结尾
     // "semi": [0],
     'no-useless-escape':0,
-    'no-unreachable':0
+    'no-unreachable':0,
+    'no-undef':0,
+    'no-unused-vars':0
   }
 }

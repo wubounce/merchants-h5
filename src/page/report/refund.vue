@@ -2,16 +2,16 @@
 <div class="earnings">
   <div class="search">
     <div class="slectdata timechoose">
-      <span @click="open('picker2')">{{searchtime}}</span>至<span @click="open('picker3')">{{searchtime2}}<i class="iconfont icon-nextx select-back"></i></span>
+      <span @click="open('picker2')">{{startDate}}</span>至<span @click="open('picker3')">{{endDate}}<i class="iconfont icon-nextx select-back"></i></span>
     </div>
     <div class="slectdata shopchoose">
-      <span @click="popupVisible=true">{{currentTags?currentTags.shopName:'请选择店铺'}}<i class="iconfont icon-nextx select-back"></i></span>
+      <span @click="popupVisible=true">{{currentTags?currentTags.shopName:'全部'}}<i class="iconfont icon-nextx select-back"></i></span>
       <selectpickr :visible="popupVisible" :slots="shopSlots" :valueKey="shopName" @selectpicker="shopselectpicker" @onpickstatus="shopselectpickertatus"> </selectpickr>
     </div>
   </div>
   <div class="echarts-warp">
     <div :class="className" :id="id" :style="{height:height,width:width}" ref="myEchart"></div>
-    <div class="echart-title"><span style="background:#1890FF"></span>收益金额<span style="background:#FACC14"></span>订单数量</div>
+    <div class="echart-title"><span style="background:#1890FF"></span>退款金额<span style="background:#FACC14"></span>订单数量</div>
   </div>
   <div class="tabledata">
     <div class="listcon">
@@ -21,7 +21,7 @@
     </div>
     <div class="tableearn">
       <div class="listcon tableearn-list">
-        <router-link class="detail" to="/reportdetail" >
+        <router-link class="detail" :to="{name:'reportdetail', query:{date:'2018-06-04',type:3}}" >
           <span class="listtime">2018-06-04</span>
           <span>100</span>
           <span>300.00</span>
@@ -50,21 +50,24 @@
       </div>
     </div>
   </div>
-  <mt-datetime-picker ref="picker2" type="date" v-model="value2" @confirm="handleChange"></mt-datetime-picker>
-  <mt-datetime-picker ref="picker3" type="date" v-model="value3" @confirm="handleChange"></mt-datetime-picker>
+  <mt-datetime-picker ref="picker2" type="date" v-model="searchStartDate" @confirm="handleChange"></mt-datetime-picker>
+  <mt-datetime-picker ref="picker3" type="date" v-model="searchEndDate" @confirm="handleChange"></mt-datetime-picker>
 </div>
 </template>
 <script>
-// 引入 ECharts 主模块
+
+import qs from 'qs';
 import moment from 'moment';
+// 引入 ECharts 主模块
 import echarts from 'echarts/lib/echarts';
 // 引入折线图
 import 'echarts/lib/chart/line';
 // 引入提示框和图例组件
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/legendScroll';
-import { shopList } from '@/service/report';
 import selectpickr from '@/components/selectPicker';
+import { dayReportFun, shopListFun } from '@/service/report';
+
 export default {
   name:'report-eaning',
   props: {
@@ -88,31 +91,32 @@ export default {
   data() {
     return {
       chart: null,
-      value2: null,
-      value3: null,
-      searchtime:null,
-      searchtime2:null,
+      searchStartDate: null,
+      searchEndDate: null,
+      startDate:moment().subtract('days',7).format('YYYY-MM-DD'),
+      endDate: moment().format('YYYY-MM-DD'),
       shopName:'shopName',
       shopSlots:[
         {
             flex: 1,
-            values: [
-              {shopName:'企鹅一号店',id:12}
-            ],
+            values: [],
             className: 'slot1',
             textAlign: 'center'
           }
       ],
       popupVisible:false,
       currentTags:null,
-      data:[["2018-06-05",116],["2018-06-06",129],["2018-06-07",135],["2018-06-08",86],["2018-06-09",73],["2018-06-10",85],["2018-06-11",73],["2018-06-12",68],["2018-06-13",92],["2018-06-14",130],["2018-06-15",245],["2018-06-16",139],["2018-06-17",115],["2018-06-18",111],["2018-06-19",309],["2018-06-20",206],["2018-06-21",137],["2018-06-22",128],["2018-06-23",85],["2018-06-24",94],["2018-06-25",71],["2018-06-26",106],["2018-06-27",84],["2018-06-28",93],["2018-06-29",85],["2018-06-30",73],["2018-07-01",83],["2018-07-02",125],["2018-07-03",107],["2018-07-04",82],["2018-07-05",44],["2018-07-06",72],["2018-07-07",106],["2018-07-08",107],["2018-07-09",66],["2018-07-10",91],["2018-07-11",92],["2018-07-12",113],["2018-07-13",107],["2018-07-14",131],["2018-07-15",111],["2018-07-16",64],["2018-07-17",69],["2018-07-18",88],["2018-07-19",77],["2018-07-20",83],["2018-07-21",111],["2018-07-22",57],["2018-07-23",55],["2018-07-24",60],["2018-07-25",44],["2018-07-26",127],["2018-07-27",114],["2018-07-28",86],["2018-07-29",73],["2018-07-30",52],["2018-07-31",69],["2018-08-01",86],["2018-08-02",118],["2018-08-03",56],["2018-08-04",91],["2018-08-05",121],["2018-08-06",127],["2018-08-07",78],["2018-08-08",79],["2018-08-09",46]]
+      reportDate:null,
+      reportCount:null,
+      reportMoney:null
     };
   },
   mounted() {
     this.initChart();
   },
   created(){
-      // this.getshopList();
+     this.dayReportFun();
+     this.shopListFun();
   },
   beforeDestroy() {
     if (!this.chart) {
@@ -124,9 +128,48 @@ export default {
   methods: {
     initChart() {
       this.chart = echarts.init(this.$refs.myEchart);
+    },
+    async shopListFun(){
+      let res = await shopListFun();
+      this.shopSlots[0].values = [{shopName:'全部'},...res.data];
+    },
+    async dayReportFun(shopId){
+      let payload = null;
+      if (shopId) {
+        payload = Object.assign({},{startDate:this.startDate,endDate:this.endDate,type:3,shopId:shopId});
+      } else {
+        payload = Object.assign({},{startDate:this.startDate,endDate:this.endDate,type:3});
+      }
+      let res = await dayReportFun(qs.stringify(payload));
+      if (res.code === 0) {
+        this.reportDate = res.data.date;
+        this.reportCount = res.data.count;
+        this.reportMoney = res.data.money;
+      }
+      this.chart.setOption(this.chartOption);
+    },
+    open(picker) {
+      this.$refs[picker].open();
+    },
+    handleChange() {
+      this.startDate = this.searchStartDate ? moment(this.searchStartDate).format('YYYY-MM-DD'):moment().subtract('days',7).format('YYYY-MM-DD');
+      this.endDate = this.searchEndDate ? moment(this.searchEndDate).format('YYYY-MM-DD'):moment().format('YYYY-MM-DD');
+      this.dayReportFun();
+    },
+    shopselectpicker(data){
+      this.currentTags = data;
+      let shopid = this.currentTags.shopName === '全部' ? '': this.currentTags.shopId=2;
+      this.dayReportFun(shopid);
+    },
+    shopselectpickertatus(data){
+      this.popupVisible = data;
+    },
+  },
+  computed:{
+    chartOption(){
       let option = {
         title: {
-            text: '收益表'
+            text: '退款表'
         },
         tooltip: {
             trigger: 'axis',
@@ -153,7 +196,7 @@ export default {
         xAxis : [{
           type : 'category',
           offset:8,
-          data : ['05-29', '05-30','05-31','06-01','06-02','06-03','06-01','06-01','06-30','06-02','06-03','06-01','06-01','06-30', '05-29', '05-30','05-31','06-01','06-02','06-03','06-01','06-01','06-30','06-02','06-03','06-01','06-01','06-30','05-29', '05-30','05-31','06-01','06-02','06-03','06-01','06-01','06-30','06-02','06-03','06-01','06-01','06-30','07-03'],
+          data :this.reportDate,
           axisLabel: {
             textStyle: {color: '#999'},
           },
@@ -223,11 +266,11 @@ export default {
         ],
         series: [
             {
-                name:'收益金额',
+                name:'退款金额',
                 type:'line',
                 stack: '总量',
                 symbol: 'circle',
-                data:[34, 35, 36, 37, 38, 39, 40, 41, 42,34, 35, 36, 37, 38, 39, 40, 41, 42,34, 35, 36, 37, 38, 39, 40, 41, 42],
+                data:this.reportMoney,
                 itemStyle: {
                   normal: {
                       color: "#1890ff",
@@ -252,7 +295,7 @@ export default {
                 type:'line',
                 stack: '总量',
                 symbol: 'circle',
-                data:[34, 35, 36, 37, 38, 39, 40, 41, 42,34, 35, 36, 37, 38, 39, 40, 41, 42,34, 35, 36, 37, 38, 39, 40, 41, 42],
+                data:this.reportCount,
                 itemStyle: {
                     normal: {
                         color: "#FACC14",
@@ -274,27 +317,8 @@ export default {
             }
         ]
       };
-      this.chart.setOption(option);
-    },
-    async getshopList(){
-      let res = await shopList();
-      if (res.code === 0) {
-         this.shopSlots[0].values = res.data.items;
-      }
-    },
-    open(picker) {
-      this.$refs[picker].open();
-    },
-    handleChange() {
-      this.searchtime = this.value2 ? moment(this.value2).format('YYYY-MM-DD'):'';
-      this.searchtime2 = this.value3 ? moment(this.value3).format('YYYY-MM-DD'):'';
-    },
-    shopselectpicker(data){
-      this.currentTags = data;
-    },
-    shopselectpickertatus(data){
-      this.popupVisible = data;
-    },
+      return option;
+    }
   },
   components:{
     selectpickr
@@ -424,10 +448,5 @@ export default {
   }
   .select-back {
     float: right;
-  }
-</style>
-<style>
-   .earnings .mint-header {
-    background: #F2F2F2 !important;
   }
 </style>
