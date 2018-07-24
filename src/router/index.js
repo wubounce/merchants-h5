@@ -35,5 +35,13 @@ export default new Router({
     { path: '/editShop', name: 'editShop', component: () => import('@/page/shop/editShop') },
     { path: '/todolist', name: 'todolist', component: () => import('@/page/todolist/index') },
     { path: '/marketing', name: 'marketing', component: () => import('@/page/marketing/index') },
+
+    // 我的
+    { path: '/user', name: 'user', component: () => import('@/page/user/user') },
+
+    //钱包
+    { path: '/wallet', name: 'wallet', component: () => import('@/page/wallet/wallet') },
+    { path: '/accountList', name: 'accountList', component: () => import('@/page/wallet/accountList') },
+
   ]
 });
