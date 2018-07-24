@@ -166,7 +166,7 @@ export default {
   },
   methods: {
     getcheckshop(){
-      this.checkshoptxt = this.checkshoplist.join(',').replace(/\-[0-9]+/g,'');
+      //this.checkshoptxt = this.checkshoplist.join(',').replace(/\-[0-9]+/g,'');
       this.shopVisible = false;
     }
   },

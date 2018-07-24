@@ -40,6 +40,11 @@ export default new Router({
     //钱包
     { path: '/wallet', name: 'wallet', component: () => import('@/page/wallet/wallet') },
     { path: '/accountList', name: 'accountList', component: () => import('@/page/wallet/accountList') },
-
+    { path: '/accountDetail', name: 'accountDetail', component: () => import('@/page/wallet/accountDetail') },
+    { path: '/withdraw', name: 'withdraw', component: () => import('@/page/wallet/withdraw') },
+    { path: '/withdrawList', name: 'withdrawList', component: () => import('@/page/wallet/withdrawList') },
+    { path: '/withdrawDetail', name: 'withdrawDetail', component: () => import('@/page/wallet/withdrawDetail') },
+    { path: '/withdrawResult', name: 'withdrawResult', component: () => import('@/page/wallet/withdrawResult') },
+    
   ]
 });
