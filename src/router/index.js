@@ -35,6 +35,10 @@ export default new Router({
     { path: '/editShop', name: 'editShop', component: () => import('@/page/shop/editShop') },
     { path: '/todolist', name: 'todolist', component: () => import('@/page/todolist/index') },
     { path: '/marketing', name: 'marketing', component: () => import('@/page/marketing/index') },
+    { path: '/addvip', name: 'addvip', component: () => import('@/page/marketing/addVIP') },
+    { path: '/addMarket', name: 'addMarket', component: () => import('@/page/marketing/addMarket') },
+    { path: '/vipDetail', name: 'vipDetail', component: () => import('@/page/marketing/vipDetail') },
+    { path: '/editVip', name: 'editVip', component: () => import('@/page/marketing/editVip') },
 
     // 我的
     { path: '/user', name: 'user', component: () => import('@/page/user/user') },

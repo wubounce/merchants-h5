@@ -45,6 +45,10 @@
           </div>
         </div>
       </div>
+      <div class="addmember" @click="goaddMarket">
+        <span class="order-action iconfont icon-nextx"></span><br>
+        <span>优惠</span>
+      </div>
   	</div>
   	<div class="VIP-wrap"  v-if="tabindex === 1">
       <div class="car-shop">
@@ -52,14 +56,18 @@
       </div>
   		<div class="card-banner">       
         <swiper :options="swiperOption"  ref="mySwiper">
+      
           <swiper-slide>
-            <div class="year-card card">   
+            <router-link :to="{name:'vipDetail'}">
+              <div class="year-card card">   
                 <p class="vip-type">VIP年卡</p>                
                 <p class="price">500<span>元</span></p>
                 <p class="usenum">每日仅限使用243123432次</p>       
                 <p class="tag">8<span>折</span></p> 
-            </div>                    
+              </div>
+             </router-link>                     
           </swiper-slide>  
+         
           <swiper-slide>
             <div class="halfYear-card card">   
                 <p class="vip-type">VIP半年卡</p>                
@@ -78,6 +86,10 @@
         </swiper-slide>  
         </swiper>        
       </div> 
+      <div class="addmember" @click="goaddvip">
+        <span class="order-action iconfont icon-nextx"></span><br>
+        <span>vip卡</span>
+      </div>
   	</div>
   </section>
 </div>
@@ -95,6 +107,7 @@ export default {
         slidesPerView: 'auto',
         centeredSlides: true,
         spaceBetween: 0,
+        loopAdditionalSlides: 100,
         on:{
           // slideChangeTransitionEnd:()=>{
           //     this.typeListId = this.swiper.activeIndex;
@@ -111,10 +124,18 @@ export default {
   methods: {
     tabclick(index){
     	this.tabindex = index;
+    },
+    goaddMarket(){
+      this.$router.push({name:'addMarket'});
+    },
+    goaddvip(){
+      this.$router.push({name:'addvip'});
     }
   },
   components:{
     QHeader,
+    swiper,
+    swiperSlide
   }
 };
 </script>
@@ -264,5 +285,32 @@ export default {
     .swiper-container{
       overflow: auto;
     }
-  }    
+    .swiper-wrapper a{
+      display: block;
+      height: 100%;
+    }
+    
+  }  
+  .addmember {
+    width:1.49rem;
+    height:1.49rem;
+    background:#1890FF;
+    border-radius: 50%;
+    font-size:12px;
+    font-family:PingFangSC-Regular;
+    color:rgba(255,255,255,1);
+    text-align: center;
+    -moz-box-shadow:0px 0.03rem 0.4rem rgba(24,144,255,0.75); 
+    -webkit-box-shadow:0px 0.03rem 0.4rem rgba(24,144,255,0.75);
+    box-shadow: 0px 0.03rem 0.4rem rgba(24,144,255,0.75);
+    position: fixed;
+    bottom:0.55rem;
+    right: 0.64rem;
+    .order-action {
+      display: inline-block;
+      margin-top: 0.2rem;
+      font-size: 16px;
+      color: #fff;
+    }
+  }
 </style>

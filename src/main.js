@@ -17,7 +17,7 @@ import VueAMap from 'vue-amap';
 Vue.use(VueAMap);
 import VueAwesomeSwiper from 'vue-awesome-swiper';
 Vue.use(VueAwesomeSwiper);
-import 'swiper/dist/css/swiper.css'
+import 'swiper/dist/css/swiper.css';
 // 初始化vue-amap
 VueAMap.initAMapApiLoader({
 // 高德的key
