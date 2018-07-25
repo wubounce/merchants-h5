@@ -82,7 +82,7 @@ export default {
           let loginInfo = Object.assign({},this.form);
           let res = await login(qs.stringify(loginInfo));
           if (res.code===0) {
-              this.login(res.data);
+              this.login(res.data.token);
               this.$router.push('/index');
           }else {
               MessageBox.alert(res.msg);
