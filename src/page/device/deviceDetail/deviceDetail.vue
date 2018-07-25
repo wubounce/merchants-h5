@@ -60,6 +60,13 @@
       </li>
 
     </ul>
+
+    <div class="about-button">
+      <Button btn-type="small" btn-color="spe" class="ft-btn active" @confirm="deviceDele">删除</Button>
+      <Button btn-type="small" btn-color="spe" class="ft-btn" @confirm="deviceTZJ">桶自洁</Button>
+      <Button btn-type="small" btn-color="spe" class="ft-btn" @confirm="deviceRest">复位</Button>
+      <Button btn-type="small" btn-color="spe" class="ft-btn" @confirm="deviceEdit">编辑</Button>
+    </div>
     <!-- 模块商 -->
     <mt-popup v-model="companyVisible" position="bottom" class="select-popup">
       <div class="select">
@@ -135,8 +142,11 @@
 
       },
       checkSecondClass() {},
-      toFunctionSeting() {}
-
+      toFunctionSeting() {},
+      deviceDele() {},
+      deviceTZJ() {},
+      deviceRest() {},
+      deviceEdit() {},
     },
     components: {
       Actionsheet,
@@ -251,13 +261,36 @@
       padding: 0.13rem 0.4rem;
       margin: .4rem 0 2.9rem;
       background: rgba(255, 255, 255, 1);
-      
+
       p {
         width: 10rem;
         height: 0.8rem;
         line-height: 0.8rem;
         color: #999999;
       }
+    }
+  }
+
+  .about-button {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    background-color: #fff;
+    display: flex;
+    justify-content: flex-end;
+    .ft-btn {
+      margin: 0.3rem 0;
+      width: 2.13rem;
+      line-height: 0.9rem;
+      height: 0.9rem;
+      border-radius: 5px;
+      margin-right: 0.3rem;
+      color: #333333;
+      border-color: #D8D8D8;
+    }
+    .active {
+      color: #1890FF;
+      border-color: #1890FF;
     }
   }
 
