@@ -2,19 +2,19 @@
 	<section>
 	  <q-header :title="title"></q-header>
     <ul>
-      <li v-for="(item,index) in list" :key="index" @click="toShopDetail">
+      <li v-for="(item,index) in list" :key="index" @click="toShopDetail(item.shopId)">
         <p class="top">
           <!-- <span class="shopName">{{item.shopName}}</span>
           <span>
             <span class="iconMark discount">惠</span><span class="iconMark reserve">预</span>
           </span> -->
           <span>{{item.shopName}}</span>
-          <span><span class="iconMark discount">惠</span><span class="iconMark reserve">预</span></span>
+          <span><span v-if="item.isDiscount" class="iconMark discount">惠</span><span v-if="!item.isReserve" class="iconMark reserve">预</span></span>
         </p>
         <div class="bottom">
           <div class="kindof">
             <div class="text">分类</div>
-            <div class="text-value">{{item.shopTypeName}}</div>
+            <div class="text-value">{{item.shopType}}</div>
           </div>
           <div class="kindof">
             <div class="text">设备</div>
@@ -22,14 +22,8 @@
           </div>
           <div class="kindof">
             <div class="text">收益</div>
-            <div class="text-value">{{item.orderPrice}}<span class="little-font">元</span></div>
+            <div class="text-value">{{item.profit}}<span class="little-font">元</span></div>
           </div>
-          <!-- <p>
-            <span class="kindof">分类</span><span class="size">{{item.shopTypeName}}</span>
-            <span class="kindof">设备</span><span class="size">{{item.machineCount}}台</span>
-            <br>
-            <span class="kindof">收益</span><span class="size">{{item.orderPrice}}元</span>
-          </p> -->
         </div>
       </li>
     </ul>
@@ -39,69 +33,41 @@
 
 <script>
 import QHeader from '@/components/header';
+import { MessageBox } from 'mint-ui';
+import { manageListFun } from '@/service/shop';
 export default {
   data() {
     return {
        title:'店铺管理',
-       list:[{
-          shopId:'12345dsuisydwedbewi1823',
-          machineCount:54444440,
-          shopName:'常熟高新园中等专业学校',
-          orderPrice:'999999100.00',
-          shopTypeName:'流动人口社区',
-          ifAddTime:'1',
-          isReserve:'0'
-        },
-        {
-          shopId:'12345dsuisydwedbewi1823',
-          machineCount:50,
-          shopName:'常熟高新园中等专业学校',
-          orderPrice:'10000.00',
-          shopTypeName:'流动人口社区',
-          ifAddTime:'1',
-          isReserve:'0'
-        },
-        {
-          shopId:'12345dsuisydwedbewi1823',
-          machineCount:50,
-          shopName:'常熟高新园中等专业学校',
-          orderPrice:'10000.00',
-          shopTypeName:'流动人口社区',
-          ifAddTime:'1',
-          isReserve:'0'
-        },
-        {
-          shopId:'12345dsuisydwedbewi1823',
-          machineCount:50,
-          shopName:'常熟高新园中等专业学校',
-          orderPrice:'10000.00',
-          shopTypeName:'流动人口社区',
-          ifAddTime:'1',
-          isReserve:'0'
-        },
-        {
-          shopId:'12345dsuisydwedbewi1823',
-          machineCount:50,
-          shopName:'常熟高新园中等专业学校',
-          orderPrice:'10000.00',
-          shopTypeName:'流动人口社区',
-          ifAddTime:'1',
-          isReserve:'0'
-        }
-      ]
+       list:[]
     };
   },
   methods: {
-    toShopDetail() {
+    toShopDetail(i) {
       this.$router.push({
-        name:'shopDetail'
+        name:'shopDetail',
+        query:{
+          shopId: i
+        }
       });
     },
     toAddShop() {
       this.$router.push({
         name:'addShop'
       });
+    },
+    async getShopName() {
+      let res = await manageListFun();
+      if(res.code===0) {
+        this.list = res.data;
+      }
+      else {
+        MessageBox.alert(res.msg);
+      }
     }
+  },
+  created() {
+    this.getShopName();
   },
   components: {
     QHeader
