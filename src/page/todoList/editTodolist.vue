@@ -4,17 +4,21 @@
     <!-- 第一模块 -->
     <div class="ul-list">
       <p class="personal-item" @click="changemachineFunc"><span>启动模式</span><span>{{machineFunction}}</span></p>
-      <p class="personal-item"><span>启动时间</span><span>{{time}}</span></p>
+      <p class="personal-item" @click="open('pickerStarTime')"><span>启动时间</span><span>{{time}}</span></p>
     </div>
     <button class="submit" @click="submit">提交</button>
 
+    <!-- 启动模式 -->
     <mt-popup v-model="popupVisible" position="bottom" class="mint-popup">
       <div class="prop-bd">
         <div class="page-picker-wrapper">
-          <mt-picker class="picker" :slots="slots" @change="valuesChange" :showToolbar="true" ><p class="toolBar"><span @click="cancel">取消</span><span>店铺类型</span><span @click="confirmNews">确定</span></p></mt-picker>
+          <mt-picker class="picker" :slots="slots" @change="valuesChange" :showToolbar="true" ><p class="toolBar"><span @click="cancel">取消</span><span>启动模式</span><span @click="confirmNews">确定</span></p></mt-picker>
         </div>
       </div>
     </mt-popup>
+
+    <!-- 启动时间 -->
+    <mt-datetime-picker ref="pickerStarTime" type="datetime" v-model="pickerValue"  @confirm="handleConfirm"></mt-datetime-picker>
   </section>
 </template>
 
@@ -22,6 +26,7 @@
 import QHeader from '@/components/header';
 import Button from "@/components/Button/Button";
 import { MessageBox } from 'mint-ui';
+import moment from 'moment';
   export default {
     data() {
       return {
@@ -40,38 +45,37 @@ import { MessageBox } from 'mint-ui';
             name:'店铺类型',
             defaultIndex:2
           }
-        ]
+        ],
+        datatimeVisible:false,
+        pickerValue:''
       };
     },
     created(){
     },
     methods: {
-      submit() {
-
-      },
       changemachineFunc() {
         this.popupVisible = true;
         this.index = 0;
       },
-      goStart() {
-        //立即启动
-        MessageBox.confirm('您确定要启动还未到期的设备么？').then(action => {	        
-	        let instance = this.$toast({
-            message: '启动成功',
-            iconClass: 'mint-toast-icon mintui mintui-success'
-          });
-          setTimeout(() => {
-            instance.close();
-          }, 1000);
-	      },
-	      action => {
-	      	this.$toast({
-            message: "取消",
-            position: "bottom",
-            duration: 3000
-          });
-	      }
-	     );
+      open(picker) {
+        this.$refs[picker].open();
+      },
+      handleConfirm(data) {
+        let date = moment(data).format('YYYY-MM-DD HH:mm');
+	      this.pickerValue = date;
+        this.time = this.pickerValue;
+      },
+      submit() {
+        let instance = this.$toast({
+          message: '编辑成功',
+          iconClass: 'mint-toast-icon mintui mintui-success'
+        });
+        setTimeout(() => {
+          instance.close();
+        }, 1000);
+        this.$router.push({
+          name:'todoDetail'
+        });
       },
       valuesChange(picker, values) {
         this.machineFunction = values[0];
