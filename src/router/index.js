@@ -21,6 +21,7 @@ export default new Router({
     { path: '/addDevice', name: 'addDevice', component: () => import('@/page/device/addDevice/addDevice') },
     { path: '/editDevice', name: 'editDevice', component: () => import('@/page/device/editDevice/editDevice') },
     { path: '/deviceDetail', name: 'deviceDetail', component: () => import('@/page/device/deviceDetail/deviceDetail') },
+    { path: '/functionSet', name: 'functionSet', component: () => import('@/page/device/functionSet/functionSet') },
 
 
     { path: '/member', name: 'member', component: () => import('@/page/member/index') },

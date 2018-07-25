@@ -54,11 +54,27 @@
         </ul>
       </li>
 
+      <!-- 功能列表部分 -->
+      <section class="fun-item-hd">
+        <div>
+          <p v-for="(item,index) in functionListTitle " :key="index">
+            <span v-for="(it,idx) in item " :key="idx">{{it}}</span>
+          </p>
+        </div>
+      </section>
+      <section class="fun-item-bd">
+        <p v-for="(item,index) in functionList " :key="index">
+          <span>{{item.fuctionName}}</span>
+          <span>{{item.time}}</span>
+          <span>{{item.price}}</span>
+          <span>{{item.status}}</span>
+        </p>
+      </section>
+
       <li class="device-detail-ft">
         <p>创建人：Wendy</p>
         <p>创建时间： 2018-07-15 15:38:05</p>
       </li>
-
     </ul>
 
     <div class="about-button">
@@ -82,18 +98,8 @@
 </template>
 
 <script>
-  // import wx from 'weixin-js-sdk';
-  // import {
-  //   device
-  // } from "@/service/device";
   import Button from "@/components/Button/Button";
   import QHeader from '@/components/header';
-  import {
-    Actionsheet
-  } from "mint-ui";
-  import AddCount from "@/components/AddCount/AddCount";
-
-
   export default {
     data() {
       return {
@@ -125,8 +131,18 @@
             value: "youfang"
           }
         ],
-        functionList: [],
-        funList: [],
+        functionList: [{
+          fuctionName: '白色特脏 赃污',
+          time: 25,
+          price: 8,
+          status: '开启'
+        }],
+        functionListTitle: [
+          ['功能'],
+          ['耗时', '/分'],
+          ['原价', '/元'],
+          ['状态']
+        ]
       };
     },
     methods: {
@@ -149,8 +165,6 @@
       deviceEdit() {},
     },
     components: {
-      Actionsheet,
-      AddCount,
       Button,
       QHeader
     }
@@ -255,13 +269,11 @@
           color: #999999;
         }
       }
-
     }
     .device-detail-ft {
       padding: 0.13rem 0.4rem;
       margin: .4rem 0 2.9rem;
       background: rgba(255, 255, 255, 1);
-
       p {
         width: 10rem;
         height: 0.8rem;
@@ -269,6 +281,59 @@
         color: #999999;
       }
     }
+    .fun-item-hd {
+      padding: 0;
+      background: #FAFCFF;
+      color: #1890FF;
+      font-size: 0.37rem;
+      padding: .6rem 0;
+      div {
+        display: flex;
+        p {
+          flex: 2.19;
+          text-align: center;
+          position: relative;
+          border-right: rgb(24, 144, 255) .03rem solid;
+          box-sizing: border-box;
+          &:nth-child(1) {
+            flex: 3.32;
+          }
+          &:nth-child(4) {
+            flex: 2.21;
+            border-right: none;
+          }
+          span {
+            &:nth-child(2) {
+              font-size: 70%;
+              letter-spacing: .001rem
+            }
+          }
+        }
+      }
+    }
+    .fun-item-bd {
+      height: 1.6rem;
+      line-height: 1.6rem;
+      padding: 0 .4rem;
+      font-size: 0.37rem;
+      color: #333333;
+      background: #fff;
+      p {
+        display: flex;
+        justify-content: space-between;
+        span {
+          flex: 2.19;
+          text-align: center;
+          &:nth-child(1) {
+            flex: 3.32;
+          }
+          &:nth-child(4) {
+            flex: 2.21;
+          }
+        }
+      }
+    }
+
   }
 
   .about-button {
