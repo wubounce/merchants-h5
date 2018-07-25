@@ -387,6 +387,9 @@ export default {
       setTimeout(() => {
         instance.close();
       }, 1000);
+      this.$router.push({
+        name:'shopList'
+      });
     }
   },
   components:{

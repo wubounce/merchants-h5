@@ -30,9 +30,11 @@
     <p class="shop-item"><span>VIP数量</span><span>{{vipsum}}个</span></p>
 
     <!-- 第四模块 -->
-    <p class="shop-info second-p"><span>创建人： </span><span>{{operatorId}}</span></p>
-    <p class="shop-info"><span>创建时间： </span><span>{{createTime}}</span></p>
+    <p class="shop-info second-p"><span>创建人：</span><span>{{operatorId}}</span></p>
+    <p class="shop-info"><span>创建时间：</span><span>{{createTime}}</span></p>
     <p class="blank"></p>
+
+    <!-- 第五模块 -->
     <p class="about-button">
       <Button btn-type="small" btn-color="spe" id="delete" @confirm="isDeleteOrNot()">删除</Button>
 			<Button btn-type="small" btn-color="spe" id="edit" @confirm="goShopEdit()">编辑</Button>
@@ -42,6 +44,7 @@
 <script>
 import QHeader from '@/components/header';
 import Button from "@/components/Button/Button";
+import { MessageBox } from 'mint-ui';
 export default {
   data() {
     return {
@@ -65,6 +68,26 @@ export default {
   methods:{
     isDeleteOrNot() {
       //删除功能
+      MessageBox.confirm('您确定要取消批量启动设备么？').then(action => {	        
+	        let instance = this.$toast({
+            message: '删除成功',
+            iconClass: 'mint-toast-icon mintui mintui-success'
+          });
+          setTimeout(() => {
+            instance.close();
+          }, 1000);
+          this.$router.push({
+            name:'shopList'
+          });
+	      },
+	      action => {
+	      	this.$toast({
+              message: "已取消",
+              position: "middle",
+              duration: 3000
+            });
+	      }
+	     );
     },
     goShopEdit() {
       //编辑功能
@@ -171,7 +194,6 @@ export default {
     background-color: #fff;
     color:rgba(153,153,153,1);
     padding: 0.2rem 0;
-
     span {
       padding-left: 0.3rem;
     }

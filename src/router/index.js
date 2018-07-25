@@ -28,12 +28,20 @@ export default new Router({
     { path: '/detailMember', name: 'detailMember', component: () => import('@/page/member/detailMember') },
     { path: '/order', name: 'order', component: () => import('@/page/order/index') },
     { path: '/orderdetail', name: 'orderdetail', component: () => import('@/page/order/orderdetail') },
+
+    //店铺管理
     { path: '/shoplist', name: 'shopList', component: () => import('@/page/shop/shopList') },
     { path: '/addShop', name: 'addShop', component: () => import('@/page/shop/addShop') },
     { path: '/mapSearch', name: 'mapSearch', component: () => import('@/page/shop/mapSearch') },
     { path: '/shopDetail', name: 'shopDetail', component: () => import('@/page/shop/shopDetail') },
     { path: '/editShop', name: 'editShop', component: () => import('@/page/shop/editShop') },
+
+    //待办事项
     { path: '/todolist', name: 'todolist', component: () => import('@/page/todolist/index') },
+    { path: '/todoDetail', name: 'todoDetail', component: () => import('@/page/todolist/todoDetail') },
+    { path: '/editTodolist', name: 'editTodolist', component: () => import('@/page/todolist/editTodolist') },
+
+    //营销管理
     { path: '/marketing', name: 'marketing', component: () => import('@/page/marketing/index') },
     { path: '/addvip', name: 'addvip', component: () => import('@/page/marketing/addVIP') },
     { path: '/addMarket', name: 'addMarket', component: () => import('@/page/marketing/addMarket') },
