@@ -20,7 +20,7 @@
       <div class="form-input"><span class="more more-color">请选择权限</span><span class="forward iconfont icon-nextx"  @click="permissionsVisible=true"></span></div>
     </div> -->
   </div>
-  <div class="confirm" @click="getcheckshop">提交</div>
+  <div class="confirm" @click="addmember">提交</div>
   <!-- 选择店铺 -->
   <mt-popup v-model="shopVisible" position="bottom">
     <div class="resp-shop">
@@ -166,20 +166,19 @@ export default {
       let res = await shopListFun();
       this.shoplist = res.data;
     },
-    async getcheckshop(){
+    getcheckshop(){
       this.checkshoptxt = this.checkshoplist.join(',');
-      this.shoplist.forEach((item,i)=>{
-          if(this.checkshoplist[i] === item.shopName){
-            this.operateShopIds.push(item.shopId);
-          }
-      });
+      let checklist = this.shoplist.filter(v=>this.checkshoplist.some(k=>k==v.shopName));
       this.shopVisible = false;
+      checklist.forEach(item=>this.operateShopIds.push(item.shopId));
+    },
+    async addmember(){
       if (this.validate()) {
         let payload = {
           username:this.username,
           phone:this.phone,
           operateShopIds:this.operateShopIds.join(','),
-          mIds:''
+          mIds:1
         };
         let res = await addOperatorFun(qs.stringify(payload));
         if (res.code === 1) {
@@ -188,7 +187,7 @@ export default {
           this.$toast({message: res.msg });
         }
       }
-    },
+    }
   },
   components:{
     QHeader,

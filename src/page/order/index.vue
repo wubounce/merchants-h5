@@ -24,7 +24,7 @@
           <span class="odernmu-phone">{{item.phone}}<span style="padding:0 0.186667rem;color:#333333">|</span>{{item.createTime}}</span>
           <span class="ordernum-status">{{item.orderStatus | orserStatus}}</span>
         </section>
-        <router-link :to="{ name: 'orderdetail'}">
+        <router-link :to="{ name: 'orderdetail', query:{orderNo:item.orderNo}}">
         <section class="order-list">  
             <div class="title">{{item.shopName}}<span  class="go">icon</span></div>
             <div class="detail">  

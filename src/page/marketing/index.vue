@@ -7,6 +7,7 @@
   <section class="tab-contont">
   	<div class="discount-wrap" v-if="tabindex === 0">
   		<div class="discoun-list">
+        <span class="discountag"><span class="zanting">已暂停</span></span>
   			<p class="time">优惠期<span>2018-08-09</span>至<span>2018-08-09</span></p>
         <div class="discoun-content">
           <div class="dis-con-title">
@@ -97,6 +98,7 @@
 <script>
 import QHeader from '@/components/header';
 import { swiper, swiperSlide } from 'vue-awesome-swiper';  
+import { timeMarketListFun } from '@/service/market';
 export default {
   data() {
     return {
@@ -120,10 +122,16 @@ export default {
     
   },
   created(){
+    this.timeMarketList();
   },
   methods: {
     tabclick(index){
     	this.tabindex = index;
+    },
+    async timeMarketList(){
+      let res = await timeMarketListFun();
+      console.log(res);
+
     },
     goaddMarket(){
       this.$router.push({name:'addMarket'});
@@ -168,6 +176,24 @@ export default {
     margin-top: 0.29rem;
     padding:0.29rem 0.4rem 0;
     background: #fff;
+    position: relative;
+    .discountag {
+      width: 0;
+      height: 0;
+      border-style: solid;
+      border-width: 0 1.07rem 1.07rem 0;
+      border-color: transparent #D8D8D8 transparent transparent;
+      position:absolute;
+      top:0px;
+      right:0px;
+      .zanting {
+         -webkit-transform-origin: center center;
+          transform-origin: center center;
+          font-size: 12px;
+          color: #fff;
+      }
+     
+    }
 		.time {
 			color: #999999;
 			font-size: 14px;
@@ -313,4 +339,5 @@ export default {
       color: #fff;
     }
   }
+
 </style>

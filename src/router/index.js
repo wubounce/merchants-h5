@@ -53,6 +53,10 @@ export default new Router({
     // 我的
     { path: '/user', name: 'user', component: () => import('@/page/user/user') },
 
+    { path: '/setting', name: 'setting', component: () => import('@/page/setting/index') },
+    { path: '/personalSet', name: 'personalSet', component: () => import('@/page/setting/personalSet') },
+
+
     //钱包
     { path: '/wallet', name: 'wallet', component: () => import('@/page/wallet/wallet') },
     { path: '/accountList', name: 'accountList', component: () => import('@/page/wallet/accountList') },

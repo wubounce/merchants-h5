@@ -30,8 +30,10 @@
     </ul>
     <ul class="user-list">
         <li class="item">
+        <router-link to="setting" class="item">
             <div class="item-left"><img src="../../assets/img/home/icon_near2x.png"><span>设置</span></div>
             <div class="item-right"><img src="../../assets/img/home/icon_near2x.png"></div>
+            </router-link>
         </li>
     </ul>
     <q-menu></q-menu>
