@@ -2,10 +2,12 @@
   <section class="personal">
     <q-header :title="title"></q-header>
     <!-- 第一模块 -->
-    <p class="shop-item title"><span>累计收益</span><span>{{orderPrice}}</span></p>
-    <p class="shop-item second-p"><span>店铺名称</span><span>{{shopName}}</span></p>
-    <p class="shop-item"><span>店铺类型</span><span>{{shopType}}</span></p>
-    <p class="shop-address"><span>店铺地址</span><br><span>{{address}}</span></p>
+    <p class="shop-item title"><span>累计收益</span><span>{{shopdetail.profit}} 元</span></p>
+    <p class="shop-item second-p"><span>店铺名称</span><span>{{shopdetail.shopName}}</span></p>
+    <p class="shop-item"><span>店铺类型</span><span>{{shopdetail.shopType}}</span></p>
+    <p class="shop-address">
+      <span>店铺地址</span><br>
+      <span>{{shopdetail.province + shopdetail.city + shopdetail.district + shopdetail.address }}</span></p>
 
     <!-- 第二模块 -->
     <div class="shop-machine">
@@ -14,25 +16,27 @@
         <span class="one-machine" v-for="(item,index) in list" :key="index">{{item}}</span>
       </div>
     </div>
-    <p class="shop-item"><span>设备数量</span><span>{{machineCount}}</span></p>
-    <p class="shop-item"><span>预约功能</span><span>{{isReserve}}</span></p>
-    <p class="shop-item"><span>预约时长(分钟)</span><span>{{reserveTime}}</span></p>
-    <p class="shop-item"><span>营业时间</span><span>{{time}}</span></p>
+    <p class="shop-item"><span>设备数量</span><span>{{shopdetail.machineCount}} 台</span></p>
+    <p class="shop-item"><span>预约功能</span><span>{{shopdetail.isReserve == 0? '已开通' : '未开通'}}</span></p>
+    <p class="shop-item"><span>预约时长(分钟)</span><span>{{shopdetail.orderLimitMinutes}}</span></p>
+    <p class="shop-item"><span>营业时间</span><span>{{shopdetail.workTime}}</span></p>
     <p class="picture">
         <span>店铺照片</span>
         <span>
-          <img src="../../../static/shop/demo.jpg" alt="店铺图片" class="shop-img">
+          <img :src="shopdetail.imageId" alt="店铺图片" class="shop-img">
         </span>
     </p>
 
     <!-- 第三模块 -->
-    <p class="shop-item second-p"><span>限时优惠</span><span>{{discount}}</span></p>
-    <p class="shop-item"><span>VIP数量</span><span>{{vipsum}}个</span></p>
+    <p class="shop-item second-p"><span>限时优惠</span><span>{{shopdetail.isDiscount ==true ? '已设置' : '未设置'}}</span></p>
+    <p class="shop-item"><span>VIP数量</span><span>{{shopdetail.vipCount}}个</span></p>
 
     <!-- 第四模块 -->
-    <p class="shop-info second-p"><span>创建人： </span><span>{{operatorId}}</span></p>
-    <p class="shop-info"><span>创建时间： </span><span>{{createTime}}</span></p>
+    <p class="shop-info second-p"><span>创建人：</span><span>{{shopdetail.createUser}}</span></p>
+    <p class="shop-info"><span>创建时间：</span><span>{{shopdetail.createTime}}</span></p>
     <p class="blank"></p>
+
+    <!-- 第五模块 -->
     <p class="about-button">
       <Button btn-type="small" btn-color="spe" id="delete" @confirm="isDeleteOrNot()">删除</Button>
 			<Button btn-type="small" btn-color="spe" id="edit" @confirm="goShopEdit()">编辑</Button>
@@ -40,38 +44,61 @@
   </section>
 </template>
 <script>
+import qs from "qs";
 import QHeader from '@/components/header';
 import Button from "@/components/Button/Button";
+import { MessageBox } from 'mint-ui';
+import { shopDetailFun } from '@/service/shop';
 export default {
   data() {
     return {
+      //shopId:this.$route.query.shopId,
       title: '店铺详情',
-      orderPrice: '1000元',
-      shopName: '企鹅科技1号店',
-      shopType: '学校',
-      address:'浙江省 杭州市 西湖区 紫荆花路2号联合大厦A幢3单元1005',
-      list:['洗衣机','吹风机','烘干机','充电桩','修理机','洗鞋机','战斗机','万能充'],
-      MachineTypeIds: "4eeb1b0a-d006-49cc-bf17-73c20599057b,c9892cb4-bd78-40f6-83c2-ba73383b090a",
-      machineCount: '100台',
-      isReserve: '已开通',
-      reserveTime:'5',
-      time:'09:30-22:30',
-      discount:'已设置',
-      vipsum:'300',
-      operatorId:'Wendy',
-      createTime:'2018-07-15 15:38:05'
+      list:[],
+      shopdetail:{}
     };
   },
   methods:{
     isDeleteOrNot() {
       //删除功能
+      MessageBox.confirm('您确定要取消批量启动设备么？').then(action => {	        
+	        let instance = this.$toast({
+            message: '删除成功',
+            iconClass: 'mint-toast-icon mintui mintui-success'
+          });
+          setTimeout(() => {
+            instance.close();
+          }, 1000);
+          this.$router.push({
+            name:'shopList'
+          });
+	      },
+	      action => {
+	      	this.$toast({
+              message: "已取消",
+              position: "middle",
+              duration: 3000
+            });
+	      }
+	     );
     },
     goShopEdit() {
       //编辑功能
       this.$router.push({
         name:'editShop'
       });
+    },
+    async getShopDetail() {
+      let obj = { shopId: this.$route.query.shopId };
+      let res = await shopDetailFun(qs.stringify(obj));
+      if(res.code===0) {
+        this.shopdetail = res.data;
+        this.list = res.data.machineTypeNames.split(',');
+      }
     }
+  },
+  created() {
+    this.getShopDetail();
   },
   components:{
     QHeader,
@@ -162,6 +189,7 @@ export default {
           padding-right: 0.3rem;
           .shop-img {
             width: 2rem;
+            height: 2rem;
           }
         }
       }
@@ -171,7 +199,6 @@ export default {
     background-color: #fff;
     color:rgba(153,153,153,1);
     padding: 0.2rem 0;
-
     span {
       padding-left: 0.3rem;
     }

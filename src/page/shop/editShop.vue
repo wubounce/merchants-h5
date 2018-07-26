@@ -57,10 +57,8 @@
 </template>
 
 <script>
-
 import QHeader from '@/components/header';
 import UploadImg from "@/components/UploadImg/UploadImg";
-
 export default {
   data() {
     return {

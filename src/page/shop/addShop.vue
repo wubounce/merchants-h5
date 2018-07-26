@@ -11,8 +11,8 @@
     </ul>
     <div class="second">
       <li class="device business" @click="addDevice">设备类型<span>{{machineName}}</span></li>
-      <p class="isReserve"><span>预约功能</span><span><mt-switch class="check-switch"></mt-switch></span></p>
-      <p class="reserveTime"><span>预约时长</span><span><input type="text" class='timeInput'  maxlength="2" placeholder="请填写预约有效时长"></span></p>
+      <p class="isReserve"><span>预约功能</span><span><mt-switch class="check-switch" v-model="isReserve"></mt-switch></span></p>
+      <p class="reserveTime"><span>预约时长</span><span><input type="text" class='timeInput' v-model="orderLimitMinutes" maxlength="2" placeholder="请填写预约有效时长"></span></p>
       <li class="business" @click="chooseTime">营业时间<span>{{addBusinessTime}}</span></li>
       <p class="picture">
         <span>店铺照片</span>
@@ -57,10 +57,11 @@
 </template>
 
 <script>
-
+import qs from "qs";
 import QHeader from '@/components/header';
 import UploadImg from "@/components/UploadImg/UploadImg";
-
+import { addShopFun } from '@/service/shop';
+import { areaListFun } from '@/service/shop';
 export default {
   data() {
     return {
@@ -70,6 +71,7 @@ export default {
       address:'',
       machineName:'',
       machineTypeIds:'',
+      orderLimitMinutes:'',
       addBusinessTime:'',
       title:'新增店铺',
       list: [
@@ -86,7 +88,7 @@ export default {
           value: ""
         }
       ],
-      shopType: 1,
+      shopType: "",
       shopTypeString:'',
       popupVisible:false,
       placeVisible:false,
@@ -105,7 +107,7 @@ export default {
       addressSlots:[
         {
           flex: 1,
-          values: [1,2,3,4,5,6,7,8,9],
+          values: [],
           className: "slot1",
           textAlign: "center"
         },
@@ -132,9 +134,22 @@ export default {
           textAlign: "center"
         }
       ],
+      provinceArray:[],
+      cityArray:[],
+      districtArray:[],
+      provinceId:'',
+      cityId:'',
+      districtId:'',
+      
+      provinceName:'',
+      cityName:'',
+      districtName:'',
+
+      areaName:'',
       imgId: {
         a: "a"
       },
+      url:'',
       machine: [],
       arrLabel:[],
       options: [
@@ -227,7 +242,8 @@ export default {
         }
       ],
       timeVisible: false,
-      isTime:true
+      isTime:true,
+      isReserve:true
     };
   },
   methods:{
@@ -273,7 +289,7 @@ export default {
           break;
         case 1:
           this.placeVisible = true;
-          //alert('该功能的实现依赖接口,接口暂无T^T');
+          this.getArea();
           break;
         case 2:
           this.go("mapSearch");
@@ -294,7 +310,16 @@ export default {
           this.list[0].value = this.shopTypeString;
           break;
         case 1:
-          alert('功能暂无');
+          this.placeVisible = false;
+          //console.log(this.provinceName == this.cityName.slice(0,2));
+          if(this.provinceName == this.cityName.slice(0,2)) {
+            
+            this.list[1].value = this.cityName + this.districtName;
+          }
+          else {
+            this.list[1].value = this.provinceName + this.cityName + this.districtName;
+          }
+          
           break;
         case 2:
           alert('功能暂无');
@@ -342,7 +367,6 @@ export default {
           this.placeVisible = false;
           break;
         case 2:
-          alert('功能暂无');
           break;
         case 3:
           this.deviceDetail = false;
@@ -352,7 +376,50 @@ export default {
           break;
       }
     },
-    onAddressChange() {
+    async  onAddressChange(picker, values) {
+      //根据省，找出与之对应的市
+      for(let i=0;i<this.provinceArray.length;i++) {
+        if(values[0] == this.provinceArray[i].areaName) {
+          let city = { parentId: this.provinceArray[i].areaId };
+          this.provinceId = this.provinceArray[i].areaId;
+          let res = await areaListFun(qs.stringify(city));
+          if(res.code===0) {
+            let chooseCity = res.data.map((c)=> {
+              return c.areaName;
+            });
+
+            this.cityArray = res.data;
+            picker.setSlotValues(1, chooseCity); //设置市
+          }
+        }
+      }
+
+      //根据市，找出与之对应的区
+      for(let j=0;j<this.cityArray.length;j++) {
+        if(values[1] == this.cityArray[j].areaName) {
+          let district = { parentId: this.cityArray[j].areaId };
+          this.cityId = this.cityArray[j].areaId;
+          let resDistrict = await areaListFun(qs.stringify(district));
+          if(resDistrict.code===0) {
+            let chooseDistrict = resDistrict.data.map((d)=> {
+              return d.areaName;
+            });
+
+            this.districtArray = resDistrict.data;
+            picker.setSlotValues(2, chooseDistrict); //设置市
+          }
+        }
+      }
+
+      for(let j=0;j<this.districtArray.length;j++) {
+        if(values[2] == this.districtArray[j].areaName) {
+          this.districtId = this.districtArray[j].areaId;
+        }
+      }
+
+      this.provinceName = values[0];
+      this.cityName = values[1];
+      this.districtName = values[2];
 
     },
     addDevice() {
@@ -362,7 +429,8 @@ export default {
       this.deviceDetail = true;
     },
     UpdatedImgFiles(msg) {
-      console.log(msg);
+      this.url = msg;
+      //console.log(this.url);
     },
     changeTime(picker, values) {
       this.shopTime.startTime = values[0].slice(0,2) + ':' +values[1].slice(0,2);
@@ -379,15 +447,57 @@ export default {
       this.timeVisible = true;
       this.isClass = true;
     },
-    submit() {
-      let instance = this.$toast({
-        message: '添加成功',
-        iconClass: 'mint-toast-icon mintui mintui-success'
-      });
-      setTimeout(() => {
-        instance.close();
-      }, 1000);
+    async submit() {
+      let changeisReserve = (this.isReserve==true)? 0 :1;
+      let obj = {
+        shopId: '  ',
+        shopName: this.shopName,
+        shopType: this.shopType,
+        provinceId:'130000',
+        cityId:'130100',
+        districtId:'130102',
+        address: this.address,
+        lat:'33.564',
+        lng:'134.456',
+        machineTypeIds: 'c9892cb4-bd78-40f6-83c2-ba73383b090a',
+        isReserve: changeisReserve,
+        orderLimitMinutes: this.orderLimitMinutes,
+        workTime: this.addBusinessTime,
+        imageId: 'http://fileupload.haiyaxiyi.cn/Upload/Shop/292f6b9c-782e-432b-aa0e-d720837026f7.jpg'
+      };
+
+      let res = await addShopFun(qs.stringify(obj));
+      if(res.code===0) {
+        //成功后的操作
+        let instance = this.$toast({
+          message: '添加成功',
+          iconClass: 'mint-toast-icon mintui mintui-success'
+        });
+        setTimeout(() => {
+          instance.close();
+        }, 1000);
+        this.$router.push({
+          name:'shopList'
+        });
+      }
+    },
+    //省市区联动
+    async getArea() {
+      let obj = { parentId: 0 };
+      let res = await areaListFun(qs.stringify(obj));
+      this.provinceArray = res.data;
+      if(res.code===0) {
+        for(let i=0;i<res.data.length;i++) {
+          this.addressSlots[0].values.push(res.data[i].areaName);
+        }
+      }
+      else {
+        MessageBox.alert(res.msg);
+      }
     }
+  },
+  created() {
+    //this.getArea();
   },
   components:{
     QHeader,
