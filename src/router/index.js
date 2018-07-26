@@ -22,6 +22,32 @@ export default new Router({
     { path: '/editDevice', name: 'editDevice', component: () => import('@/page/device/editDevice/editDevice') },
     { path: '/deviceDetail', name: 'deviceDetail', component: () => import('@/page/device/deviceDetail/deviceDetail') },
     { path: '/functionSet', name: 'functionSet', component: () => import('@/page/device/functionSet/functionSet') },
+    
+    { path: '/batchEdit',name: 'batchEdit', component: () => import('@/page/device/batchEdit/batchEdit'),
+    children:[
+      {
+        path: '',
+        component: () => import('@/page/device/batchEdit/selectShop'),
+        name: 'selectShop'
+      },
+      {
+        path: '/selectFirstype',
+        component: () => import('@/page/device/batchEdit/selectFirstype'),
+        name: 'selectFirstype'
+      },
+      {
+        path: '/selectSecondtype',
+        component: () => import('@/page/device/batchEdit/selectSecondtype'),
+        name: 'selectSecondtype'
+      },
+      {
+        path: '/selectFunction',
+        component: () => import('@/page/device/batchEdit/selectFunction'),
+        name: 'selectFunction'
+      }
+    ] 
+    },
+
 
 
     { path: '/member', name: 'member', component: () => import('@/page/member/index') },

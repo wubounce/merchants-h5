@@ -23,18 +23,12 @@
       <Button class="btn cancle" btn-type="default" btn-color="blue" @confirm="cancleSetFun">取消</Button>
       <Button class="btn" btn-type="default" btn-color="blue" @confirm="confirmeSetFun">确定</Button>
     </section>
-
-
-
   </section>
 </template>
 
 <script>
   import Button from "@/components/Button/Button";
   import QHeader from '@/components/header';
-
-
-
   export default {
     data() {
       return {
