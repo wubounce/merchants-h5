@@ -146,7 +146,7 @@ export default {
   },
   methods: { 
     async ParentTypeFun(){ //获取设备类型
-        let res = await ParentTypeFun();
+        let res = await ParentTypeFun(qs.stringify({onlyMine:true}));
         let pac = res.data.find(item=>item.name === '洗衣机');
         this.washingMachineId = pac ? pac.id : '';
         this.typeProfitData();
@@ -161,10 +161,10 @@ export default {
       } else {
         res = await countMachineFun();
       }
-      res.data.forEach(item=>{
-          this.barseriesData.push(item.count);
-          this.barxAxisData.push(MachineStatus(item.machineState));
-      });
+      for(var i in res.data){ //json循环
+        this.barseriesData.push(res.data[i]);
+        this.barxAxisData.push(MachineStatus(i));
+      }
       // 把配置和数据放这里
       this.barchart.setOption(this.barOChartPtion);
     },

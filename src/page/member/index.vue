@@ -1,34 +1,19 @@
 <template>
 <div class="member">
   <q-header :title="title"></q-header>
-  <div class="meber-list">
+  <div class="meber-list" v-for="(item,index) in list" :key="index">
     <div class="momber-wrap">
       <div class="name">
-        <router-link :to="{name:'detailMember'}">
-          <p>Janet</p><p class="phonenum">19420441735 </p>
+        <router-link :to="{name:'detailMember',query:{ id:item.id }}">
+          <p>{{item.userName}}</p><p class="phonenum">{{item.phone}}</p>
         </router-link>
       </div>
       <div class="phone">
-        <div class="right"><mt-switch v-model="value" class="check-switch"></mt-switch></div>
+        <div class="right"><mt-switch v-model="item.isLock" class="check-switch"></mt-switch></div>
       </div>
     </div>
-    <p class="memberdesc">权限：首页，报表，店铺新增</p>
+    <!-- <p class="memberdesc">权限：首页，报表，店铺新增</p> -->
   </div>
-  <div class="meber-list">
-    <div class="momber-wrap">
-      <div class="name">
-        <router-link :to="{name:'detailMember'}">
-          <p>Janet</p><p class="phonenum">19420441735 </p>
-        </router-link>
-      </div>
-      <div class="phone">
-        <div class="right"><mt-switch v-model="value" class="check-switch"></mt-switch></div>
-      </div>
-    </div>
-    <p class="memberdesc">权限：首页，报表，店铺新增</p>
-  </div>
-
-
   <div class="addmember" @click="addmemeber">
     <span class="order-action iconfont icon-nextx"></span><br>
     <span>人员</span>
@@ -37,19 +22,34 @@
 </template>
 <script>
 import QHeader from '@/components/header';
+import { operatorListFun } from '@/service/member';
+import { memberIsLock } from '@/utils/mapping';
 export default {
   data() {
     return {
       title: '人员管理',
       value: false,
+      list:[]
     };
   },
   mounted() {
     
   },
   created(){
+    this.getMemberList();
   },
   methods: {
+    async getMemberList(){
+      let res = await operatorListFun();
+      res.data.forEach((item)=>{
+        if (item.isLock === 0) {
+          item.isLock = true;
+        } else {
+          item.isLock = false;
+        }
+      });
+      this.list = res.data;
+    },
     addmemeber(){
       this.$router.push({name:'addMember'});
     }

@@ -13,5 +13,5 @@ export const dayReportFun = (payload) => fetch.post(dayReportApi, payload);
 //按机器统计
 export const machineReportFun = (payload) => fetch.post(machineReportApi, payload);
 
-//按机器统计
+//店铺列表
 export const shopListFun = (payload) => fetch.post(shopListApi, payload);
