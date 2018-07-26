@@ -26,10 +26,10 @@
             <span class="field-title">设备型号</span>
             <p class="select">{{fromdata.secondClass}}</p>
           </li>
-          <li @click="getCompany">
+          <!-- <li @click="getCompany">
             <span class="field-title">公司</span>
             <p class="select">{{fromdata.companyType.name}}</p>
-          </li>
+          </li> -->
 
           <li>
             <span class="field-title">NQT</span>

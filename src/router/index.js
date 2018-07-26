@@ -91,38 +91,36 @@ export default new Router({
     },
 
     {
-      path: '/batchEdit',
-      name: 'batchEdit',
+      path: '/batchStart',
+      name: 'batchStart',
       component: () =>
-        import ('@/page/device/batchEdit/batchEdit'),
+        import ('@/page/device/batchStart/batchStart'),
       children: [{
           path: '',
           component: () =>
-            import ('@/page/device/batchEdit/selectShop'),
+            import ('@/page/device/batchStart/selectShop'),
           name: 'selectShop'
         },
         {
           path: '/selectFirstype',
           component: () =>
-            import ('@/page/device/batchEdit/selectFirstype'),
+            import ('@/page/device/batchStart/selectFirstype'),
           name: 'selectFirstype'
-        },
-        {
-          path: '/selectSecondtype',
-          component: () =>
-            import ('@/page/device/batchEdit/selectSecondtype'),
-          name: 'selectSecondtype'
         },
         {
           path: '/selectFunction',
           component: () =>
-            import ('@/page/device/batchEdit/selectFunction'),
+            import ('@/page/device/batchStart/selectFunction'),
           name: 'selectFunction'
+        },
+        {
+          path: '/selectStartTime',
+          component: () =>
+            import ('@/page/device/batchStart/selectStartTime'),
+          name: 'selectStartTime'
         }
       ]
     },
-
-
 
     {
       path: '/member',
