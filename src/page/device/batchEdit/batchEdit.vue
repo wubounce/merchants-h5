@@ -112,7 +112,7 @@
 
   .move-enter-active,
   .move-leave-active {
-    transition: opacity .5s;
+    transition: opacity .3s;
   }
 
   .move-enter,
