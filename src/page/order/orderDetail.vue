@@ -37,7 +37,7 @@
       <div class="vip">订单编号：{{detail.orderNo}}</div>
     </div>
   </section>
-  <section class="total-wrap" v-if="detail.orderStatus === 2 || detail.orderStatus === 5">
+  <section class="total-wrap" v-if="detail.orderStatus === 2&& detail.payType !== 0 || detail.orderStatus === 5&& detail.payType !== 0">
     <div class="total-border">
       <div class="vip">支付方式：{{detail.payType | PayType}}</div>
     </div>
@@ -74,10 +74,8 @@ export default {
   },
   methods: {
     async getDetail(orderNo){
-      let payload = Object.assign({},{orderNo:orderNo});
-      let res = await orderDetailFun(qs.stringify(payload));
-      this.detail = res.data.items.find((item)=>item.id === orderNo);
-      console.log(this.detail);
+      let res = await orderDetailFun(qs.stringify({orderNo:orderNo}));
+      this.detail = res.data;
     },
     machineReset(id,machineId){ //设备复位
       MessageBox.confirm(`确定复位${this.detail.subType}？`).then(async () => {
