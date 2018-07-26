@@ -1,0 +1,118 @@
+<template>
+<div class="addmarket">
+  <q-header :title="title"></q-header>
+  <div class="addvip-header">
+    <p>所属店铺<span class="addvip-con">sfsdfsfsfasfsdf</span></p>
+    <p>优惠期<span class="addvip-con">sfsdfsfsfasfsdf</span></p>
+    <p>活动日<span class="addvip-con">sfsdfsfsfasfsdf</span></p>
+    <p>每日活动时段<span class="addvip-con">sfsdfsfsfasfsdf</span></p>
+    <p>折扣优惠<span class="addvip-con">sfsdfsfsfasfsdf</span></p>
+    <p>折扣优惠<span class="addvip-con">sfsdfsfsfasfsdf</span></p>
+    <p>活动状态<span class="addvip-con">sfsdfsfsfasfsdf</span></p>
+  </div>
+  <div class="create-wrap">
+    <p>创建人：Wendy</p>
+    <p>创建时间： 2018-07-15 15:38:05</p>
+  </div>
+  <div class="footer">
+    <span class="edit"><router-link :to="{name:'editMarket'}">编辑</router-link></span>
+    <span class="del" @click="deldelMarket">删除</span>
+  </div>
+</div>
+</template>
+<script>
+import QHeader from '@/components/header';
+import { MessageBox } from 'mint-ui';
+import qs from 'qs';
+import moment from 'moment';
+import { delMarketFun } from '@/service/market';
+
+export default {
+  data() {
+    return {
+      title: '显示优惠详情',
+    };
+  },
+  mounted() {
+    
+  },
+  created(){
+   
+  },
+  methods: {
+    deldelMarket(id){
+      MessageBox.confirm(`确认删除？`).then(async () => {
+        let query = this.$route.query;
+        let payload = {timeId:query.id};
+        let res = await delMarketFun(qs.stringify(payload));
+        if (res.code === 0) {
+          this.$toast({message: '删除成功' });
+          this.$router.push({name:'marketing'});
+        } else {
+          this.$toast({message: res.msg });
+        }
+      });
+    }
+  },
+  components:{
+    QHeader,
+  }
+};
+</script>
+<style type="text/css" lang="scss" scoped>
+  .addvip-header {
+    padding: 0 0.4rem;
+    background: #fff;
+    p {
+      height: 1.6rem;
+      line-height: 1.6rem;
+      font-size: 16px;
+      color: #999;
+      border-bottom:1px solid rgba(223,230,255,1);
+    }
+    p:last-child{
+      border:none;
+    }
+    .addvip-con {
+      float: right;
+      color: #333;
+    }
+  }
+ .create-wrap {
+    margin-top: 0.27rem;
+    padding: 0 0.4rem;
+    background: #fff;
+    font-size:12px;
+    color:#999;
+    p {
+      line-height:0.77rem;
+    }
+  }
+  .footer {
+    width: 100%;
+    background: #fff;
+    position: fixed;
+    bottom: 0;
+    font-size: 14px;
+    padding: 0.28rem 0;
+    > span {
+      float: right;
+      width: 2.4rem;
+      height: 0.8rem;
+      line-height: 0.8rem;
+      border-radius: 0.11rem;
+      text-align: center;
+      margin-right: 0.4rem;
+    }
+    .del {
+      border: 1px solid rgba(216,216,216,1);
+    }
+    .edit {
+      border: 1px solid  #1890FF;
+      a {
+        color: #1890FF;
+      }
+    }
+  }
+</style>
+

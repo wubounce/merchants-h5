@@ -47,6 +47,8 @@ export default new Router({
     { path: '/marketing', name: 'marketing', component: () => import('@/page/marketing/index') },
     { path: '/addvip', name: 'addvip', component: () => import('@/page/marketing/addVIP') },
     { path: '/addMarket', name: 'addMarket', component: () => import('@/page/marketing/addMarket') },
+    { path: '/detailMarket', name: 'detailMarket', component: () => import('@/page/marketing/detailMarket') },
+    { path: '/editMarket', name: 'editMarket', component: () => import('@/page/marketing/editMarket') },
     { path: '/vipDetail', name: 'vipDetail', component: () => import('@/page/marketing/vipDetail') },
     { path: '/editVip', name: 'editVip', component: () => import('@/page/marketing/editVip') },
 
@@ -55,6 +57,10 @@ export default new Router({
 
     { path: '/setting', name: 'setting', component: () => import('@/page/setting/index') },
     { path: '/personalSet', name: 'personalSet', component: () => import('@/page/setting/personalSet') },
+    { path: '/changePwd', name: 'changePwd', component: () => import('@/page/setting/changePwd') },
+    { path: '/contact', name: 'contact', component: () => import('@/page/contact/index') },
+    { path: '/cooperation', name: 'cooperation', component: () => import('@/page/cooperation/index') },
+    
 
 
     //钱包

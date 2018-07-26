@@ -20,19 +20,23 @@
     </ul>
     <ul class="user-list">
         <li class="item">
-            <div class="item-left"><img src="../../assets/img/home/icon_near2x.png"><span>联系客服</span></div>
-            <div class="item-right"><img src="../../assets/img/home/icon_near2x.png"></div>
+            <router-link to="contact" class="item">
+                <div class="item-left"><img src="../../assets/img/home/icon_near2x.png"><span>联系客服</span></div>
+                <div class="item-right"><img src="../../assets/img/home/icon_near2x.png"></div>
+            </router-link>
         </li>
         <li class="item">
-            <div class="item-left"><img src="../../assets/img/home/icon_near2x.png"><span>合作热线</span></div>
-            <div class="item-right"><img src="../../assets/img/home/icon_near2x.png"></div>
+            <router-link to="cooperation" class="item">
+                <div class="item-left"><img src="../../assets/img/home/icon_near2x.png"><span>合作热线</span></div>
+                <div class="item-right"><img src="../../assets/img/home/icon_near2x.png"></div>
+            </router-link>
         </li>
     </ul>
     <ul class="user-list">
         <li class="item">
-        <router-link to="setting" class="item">
-            <div class="item-left"><img src="../../assets/img/home/icon_near2x.png"><span>设置</span></div>
-            <div class="item-right"><img src="../../assets/img/home/icon_near2x.png"></div>
+            <router-link to="setting" class="item">
+                <div class="item-left"><img src="../../assets/img/home/icon_near2x.png"><span>设置</span></div>
+                <div class="item-right"><img src="../../assets/img/home/icon_near2x.png"></div>
             </router-link>
         </li>
     </ul>

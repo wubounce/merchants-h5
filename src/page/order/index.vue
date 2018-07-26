@@ -26,7 +26,7 @@
         </section>
         <router-link :to="{ name: 'orderdetail', query:{orderNo:item.orderNo}}">
         <section class="order-list">  
-            <div class="title">{{item.shopName}}<span  class="go">icon</span></div>
+            <div class="title">{{item.shopName}}<span class="go iconfont icon-nextx"></span></div>
             <div class="detail">  
               <div class="orderpic"><img :src="item.imageId" alt=""></div>
               <div class="content">

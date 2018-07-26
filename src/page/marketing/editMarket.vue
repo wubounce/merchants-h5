@@ -74,7 +74,7 @@ export default {
       value3:'',
       test:true,
       pickerstartDate: new Date('2018-01-01'),
-      title: '新增优惠',
+      title: '编辑限时优惠',
       shopVisible:false,
       shopCurrentTags:null,
       shopName:'shopName',
@@ -291,7 +291,7 @@ export default {
       height: 1.6rem;
       line-height: 1.6rem;
       font-size: 16px;
-      color: #333;
+      color: #999;
       border-bottom:1px solid rgba(223,230,255,1);
     }
     p:last-child{
@@ -299,6 +299,7 @@ export default {
     }
     .addvip-con {
       float: right;
+      color: #333;
     }
   }
   .promiss-footer {

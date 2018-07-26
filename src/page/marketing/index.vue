@@ -6,46 +6,23 @@
   </section>
   <section class="tab-contont">
   	<div class="discount-wrap" v-if="tabindex === 0">
-  		<div class="discoun-list">
-        <span class="discountag"><span class="zanting">已暂停</span></span>
-  			<p class="time">优惠期<span>2018-08-09</span>至<span>2018-08-09</span></p>
-        <div class="discoun-content">
-          <div class="dis-con-title">
-            <p>店铺</p>
-            <p class="dis-con-shop">1店</p>
-          </div>
-          <div class="dis-con-title">
-            <p>折扣优惠</p>
-            <p class="dis-con-shop">8<span>折</span></p>
-          </div>
-        </div>
+
+  		<div class="discoun-list" v-for="(item,index) in timeMarket" :key="index">
+        <router-link :to="{name:'detailMarket', query:{id:item.id}}">
+          <span class="discountag"><span class="zanting">已暂停</span></span>
+            <p class="time">优惠期<span :class="{'stop-discount':item.status === 1}">{{item.noDiscountStart}}</span>至<span :class="{'stop-discount':item.status === 1}">{{item.noDiscountStart}}</span></p>
+            <div class="discoun-content">
+              <div class="dis-con-title">
+                <p>店铺</p>
+                <p :class="['dis-con-shop', {'stop-discount':item.status === 1}]">{{item.shop[0].name}}</p>
+              </div>
+              <div class="dis-con-title">
+                <p>折扣优惠</p>
+                <p :class="['dis-con-shop', {'stop-discount':item.status === 1}]">{{item.discountVO}}<span>折</span></p>
+              </div>
+            </div>
+          </router-link>
   		</div>
-      <div class="discoun-list">
-        <p class="time">优惠期<span>2018-08-09</span>至<span>2018-08-09</span></p>
-        <div class="discoun-content">
-          <div class="dis-con-title">
-            <p>店铺</p>
-            <p class="dis-con-shop">1店</p>
-          </div>
-          <div class="dis-con-title">
-            <p>折扣优惠</p>
-            <p class="dis-con-shop">8<span>折</span></p>
-          </div>
-        </div>
-      </div>
-      <div class="discoun-list">
-        <p class="time">优惠期<span>2018-08-09</span>至<span>2018-08-09</span></p>
-        <div class="discoun-content">
-          <div class="dis-con-title">
-            <p>店铺</p>
-            <p class="dis-con-shop">1店</p>
-          </div>
-          <div class="dis-con-title">
-            <p>折扣优惠</p>
-            <p class="dis-con-shop">8<span>折</span></p>
-          </div>
-        </div>
-      </div>
       <div class="addmember" @click="goaddMarket">
         <span class="order-action iconfont icon-nextx"></span><br>
         <span>优惠</span>
@@ -99,6 +76,7 @@
 import QHeader from '@/components/header';
 import { swiper, swiperSlide } from 'vue-awesome-swiper';  
 import { timeMarketListFun } from '@/service/market';
+import moment from 'moment';
 export default {
   data() {
     return {
@@ -116,6 +94,7 @@ export default {
           // } 
         },                
       },
+      timeMarket:[]
     };
   },
   mounted() {
@@ -123,6 +102,7 @@ export default {
   },
   created(){
     this.timeMarketList();
+    console.log();
   },
   methods: {
     tabclick(index){
@@ -130,7 +110,11 @@ export default {
     },
     async timeMarketList(){
       let res = await timeMarketListFun();
-      console.log(res);
+      this.timeMarket = res.data.items;
+      res.data.items.forEach((item)=>{
+          item.noDiscountStart = item.noDiscountStart ? moment(item.noDiscountStart).format('YYYY-MM-DD') : '';
+          item.noDiscountEnd = item.noDiscountEnd ? moment(item.noDiscountEnd).format('YYYY-MM-DD'): '';
+      });
 
     },
     goaddMarket(){
@@ -172,6 +156,7 @@ export default {
 		}
 
 	}
+
 	.discoun-list {
     margin-top: 0.29rem;
     padding:0.29rem 0.4rem 0;
@@ -206,6 +191,9 @@ export default {
         padding: 0 0.27rem;
       }
 		}
+    .stop-discount {
+      color:#999;
+    }
 	}
 	.discoun-content {
     display: flex;

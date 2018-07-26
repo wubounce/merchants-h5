@@ -178,7 +178,6 @@ export default {
           username:this.username,
           phone:this.phone,
           operateShopIds:this.operateShopIds.join(','),
-          mIds:1
         };
         let res = await addOperatorFun(qs.stringify(payload));
         if (res.code === 1) {
@@ -204,21 +203,21 @@ export default {
       line-height: 1.6rem;
       border-bottom:1px solid rgba(223,230,255,1);
       .form-title {
-        width: 1.73rem;
+        width: 2rem;
         font-size: 16px;
       }
       .form-input{
         width: 100%;
         flex: 1;
         input{
-          width: 6.8rem;
+          width: 6.4rem;
           font-size: 16px;
           color: #333;
           text-align: right;
         }
         .more {
           display: inline-block;
-          width: 6.8rem;
+          width: 6.4rem;
           font-size: 16px;
           color: #333;
           text-align: right;
