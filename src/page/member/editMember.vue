@@ -2,15 +2,6 @@
 <div class="addmember">
   <q-header :title="title"></q-header>
   <div class="add-form">
-
-    <div class="input-group">
-      <div class="form-title"><span>用户名</span></div>
-      <div class="form-input"><input type="text" v-model="username" placeholder="请输入用户名"><span class="forward iconfont icon-nextx"></span></div>
-    </div>
-    <div class="input-group">
-      <div class="form-title"><span>手机</span></div>
-      <div class="form-input"><input type="text" v-model="phone" placeholder="请输入手机号码"><span class="forward iconfont icon-nextx"></span></div>
-    </div>
     <div class="input-group">
       <div class="form-title"><span>负责店铺</span></div>
       <div class="form-input"><span class="more more-color">{{checkshoptxt?checkshoptxt:'请选择店铺'}}</span><span class="forward iconfont icon-nextx" @click="shopVisible=true"></span></div>
@@ -19,6 +10,11 @@
       <div class="form-title"><span>权限</span></div>
       <div class="form-input"><span class="more more-color">请选择权限</span><span class="forward iconfont icon-nextx"  @click="permissionsVisible=true"></span></div>
     </div> -->
+
+  </div>
+  <div class="input-group createtime">
+    <div class="form-title">创建时间</div>
+    <div class="form-input">{{createTime}}</div>
   </div>
   <div class="confirm" @click="getcheckshop">提交</div>
   <!-- 选择店铺 -->
@@ -120,11 +116,11 @@
 import QHeader from '@/components/header';
 import qs from 'qs';
 import { validatPhone } from '@/utils/validate';
-import { shopListFun, addOperatorFun } from '@/service/member';
+import { shopListFun, addOperatorFun, getOperatorInfoFun } from '@/service/member';
 export default {
   data() {
     return {
-      title: '新增人员',
+      title: '编辑人员',
       checkshoplist: [],
       checkpermissionslist: [],
       shopVisible:false,
@@ -134,33 +130,35 @@ export default {
       operateShopIds:[],
       username:'',
       phone:'',
-      checkshoptxt:''
+      checkshoptxt:'',
+      createTime:''
     };
   },
   mounted() {
     
   },
   created(){
+    let query = this.$route.query;
+    this.getOperatorInfo(query.id);
     this.shopListFun();
   },
   methods: {
     validate() {
-      if (this.username === '') {
-        this.$toast({message: '请输入用户名' });
-        return false;
-      }
-      if (this.phone === '') {
-        this.$toast({message: '请输入手机号码' });
-        return false;
-      }else if (!validatPhone(this.phone)) {
-        this.$toast({message: '请输入正确的手机号码' });
-        return false;
-      } 
       if (this.checkshoptxt === '') {
         this.$toast({message: '请选择店铺' });
         return false;
       }
       return true;
+    },
+    async getOperatorInfo(id){
+      let res = await getOperatorInfoFun(qs.stringify({id:id}));
+      if (res.code === 0) {
+        this.username = res.data.userName;
+        this.phone = res.data.phone;
+        this.createTime = res.data.createTime;
+        this.checkshoptxt = res.data.operateShopNames;
+        this.checkshoplist = res.data.operateShopNames.split(',');
+      }
     },
     async shopListFun(){
       let res = await shopListFun();
@@ -233,7 +231,24 @@ export default {
       }
        
     }
-    
+  }
+  .createtime {
+    padding-left: 0.4rem;
+    border:none;
+    margin-top:0.4rem;
+    background:#fff;
+    font-size: 16px;
+    padding: 0.53rem 0.4rem;
+    display: flex;
+    >div {
+      flex: 1;
+    }
+    .form-input {
+      text-align: right;
+    }
+    .form-title {
+      color: #999;
+    }
   }
   .silde {
     color: #BAC0D2;

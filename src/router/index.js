@@ -26,6 +26,7 @@ export default new Router({
     { path: '/member', name: 'member', component: () => import('@/page/member/index') },
     { path: '/addMember', name: 'addMember', component: () => import('@/page/member/addMember') },
     { path: '/detailMember', name: 'detailMember', component: () => import('@/page/member/detailMember') },
+    { path: '/editMember', name: 'editMember', component: () => import('@/page/member/editMember') },
     { path: '/order', name: 'order', component: () => import('@/page/order/index') },
     { path: '/orderdetail', name: 'orderdetail', component: () => import('@/page/order/orderdetail') },
     { path: '/shoplist', name: 'shopList', component: () => import('@/page/shop/shopList') },
