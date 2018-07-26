@@ -18,10 +18,10 @@
             <p class="select">{{fromdata.shopName}}</p>
           </li>
 
-          <li @click="getCompany">
+          <!-- <li @click="getCompany">
             <span class="field-title">公司</span>
             <p class="select">{{fromdata.companyType.name}}</p>
-          </li>
+          </li> -->
           
           <li>
             <span class="field-title">NQT</span>
