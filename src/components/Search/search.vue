@@ -40,7 +40,7 @@
       return {
         myData: [], // 用来接收 ajax 得到的数据
         now: -1,
-        isResult: fasle
+        isResult: false
       };
     },
     methods: {
@@ -124,9 +124,6 @@
             border-right: 0.04rem solid rgba(216, 216, 216, 1); // transform: scaleY(0.5);
           }
         }
-
-
-
       }
       .result-left {
         flex: 1;
