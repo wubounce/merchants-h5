@@ -11,10 +11,15 @@ const http = axios.create({
 
 // request拦截器
 http.interceptors.request.use(config => {
-  Indicator.open({
-    text: "加载中",
-    spinnerType: "fading-circle"
-  });
+  
+  //由于省市区三级联动调用三次接口，避免闪屏现象，如下操作
+  if(config.url != 'area/list') {
+    Indicator.open({
+      text: "加载中",
+      spinnerType: "fading-circle"
+    });
+  }
+
   let token = getToken();
   if (config.method === 'post' && config.headers['Content-Type'] !== 'multipart/form-data') {
     config.headers['content-type'] = 'application/x-www-form-urlencoded';

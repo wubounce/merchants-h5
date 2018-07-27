@@ -1,7 +1,9 @@
 <template>
   <div class="upload">
     <input :id="id" type="file" ref="input" @change="beforeFiles" />
-    <label :for="id"><img class="upLoad" v-bind:src="x" alt="店铺图片" ></label>
+    <label :for="id">
+      <img class="upLoad"  :src="defaultPicture" alt="店铺图片" >
+    </label>
   </div>
 </template>
 
@@ -10,15 +12,19 @@ export default {
   props: {
     id: {
       type: String
+    },
+    defaultPicture: {
+      type: String
     }
   },
   data() {
     return {
-      x:'../../../static/shop/add.png'
+      newImg:''
     };
   },
   methods: {
     beforeFiles() {
+      var newImg = this.defaultPicture;
       let files = this.$refs.input.files[0];
       let fileType = files.type === "image/png" || files.type === "image/jpeg";
       let size = files.size / 1024 / 1024 < 2;
@@ -45,8 +51,8 @@ export default {
       reader.readAsDataURL(files);
       reader.onload = evt => {
         let url = evt.target.result;
-        this.x = url;
-        this.$emit("onImgFiles", url);
+        this.newImg = url;
+        this.$emit("onImgFiles", this.newImg);
       };
     }
   }

@@ -88,10 +88,10 @@ section {
         justify-content: space-between;
         border-bottom: 1px solid #F8F8F8;
         background-color: #fff; 
-        font-size: 0.45rem;
+        font-size: 16px;
         padding: 0.3rem; 
         .iconMark {
-          font-size: 0.3rem;
+          font-size: 11px;
           color: #fff;
           padding: 0.1rem;
           border-top-left-radius: 3px;
@@ -133,11 +133,11 @@ section {
           .text {
             margin-top: 0.4rem;
             color: #999999;
-            font-size: 0.2rem;
+            font-size: 14px;
           }
           .text-value {
             color:#1890FF;
-            font-size: 0.4rem;
+            font-size: 16px;
             margin-top: 0.2rem;
             .little-font {
               font-size: 0.01rem;
