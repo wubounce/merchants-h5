@@ -56,7 +56,7 @@ export default {
         name:'addShop'
       });
     },
-    async getShopName() {
+    async getShopList() {
       let res = await manageListFun();
       if(res.code===0) {
         this.list = res.data;
@@ -67,7 +67,14 @@ export default {
     }
   },
   created() {
-    this.getShopName();
+    this.getShopList();
+  },
+  watch: {
+    $route(to,from) {
+      if(from.name == 'shopDetail') {
+        this.getShopList();
+      }
+    }
   },
   components: {
     QHeader
@@ -144,18 +151,6 @@ section {
             }
           }
         }
-        // .kindof {
-        //   background: #e0f2ff;
-        //   border-radius: 0.09rem;
-        //   font-size: 0.3rem;
-        //   color: rgba(24,144,255,1);
-        //   padding: 0.12rem 0.22rem;
-        //   margin-left:0.4rem;
-        // }
-        // .size {
-        //   font-size: 0.35rem;
-        //   margin-left: 0.2rem;
-        // }
       }
     }
   }

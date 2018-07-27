@@ -63,6 +63,7 @@ import UploadImg from "@/components/UploadImg/UploadImg";
 import { addOrEditShopFun } from '@/service/shop';
 import { areaListFun } from '@/service/shop';
 import { listParentTypeFun } from '@/service/shop';
+import { uploadFileFun } from '@/service/shop';
 export default {
   data() {
     return {
@@ -422,9 +423,26 @@ export default {
         }
       }
     },
-    UpdatedImgFiles(msg) {
-      this.imgId.defaultPicture = msg;
-      console.log(this.imgId.defaultPicture);
+    async UpdatedImgFiles(msg) {
+      //判断图片类型
+      if(msg.substring(0,22)=="data:image/png;base64,") {
+        console.log(msg.substring(0,22));
+        msg = msg.replace("data:image/png;base64,","");
+      }
+      else if(msg.substring(0,23)=="data:image/jpeg;base64,") {
+        console.log(msg.substring(0,23));
+        msg = msg.replace("data:image/jpeg;base64,","");
+      }
+      let obj = { files:msg };
+      let res = await uploadFileFun(qs.stringify(obj));
+      if(res.code ===0 ) {
+        this.imageId = res.data[0].url;
+        console.log(this.imageId);
+      }
+      else {
+        MessageBox.alert(res.msg);
+      }
+      this.imgId.defaultPicture = this.imageId;
     },
     changeTime(picker, values) {
       this.shopTime.startTime = values[0].slice(0,2) + ':' +values[1].slice(0,2);
@@ -443,7 +461,9 @@ export default {
     },
     async submit() {
       let changeisReserve = (this.isReserve==true)? 0 :1;
-      //console.log(this.provinceId);
+      //判断信息是否完整
+      
+
       let obj = {
         shopId: '  ',
         shopName: this.shopName,
@@ -458,7 +478,7 @@ export default {
         isReserve: changeisReserve,
         orderLimitMinutes: this.orderLimitMinutes,
         workTime: this.addBusinessTime,
-        imageId: 'http://fileupload.haiyaxiyi.cn/Upload/Shop/292f6b9c-782e-432b-aa0e-d720837026f7.jpg'
+        imageId: this.imageId
       };
 
       let res = await addOrEditShopFun(qs.stringify(obj));

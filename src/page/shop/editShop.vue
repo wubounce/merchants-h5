@@ -64,6 +64,7 @@ import { shopDetailFun } from '@/service/shop';
 import { addOrEditShopFun } from '@/service/shop';
 import { areaListFun } from '@/service/shop';
 import { listParentTypeFun } from '@/service/shop';
+import { uploadFileFun } from '@/service/shop';
 export default {
   data() {
     return {
@@ -425,11 +426,26 @@ export default {
         }
       }
     },
-    UpdatedImgFiles(msg) {
-      //this.url = msg;
-      this.imgId.defaultPicture = msg;
-      console.log(msg);
-
+    async UpdatedImgFiles(msg) {
+      //判断图片类型
+      if(msg.substring(0,22)=="data:image/png;base64,") {
+        console.log(msg.substring(0,22));
+        msg = msg.replace("data:image/png;base64,","");
+      }
+      else if(msg.substring(0,23)=="data:image/jpeg;base64,") {
+        console.log(msg.substring(0,23));
+        msg = msg.replace("data:image/jpeg;base64,","");
+      }
+      let obj = { files:msg };
+      let res = await uploadFileFun(qs.stringify(obj));
+      if(res.code ===0 ) {
+        this.imageId = res.data[0].url;
+        console.log(this.imageId);
+      }
+      else {
+        MessageBox.alert(res.msg);
+      }
+      this.imgId.defaultPicture = this.imageId;
     },
     changeTime(picker, values) {
       this.shopTime.startTime = values[0].slice(0,2) + ':' +values[1].slice(0,2);
@@ -464,14 +480,14 @@ export default {
         isReserve: changeisReserve,
         orderLimitMinutes: this.orderLimitMinutes,
         workTime: this.addBusinessTime,
-        imageId: 'http://image.qiekj.com/2018/07/18/336864863206769383'
+        imageId: this.imageId
       };
 
       let res = await addOrEditShopFun(qs.stringify(obj));
       if(res.code===0) {
         //成功后的操作
         let instance = this.$toast({
-          message: '添加成功',
+          message: '编辑成功',
           iconClass: 'mint-toast-icon mintui mintui-success'
         });
         setTimeout(() => {
@@ -555,9 +571,17 @@ export default {
         };
         let resMachine = await listParentTypeFun(qs.stringify(objMachine));
         if(resMachine.code ===0 ) {
-          console.log(resMachine.data);
+          console.log(resMachine.data[0].name);
           let arrmachine = res.data.machineTypeNames.split(',');
-          console.log(arrmachine);
+          let arr = [];
+          for(let i=0;i<arrmachine.length;i++) {
+            for(let j=0;j<resMachine.data.length;j++) {
+              if(arrmachine[i] == resMachine.data[j].name) {
+                arr.push(resMachine.data[j].id);
+              }
+            }
+          }
+          this.machineTypeIdsArray = arr.join(',');
         }
       }
     }

@@ -2,47 +2,46 @@
   <section class="todolist">
 		<q-header :title="title"></q-header>
     <!-- 第一模块 -->
-    <p class="todo-item first-todo-item"><span>所属店铺</span><span>{{shopName}}</span></p>
-    <p class="todo-item"><span>设备类型</span><span>{{machineType}}</span></p>
-    <p class="todo-item"><span>启动模式</span><span>{{machineFunction}}</span></p>
-    <p class="todo-item"><span>启动时间</span><span>{{time}}</span></p>
+    <p class="todo-item first-todo-item"><span>所属店铺</span><span>{{item.shopName}}</span></p>
+    <p class="todo-item"><span>设备类型</span><span>{{item.machineTypeName}}</span></p>
+    <p class="todo-item"><span>启动模式</span><span>{{item.functionName}}</span></p>
+    <p class="todo-item"><span>启动时间</span><span>{{item.beginTime}}</span></p>
 
     <!-- 第二模块 -->
-    <p class="todo-info second-p"><span>创建人：</span><span>{{operatorId}}</span></p>
-    <p class="todo-info"><span>创建时间：</span><span>{{createTime}}</span></p>
+    <p class="todo-info second-p"><span>创建人：</span><span>{{item.createUser}}</span></p>
+    <p class="todo-info"><span>创建时间：</span><span>{{item.createTime}}</span></p>
     <p class="blank"></p>
 
     <!-- 第三模块 -->
     <p class="about-button">
-      <Button btn-type="small" btn-color="spe" class="common-button" @confirm="isDeleteOrNot()">删除</Button>
-			<Button btn-type="small" btn-color="spe" class="common-button" @confirm="goTodoDetailEdit()">编辑</Button>
+      <Button btn-type="small" btn-color="spe" class="common-button" @confirm="isDeleteOrNot(item.id)">删除</Button>
+			<Button btn-type="small" btn-color="spe" class="common-button" @confirm="goTodoDetailEdit(item.id,item.machineParentTypeId)">编辑</Button>
       <Button btn-type="small" btn-color="spe" class="common-button" @confirm="goStart()">立即启动</Button>
     </p>
   </section>
 </template>
 
 <script>
+import qs from "qs";
 import QHeader from '@/components/header';
 import Button from "@/components/Button/Button";
 import { MessageBox } from 'mint-ui';
+import { getBatchStartFun } from '@/service/todoList';
+import { delBatchStartFun } from '@/service/todoList';
   export default {
     data() {
       return {
         title:'待办详情',
-        shopName:'联合大厦企鹅1号店',
-        machineType:'洗衣机',
-        machineFunction: '标准洗',
-        time: '2018-08-09 12:00',
-        operatorId:'Wendy',
-        createTime:'2018-07-15 15:38:05'
+        item:{}
       };
     },
-    created(){
-    },
     methods: {
-      isDeleteOrNot() {
+      async isDeleteOrNot() {
         //删除
-        MessageBox.confirm('您确定要取消批量启动设备么？').then(action => {	        
+        MessageBox.confirm('您确定要取消批量启动设备么？').then(action => {
+          let objDel = { id:this.$route.query.id };
+          let resDel = delBatchStartFun(qs.stringify(objDel));
+
 	        let instance = this.$toast({
             message: '删除成功',
             iconClass: 'mint-toast-icon mintui mintui-success'
@@ -63,10 +62,14 @@ import { MessageBox } from 'mint-ui';
 	      }
 	     );
       },
-      goTodoDetailEdit() {
+      goTodoDetailEdit(i,j) {
         //编辑
         this.$router.push({
-            name:'editTodolist'
+            name: 'editTodolist',
+            query: {
+              id: i,
+              machineParentTypeId: j
+            }
           });
       },
       goStart() {
@@ -88,7 +91,22 @@ import { MessageBox } from 'mint-ui';
             });
 	      }
 	     );
+      },
+      async getBatchStart() {
+        let obj ={
+          id:this.$route.query.id,
+          page:1,
+          pageSize: 10
+        };
+        let res = await getBatchStartFun(qs.stringify(obj));
+        if(res.code ===0 ) {
+          //参数异常，待后台确认
+          this.item = res.data;
+        }
       }
+    },
+    created() {
+      this.getBatchStart();
     },
     components: {
       QHeader,
@@ -105,7 +123,7 @@ import { MessageBox } from 'mint-ui';
   .todo-item {
     display: flex;
     justify-content: space-between;
-    font-size: 0.35rem;
+    font-size: 16px;
     padding: 0.3rem;
     border-bottom: 1px solid #F8F8F8;
     background-color: #fff; 
@@ -119,7 +137,7 @@ import { MessageBox } from 'mint-ui';
     }
   }
   .todo-info {
-    font-size: 0.1rem;
+    font-size: 12px;
     background-color: #fff;
     color:rgba(153,153,153,1);
     padding: 0.2rem 0;
@@ -146,6 +164,7 @@ import { MessageBox } from 'mint-ui';
       margin-right: 0.3rem;
       color: #333333;
       border-color:#D8D8D8;
+      font-size: 14px;
     }
   }
 }

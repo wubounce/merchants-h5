@@ -49,6 +49,7 @@ import QHeader from '@/components/header';
 import Button from "@/components/Button/Button";
 import { MessageBox } from 'mint-ui';
 import { shopDetailFun } from '@/service/shop';
+import { deleteShopFun } from '@/service/shop';
 export default {
   data() {
     return {
@@ -60,10 +61,15 @@ export default {
     };
   },
   methods:{
-    isDeleteOrNot() {
+    async isDeleteOrNot() {
       //删除功能
-      MessageBox.confirm('您确定要取消批量启动设备么？').then(action => {	        
-	        let instance = this.$toast({
+      MessageBox.confirm('您确定要取消批量启动设备么？').then(action => 
+        {	    
+          //调用删除接口
+          let obj = { shopId: this.$route.query.shopId };
+          let res = deleteShopFun(qs.stringify(obj));
+
+          let instance = this.$toast({
             message: '删除成功',
             iconClass: 'mint-toast-icon mintui mintui-success'
           });
@@ -73,15 +79,15 @@ export default {
           this.$router.push({
             name:'shopList'
           });
-	      },
-	      action => {
-	      	this.$toast({
+        },
+        action => {
+          this.$toast({
               message: "已取消",
               position: "middle",
               duration: 3000
             });
-	      }
-	     );
+        }
+      );
     },
     goShopEdit() {
       //编辑功能
@@ -157,7 +163,7 @@ export default {
        margin-left: 0.3rem;
        margin-bottom: 0.2rem;
        .one-machine {
-          font-size: 14px;
+          font-size: 0.38rem;
           color: #333333;
           background-color:rgba(24, 144, 255, 0.05);
           display: inline-block;

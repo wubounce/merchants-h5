@@ -26,7 +26,7 @@ export default {
     beforeFiles() {
       var newImg = this.defaultPicture;
       let files = this.$refs.input.files[0];
-      let fileType = files.type === "image/png" || files.type === "image/jpeg";
+      let fileType = files.type === "image/png" || files.type === "image/jpeg" ;
       let size = files.size / 1024 / 1024 < 2;
       if (!fileType) {
         this.$toast({

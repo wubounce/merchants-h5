@@ -3,8 +3,8 @@
     <q-header :title="title"></q-header>
     <!-- 第一模块 -->
     <div class="ul-list">
-      <p class="personal-item" @click="changemachineFunc"><span>启动模式</span><span>{{machineFunction}}</span></p>
-      <p class="personal-item" @click="open('pickerStarTime')"><span>启动时间</span><span>{{time}}</span></p>
+      <p class="personal-item" @click="changemachineFunc"><span>启动模式</span><span>{{item.functionName}}</span></p>
+      <p class="personal-item" @click="open('pickerStarTime')"><span>启动时间</span><span>{{item.beginTime}}</span></p>
     </div>
     <button class="submit" @click="submit">提交</button>
 
@@ -23,6 +23,10 @@
 </template>
 
 <script>
+import qs from "qs";
+import { getBatchStartFun } from '@/service/todoList';
+import { updateBatchStartFun } from '@/service/todoList';
+import { getFunctionListFun } from '@/service/todoList';
 import QHeader from '@/components/header';
 import Button from "@/components/Button/Button";
 import { MessageBox } from 'mint-ui';
@@ -31,26 +35,25 @@ import moment from 'moment';
     data() {
       return {
         title:'批量定时启动设备',
-        machineFunction: '标准洗',
-        time: '2018-08-09 12:00',
+        item:{},
         popupVisible:false,
         index:'',
         slots: [
           {
             flex: 1,
-            values: ['学校', '公寓', '流动人口社区', '酒店', '医院', '养老院','工厂','浴场','其他'],
+            values: [],
             className: 'shop-type',
             textAlign: 'center',
             position:'bottom',
-            name:'店铺类型',
-            defaultIndex:2
+            name:'启动模式'
           }
         ],
         datatimeVisible:false,
-        pickerValue:''
+        pickerValue:'',
+        shopId:'',
+        funArr:[],
+        standardFunctionId:''
       };
-    },
-    created(){
     },
     methods: {
       changemachineFunc() {
@@ -61,11 +64,39 @@ import moment from 'moment';
         this.$refs[picker].open();
       },
       handleConfirm(data) {
-        let date = moment(data).format('YYYY-MM-DD HH:mm');
-	      this.pickerValue = date;
-        this.time = this.pickerValue;
+        //判断启动时间是否小于当前时间
+        let nowDate = new Date();
+        if(this.pickerValue <= nowDate) {
+          this.$toast({
+              message: '启动时间不得小于等于当前时间',
+              position: "middle",
+              duration: 3000
+            });
+        }
+        else {
+          let date = moment(data).format('YYYY-MM-DD HH:mm');
+          this.pickerValue = date;
+          this.item.beginTime = this.pickerValue;
+        }
       },
-      submit() {
+      async submit() {
+        console.log(this.funArr);
+        for(let i=0; i<this.funArr.length; i++) {
+          if(this.item.functionName == this.funArr[i].functionName) {
+            this.standardFunctionId = this.funArr[i].functionId;
+          }
+        }
+
+        let objUpdate = {
+          id: this.$route.query.id,
+          machineParentTypeId: this.$route.query.machineParentTypeId,
+          shopId: this.item.shopId,
+          standardFunctionId: this.standardFunctionId,
+          startTime: this.item.beginTime
+        };
+
+        let resUpdate = await updateBatchStartFun(qs.stringify(objUpdate));
+
         let instance = this.$toast({
           message: '编辑成功',
           iconClass: 'mint-toast-icon mintui mintui-success'
@@ -74,40 +105,11 @@ import moment from 'moment';
           instance.close();
         }, 1000);
         this.$router.push({
-          name:'todoDetail'
+          name:'todolist'
         });
       },
       valuesChange(picker, values) {
         this.machineFunction = values[0];
-        switch(values[0]) {
-          case '学校':
-            this.shopType = 1;
-            break;
-          case '公寓':
-            this.shopType = 2;
-            break;
-          case '流动人口社区':
-            this.shopType = 3;
-            break;
-          case '酒店':
-            this.shopType = 4;
-            break;
-            case '医院':
-            this.shopType = 5;
-            break;
-          case '养老院':
-            this.shopType = 6;
-            break;
-            case '工厂':
-            this.shopType = 7;
-            break;
-          case '浴场':
-            this.shopType = 8;
-            break;
-          case '其他':
-            this.shopType = 9;
-            break;
-        }
       },
       cancel() {
         switch(this.index) {
@@ -120,9 +122,44 @@ import moment from 'moment';
         switch(this.index) {
           case 0:
             this.popupVisible = false;
+            this.item.functionName = this.machineFunction;
             break;
         }
+      },
+      async getBatchStart() {
+        let obj ={
+          id:this.$route.query.id,
+          page:1,
+          pageSize: 10
+        };
+        let res = await getBatchStartFun(qs.stringify(obj));
+        if(res.code ===0 ) {
+          //console.log(res.data);
+          //参数异常，待后台确认
+          this.item = res.data;
+          this.pickerValue = res.data.beginTime;
+        }
+      },
+      updateBatchStart() {
+        //修改待办信息
+      },
+      async getFunctionList() {
+        let objFunList = {
+          machineParentTypeId: this.$route.query.machineParentTypeId
+        };
+        let resFunList = await getFunctionListFun(qs.stringify(objFunList));
+        if(resFunList.code === 0 ) {
+          this.funArr = resFunList.data;
+          let arr = resFunList.data.map((i)=>{
+            return i.functionName;
+          });
+          this.slots[0].values = arr;
+        }
       }
+    },
+    created() {
+      this.getBatchStart();
+      this.getFunctionList();
     },
     components: {
       QHeader,
@@ -138,7 +175,6 @@ import moment from 'moment';
     .personal-item {
       display: flex;
       justify-content: space-between;
-      font-size: 0.35rem;
       padding: 0.3rem;
       border-bottom: 1px solid #F8F8F8;
       background: url("../../../static/shop/right.png") no-repeat right
@@ -151,7 +187,7 @@ import moment from 'moment';
         &:last-child {
           color: #333333;
         }
-        font-size: 0.28rem;
+        font-size: 16px;
         margin-right: 0.3rem;
       }
     }
@@ -164,7 +200,7 @@ import moment from 'moment';
     padding: 0.45rem 0;
     background-color: #1890FF;
     color: #fff;
-    font-size: 0.5rem;
+    font-size: 18px;
   }
   .mint-popup {
     width: 100%;

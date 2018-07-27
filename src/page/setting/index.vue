@@ -1,7 +1,7 @@
 <template>
 <div class="marketing">
   <q-header :title="title"></q-header>
-    <div class="add-form">
+  <div class="add-form">
     <div class="input-group">
       <router-link :to="{name:'personalSet'}">
           <div class="form-title"><span>个人信息</span><span class="forward iconfont icon-nextx"></span></div>
@@ -11,10 +11,14 @@
       <div class="form-title"><span>账户设置</span><span class="forward iconfont icon-nextx"></span></div>
     </div>
   </div>
+  <div class="deleteShop">
+    <button>退出登录</button>
+  </div>
 </div>
 </template>
 <script>
 import QHeader from '@/components/header';
+import Button from "@/components/Button/Button";
 export default {
   data() {
     return {
@@ -31,8 +35,7 @@ export default {
     
   },
   components:{
-    QHeader,
-
+    QHeader
   }
 };
 </script>
@@ -54,4 +57,17 @@ export default {
       color: #999;
     }
   }
+  .deleteShop {
+      button {
+        display: block;
+        margin: 0.7rem auto;
+        width: 92%;
+        background-color:#1890FF;
+        border: none;
+        border-radius: 5px;
+        color:#fff;
+        font-size:16px;
+        padding: 0.35rem 0;
+      }
+    }
 </style>
