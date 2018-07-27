@@ -12,12 +12,12 @@
     <div class="second">
       <li class="device business" @click="addDevice">设备类型<span>{{machineName}}</span></li>
       <p class="isReserve"><span>预约功能</span><span><mt-switch class="check-switch" v-model="isReserve"></mt-switch></span></p>
-      <p class="reserveTime"><span>预约时长</span><span><input type="text" class='timeInput' v-model="orderLimitMinutes" maxlength="2" placeholder="请填写预约有效时长"></span></p>
+      <p class="reserveTime"><span>预约时长(分钟)</span><span><input type="text" class='timeInput' v-model="orderLimitMinutes" maxlength="2" placeholder="请填写预约有效时长"></span></p>
       <li class="business" @click="chooseTime">营业时间<span>{{addBusinessTime}}</span></li>
       <p class="picture">
         <span>店铺照片</span>
         <span>
-          <UploadImg :id="imgId.a" @onImgFiles="UpdatedImgFiles"></UploadImg>
+          <UploadImg :id="imgId.a" :defaultPicture="imgId.defaultPicture" @onImgFiles="UpdatedImgFiles"></UploadImg>
         </span>
       </p>
     </div>
@@ -60,8 +60,9 @@
 import qs from "qs";
 import QHeader from '@/components/header';
 import UploadImg from "@/components/UploadImg/UploadImg";
-import { addShopFun } from '@/service/shop';
+import { addOrEditShopFun } from '@/service/shop';
 import { areaListFun } from '@/service/shop';
+import { listParentTypeFun } from '@/service/shop';
 export default {
   data() {
     return {
@@ -71,6 +72,8 @@ export default {
       address:'',
       machineName:'',
       machineTypeIds:'',
+      machineArray: [],
+      machineTypeIdsArray:'',
       orderLimitMinutes:'',
       addBusinessTime:'',
       title:'新增店铺',
@@ -147,7 +150,8 @@ export default {
 
       areaName:'',
       imgId: {
-        a: "a"
+        a: "a",
+        defaultPicture:'../../../static/shop/add.png'
       },
       url:'',
       machine: [],
@@ -156,38 +160,6 @@ export default {
         {
           label: '洗衣机',
           value: '洗衣机'
-        },
-        {
-          label: '吹风机',
-          value: '吹风机'
-        },
-        {
-          label: '充电桩',
-          value: '充电桩'
-        },
-        {
-          label: '万能充',
-          value: '万能充'
-        },
-        {
-          label: '缝纫机',
-          value: '缝纫机'
-        },
-        {
-          label: '洗鞋机',
-          value: '洗鞋机'
-        },
-        {
-          label: '修理机',
-          value: '修理机'
-        },
-        {
-          label: '战斗机',
-          value: '战斗机'
-        },
-        {
-          label: '想不到了',
-          value: '想不到了'
         }
       ],
       shopTime: {
@@ -321,13 +293,25 @@ export default {
           }
           
           break;
+        //经纬度
         case 2:
-          alert('功能暂无');
           break;
-        case 3:
+        //设备管理
+        case 3: {
           this.deviceDetail = false;
           this.machineName = this.machine.join(' , ');
+          let arr = [];
+          for(let i=0;i<this.machine.length;i++) {
+            for(let j=0;j<this.machineArray.length;j++) {
+              if(this.machine[i] == this.machineArray[j].name) {
+                arr.push(this.machineArray[j].id);
+              }
+            }
+          }
+          this.machineTypeIdsArray = arr.join(',');
+          console.log(this.machineTypeIdsArray);
           break;
+        }
         case 4:
           this.timeVisible = false;
           if(parseInt(this.shopTime.startTime.slice(0,2)) < parseInt(this.shopTime.endTime.slice(0,2))) {
@@ -416,21 +400,31 @@ export default {
           this.districtId = this.districtArray[j].areaId;
         }
       }
-
       this.provinceName = values[0];
       this.cityName = values[1];
       this.districtName = values[2];
-
     },
-    addDevice() {
+    async addDevice() {
       this.index = 3;
-      console.log('index:',this.index);
       this.isClass = true;
       this.deviceDetail = true;
+      let obj = {
+        onlyMine: false
+      };
+      let res = await listParentTypeFun(qs.stringify(obj));
+      if(res.code ===0 ) {
+        this.machineArray = res.data;
+        let arr = [];
+        arr = JSON.parse(JSON.stringify(res.data).replace(/name/g,"label"));
+        this.options = JSON.parse(JSON.stringify(arr).replace(/id/g,"value"));
+        for(let i=0;i<this.options.length;i++) {
+          this.options[i]['value'] = this.options[i]['label'];
+        }
+      }
     },
     UpdatedImgFiles(msg) {
-      this.url = msg;
-      //console.log(this.url);
+      this.imgId.defaultPicture = msg;
+      console.log(this.imgId.defaultPicture);
     },
     changeTime(picker, values) {
       this.shopTime.startTime = values[0].slice(0,2) + ':' +values[1].slice(0,2);
@@ -449,24 +443,25 @@ export default {
     },
     async submit() {
       let changeisReserve = (this.isReserve==true)? 0 :1;
+      //console.log(this.provinceId);
       let obj = {
         shopId: '  ',
         shopName: this.shopName,
         shopType: this.shopType,
-        provinceId:'130000',
-        cityId:'130100',
-        districtId:'130102',
+        provinceId: this.provinceId,
+        cityId: this.cityId,
+        districtId: this.districtId,
         address: this.address,
         lat:'33.564',
         lng:'134.456',
-        machineTypeIds: 'c9892cb4-bd78-40f6-83c2-ba73383b090a',
+        machineTypeIds: this.machineTypeIdsArray,
         isReserve: changeisReserve,
         orderLimitMinutes: this.orderLimitMinutes,
         workTime: this.addBusinessTime,
         imageId: 'http://fileupload.haiyaxiyi.cn/Upload/Shop/292f6b9c-782e-432b-aa0e-d720837026f7.jpg'
       };
 
-      let res = await addShopFun(qs.stringify(obj));
+      let res = await addOrEditShopFun(qs.stringify(obj));
       if(res.code===0) {
         //成功后的操作
         let instance = this.$toast({
@@ -520,7 +515,7 @@ export default {
   .personal-list {
     background-color: #fff;
     .shopname-p {
-      font-size: 0.35rem;
+      font-size: 16px;
       border-bottom: 1px solid #F8F8F8;
       padding: 0.06rem;
       span {
@@ -534,21 +529,21 @@ export default {
         }
         ::-webkit-input-placeholder {
           color: #999999;
-          font-size: 0.35rem;
+          font-size: 16px;
         }
         :-moz-placeholder {
           /* Firefox 18- */
           color: #999999;
-          font-size: 0.35rem;
+          font-size: 16px;
         }
         ::-moz-placeholder {
           /* Firefox 19+ */
           color: #999999;
-          font-size: 0.35rem;
+          font-size: 16px;
         }
         :-ms-input-placeholder {
           color: #999999;
-          font-size: 0.35rem;
+          font-size: 16px;
         }
       }
       &:last-child {
@@ -556,7 +551,7 @@ export default {
       }
     }
     .personal-item {
-      font-size: 0.35rem;
+      font-size: 16px;
       padding: 0.3rem;
       border-bottom: 1px solid #F8F8F8;
       background: url("../../../static/shop/right.png") no-repeat right
@@ -565,7 +560,7 @@ export default {
       span {
         float: right;
         color: #7f7f7f;
-        font-size: 0.28rem;
+        font-size: 16px;
         margin-right: 0.3rem;
       }
     }
@@ -580,7 +575,7 @@ export default {
     .business {
       display: flex;
       justify-content: space-between;
-      font-size: 0.35rem;
+      font-size: 16px;
       padding: 0.3rem;
       background-color: #fff;
       border-bottom: 1px solid #F8F8F8;
@@ -590,14 +585,14 @@ export default {
       span {
         
         color: #7f7f7f;
-        font-size: 0.28rem;
+        font-size: 16px;
         margin-right: 0.3rem;
       }
     }
     .isReserve {
       display: flex;
       justify-content: space-between;
-      font-size: 0.35rem;
+      font-size: 16px;
       border-bottom: 1px solid #F8F8F8;
       padding: 0.1rem;
       span {
@@ -608,7 +603,7 @@ export default {
       }
     }
     .reserveTime {
-      font-size: 0.35rem;
+      font-size: 16px;
       border-bottom: 1px solid #F8F8F8;
       padding: 0.06rem;
       span {
@@ -622,21 +617,21 @@ export default {
         }
         ::-webkit-input-placeholder {
           color: #999999;
-          font-size: 0.35rem;
+          font-size: 16px;
         }
         :-moz-placeholder {
           /* Firefox 18- */
           color: #999999;
-          font-size: 0.35rem;
+          font-size: 16px;
         }
         ::-moz-placeholder {
           /* Firefox 19+ */
           color: #999999;
-          font-size: 0.35rem;
+          font-size: 16px;
         }
         :-ms-input-placeholder {
           color: #999999;
-          font-size: 0.35rem;
+          font-size: 16px;
         }
       }
     }
@@ -646,7 +641,7 @@ export default {
       justify-content: space-between;
       span {
         &:first-child {
-          font-size: 0.35rem;
+          font-size: 16px;
           line-height: 2rem;
           padding-left: 0.3rem;
         }
@@ -664,7 +659,7 @@ export default {
     padding: 0.45rem 0;
     background-color: #1890FF;
     color: #fff;
-    font-size: 0.5rem;
+    font-size: 18px;
   }
   .blank {
     height:2rem;
@@ -683,16 +678,16 @@ export default {
     }
     span {
       &:nth-child(1) {
-        font-size: 0.45rem;
+        font-size: 15px;
         color: #999999;
       }
       &:nth-child(2) {
-        font-size: 0.5rem;
+        font-size: 16px;
         margin: 0 2.7rem;
         color: #666666;
       }
       &:nth-child(3) {
-        font-size: 0.45rem;
+        font-size: 15px;
         color: #1890FF;
       }
     }

@@ -7,7 +7,7 @@
     <p class="shop-item"><span>店铺类型</span><span>{{shopdetail.shopType}}</span></p>
     <p class="shop-address">
       <span>店铺地址</span><br>
-      <span>{{shopdetail.province + shopdetail.city + shopdetail.district + shopdetail.address }}</span></p>
+      <span>{{ completeAddress }}</span></p>
 
     <!-- 第二模块 -->
     <div class="shop-machine">
@@ -55,7 +55,8 @@ export default {
       //shopId:this.$route.query.shopId,
       title: '店铺详情',
       list:[],
-      shopdetail:{}
+      shopdetail:{},
+      completeAddress:''
     };
   },
   methods:{
@@ -85,7 +86,10 @@ export default {
     goShopEdit() {
       //编辑功能
       this.$router.push({
-        name:'editShop'
+        name:'editShop',
+        query:{
+          shopId: this.$route.query.shopId
+        }
       });
     },
     async getShopDetail() {
@@ -94,6 +98,13 @@ export default {
       if(res.code===0) {
         this.shopdetail = res.data;
         this.list = res.data.machineTypeNames.split(',');
+        //店铺地址
+        if(res.data.province == res.data.city.slice(0,2)) {
+          this.completeAddress = res.data.city + res.data.district + res.data.address;
+        }
+        else {
+          this.completeAddress = res.data.province + res.data.city + res.data.district + res.data.address;
+        }
       }
     }
   },
@@ -115,7 +126,7 @@ export default {
      margin-top: 0.3rem;
    }
    .shop-address {
-     font-size: 0.35rem;
+     font-size: 16px;
      padding: 0.3rem;
      background-color: #fff; 
      border-bottom: 1px solid #F8F8F8;
@@ -131,7 +142,7 @@ export default {
       }
    }
    .shop-machine {
-     font-size: 0.35rem;
+     font-size: 16px;
      background-color: #fff;
      border-bottom: 1px solid #F8F8F8;
      span {
@@ -146,6 +157,7 @@ export default {
        margin-left: 0.3rem;
        margin-bottom: 0.2rem;
        .one-machine {
+          font-size: 14px;
           color: #333333;
           background-color:rgba(24, 144, 255, 0.05);
           display: inline-block;
@@ -159,7 +171,7 @@ export default {
    .shop-item {
       display: flex;
       justify-content: space-between;
-      font-size: 0.35rem;
+      font-size: 16px;
       padding: 0.3rem;
       border-bottom: 1px solid #F8F8F8;
       background-color: #fff; 
@@ -180,7 +192,7 @@ export default {
       border-bottom: 1px solid #F8F8F8;
       span {
         &:first-child {
-          font-size: 0.35rem;
+          font-size: 16px;
           line-height: 2rem;
           padding-left: 0.3rem;
           color:rgba(153,153,153,1);
@@ -195,7 +207,7 @@ export default {
       }
   }
   .shop-info {
-    font-size: 0.1rem;
+    font-size: 12px;
     background-color: #fff;
     color:rgba(153,153,153,1);
     padding: 0.2rem 0;
@@ -220,6 +232,7 @@ export default {
       height: 0.9rem;
       border-radius: 5px;
       margin-right: 0.3rem;
+      font-size: 14px;
     }
     #delete {
       color: #333333;
