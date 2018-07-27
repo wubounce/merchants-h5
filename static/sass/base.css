@@ -1,9 +1,5 @@
-html {
-  font-size: calc(100vw / 7.5);
-}
-
 body {
-  font: .28rem/1.428 "PingFang SC", "Helvetica Neue", Helvetica, "Hiragino Sans GB", "Microsoft YaHei", Arial, sans-serif;
+  font-family: "PingFang SC", "Helvetica Neue", Helvetica, "Hiragino Sans GB", "Microsoft YaHei", Arial, sans-serif;
   background: #efeff4;
 }
 

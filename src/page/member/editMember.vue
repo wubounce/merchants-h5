@@ -16,7 +16,7 @@
     <div class="form-title">创建时间</div>
     <div class="form-input">{{createTime}}</div>
   </div>
-  <div class="confirm" @click="getcheckshop">提交</div>
+  <div class="confirm" @click="updateMember">提交</div>
   <!-- 选择店铺 -->
   <mt-popup v-model="shopVisible" position="bottom">
     <div class="resp-shop">
@@ -116,7 +116,7 @@
 import QHeader from '@/components/header';
 import qs from 'qs';
 import { validatPhone } from '@/utils/validate';
-import { shopListFun, addOperatorFun, getOperatorInfoFun } from '@/service/member';
+import { shopListFun, updateOperatorInfoFun, getOperatorInfoFun } from '@/service/member';
 export default {
   data() {
     return {
@@ -166,26 +166,27 @@ export default {
     },
     async getcheckshop(){
       this.checkshoptxt = this.checkshoplist.join(',');
-      this.shoplist.forEach((item,i)=>{
-          if(this.checkshoplist[i] === item.shopName){
-            this.operateShopIds.push(item.shopId);
-          }
-      });
+      let checklist = this.shoplist.filter(v=>this.checkshoplist.some(k=>k==v.shopName));
       this.shopVisible = false;
+      checklist.forEach(item=>this.operateShopIds.push(`'${item.shopId}'`));
+    },
+    async updateMember(){
       if (this.validate()) {
         let payload = {
+          id:this.$route.query.id,
           username:this.username,
           phone:this.phone,
           operateShopIds:this.operateShopIds.join(','),
         };
-        let res = await addOperatorFun(qs.stringify(payload));
-        if (res.code === 1) {
-          this.$toast({message: '创建成功' });
+        let res = await updateOperatorInfoFun(qs.stringify(payload));
+        if (res.code === 0) {
+          this.$toast({message: '修改成功' });
+          this.$router.push({name:'member'});
         } else {
           this.$toast({message: res.msg });
         }
       }
-    },
+    }
   },
   components:{
     QHeader,

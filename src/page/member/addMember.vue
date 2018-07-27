@@ -5,7 +5,7 @@
 
     <div class="input-group">
       <div class="form-title"><span>用户名</span></div>
-      <div class="form-input"><input type="text" v-model="username" placeholder="请输入用户名"><span class="forward iconfont icon-nextx"></span></div>
+      <div class="form-input"><input type="text" v-model="username" placeholder="请输入用户名" @blur="validatName" maxlength="20"><span class="forward iconfont icon-nextx"></span></div>
     </div>
     <div class="input-group">
       <div class="form-title"><span>手机</span></div>
@@ -119,7 +119,7 @@
 <script>
 import QHeader from '@/components/header';
 import qs from 'qs';
-import { validatPhone } from '@/utils/validate';
+import { validatPhone, validatName } from '@/utils/validate';
 import { shopListFun, addOperatorFun } from '@/service/member';
 export default {
   data() {
@@ -148,7 +148,11 @@ export default {
       if (this.username === '') {
         this.$toast({message: '请输入用户名' });
         return false;
-      }
+      }else if (!validatName(this.username)) {
+        this.$toast({message: '用户名2-20个字符，只支持中文' });
+        return false;
+      } 
+
       if (this.phone === '') {
         this.$toast({message: '请输入手机号码' });
         return false;
@@ -162,6 +166,11 @@ export default {
       }
       return true;
     },
+    validatName(){
+      if (!validatName(this.username)) {
+        this.$toast({message: '用户名2-20个字符，只支持中文' });
+      } 
+    },
     async shopListFun(){
       let res = await shopListFun();
       this.shoplist = res.data;
@@ -170,7 +179,8 @@ export default {
       this.checkshoptxt = this.checkshoplist.join(',');
       let checklist = this.shoplist.filter(v=>this.checkshoplist.some(k=>k==v.shopName));
       this.shopVisible = false;
-      checklist.forEach(item=>this.operateShopIds.push(item.shopId));
+      checklist.forEach(item=>this.operateShopIds.push(`'${item.shopId}'`));
+
     },
     async addmember(){
       if (this.validate()) {
@@ -180,8 +190,9 @@ export default {
           operateShopIds:this.operateShopIds.join(','),
         };
         let res = await addOperatorFun(qs.stringify(payload));
-        if (res.code === 1) {
-          this.$toast({message: '创建成功' });
+        if (res.code === 0) {
+          this.$toast({message: '新增成功' });
+          this.$router.push({name:'member'});
         } else {
           this.$toast({message: res.msg });
         }

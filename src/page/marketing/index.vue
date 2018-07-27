@@ -6,11 +6,11 @@
   </section>
   <section class="tab-contont">
   	<div class="discount-wrap" v-if="tabindex === 0">
-
+      <div class="no-discount-list" v-if="timeMarket.lenght<=0">未设置限时优惠活动</div>
   		<div class="discoun-list" v-for="(item,index) in timeMarket" :key="index">
         <router-link :to="{name:'detailMarket', query:{id:item.id}}">
-          <span class="discountag"><span class="zanting">已暂停</span></span>
-            <p class="time">优惠期<span :class="{'stop-discount':item.status === 1}">{{item.noDiscountStart}}</span>至<span :class="{'stop-discount':item.status === 1}">{{item.noDiscountStart}}</span></p>
+          <span class="discountag" v-if="item.status === 1"><img src="../../../static/image/market/makretStop@2x.png"></span>
+            <p class="time">优惠期<span :class="{'stop-discount':item.status === 1}">{{item.noDiscountStart}}</span>至<span :class="{'stop-discount':item.status === 1}">{{item.noDiscountEnd}}</span></p>
             <div class="discoun-content">
               <div class="dis-con-title">
                 <p>店铺</p>
@@ -29,41 +29,43 @@
       </div>
   	</div>
   	<div class="VIP-wrap"  v-if="tabindex === 1">
-      <div class="car-shop">
-        企鹅一号店vip卡
+      <div class="no-discount-list" v-if="timeMarket.lenght<=0">未设置店铺VIP卡</div>
+      <div>
+         <div class="car-shop">企鹅一号店vip卡</div>
+          <div class="card-banner">       
+            <swiper :options="swiperOption"  ref="mySwiper">
+          
+              <swiper-slide>
+                <router-link :to="{name:'vipDetail'}">
+                  <div class="year-card card">   
+                    <p class="vip-type">VIP年卡</p>                
+                    <p class="price">500<span>元</span></p>
+                    <p class="usenum">每日仅限使用243123432次</p>       
+                    <p class="tag">8<span>折</span></p> 
+                  </div>
+                 </router-link>                     
+              </swiper-slide>  
+             
+              <swiper-slide>
+                <div class="halfYear-card card">   
+                    <p class="vip-type">VIP半年卡</p>                
+                    <p class="price">500<span>元</span></p>
+                    <p class="usenum">每日仅限使用243123432次</p>       
+                    <p class="tag">9<span>折</span></p> 
+                </div>                    
+              </swiper-slide>   
+              <swiper-slide>
+                <div class="season-card card">   
+                    <p class="vip-type">VIP月卡</p>                
+                    <p class="price">500<span>元</span></p>
+                    <p class="usenum">每日仅限使用243123432次</p>       
+                    <p class="tag">9<span>折</span></p> 
+                </div>                    
+            </swiper-slide>  
+            </swiper>        
+          </div> 
       </div>
-  		<div class="card-banner">       
-        <swiper :options="swiperOption"  ref="mySwiper">
-      
-          <swiper-slide>
-            <router-link :to="{name:'vipDetail'}">
-              <div class="year-card card">   
-                <p class="vip-type">VIP年卡</p>                
-                <p class="price">500<span>元</span></p>
-                <p class="usenum">每日仅限使用243123432次</p>       
-                <p class="tag">8<span>折</span></p> 
-              </div>
-             </router-link>                     
-          </swiper-slide>  
-         
-          <swiper-slide>
-            <div class="halfYear-card card">   
-                <p class="vip-type">VIP半年卡</p>                
-                <p class="price">500<span>元</span></p>
-                <p class="usenum">每日仅限使用243123432次</p>       
-                <p class="tag">9<span>折</span></p> 
-            </div>                    
-          </swiper-slide>   
-          <swiper-slide>
-            <div class="season-card card">   
-                <p class="vip-type">VIP月卡</p>                
-                <p class="price">500<span>元</span></p>
-                <p class="usenum">每日仅限使用243123432次</p>       
-                <p class="tag">9<span>折</span></p> 
-            </div>                    
-        </swiper-slide>  
-        </swiper>        
-      </div> 
+     
       <div class="addmember" @click="goaddvip">
         <span class="order-action iconfont icon-nextx"></span><br>
         <span>vip卡</span>
@@ -163,19 +165,14 @@ export default {
     background: #fff;
     position: relative;
     .discountag {
-      width: 0;
-      height: 0;
-      border-style: solid;
-      border-width: 0 1.07rem 1.07rem 0;
-      border-color: transparent #D8D8D8 transparent transparent;
-      position:absolute;
-      top:0px;
-      right:0px;
-      .zanting {
-         -webkit-transform-origin: center center;
-          transform-origin: center center;
-          font-size: 12px;
-          color: #fff;
+      width: 1.25rem;
+      height: 1.25rem;
+      position: absolute;
+      top: 0;
+      right: 0;
+      img {
+        display: block;
+        width: 100%;
       }
      
     }
@@ -192,7 +189,7 @@ export default {
       }
 		}
     .stop-discount {
-      color:#999;
+      color:#999 !important;
     }
 	}
 	.discoun-content {
@@ -327,5 +324,10 @@ export default {
       color: #fff;
     }
   }
-
+  .no-discount-list {
+    font-size: 14px;
+    color: #999;
+    text-align: center;
+    padding-top: 4rem;
+  }
 </style>

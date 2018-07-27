@@ -16,7 +16,7 @@
 </template>
 
 <script>
-  import { updatePwdFun } from '@/service/resetPwd';
+  import { forgetPwdFun } from '@/service/resetPwd';
   import qs from 'qs';
   import QHeader from '@/components/header';
   export default {
@@ -57,11 +57,7 @@
           if (res.code===0) {
                this.countdown();
           }else {
-             this.$toast({
-              message: res.msg,
-              position: "bottom",
-              duration: 3000
-            });
+             this.$toast(res.msg);
           }
         }
       },

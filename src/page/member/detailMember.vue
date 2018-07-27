@@ -25,14 +25,15 @@
   </div>
   <div class="footer">
     <span class="edit"><router-link :to="{name:'editMember',query:{ id:detail.id }}">编辑</router-link></span>
-    <span class="del">删除</span>
+    <span class="del" @click="deldelMember(detail.id)">删除</span>
   </div>
 </div>
 </template>
 <script>
 import QHeader from '@/components/header';
+import { MessageBox } from 'mint-ui';
 import qs from 'qs';
-import { getOperatorInfoFun } from '@/service/member';
+import { getOperatorInfoFun, delOperatorFun } from '@/service/member';
 export default {
   data() {
     return {
@@ -53,6 +54,19 @@ export default {
       if (res.code === 0) {
         this.detail = res.data;
       }
+    },
+    deldelMember(id){
+      MessageBox.confirm(`确认删除？`).then(async () => {
+        let query = this.$route.query;
+        let payload = {id:query.id};
+        let res = await delOperatorFun(qs.stringify(payload));
+        if (res.code === 0) {
+          this.$toast({message: '删除成功' });
+           this.$router.push({name:'member'});
+        } else {
+          this.$toast({message: res.msg });
+        }
+      });
     }
   },
   components:{

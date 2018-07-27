@@ -70,6 +70,21 @@ export const PayType = (ststus)=>{
 };
 
 
+// 交易类型
+export const ApplyType = (ststus)=>{
+	switch (ststus){
+		case 1:
+			return '收入 ';
+		case 2:
+		  	return '提现';
+		case 3:
+		 	 return '支出 ';
+		default:
+  			return ststus;
+	}
+};
+
+
 // 人员管理禁用启用
 export const memberIsLock = (ststus)=>{
 	switch (ststus){

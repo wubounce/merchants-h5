@@ -20,7 +20,7 @@
 </template>
 
 <script>
-  import { smscodeFun, forgetPwdFun } from '@/service/resetPwd';
+  import { smscodeFun, validateCodeFun } from '@/service/resetPwd';
   import { validatPhone } from '@/utils/validate';
   import QHeader from '@/components/header';
   import qs from 'qs';
@@ -54,11 +54,7 @@
           if (res.code===0) {
               this.countdown();
           }else {
-             this.$toast({
-              message: res.msg,
-              position: "bottom",
-              duration: 3000
-            });
+             this.$toast(res.msg);
           }
         }
       },
@@ -77,16 +73,12 @@
             this.$toast({message: "请输入验证码" });
             return false;
           }
-          let payload = Object.assign({},{phone:this.reset.phone});
-          let res = await forgetPwdFun(qs.stringify(payload));
+          let payload = Object.assign({},this.reset,{username:''});
+          let res = await validateCodeFun(qs.stringify(payload));
           if (res.code===0) {
             this.$router.push({name:'confimPwd'});
           }else {
-             this.$toast({
-              message: res.msg,
-              position: "bottom",
-              duration: 3000
-            });
+             this.$toast(res.msg);
           }
         }
       }

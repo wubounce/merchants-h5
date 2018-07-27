@@ -2,50 +2,65 @@
     <!-- 根据类型更换title -->
 	<div class="accountDetail-wrapper" v-title="'收益详情'">
 		<header>
-			<p class="title"><img src="../../assets/img/test.jpg">每日便利洗衣店</p>
-			<p class="price">+3.50</p>
+			<p class="title"><span class="usericon iconfont icon-dianpu"></span>{{data.shopName}}</p>
+			<p class="price">+{{data.payPrice}}</p>
 			<p class="satus">交易成功</p>
 		</header>		
 		<ul class="record">
 			<li>
-                <div><p>订单金额</p><p>5.00</p></div>   
-				<div class="discounts"><p>优惠券</p><p>-1.50</p></div>
-                <div class="discounts"><p>限时折扣</p><p>-1.50</p></div>            
+                <div><p>订单金额</p><p>{{data.markPrice}}</p></div>   
+				<!-- <div class="discounts"><p>优惠券</p><p>-{{data.discountPrice}}</p></div> -->
+                <div class="discounts"><p>限时折扣</p><p>-{{data.discountPrice}}</p></div>            
             </li>	
             <li>
-                <div><p>支付方式</p><p>微信支付</p></div>
-                <div><p>用户账号</p><p>15726694131</p></div>
+                <div><p>支付方式</p><p>{{data.payType | PayType}}</p></div>
+                <div><p>用户账号</p><p>{{data.userPhone}}</p></div>
             </li>
             <li>
-                <div><p>创建之间</p><p>2018-05-29 10:10</p></div>
-                <div><p>订单号</p><p>20180528161055875468</p></div>
+                <div><p>创建之间</p><p>{{data.createTime}}</p></div>
+                <div><p>订单号</p><p>{{data.orderNo}}</p></div>
+                <div><p>店铺</p><p>{{data.shopName}}</p></div>
             </li>
             <li>
-                <div><p>类型</p><p>洗衣机</p></div>
-                <div><p>设备型号</p><p>海尔8公斤滚筒SGDN8-636U7</p></div>
-                <div><p>设备名称</p><p>机器名称</p></div>
-                <div><p>IMEI号</p><p>865933031225838</p></div>
+                <div><p>类型</p><p>{{data.parentType}}</p></div>
+                <div><p>设备型号</p><p>{{data.subType}}-636U7</p></div>
+                <div><p>设备名称</p><p>{{data.machineName}}</p></div>
+                <div><p>IMEI号</p><p>{{data.imei}}</p></div>
             </li>
             <li>
-                <div class="remarks"><p>备注</p><p>我要退款啊我要退款啊我要退款啊我要退款啊 我要退款啊我要退款啊</p></div>    
+                <div class="remarks"><p>备注</p><p>{{data.reason}}</p></div>    
             </li>
 		</ul>
 	</div>
 </template>
 
 <script>
+import qs from 'qs';
+import { PayType } from '@/utils/mapping';
+import { getOrderDetailFun } from '@/service/user';
 export default {
   data() {
     return {
+        data:{}
     };
   },
   mounted() {
     
   },
   created(){
+    this.getOrderDetail();
   },
   methods: {
-    
+    async getOrderDetail(type){
+        let payload = {balanceLogId:this.$route.query.balanceLogId};
+        let res = await getOrderDetailFun(qs.stringify(payload));
+        this.data = res.data;
+    }
+  },
+  filters: {
+    PayType:function(value){
+      return PayType(value);
+    }
   },
   components:{
     
@@ -66,14 +81,14 @@ export default {
                 display: flex;
                 justify-content: center;
                 align-items: center;
-                img{
-                    width: .5867rem;
-                    height: .5867rem;
-                    margin-right: .2rem;                    
+               .icon-dianpu {
+                    color: #52C41A;
+                    font-size: 24px;
+                    padding-right: 0.21rem;
                 }
                 color: $first-color;
                 line-height: .6667rem;
-                font-size: .48rem;
+                font-size: 18px;
             }
             .price{
                 color: $first-color;

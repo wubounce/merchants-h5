@@ -110,6 +110,7 @@ export default {
         let res = await ordeRrefundFun(qs.stringify(payload));
         if (res.code === 0) {
           this.$toast({message: '退款成功' });
+          this.$router.push({name:'order'});
         } else {
           this.$toast({message: '退款失败' });
         }
@@ -172,7 +173,6 @@ export default {
       }
     }
     .content {
-      width: 6.293333rem;
       height: 2.653333rem;
       padding-left: 0.266667rem; 
       .con-title {

@@ -8,10 +8,10 @@
     <p>活动日<span class="addvip-con">{{activeCurrentTags?activeCurrentTags !== '自定义'?activeCurrentTags:checkWeeklisttxt:checkWeeklisttxt}}<span class="order-action iconfont icon-nextx" @click="activeVisible=true"></span></span></p>
     <p>每日活动时段<span class="addvip-con">{{addmarket.time}}<span class="order-action iconfont icon-nextx" @click="activeTimeVisible = true"></span></span></p>
     <p>折扣优惠<span class="addvip-con"><input type="text" placeholder="折扣优惠" class="discount-input" v-model="addmarket.discount">%</span></p>
-    <p>是否开放<span class="addvip-con"><mt-switch v-model="addmarket.isOpen" class="check-switch"></mt-switch></span></p>
+    <p>是否开放<span class="addvip-con"><mt-switch v-model="addmarket.addstatus" class="check-switch"></mt-switch></span></p>
   </div>
   <section class="promiss-footer">
-    <span class="can">取消</span>
+    <span class="can" @click="cancalAdd">取消</span>
     <span class="cifrm" @click="toaddMaket">确定</span>
   </section> 
     <!-- 店铺 -->
@@ -66,14 +66,14 @@ import moment from 'moment';
 import selectpickr from '@/components/selectPicker';
 import { shopListFun } from '@/service/report';
 import { addOruPdateFun } from '@/service/market';
-import { validatDiscount } from '@/utils/validate';
+// import { validatDiscount } from '@/utils/validate';
 export default {
   data() {
     return {
       value2:'',
       value3:'',
       test:true,
-      pickerstartDate: new Date('2018-01-01'),
+      pickerstartDate: new Date(),
       title: '新增优惠',
       shopVisible:false,
       shopCurrentTags:null,
@@ -110,7 +110,7 @@ export default {
       checkWeeklisttxt:'',
       
       addmarket:{
-        isOpen:true,
+        addstatus:true,
         time:null,
         startTime:'',
         endTime:'',
@@ -126,7 +126,7 @@ export default {
           values: ['00','01', '02', '03', '04', '05', '06','07','08', '09', '10', '11', '12', '13','14','15','16','17','18','19','20','21','22','23'],
           className: 'slot1',
           textAlign: 'right',
-          defaultIndex:4
+          defaultIndex:5
         },
         {
           divider: true,
@@ -139,7 +139,7 @@ export default {
           '30','31', '32', '33', '34', '35', '36','37','38', '39', '40', '41', '42', '43','44','45','46','47','48','49','50','51','52','53','54','55','56','57','58','59'],
           className: 'slot3',
           textAlign: 'left',
-          defaultIndex:30
+          defaultIndex:0
         },
         {
           divider: true,
@@ -151,7 +151,7 @@ export default {
           values: ['00','01', '02', '03', '04', '05', '06','07','08', '09', '10', '11', '12', '13','14','15','16','17','18','19','20','21','22','23'],
           className: 'slot1',
           textAlign: 'right',
-          defaultIndex:20
+          defaultIndex:23
         },
         {
           divider: true,
@@ -164,7 +164,7 @@ export default {
           '30','31', '32', '33', '34', '35', '36','37','38', '39', '40', '41', '42', '43','44','45','46','47','48','49','50','51','52','53','54','55','56','57','58','59'],
           className: 'slot3',
           textAlign: 'left',
-          defaultIndex:30
+          defaultIndex:0
         }
       ],
     };
@@ -174,7 +174,6 @@ export default {
   },
   created(){
     this.shopListFun();
-
   },
   methods: {
     async shopListFun(){
@@ -187,7 +186,7 @@ export default {
     shopselectpickertatus(data){
       this.shopVisible = data;
     },
-    activeselectpicker(data){
+    activeselectpicker(data){ //打开自定义星期
       this.activeCurrentTags = data;
       if (this.activeCurrentTags === '自定义') {
           this.weekVisible = true;
@@ -196,7 +195,7 @@ export default {
     activeselectpickertatus(data){
       this.activeVisible = data;
     },
-    checkeWeekList(){
+    checkeWeekList(){ //选择自定星期
       let checklist = this.weekTitle.filter(v=>this.checkWeeklist.some(k=>k==v.value));
       let checkActiveList = [];
       checklist.forEach(item=>checkActiveList.push(item.label));
@@ -238,7 +237,7 @@ export default {
         this.$toast({message: "请选择优惠期结束时间" });
         return false;
       }
-      if (!this.checkWeeklisttxt || !this.activeCurrentTags) {
+      if (!this.activeCurrentTags && !this.checkWeeklisttxt) {
         this.$toast({message: "请选择活动日" });
         return false;
       }
@@ -250,10 +249,10 @@ export default {
         this.$toast({message: "请填写折扣优惠" });
         return false;
       }
-      if (!validatDiscount(this.addmarket.discount)) {
-        this.$toast({message: "折扣优惠请填写数字" });
-        return false;
-      }
+      // if (!validatDiscount(this.addmarket.discount)) {
+      //   this.$toast({message: "折扣优惠请填写数字" });
+      //   return false;
+      // }
       
       if (!this.shopCurrentTags) {
         this.$toast({message: "请选择店铺" });
@@ -262,7 +261,7 @@ export default {
 
       let week = null;
       if(this.checkWeeklisttxt){
-        week = this.checkWeeklist.join(',');
+        week = this.checkWeeklisttxt;
       }else{
         if (this.activeCurrentTags === '周一至周五') {
           week = '1,2,3,4,5';
@@ -270,11 +269,20 @@ export default {
           week = '1,2,3,4,5,6,7';
         }
       }
-      let status = null;
-      this.addmarket.isOpen === true ? status = 0  :status = 1;
+     let status = null;
+      this.addmarket.addstatus === true ? status = 0  : status = 1;
       let payload = Object.assign({},this.addmarket,{week:week,shopIds:this.shopCurrentTags.shopId,status:status});
-      delete payload.isOpen;
+      delete payload.addstatus;
       let res = await addOruPdateFun(qs.stringify(payload));
+      if (res.code === 0) {
+        this.$toast({message: '新增成功' });
+        this.$router.push({name:'marketing'});
+      } else {
+        this.$toast({message: res.msg });
+      }
+    },
+    cancalAdd(){
+      this.$router.push({name:'marketing'});
     }
   },
   components:{

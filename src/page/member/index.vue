@@ -1,6 +1,7 @@
 <template>
 <div class="member">
   <q-header :title="title"></q-header>
+  <div class="no-discount-list" v-if="list.lenght<=0">暂无二级管理账号</div>
   <div class="meber-list" v-for="(item,index) in list" :key="index">
     <div class="momber-wrap">
       <div class="name">
@@ -86,6 +87,7 @@ export default {
   .phonenum {
     font-size: 16px;
     color: #999;
+    margin-top: 0.11rem;
   }
   .memberdesc {
     border-top:1px solid #DFE6FF;

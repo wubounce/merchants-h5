@@ -79,13 +79,9 @@
           delete payload.checkpassword;
           let res = await updatePwdFun(qs.stringify(payload));
           if (res.code===0) {
-            console.log(res);
+             this.$router.push({name:'login'});
           }else {
-             this.$toast({
-              message: res.msg,
-              position: "bottom",
-              duration: 3000
-            });
+             this.$toast(res.msg);
           }
         }
       },

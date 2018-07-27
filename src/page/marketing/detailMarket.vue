@@ -2,20 +2,19 @@
 <div class="addmarket">
   <q-header :title="title"></q-header>
   <div class="addvip-header">
-    <p>所属店铺<span class="addvip-con">sfsdfsfsfasfsdf</span></p>
-    <p>优惠期<span class="addvip-con">sfsdfsfsfasfsdf</span></p>
-    <p>活动日<span class="addvip-con">sfsdfsfsfasfsdf</span></p>
-    <p>每日活动时段<span class="addvip-con">sfsdfsfsfasfsdf</span></p>
-    <p>折扣优惠<span class="addvip-con">sfsdfsfsfasfsdf</span></p>
-    <p>折扣优惠<span class="addvip-con">sfsdfsfsfasfsdf</span></p>
-    <p>活动状态<span class="addvip-con">sfsdfsfsfasfsdf</span></p>
+    <p>所属店铺<span class="addvip-con" v-for="(item,index) in detail.shop" :key="index">{{item.name}}</span></p>
+    <p>优惠期<span class="addvip-con">{{detail.noDiscountStart}}<span v-if="detail.noDiscountStart&&detail.noDiscountEnd">-</span>{{detail.noDiscountEnd}}</span></p>
+    <p>活动日<span class="addvip-con">{{detail.noWeek | week}}</span></p>
+    <p>每日活动时段<span class="addvip-con">{{detail.noTime}}</span></p>
+    <p>折扣优惠<span class="addvip-con">{{detail.discount}}%</span></p>
+    <p>活动状态<span class="addvip-con">{{detail.status === 0 ? '开放':'暂停'}}</span></p>
   </div>
   <div class="create-wrap">
-    <p>创建人：Wendy</p>
-    <p>创建时间： 2018-07-15 15:38:05</p>
+    <p>创建人：{{detail.createUserName}}</p>
+    <p>创建时间： {{detail.createTime}}</p>
   </div>
   <div class="footer">
-    <span class="edit"><router-link :to="{name:'editMarket'}">编辑</router-link></span>
+    <span class="edit"><router-link :to="{name:'editMarket', query:{id:detail.id}}">编辑</router-link></span>
     <span class="del" @click="deldelMarket">删除</span>
   </div>
 </div>
@@ -25,34 +24,76 @@ import QHeader from '@/components/header';
 import { MessageBox } from 'mint-ui';
 import qs from 'qs';
 import moment from 'moment';
-import { delMarketFun } from '@/service/market';
+import { delMarketFun, detailMarketFun } from '@/service/market';
 
 export default {
   data() {
     return {
       title: '显示优惠详情',
+      detail:{}
     };
   },
   mounted() {
     
   },
   created(){
-   
+    this.getDetail();
   },
   methods: {
+    async getDetail(){
+      let query = this.$route.query;
+      let payload = {timeId:query.id};
+      let res = await detailMarketFun(qs.stringify(payload));
+      this.detail = res.data;
+      this.detail.noDiscountStart = this.detail.noDiscountStart ? moment(this.detail.noDiscountStart).format('YYYY-MM-DD') : '';
+      this.detail.noDiscountEnd = this.detail.noDiscountEnd ? moment(this.detail.noDiscountEnd).format('YYYY-MM-DD'): '';
+      this.detail.createTime = this.detail.createTime? moment(this.detail.createTime).format('YYYY-MM-DD'): '';
+    },
     deldelMarket(id){
       MessageBox.confirm(`确认删除？`).then(async () => {
         let query = this.$route.query;
         let payload = {timeId:query.id};
         let res = await delMarketFun(qs.stringify(payload));
         if (res.code === 0) {
-          this.$toast({message: '删除成功' });
+          this.$toast('删除成功');
           this.$router.push({name:'marketing'});
         } else {
           this.$toast({message: res.msg });
         }
       });
     }
+  },
+  filters: {
+    week: function (value) {
+      if (value === '1,2,3,4,5,6,7') {
+        return '每天';
+      } else if(value === '1,2,3,4,5'){
+        return '周一至周五';
+      }else {
+        let arr = [];
+        let weeklsit = [];
+        arr = value? value.split(',') :[] ;
+        arr.forEach(item=>{
+          if (item == '1') {
+            weeklsit.push('周一');
+          } else if(item == '2') {
+            weeklsit.push('周二');
+          } else if(item == '3') {
+            weeklsit.push('周三');
+          } else if(item == '4') {
+            weeklsit.push('周四');
+          } else if(item == '5') {
+            weeklsit.push('周五');
+          } else if(item == '6') {
+            weeklsit.push('周六');
+          } else if(item == '7') {
+            weeklsit.push('周日');
+          }
+        });
+        return weeklsit.join(',');
+      }
+      
+    },
   },
   components:{
     QHeader,

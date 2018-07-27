@@ -1,39 +1,55 @@
 <template>
 <div class="withdraw-wrapper" v-title="'我的钱包'">
     <header>
-        <img src="../../assets/img/test.jpg">
+        <span class="iconfont icon-zhifubao"></span>
         <div>
-            <p class="name">zhangzhigao***@163.com</p>
+            <p class="name">{{userInfo.alipayAccount}}</p>
             <p>24小时内到账</p>
         </div>
     </header>
     <div class="withdraw-money">
         <p class="title">提现金额</p>
-        <label><span>￥</span><input></label>
+        <label><span>￥</span><input v-model="money"></label>
         <div class="total">
-            <p class="balance">账户余额 ￥0.00，最低提现10元</p>
-            <p class="withdraw-all">全部提现</p>
+            <p class="balance">账户余额 ￥{{balance}}，最低提现10元</p>
+            <p class="withdraw-all" @click="allWithdraw">全部提现</p>
         </div>
     </div>
     <!-- 满足条件可以提现的时候去掉class：btn-disabled -->
-    <div class="btn btn-disabled">确认提现</div>
-    <p class="withdraw-list">提现记录</p>
+    <div class="btn btn-disabled" @click="gotoWithdraw">确认提现</div>
+    <p class="withdraw-list"><router-link :to="{name:'withdrawList'}">提现记录</router-link></p>
 </div>
 </template>
 <script>
+import qs from 'qs';
+import { getOperatorFun, getMoneySubmitDetailFun } from '@/service/user';
 export default {
   data() {
     return {
-      
+      userInfo:{},
+      money:'',
+      balance:''
     };
   },
   mounted() {
     
   },
   created(){
+    this.balance = this.$route.query.balance;
+    this.getOperator();
   },
   methods: {
-    
+    async getOperator(){
+        let res = await getOperatorFun();
+        this.userInfo = res.data;
+    },
+    allWithdraw(){
+        this.money = this.balance;
+    },
+    async gotoWithdraw(){
+        let payload = Object.assign({},{money:this.money});
+        let res = await getMoneySubmitDetailFun(qs.stringify(payload));
+    }
   },
   components:{
 
@@ -50,10 +66,12 @@ export default {
             padding: 0 .4rem;
             background-color: #fff;
             margin-bottom: .2933rem;
-            img{
+            .icon-zhifubao{
                 width: 1.3067rem;
                 height: 1.3067rem;
-                margin-right: .4rem;                 
+                margin-right: .4rem; 
+                color: #1890FF; 
+                font-size: 1.17rem;               
             }
             p{
                 font-size: .3733rem;

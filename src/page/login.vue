@@ -36,7 +36,6 @@ import { mapActions } from 'vuex';
 import { removeToken, removeUser } from '@/utils/tool';
 import { validatPhone } from '@/utils/validate';
 import { login } from '@/service/login';
-import { MessageBox } from 'mint-ui';
 import Button from "@/components/Button/Button";
 export default {
     name: 'page-login',
@@ -85,7 +84,7 @@ export default {
               this.login(res.data.token);
               this.$router.push('/index');
           }else {
-              MessageBox.alert(res.msg);
+             this.$toast(res.msg);
           }
         }
       },

@@ -227,7 +227,6 @@ export default {
   background: #fff;
   height: 1.173333rem;
   line-height: 1.173333rem;
-  opacity:0.6;
   border-bottom:1px solid rgba(220,224,230,1);
   div {
     flex: 1;
