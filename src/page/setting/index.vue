@@ -8,7 +8,9 @@
       </router-link>
     </div>
     <div class="input-group">
-      <div class="form-title"><span>账户设置</span><span class="forward iconfont icon-nextx"></span></div>
+      <router-link :to="{name:'accountSet'}">
+          <div class="form-title"><span>账户设置</span><span class="forward iconfont icon-nextx"></span></div>
+      </router-link>
     </div>
   </div>
   <div class="deleteShop">

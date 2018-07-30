@@ -238,7 +238,7 @@ export default new Router({
 
     
     
-    
+    //设置
     {
       path: '/setting',
       name: 'setting',
@@ -251,7 +251,15 @@ export default new Router({
       component: () =>
         import ('@/page/setting/personalSet')
     },
+    {
+      path: '/accountSet',
+      name: 'accountSet',
+      component: () =>
+        import ('@/page/setting/accountSet')
+    },
     { path: '/changePwd', name: 'changePwd', component: () => import('@/page/setting/changePwd') },
+    { path: '/setAlipay', name: 'setAlipay', component: () => import('@/page/setting/setAlipay') },
+    { path: '/realName', name: 'realName', component: () => import('@/page/setting/realName') },
     { path: '/contact', name: 'contact', component: () => import('@/page/contact/index') },
     { path: '/cooperation', name: 'cooperation', component: () => import('@/page/cooperation/index') },
 
@@ -285,12 +293,6 @@ export default new Router({
       name: 'withdrawList',
       component: () =>
         import ('@/page/wallet/withdrawList')
-    },
-    {
-      path: '/withdrawDetail',
-      name: 'withdrawDetail',
-      component: () =>
-        import ('@/page/wallet/withdrawDetail')
     },
     {
       path: '/withdrawResult',
