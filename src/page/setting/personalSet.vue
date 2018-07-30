@@ -3,15 +3,15 @@
   <q-header :title="title"></q-header>
   <div class="add-form">
     <div class="input-group">
-        <div class="form-title"><span>账号</span><span class="forward">157 2669 4131</span></div>
+        <div class="form-title"><span>账号</span><span class="forward">{{item.phone}}</span></div>
     </div>
 
     <div class="input-group">
-      <div class="form-title"><span>姓名</span><span class="forward">张*高</span></div>
+      <div class="form-title"><span>姓名</span><span class="forward">{{item.realName}}</span></div>
     </div>
 
     <div class="input-group" @click="chooseArea">
-      <div class="form-title"><span>所在地区</span><span class="forward iconfont icon-nextx"></span><span class="forward">{{address}}</span></div>
+      <div class="form-title"><span>所在地区</span><span class="forward iconfont icon-nextx"></span><span class="forward">{{item.address}}</span></div>
     </div>
   </div>
 
@@ -29,11 +29,13 @@
 import qs from "qs";
 import QHeader from '@/components/header';
 import { areaListFun } from '@/service/shop';
+import { getPersonalInfoFun } from '@/service/user';
+import { updateOperatorFun } from '@/service/user';
 export default {
   data() {
     return {
       title: '个人信息',
-      address: '',
+      item: {},
       placeVisible: false,
       addressSlots:[
         {
@@ -70,38 +72,66 @@ export default {
       districtArray:[],
       provinceId:'',
       cityId:'',
-      districtId:''
+      districtId:'',
+      provinceName:'',
+      cityName:'',
+      districtName:''
     };
   },
   mounted() {
     
   },
   created(){
+    this.getArea();
+    this.getPersonalInfo();
   },
   methods: {
+    async getPersonalInfo() {
+      let res = await getPersonalInfoFun();
+      this.item = res.data;
+    },
     chooseArea() {
       this.placeVisible = true;
     },
-    async onAddressChange(picker, values) {
-      //选择地区
-      //根据省，找出与之对应的市
+    cancel() {
+      //取消
+    },
+    async confirmNews() {
+      //确定
+      this.placeVisible = false;
+      if(this.provinceName == this.cityName.slice(0,2)) {     
+        this.item.address = this.cityName + this.districtName;
+      }
+      else {
+        this.item.address = this.provinceName + this.cityName + this.districtName;
+      }
+      //往后台传值
+      let objUpdate = {
+        address: this.item.address
+      };
+      let res = await updateOperatorFun(qs.stringify(objUpdate));
+
+    },
+    async onAddressChange(picker,values) {
+      //市
       for(let i=0;i<this.provinceArray.length;i++) {
         if(values[0] == this.provinceArray[i].areaName) {
-          let city = { parentId: this.provinceArray[i].areaId };
-          this.provinceId = this.provinceArray[i].areaId;
-          let res = await areaListFun(qs.stringify(city));
-          if(res.code===0) {
-            let chooseCity = res.data.map((c)=> {
+          let city ={
+            parentId: this.provinceArray[i].areaId
+          };
+          let resCity = await areaListFun(qs.stringify(city));
+          if(resCity.code===0) {
+            let chooseCity = resCity.data.map((c)=> {
               return c.areaName;
             });
 
-            this.cityArray = res.data;
+            this.cityArray = resCity.data;
             picker.setSlotValues(1, chooseCity); //设置市
           }
         }
       }
-
-      //根据市，找出与之对应的区
+      
+      //区
       for(let j=0;j<this.cityArray.length;j++) {
         if(values[1] == this.cityArray[j].areaName) {
           let district = { parentId: this.cityArray[j].areaId };
@@ -111,39 +141,35 @@ export default {
             let chooseDistrict = resDistrict.data.map((d)=> {
               return d.areaName;
             });
-
             this.districtArray = resDistrict.data;
             picker.setSlotValues(2, chooseDistrict); //设置市
           }
         }
       }
-
+      //传区的id
       for(let j=0;j<this.districtArray.length;j++) {
         if(values[2] == this.districtArray[j].areaName) {
           this.districtId = this.districtArray[j].areaId;
         }
       }
+
       this.provinceName = values[0];
       this.cityName = values[1];
       this.districtName = values[2];
     },
-    cancel() {
-      //取消
-    },
-    confirmNews() {
-      //确定
-    },
     async getArea() {
-      let obj = { parentId: 0 };
-      let res = await areaListFun(qs.stringify(obj));
-      this.provinceArray = res.data;
-      if(res.code===0) {
-        for(let i=0;i<res.data.length;i++) {
-          this.addressSlots[0].values.push(res.data[i].areaName);
+      let obj = {
+        parentId: '0'
+      };
+      let resProvince = await areaListFun(qs.stringify(obj));
+      if(resProvince.code===0) {
+        this.provinceArray = resProvince.data;        
+        for(let i=0;i<resProvince.data.length;i++) {
+          this.addressSlots[0].values.push(resProvince.data[i].areaName);
         }
       }
       else {
-        MessageBox.alert(res.msg);
+        MessageBox.alert(resProvince.msg);
       }
     }
   },

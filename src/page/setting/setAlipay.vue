@@ -6,13 +6,15 @@
         <input type="text" class='addressInput' v-model="account"  placeholder="请填写支付宝账号" @input="disbaledBtn">
       </span>
     </p>
-    <p class="btn">
+    <p class="btn" @click="submitAlipay">
       <mt-button type="primary" class="btn-blue" :disabled="disabled">确定</mt-button>
     </p>
   </section>
 </template>
 <script>
 import QHeader from '@/components/header';
+import qs from 'qs';
+import { updateOperatorFun } from '@/service/user';
 export default {
   data() {
     return {
@@ -24,7 +26,40 @@ export default {
   methods: {
     disbaledBtn() {
       this.disabled = false;
+    },
+    async submitAlipay() {
+
+      if(this.account.length < 5) {
+        this.$toast({
+          message: "支付宝帐号不符合规则",
+          position: "bottom",
+          duration: 3000
+        });
+      }
+      else {
+        let obj ={
+          alipayAccount: this.account
+        };
+        let res = await updateOperatorFun(qs.stringify(obj));
+        if(res.code === 0 ) {
+          this.$router.push({
+            name: 'accountSet'
+          });
+          let instance = this.$toast({
+            message: '支付宝账号修改成功',
+            iconClass: 'mint-toast-icon mintui mintui-success'
+          });
+          setTimeout(() => {
+            instance.close();
+          }, 2000);
+        }
+        else {
+          this.$toast(res.msg);
+        }
+      }
     }
+  },
+  created() {
   },
   components:{
     QHeader

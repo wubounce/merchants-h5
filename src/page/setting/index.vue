@@ -14,7 +14,9 @@
     </div>
   </div>
   <div class="deleteShop">
-    <button>退出登录</button>
+    <router-link :to="{name:'login'}">
+      <button>退出登录</button>
+    </router-link>
   </div>
 </div>
 </template>

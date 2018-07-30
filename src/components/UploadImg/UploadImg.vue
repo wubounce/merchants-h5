@@ -2,7 +2,7 @@
   <div class="upload">
     <input :id="id" type="file" ref="input" @change="beforeFiles" />
     <label :for="id">
-      <img class="upLoad"  :src="defaultPicture" alt="店铺图片" >
+      <img :class="{'upLoadShop' : isStatus,'upLoadStatus': !isStatus}" :src="defaultPicture" alt="店铺图片" >
     </label>
   </div>
 </template>
@@ -15,6 +15,9 @@ export default {
     },
     defaultPicture: {
       type: String
+    },
+    isStatus: {
+      type: Boolean
     }
   },
   data() {
@@ -69,7 +72,15 @@ export default {
     font-size: 0;
     border: 0;
     display: inline-block;
-    .upLoad {
+    .upLoadStatus {
+      width: 9rem;
+      height: 6rem;
+
+      margin-bottom: 0.3rem;
+      padding: au;
+      padding-left: 0.5rem;
+    }
+    .upLoadShop {
       width: 2rem;
       height: 2rem; 
       border-radius: 5px;
