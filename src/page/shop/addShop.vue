@@ -17,7 +17,7 @@
       <p class="picture">
         <span>店铺照片</span>
         <span>
-          <UploadImg :id="imgId.a" :defaultPicture="imgId.defaultPicture" @onImgFiles="UpdatedImgFiles"></UploadImg>
+          <UploadImg :id="imgId.a" :defaultPicture="imgId.defaultPicture" :isStatus="imgId.isStatus" @onImgFiles="UpdatedImgFiles"></UploadImg>
         </span>
       </p>
     </div>
@@ -152,7 +152,8 @@ export default {
       areaName:'',
       imgId: {
         a: "a",
-        defaultPicture:'../../../static/shop/add.png'
+        defaultPicture:'../../../static/image/shop/add.png',
+        isStatus:true
       },
       url:'',
       machine: [],
