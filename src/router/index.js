@@ -228,7 +228,6 @@ export default new Router({
         import ('@/page/user/user')
     },
 
-    
     //设置
     {
       path: '/setting',
@@ -251,6 +250,7 @@ export default new Router({
     { path: '/changePwd', name: 'changePwd', component: () => import('@/page/setting/changePwd') },
     { path: '/setAlipay', name: 'setAlipay', component: () => import('@/page/setting/setAlipay') },
     { path: '/realName', name: 'realName', component: () => import('@/page/setting/realName') },
+    { path: '/realNameGet', name: 'realNameGet', component: () => import('@/page/setting/realNameGet') },
     { path: '/contact', name: 'contact', component: () => import('@/page/contact/index') },
     { path: '/cooperation', name: 'cooperation', component: () => import('@/page/cooperation/index') },
 
