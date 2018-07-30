@@ -26,7 +26,9 @@
 </section>
 </template>
 <script>
+import qs from "qs";
 import QHeader from '@/components/header';
+import { areaListFun } from '@/service/shop';
 export default {
   data() {
     return {
