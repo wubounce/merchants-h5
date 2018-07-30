@@ -286,12 +286,6 @@ export default new Router({
         import ('@/page/wallet/withdrawList')
     },
     {
-      path: '/withdrawDetail',
-      name: 'withdrawDetail',
-      component: () =>
-        import ('@/page/wallet/withdrawDetail')
-    },
-    {
       path: '/withdrawResult',
       name: 'withdrawResult',
       component: () =>
