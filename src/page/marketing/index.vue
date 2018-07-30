@@ -1,6 +1,5 @@
-<template>
-<div class="marketing">
-  <q-header :title="title"></q-header>
+ <template>
+<div class="marketing" v-title="title">
   <section class="tab-title">
   	<div v-for="(item,index) in tabtitle" @click="tabclick(index)"><span :class="{tabcurrent:tabindex === index}" >{{item}}</span></div>
   </section>
@@ -24,7 +23,7 @@
           </router-link>
   		</div>
       <div class="addmember" @click="goaddMarket">
-        <span class="order-action iconfont icon-nextx"></span><br>
+        <span class="order-action iconfont icon-tianjia"></span><br>
         <span>优惠</span>
       </div>
   	</div>
@@ -67,7 +66,7 @@
       </div>
      
       <div class="addmember" @click="goaddvip">
-        <span class="order-action iconfont icon-nextx"></span><br>
+        <span class="order-action iconfont icon-tianjia"></span><br>
         <span>vip卡</span>
       </div>
   	</div>
@@ -75,7 +74,6 @@
 </div>
 </template>
 <script>
-import QHeader from '@/components/header';
 import { swiper, swiperSlide } from 'vue-awesome-swiper';  
 import { timeMarketListFun } from '@/service/market';
 import moment from 'moment';
@@ -127,7 +125,6 @@ export default {
     }
   },
   components:{
-    QHeader,
     swiper,
     swiperSlide
   }

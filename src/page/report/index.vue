@@ -1,5 +1,5 @@
 <template>
-<div class="report">
+<div class="report" v-title="title">
   <mt-navbar class="tab" v-model="selected">
     <mt-tab-item id="1">收益</mt-tab-item>
     <mt-tab-item id="2">退款</mt-tab-item>

@@ -41,7 +41,6 @@
 		},
 		watch: {
 		$route () {
-	       console.log('改变路由');
 	      this.selected = this.$route.path;
 	    },
 		selected: function (val) {

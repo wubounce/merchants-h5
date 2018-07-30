@@ -9,8 +9,10 @@ const getOperatorInfoApi = 'operatorManager/getOperatorInfo';                   
 const updateOperatorInfoApi = 'operatorManager/updateOperatorInfo';                                // 更新管理员 method 'post'
 const delOperatorApi = 'operatorManager/delOperatorInfo';                                          // 删除管理员 method 'post'
 const shopListApi = 'shop/listShop';                                                               // 店铺列表 method 'post'
+const menuSelectApi = '/sys/menu/select';                                                          //获取所有菜单列表
+const permsMenuApi = '/sys/menu/perms';                                                            //分配权限
       
-// 获取管理员列表
+// 获取管理员列表 
 export const operatorListFun = (payload) => fetch.post(operatorListApi, payload);
 
 //新增管理员
@@ -28,4 +30,9 @@ export const delOperatorFun = (payload) => fetch.post(delOperatorApi, payload);
 //店铺列表
 export const shopListFun = (payload) => fetch.post(shopListApi, payload);
 
+//获取所有菜单列表
+export const menuSelectFun = (payload) => fetch.post(menuSelectApi, payload);
+
+//分配权限
+export const permsMenuFun = (payload) => fetch.post(permsMenuApi, payload);
 

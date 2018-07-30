@@ -9,26 +9,25 @@
             <p class="icon-wrapper"><span class="icon"></span>  </p>   
             <div>
               <p class="status">发起提现申请</p>
-              <p class="time">2018–07-22 17:06</p>
+              <p class="time">{{data.createTime}}</p>
             </div>
-
-            
           </li>
-          <li class="second">
-            <p class="icon-wrapper"><span class="icon"></span>  </p>   
+          <li :class="['second',{'active':data.status === 0}]" >
+            <p :class="['icon-wrapper','iconfont',{'icon-shijian':data.status === 0}]"><span class="icon"></span></p>   
             <div>
               <p class="status">处理中</p>
-              <p class="time">预计07-23 17:06前到账</p>
+              <p class="time" v-if="data.status === 0">预计{{expectCompleteTime}}前到账</p>
+              <p class="time" v-else>{{data.createTime}}</p>
             </div>
             
           </li>
-          <li class="third">
+          <li :class="['third',{'active':data.status !== 0}]">
             <!-- 根据状态更换icon -->
-            <p class="icon-wrapper"><span class="icon"></span> </p>   
+            <p :class="['icon-wrapper','iconfont',{'icon-shibai':data.status === 2,'icon-chenggong':data.status === 1}]"><span class="icon"></span> </p>   
             <div>
               <!-- 若提现失败则给下status增加class：fall -->
-              <p class="status">提现失败</p>
-              <p class="time">2018–07-23 14:00</p>                           
+              <p :class="['status',{'fall':data.status === 2}]">{{data.status === 2? '提现失败': '到账成功'}}</p>
+              <p class="time">{{data.completeTime}}</p>                           
             </div>            
           </li>
         </ul>
@@ -38,13 +37,13 @@
     </div>
     <ul class="record">
 			<li>
-        <p>提现金额</p><p>5000.00</p> 
+        <p>提现金额</p><p>{{data.price}}</p> 
       </li>	 
       <li>
-        <p>到账支付宝</p><p>zhangzhigao110@163.com(张志高)</p>  
+        <p>到账支付宝</p><p>{{data.alipayAccount}}</p>  
       </li>	
       <li>    
-        <p>提现单号</p><p>20180528161055875468</p>    
+        <p>提现单号</p><p>{{data.orderNo}}</p>    
       </li>	       
 		</ul>
     <!-- 提现进入才会显示按钮，详情进入不显示 -->
@@ -53,20 +52,30 @@
   </div>
 </template>
 <script>
-
+import moment from 'moment';
+import qs from 'qs';
+import { getMoneySubmitDetailFun } from '@/service/user';
 export default {
   data() {
     return {
-                                               
+      data:{},
+      expectCompleteTime:''
     };
   },
   mounted() {
     
   },
   created(){
-  },
+    let balanceLogId = this.$route.query.balanceLogId;
+    this.getMoneySubmitDetail(balanceLogId);
+  }, 
   methods: {
-    
+    async getMoneySubmitDetail(balanceLogId){
+      let payload = {balanceLogId:balanceLogId};
+      let res = await getMoneySubmitDetailFun(qs.stringify(payload));
+      this.data = res.data;
+      this.expectCompleteTime = moment(res.data.createTime).add('days',1).format('YYYY-MM-DD hh:mm:ss');
+    }
   },
   components:{
 
@@ -111,6 +120,9 @@ export default {
                   font-size: .6933rem;
                   line-height: 1;
                   color: $highlight-color;
+                }
+                .icon-shibai {
+                  color: #FF5F5F;
                 }
                 div{
                   position: absolute;

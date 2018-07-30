@@ -1,6 +1,5 @@
 <template>
-  <div class="reset">
-    <q-header :title="title"></q-header>
+  <div class="reset" v-title="title">
     <form ref="resetForm" :model="reset">
     <div class="form-group">
       <input type="password" placeholder="请输入旧密码" v-model="reset.oldPassword">
@@ -18,7 +17,6 @@
 <script>
   import { forgetPwdFun } from '@/service/resetPwd';
   import qs from 'qs';
-  import QHeader from '@/components/header';
   export default {
     data() {
       return {
@@ -63,7 +61,6 @@
       },
     },
     components: {
-      QHeader
     }
   };
 </script>

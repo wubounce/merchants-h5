@@ -1,6 +1,5 @@
 <template>
-<div class="addmarket">
-  <q-header :title="title"></q-header>
+<div class="addmarket" v-title="title">
   <div class="addvip-header">
     <p>所属店铺<span class="addvip-con" v-for="(item,index) in detail.shop" :key="index">{{item.name}}</span></p>
     <p>优惠期<span class="addvip-con">{{detail.noDiscountStart}}<span v-if="detail.noDiscountStart&&detail.noDiscountEnd">-</span>{{detail.noDiscountEnd}}</span></p>
@@ -20,7 +19,6 @@
 </div>
 </template>
 <script>
-import QHeader from '@/components/header';
 import { MessageBox } from 'mint-ui';
 import qs from 'qs';
 import moment from 'moment';
@@ -29,7 +27,7 @@ import { delMarketFun, detailMarketFun } from '@/service/market';
 export default {
   data() {
     return {
-      title: '显示优惠详情',
+      title: '限时优惠详情',
       detail:{}
     };
   },
@@ -96,8 +94,7 @@ export default {
     },
   },
   components:{
-    QHeader,
-  }
+   }
 };
 </script>
 <style type="text/css" lang="scss" scoped>

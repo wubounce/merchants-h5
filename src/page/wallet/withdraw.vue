@@ -1,5 +1,5 @@
 <template>
-<div class="withdraw-wrapper" v-title="'我的钱包'">
+<div class="withdraw-wrapper" v-title="'余额提现'">
     <header>
         <span class="iconfont icon-zhifubao"></span>
         <div>
@@ -9,13 +9,12 @@
     </header>
     <div class="withdraw-money">
         <p class="title">提现金额</p>
-        <label><span>￥</span><input v-model="money" @input="btndisabdisabled"></label>
+        <label><span>￥</span><input v-model="money" @input="btndisabdisabled" type="number"></label>
         <div class="total">
-            <p class="balance">账户余额 ￥{{balance}}，最低提现10元</p>
+            <p class="balance">账户余额 ￥{{userInfo.balance}}，最低提现10元</p>
             <p class="withdraw-all" @click="allWithdraw">全部提现</p>
         </div>
     </div>
-    <!-- 满足条件可以提现的时候去掉class：btn-disabled -->
     <mt-button class="btn" :disabled="disabled" @click="gotoWithdraw">确认提现</mt-button>
     <p class="withdraw-list"><router-link :to="{name:'withdrawList'}">提现记录</router-link></p>
 </div>
@@ -28,7 +27,6 @@ export default {
     return {
       userInfo:{},
       money:'',
-      balance:'',
       disabled:true
     };
   },
@@ -36,7 +34,6 @@ export default {
     
   },
   created(){
-    this.balance = this.$route.query.balance;
     this.getOperator();
   },
   methods: {
@@ -45,7 +42,7 @@ export default {
         this.userInfo = res.data;
     },
     allWithdraw(){
-        this.money = this.balance;
+        this.money = this.userInfo.balance;
         this.disabled = false;
     },
     async gotoWithdraw(){
@@ -53,10 +50,15 @@ export default {
             this.$toast('最低提现10元');
             return false;
         }
+        if (Number(this.money) > this.userInfo.balance ) {
+            this.$toast('最高提现不能超过账户余额');
+            return false;
+        }
         let payload = Object.assign({},{money:this.money});
         let res = await getApplyFinanceFun(qs.stringify(payload));
         if (res.code===0) {
             this.$toast('提现成功');
+            this.$router.push({name:'withdrawResult'});
         }else {
             this.$toast(res.msg);
         }

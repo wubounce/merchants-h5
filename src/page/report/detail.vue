@@ -1,6 +1,5 @@
 <template>
-<div class="report-detail">
-  <q-header :title="title"></q-header>
+<div class="report-detail" v-title="title">
     <div class="tabledata">
         <div class="listcon">
           <span>设备名称</span>
@@ -22,7 +21,6 @@
 </div>
 </template>
 <script>
-import QHeader from '@/components/header';
 import { machineReportFun } from '@/service/report';
 import qs from 'qs';
 export default {
@@ -49,7 +47,6 @@ export default {
     }
   },
   components:{
-    QHeader,
   }
 };
 </script>

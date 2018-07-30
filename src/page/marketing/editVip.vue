@@ -1,6 +1,5 @@
 <template>
-<div class="addvip">
-  <q-header :title="title"></q-header>
+<div class="addvip" v-title="title">
   <div class="addvip-header">
     <p>VIP卡类型<span class="addvip-con">{{vipTypeCurrentTags}}<span class="order-action iconfont icon-nextx" @click="vipTypeVisible = true;"></span></span></p>
   </div>
@@ -28,7 +27,6 @@
 </div>
 </template>
 <script>
-import QHeader from '@/components/header';
 // import qs from 'qs';
 import selectpickr from '@/components/selectPicker';
 export default {
@@ -62,7 +60,6 @@ export default {
     },
   },
   components:{
-    QHeader,
     selectpickr
   }
 };

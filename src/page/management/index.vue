@@ -1,6 +1,5 @@
 <template>
-<div class="mang">
-  <q-header :title="title"></q-header>
+<div class="mang" v-title="title">
   <div class="alllist">
     <router-link :to="{ name: 'shopList'}">
       <section class="order-list">  
@@ -93,7 +92,7 @@ import QHeader from '@/components/header';
 export default {
   data() {
     return {
-      title: '企鹅商家管理后台',
+      title: '管理',
     };
   },
   mounted() {

@@ -31,8 +31,8 @@
       </div>
     </div>
   </div>
-  <mt-datetime-picker ref="picker2" type="date" v-model="searchStartDate" @confirm="handleChange"></mt-datetime-picker>
-  <mt-datetime-picker ref="picker3" type="date" v-model="searchEndDate" @confirm="handleChange"></mt-datetime-picker>
+  <mt-datetime-picker ref="picker2" type="date" v-model="searchStartDate" @confirm="handleStartDateChange"></mt-datetime-picker>
+  <mt-datetime-picker ref="picker3" type="date" v-model="searchEndDate" @confirm="handleEndDateChange"></mt-datetime-picker>
 </div>
 </template>
 <script>
@@ -141,9 +141,12 @@ export default {
     open(picker) {
       this.$refs[picker].open();
     },
-    handleChange() {
-      this.startDate = this.searchStartDate ? moment(this.searchStartDate).format('YYYY-MM-DD'):moment().subtract('days',7).format('YYYY-MM-DD');
-      this.endDate = this.searchEndDate ? moment(this.searchEndDate).format('YYYY-MM-DD'):moment().format('YYYY-MM-DD');
+    handleStartDateChange(value) {
+      this.startDate = moment(value).format('YYYY-MM-DD');
+      this.dayReportFun();
+    },
+    handleEndDateChange(value) {
+      this.endDate = moment(value).format('YYYY-MM-DD');
       this.dayReportFun();
     },
     shopselectpicker(data){

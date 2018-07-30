@@ -1,5 +1,5 @@
 <template>
-<div class="login">
+<div class="login" v-title="'登录'">
   <div class="header">
     <h1 class="logo">
       <img src="../../static/logo.png"/>
@@ -10,14 +10,14 @@
       <div class="form-group input">
         <p class="userName">
           <input type="text" v-model.trim="form.userName" v-on:input="userinputFunc" placeholder="请输入手机号码" style="width:90%">
-          <span class="eyes iconfont icon-delx" v-if="isuser" @click="form.userName='';isuser=false"></span>
+          <span class="eyes iconfont icon-guanbi" v-if="isuser" @click="form.userName='';isuser=false"></span>
         </p>
         <div class="passWord">
           <div class="pwdshow">
             <input type="text" v-model.trim="form.password" v-if="typepwd" >
             <input type="password" v-model.trim="form.password" v-on:input="pwdinputFunc" placeholder="请输入密码" v-else>
           </div>
-          <div class="eyes iconfont icon-nextx"  @click="openpwd"></div>
+          <div class="eyes iconfont icon-biyanjing"  @click="openpwd"></div>
         </div>
       </div>
       <div class="form-group">

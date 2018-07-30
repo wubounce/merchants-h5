@@ -30,7 +30,7 @@ export default {
        this.data = res.data;
     },
     gowithdraw(){
-        this.$router.push({name:'withdraw',query:{balance:this.data.balance}});
+        this.$router.push({name:'withdraw'});
     }
   },
   components:{

@@ -1,13 +1,12 @@
 <template>
-<div class="addmarket">
-  <q-header :title="title"></q-header>
+<div class="addmarket" v-title="title">
   <div class="addvip-header">
     <p>所属店铺<span class="addvip-con">{{checkshoptxt?checkshoptxt:''}}<span class="order-action iconfont icon-nextx" @click="shopVisible=true"></span></span></p>
     <p>优惠期开始<span class="addvip-con">{{addmarket.startTime}}<span class="order-action iconfont icon-nextx" @click="open('picker2')"></span></span></p>
      <p>优惠期结束<span class="addvip-con">{{addmarket.endTime}}<span class="order-action iconfont icon-nextx" @click="open('picker3')"></span></span></p>
     <p>活动日<span class="addvip-con">{{activeCurrentTags?activeCurrentTags !== '自定义'?activeCurrentTags:checkWeeklisttxt:checkWeeklisttxt}}<span class="order-action iconfont icon-nextx" @click="activeVisible=true"></span></span></p>
     <p>每日活动时段<span class="addvip-con">{{addmarket.time}}<span class="order-action iconfont icon-nextx" @click="activeTimeVisible = true"></span></span></p>
-    <p>折扣优惠<span class="addvip-con"><input type="text" placeholder="折扣优惠" class="discount-input" v-model="addmarket.discount">%</span></p>
+    <p>折扣优惠<span class="addvip-con"><input type="number" placeholder="折扣优惠" class="discount-input" v-model="addmarket.discount">%</span></p>
     <p>是否开放<span class="addvip-con"><mt-switch v-model="addmarket.addstatus" class="check-switch"></mt-switch></span></p>
   </div>
   <section class="promiss-footer">
@@ -67,7 +66,6 @@
 </div>
 </template>
 <script>
-import QHeader from '@/components/header';
 import qs from 'qs';
 import moment from 'moment';
 import selectpickr from '@/components/selectPicker';
@@ -278,7 +276,6 @@ export default {
     }
   },
   components:{
-    QHeader,
     selectpickr
   }
 };
@@ -418,5 +415,8 @@ export default {
   }
   .addmarket .picker-toolbar {
     height: 1.07rem;
+  }
+  .addmarket .picker, .addmarket .picker-items {
+    width: 100%;
   }
 </style>

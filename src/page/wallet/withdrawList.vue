@@ -1,38 +1,19 @@
 <template>
 <div class="withdrawList-wrapper" v-title="'提现记录'">
-    <div class="list add"  v-for="(item,index) in applylsit" :key="index">
-        <span class="iconfont icon-tixian"></span>
-        <div class="accountList-content clearfix">
-            <div class="left">
-                <p class="title">余额提现</p>
-                <p class="status">提现成功</p>
-                <p class="time">5月25日 18:16</p>
-            </div>
-            <p class="price">-1000</p>
-        </div>                
+    <div  v-for="(item,index) in applylsit" :key="index" :class="['list', {'fall':item.status === 2}]" >
+        <router-link :to="{name:'withdrawResult',query:{balanceLogId:item.id}}">
+            <span class="iconfont icon-tixian"></span>
+            <div class="accountList-content clearfix">
+                <div class="left">
+                    <p class="title">余额提现</p>
+                    <p class="status">{{item.status === 0 ? '处理中':item.status === 1 ? '提现成功':'提现失败'}}</p>
+                    <p class="time">5月25日 18:16</p>
+                </div>
+                <p class="price">-1000</p>
+            </div>     
+        </router-link>
     </div>
-    <div class="list">
-        <span class="iconfont icon-tixian"></span>
-        <div class="accountList-content clearfix">
-            <div class="left">
-                <p class="title">余额提现</p>
-                <p class="status">提现中</p>
-                <p class="time">5月25日 18:16</p>
-            </div>
-            <p class="price">-1000</p>
-        </div>                
-    </div>
-    <div class="list fall">
-        <span class="iconfont icon-tixian"></span>
-        <div class="accountList-content clearfix">
-            <div class="left">
-                <p class="title">余额提现</p>
-                <p class="status">提现失败</p>
-                <p class="time">5月25日 18:16</p>
-            </div>
-            <p class="price">-1000</p>
-        </div>                
-    </div>
+   
 </div>
 </template>
 <script>

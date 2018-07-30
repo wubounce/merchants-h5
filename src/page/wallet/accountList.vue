@@ -7,7 +7,7 @@
     <div class="apply--list-wrap">
         <div class="all" v-for="(item,index) in applylsit" :key="index" >
             <div class="list add" v-if="item.type === 1 "> 
-                <router-link :to="{name:'accountDetail', query:{balanceLogId:item.id}}">
+                <router-link :to="{name:'accountDetail', query:{balanceLogId:item.id,type:item.type}}">
                     <div class="icon-type"> 
                         <span class="usericon iconfont icon-dianpu"></span>
                     </div>

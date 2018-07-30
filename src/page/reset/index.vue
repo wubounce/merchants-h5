@@ -1,6 +1,5 @@
 <template>
-  <div class="reset">
-    <q-header :title="title"></q-header>
+  <div class="reset" v-title="title">
     <form ref="resetForm" :model="reset">
     <div class="form-group">
       <input type="text" placeholder="请输入手机号码" v-model="reset.phone" require>
@@ -22,7 +21,6 @@
 <script>
   import { smscodeFun, validateCodeFun } from '@/service/resetPwd';
   import { validatPhone } from '@/utils/validate';
-  import QHeader from '@/components/header';
   import qs from 'qs';
   export default {
     data() {
@@ -84,7 +82,6 @@
       }
     },
     components: {
-      QHeader
     }
   };
 </script>

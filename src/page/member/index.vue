@@ -1,6 +1,5 @@
 <template>
-<div class="member">
-  <q-header :title="title"></q-header>
+<div class="member" v-title="title">
   <div class="no-discount-list" v-if="list.lenght<=0">暂无二级管理账号</div>
   <div class="meber-list" v-for="(item,index) in list" :key="index">
     <div class="momber-wrap">
@@ -16,13 +15,12 @@
     <!-- <p class="memberdesc">权限：首页，报表，店铺新增</p> -->
   </div>
   <div class="addmember" @click="addmemeber">
-    <span class="order-action iconfont icon-nextx"></span><br>
+    <span class="order-action iconfont icon-tianjia"></span><br>
     <span>人员</span>
   </div>
 </div>
 </template>
 <script>
-import QHeader from '@/components/header';
 import { operatorListFun } from '@/service/member';
 import { memberIsLock } from '@/utils/mapping';
 export default {
@@ -56,7 +54,6 @@ export default {
     }
   },
   components:{
-    QHeader,
   }
 };
 </script>
