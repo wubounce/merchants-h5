@@ -1,0 +1,61 @@
+<template>
+  <div class="contant">
+    <q-header :title="title"></q-header>
+    <div class="erweima">
+      <img src="../../../static/image/user/logo@2x.png">
+    </div>
+     <div class="work-time">
+      <p>服务时间：周一至周日 08:00-22:30</p>
+    </div>
+    <p class="gaunzhu">服务热线：400 668 9966</p>
+  </div>
+</template>
+
+<script>
+  import QHeader from '@/components/header';
+  export default {
+    data() {
+      return {
+        title:'合作热线'
+      };
+    },
+    created(){
+    },
+    methods: {
+     
+    },
+    components: {
+      QHeader
+    }
+  };
+</script>
+
+<style lang="scss" scoped>
+.contant {
+  background: #fff;
+  height: 100%;
+  text-align: center;
+  .erweima {
+    width:2.96rem;
+    height:2.52rem;
+    margin: 2.12rem auto 0;
+    img {
+      display: block;
+      width: 100%;
+    }
+  }
+  .gaunzhu {
+    font-size: 18px;
+    text-align: center;
+    margin-top: 0.4rem;
+  }
+  .work-time {
+    margin-top: 1.33rem;
+    font-size: 14px;
+    color: #999;
+    text-align: center;
+    line-height: 0.64rem;
+  }
+}
+</style>
+

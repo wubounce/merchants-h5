@@ -6,16 +6,18 @@
 // 机器状态
 export const MachineStatus = (ststus)=>{
 	switch (ststus){
-		case 1:
+		case 'idle':
 			return '空闲';
-		case 2:
-		  return '工作';
-		case 4:
-		  return '故障';
-		case 8:
-		  return '离线';
-		case 16:
-		  return '超时未工作';
+		case 'run':
+		    return '工作';
+		case 'hitch':
+		    return '故障';
+		case 'offline':
+		    return '离线';
+		case 'timeout':
+		    return '超时未工作';
+		case 'all':
+		 	return '总数';
 		 default:
   			return ststus;
 	}
@@ -52,6 +54,49 @@ export const orderStatus = (ststus)=>{
   			return ststus;
 	}
 };
+
+// 支付方式
+export const PayType = (ststus)=>{
+	switch (ststus){
+		case 1:
+			return '支付宝';
+		case 2:
+		  	return '余额';
+		case 3:
+		 	 return '微信 ';
+		default:
+  			return ststus;
+	}
+};
+
+
+// 交易类型
+export const ApplyType = (ststus)=>{
+	switch (ststus){
+		case 1:
+			return '收入 ';
+		case 2:
+		  	return '提现';
+		case 3:
+		 	 return '支出 ';
+		default:
+  			return ststus;
+	}
+};
+
+
+// 人员管理禁用启用
+export const memberIsLock = (ststus)=>{
+	switch (ststus){
+		case 0:
+			return true;
+		case 1:
+		  	return false;
+		default:
+  			return true;
+	}
+};
+
 
 
 

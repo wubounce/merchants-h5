@@ -2,67 +2,39 @@
 <div class="addmember">
   <q-header :title="title"></q-header>
   <div class="add-form">
+
     <div class="input-group">
       <div class="form-title"><span>用户名</span></div>
-      <div class="form-input"><input type="text" placeholder="请输入用户名"><span class="forward iconfont icon-nextx"></span></div>
+      <div class="form-input"><input type="text" v-model="username" placeholder="请输入用户名" @blur="validatName" maxlength="20"><span class="forward iconfont icon-nextx"></span></div>
     </div>
     <div class="input-group">
       <div class="form-title"><span>手机</span></div>
-      <div class="form-input"><input type="text" placeholder="请输入手机号码"><span class="forward iconfont icon-nextx"></span></div>
+      <div class="form-input"><input type="text" v-model="phone" placeholder="请输入手机号码"><span class="forward iconfont icon-nextx"></span></div>
     </div>
     <div class="input-group">
       <div class="form-title"><span>负责店铺</span></div>
       <div class="form-input"><span class="more more-color">{{checkshoptxt?checkshoptxt:'请选择店铺'}}</span><span class="forward iconfont icon-nextx" @click="shopVisible=true"></span></div>
     </div>
-    <div class="input-group" style="border:none">
+    <!-- <div class="input-group" style="border:none">
       <div class="form-title"><span>权限</span></div>
       <div class="form-input"><span class="more more-color">请选择权限</span><span class="forward iconfont icon-nextx"  @click="permissionsVisible=true"></span></div>
-    </div>
+    </div> -->
   </div>
-  <div class="confirm">提交</div>
+  <div class="confirm" @click="addmember">提交</div>
   <!-- 选择店铺 -->
   <mt-popup v-model="shopVisible" position="bottom">
     <div class="resp-shop">
-      <!-- <span class="quxi">取消</span> -->
       <span class="shop">负责店铺</span>
-      <!-- <span class="qued">确定</span> -->
     </div>
     <section class="resp-shop-wrap">
-     <!--  <div class="check-shop">
-        <p>已选店铺</p>
-        <div class="check-shop-list">
-          <div><span>企鹅一号店</span><i class="shopclose iconfont icon-delx"></i></div>
-          <div><span>企鹅二号店企鹅二号店企鹅二号店企鹅二号店企鹅二号店</span><i class="shopclose iconfont icon-delx"></i></div>
-          <div><span>企鹅二号店</span><i class="shopclose iconfont icon-delx"></i></div>
-        </div>
-      </div>
-      <section class="sarch-wrap">
-        <input type="text" v-model="searchshop" placeholder="请输入相关店铺名称">
-      </section> -->
       <div class="all-list">
-        <label class="mint-checklist-label">
+        <label class="mint-checklist-label" v-for="(item,index) in shoplist" :key="index">
           <span class="mint-checkbox is-right">
-            <input type="checkbox" class="mint-checkbox-input" v-model="checkshoplist" value="企鹅一号店-12"> 
+            <input type="checkbox" class="mint-checkbox-input" v-model="checkshoplist" :value="item.shopName"> 
             <span class="mint-checkbox-core"></span>
           </span> 
-          <p class="mint-checkbox-label shopname">企鹅一号店</p>
-          <p class="mint-checkbox-label shopdesc">紫金花路2号联合大厦1幢1层10号1层…</p>
-        </label>
-        <label class="mint-checklist-label">
-          <span class="mint-checkbox is-right">
-            <input type="checkbox" class="mint-checkbox-input" v-model="checkshoplist" value="企鹅二号店交罚款技术开发都是-13"> 
-            <span class="mint-checkbox-core"></span>
-          </span> 
-          <p class="mint-checkbox-label shopname">企鹅二号店</p>
-          <p class="mint-checkbox-label shopdesc">紫金花路2号联合大厦1幢1层10号1层…</p>
-        </label>
-        <label class="mint-checklist-label">
-          <span class="mint-checkbox is-right">
-            <input type="checkbox" class="mint-checkbox-input" v-model="checkshoplist" value="企鹅三号店-14"> 
-            <span class="mint-checkbox-core"></span>
-          </span> 
-          <p class="mint-checkbox-label shopname">企鹅三号店</p>
-          <p class="mint-checkbox-label shopdesc">紫金花路2号联合大厦1幢1层10号1层…</p>
+          <p class="mint-checkbox-label shopname">{{item.shopName}}</p>
+          <p class="mint-checkbox-label shopdesc">{{item.address}}</p>
         </label>
       </div>
     </section>
@@ -146,28 +118,85 @@
 </template>
 <script>
 import QHeader from '@/components/header';
+import qs from 'qs';
+import { validatPhone, validatName } from '@/utils/validate';
+import { shopListFun, addOperatorFun } from '@/service/member';
 export default {
   data() {
     return {
       title: '新增人员',
-      checkshoptxt:'',
       checkshoplist: [],
       checkpermissionslist: [],
       shopVisible:false,
       permissionsVisible:false,
-      searchshop:'',
       permissionsData:[],
+      shoplist:[],
+      operateShopIds:[],
+      username:'',
+      phone:'',
+      checkshoptxt:''
     };
   },
   mounted() {
     
   },
   created(){
+    this.shopListFun();
   },
   methods: {
+    validate() {
+      if (this.username === '') {
+        this.$toast({message: '请输入用户名' });
+        return false;
+      }else if (!validatName(this.username)) {
+        this.$toast({message: '用户名2-20个字符，只支持中文' });
+        return false;
+      } 
+
+      if (this.phone === '') {
+        this.$toast({message: '请输入手机号码' });
+        return false;
+      }else if (!validatPhone(this.phone)) {
+        this.$toast({message: '请输入正确的手机号码' });
+        return false;
+      } 
+      if (this.checkshoptxt === '') {
+        this.$toast({message: '请选择店铺' });
+        return false;
+      }
+      return true;
+    },
+    validatName(){
+      if (!validatName(this.username)) {
+        this.$toast({message: '用户名2-20个字符，只支持中文' });
+      } 
+    },
+    async shopListFun(){
+      let res = await shopListFun();
+      this.shoplist = res.data;
+    },
     getcheckshop(){
-      this.checkshoptxt = this.checkshoplist.join(',').replace(/\-[0-9]+/g,'');
+      this.checkshoptxt = this.checkshoplist.join(',');
+      let checklist = this.shoplist.filter(v=>this.checkshoplist.some(k=>k==v.shopName));
       this.shopVisible = false;
+      checklist.forEach(item=>this.operateShopIds.push(`'${item.shopId}'`));
+
+    },
+    async addmember(){
+      if (this.validate()) {
+        let payload = {
+          username:this.username,
+          phone:this.phone,
+          operateShopIds:this.operateShopIds.join(','),
+        };
+        let res = await addOperatorFun(qs.stringify(payload));
+        if (res.code === 0) {
+          this.$toast({message: '新增成功' });
+          this.$router.push({name:'member'});
+        } else {
+          this.$toast({message: res.msg });
+        }
+      }
     }
   },
   components:{
@@ -185,21 +214,21 @@ export default {
       line-height: 1.6rem;
       border-bottom:1px solid rgba(223,230,255,1);
       .form-title {
-        width: 1.73rem;
+        width: 2rem;
         font-size: 16px;
       }
       .form-input{
         width: 100%;
         flex: 1;
         input{
-          width: 6.8rem;
+          width: 6.4rem;
           font-size: 16px;
           color: #333;
           text-align: right;
         }
         .more {
           display: inline-block;
-          width: 6.8rem;
+          width: 6.4rem;
           font-size: 16px;
           color: #333;
           text-align: right;

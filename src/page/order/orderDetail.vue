@@ -1,17 +1,17 @@
 <template>
 <div class="order-detail">
   <q-header :title="title"></q-header>
-   <div class="order-status">{{'已支付' | orserStatus}}</div>
-    <div class="order-title">紫金港路浙江大学时湖校区西区C4号</div>
+   <div class="order-status">{{detail.orderStatus | orserStatus}}</div>
+    <div class="order-title">{{detail.shopAddress}}</div>
   <div class="alllist">
     <section class="order-list">  
      
       <div class="detail">  
-        <div class="orderpic"><img src="../../assets/img/home/icon_near2x.png" alt=""></div>
+        <div class="orderpic"><img :src="detail.imageId" alt=""></div>
         <div class="content">
-            <p class="con-title">海尔8KgFh069Fd2F</p>
-            <p class="con-type">标准洗<span style="padding:0 0.346667rem">|</span>时长40分钟</p>
-            <p class="con-price">¥560</p>
+            <p class="con-title">{{detail.subType}}</p>
+            <p class="con-type">{{detail.machineFunctionName}}<span style="padding:0 0.346667rem">|</span>时长{{detail.markMinutes}}分钟</p>
+            <p class="con-price">¥{{detail.markPrice}}</p>
         </div>
       </div>
     </section>
@@ -19,81 +19,111 @@
 
   <section class="total-wrap">
     <div class="total-border">
-      <div class="vip">VIP会员卡</div>
-      <div class="discount">-¥2.4</div>
+      <div class="vip"><span class="viptag">vip</span>VIP会员卡</div>
+      <div class="discount">-¥{{detail.discountPrice}}</div>
     </div>
   </section>
   <section class="money-wrap">
     <span class="heji">合计：</span>
-    <span class="money">¥5.60</span>
+    <span class="money">¥{{detail.payPrice}}</span>
   </section>
   <section class="total-wrap">
     <div class="total-border">
-      <div class="vip">用户账号：18767567866</div>
+      <div class="vip">用户账号：{{detail.phone}}</div>
+    </div>
+  </section>
+  <section class="total-wrap">
+    <div class="total-border">
+      <div class="vip">订单编号：{{detail.orderNo}}</div>
+    </div>
+  </section>
+  <section class="total-wrap" v-if="detail.orderStatus === 2&& detail.payType !== 0 || detail.orderStatus === 5&& detail.payType !== 0">
+    <div class="total-border">
+      <div class="vip">支付方式：{{detail.payType | PayType}}</div>
     </div>
   </section>
   <section class="oder-time" style="margin-bottom:1.3rem;">
-    <span>下单时间：2018-06-13 11:08</span>
+    <span>下单时间：{{detail.payTime}}</span>
   </section>
-   <section class="listaction"> 
-    <span @click="orderRefund">退款</span>
-    <span @click="machineBoot">启动</span>
-    <span @click="machineReset">复位</span>
+   <section class="listaction" v-if="detail.orderStatus === 2"> 
+    <mt-button @click="orderRefund(detail.id,detail.payPrice)">退款</mt-button>
+    <mt-button @click="machineBoot(detail.id)" v-if="detail.machineType === 1">启动</mt-button>
+    <mt-button @click="machineReset(detail.id,detail.machineId)">复位</mt-button>
   </section>
 </div>
 </template>
 <script>
 import qs from 'qs';
 import QHeader from '@/components/header';
-import { orderStatus } from '@/utils/mapping';
-import { ordeRrefundFun, machineResetFun, machineBootFun } from '@/service/order';
+import { orderStatus, PayType } from '@/utils/mapping';
+import { ordeRrefundFun, orderDetailFun, machineResetFun, machineBootFun } from '@/service/order';
 import { MessageBox } from 'mint-ui';
 export default {
   data() {
     return {
-      title: '订单管理',
-      searchData:''
+      title: '订单详情',
+      detail:{}
     };
   },
   mounted() {
     
   },
   created(){
-
+    let query = this.$route.query;
+    this.getDetail(query.orderNo);
   },
   methods: {
-    machineReset(){ //设备复位
-      MessageBox.confirm('确定复位企鹅1号机？').then(async () => {
+    async getDetail(orderNo){
+      let res = await orderDetailFun(qs.stringify({orderNo:orderNo}));
+      this.detail = res.data;
+    },
+    machineReset(id,machineId){ //设备复位
+      MessageBox.confirm(`确定复位${this.detail.subType}？`).then(async () => {
           let query = this.$route.query;
-          let payload = {machineId:query.machineId,orderNo:query.orderNo};
+          let payload = {machineId:machineId,orderNo:id};
           let res = await machineResetFun(qs.stringify(payload));
-          console.log(res);
+          if (res.code === 0) {
+            this.$toast({message: '复位成功' });
+          } else {
+            this.$toast({message: res.msg });
+          }
       });
       
     },
-    async machineBoot(){ //设备启动
-      MessageBox.confirm('确定启动企鹅1号机？').then(async () => {
+    machineBoot(id){ //设备启动
+      MessageBox.confirm(`您确定要启动${this.detail.subType}？`).then(async () => {
         let query = this.$route.query;
-        let payload = {orderId:query.orderNo};
+        let payload = {orderId:id};
         let res = await machineBootFun(qs.stringify(payload));
-         console.log(res);
+        if (res.code === 0) {
+          this.$toast({message: '启动成功' });
+        } else {
+          this.$toast({message: res.msg });
+        }
       });
       
     },
-    async orderRefund(){ //退款
-      MessageBox.confirm('确定退款？').then(async () => {
+    orderRefund(id,payPrice){ //退款
+      MessageBox.confirm('确定发起退款？').then(async () => {
         let query = this.$route.query;
-        let payload = {orderNo:query.orderNo};
+        let payload = {orderNo:id,refundMoney:payPrice};
         let res = await ordeRrefundFun(qs.stringify(payload));
-         console.log(res);
+        if (res.code === 0) {
+          this.$toast({message: '退款成功' });
+          this.$router.push({name:'order'});
+        } else {
+          this.$toast({message: '退款失败' });
+        }
       });
-      
     },
   },
   filters: {
     orserStatus: function (value) {
       return orderStatus(value);
     },
+    PayType:function(value){
+      return PayType(value);
+    }
   },
   components:{
     QHeader,
@@ -136,11 +166,13 @@ export default {
       border-radius:0.133333rem;
       background: #ccc;
       img {
+        display: block;
         width: 100%;
+        height: 100%;
+        border-radius: 0.133333rem;
       }
     }
     .content {
-      width: 6.293333rem;
       height: 2.653333rem;
       padding-left: 0.266667rem; 
       .con-title {
@@ -177,7 +209,19 @@ export default {
       text-align: right;
       color: #FF5F5F;
     }
+    .viptag {
+      display: inline-block;
+      width:0.53rem;
+      height:0.41rem;
+      line-height: 0.41rem;
+      text-align: center;
+      background:linear-gradient(-138.4deg,rgba(251,154,73,1),rgba(245,88,35,1));
+      border-radius:0.05rem;
+      font-size: 10px;
+      color: #fff;
+      margin-right: 0.27rem;
     }
+  }
     
   .money-wrap {
     text-align: right;
@@ -223,17 +267,18 @@ export default {
     bottom: 0;
     width: 100%;
     box-sizing: border-box;
-    span {
+    button {
       float: right;
       width:2.133333rem;
       height:0.8rem;
-      line-height: 0.8rem;
       border-radius:0.106667rem;
       border:0.026667rem solid rgba(216,216,216,1);
       font-size: 14px;
       color: #333;
       text-align: center;
       margin:0 0.133333rem;
+      background: #fff;
+      box-shadow: none;
     }
   }
 </style>

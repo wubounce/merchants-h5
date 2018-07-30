@@ -1,5 +1,5 @@
 <template>
-<div>
+<div class="report-detail">
   <q-header :title="title"></q-header>
     <div class="tabledata">
         <div class="listcon">
@@ -9,6 +9,7 @@
           <span>订单金额</span>
         </div>
         <div class="tableearn">
+          <div class="nodata" v-if="list.length <= 0">暂无数据</div>
           <div class="listcon tableearn-list" v-for="(item,index) in list" :key="index">
             <span>{{item.machineName}}</span>
             <span>{{item.machineTypeName}}</span>
@@ -53,6 +54,7 @@ export default {
 };
 </script>
 <style lang="scss">
+.report-detail {
   .mint-header {
       background: #F2F2F2 !important;
   }
@@ -80,6 +82,13 @@ export default {
       font-weight: 600;
     }
   }
+  .nodata {
+    font-size: 14px;
+    color: #999;
+    text-align: center;
+    padding: 2rem 0;
+    background: #efeff4;
+  }
   .tableearn-list {
     span {
       font-weight: normal;
@@ -92,4 +101,5 @@ export default {
   .tableearn .tableearn-list:nth-child(2n-1) {
     background: #FAFCFE !important;
   }
+}
 </style>

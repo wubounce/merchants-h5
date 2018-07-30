@@ -2,29 +2,36 @@
 <div class="wallet-wrapper" v-title="'我的钱包'">
     <div class="wallet-content">
         <router-link to="accountList">收支明细</router-link>
-        <img src="../../assets/img/test.jpg">
+        <img src="../../../static/image/user/money@2x.png">
         <p class="font-title">账户余额 (元)</p>
-        <p class="price">350.00</p>
-        <p class="total">累计收益 600.00</p>
+        <p class="price">{{data.balance}}</p>
+        <p class="total">累计收益 {{data.OrderCount ? data.OrderCount:0}}</p>
     </div>
-    <div class="btn">余额提现</div>
+    <div class="btn" @click="gowithdraw">余额提现</div>
     <p class="copyright">杭州企鹅科技有限公司</p>
 </div>
 </template>
 <script>
+import { getApplyFinanceFun } from '@/service/user';
 export default {
   data() {
     return {
-      
+      data:{}
     };
   },
   mounted() {
-    
+    this.getApplyFinance();
   },
   created(){
   },
   methods: {
-    
+    async getApplyFinance(){
+        let res = await getApplyFinanceFun();
+       this.data = res.data;
+    },
+    gowithdraw(){
+        this.$router.push({name:'withdraw',query:{balance:this.data.balance}});
+    }
   },
   components:{
 

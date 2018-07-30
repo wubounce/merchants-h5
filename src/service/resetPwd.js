@@ -3,18 +3,20 @@
  */
 import { fetch } from './baseService';
 
-const smscodeApi = 'operator/smsCode';                                        // 发送验证码  method 'post'
-const updatePwdApi = 'operator/updatePwd';                                   // 修改密码  method 'post'
-const forgetPwdApi = 'operator/forgetPwd';                                   // 验证码是否过期  method 'post'
+const smscodeApi = 'operator/smsCode';                                        // 忘记密码模块发送模版消息  method 'post'
+const updatePwdApi = 'operator/updatePwd';                                    // 个人中心 修改密码  method 'post'
+const validateCodeApi = 'operator/validateCode';                              // 忘记密码模块 验证验证码  method 'post'
+const forgetPwdApi = 'operator/changePwd';                                   // 忘记密码模块 修改密码  method 'post'
 
 
-// 发送验证码
+// 忘记密码模块发送模版消息
 export const smscodeFun = (payload) => fetch.post(smscodeApi, payload);
 
-
-// 修改密码
+// 个人中心 修改密码
 export const updatePwdFun = (payload) => fetch.post(updatePwdApi, payload);
 
-
 // 验证码是否过期
+export const validateCodeFun = (payload) => fetch.post(validateCodeApi, payload);
+
+//  忘记密码模块 修改密码
 export const forgetPwdFun = (payload) => fetch.post(forgetPwdApi, payload);

@@ -11,13 +11,13 @@
     </ul>
     <div class="second">
       <li class="device business" @click="addDevice">设备类型<span>{{machineName}}</span></li>
-      <p class="isReserve"><span>预约功能</span><span><mt-switch class="check-switch"></mt-switch></span></p>
-      <p class="reserveTime"><span>预约时长</span><span><input type="text" class='timeInput'  maxlength="2" placeholder="请填写预约有效时长"></span></p>
+      <p class="isReserve"><span>预约功能</span><span><mt-switch class="check-switch" v-model="isReserve"></mt-switch></span></p>
+      <p class="reserveTime"><span>预约时长(分钟)</span><span><input type="text" class='timeInput' v-model="orderLimitMinutes" maxlength="2" placeholder="请填写预约有效时长"></span></p>
       <li class="business" @click="chooseTime">营业时间<span>{{addBusinessTime}}</span></li>
       <p class="picture">
         <span>店铺照片</span>
         <span>
-          <UploadImg :id="imgId.a" @onImgFiles="UpdatedImgFiles"></UploadImg>
+          <UploadImg :id="imgId.a" :defaultPicture="imgId.defaultPicture" @onImgFiles="UpdatedImgFiles"></UploadImg>
         </span>
       </p>
     </div>
@@ -57,10 +57,13 @@
 </template>
 
 <script>
-
+import qs from "qs";
 import QHeader from '@/components/header';
 import UploadImg from "@/components/UploadImg/UploadImg";
-
+import { addOrEditShopFun } from '@/service/shop';
+import { areaListFun } from '@/service/shop';
+import { listParentTypeFun } from '@/service/shop';
+import { uploadFileFun } from '@/service/shop';
 export default {
   data() {
     return {
@@ -70,6 +73,9 @@ export default {
       address:'',
       machineName:'',
       machineTypeIds:'',
+      machineArray: [],
+      machineTypeIdsArray:'',
+      orderLimitMinutes:'',
       addBusinessTime:'',
       title:'新增店铺',
       list: [
@@ -86,7 +92,7 @@ export default {
           value: ""
         }
       ],
-      shopType: 1,
+      shopType: "",
       shopTypeString:'',
       popupVisible:false,
       placeVisible:false,
@@ -105,7 +111,7 @@ export default {
       addressSlots:[
         {
           flex: 1,
-          values: [1,2,3,4,5,6,7,8,9],
+          values: [],
           className: "slot1",
           textAlign: "center"
         },
@@ -132,47 +138,29 @@ export default {
           textAlign: "center"
         }
       ],
+      provinceArray:[],
+      cityArray:[],
+      districtArray:[],
+      provinceId:'',
+      cityId:'',
+      districtId:'',
+      
+      provinceName:'',
+      cityName:'',
+      districtName:'',
+
+      areaName:'',
       imgId: {
-        a: "a"
+        a: "a",
+        defaultPicture:'../../../static/shop/add.png'
       },
+      url:'',
       machine: [],
       arrLabel:[],
       options: [
         {
           label: '洗衣机',
           value: '洗衣机'
-        },
-        {
-          label: '吹风机',
-          value: '吹风机'
-        },
-        {
-          label: '充电桩',
-          value: '充电桩'
-        },
-        {
-          label: '万能充',
-          value: '万能充'
-        },
-        {
-          label: '缝纫机',
-          value: '缝纫机'
-        },
-        {
-          label: '洗鞋机',
-          value: '洗鞋机'
-        },
-        {
-          label: '修理机',
-          value: '修理机'
-        },
-        {
-          label: '战斗机',
-          value: '战斗机'
-        },
-        {
-          label: '想不到了',
-          value: '想不到了'
         }
       ],
       shopTime: {
@@ -227,7 +215,8 @@ export default {
         }
       ],
       timeVisible: false,
-      isTime:true
+      isTime:true,
+      isReserve:true
     };
   },
   methods:{
@@ -273,7 +262,7 @@ export default {
           break;
         case 1:
           this.placeVisible = true;
-          //alert('该功能的实现依赖接口,接口暂无T^T');
+          this.getArea();
           break;
         case 2:
           this.go("mapSearch");
@@ -294,15 +283,36 @@ export default {
           this.list[0].value = this.shopTypeString;
           break;
         case 1:
-          alert('功能暂无');
+          this.placeVisible = false;
+          //console.log(this.provinceName == this.cityName.slice(0,2));
+          if(this.provinceName == this.cityName.slice(0,2)) {
+            
+            this.list[1].value = this.cityName + this.districtName;
+          }
+          else {
+            this.list[1].value = this.provinceName + this.cityName + this.districtName;
+          }
+          
           break;
+        //经纬度
         case 2:
-          alert('功能暂无');
           break;
-        case 3:
+        //设备管理
+        case 3: {
           this.deviceDetail = false;
           this.machineName = this.machine.join(' , ');
+          let arr = [];
+          for(let i=0;i<this.machine.length;i++) {
+            for(let j=0;j<this.machineArray.length;j++) {
+              if(this.machine[i] == this.machineArray[j].name) {
+                arr.push(this.machineArray[j].id);
+              }
+            }
+          }
+          this.machineTypeIdsArray = arr.join(',');
+          console.log(this.machineTypeIdsArray);
           break;
+        }
         case 4:
           this.timeVisible = false;
           if(parseInt(this.shopTime.startTime.slice(0,2)) < parseInt(this.shopTime.endTime.slice(0,2))) {
@@ -342,7 +352,6 @@ export default {
           this.placeVisible = false;
           break;
         case 2:
-          alert('功能暂无');
           break;
         case 3:
           this.deviceDetail = false;
@@ -352,17 +361,88 @@ export default {
           break;
       }
     },
-    onAddressChange() {
+    async  onAddressChange(picker, values) {
+      //根据省，找出与之对应的市
+      for(let i=0;i<this.provinceArray.length;i++) {
+        if(values[0] == this.provinceArray[i].areaName) {
+          let city = { parentId: this.provinceArray[i].areaId };
+          this.provinceId = this.provinceArray[i].areaId;
+          let res = await areaListFun(qs.stringify(city));
+          if(res.code===0) {
+            let chooseCity = res.data.map((c)=> {
+              return c.areaName;
+            });
 
+            this.cityArray = res.data;
+            picker.setSlotValues(1, chooseCity); //设置市
+          }
+        }
+      }
+
+      //根据市，找出与之对应的区
+      for(let j=0;j<this.cityArray.length;j++) {
+        if(values[1] == this.cityArray[j].areaName) {
+          let district = { parentId: this.cityArray[j].areaId };
+          this.cityId = this.cityArray[j].areaId;
+          let resDistrict = await areaListFun(qs.stringify(district));
+          if(resDistrict.code===0) {
+            let chooseDistrict = resDistrict.data.map((d)=> {
+              return d.areaName;
+            });
+
+            this.districtArray = resDistrict.data;
+            picker.setSlotValues(2, chooseDistrict); //设置市
+          }
+        }
+      }
+
+      for(let j=0;j<this.districtArray.length;j++) {
+        if(values[2] == this.districtArray[j].areaName) {
+          this.districtId = this.districtArray[j].areaId;
+        }
+      }
+      this.provinceName = values[0];
+      this.cityName = values[1];
+      this.districtName = values[2];
     },
-    addDevice() {
+    async addDevice() {
       this.index = 3;
-      console.log('index:',this.index);
       this.isClass = true;
       this.deviceDetail = true;
+      let obj = {
+        onlyMine: false
+      };
+      let res = await listParentTypeFun(qs.stringify(obj));
+      if(res.code ===0 ) {
+        this.machineArray = res.data;
+        let arr = [];
+        arr = JSON.parse(JSON.stringify(res.data).replace(/name/g,"label"));
+        this.options = JSON.parse(JSON.stringify(arr).replace(/id/g,"value"));
+        for(let i=0;i<this.options.length;i++) {
+          this.options[i]['value'] = this.options[i]['label'];
+        }
+      }
     },
-    UpdatedImgFiles(msg) {
-      console.log(msg);
+    async UpdatedImgFiles(msg) {
+      //判断图片类型
+      if(msg.substring(0,22)=="data:image/png;base64,") {
+        console.log(msg.substring(0,22));
+        msg = msg.replace("data:image/png;base64,","");
+      }
+      else if(msg.substring(0,23)=="data:image/jpeg;base64,") {
+        console.log(msg.substring(0,23));
+        msg = msg.replace("data:image/jpeg;base64,","");
+      }
+      let obj = { files:msg };
+      let res = await uploadFileFun(qs.stringify(obj));
+      if(res.code ===0 ) {
+        this.imageId = res.data[0].url;
+        console.log(this.imageId);
+      }
+      else {
+        MessageBox.alert(res.msg);
+      }
+      this.imgId.defaultPicture = this.imageId;
     },
     changeTime(picker, values) {
       this.shopTime.startTime = values[0].slice(0,2) + ':' +values[1].slice(0,2);
@@ -379,18 +459,60 @@ export default {
       this.timeVisible = true;
       this.isClass = true;
     },
-    submit() {
-      let instance = this.$toast({
-        message: '添加成功',
-        iconClass: 'mint-toast-icon mintui mintui-success'
-      });
-      setTimeout(() => {
-        instance.close();
-      }, 1000);
-      this.$router.push({
-        name:'shopList'
-      });
+    async submit() {
+      let changeisReserve = (this.isReserve==true)? 0 :1;
+      //判断信息是否完整
+      
+
+      let obj = {
+        shopId: '  ',
+        shopName: this.shopName,
+        shopType: this.shopType,
+        provinceId: this.provinceId,
+        cityId: this.cityId,
+        districtId: this.districtId,
+        address: this.address,
+        lat:'33.564',
+        lng:'134.456',
+        machineTypeIds: this.machineTypeIdsArray,
+        isReserve: changeisReserve,
+        orderLimitMinutes: this.orderLimitMinutes,
+        workTime: this.addBusinessTime,
+        imageId: this.imageId
+      };
+
+      let res = await addOrEditShopFun(qs.stringify(obj));
+      if(res.code===0) {
+        //成功后的操作
+        let instance = this.$toast({
+          message: '添加成功',
+          iconClass: 'mint-toast-icon mintui mintui-success'
+        });
+        setTimeout(() => {
+          instance.close();
+        }, 1000);
+        this.$router.push({
+          name:'shopList'
+        });
+      }
+    },
+    //省市区联动
+    async getArea() {
+      let obj = { parentId: 0 };
+      let res = await areaListFun(qs.stringify(obj));
+      this.provinceArray = res.data;
+      if(res.code===0) {
+        for(let i=0;i<res.data.length;i++) {
+          this.addressSlots[0].values.push(res.data[i].areaName);
+        }
+      }
+      else {
+        MessageBox.alert(res.msg);
+      }
     }
+  },
+  created() {
+    //this.getArea();
   },
   components:{
     QHeader,
@@ -413,7 +535,7 @@ export default {
   .personal-list {
     background-color: #fff;
     .shopname-p {
-      font-size: 0.35rem;
+      font-size: 16px;
       border-bottom: 1px solid #F8F8F8;
       padding: 0.06rem;
       span {
@@ -427,21 +549,21 @@ export default {
         }
         ::-webkit-input-placeholder {
           color: #999999;
-          font-size: 0.35rem;
+          font-size: 16px;
         }
         :-moz-placeholder {
           /* Firefox 18- */
           color: #999999;
-          font-size: 0.35rem;
+          font-size: 16px;
         }
         ::-moz-placeholder {
           /* Firefox 19+ */
           color: #999999;
-          font-size: 0.35rem;
+          font-size: 16px;
         }
         :-ms-input-placeholder {
           color: #999999;
-          font-size: 0.35rem;
+          font-size: 16px;
         }
       }
       &:last-child {
@@ -449,7 +571,7 @@ export default {
       }
     }
     .personal-item {
-      font-size: 0.35rem;
+      font-size: 16px;
       padding: 0.3rem;
       border-bottom: 1px solid #F8F8F8;
       background: url("../../../static/shop/right.png") no-repeat right
@@ -458,7 +580,7 @@ export default {
       span {
         float: right;
         color: #7f7f7f;
-        font-size: 0.28rem;
+        font-size: 16px;
         margin-right: 0.3rem;
       }
     }
@@ -473,7 +595,7 @@ export default {
     .business {
       display: flex;
       justify-content: space-between;
-      font-size: 0.35rem;
+      font-size: 16px;
       padding: 0.3rem;
       background-color: #fff;
       border-bottom: 1px solid #F8F8F8;
@@ -483,14 +605,14 @@ export default {
       span {
         
         color: #7f7f7f;
-        font-size: 0.28rem;
+        font-size: 16px;
         margin-right: 0.3rem;
       }
     }
     .isReserve {
       display: flex;
       justify-content: space-between;
-      font-size: 0.35rem;
+      font-size: 16px;
       border-bottom: 1px solid #F8F8F8;
       padding: 0.1rem;
       span {
@@ -501,7 +623,7 @@ export default {
       }
     }
     .reserveTime {
-      font-size: 0.35rem;
+      font-size: 16px;
       border-bottom: 1px solid #F8F8F8;
       padding: 0.06rem;
       span {
@@ -515,21 +637,21 @@ export default {
         }
         ::-webkit-input-placeholder {
           color: #999999;
-          font-size: 0.35rem;
+          font-size: 16px;
         }
         :-moz-placeholder {
           /* Firefox 18- */
           color: #999999;
-          font-size: 0.35rem;
+          font-size: 16px;
         }
         ::-moz-placeholder {
           /* Firefox 19+ */
           color: #999999;
-          font-size: 0.35rem;
+          font-size: 16px;
         }
         :-ms-input-placeholder {
           color: #999999;
-          font-size: 0.35rem;
+          font-size: 16px;
         }
       }
     }
@@ -539,7 +661,7 @@ export default {
       justify-content: space-between;
       span {
         &:first-child {
-          font-size: 0.35rem;
+          font-size: 16px;
           line-height: 2rem;
           padding-left: 0.3rem;
         }
@@ -557,7 +679,7 @@ export default {
     padding: 0.45rem 0;
     background-color: #1890FF;
     color: #fff;
-    font-size: 0.5rem;
+    font-size: 18px;
   }
   .blank {
     height:2rem;
@@ -576,16 +698,16 @@ export default {
     }
     span {
       &:nth-child(1) {
-        font-size: 0.45rem;
+        font-size: 15px;
         color: #999999;
       }
       &:nth-child(2) {
-        font-size: 0.5rem;
+        font-size: 16px;
         margin: 0 2.7rem;
         color: #666666;
       }
       &:nth-child(3) {
-        font-size: 0.45rem;
+        font-size: 15px;
         color: #1890FF;
       }
     }

@@ -13,6 +13,7 @@
     <div :class="className" :id="id" :style="{height:height,width:width}" ref="myEchart"></div>
     <div class="echart-title"><span style="background:#1890FF"></span>收益金额<span style="background:#FACC14"></span>订单数量</div>
   </div>
+
   <div class="tabledata">
     <div class="listcon">
       <span>日期</span>
@@ -20,32 +21,12 @@
       <span>订单金额</span>
     </div>
     <div class="tableearn">
-      <div class="listcon tableearn-list">
-        <router-link class="detail" :to="{name:'reportdetail', query:{date:'2018-06-04',type:1}}" >
-          <span class="listtime">2018-06-04</span>
-          <span>100</span>
-          <span>300.00</span>
-        </router-link>
-      </div>
-      <div class="listcon tableearn-list">
-        <router-link class="detail" to="/reportdetail" >
-          <span class="listtime">2018-06-04</span>
-          <span>100</span>
-          <span>300.00</span>
-        </router-link>
-      </div>
-      <div class="listcon tableearn-list">
-        <router-link class="detail" to="/reportdetail" >
-          <span class="listtime">2018-06-04</span>
-          <span>100</span>
-          <span>300.00</span>
-        </router-link>
-      </div>
-      <div class="listcon tableearn-list">
-        <router-link class="detail" to="/reportdetail" >
-          <span class="listtime">2018-06-04</span>
-          <span>100</span>
-          <span>300.00</span>
+       <div class="nodata" v-if="lsitdata.length <= 0">暂无数据</div>
+      <div class="listcon tableearn-list" v-for="(item,index) in  lsitdata" :key="index">
+        <router-link class="detail" :to="{name:'reportdetail', query:{date:item.date,type:1}}" >
+          <span class="listtime">{{item.date}}</span>
+          <span>{{item.count}}</span>
+          <span>{{item.money}}</span>
         </router-link>
       </div>
     </div>
@@ -107,9 +88,9 @@ export default {
       lsitdata:[],
       popupVisible:false,
       currentTags:null,
-      reportDate:null,
-      reportCount:null,
-      reportMoney:null
+      reportDate:[],
+      reportCount:[],
+      reportMoney:[],
     };
   },
   mounted() {
@@ -143,9 +124,17 @@ export default {
       }
       let res = await dayReportFun(qs.stringify(payload));
       if (res.code === 0) {
-        this.reportDate = res.data.date;
-        this.reportCount = res.data.count;
-        this.reportMoney = res.data.money;
+        this.reportDate = [];
+        this.reportCount = [];
+        this.reportMoney = [];
+        res.data.forEach(item=>{
+          this.reportDate.push(item.date);
+          this.reportCount.push(item.count);
+          this.reportMoney.push(item.money);
+        });
+        this.lsitdata = res.data;
+      }else {
+        this.$toast({message: res.msg });
       }
       this.chart.setOption(this.chartOption);
     },
@@ -159,8 +148,7 @@ export default {
     },
     shopselectpicker(data){
       this.currentTags = data;
-      let shopid = this.currentTags.shopName === '全部' ? '': this.currentTags.shopId=2;
-      this.dayReportFun(shopid);
+      this.dayReportFun(this.currentTags.shopId);
     },
     shopselectpickertatus(data){
       this.popupVisible = data;
@@ -358,6 +346,7 @@ export default {
   .mint-tab-item-label {
     font-size: 16px;
   }
+
   .listcon {
     display: flex;
     font-size: 14px;
@@ -402,6 +391,10 @@ export default {
     .listtime {
       color: #1890FF;
     }
+  }
+  .tableearn {
+    height: 4.3rem;
+    overflow-y: scroll;
   }
   .tableearn .tableearn-list:nth-child(2n) {
     background: #fff !important;
@@ -449,5 +442,12 @@ export default {
   }
   .select-back {
     float: right;
+  }
+  .nodata {
+    font-size: 14px;
+    color: #999;
+    text-align: center;
+    padding: 2rem 0;
+    background: #efeff4;
   }
 </style>

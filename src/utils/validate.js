@@ -35,3 +35,20 @@ export function validatPhone(str) {
   return reg.test(str);
 }
 
+/* 密码 */
+export const validatPwd = (str) => {
+  const reg = /^[a-zA-Z0-9]{6,20}$/;
+  return reg.test(str);
+};
+
+/* 数字 */
+export const validatDiscount = (str) => {
+  const reg = /^[0-9]*$/;
+  return reg.test(str);
+};
+
+/* 中文*/
+export const validatName = (str) => {
+  const reg = /^[\u4E00-\u9FA5]{2,20}$/;
+  return reg.test(str);
+};

@@ -4,51 +4,70 @@
   <div class="add-form">
     <div class="input-group">
       <div class="form-title">用户名</div>
-      <div class="form-input">hahadhadf</div>
-    </div>
-    <div class="input-group">
-      <div class="form-title">用户名</div>
-      <div class="form-input">hahadhadf</div>
+      <div class="form-input">{{detail.userName}}</div>
     </div>
     <div class="input-group">
       <div class="form-title">手机</div>
-      <div class="form-input">19976890235</div>
+      <div class="form-input">{{detail.phone}}</div>
     </div>
     <div class="input-group">
       <div class="form-title">负责店铺</div>
-      <div class="form-input">企鹅一号店</div>
+      <div class="form-input">{{detail.operateShopNames}}</div>
     </div>
-    <div class="input-group" style="border:none">
+    <!-- <div class="input-group" style="border:none">
       <div class="form-title">权限</div>
       <div class="form-input">首页，报表，店铺新增，首页，报表，店铺新增</div>
-    </div>
-
+    </div> -->
   </div>
   <div class="input-group createtime">
     <div class="form-title">创建时间</div>
-    <div class="form-input">2018-04-05 14:00</div>
+    <div class="form-input">{{detail.createTime}}</div>
   </div>
   <div class="footer">
-    <span class="edit">编辑</span>
-    <span class="del">删除</span>
+    <span class="edit"><router-link :to="{name:'editMember',query:{ id:detail.id }}">编辑</router-link></span>
+    <span class="del" @click="deldelMember(detail.id)">删除</span>
   </div>
 </div>
 </template>
 <script>
 import QHeader from '@/components/header';
+import { MessageBox } from 'mint-ui';
+import qs from 'qs';
+import { getOperatorInfoFun, delOperatorFun } from '@/service/member';
 export default {
   data() {
     return {
-      title: '新增人员',
+      title: '人员详情',
+      detail:{}
     };
   },
   mounted() {
     
   },
   created(){
+    let query = this.$route.query;
+    this.getOperatorInfo(query.id);
   },
   methods: {
-   
+    async getOperatorInfo(id){
+      let res = await getOperatorInfoFun(qs.stringify({id:id}));
+      if (res.code === 0) {
+        this.detail = res.data;
+      }
+    },
+    deldelMember(id){
+      MessageBox.confirm(`确认删除？`).then(async () => {
+        let query = this.$route.query;
+        let payload = {id:query.id};
+        let res = await delOperatorFun(qs.stringify(payload));
+        if (res.code === 0) {
+          this.$toast({message: '删除成功' });
+           this.$router.push({name:'member'});
+        } else {
+          this.$toast({message: res.msg });
+        }
+      });
+    }
   },
   components:{
     QHeader,
@@ -102,7 +121,10 @@ export default {
     }
     .edit {
       border: 1px solid  #1890FF;
+      a {
       color: #1890FF;
+
+      }
     }
   }
 </style>

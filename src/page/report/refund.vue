@@ -1,5 +1,5 @@
 <template>
-<div class="earnings">
+<div class="refund">
   <div class="search">
     <div class="slectdata timechoose">
       <span @click="open('picker2')">{{startDate}}</span>至<span @click="open('picker3')">{{endDate}}<i class="iconfont icon-nextx select-back"></i></span>
@@ -13,6 +13,7 @@
     <div :class="className" :id="id" :style="{height:height,width:width}" ref="myEchart"></div>
     <div class="echart-title"><span style="background:#1890FF"></span>退款金额<span style="background:#FACC14"></span>订单数量</div>
   </div>
+
   <div class="tabledata">
     <div class="listcon">
       <span>日期</span>
@@ -20,32 +21,12 @@
       <span>订单金额</span>
     </div>
     <div class="tableearn">
-      <div class="listcon tableearn-list">
-        <router-link class="detail" :to="{name:'reportdetail', query:{date:'2018-06-04',type:3}}" >
-          <span class="listtime">2018-06-04</span>
-          <span>100</span>
-          <span>300.00</span>
-        </router-link>
-      </div>
-      <div class="listcon tableearn-list">
-        <router-link class="detail" to="/reportdetail" >
-          <span class="listtime">2018-06-04</span>
-          <span>100</span>
-          <span>300.00</span>
-        </router-link>
-      </div>
-      <div class="listcon tableearn-list">
-        <router-link class="detail" to="/reportdetail" >
-          <span class="listtime">2018-06-04</span>
-          <span>100</span>
-          <span>300.00</span>
-        </router-link>
-      </div>
-      <div class="listcon tableearn-list">
-        <router-link class="detail" to="/reportdetail" >
-          <span class="listtime">2018-06-04</span>
-          <span>100</span>
-          <span>300.00</span>
+      <div class="nodata" v-if="lsitdata.length <= 0">暂无数据</div>
+      <div class="listcon tableearn-list" v-for="(item,index) in  lsitdata" :key="index">
+        <router-link class="detail" :to="{name:'reportdetail', query:{date:item.date,type:3}}" >
+          <span class="listtime">{{item.date}}</span>
+          <span>{{item.count}}</span>
+          <span>{{item.money}}</span>
         </router-link>
       </div>
     </div>
@@ -104,11 +85,12 @@ export default {
             textAlign: 'center'
           }
       ],
+      lsitdata:[],
       popupVisible:false,
       currentTags:null,
-      reportDate:null,
-      reportCount:null,
-      reportMoney:null
+      reportDate:[],
+      reportCount:[],
+      reportMoney:[],
     };
   },
   mounted() {
@@ -142,9 +124,17 @@ export default {
       }
       let res = await dayReportFun(qs.stringify(payload));
       if (res.code === 0) {
-        this.reportDate = res.data.date;
-        this.reportCount = res.data.count;
-        this.reportMoney = res.data.money;
+        this.reportDate = [];
+        this.reportCount = [];
+        this.reportMoney = [];
+        res.data.forEach(item=>{
+          this.reportDate.push(item.date);
+          this.reportCount.push(item.count);
+          this.reportMoney.push(item.money);
+        });
+        this.lsitdata = res.data;
+      }else {
+        this.$toast({message: res.msg });
       }
       this.chart.setOption(this.chartOption);
     },
@@ -158,8 +148,7 @@ export default {
     },
     shopselectpicker(data){
       this.currentTags = data;
-      let shopid = this.currentTags.shopName === '全部' ? '': this.currentTags.shopId=2;
-      this.dayReportFun(shopid);
+      this.dayReportFun(this.currentTags.shopId);
     },
     shopselectpickertatus(data){
       this.popupVisible = data;
@@ -326,127 +315,139 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-  .earnings {
+  .refund {
     background: #fff;
-  }
-  .echarts-warp {
+      .echarts-warp {
     padding: 0.32rem;
   }
-  .echart-title {
-    font-size: 12px;
-    color:rgba(153,153,153,1);
-    text-align: center;
-    margin-top: 0.4rem;
-    span {
-      width: 0.2rem;
-      height: 0.2rem;
-      display: inline-block;;
-      background: #f60;
-      border-radius: 50%;
-      margin-right: 0.133333rem;
-      margin-left: 0.133333rem;
+    .echart-title {
+      font-size: 12px;
+      color:rgba(153,153,153,1);
+      text-align: center;
+      margin-top: 0.4rem;
+      span {
+        width: 0.2rem;
+        height: 0.2rem;
+        display: inline-block;;
+        background: #f60;
+        border-radius: 50%;
+        margin-right: 0.133333rem;
+        margin-left: 0.133333rem;
+      }
     }
-  }
-  .tabletit {
-    background: #fff !important;
-  }
-  .mint-navbar{
-    height: 1.066667rem;
-    border:1px solid rgba(229,229,229,1);
-  }
-  .mint-tab-item-label {
-    font-size: 16px;
-  }
-  .listcon {
-    display: flex;
-    font-size: 14px;
-    height: 40px;
-    line-height: 40px;
-    text-align: center;
-    span {
-      flex:1;
-      font-weight: 600;
+    .tabletit {
+      background: #fff !important;
     }
-  }
-  .detail {
-    display: block;
-    width: 100%;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    align-items: center;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-    color: #333333;
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    font-size: 14px;
-    height: 40px;
-    line-height: 1;
-    padding: 0 10px;
-    position: relative;
-    text-align: center;
-    white-space: nowrap;
-    border-top: 1px solid #E5E5E5;
-    span {
-      flex:1;
-      font-weight: 600;
+    .mint-navbar{
+      height: 1.066667rem;
+      border:1px solid rgba(229,229,229,1);
     }
-  }
-  .detail {
-    span {
-      font-weight: normal;
-      color: #666666;
+    .mint-tab-item-label {
+      font-size: 16px;
     }
-    .listtime {
-      color: #1890FF;
+    .listcon {
+      display: flex;
+      font-size: 14px;
+      height: 40px;
+      line-height: 40px;
+      text-align: center;
+      span {
+        flex:1;
+        font-weight: 600;
+      }
     }
-  }
-  .tableearn .tableearn-list:nth-child(2n) {
-    background: #fff !important;
-  }
-  .tableearn .tableearn-list:nth-child(2n-1) {
-    background: #FAFCFE !important;
-  }
-  .search {
-    display: flex;
-    padding: 0.4rem 0.32rem 0 0.32rem;
-  }
-  .slectdata {
-    display: flex;
-    border-bottom: 1px solid #e5e5e5;
-    border-radius: 0.053333rem;
-    height: 0.746667rem;
-    line-height: 0.746667rem;
-    background: #fff;
-    font-size: 14px;
-    span {
+    .detail {
+      display: block;
       width: 100%;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      align-items: center;
+      -webkit-box-sizing: border-box;
+      box-sizing: border-box;
+      color: #333333;
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      font-size: 14px;
+      height: 40px;
+      line-height: 1;
+      padding: 0 10px;
+      position: relative;
+      text-align: center;
+      white-space: nowrap;
+      border-top: 1px solid #E5E5E5;
+      span {
+        flex:1;
+        font-weight: 600;
+      }
+    }
+    .detail {
+      span {
+        font-weight: normal;
+        color: #666666;
+      }
+      .listtime {
+        color: #1890FF;
+      }
+    }
+    .tableearn {
+      height: 4.3rem;
+      overflow-y: scroll;
+    }
+    .tableearn .tableearn-list:nth-child(2n) {
+      background: #fff !important;
+    }
+    .tableearn .tableearn-list:nth-child(2n-1) {
+      background: #FAFCFE !important;
+    }
+    .search {
+      display: flex;
+      padding: 0.4rem 0.32rem 0 0.32rem;
+    }
+    .slectdata {
+      display: flex;
+      border-bottom: 1px solid #e5e5e5;
+      border-radius: 0.053333rem;
       height: 0.746667rem;
       line-height: 0.746667rem;
-      display: inline-block;
+      background: #fff;
+      font-size: 14px;
+      span {
+        width: 100%;
+        height: 0.746667rem;
+        line-height: 0.746667rem;
+        display: inline-block;
+      }
     }
-  }
-  .timechoose {
-    width: 60%;
-    span {
-      width: 45%;
+    .timechoose {
+      width: 60%;
+      span {
+        width: 45%;
+        text-align: center;
+      }
+    }
+    .shopchoose {
+      width: 40%;
+      margin-left: .2rem;
+      span {
+        width: 100% !important;
+        display: inline-block;
+        color: #666;
+      }
+    }
+    .mint-popup {
+      width: 100%;
+    }
+    .select-back {
+      float: right;
+    }
+    .nodata {
+      font-size: 14px;
+      color: #999;
       text-align: center;
+      padding: 2rem 0;
+      background: #efeff4;
     }
   }
-  .shopchoose {
-    width: 40%;
-    margin-left: .2rem;
-    span {
-      width: 100% !important;
-      display: inline-block;
-      color: #666;
-    }
-  }
-  .mint-popup {
-    width: 100%;
-  }
-  .select-back {
-    float: right;
-  }
+
 </style>

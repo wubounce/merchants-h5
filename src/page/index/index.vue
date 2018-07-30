@@ -146,7 +146,7 @@ export default {
   },
   methods: { 
     async ParentTypeFun(){ //获取设备类型
-        let res = await ParentTypeFun();
+        let res = await ParentTypeFun(qs.stringify({onlyMine:true}));
         let pac = res.data.find(item=>item.name === '洗衣机');
         this.washingMachineId = pac ? pac.id : '';
         this.typeProfitData();
@@ -161,10 +161,10 @@ export default {
       } else {
         res = await countMachineFun();
       }
-      res.data.forEach(item=>{
-          this.barseriesData.push(item.count);
-          this.barxAxisData.push(MachineStatus(item.machineState));
-      });
+      for(var i in res.data){ //json循环
+        this.barseriesData.push(res.data[i]);
+        this.barxAxisData.push(MachineStatus(i));
+      }
       // 把配置和数据放这里
       this.barchart.setOption(this.barOChartPtion);
     },
@@ -449,7 +449,8 @@ export default {
             y: 'bottom',
             x:'center',
             bottom:'40%',
-            itemWidth:8,
+            itemWidth:6,
+            itemHeight:6,
             data:[{
                 name:'脉冲',
                 icon : 'circle',
@@ -476,8 +477,8 @@ export default {
               labelLine: {
                   normal: {
                       show: false,
-                      length:1,
-                      length2:1,
+                      length:2,
+                      length2:2,
                   }
               },
               data:this.pietypeData,
@@ -497,10 +498,11 @@ export default {
             orient: 'horizontal',
             y: 'bottom',
             x:'center',
-            bottom:'40%',
+            bottom:'50%',
             padding :0,
             itemGap:4,
-            itemWidth:8,
+            itemWidth:6, //图表大小
+            itemHeight:6,
             data:this.piefunDatatitle
         },
         series: [
@@ -633,7 +635,8 @@ export default {
   .earnings-wrap {
     width:100%;
     height:3.2rem;
-    background:linear-gradient(135deg,rgba(24,144,255,1),rgba(4,190,254,1));
+    background: url(../../../static/image/index/todayearnings@2x.png);
+    background-size: cover;
     display: flex;
     p {
       color: #fff;
@@ -653,11 +656,11 @@ export default {
     padding-top: 0.95rem;
   }
   .earning-type-size {
-    font-size: 24px !important;
+    font-size: 32px !important;
     font-family:PingFangSC-Regular;
   }
   .today-earning-size {
-    font-size: 32px !important;
+    font-size: 50px !important;
     font-family:PingFangSC-Regular;
   }
 </style>

@@ -3,35 +3,44 @@
     <header>
         <p class="guide"><img src="../../assets/img/home/icon_near2x.png">平台指南</p>
         <div class="user-info">
-            <div class="pic"><img src=""></div>
+            <div class="pic">
+                <img :src="userInfo.headImage" v-if="userInfo.headImage">
+                <img src="../../../static/image/user/avatar@2x.png" v-else>
+            </div>
             <div class="info-content">
-                <p class="name">商家姓名</p>
-                <p class="phone">15799998888</p>
+                <p class="name">{{userInfo.cardName}}</p>
+                <p class="phone">{{userInfo.phone}}</p>
             </div>
         </div>        
     </header>
     <ul class="user-list">
         <li>
             <router-link to="wallet" class="item">
-                <div class="item-left"><img src="../../assets/img/home/icon_near2x.png"><span>我的钱包</span></div>
-                <div class="item-right"><img src="../../assets/img/home/icon_near2x.png"></div>
+                <div class="item-left"><span class="usericon iconfont icon-qianbao"></span><span>我的钱包</span></div>
+                <div class="item-right"><span class="go iconfont icon-nextx"></span></div>
             </router-link>
         </li>
     </ul>
     <ul class="user-list">
-        <li class="item">
-            <div class="item-left"><img src="../../assets/img/home/icon_near2x.png"><span>联系客服</span></div>
-            <div class="item-right"><img src="../../assets/img/home/icon_near2x.png"></div>
+        <li>
+            <router-link to="contact" class="item" style="border-bottom: 1px solid #e5e5e5;">
+                <div class="item-left"><span class="usericon iconfont icon-lianxi"></span><span>联系客服</span></div>
+                <div class="item-right"><span class="go iconfont icon-nextx"></span></div>
+            </router-link>
         </li>
-        <li class="item">
-            <div class="item-left"><img src="../../assets/img/home/icon_near2x.png"><span>合作热线</span></div>
-            <div class="item-right"><img src="../../assets/img/home/icon_near2x.png"></div>
+        <li>
+            <router-link to="cooperation" class="item">
+                <div class="item-left"><span class="usericon iconfont icon-rexian"></span><span>合作热线</span></div>
+                <div class="item-right"><span class="go iconfont icon-nextx"></span></div>
+            </router-link>
         </li>
     </ul>
     <ul class="user-list">
-        <li class="item">
-            <div class="item-left"><img src="../../assets/img/home/icon_near2x.png"><span>设置</span></div>
-            <div class="item-right"><img src="../../assets/img/home/icon_near2x.png"></div>
+        <li>
+            <router-link to="setting" class="item">
+                <div class="item-left"><span class="usericon iconfont icon-shezhi"></span><span>设置</span></div>
+                <div class="item-right"><span class="go iconfont icon-nextx"></span></div>
+            </router-link>
         </li>
     </ul>
     <q-menu></q-menu>
@@ -39,19 +48,24 @@
 </template>
 <script>
 import QMenu from '@/components/menu';
+import { getOperatorFun } from '@/service/user';
 export default {
   data() {
     return {
-      
+      userInfo:{}
     };
   },
   mounted() {
     
   },
   created(){
+    this.getOperator();
   },
   methods: {
-    
+    async getOperator(){
+        let res = await getOperatorFun();
+       this.userInfo = res.data;
+    }
   },
   components:{
     QMenu,
@@ -62,10 +76,9 @@ export default {
     @import "../../assets/scss/common";
     .user-wrapper{        
         header{
-            height: 4rem;
-            padding: .266667rem .4rem .946667rem .84rem;
-            background-color: #1890ff;
-            box-sizing: border-box;
+            padding: 0.37rem 0.83rem 0.8rem 0.4rem;
+            background:url(../../../static/image/user/user@2x.png);
+            background-size: cover;
             .guide{
                 font-size: .37rem;
                 color: #a8d5ff;
@@ -89,6 +102,7 @@ export default {
                     border: .066667rem solid #cee7ff;
                     background-color: #fff;
                     margin-right: .533333rem;
+                    border-radius: 50%;
                     img{
                         width: 100%;
                         height: 100%;
@@ -115,6 +129,7 @@ export default {
             margin-bottom: .266667rem;
             .item{
                 height: 1.173333rem;
+                line-height: 1.17rem;
                 border-bottom: $first-border;
                 padding-right: .4rem;
                 display: flex;
@@ -124,25 +139,18 @@ export default {
                     border: none;
                 } 
                 .item-left{
-                    img{
-                       width: .533333rem;
-                       height: .533333rem;
-                       margin-right:.426667rem; 
-                       vertical-align: middle; 
-                    }
                     span{
                         color: $first-color;
-                        font-size: .426667rem;
-                        
+                        font-size: 16px;
                     }
                 }
-                .item-right{
-                    img{
-                        width:.32rem;
-                        height: .32rem;
-
-                    }
-                }
+            }
+            .go {
+                color: #999;
+            }
+            .usericon {
+                color: #1890FF !important;
+                margin-right:.426667rem; 
             }
         }
     }

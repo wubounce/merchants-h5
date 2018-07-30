@@ -6,86 +6,66 @@
   </section>
   <section class="tab-contont">
   	<div class="discount-wrap" v-if="tabindex === 0">
-  		<div class="discoun-list">
-  			<p class="time">优惠期<span>2018-08-09</span>至<span>2018-08-09</span></p>
-        <div class="discoun-content">
-          <div class="dis-con-title">
-            <p>店铺</p>
-            <p class="dis-con-shop">1店</p>
-          </div>
-          <div class="dis-con-title">
-            <p>折扣优惠</p>
-            <p class="dis-con-shop">8<span>折</span></p>
-          </div>
-        </div>
+      <div class="no-discount-list" v-if="timeMarket.lenght<=0">未设置限时优惠活动</div>
+  		<div class="discoun-list" v-for="(item,index) in timeMarket" :key="index">
+        <router-link :to="{name:'detailMarket', query:{id:item.id}}">
+          <span class="discountag" v-if="item.status === 1"><img src="../../../static/image/market/makretStop@2x.png"></span>
+            <p class="time">优惠期<span :class="{'stop-discount':item.status === 1}">{{item.noDiscountStart}}</span>至<span :class="{'stop-discount':item.status === 1}">{{item.noDiscountEnd}}</span></p>
+            <div class="discoun-content">
+              <div class="dis-con-title">
+                <p>店铺</p>
+                <p :class="['dis-con-shop', {'stop-discount':item.status === 1}]">{{item.shop[0].name}}</p>
+              </div>
+              <div class="dis-con-title">
+                <p>折扣优惠</p>
+                <p :class="['dis-con-shop', {'stop-discount':item.status === 1}]">{{item.discountVO}}<span>折</span></p>
+              </div>
+            </div>
+          </router-link>
   		</div>
-      <div class="discoun-list">
-        <p class="time">优惠期<span>2018-08-09</span>至<span>2018-08-09</span></p>
-        <div class="discoun-content">
-          <div class="dis-con-title">
-            <p>店铺</p>
-            <p class="dis-con-shop">1店</p>
-          </div>
-          <div class="dis-con-title">
-            <p>折扣优惠</p>
-            <p class="dis-con-shop">8<span>折</span></p>
-          </div>
-        </div>
-      </div>
-      <div class="discoun-list">
-        <p class="time">优惠期<span>2018-08-09</span>至<span>2018-08-09</span></p>
-        <div class="discoun-content">
-          <div class="dis-con-title">
-            <p>店铺</p>
-            <p class="dis-con-shop">1店</p>
-          </div>
-          <div class="dis-con-title">
-            <p>折扣优惠</p>
-            <p class="dis-con-shop">8<span>折</span></p>
-          </div>
-        </div>
-      </div>
       <div class="addmember" @click="goaddMarket">
         <span class="order-action iconfont icon-nextx"></span><br>
         <span>优惠</span>
       </div>
   	</div>
   	<div class="VIP-wrap"  v-if="tabindex === 1">
-      <div class="car-shop">
-        企鹅一号店vip卡
+      <div class="no-discount-list" v-if="timeMarket.lenght<=0">未设置店铺VIP卡</div>
+      <div>
+         <div class="car-shop">企鹅一号店vip卡</div>
+          <div class="card-banner">       
+            <swiper :options="swiperOption"  ref="mySwiper">
+          
+              <swiper-slide>
+                <router-link :to="{name:'vipDetail'}">
+                  <div class="year-card card">   
+                    <p class="vip-type">VIP年卡</p>                
+                    <p class="price">500<span>元</span></p>
+                    <p class="usenum">每日仅限使用243123432次</p>       
+                    <p class="tag">8<span>折</span></p> 
+                  </div>
+                 </router-link>                     
+              </swiper-slide>  
+             
+              <swiper-slide>
+                <div class="halfYear-card card">   
+                    <p class="vip-type">VIP半年卡</p>                
+                    <p class="price">500<span>元</span></p>
+                    <p class="usenum">每日仅限使用243123432次</p>       
+                    <p class="tag">9<span>折</span></p> 
+                </div>                    
+              </swiper-slide>   
+              <swiper-slide>
+                <div class="season-card card">   
+                    <p class="vip-type">VIP月卡</p>                
+                    <p class="price">500<span>元</span></p>
+                    <p class="usenum">每日仅限使用243123432次</p>       
+                    <p class="tag">9<span>折</span></p> 
+                </div>                    
+            </swiper-slide>  
+            </swiper>        
+          </div> 
       </div>
-  		<div class="card-banner">       
-        <swiper :options="swiperOption"  ref="mySwiper">
-      
-          <swiper-slide>
-            <router-link :to="{name:'vipDetail'}">
-              <div class="year-card card">   
-                <p class="vip-type">VIP年卡</p>                
-                <p class="price">500<span>元</span></p>
-                <p class="usenum">每日仅限使用243123432次</p>       
-                <p class="tag">8<span>折</span></p> 
-              </div>
-             </router-link>                     
-          </swiper-slide>  
-         
-          <swiper-slide>
-            <div class="halfYear-card card">   
-                <p class="vip-type">VIP半年卡</p>                
-                <p class="price">500<span>元</span></p>
-                <p class="usenum">每日仅限使用243123432次</p>       
-                <p class="tag">9<span>折</span></p> 
-            </div>                    
-          </swiper-slide>   
-          <swiper-slide>
-            <div class="season-card card">   
-                <p class="vip-type">VIP月卡</p>                
-                <p class="price">500<span>元</span></p>
-                <p class="usenum">每日仅限使用243123432次</p>       
-                <p class="tag">9<span>折</span></p> 
-            </div>                    
-        </swiper-slide>  
-        </swiper>        
-      </div> 
+     
       <div class="addmember" @click="goaddvip">
         <span class="order-action iconfont icon-nextx"></span><br>
         <span>vip卡</span>
@@ -97,6 +77,8 @@
 <script>
 import QHeader from '@/components/header';
 import { swiper, swiperSlide } from 'vue-awesome-swiper';  
+import { timeMarketListFun } from '@/service/market';
+import moment from 'moment';
 export default {
   data() {
     return {
@@ -114,16 +96,28 @@ export default {
           // } 
         },                
       },
+      timeMarket:[]
     };
   },
   mounted() {
     
   },
   created(){
+    this.timeMarketList();
+    console.log();
   },
   methods: {
     tabclick(index){
     	this.tabindex = index;
+    },
+    async timeMarketList(){
+      let res = await timeMarketListFun();
+      this.timeMarket = res.data.items;
+      res.data.items.forEach((item)=>{
+          item.noDiscountStart = item.noDiscountStart ? moment(item.noDiscountStart).format('YYYY-MM-DD') : '';
+          item.noDiscountEnd = item.noDiscountEnd ? moment(item.noDiscountEnd).format('YYYY-MM-DD'): '';
+      });
+
     },
     goaddMarket(){
       this.$router.push({name:'addMarket'});
@@ -164,10 +158,24 @@ export default {
 		}
 
 	}
+
 	.discoun-list {
     margin-top: 0.29rem;
     padding:0.29rem 0.4rem 0;
     background: #fff;
+    position: relative;
+    .discountag {
+      width: 1.25rem;
+      height: 1.25rem;
+      position: absolute;
+      top: 0;
+      right: 0;
+      img {
+        display: block;
+        width: 100%;
+      }
+     
+    }
 		.time {
 			color: #999999;
 			font-size: 14px;
@@ -180,6 +188,9 @@ export default {
         padding: 0 0.27rem;
       }
 		}
+    .stop-discount {
+      color:#999 !important;
+    }
 	}
 	.discoun-content {
     display: flex;
@@ -312,5 +323,11 @@ export default {
       font-size: 16px;
       color: #fff;
     }
+  }
+  .no-discount-list {
+    font-size: 14px;
+    color: #999;
+    text-align: center;
+    padding-top: 4rem;
   }
 </style>

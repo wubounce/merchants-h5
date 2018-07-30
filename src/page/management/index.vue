@@ -132,7 +132,7 @@ export default {
       }
     }
     .content {
-      width: 6.293333rem;
+      width: 7rem;
       padding-left: 0.27rem; 
       .con-title {
           font-size: 17px;
