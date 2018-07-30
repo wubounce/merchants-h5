@@ -1,7 +1,7 @@
 <template>
 <div class="withdrawList-wrapper" v-title="'提现记录'">
-    <div class="list add">
-        <img src="../../assets/img/test.jpg">
+    <div class="list add"  v-for="(item,index) in applylsit" :key="index">
+        <span class="iconfont icon-tixian"></span>
         <div class="accountList-content clearfix">
             <div class="left">
                 <p class="title">余额提现</p>
@@ -12,7 +12,7 @@
         </div>                
     </div>
     <div class="list">
-        <img src="../../assets/img/test.jpg">
+        <span class="iconfont icon-tixian"></span>
         <div class="accountList-content clearfix">
             <div class="left">
                 <p class="title">余额提现</p>
@@ -23,7 +23,7 @@
         </div>                
     </div>
     <div class="list fall">
-        <img src="../../assets/img/test.jpg">
+        <span class="iconfont icon-tixian"></span>
         <div class="accountList-content clearfix">
             <div class="left">
                 <p class="title">余额提现</p>
@@ -36,24 +36,33 @@
 </div>
 </template>
 <script>
-import { Navbar, TabItem } from 'mint-ui';
+import qs from 'qs';
+import { getApplyListFun } from '@/service/user';
+import { ApplyType } from '@/utils/mapping';
 export default {
   data() {
     return {
-      selected: 1,
+        selected: 1,
+        page:1,
+        pageSize:10,
+        applylsit:[]
     };
   },
   mounted() {
-    
+   
   },
   created(){
+     this.getApplyList();
   },
   methods: {
-    
+    async getApplyList(){
+        let payload = {page:this.page,pageSize: this.pageSize,type:2};
+        let res = await getApplyListFun(qs.stringify(payload));
+       this.applylsit = res.data.items;
+    }
   },
   components:{
-    Navbar,
-    TabItem
+  
   }
 };
 </script>
@@ -66,13 +75,17 @@ export default {
             background-color: #fff;
             height: 2.32rem ;  
             box-sizing: border-box;          
-            img{
+            span{
                 position: absolute;
                 top: .33rem;
                 left: .4rem;
                 width: 1.17rem;
                 height: 1.17rem;
                 border-radius: 50%;
+            }
+            .icon-tixian {
+                color:#1890FF;
+                font-size: 1.2rem;
             }
             .accountList-content{
                 width: 100%;

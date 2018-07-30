@@ -47,7 +47,6 @@
       </div>
       <div class="bar" id="bar" :style="{height:height,width:width}" ref="bar"></div>
     </div>
-    <q-menu></q-menu>
   </div>
 </template>
 <script>
@@ -61,7 +60,6 @@ import 'echarts/lib/chart/pie';
 // 引入提示框和图例组件
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/legendScroll';
-import QMenu from '@/components/menu';
 import selectpickr from '@/components/selectPicker';
 import { ParentTypeFun, countMachineFun, totalProfitFun, timeProfitFun, typeProfitFun } from '@/service/index';
 import { MachineStatus, communicateType } from '@/utils/mapping';
@@ -535,7 +533,6 @@ export default {
     }
   },
   components:{
-    QMenu,
     selectpickr
   }
 };

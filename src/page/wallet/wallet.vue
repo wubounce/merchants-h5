@@ -5,7 +5,7 @@
         <img src="../../../static/image/user/money@2x.png">
         <p class="font-title">账户余额 (元)</p>
         <p class="price">{{data.balance}}</p>
-        <p class="total">累计收益 {{data.OrderCount ? data.OrderCount:0}}</p>
+        <p class="total">累计收益 {{data.orderCount ? data.orderCount:0}}</p>
     </div>
     <div class="btn" @click="gowithdraw">余额提现</div>
     <p class="copyright">杭州企鹅科技有限公司</p>

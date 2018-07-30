@@ -1,4 +1,4 @@
-index<template>
+<template>
 <div class="accountList-wrapper" v-title="'收支明细'">
     <section class="apply-status">
         <div v-for="(item,index) in titleArr" @click="titleClick(index)"><span :class="{current: titleIndex === index}">{{item.lable}}</span></div>

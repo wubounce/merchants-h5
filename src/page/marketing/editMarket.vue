@@ -2,7 +2,7 @@
 <div class="addmarket">
   <q-header :title="title"></q-header>
   <div class="addvip-header">
-    <p>所属店铺<span class="addvip-con">{{shopCurrentTags?shopCurrentTags.shopName:''}}<span class="order-action iconfont icon-nextx" @click="shopVisible=true"></span></span></p>
+    <p>所属店铺<span class="addvip-con">{{checkshoptxt?checkshoptxt:''}}<span class="order-action iconfont icon-nextx" @click="shopVisible=true"></span></span></p>
     <p>优惠期开始<span class="addvip-con">{{addmarket.startTime}}<span class="order-action iconfont icon-nextx" @click="open('picker2')"></span></span></p>
      <p>优惠期结束<span class="addvip-con">{{addmarket.endTime}}<span class="order-action iconfont icon-nextx" @click="open('picker3')"></span></span></p>
     <p>活动日<span class="addvip-con">{{activeCurrentTags?activeCurrentTags !== '自定义'?activeCurrentTags:checkWeeklisttxt:checkWeeklisttxt}}<span class="order-action iconfont icon-nextx" @click="activeVisible=true"></span></span></p>
@@ -14,8 +14,6 @@
     <span class="can" @click="cancalAdd">取消</span>
     <span class="cifrm" @click="toaddMaket">确定</span>
   </section> 
-    <!-- 店铺 -->
-  <selectpickr :visible="shopVisible" :slots="shopSlots" :valueKey="shopName" @selectpicker="shopselectpicker" @onpickstatus="shopselectpickertatus"> </selectpickr>
   <!-- 活动日 -->
   <selectpickr :visible="activeVisible" :slots="activeSlots"  @selectpicker="activeselectpicker" @onpickstatus="activeselectpickertatus"> </selectpickr>
   <!-- 选择自定义星期-->
@@ -43,20 +41,31 @@
      <mt-picker class="picker"  :slots="activeTimeslots" @change="changeTime" :showToolbar="true"><p class="toolBar"><span class="timequx" @click="activeTimeVisible = false;">取消</span><span @click="chooseDay" class="tiem-picker-title">全天</span><span @click="confirmNews" class="queding">确定</span></p></mt-picker>
   </mt-popup>
 
-  
-  <!-- <mt-popup v-model="activeDayStartVisible" position="bottom" class="mint-popup">
-     <mt-picker class="picker"  :slots="activeTimeslots" @change="changeTime" :showToolbar="true"><p class="toolBar"><span class="timequx" @click="activeTimeVisible = false;">取消</span><span @click="chooseDay" class="tiem-picker-title">全天</span><span @click="confirmNews" class="queding">确定</span></p></mt-picker>
+  <!-- 优惠期开始 -->
+  <mt-datetime-picker ref="picker2" type="date" v-model="discountStartDate" @confirm="handleStartTimeChange" :startDate="pickerstartDate"></mt-datetime-picker>
+    <!-- 优惠期结束 -->
+  <mt-datetime-picker ref="picker3" type="date" v-model="discountEndDate"  @confirm="handleEndTimeTimeChange" :startDate="pickerstartDate"></mt-datetime-picker>
+
+  <!-- 选择店铺 -->
+  <mt-popup v-model="shopVisible" position="bottom">
+    <div class="resp-shop">
+      <span class="quxi" @click="shopVisible = false">取消</span>
+      <span class="shop">店铺</span>
+      <span class="qued" @click="getcheckshop">确定</span>
+    </div>
+    <section class="resp-shop-wrap">
+      <div class="all-list">
+        <label class="mint-checklist-label" v-for="(item,index) in shoplist" :key="index">
+          <span class="mint-checkbox is-right">
+            <input type="checkbox" class="mint-checkbox-input" v-model="checkshoplist" :value="item.shopName"> 
+            <span class="mint-checkbox-core"></span>
+          </span> 
+          <p class="mint-checkbox-label shopname">{{item.shopName}}</p>
+        </label>
+      </div>
+    </section>
   </mt-popup>
-    <div class="day-time">
-      <div class="start">
-        <mt-datetime-picker ref="picker2" type="date" v-model="value2" :showToolbar="false"></mt-datetime-picker>
-      </div>
-      <div class="end">
-        <mt-datetime-picker ref="picker3" type="date" v-model="value3" :showToolbar="false"></mt-datetime-picker>
-      </div>
-    </div> -->
-    <mt-datetime-picker ref="picker2" type="date" v-model="value2" @confirm="handleStartTimeChange" :startDate="pickerstartDate"></mt-datetime-picker>
-    <mt-datetime-picker ref="picker3" type="date" v-model="value3"  @confirm="handleEndTimeTimeChange" :startDate="pickerEndDate"></mt-datetime-picker>
+
 </div>
 </template>
 <script>
@@ -70,23 +79,18 @@ import { addOruPdateFun, detailMarketFun } from '@/service/market';
 export default {
   data() {
     return {
-      value2:'',
-      value3:'',
-      test:true,
+      discountStartDate:'',
+      discountEndDate:'',
       pickerstartDate: new Date(),
       pickerEndDate: new Date(),
       title: '编辑限时优惠',
+
       shopVisible:false,
-      shopCurrentTags:null,
-      shopName:'shopName',
-      shopSlots:[
-        {
-            flex: 1,
-            values: [],
-            className: 'slot1',
-            textAlign: 'center'
-          }
-      ],
+      checkshoptxt:'',
+      shoplist:[],
+      checkshoplist:[],
+      shopIds:[],
+
       activeVisible: false,
       activeCurrentTags:null,
       activeSlots:[
@@ -187,11 +191,14 @@ export default {
       this.addmarket.addstatus =  detail.status ===  0 ? this.addmarket.addstatus = true  : this.addmarket.addstatus = false;
       this.addmarket.time = detail.noTime;
       this.addmarket.discount = detail.discount;
-      let beshop = {
-        shopName:detail.shop[0].name,
-        shopId:detail.shop[0].id
-      };
-      this.shopCurrentTags = beshop;
+
+      let beshop = [];
+      detail.shop.forEach(item=>{
+        beshop.push(item.name);
+      });
+      this.checkshoptxt = beshop.join(',');
+      this.checkshoplist = beshop;
+
       this.activeCurrentTags = this.filterweek(detail.noWeek);
       this.pickerstartDate = new Date(detail.noDiscountStart);
       this.pickerEndDate = new Date(detail.noDiscountEnd);
@@ -227,13 +234,13 @@ export default {
     },
     async shopListFun(){
       let res = await shopListFun();
-      this.shopSlots[0].values = [...res.data];
+      this.shoplist = res.data;
     },
-    shopselectpicker(data){
-      this.shopCurrentTags = data;
-    },
-    shopselectpickertatus(data){
-      this.shopVisible = data;
+    getcheckshop(){
+      this.checkshoptxt = this.checkshoplist.join(',');
+      let checklist = this.shoplist.filter(v=>this.checkshoplist.some(k=>k==v.shopName));
+      this.shopVisible = false;
+      checklist.forEach(item=>this.shopIds.push(item.shopId));
     },
     activeselectpicker(data){ //打开自定义星期
       this.activeCurrentTags = data;
@@ -290,7 +297,7 @@ export default {
       }
       let status = null;
       this.addmarket.addstatus === true ? status = 0  : status = 1;
-      let payload = Object.assign({},this.addmarket,{week:week,shopIds:this.shopCurrentTags.shopId,timeId:this.$route.query.id,status:status});
+      let payload = Object.assign({},this.addmarket,{week:week,shopIds:this.shopIds.join(','),timeId:this.$route.query.id,status:status});
       delete payload.addstatus;
       let res = await addOruPdateFun(qs.stringify(payload));
       if (res.code === 0) {
@@ -436,6 +443,8 @@ export default {
   .addmarket .mint-checklist-label {
     padding:0 0.4rem;
     text-align: center;
+    height: 1.17rem;
+    line-height: 1.17rem;
   }
   .addmarket .mint-switch-input:checked + .mint-switch-core {
     border-color: #4DD865;

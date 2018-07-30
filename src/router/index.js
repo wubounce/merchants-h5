@@ -16,6 +16,39 @@ export default new Router({
         import ('@/page/login')
     },
     {
+      path: '/home',
+      name: 'home',
+      component: () =>import ('@/page/home'),
+      children:[
+        {
+          path: '/index',
+          name: 'index',
+          component: () =>
+            import ('@/page/index/index')
+        },
+        {
+          path: '/report',
+          name: 'report',
+          component: () =>
+            import ('@/page/report/index')
+        },
+        {
+          path: '/management',
+          name: 'management',
+          component: () =>
+            import ('@/page/management/index')
+        },
+        // 我的
+        {
+          path: '/user',
+          name: 'user',
+          component: () =>
+            import ('@/page/user/user')
+        },
+      ]
+    },
+    
+    {
       path: '/reset',
       name: 'reset',
       component: () =>
@@ -27,24 +60,7 @@ export default new Router({
       component: () =>
         import ('@/page/reset/confimPwd')
     },
-    {
-      path: '/index',
-      name: 'index',
-      component: () =>
-        import ('@/page/index/index')
-    },
-    {
-      path: '/report',
-      name: 'report',
-      component: () =>
-        import ('@/page/report/index')
-    },
-    {
-      path: '/management',
-      name: 'management',
-      component: () =>
-        import ('@/page/management/index')
-    },
+      
     {
       path: '/reportdetail',
       name: 'reportdetail',
@@ -220,14 +236,7 @@ export default new Router({
     { path: '/vipDetail', name: 'vipDetail', component: () => import('@/page/marketing/vipDetail') },
     { path: '/editVip', name: 'editVip', component: () => import('@/page/marketing/editVip') },
 
-    // 我的
-    {
-      path: '/user',
-      name: 'user',
-      component: () =>
-        import ('@/page/user/user')
-    },
-
+    
     
     
     {

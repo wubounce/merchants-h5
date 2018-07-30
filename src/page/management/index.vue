@@ -86,12 +86,10 @@
     </router-link>
   </div>
   <div style="width:100%;height:1.73rem;"></div>
-  <q-menu></q-menu>
 </div>
 </template>
 <script>
 import QHeader from '@/components/header';
-import QMenu from '@/components/menu';
 export default {
   data() {
     return {
@@ -106,7 +104,6 @@ export default {
   },
   components:{
     QHeader,
-    QMenu
   }
 };
 </script>

@@ -6,7 +6,7 @@
   </section>
   <section class="tab-contont">
   	<div class="discount-wrap" v-if="tabindex === 0">
-      <div class="no-discount-list" v-if="timeMarket.lenght<=0">未设置限时优惠活动</div>
+      <div class="no-discount-list" v-if="timeMarket.length<=0">未设置限时优惠活动</div>
   		<div class="discoun-list" v-for="(item,index) in timeMarket" :key="index">
         <router-link :to="{name:'detailMarket', query:{id:item.id}}">
           <span class="discountag" v-if="item.status === 1"><img src="../../../static/image/market/makretStop@2x.png"></span>
@@ -29,7 +29,7 @@
       </div>
   	</div>
   	<div class="VIP-wrap"  v-if="tabindex === 1">
-      <div class="no-discount-list" v-if="timeMarket.lenght<=0">未设置店铺VIP卡</div>
+      <div class="no-discount-list" v-if="timeMarket.length<=0">未设置店铺VIP卡</div>
       <div>
          <div class="car-shop">企鹅一号店vip卡</div>
           <div class="card-banner">       

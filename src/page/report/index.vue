@@ -13,11 +13,9 @@
     </mt-tab-container-item>
   </mt-tab-container>
   <div style="width:100%;height:1.73rem;"></div>
-  <q-menu></q-menu>
 </div>
 </template>
 <script>
-import QMenu from '@/components/menu';
 import reporteaning from './earnings';
 import refund from './refund';
 export default {
@@ -32,7 +30,6 @@ export default {
   methods: {
   },
   components:{
-    QMenu,
     reporteaning,
     refund
   }
