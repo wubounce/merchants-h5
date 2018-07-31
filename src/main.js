@@ -17,7 +17,6 @@ import VueAMap from 'vue-amap';
 Vue.use(VueAMap);
 import VueAwesomeSwiper from 'vue-awesome-swiper';
 import 'swiper/dist/css/swiper.css';
-<<<<<<< HEAD
 Vue.use(VueAwesomeSwiper);
 import { Tree } from 'element-ui';
 Vue.use(Tree);
@@ -31,10 +30,8 @@ plugin: ['AMap.Autocomplete', 'AMap.PlaceSearch', 'AMap.Scale', 'AMap.OverView',
 // 高德 sdk 版本，默认为 1.4.4
 v: '1.4.4'
 });
-=======
 
 
->>>>>>> 51736a1c29dfad9b4ab1bc35ed89dfe4c5f20373
 
 
 Vue.config.productionTip = true;
