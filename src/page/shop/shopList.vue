@@ -142,7 +142,7 @@ section {
             font-size: 16px;
             margin-top: 0.2rem;
             .little-font {
-              font-size: 0.01rem;
+              font-size: 8px;
             }
           }
         }

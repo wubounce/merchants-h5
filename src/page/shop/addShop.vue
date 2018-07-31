@@ -512,6 +512,7 @@ export default {
   },
   created() {
     //this.getArea();
+    this.list[2].value = this.$route.query.place;
   },
   components:{
     UploadImg
@@ -569,6 +570,8 @@ export default {
       }
     }
     .personal-item {
+      display: flex;
+      justify-content: space-between;
       font-size: 16px;
       padding: 0.3rem;
       border-bottom: 1px solid #F8F8F8;
@@ -576,7 +579,6 @@ export default {
         0.3rem center;
       background-size: 0.16rem 0.27rem;
       span {
-        float: right;
         color: #7f7f7f;
         font-size: 16px;
         margin-right: 0.3rem;

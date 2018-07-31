@@ -93,6 +93,7 @@ export default {
     },
     cancel() {
       //取消
+      this.placeVisible = false;
     },
     async confirmNews() {
       //确定

@@ -4,7 +4,18 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
     <title>企鹅共享商家端</title>
-    <script type="text/javascript" src="https://webapi.amap.com/maps?v=1.4.2&key=c6456d57a6cac4a772d3ef0f25cceccb"></script>
+    <style>
+      /* 这是新增店铺页面地图样式,暂时只能放这样式才能显示,别吐槽啊T^T */
+      .amap-sug-result {
+        margin-left: -0.6rem;
+      }
+      .auto-item {
+        font-size: 14px;
+        cursor: pointer;
+        padding: 0.3rem;
+        white-space: normal;
+      }
+    </style>
   </head>
   <body>
     <div id="app"></div>
@@ -14,5 +25,7 @@
     <!-- 微信jssdk -->
     <!-- <script src="http://res.wx.qq.com/open/js/jweixin-1.2.0.js"></script> -->
     <script type="text/javascript" src="https://webapi.amap.com/demos/js/liteToolbar.js"></script>
+    <!-- 地图js -->
+    <script src="https://webapi.amap.com/maps?v=1.4.8&key=f5379f3dfba375059e44adf4298fbd28"></script>
   </body>
 </html>
