@@ -1,6 +1,5 @@
 <template>
-  <section class="editTodolist">
-    <q-header :title="title"></q-header>
+  <section class="editTodolist" v-title="title">
     <!-- 第一模块 -->
     <div class="ul-list">
       <p class="personal-item" @click="changemachineFunc"><span>启动模式</span><span>{{item.functionName}}</span></p>
@@ -27,7 +26,6 @@ import qs from "qs";
 import { getBatchStartFun } from '@/service/todoList';
 import { updateBatchStartFun } from '@/service/todoList';
 import { getFunctionListFun } from '@/service/todoList';
-import QHeader from '@/components/header';
 import Button from "@/components/Button/Button";
 import { MessageBox } from 'mint-ui';
 import moment from 'moment';
@@ -162,7 +160,6 @@ import moment from 'moment';
       this.getFunctionList();
     },
     components: {
-      QHeader,
       Button
     }
   };

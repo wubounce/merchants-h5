@@ -1,6 +1,5 @@
 <template>
-  <section class="personal">
-    <q-header :title="title"></q-header>
+  <section class="personal" v-title="title">
     <ul class="personal-list">
       <p class="shopname-p"><span>店铺名称</span><span><input type="text" class='addressInput' v-model="shopName" maxlength="12" placeholder="请填写店铺名称"></span></p>
       <li v-for="(item,index) in list" :key="index" class="personal-item" @click="toDetail(index)">
@@ -58,7 +57,6 @@
 
 <script>
 import qs from "qs";
-import QHeader from '@/components/header';
 import UploadImg from "@/components/UploadImg/UploadImg";
 import { addOrEditShopFun } from '@/service/shop';
 import { areaListFun } from '@/service/shop';
@@ -514,9 +512,9 @@ export default {
   },
   created() {
     //this.getArea();
+    this.list[2].value = this.$route.query.place;
   },
   components:{
-    QHeader,
     UploadImg
   }
 };
@@ -572,6 +570,8 @@ export default {
       }
     }
     .personal-item {
+      display: flex;
+      justify-content: space-between;
       font-size: 16px;
       padding: 0.3rem;
       border-bottom: 1px solid #F8F8F8;
@@ -579,7 +579,6 @@ export default {
         0.3rem center;
       background-size: 0.16rem 0.27rem;
       span {
-        float: right;
         color: #7f7f7f;
         font-size: 16px;
         margin-right: 0.3rem;

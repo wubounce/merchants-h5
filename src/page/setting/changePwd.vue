@@ -1,6 +1,5 @@
 <template>
-  <div class="change-pwd">
-    <q-header :title="title"></q-header>
+  <div class="change-pwd" v-title="title">
     <form ref="resetForm" :model="reset">
       <div class="resetForm">
         <div class="form-group">
@@ -23,7 +22,6 @@
 <script>
   import { updatePwdFun } from '@/service/resetPwd';
   import qs from 'qs';
-  import QHeader from '@/components/header';
   import { validatPwd } from '@/utils/validate';
   export default {
     data() {
@@ -87,7 +85,7 @@
       },
     },
     components: {
-      QHeader
+      
     }
   };
 </script>

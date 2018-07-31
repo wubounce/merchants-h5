@@ -1,6 +1,5 @@
 <template>
-  <section>
-      <q-header :title="title"></q-header>
+  <section v-title="title">
       <router-link :to="{name:'changePwd'}">
         <p class="user business">修改密码<span>{{user.password}}</span></p>
       </router-link>
@@ -13,7 +12,6 @@
   </section>
 </template>
 <script>
-import QHeader from '@/components/header';
 import qs from 'qs';
 import { getAliAndStatusFun } from '@/service/setAlipayAndStatus';
 export default {
@@ -74,7 +72,7 @@ export default {
     this.getAliAndStatus();
   },
   components:{
-    QHeader
+    
   }
 };
 </script>

@@ -1,6 +1,5 @@
 <template>
-  <section class="personal">
-    <q-header :title="title"></q-header>
+  <section class="personal" v-title="title">
     <!-- 第一模块 -->
     <p class="shop-item title"><span>累计收益</span><span>{{shopdetail.profit}} 元</span></p>
     <p class="shop-item second-p"><span>店铺名称</span><span>{{shopdetail.shopName}}</span></p>
@@ -45,7 +44,6 @@
 </template>
 <script>
 import qs from "qs";
-import QHeader from '@/components/header';
 import Button from "@/components/Button/Button";
 import { MessageBox } from 'mint-ui';
 import { shopDetailFun } from '@/service/shop';
@@ -118,7 +116,6 @@ export default {
     this.getShopDetail();
   },
   components:{
-    QHeader,
     Button
   }
 };

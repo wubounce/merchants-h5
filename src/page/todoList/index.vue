@@ -1,6 +1,5 @@
 <template>
-  <section class="todolist">
-		<q-header :title="title"></q-header>
+  <section class="todolist" v-title="title">
 		<p class="shop-item title">批量定时启动设备</p>
 		<ul>
 			<li v-for="(item,index) in list" :key="index" @click="toDetail(item.id)"> 
@@ -17,7 +16,6 @@
 
 <script>
 import qs from "qs";
-import QHeader from '@/components/header';
 import { listBatchStartFun } from '@/service/todoList';
   export default {
     data() {
@@ -48,9 +46,6 @@ import { listBatchStartFun } from '@/service/todoList';
     },
     created() {
       this.getListBatchStart();
-    },
-    components: {
-			QHeader
     }
   };
 </script>

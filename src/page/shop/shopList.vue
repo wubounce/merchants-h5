@@ -1,6 +1,5 @@
 <template>
-	<section>
-	  <q-header :title="title"></q-header>
+	<section v-title="title">
     <ul>
       <li v-for="(item,index) in list" :key="index" @click="toShopDetail(item.shopId)">
         <p class="top">
@@ -32,7 +31,6 @@
 </template>
 
 <script>
-import QHeader from '@/components/header';
 import { MessageBox } from 'mint-ui';
 import { manageListFun } from '@/service/shop';
 export default {
@@ -75,9 +73,6 @@ export default {
         this.getShopList();
       }
     }
-  },
-  components: {
-    QHeader
   }
 };
 </script>
@@ -147,7 +142,7 @@ section {
             font-size: 16px;
             margin-top: 0.2rem;
             .little-font {
-              font-size: 0.01rem;
+              font-size: 8px;
             }
           }
         }
@@ -165,9 +160,12 @@ section {
     text-align: center;
     div {
       color:#fff;
+      &:first-child {
+        font-size: 36px;
+      }
     }
     .iconShop {
-      font-size: 0.35rem;
+      font-size: 16px;
       margin-top: -0.2rem;
     }
   }

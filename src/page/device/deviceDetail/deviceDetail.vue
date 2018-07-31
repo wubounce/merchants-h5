@@ -4,7 +4,7 @@
     <ul class="device-detail">
       <li class="device-detail-hd">
         <p>累计收益</p>
-        <p>{{fromdata.cumuIncome}}</p>
+        <p>{{deviceDetail.profit}}</p>
       </li>
       <!-- 表单模块部分  -->
       <li class="device-detail-item">
@@ -14,37 +14,37 @@
           <li>
             <span class="field-title">设备名称</span>
             <p class="select-1">
-              <input type="text" v-model="fromdata.machineName">
+              <input type="text" v-model="deviceDetail.machineName">
             </p>
           </li>
           <li @click="checkDeviceSelect">
             <span class="field-title">所属店铺</span>
-            <p class="select">{{fromdata.shopName}}</p>
+            <p class="select">{{deviceDetail.shopName}}</p>
           </li>
 
           <router-link to="/addDevice" tag="li">
             <span class="field-title">设备类型</span>
-            <p class="select">{{fromdata.firstClass}}</p>
+            <p class="select">{{deviceDetail.parentTypeName}}</p>
           </router-link>
           <li @click="checkSecondClass">
             <span class="field-title">设备型号</span>
-            <p class="select">{{fromdata.secondClass}}</p>
+            <p class="select">{{deviceDetail.subTypeName}}</p>
           </li>
           <li @click="getCompany">
             <span class="field-title">公司</span>
-            <p class="select">{{fromdata.companyType.name}}</p>
+            <p class="select">{{deviceDetail.company}}</p>
           </li>
 
           <li>
             <span class="field-title">NQT</span>
             <p class="select-2">
-              <input type="text" v-model="fromdata.nqt" placeholder="请输入模块上二维码">
+              <input type="text" v-model="deviceDetail.nqt" placeholder="请输入模块上二维码">
             </p>
           </li>
           <li>
             <span class="field-title">IMEI</span>
             <p class="select-2">
-              <input type="text" v-model="fromdata.imei" placeholder="请输入模块上二维码">
+              <input type="text" v-model="deviceDetail.imei" placeholder="请输入模块上二维码">
             </p>
           </li>
           <li @click="toFunctionSeting">
@@ -78,10 +78,10 @@
     </ul>
 
     <div class="about-button">
-      <Button btn-type="small" btn-color="spe" class="ft-btn active" @confirm="deviceDele">删除</Button>
-      <Button btn-type="small" btn-color="spe" class="ft-btn" @confirm="deviceTZJ">桶自洁</Button>
-      <Button btn-type="small" btn-color="spe" class="ft-btn" @confirm="deviceRest">复位</Button>
-      <Button btn-type="small" btn-color="spe" class="ft-btn" @confirm="deviceEdit">编辑</Button>
+      <Button btn-type="small" btn-color="spe" class="ft-btn active" @click="deviceDele">删除</Button>
+      <Button btn-type="small" btn-color="spe" class="ft-btn" @click="deviceTZJ">桶自洁</Button>
+      <Button btn-type="small" btn-color="spe" class="ft-btn" @click="deviceRest">复位</Button>
+      <Button btn-type="small" btn-color="spe" class="ft-btn" @click="deviceEdit">编辑</Button>
     </div>
     <!-- 模块商 -->
     <mt-popup v-model="companyVisible" position="bottom" class="select-popup">
@@ -98,11 +98,15 @@
 </template>
 
 <script>
+  import qs from "qs";
   import Button from "@/components/Button/Button";
   import QHeader from '@/components/header';
+  import { MessageBox } from 'mint-ui';
+  import { detailDeviceListFun,deleteDeviceFun,manageResetDeviceFun,tzjDeviceFun } from '@/service/device';
   export default {
     data() {
       return {
+        deviceDetail: [],
         companyVisible: false,
         title: '设备详情',
         fromdata: {
@@ -157,12 +161,58 @@
       checkDeviceSelect() {
 
       },
+      async getDetailDevice() {  //获取数据
+        let payload = { machineId: this.$route.query.machineId} ;     
+        let res = await detailDeviceListFun(qs.stringify(payload));
+         if(res.code === 0) {
+          this.deviceDetail= res.data; 
+        }
+        else {
+          MessageBox.alert(res.msg);
+        }
+      }, 
       checkSecondClass() {},
       toFunctionSeting() {},
-      deviceDele() {},
-      deviceTZJ() {},
-      deviceRest() {},
+      deviceDele() {  //删除
+        MessageBox.confirm('确定执行此操作?').then(async () => {
+          let res = await deleteDeviceFun(qs.stringify({machineId: this.$route.query.machineId}));
+          if(res.code === 0) {
+            this.$router.push({name:'deviceDetail'});
+          }
+          else {
+            MessageBox.alert(res.msg);
+          }
+        });   
+        
+      },
+      deviceTZJ() {
+        MessageBox.confirm('确定执行此操作?').then(async () => {
+          let res = await tzjDeviceFun(qs.stringify({machineId: this.$route.query.machineId}));
+          if(res.code === 0) {
+            MessageBox.alert("操作成功");
+        }
+        else {
+          MessageBox.alert(res.msg);
+          }
+        });
+        
+      },
+      deviceRest() {  //复位
+        MessageBox.confirm('确定执行此操作?').then(async ()=> {
+          let res = await manageResetDeviceFun(qs.stringify({machineId: this.$route.query.machineId}));
+          if(res.code === 0) {
+            MessageBox.alert("操作成功");
+          }
+          else {
+            MessageBox.alert(res.msg);
+          }
+        });
+
+      },
       deviceEdit() {},
+    },
+    created(){
+      this.getDetailDevice();
     },
     components: {
       Button,

@@ -1,6 +1,5 @@
 <template>
-   <section>
-       <q-header :title="title"></q-header>
+   <section v-title="title">
        <p class="prompt">请填写支付宝账号 <span>{{this.$route.query.alipayAccount}}</span> 实名信息</p>
        <p class="shopname-p margin">
           <span>姓名</span><span>
@@ -26,7 +25,6 @@
 </template>
 <script>
 import qs from 'qs';
-import QHeader from '@/components/header';
 import UploadImg from "@/components/UploadImg/UploadImg";
 import { uploadFileFun } from '@/service/shop';
 import { confirmOperatorFun } from '@/service/user';
@@ -139,7 +137,6 @@ export default {
     }
   },
   components:{
-    QHeader,
     UploadImg
   }
 };

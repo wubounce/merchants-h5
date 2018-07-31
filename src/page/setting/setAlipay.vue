@@ -1,6 +1,5 @@
 <template>
-  <section>
-    <q-header :title="title"></q-header>
+  <section v-title="title">
     <p class="shopname-p">
       <span>支付宝账号</span><span>
         <input type="text" class='addressInput' v-model="account"  placeholder="请填写支付宝账号" @input="disbaledBtn">
@@ -12,7 +11,6 @@
   </section>
 </template>
 <script>
-import QHeader from '@/components/header';
 import qs from 'qs';
 import { updateOperatorFun } from '@/service/user';
 export default {
@@ -62,7 +60,7 @@ export default {
   created() {
   },
   components:{
-    QHeader
+    
   }
 };
 </script>
