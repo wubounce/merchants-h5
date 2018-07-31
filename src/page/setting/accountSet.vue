@@ -93,7 +93,7 @@ section {
     padding: 0.3rem;
     background-color: #fff;
     border-bottom: 1px solid #F8F8F8;
-    background: url("../../../static/shop/right.png") no-repeat right
+    background: url("../../../static/image/shop/right.png") no-repeat right
       0.3rem center;
     background-size: 0.16rem 0.27rem;
     span {
