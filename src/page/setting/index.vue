@@ -1,6 +1,5 @@
 <template>
-<div class="marketing">
-  <q-header :title="title"></q-header>
+<div class="marketing" v-title="title">
   <div class="add-form">
     <div class="input-group">
       <router-link :to="{name:'personalSet'}">
@@ -21,7 +20,6 @@
 </div>
 </template>
 <script>
-import QHeader from '@/components/header';
 import Button from "@/components/Button/Button";
 export default {
   data() {
@@ -37,9 +35,6 @@ export default {
   },
   methods: {
     
-  },
-  components:{
-    QHeader
   }
 };
 </script>

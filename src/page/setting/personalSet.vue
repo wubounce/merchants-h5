@@ -1,6 +1,5 @@
 <template>
-<section class="marketing">
-  <q-header :title="title"></q-header>
+<section class="marketing" v-title="title">
   <div class="add-form">
     <div class="input-group">
         <div class="form-title"><span>账号</span><span class="forward">{{item.phone}}</span></div>
@@ -27,7 +26,6 @@
 </template>
 <script>
 import qs from "qs";
-import QHeader from '@/components/header';
 import { areaListFun } from '@/service/shop';
 import { getPersonalInfoFun } from '@/service/user';
 import { updateOperatorFun } from '@/service/user';
@@ -174,7 +172,7 @@ export default {
     }
   },
   components:{
-    QHeader
+    
   }
 };
 </script>

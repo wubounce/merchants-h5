@@ -88,8 +88,11 @@ Vue.prototype.get_sign = (obj)=>{
   let sha1 = require('sha1');
   let _sign = sha1(str3.split('"').join(''));
   console.log("sha1加密后的str:",_sign);
+  delete obj._appid;
+  obj._sign = _sign;
+  console.log('处理过的请求参数：',obj);
 
-  return _sign;
+  return obj;
 
 };
 

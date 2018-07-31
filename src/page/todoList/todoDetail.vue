@@ -1,6 +1,5 @@
 <template>
-  <section class="todolist">
-		<q-header :title="title"></q-header>
+  <section class="todolist" v-title="title">
     <!-- 第一模块 -->
     <p class="todo-item first-todo-item"><span>所属店铺</span><span>{{item.shopName}}</span></p>
     <p class="todo-item"><span>设备类型</span><span>{{item.machineTypeName}}</span></p>
@@ -23,7 +22,6 @@
 
 <script>
 import qs from "qs";
-import QHeader from '@/components/header';
 import Button from "@/components/Button/Button";
 import { MessageBox } from 'mint-ui';
 import { getBatchStartFun } from '@/service/todoList';
@@ -109,7 +107,6 @@ import { delBatchStartFun } from '@/service/todoList';
       this.getBatchStart();
     },
     components: {
-      QHeader,
       Button
     }
   };

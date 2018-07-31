@@ -1,6 +1,5 @@
 <template>
-  <section class="personal">
-    <q-header :title="title"></q-header>
+  <section class="personal" v-title="title">
     <ul class="personal-list">
       <p class="shopname-p"><span>店铺名称</span><span><input type="text" class='addressInput' v-model="shopName" maxlength="12" placeholder="请填写店铺名称"></span></p>
       <li v-for="(item,index) in list" :key="index" class="personal-item" @click="toDetail(index)">
@@ -17,7 +16,7 @@
       <p class="picture">
         <span>店铺照片</span>
         <span>
-          <UploadImg :id="imgId.a" :defaultPicture="imgId.defaultPicture" @onImgFiles="UpdatedImgFiles"></UploadImg>
+           <UploadImg :id="imgId.a" :defaultPicture="imgId.defaultPicture" :isStatus="imgId.isStatus" @onImgFiles="UpdatedImgFiles"></UploadImg>
         </span>
       </p>
     </div>
@@ -58,7 +57,6 @@
 
 <script>
 import qs from "qs";
-import QHeader from '@/components/header';
 import UploadImg from "@/components/UploadImg/UploadImg";
 import { shopDetailFun } from '@/service/shop';
 import { addOrEditShopFun } from '@/service/shop';
@@ -153,7 +151,8 @@ export default {
       areaName:'',
       imgId: {
         a: "b",
-        defaultPicture:''
+        defaultPicture:'',
+        isStatus:true
       },
       url:'',
       machine: [],
@@ -591,7 +590,6 @@ export default {
     //this.getArea();
   },
   components:{
-    QHeader,
     UploadImg
   }
 };

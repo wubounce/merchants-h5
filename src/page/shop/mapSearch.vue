@@ -1,15 +1,13 @@
 <template>
-  <section>
-    <q-header :title="title"></q-header>
+  <section v-title="title">
     <div id="tip">
-      <input type="text" id="keyword" name="keyword" value="请输入关键字：(选定后搜索)" onfocus='this.value=""'/>
+      <input type="text" id="keyword" name="keyword" value="查找小区/大厦/学校等" onfocus='this.value=""'/>
     </div>
     <div id="mapContainer"></div>
   </section>
 </template>
 <script>
 /*eslint-disable*/
-import QHeader from '@/components/header';
 export default {
   data() {
     return {
@@ -57,7 +55,7 @@ export default {
     this.loadMap();
   },
   components:{
-    QHeader
+    
   }
 };
 /*eslint-enable*/
@@ -72,10 +70,10 @@ section {
       width: 93%;
       margin-top: 0.3rem;
       font-size: 0.43rem;
-      line-height: 0.7rem;
+      line-height: 1rem;
     } 
     ::-webkit-input-placeholder {
-      font-size: 0.35rem;
+      font-size: 16px;
     }
     :-moz-placeholder {
       /* Firefox 18- */

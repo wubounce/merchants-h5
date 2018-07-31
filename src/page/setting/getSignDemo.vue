@@ -15,8 +15,15 @@ export default {
                 password: '123456',
                 _timestamp: time
             };
-    
-           this.get_sign(item);
+          
+            //{
+            //    userName: "18948788872", 
+            //    password: "123456", 
+            //    _timestamp: 1533021094042, 
+            //    _sign: "1aed558fb59754fcba1f98d294c2749405374030"
+            // }
+            //函数返回一个对象，如上注释
+           this.get_sign(item); 
         }
     },
     created() {

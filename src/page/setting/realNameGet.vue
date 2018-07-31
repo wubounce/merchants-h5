@@ -1,6 +1,5 @@
 <template>
-   <section>
-       <q-header :title="title"></q-header>
+   <section v-title="title">
        <p class="shopname-p">
           <span>姓名</span><span>{{item.cardName}}</span>
        </p>
@@ -17,7 +16,6 @@
 </template>
 <script>
 import qs from 'qs';
-import QHeader from '@/components/header';
 import { getRealNameFun } from '@/service/user';
 export default {
   data() {
@@ -53,7 +51,7 @@ export default {
       this.getRealName();
   },
   components:{
-    QHeader
+    
   }
 };
 </script>
