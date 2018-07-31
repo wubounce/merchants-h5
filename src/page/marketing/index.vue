@@ -1,12 +1,11 @@
-<template>
-<div class="marketing">
-  <q-header :title="title"></q-header>
+ <template>
+<div class="marketing" v-title="title">
   <section class="tab-title">
   	<div v-for="(item,index) in tabtitle" @click="tabclick(index)"><span :class="{tabcurrent:tabindex === index}" >{{item}}</span></div>
   </section>
   <section class="tab-contont">
   	<div class="discount-wrap" v-if="tabindex === 0">
-      <div class="no-discount-list" v-if="timeMarket.lenght<=0">未设置限时优惠活动</div>
+      <div class="no-discount-list" v-if="timeMarket.length<=0">未设置限时优惠活动</div>
   		<div class="discoun-list" v-for="(item,index) in timeMarket" :key="index">
         <router-link :to="{name:'detailMarket', query:{id:item.id}}">
           <span class="discountag" v-if="item.status === 1"><img src="../../../static/image/market/makretStop@2x.png"></span>
@@ -24,13 +23,13 @@
           </router-link>
   		</div>
       <div class="addmember" @click="goaddMarket">
-        <span class="order-action iconfont icon-nextx"></span><br>
+        <span class="order-action iconfont icon-tianjia"></span><br>
         <span>优惠</span>
       </div>
   	</div>
   	<div class="VIP-wrap"  v-if="tabindex === 1">
-      <div class="no-discount-list" v-if="timeMarket.lenght<=0">未设置店铺VIP卡</div>
-      <div>
+      <div class="no-discount-list" v-if="timeMarket.length<=0">未设置店铺VIP卡</div>
+      <div v-else>
          <div class="car-shop">企鹅一号店vip卡</div>
           <div class="card-banner">       
             <swiper :options="swiperOption"  ref="mySwiper">
@@ -67,7 +66,7 @@
       </div>
      
       <div class="addmember" @click="goaddvip">
-        <span class="order-action iconfont icon-nextx"></span><br>
+        <span class="order-action iconfont icon-tianjia"></span><br>
         <span>vip卡</span>
       </div>
   	</div>
@@ -75,7 +74,6 @@
 </div>
 </template>
 <script>
-import QHeader from '@/components/header';
 import { swiper, swiperSlide } from 'vue-awesome-swiper';  
 import { timeMarketListFun } from '@/service/market';
 import moment from 'moment';
@@ -127,7 +125,6 @@ export default {
     }
   },
   components:{
-    QHeader,
     swiper,
     swiperSlide
   }

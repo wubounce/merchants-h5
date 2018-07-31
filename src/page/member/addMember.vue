@@ -1,24 +1,22 @@
 <template>
-<div class="addmember">
-  <q-header :title="title"></q-header>
+<div class="addmember" v-title="title">
   <div class="add-form">
-
     <div class="input-group">
       <div class="form-title"><span>用户名</span></div>
       <div class="form-input"><input type="text" v-model="username" placeholder="请输入用户名" @blur="validatName" maxlength="20"><span class="forward iconfont icon-nextx"></span></div>
     </div>
     <div class="input-group">
       <div class="form-title"><span>手机</span></div>
-      <div class="form-input"><input type="text" v-model="phone" placeholder="请输入手机号码"><span class="forward iconfont icon-nextx"></span></div>
+      <div class="form-input"><input type="number" v-model="phone" placeholder="请输入手机号码"><span class="forward iconfont icon-nextx"></span></div>
     </div>
     <div class="input-group">
       <div class="form-title"><span>负责店铺</span></div>
       <div class="form-input"><span class="more more-color">{{checkshoptxt?checkshoptxt:'请选择店铺'}}</span><span class="forward iconfont icon-nextx" @click="shopVisible=true"></span></div>
     </div>
-    <!-- <div class="input-group" style="border:none">
+    <div class="input-group" style="border:none">
       <div class="form-title"><span>权限</span></div>
       <div class="form-input"><span class="more more-color">请选择权限</span><span class="forward iconfont icon-nextx"  @click="permissionsVisible=true"></span></div>
-    </div> -->
+    </div>
   </div>
   <div class="confirm" @click="addmember">提交</div>
   <!-- 选择店铺 -->
@@ -72,7 +70,7 @@
           <label class="mint-checklist-label prom">
             <div class="check-prem-list">
               <span class="mint-checkbox is-right">
-                <i class="silde iconfont icon-nextx"></i>
+                <i class="silde iconfont icon-xiangxiajiantou"></i>
               </span> 
               <span class="mint-checkbox-label shopname">店铺管理</span>
             </div>
@@ -117,10 +115,9 @@
 </div>
 </template>
 <script>
-import QHeader from '@/components/header';
 import qs from 'qs';
 import { validatPhone, validatName } from '@/utils/validate';
-import { shopListFun, addOperatorFun } from '@/service/member';
+import { shopListFun, addOperatorFun, menuSelectFun } from '@/service/member';
 export default {
   data() {
     return {
@@ -142,6 +139,7 @@ export default {
   },
   created(){
     this.shopListFun();
+    this.menuSelect();
   },
   methods: {
     validate() {
@@ -170,6 +168,20 @@ export default {
       if (!validatName(this.username)) {
         this.$toast({message: '用户名2-20个字符，只支持中文' });
       } 
+    },
+    async menuSelect(){
+      let res = await menuSelectFun();
+      // let aa = [];
+      // res.data.filter(v=>{
+      //   res.data.some(k=>{
+      //     if (k.parentId===v.menuId) {
+      //       aa.push(k);
+      //       v['child'] = aa;
+      //     }
+      //   });
+      // });
+
+      console.log(res);
     },
     async shopListFun(){
       let res = await shopListFun();
@@ -200,7 +212,6 @@ export default {
     }
   },
   components:{
-    QHeader,
   }
 };
 </script>

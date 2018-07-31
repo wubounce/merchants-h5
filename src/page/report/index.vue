@@ -1,5 +1,5 @@
 <template>
-<div class="report">
+<div class="report" v-title="title">
   <mt-navbar class="tab" v-model="selected">
     <mt-tab-item id="1">收益</mt-tab-item>
     <mt-tab-item id="2">退款</mt-tab-item>
@@ -13,11 +13,9 @@
     </mt-tab-container-item>
   </mt-tab-container>
   <div style="width:100%;height:1.73rem;"></div>
-  <q-menu></q-menu>
 </div>
 </template>
 <script>
-import QMenu from '@/components/menu';
 import reporteaning from './earnings';
 import refund from './refund';
 export default {
@@ -32,7 +30,6 @@ export default {
   methods: {
   },
   components:{
-    QMenu,
     reporteaning,
     refund
   }

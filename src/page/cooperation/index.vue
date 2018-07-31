@@ -1,6 +1,5 @@
 <template>
-  <div class="contant">
-    <q-header :title="title"></q-header>
+  <div class="contant" v-title="title">
     <div class="erweima">
       <img src="../../../static/image/user/logo@2x.png">
     </div>
@@ -12,7 +11,6 @@
 </template>
 
 <script>
-  import QHeader from '@/components/header';
   export default {
     data() {
       return {
@@ -25,7 +23,6 @@
      
     },
     components: {
-      QHeader
     }
   };
 </script>

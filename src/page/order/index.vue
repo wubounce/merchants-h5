@@ -1,9 +1,8 @@
 <template>
-<div class="order-wrap">
-  <q-header :title="title"></q-header>
+<div class="order-wrap" v-title="title">
   <section class="sarch-wrap">
     <div class="search">
-       <span class="iconfont icon-nextx select-back" @click="searchOrder"></span>
+       <span class="iconfont icon-IconSearch select-back" @click="searchOrder"></span>
         <input type="text" v-model.trim="searchData" @input="clearSearch" placeholder="请输入用户手机号/订单号查询">
     </div>
   </section>
@@ -51,7 +50,6 @@
 </template>
 <script>
 import qs from 'qs';
-import QHeader from '@/components/header';
 import { orderStatus } from '@/utils/mapping';
 import { orderListFun,searchOrderFun, ordeRrefundFun, machineResetFun, machineBootFun } from '@/service/order';
 import { MessageBox } from 'mint-ui';
@@ -191,7 +189,6 @@ export default {
     },
   },
   components:{
-    QHeader,
   }
 };
 </script>

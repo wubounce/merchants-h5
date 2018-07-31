@@ -1,6 +1,5 @@
 <template>
-<div class="addmember">
-  <q-header :title="title"></q-header>
+<div class="addmember" v-title="title">
   <div class="add-form">
     <div class="input-group">
       <div class="form-title">用户名</div>
@@ -30,7 +29,6 @@
 </div>
 </template>
 <script>
-import QHeader from '@/components/header';
 import { MessageBox } from 'mint-ui';
 import qs from 'qs';
 import { getOperatorInfoFun, delOperatorFun } from '@/service/member';
@@ -70,7 +68,6 @@ export default {
     }
   },
   components:{
-    QHeader,
   }
 };
 </script>

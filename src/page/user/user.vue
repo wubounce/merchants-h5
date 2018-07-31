@@ -1,7 +1,7 @@
 <template>
 <div class="user-wrapper" v-title="'我的'">
     <header>
-        <p class="guide"><img src="../../assets/img/home/icon_near2x.png">平台指南</p>
+        <p class="guide"><span class="iconfont icon-zhinan"></span>平台指南</p>
         <div class="user-info">
             <div class="pic">
                 <img :src="userInfo.headImage" v-if="userInfo.headImage">
@@ -43,11 +43,9 @@
             </router-link>
         </li>
     </ul>
-    <q-menu></q-menu>
 </div>
 </template>
 <script>
-import QMenu from '@/components/menu';
 import { getOperatorFun } from '@/service/user';
 export default {
   data() {
@@ -68,7 +66,6 @@ export default {
     }
   },
   components:{
-    QMenu,
   }
 };
 </script>
@@ -84,7 +81,7 @@ export default {
                 color: #a8d5ff;
                 text-align: right;
                 line-height: .533333rem;
-                img{
+                span{
                     width: .36rem;
                     height:.36rem;
                     margin-right: .133333rem;

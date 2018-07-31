@@ -1,16 +1,21 @@
 <template>
     <!-- 根据类型更换title -->
-	<div class="accountDetail-wrapper" v-title="'收益详情'">
+	<div class="accountDetail-wrapper" v-title="title">
 		<header>
-			<p class="title"><span class="usericon iconfont icon-dianpu"></span>{{data.shopName}}</p>
-			<p class="price">+{{data.payPrice}}</p>
+			<p class="title">
+                <span class="usericon iconfont icon-dianpu" v-if="data.type===1"></span>
+                <span class="usericon iconfont icon-tuikuan" v-if="data.type===3"></span>
+                {{data.shopName}}
+            </p>
+			<p class="price" v-if="data.type===1">+{{data.payPrice}}</p>
+            <p class="price" v-if="data.type===3">-{{data.payPrice}}</p>
 			<p class="satus">交易成功</p>
 		</header>		
-		<ul class="record">
+		<ul class="record" v-if="data.type===1">
 			<li>
                 <div><p>订单金额</p><p>{{data.markPrice}}</p></div>   
-				<!-- <div class="discounts"><p>优惠券</p><p>-{{data.discountPrice}}</p></div> -->
-                <div class="discounts"><p>限时折扣</p><p>-{{data.discountPrice}}</p></div>            
+				<div class="discounts"><p>优惠券</p><p><span v-if="data.discountPrice">-</span>{{data.discountPrice}}</p></div>
+                <div class="discounts"><p>限时折扣</p><p><span v-if="data.discountPrice">-</span>{{data.discountPrice}}</p></div>  
             </li>	
             <li>
                 <div><p>支付方式</p><p>{{data.payType | PayType}}</p></div>
@@ -31,6 +36,27 @@
                 <div class="remarks"><p>备注</p><p>{{data.reason}}</p></div>    
             </li>
 		</ul>
+        <ul class="record" v-if="data.type===3">
+            <li>
+                <div><p>付款金额</p><p>{{data.markPrice}}</p></div>   
+                <div class="discounts"><p>退款金额</p><p><span v-if="data.discountPrice">-</span>{{data.discountPrice}}</p></div>            
+            </li>   
+            <li>
+                <div><p>用户账号</p><p>{{data.userPhone}}</p></div>
+                <div><p>创建之间</p><p>{{data.createTime}}</p></div>
+                <div><p>订单号</p><p>{{data.orderNo}}</p></div>
+            </li>
+            <li>
+                <div><p>店铺</p><p>{{data.shopName}}</p></div>
+                <div><p>类型</p><p>{{data.parentType}}</p></div>
+                <div><p>设备型号</p><p>{{data.subType}}-636U7</p></div>
+                <div><p>设备名称</p><p>{{data.machineName}}</p></div>
+                <div><p>IMEI号</p><p>{{data.imei}}</p></div>
+            </li>
+            <li>
+                <div class="remarks"><p>备注</p><p>{{data.reason}}</p></div>    
+            </li>
+        </ul>
 	</div>
 </template>
 
@@ -41,6 +67,7 @@ import { getOrderDetailFun } from '@/service/user';
 export default {
   data() {
     return {
+        title:'',
         data:{}
     };
   },
@@ -48,6 +75,12 @@ export default {
     
   },
   created(){
+    let query = this.$route.query;
+    if (query.type === 1) {
+      this.title = '收益详情';
+    } else {
+      this.title = '退款详情';
+    }
     this.getOrderDetail();
   },
   methods: {
@@ -81,9 +114,14 @@ export default {
                 display: flex;
                 justify-content: center;
                 align-items: center;
+                .icon-tuikuan {
+                    color: #FAAD14;
+                    font-size:0.64rem;
+                    padding-right: 0.21rem;
+                }
                .icon-dianpu {
                     color: #52C41A;
-                    font-size: 24px;
+                    font-size:0.64rem;
                     padding-right: 0.21rem;
                 }
                 color: $first-color;

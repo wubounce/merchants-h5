@@ -1,5 +1,5 @@
 <template>
-  <div class="main">
+  <div class="main" v-title="'首页'">
     <div class="earnings-wrap">
       <div class="earning-type">
         <p>总收益 (元)</p>
@@ -47,7 +47,6 @@
       </div>
       <div class="bar" id="bar" :style="{height:height,width:width}" ref="bar"></div>
     </div>
-    <q-menu></q-menu>
   </div>
 </template>
 <script>
@@ -61,7 +60,6 @@ import 'echarts/lib/chart/pie';
 // 引入提示框和图例组件
 import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/legendScroll';
-import QMenu from '@/components/menu';
 import selectpickr from '@/components/selectPicker';
 import { ParentTypeFun, countMachineFun, totalProfitFun, timeProfitFun, typeProfitFun } from '@/service/index';
 import { MachineStatus, communicateType } from '@/utils/mapping';
@@ -198,13 +196,15 @@ export default {
         payload = Object.assign({},{parentTypeId:this.washingMachineId,type:0});
       }
       let res = await typeProfitFun(qs.stringify(payload));
-      res.data.communicateType.forEach(item=>{
+      let communicateTypeData = res.data ? res.data.communicateType :[];
+      communicateTypeData.forEach(item=>{
           this.pietypeData.push({
             value: item.sum,
             name: communicateType(Number(item.type))
           });
       });
-      res.data.machineType.forEach(item=>{
+      let machineTypeData = res.data ? res.data.machineType :[];
+      machineTypeData.forEach(item=>{
         this.piefunDatatitle.push({
           name:item.type,
           icon : 'circle',
@@ -535,7 +535,6 @@ export default {
     }
   },
   components:{
-    QMenu,
     selectpickr
   }
 };

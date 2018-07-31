@@ -14,7 +14,7 @@
         </div>
       </div>
     </form>
-    <p class="btn">
+    <p class="change-pwd-btn">
        <mt-button type="primary" class="btn-blue" @click.prevent="changePwdConfirm" :disabled="disabled">确定</mt-button>
     </p>
   </div>

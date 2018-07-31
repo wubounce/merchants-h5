@@ -1,6 +1,5 @@
 <template>
-<div class="addvip">
-  <q-header :title="title"></q-header>
+<div class="addvip"  v-title="title">
   <div class="addvip-header">
     <p>所属店铺<span class="addvip-con">企鹅一号店VIP卡</span></p>
     <p>VIP卡类型<span class="addvip-con">VIP年卡</span></p>
@@ -29,7 +28,6 @@
 </div>
 </template>
 <script>
-import QHeader from '@/components/header';
 export default {
   data() {
     return {
@@ -44,7 +42,6 @@ export default {
   methods: {
   },
   components:{
-    QHeader
   }
 };
 </script>

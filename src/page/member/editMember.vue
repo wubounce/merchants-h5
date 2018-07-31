@@ -1,16 +1,14 @@
 <template>
-<div class="addmember">
-  <q-header :title="title"></q-header>
+<div class="addmember" v-title="title">
   <div class="add-form">
     <div class="input-group">
       <div class="form-title"><span>负责店铺</span></div>
       <div class="form-input"><span class="more more-color">{{checkshoptxt?checkshoptxt:'请选择店铺'}}</span><span class="forward iconfont icon-nextx" @click="shopVisible=true"></span></div>
     </div>
-    <!-- <div class="input-group" style="border:none">
+    <div class="input-group" style="border:none">
       <div class="form-title"><span>权限</span></div>
       <div class="form-input"><span class="more more-color">请选择权限</span><span class="forward iconfont icon-nextx"  @click="permissionsVisible=true"></span></div>
-    </div> -->
-
+    </div>
   </div>
   <div class="input-group createtime">
     <div class="form-title">创建时间</div>
@@ -113,7 +111,6 @@
 </div>
 </template>
 <script>
-import QHeader from '@/components/header';
 import qs from 'qs';
 import { validatPhone } from '@/utils/validate';
 import { shopListFun, updateOperatorInfoFun, getOperatorInfoFun } from '@/service/member';
@@ -157,7 +154,7 @@ export default {
         this.phone = res.data.phone;
         this.createTime = res.data.createTime;
         this.checkshoptxt = res.data.operateShopNames;
-        this.checkshoplist = res.data.operateShopNames.split(',');
+        this.checkshoplist = res.data.operateShopNames ? res.data.operateShopNames.split(',') :[];
       }
     },
     async shopListFun(){
@@ -189,7 +186,6 @@ export default {
     }
   },
   components:{
-    QHeader,
   }
 };
 </script>

@@ -1,5 +1,5 @@
 <template>
-<div class="withdraw-wrapper" v-title="'我的钱包'">
+<div class="withdraw-wrapper" v-title="'余额提现'">
     <header>
         <span class="iconfont icon-zhifubao"></span>
         <div>
@@ -9,46 +9,62 @@
     </header>
     <div class="withdraw-money">
         <p class="title">提现金额</p>
-        <label><span>￥</span><input v-model="money"></label>
+        <label><span>￥</span><input v-model="money" @input="btndisabdisabled" type="number"></label>
         <div class="total">
-            <p class="balance">账户余额 ￥{{balance}}，最低提现10元</p>
+            <p class="balance">账户余额 ￥{{userInfo.balance}}，最低提现10元</p>
             <p class="withdraw-all" @click="allWithdraw">全部提现</p>
         </div>
     </div>
-    <!-- 满足条件可以提现的时候去掉class：btn-disabled -->
-    <div class="btn btn-disabled" @click="gotoWithdraw">确认提现</div>
+    <mt-button class="btn" :disabled="disabled" @click="gotoWithdraw">确认提现</mt-button>
     <p class="withdraw-list"><router-link :to="{name:'withdrawList'}">提现记录</router-link></p>
 </div>
 </template>
 <script>
 import qs from 'qs';
-import { getOperatorFun, getMoneySubmitDetailFun } from '@/service/user';
+import { getApplyaccountFun, getApplyFinanceFun } from '@/service/user';
 export default {
   data() {
     return {
       userInfo:{},
       money:'',
-      balance:''
+      disabled:true
     };
   },
   mounted() {
     
   },
   created(){
-    this.balance = this.$route.query.balance;
     this.getOperator();
   },
   methods: {
     async getOperator(){
-        let res = await getOperatorFun();
+        let res = await getApplyaccountFun();
         this.userInfo = res.data;
     },
     allWithdraw(){
-        this.money = this.balance;
+        this.money = this.userInfo.balance;
+        this.disabled = false;
     },
     async gotoWithdraw(){
+        if (Number(this.money) < 10 ) {
+            this.$toast('最低提现10元');
+            return false;
+        }
+        if (Number(this.money) > this.userInfo.balance ) {
+            this.$toast('最高提现不能超过账户余额');
+            return false;
+        }
         let payload = Object.assign({},{money:this.money});
-        let res = await getMoneySubmitDetailFun(qs.stringify(payload));
+        let res = await getApplyFinanceFun(qs.stringify(payload));
+        if (res.code===0) {
+            this.$toast('提现成功');
+            this.$router.push({name:'withdrawResult'});
+        }else {
+            this.$toast(res.msg);
+        }
+    },
+    btndisabdisabled(){
+        this.money !== '' ? this.disabled = false : this.disabled = true;
     }
   },
   components:{
@@ -127,6 +143,7 @@ export default {
         }
         .btn{
             margin-top: .6667rem;
+            display: block;
             &.btn-disabled{
                 opacity: .5;
             }

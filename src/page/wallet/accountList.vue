@@ -1,4 +1,4 @@
-index<template>
+<template>
 <div class="accountList-wrapper" v-title="'收支明细'">
     <section class="apply-status">
         <div v-for="(item,index) in titleArr" @click="titleClick(index)"><span :class="{current: titleIndex === index}">{{item.lable}}</span></div>
@@ -7,7 +7,7 @@ index<template>
     <div class="apply--list-wrap">
         <div class="all" v-for="(item,index) in applylsit" :key="index" >
             <div class="list add" v-if="item.type === 1 "> 
-                <router-link :to="{name:'accountDetail', query:{balanceLogId:item.id}}">
+                <router-link :to="{name:'accountDetail', query:{balanceLogId:item.id,type:item.type}}">
                     <div class="icon-type"> 
                         <span class="usericon iconfont icon-dianpu"></span>
                     </div>
@@ -77,7 +77,7 @@ export default {
     async getApplyList(type){
         let payload = {page:this.page,pageSize: this.pageSize,type:this.type};
         let res = await getApplyListFun(qs.stringify(payload));
-       this.applylsit = res.data.items;
+       this.applylsit = res.data?res.data.items :[];
     }
   },
   filters: {

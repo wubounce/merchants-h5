@@ -1,6 +1,5 @@
 <template>
-<div class="order-detail">
-  <q-header :title="title"></q-header>
+<div class="order-detail" v-title="title">
    <div class="order-status">{{detail.orderStatus | orserStatus}}</div>
     <div class="order-title">{{detail.shopAddress}}</div>
   <div class="alllist">
@@ -54,7 +53,6 @@
 </template>
 <script>
 import qs from 'qs';
-import QHeader from '@/components/header';
 import { orderStatus, PayType } from '@/utils/mapping';
 import { ordeRrefundFun, orderDetailFun, machineResetFun, machineBootFun } from '@/service/order';
 import { MessageBox } from 'mint-ui';
@@ -126,7 +124,6 @@ export default {
     }
   },
   components:{
-    QHeader,
   }
 };
 </script>
