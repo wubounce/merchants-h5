@@ -16,7 +16,7 @@
             <p :class="['icon-wrapper','iconfont',{'icon-shijian':data.status === 0}]"><span class="icon"></span></p>   
             <div>
               <p class="status">处理中</p>
-              <p class="time" v-if="data.status === 0">预计{{expectCompleteTime}}前到账</p>
+              <p class="time" v-if="data.status === 0">预计{{data.forecastTime}}前到账</p>
               <p class="time" v-else>{{data.createTime}}</p>
             </div>
             
@@ -47,7 +47,7 @@
       </li>	       
 		</ul>
     <!-- 提现进入才会显示按钮，详情进入不显示 -->
-    <div class="btn">完成</div>
+    <div class="btn" v-if="ishow" @click="$router.push({name:'withdraw'})">完成</div>
     
   </div>
 </template>
@@ -59,22 +59,22 @@ export default {
   data() {
     return {
       data:{},
-      expectCompleteTime:''
+      ishow:false
     };
   },
   mounted() {
     
   },
   created(){
-    let balanceLogId = this.$route.query.balanceLogId;
-    this.getMoneySubmitDetail(balanceLogId);
+    let query = this.$route.query; 
+    query.applyMoney? this.ishow = true:this.ishow = false;
+    this.getMoneySubmitDetail(query.balanceLogId);
   }, 
   methods: {
     async getMoneySubmitDetail(balanceLogId){
       let payload = {balanceLogId:balanceLogId};
       let res = await getMoneySubmitDetailFun(qs.stringify(payload));
       this.data = res.data;
-      this.expectCompleteTime = moment(res.data.createTime).add('days',1).format('YYYY-MM-DD hh:mm:ss');
     }
   },
   components:{

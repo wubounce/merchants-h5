@@ -9,10 +9,10 @@
         </router-link>
       </div>
       <div class="phone">
-        <div class="right"><mt-switch v-model="item.isLock" class="check-switch"></mt-switch></div>
+        <div class="right"><mt-switch v-model="item.isLock" class="check-switch" ></mt-switch></div>
       </div>
     </div>
-    <!-- <p class="memberdesc">权限：首页，报表，店铺新增</p> -->
+    <p class="memberdesc">权限：<span v-for="(items,index) in item.list" :key="index">{{items.name}}<i v-if="index !== (item.list.length-1)">,</i></span></p>
   </div>
   <div class="addmember" @click="addmemeber">
     <span class="order-action iconfont icon-tianjia"></span><br>
@@ -40,6 +40,7 @@ export default {
   methods: {
     async getMemberList(){
       let res = await operatorListFun();
+      res.data = res.data ? res.data :[];
       res.data.forEach((item)=>{
         if (item.isLock === 0) {
           item.isLock = true;
@@ -91,6 +92,9 @@ export default {
     font-size: 14px;
     color: #999;
     padding-top: 0.17rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
   .check-switch {
     margin-top: 0.16rem;

@@ -21,7 +21,7 @@
 </template>
 <script>
 import qs from 'qs';
-import { getApplyaccountFun, getApplyFinanceFun } from '@/service/user';
+import { getApplyaccountFun, applyMoneySubmitFun } from '@/service/user';
 export default {
   data() {
     return {
@@ -55,10 +55,11 @@ export default {
             return false;
         }
         let payload = Object.assign({},{money:this.money});
-        let res = await getApplyFinanceFun(qs.stringify(payload));
+        let res = await applyMoneySubmitFun(qs.stringify(payload));
         if (res.code===0) {
             this.$toast('提现成功');
-            this.$router.push({name:'withdrawResult'});
+            console.log(res);
+            this.$router.push({name:'withdrawResult',query:{balanceLogId:res.data.id,applyMoney:true}});
         }else {
             this.$toast(res.msg);
         }

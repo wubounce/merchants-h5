@@ -3,7 +3,7 @@
   <div class="add-form">
     <div class="input-group">
       <div class="form-title">用户名</div>
-      <div class="form-input">{{detail.userName}}</div>
+      <div class="form-input">{{detail.username}}</div>
     </div>
     <div class="input-group">
       <div class="form-title">手机</div>
@@ -13,10 +13,10 @@
       <div class="form-title">负责店铺</div>
       <div class="form-input">{{detail.operateShopNames}}</div>
     </div>
-    <!-- <div class="input-group" style="border:none">
+    <div class="input-group" style="border:none">
       <div class="form-title">权限</div>
-      <div class="form-input">首页，报表，店铺新增，首页，报表，店铺新增</div>
-    </div> -->
+      <div class="form-input" style="text-align:left"><span v-for="(item,index) in detail.list" :key="index">{{item.name}}<i v-if="index !== (detail.list.length-1)">,</i></span></div>
+    </div>
   </div>
   <div class="input-group createtime">
     <div class="form-title">创建时间</div>

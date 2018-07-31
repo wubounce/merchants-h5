@@ -1,50 +1,53 @@
 <template>
 <div class="order-wrap" v-title="title">
-  <section class="sarch-wrap">
-    <div class="search">
-       <span class="iconfont icon-IconSearch select-back" @click="searchOrder"></span>
-        <input type="text" v-model.trim="searchData" @input="clearSearch" placeholder="请输入用户手机号/订单号查询">
-    </div>
-  </section>
-  <section class="order-status">
-    <div v-for="(item,index) in titleArr" @click="titleClick(index)"><span :class="{current: titleIndex === index}">{{item.lable}}</span></div>
-  </section>
-  <section class="no-order" v-if="nosearchList">
-    未找到符合的结果
-  </section>
-  <section class="no-order" v-if="noOrderList">
-    暂无订单
-  </section>
-  <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
-   <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" 
-   :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore">
-      <div class="alllist" v-for="(item,index) in list" :key="index">
-        <section class="ordermun">
-          <span class="odernmu-phone">{{item.phone}}<span style="padding:0 0.186667rem;color:#333333">|</span>{{item.createTime}}</span>
-          <span class="ordernum-status">{{item.orderStatus | orserStatus}}</span>
-        </section>
-        <router-link :to="{ name: 'orderdetail', query:{orderNo:item.orderNo}}">
-        <section class="order-list">  
-            <div class="title">{{item.shopName}}<span class="go iconfont icon-nextx"></span></div>
-            <div class="detail">  
-              <div class="orderpic"><img :src="item.imageId" alt=""></div>
-              <div class="content">
-                  <p class="con-title">{{item.subType}}</p>
-                  <p class="con-type">{{item.machineFunctionName}}<span style="padding:0 0.346667rem">|</span>时长{{item.markMinutes}}分钟</p>
-                  <p class="con-price">¥{{item.payPrice}}</p>
-              </div>
-              <div class="order-action" v-if="item.orderType === 2">预约</div>
-            </div>
-        </section>
-        </router-link>
-        <section class="listaction" v-if="item.orderStatus === 2"> 
-            <mt-button @click="orderRefund(item.id,item.payPrice,item.subType)">退款</mt-button>
-            <mt-button @click="machineBoot(item.id,item.subType)" v-if="item.machineType === 1">启动</mt-button>
-            <mt-button @click="machineReset(item.id,item.machineId,item.subType)">复位</mt-button>
-        </section>
+  <div class="permissions" v-if="$store.getters.has('mer:eportr')">暂无相关页面权限</div>
+  <div>
+    <section class="sarch-wrap">
+      <div class="search">
+         <span class="iconfont icon-IconSearch select-back" @click="searchOrder"></span>
+          <input type="text" v-model.trim="searchData" @input="clearSearch" placeholder="请输入用户手机号/订单号查询">
       </div>
-      <div v-if="allLoaded" class="nomore-data">没有更多了</div>
-    </mt-loadmore>
+    </section>
+    <section class="order-status">
+      <div v-for="(item,index) in titleArr" @click="titleClick(index)"><span :class="{current: titleIndex === index}">{{item.lable}}</span></div>
+    </section>
+    <section class="no-order" v-if="nosearchList">
+      未找到符合的结果
+    </section>
+    <section class="no-order" v-if="noOrderList">
+      暂无订单
+    </section>
+    <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
+     <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" 
+     :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore">
+        <div class="alllist" v-for="(item,index) in list" :key="index">
+          <section class="ordermun">
+            <span class="odernmu-phone">{{item.phone}}<span style="padding:0 0.186667rem;color:#333333">|</span>{{item.createTime}}</span>
+            <span class="ordernum-status">{{item.orderStatus | orserStatus}}</span>
+          </section>
+          <router-link :to="{ name: 'orderdetail', query:{orderNo:item.orderNo}}">
+          <section class="order-list">  
+              <div class="title">{{item.shopName}}<span class="go iconfont icon-nextx"></span></div>
+              <div class="detail">  
+                <div class="orderpic"><img :src="item.imageId" alt=""></div>
+                <div class="content">
+                    <p class="con-title">{{item.subType}}</p>
+                    <p class="con-type">{{item.machineFunctionName}}<span style="padding:0 0.346667rem">|</span>时长{{item.markMinutes}}分钟</p>
+                    <p class="con-price">¥{{item.payPrice}}</p>
+                </div>
+                <div class="order-action" v-if="item.orderType === 2">预约</div>
+              </div>
+          </section>
+          </router-link>
+          <section class="listaction" v-if="item.orderStatus === 2"> 
+              <mt-button @click="orderRefund(item.id,item.payPrice,item.subType)">退款</mt-button>
+              <mt-button @click="machineBoot(item.id,item.subType)" v-if="item.machineType === 1">启动</mt-button>
+              <mt-button @click="machineReset(item.id,item.machineId,item.subType)">复位</mt-button>
+          </section>
+        </div>
+        <div v-if="allLoaded" class="nomore-data">没有更多了</div>
+      </mt-loadmore>
+    </div>
   </div>
 </div>
 </template>

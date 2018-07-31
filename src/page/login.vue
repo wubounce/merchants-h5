@@ -33,9 +33,10 @@
 <script>
 import qs from "qs";
 import { mapActions } from 'vuex';
-import { removeToken, removeUser } from '@/utils/tool';
+import { removeToken, removeUser, removeMenu } from '@/utils/tool';
 import { validatPhone } from '@/utils/validate';
 import { login } from '@/service/login';
+import { menuSelectFun } from '@/service/member';
 import Button from "@/components/Button/Button";
 export default {
     name: 'page-login',
@@ -54,22 +55,23 @@ export default {
       // 每次登录之前清理缓存数据
       removeToken();
       removeUser();
+      removeMenu();
     },
     computed: {
       
     },
     methods: {
       ...mapActions([
-        'login','getUser'
+        'login','getUser','getMenu'
       ]),
       validate() {
-        if (this.form.userName === '') {
-          this.$toast({message: "请输入手机号码" });
-          return false;
-        }else if (!validatPhone(this.form.userName)) {
-          this.$toast({message: "请输入正确的手机号码" });
-          return false;
-        } 
+        // if (this.form.userName === '') {
+        //   this.$toast({message: "请输入手机号码" });
+        //   return false;
+        // }else if (!validatPhone(this.form.userName)) {
+        //   this.$toast({message: "请输入正确的手机号码" });
+        //   return false;
+        // } 
         if (this.form.password === '') {
           this.$toast({message: "请输入密码"  });
           return false;
@@ -82,6 +84,8 @@ export default {
           let res = await login(qs.stringify(loginInfo));
           if (res.code===0) {
               this.login(res.data.token);
+              let menu = await menuSelectFun();
+              this.getMenu(menu.data);
               this.$router.push({name:'index'});
           }else {
              this.$toast(res.msg);

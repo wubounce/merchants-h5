@@ -3,11 +3,11 @@
   <div class="add-form">
     <div class="input-group">
       <div class="form-title"><span>负责店铺</span></div>
-      <div class="form-input"><span class="more more-color">{{checkshoptxt?checkshoptxt:'请选择店铺'}}</span><span class="forward iconfont icon-nextx" @click="shopVisible=true"></span></div>
+      <div class="form-input"><span class="more">{{checkshoptxt?checkshoptxt:'请选择店铺'}}</span><span class="forward iconfont icon-nextx" @click="shopVisible=true"></span></div>
     </div>
     <div class="input-group" style="border:none">
       <div class="form-title"><span>权限</span></div>
-      <div class="form-input"><span class="more more-color">请选择权限</span><span class="forward iconfont icon-nextx"  @click="permissionsVisible=true"></span></div>
+      <div class="form-input"><span :class="['more',{'more-color':permissionsMIdsTxt === ''}]">{{permissionsMIdsTxt?permissionsMIdsTxt:'请选择权限'}}</span><span class="forward iconfont icon-nextx"  @click="permissionsVisible=true"></span></div>
     </div>
   </div>
   <div class="input-group createtime">
@@ -43,7 +43,7 @@
       <span class="shop">权限</span>
     </div>
     <section class="resp-shop-wrap" style="padding:0;">
-      <div class="all-list">
+     <!--  <div class="all-list">
         <label class="mint-checklist-label prom">
           <div class="check-prem-list">
             <span class="mint-checkbox is-right">
@@ -101,11 +101,21 @@
             </label>
           </div>
         </div>
-      </div>
+      </div> -->
+      <el-tree
+        v-model="permissionsMIds"
+        :data="permissionsData"
+        show-checkbox
+        node-key="menuId"
+        ref="tree"
+        highlight-current
+        check-strictly
+        :props="defaultProps">
+      </el-tree>
     </section>
     <section class="promiss-footer">
-      <span class="can" @click="permissionsVisible=false">取消</span>
-      <span class="cifrm">确定</span>
+       <span class="can" @click="clearPermissions">取消</span>
+       <span class="cifrm" @click="addPermissions">确定</span>
     </section>
   </mt-popup>
 </div>
@@ -113,8 +123,11 @@
 <script>
 import qs from 'qs';
 import { validatPhone } from '@/utils/validate';
-import { shopListFun, updateOperatorInfoFun, getOperatorInfoFun } from '@/service/member';
+import { shopListFun, updateOperatorInfoFun, getOperatorInfoFun, permsMenuFun } from '@/service/member';
+import { getTrees} from '@/utils/tool';
 export default {
+  components: {
+    },
   data() {
     return {
       title: '编辑人员',
@@ -122,13 +135,23 @@ export default {
       checkpermissionslist: [],
       shopVisible:false,
       permissionsVisible:false,
+
+      allmenu:[],
       permissionsData:[],
+      defaultProps: {
+        children: 'children',
+        label: 'name'
+      },
+      permissionsMIds:[],
+      permissionsMIdsTxt:'',
+
       shoplist:[],
       operateShopIds:[],
       username:'',
       phone:'',
       checkshoptxt:'',
       createTime:''
+      
     };
   },
   mounted() {
@@ -138,6 +161,7 @@ export default {
     let query = this.$route.query;
     this.getOperatorInfo(query.id);
     this.shopListFun();
+    this.menuSelect();
   },
   methods: {
     validate() {
@@ -155,7 +179,15 @@ export default {
         this.createTime = res.data.createTime;
         this.checkshoptxt = res.data.operateShopNames;
         this.checkshoplist = res.data.operateShopNames ? res.data.operateShopNames.split(',') :[];
+        this.permissionsMIds = res.data.list.map(item=>item.menuId);
+        this.permissionsMIdsTxt = res.data.list.map(item=>item.name).join(',');
+        this.$refs.tree.setCheckedKeys(this.permissionsMIds);
       }
+    },
+    async menuSelect(){
+      let res = await permsMenuFun(); //拼接权限菜单
+      this.allmenu = res.data;
+      this.permissionsData = getTrees(res.data,0);
     },
     async shopListFun(){
       let res = await shopListFun();
@@ -167,6 +199,17 @@ export default {
       this.shopVisible = false;
       checklist.forEach(item=>this.operateShopIds.push(`'${item.shopId}'`));
     },
+    addPermissions(){
+      console.log(this.$refs.tree.getCheckedKeys());
+      this.permissionsMIds = this.$refs.tree.getCheckedKeys();
+      this.permissionsVisible=false;
+      let checkpers = [];
+      let checklist = this.allmenu.filter(v=>this.permissionsMIds.some(k=>k==v.menuId));
+      this.permissionsMIdsTxt = checklist.map(item=>item.name).join(',');
+    },
+    clearPermissions(){
+        this.permissionsVisible=false;
+    },
     async updateMember(){
       if (this.validate()) {
         let payload = {
@@ -174,6 +217,7 @@ export default {
           username:this.username,
           phone:this.phone,
           operateShopIds:this.operateShopIds.join(','),
+          mIds:this.permissionsMIds.join(',')
         };
         let res = await updateOperatorInfoFun(qs.stringify(payload));
         if (res.code === 0) {
@@ -185,8 +229,6 @@ export default {
       }
     }
   },
-  components:{
-  }
 };
 </script>
 <style type="text/css" lang="less" scoped>
@@ -289,6 +331,8 @@ export default {
   }
   .resp-shop-wrap {
     padding: 0 0.4rem;
+    height: 10.67rem;
+    overflow-y: scroll;
   }
   .check-shop {
     margin-top:0.4rem;
@@ -402,6 +446,10 @@ export default {
     padding: 0 0.4rem;
     border:none;
   }
-    
-
+  .addmember .el-checkbox__inner {
+    border-radius: 50%;
+    width: 0.45rem;
+    height: 0.45rem;
+  }
+  
 </style>

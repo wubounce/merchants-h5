@@ -1,52 +1,56 @@
 <template>
   <div class="main" v-title="'首页'">
-    <div class="earnings-wrap">
-      <div class="earning-type">
-        <p>总收益 (元)</p>
-        <p class="earning-type-size">{{allMoney}}</p>
-      </div>
-      <div class="today-earning">
-        <p style="margin-top: 0.35rem;">今日收益 (元)</p>
-        <p class="today-earning-size">{{todayMoney}}</p>
-      </div>
-      <div class="earning-type">
-        <p>当月收益 (元)</p>
-        <p class="earning-type-size">{{monthMoney}}</p>
-      </div>
-    </div>
-    <div class="lineecharts-warp">
-      <div>
-        <div class="lineechart-title">
-          <span class="linetitle">收益数据 <span @click="machineVisible = true;" class="choose-select">{{machinecurrentTags?machinecurrentTags.name:'全部'}}<i class="iconfont icon-nextx select-back"></i></span></span>
-          <span class="linedata">
-          <span :class="['linedatachoose', {linecurrent: lineSearchIndex === index}]" v-for="(item,index) in lineSearchTime" @click="lineTimeSearch(index)">{{item.lable}}</span>
-          </span>
-          <selectpickr :visible="machineVisible" :slots="equipmentSlots" :valueKey="machinepickername" @selectpicker="machineselectpicker" @onpickstatus="machineselectpickertatus"> </selectpickr>
+    <div class="permissions" v-if="$store.getters.has('mer:index')">暂无相关页面权限</div>
+    <div v-else>
+      <div class="earnings-wrap">
+        <div class="earning-type">
+          <p>总收益 (元)</p>
+          <p class="earning-type-size">{{allMoney}}</p>
         </div>
-        <div class="line" id="line" :style="{height:lineheight,width:width}" ref="line"></div>
+        <div class="today-earning">
+          <p style="margin-top: 0.35rem;">今日收益 (元)</p>
+          <p class="today-earning-size">{{todayMoney}}</p>
+        </div>
+        <div class="earning-type">
+          <p>当月收益 (元)</p>
+          <p class="earning-type-size">{{monthMoney}}</p>
+        </div>
+      </div>
+      <div class="lineecharts-warp">
+        <div>
+          <div class="lineechart-title">
+            <span class="linetitle">收益数据 <span @click="machineVisible = true;" class="choose-select">{{machinecurrentTags?machinecurrentTags.name:'全部'}}<i class="iconfont icon-nextx select-back"></i></span></span>
+            <span class="linedata">
+            <span :class="['linedatachoose', {linecurrent: lineSearchIndex === index}]" v-for="(item,index) in lineSearchTime" @click="lineTimeSearch(index)">{{item.lable}}</span>
+            </span>
+            <selectpickr :visible="machineVisible" :slots="equipmentSlots" :valueKey="machinepickername" @selectpicker="machineselectpicker" @onpickstatus="machineselectpickertatus"> </selectpickr>
+          </div>
+          <div class="line" id="line" :style="{height:lineheight,width:width}" ref="line"></div>
+        </div>
+      </div>
+      <div class="pei-wrap">
+        <div class="lineechart-title pie-title">
+          <span class="linetitle">收益分布 <span @click="distributionVisible = true;" class="choose-select">{{distributioncurrentTags?distributioncurrentTags.name:'洗衣机'}}<i class="iconfont icon-nextx select-back"></i></span></span>
+          <span class="linedata">
+             <span :class="['linedatachoose', {linecurrent: pieSearchIndex === index}]" v-for="(item,index) in lineSearchTime" @click="pieTimeSearch(index)">{{item.lable}}</span>
+          </span>
+           <selectpickr :visible="distributionVisible" :slots="distributionSlots" :valueKey="machinepickername" @selectpicker="distributionselectpicker" @onpickstatus="distributionselectpickertatus"> </selectpickr>
+        </div>
+        <div class="piebox">
+         <div class="pietype" id="pietype" :style="{height:pieheight,width:width}" ref="pietype"></div>
+         <div class="piefun" id="piefun" :style="{height:pieheight,width:width}" ref="piefun"></div>
+        </div>
+      </div>
+      <div class="bar-wrap">
+        <div class="">
+          <span class="linetitle">设备监控<span  style="font-size: 14px;font-weight: 100;color: #3AA0FF;">(总设备100)</span></span>
+          <span class="equipment" @click="equipmentVisible=true">{{equipmentcurrentTags?equipmentcurrentTags.name:'全部'}}<i class="iconfont icon-nextx select-back"></i></span>
+          <selectpickr :visible="equipmentVisible" :slots="equipmentSlots" :valueKey="machinepickername" @selectpicker="equipmentselectpicker" @onpickstatus="equipmentselectpickertatus"> </selectpickr>
+        </div>
+        <div class="bar" id="bar" :style="{height:height,width:width}" ref="bar"></div>
       </div>
     </div>
-    <div class="pei-wrap">
-      <div class="lineechart-title pie-title">
-        <span class="linetitle">收益分布 <span @click="distributionVisible = true;" class="choose-select">{{distributioncurrentTags?distributioncurrentTags.name:'洗衣机'}}<i class="iconfont icon-nextx select-back"></i></span></span>
-        <span class="linedata">
-           <span :class="['linedatachoose', {linecurrent: pieSearchIndex === index}]" v-for="(item,index) in lineSearchTime" @click="pieTimeSearch(index)">{{item.lable}}</span>
-        </span>
-         <selectpickr :visible="distributionVisible" :slots="distributionSlots" :valueKey="machinepickername" @selectpicker="distributionselectpicker" @onpickstatus="distributionselectpickertatus"> </selectpickr>
-      </div>
-      <div class="piebox">
-       <div class="pietype" id="pietype" :style="{height:pieheight,width:width}" ref="pietype"></div>
-       <div class="piefun" id="piefun" :style="{height:pieheight,width:width}" ref="piefun"></div>
-      </div>
-    </div>
-    <div class="bar-wrap">
-      <div class="">
-        <span class="linetitle">设备监控<span  style="font-size: 14px;font-weight: 100;color: #3AA0FF;">(总设备100)</span></span>
-        <span class="equipment" @click="equipmentVisible=true">{{equipmentcurrentTags?equipmentcurrentTags.name:'全部'}}<i class="iconfont icon-nextx select-back"></i></span>
-        <selectpickr :visible="equipmentVisible" :slots="equipmentSlots" :valueKey="machinepickername" @selectpicker="equipmentselectpicker" @onpickstatus="equipmentselectpickertatus"> </selectpickr>
-      </div>
-      <div class="bar" id="bar" :style="{height:height,width:width}" ref="bar"></div>
-    </div>
+    
   </div>
 </template>
 <script>
@@ -145,6 +149,7 @@ export default {
   methods: { 
     async ParentTypeFun(){ //获取设备类型
         let res = await ParentTypeFun(qs.stringify({onlyMine:true}));
+        res.data = res.data ? res.data :[];
         let pac = res.data.find(item=>item.name === '洗衣机');
         this.washingMachineId = pac ? pac.id : '';
         this.typeProfitData();

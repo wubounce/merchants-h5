@@ -11,11 +11,11 @@
     </div>
     <div class="input-group">
       <div class="form-title"><span>负责店铺</span></div>
-      <div class="form-input"><span class="more more-color">{{checkshoptxt?checkshoptxt:'请选择店铺'}}</span><span class="forward iconfont icon-nextx" @click="shopVisible=true"></span></div>
+      <div class="form-input"><span :class="['more',{'more-color':checkshoptxt === ''}]">{{checkshoptxt?checkshoptxt:'请选择店铺'}}</span><span class="forward iconfont icon-nextx" @click="shopVisible=true"></span></div>
     </div>
     <div class="input-group" style="border:none">
       <div class="form-title"><span>权限</span></div>
-      <div class="form-input"><span class="more more-color">请选择权限</span><span class="forward iconfont icon-nextx"  @click="permissionsVisible=true"></span></div>
+      <div class="form-input"><span :class="['more',{'more-color':permissionsMIdsTxt === ''}]">{{permissionsMIdsTxt?permissionsMIdsTxt:'请选择权限'}}</span><span class="forward iconfont icon-nextx"  @click="permissionsVisible=true"></span></div>
     </div>
   </div>
   <div class="confirm" @click="addmember">提交</div>
@@ -47,7 +47,7 @@
       <span class="shop">权限</span>
     </div>
     <section class="resp-shop-wrap" style="padding:0;">
-      <div class="all-list">
+     <!--  <div class="all-list">
         <label class="mint-checklist-label prom">
           <div class="check-prem-list">
             <span class="mint-checkbox is-right">
@@ -70,7 +70,8 @@
           <label class="mint-checklist-label prom">
             <div class="check-prem-list">
               <span class="mint-checkbox is-right">
-                <i class="silde iconfont icon-xiangxiajiantou"></i>
+                <input type="checkbox" class="mint-checkbox-input" v-model="checkpermissionslist" value="12344"> 
+                <span class="mint-checkbox-core"></span>
               </span> 
               <span class="mint-checkbox-label shopname">店铺管理</span>
             </div>
@@ -105,19 +106,32 @@
             </label>
           </div>
         </div>
-      </div>
+      </div> -->
+      <el-tree
+        v-model="permissionsMIds"
+        :data="permissionsData"
+        show-checkbox
+        node-key="menuId"
+        ref="tree"
+        highlight-current
+        check-strictly
+        :props="defaultProps">
+      </el-tree>
     </section>
     <section class="promiss-footer">
-      <span class="can" @click="permissionsVisible=false">取消</span>
-      <span class="cifrm">确定</span>
+      <span class="can" @click="clearPermissions">取消</span>
+      <span class="cifrm" @click="addPermissions">确定</span>
     </section>
   </mt-popup>
 </div>
 </template>
 <script>
 import qs from 'qs';
+import { mapState } from 'vuex';
 import { validatPhone, validatName } from '@/utils/validate';
-import { shopListFun, addOperatorFun, menuSelectFun } from '@/service/member';
+import { shopListFun, addOperatorFun, permsMenuFun } from '@/service/member';
+import { getTrees} from '@/utils/tool';
+
 export default {
   data() {
     return {
@@ -126,12 +140,23 @@ export default {
       checkpermissionslist: [],
       shopVisible:false,
       permissionsVisible:false,
+
+      allmenu:[],
       permissionsData:[],
+      defaultProps: {
+        children: 'children',
+        label: 'name'
+      },
+      permissionsMIds:[],
+      permissionsMIdsTxt:'',
+
       shoplist:[],
       operateShopIds:[],
       username:'',
       phone:'',
-      checkshoptxt:''
+     
+      checkshoptxt:'',
+      
     };
   },
   mounted() {
@@ -140,6 +165,9 @@ export default {
   created(){
     this.shopListFun();
     this.menuSelect();
+  },
+  computed: {
+      
   },
   methods: {
     validate() {
@@ -158,8 +186,12 @@ export default {
         this.$toast({message: '请输入正确的手机号码' });
         return false;
       } 
-      if (this.checkshoptxt === '') {
-        this.$toast({message: '请选择店铺' });
+      // if (this.checkshoptxt === '') {
+      //   this.$toast({message: '请选择店铺' });
+      //   return false;
+      // }
+      if (this.permissionsMIds.length <= 0) {
+        this.$toast({message: '请选择权限' });
         return false;
       }
       return true;
@@ -170,18 +202,9 @@ export default {
       } 
     },
     async menuSelect(){
-      let res = await menuSelectFun();
-      // let aa = [];
-      // res.data.filter(v=>{
-      //   res.data.some(k=>{
-      //     if (k.parentId===v.menuId) {
-      //       aa.push(k);
-      //       v['child'] = aa;
-      //     }
-      //   });
-      // });
-
-      console.log(res);
+      let res = await permsMenuFun(); //拼接权限菜单
+      this.allmenu = res.data;
+      this.permissionsData = getTrees(res.data,0);
     },
     async shopListFun(){
       let res = await shopListFun();
@@ -192,7 +215,16 @@ export default {
       let checklist = this.shoplist.filter(v=>this.checkshoplist.some(k=>k==v.shopName));
       this.shopVisible = false;
       checklist.forEach(item=>this.operateShopIds.push(`'${item.shopId}'`));
-
+    },
+    addPermissions(){
+      this.permissionsMIds = this.$refs.tree.getCheckedKeys();
+      this.permissionsVisible=false;
+       let checkpers = [];
+       let checklist = this.allmenu.filter(v=>this.permissionsMIds.some(k=>k==v.menuId));
+       this.permissionsMIdsTxt = checklist.map(item=>item.name).join(',');
+    },
+    clearPermissions(){
+        this.permissionsVisible=false;
     },
     async addmember(){
       if (this.validate()) {
@@ -200,6 +232,7 @@ export default {
           username:this.username,
           phone:this.phone,
           operateShopIds:this.operateShopIds.join(','),
+          mIds:this.permissionsMIds.join(',')
         };
         let res = await addOperatorFun(qs.stringify(payload));
         if (res.code === 0) {
@@ -298,6 +331,8 @@ export default {
   }
   .resp-shop-wrap {
     padding: 0 0.4rem;
+    height: 10.67rem;
+    overflow-y: scroll;
   }
   .check-shop {
     margin-top:0.4rem;
@@ -397,6 +432,7 @@ export default {
       color: #fff;
     }
   }
+  
 </style>
 <style lang="scss">
   .addmember .mint-header {
@@ -412,5 +448,10 @@ export default {
     border:none;
   }
     
-
+  .addmember .el-checkbox__inner {
+    border-radius: 50%;
+    width: 0.45rem;
+    height: 0.45rem;
+  }
+ 
 </style>

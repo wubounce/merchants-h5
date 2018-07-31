@@ -1,11 +1,29 @@
-import { getToken, setToken, removeToken, getUser, setUser, removeUser } from '@/utils/tool';
+import { getToken, setToken, removeToken, getUser, setUser, removeUser, setMenu, removeMenu, getMenu } from '@/utils/tool';
 
 const user = {
   state: {
     token: getToken(),
     name: '',
     roles: [],
-    userInfo: getUser()
+    userInfo: getUser(),
+    menu:[]
+  },
+  getters:{
+    has: (state) => (value) => {
+      let isExist = true;
+      let buttonpermsStr = getMenu();
+      if(buttonpermsStr==undefined || buttonpermsStr==null){
+        return false;
+      }
+      for(let i=0;i<buttonpermsStr.length;i++){
+        if(buttonpermsStr[i].perms.includes(String(value))){
+          isExist = false;
+          break;
+        }
+      }
+      console.log(isExist);
+      return isExist;
+    }
   },
   mutations: {
     SET_TOKEN: (state, token) => {
@@ -19,6 +37,9 @@ const user = {
     },
     setUserInfo: (state, userInfo) => {
       state.userInfo = userInfo;
+    },
+    setMenu: (state, menu) => {
+      state.menu = menu;
     }
   },
 
@@ -28,7 +49,10 @@ const user = {
       setToken(token);
       commit('SET_TOKEN', token);
     },
-
+    getMenu({ commit }, menu){
+      setMenu(menu);
+      commit('setMenu', menu);
+    },
     // 获取用户信息
     getUser ({ commit, state },userInfo) {
       setUser(userInfo);
@@ -37,6 +61,7 @@ const user = {
       commit('setUserInfo', userInfo);
       return Promise.resolve(state.userInfo);
     },
+
     // 前端 登出
     LogOut({ commit }) {
       return new Promise(resolve => {
@@ -44,8 +69,10 @@ const user = {
         commit('SET_NAME', '');
         commit('SET_ROLES', '');
         commit('setUserInfo', '');
+        commit('setMenu', []);
         removeToken();
         removeUser();
+        removeMenu();
         resolve();
       });
     }

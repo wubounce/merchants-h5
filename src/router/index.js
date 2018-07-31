@@ -301,6 +301,10 @@ export default new Router({
       component: () =>
         import ('@/page/wallet/withdrawResult')
     },
+    {
+      path: "*",
+      redirect: "/login"
+    }
 
   ]
 });
