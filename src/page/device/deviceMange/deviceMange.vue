@@ -2,74 +2,136 @@
   <section>
     <q-header :title="title"></q-header>
     <div class="search">
-      <d-search></d-search>
+      <d-search @deviceSearch="onDeviceSearch"></d-search>
     </div>
     <div class="device-status">
-      <div v-for="(item,index) in titleArr" @click="titleClick(index)" :key="index">
-        <p :class="{current: titleIndex === index}">{{item.title}}</p>
-        <span :class="{current: titleIndex === index}">{{item.num}}</span>
+      <div @click="titleClick()">
+        <p class="current">全部</p>
+        <span class="current">{{titleArr.all}}</span>
+      </div>
+      <div @click="titleClick(1)">
+        <p>运行</p>
+        <span>{{titleArr.run}}</span>
+      </div>
+      <div @click="titleClick(2)"> 
+        <p>空闲</p>
+        <span>{{titleArr.idle}}</span>
+      </div>
+      <div @click="titleClick(4)">
+        <p>故障</p>
+        <span>{{title.hitch}}</span>
+      </div>
+      <div @click="titleClick(8)">
+        <p>离线</p>
+        <span>{{title.offline}}</span>
+      </div>
+      <div @click="titleClick(16)">
+        <p>超时</p>
+        <span>{{title.timeout}}</span>
       </div>
     </div>
-
-    <div class="device-list" v-for="(item,index) in list" :key="index">
+    
+    <div class="device-list" v-for="(item,index) in list" :key="index" @click="toDeviceDetail(item.machineId)">
       <section class="item-hd">
-        <span>东龙街 176 号 3 号机</span>
-        <span>空闲</span>
+        <span>{{item.machineName}}</span>
+        <span>{{item.machineState}}</span>
       </section>
       <section class="item-bd">
         <span>店铺</span>
-        <span>一店</span>
+        <span>{{item.shopName}}</span>
       </section>
       <section class="item-ft">
         <p class="item-ft-right">
           <span>类型</span>
-          <span>洗衣机</span>
+          <span>{{item.machineTypeName}}</span>
         </p>
         <p class="item-ft-right">
           <span>收益</span>
-          <span>1000.00元</span>
+          <span>{{item.profit}}</span>
         </p>
       </section>
     </div>
-
-   
+    <div class="openItem" @click="toAddItem" v-show="isShow">···</div>
+    <div v-show="isShow2">
+      <div class="closeItem" @click="toCloseItem">X</div>
+      <router-link to="/addDevice"><div class="addDev showItem">新增设备</div></router-link>
+      <router-link to="/batchStart"><div class="betchStartup showItem">批量启动</div></router-link>
+      <router-link to="/batchEdit"><div class="betchModf showItem">批量修改</div></router-link>
+    </div>
   </section>
 
 </template>
 <script>
+  import qs from "qs";
   import QHeader from '@/components/header';
   import DSearch from '@/components/Search/search';
+  import { MessageBox } from 'mint-ui';
+  import { deviceListFun , countDeviceFun } from '@/service/device';
   export default {
     data() {
       return {
+        isShow: true,
+        isShow2: false,
         title: '设备管理',
-        titleArr: [{
-          title: '全部',
-          num: 0
-        }, {
-          title: '运行',
-          num: 0
-        }, {
-          title: '空闲',
-          num: 0
-        }, {
-          title: '故障',
-          num: 0
-        }, {
-          title: '超时未工作',
-          num: 0
-        }],
-        titleIndex: 0,
-        list: [{}],
+        titleArr: [],
+        titleIndex: null,
+        list: [],
+        machineState: null,
+        checkClass: false,
+        name: ""
       };
     },
     mounted() {
 
     },
     methods: {
-      titleClick: function (index) {
+      titleClick(index) {
         this.titleIndex = index;
+        this.getDeviceList(this.titleIndex,this.name);
       },
+      toDeviceDetail(i) {       
+        this.$router.push({
+        name:'deviceDetail',
+        query:{
+          machineId: i
+        }
+      });
+      },
+      toAddItem() {
+        this.isShow = !this.isShow;
+        this.isShow2 = !this.isShow2;
+      },
+      toCloseItem() {
+        this.isShow2 = !this.isShow2;
+        this.isShow = !this.isShow;
+      },
+      async getCountDevice(){      
+        let res = await countDeviceFun();
+         if(res.code === 0) {
+          this.titleArr= res.data; 
+        }
+        else {
+          MessageBox.alert(res.msg);
+        }
+      }, 
+      async getDeviceList(titleIndex,name)  {
+        let payload = {machineState: titleIndex,machineName: this.name};
+        let res = await deviceListFun(qs.stringify(payload));
+        if(res.code === 0) {
+          this.list = res.data;
+        }
+        else {
+          MessageBox.alert(res.msg);
+        }
+      },
+      onDeviceSearch(msg){ //搜索
+         this.name = msg;
+         this.getDeviceList(this.titleIndex,this.name);
+      }
+    },
+    created() {
+      this.getDeviceList();
+      this.getCountDevice();
     },
     components: {
       QHeader,
@@ -168,6 +230,61 @@
         }
       }
     }
+  }
+  .openItem{
+    width: 1.49rem;
+    height: 1.49rem;
+    text-align: center;
+    overflow: auto;
+    background: rgba(24,144,255,1);
+    border-radius: 50%;
+    position: fixed;
+    bottom: 0.67rem;
+    right: 0.54rem;
+    line-height: 1.49rem;
+    color: rgba(255,255,255,1);
+    font-size: 34px;
+  }
+  .closeItem{
+    width: 1.49rem;
+    height: 1.49rem;
+    text-align: center;
+    overflow: auto;
+    background: rgba(24,144,255,1);
+    border-radius: 50%;
+    position: fixed;
+    bottom: 0.67rem;
+    right: 0.54rem;
+    line-height: 1.49rem;
+    color: rgba(255,255,255,1);
+    font-size: 24px;
+  }
+  .showItem{
+    width: 1.49rem;
+    height: 1.49rem;
+    text-align: center;
+    overflow: auto;
+    background: rgba(19, 194, 194, 1);
+    border-radius: 50%;
+    position: fixed;
+    right: 0.54rem;
+    line-height: 1.49rem;
+    font-size: 12px;
+    color: rgba(255,255,255,1);
+  }
+  .addDev{
+    bottom: 2.52rem;
+    transition:all 0.2s 
+  }
+  
+  .betchStartup{
+    bottom: 4.32rem;
+    transition:all 0.3s 
+  }
+   
+  .betchModf{
+    bottom: 6.12rem;
+    transition:all 0.4s 
   }
 
 
