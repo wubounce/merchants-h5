@@ -6,7 +6,7 @@
         <input type="text" class='addressInput' v-model="account"  placeholder="请填写支付宝账号" @input="disbaledBtn">
       </span>
     </p>
-    <p class="btn" @click="submitAlipay">
+    <p class="alipay-btn" @click="submitAlipay">
       <mt-button type="primary" class="btn-blue" :disabled="disabled">确定</mt-button>
     </p>
   </section>
@@ -106,7 +106,7 @@ section{
       border-bottom: 1px solid #fff;
     }
   }
-  .btn {
+  .alipay-btn {
     .btn-blue {
       margin-top: 0.67rem;
       margin-left: 0.4rem;

@@ -75,9 +75,7 @@ export default {
     .upLoadStatus {
       width: 9rem;
       height: 6rem;
-
       margin-bottom: 0.3rem;
-      padding: au;
       padding-left: 0.5rem;
     }
     .upLoadShop {

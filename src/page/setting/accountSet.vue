@@ -7,9 +7,9 @@
       <router-link :to="{name:'setAlipay'}">
         <p class="user business">绑定支付宝<span :class="{ 'isblue': isBlue, 'isBlack': !isBlue}">{{user.alipayAccount == '' ? '未绑定' : user.alipayAccount}}</span></p>
       </router-link>
-      <router-link :to="{name:'realName',  query:{ alipayAccount:user.alipayAccount }}">
-        <p class="user business">实名认证<span :class="{ 'status-neverordoingorfail': isStatus, 'status-success': !isStatus}">{{user.status}}</span></p>
-      </router-link>
+      <!-- <router-link :to="{name:'realName',  query:{ alipayAccount:user.alipayAccount }}"> -->
+        <p class="user business" @click="toRealName">实名认证<span :class="{ 'status-neverordoingorfail': isStatus, 'status-success': !isStatus}">{{user.status}}</span></p>
+      <!-- </router-link> -->
   </section>
 </template>
 <script>
@@ -30,6 +30,21 @@ export default {
     };
   },
   methods: {
+    toRealName() {
+      if( this.user.status == 0 ) {
+        this.$router.push({
+          name: 'realName',
+          query:{
+            alipayAccount: this.user.alipayAccount
+          }
+        });
+      }
+      else {
+        this.$router.push({
+          name: 'realNameGet'
+        });
+      }
+    },
     async getAliAndStatus() {
       let res = await getAliAndStatusFun();
       if(res.code ===0) {

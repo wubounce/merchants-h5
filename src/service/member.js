@@ -9,8 +9,8 @@ const getOperatorInfoApi = 'operatorManager/getOperatorInfo';                   
 const updateOperatorInfoApi = 'operatorManager/updateOperatorInfo';                                // 更新管理员 method 'post'
 const delOperatorApi = 'operatorManager/delOperatorInfo';                                          // 删除管理员 method 'post'
 const shopListApi = 'shop/listShop';                                                               // 店铺列表 method 'post'
-const menuSelectApi = '/sys/menu/select';                                                          //获取所有菜单列表
-const permsMenuApi = '/sys/menu/perms';                                                            //分配权限
+const menuSelectApi = 'mer/select';                                                          //获取所有菜单列表
+const permsMenuApi = 'mer/perms';                                                            //分配权限
       
 // 获取管理员列表 
 export const operatorListFun = (payload) => fetch.post(operatorListApi, payload);

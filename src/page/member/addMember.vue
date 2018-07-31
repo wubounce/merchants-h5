@@ -171,6 +171,16 @@ export default {
     },
     async menuSelect(){
       let res = await menuSelectFun();
+      // let aa = [];
+      // res.data.filter(v=>{
+      //   res.data.some(k=>{
+      //     if (k.parentId===v.menuId) {
+      //       aa.push(k);
+      //       v['child'] = aa;
+      //     }
+      //   });
+      // });
+
       console.log(res);
     },
     async shopListFun(){

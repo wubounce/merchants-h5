@@ -29,7 +29,7 @@
   	</div>
   	<div class="VIP-wrap"  v-if="tabindex === 1">
       <div class="no-discount-list" v-if="timeMarket.length<=0">未设置店铺VIP卡</div>
-      <div>
+      <div v-else>
          <div class="car-shop">企鹅一号店vip卡</div>
           <div class="card-banner">       
             <swiper :options="swiperOption"  ref="mySwiper">

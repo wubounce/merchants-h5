@@ -77,7 +77,7 @@ export default {
     async getApplyList(type){
         let payload = {page:this.page,pageSize: this.pageSize,type:this.type};
         let res = await getApplyListFun(qs.stringify(payload));
-       this.applylsit = res.data.items;
+       this.applylsit = res.data?res.data.items :[];
     }
   },
   filters: {

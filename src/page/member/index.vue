@@ -1,6 +1,6 @@
 <template>
 <div class="member" v-title="title">
-  <div class="no-discount-list" v-if="list.lenght<=0">暂无二级管理账号</div>
+  <div class="no-discount-list" v-if="list.length<=0">暂无二级管理账号</div>
   <div class="meber-list" v-for="(item,index) in list" :key="index">
     <div class="momber-wrap">
       <div class="name">
@@ -117,6 +117,12 @@ export default {
       font-size: 16px;
       color: #fff;
     }
+  }
+  .no-discount-list {
+    text-align: center;
+    font-size: 14px;
+    padding-top: 4rem;
+    color: #999;
   }
 </style>
 <style>

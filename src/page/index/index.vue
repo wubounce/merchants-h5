@@ -196,13 +196,15 @@ export default {
         payload = Object.assign({},{parentTypeId:this.washingMachineId,type:0});
       }
       let res = await typeProfitFun(qs.stringify(payload));
-      res.data.communicateType.forEach(item=>{
+      let communicateTypeData = res.data ? res.data.communicateType :[];
+      communicateTypeData.forEach(item=>{
           this.pietypeData.push({
             value: item.sum,
             name: communicateType(Number(item.type))
           });
       });
-      res.data.machineType.forEach(item=>{
+      let machineTypeData = res.data ? res.data.machineType :[];
+      machineTypeData.forEach(item=>{
         this.piefunDatatitle.push({
           name:item.type,
           icon : 'circle',

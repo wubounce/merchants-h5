@@ -16,6 +16,8 @@ const getPersonalInfoApi = 'operator/getPersonalInfo';  // 设置>获取个人�
 const updateOperatorApi = 'operator/updateOperator';  // 设置>更新个人信息 method 'post'
 const confirmOperatorApi = 'operator/confirmOperator'; //设置>实名认证 method 'post'
 
+const getRealNameApi = 'operator/getConfirmOperator'; //设置>获取实名认证 method 'post'
+
 // 我的
 export const getOperatorFun = (payload) => fetch.post(getOperatorApi,payload);
 
@@ -45,3 +47,6 @@ export const updateOperatorFun = (payload) => fetch.post(updateOperatorApi,paylo
 
 // 设置>实名认证
 export const confirmOperatorFun = (payload) => fetch.post(confirmOperatorApi,payload);
+
+// 设置>获取实名认证
+export const getRealNameFun = (payload) => fetch.post(getRealNameApi,payload);
