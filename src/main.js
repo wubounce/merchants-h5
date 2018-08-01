@@ -31,12 +31,8 @@ plugin: ['AMap.Autocomplete', 'AMap.PlaceSearch', 'AMap.Scale', 'AMap.OverView',
 v: '1.4.4'
 });
 
-
-
-
 Vue.config.productionTip = true;
 Vue.config.devtools = true;
-
 
 const whiteList = ['/login','/reset','/confimPwd']; // 不重定向白名单
 router.beforeEach((to, from, next) => {
@@ -53,7 +49,6 @@ router.beforeEach((to, from, next) => {
     }
   }
 });
-
 
 /* eslint-disable no-new */
 new Vue({
@@ -100,6 +95,7 @@ Vue.prototype.$_has = function(value) {
     }
   }
   return isExist;
+};
 
 //签名算法：
 Vue.prototype.get_sign = (obj)=>{
@@ -125,8 +121,5 @@ Vue.prototype.get_sign = (obj)=>{
   delete obj._appid;
   obj._sign = _sign;
   console.log('处理过的请求参数：',obj);
-
   return obj;
-
 };
-
