@@ -1,7 +1,7 @@
 <template>
   <section class="personal" v-title="title">
     <ul class="personal-list">
-      <p class="shopname-p"><span>店铺名称</span><span><input type="text" class='addressInput' v-model="shopName" maxlength="12" placeholder="请填写店铺名称"></span></p>
+      <p class="shopname-p"><span>店铺名称</span><span><input @change="blur" type="text" class='addressInput'  maxlength="40" placeholder="请填写店铺名称"></span></p>
       <li v-for="(item,index) in list" :key="index" class="personal-item" @click="toDetail(index)">
         {{item.title}}
         <span>{{item.value == ''|| item.value==null? '' : item.value}}</span>
@@ -11,7 +11,7 @@
     <div class="second">
       <li class="device business" @click="addDevice">设备类型<span>{{machineName}}</span></li>
       <p class="isReserve"><span>预约功能</span><span><mt-switch class="check-switch" v-model="isReserve"></mt-switch></span></p>
-      <p class="reserveTime"><span>预约时长(分钟)</span><span><input type="text" class='timeInput' v-model="orderLimitMinutes" maxlength="2" placeholder="请填写预约有效时长"></span></p>
+      <p class="reserveTime"><span>预约时长(分钟)</span><span><input type="number" class='timeInput' @change="limitTime"  placeholder="请填写预约有效时长"></span></p>
       <li class="business" @click="chooseTime">营业时间<span>{{addBusinessTime}}</span></li>
       <p class="picture">
         <span>店铺照片</span>
@@ -42,10 +42,14 @@
     </mt-popup>
     
     <!-- 设备类型 -->
-    <mt-popup v-model="deviceDetail" position="bottom" class="mint-popup">
-      <p class="toolBar"><span @click="cancel">取消</span><span>设备类型</span><span @click="confirmNews">确定</span></p>
-      <mt-checklist align="right" :options="options" v-model="machine"></mt-checklist>
-    </mt-popup>
+      <div v-show="deviceDetail"  class="machine-hiden">
+        <p class="toolBar"><span @click="cancel">取消</span><span>设备类型</span><span @click="confirmNews">确定</span></p>
+        <mt-checklist align="right" :options="options" v-model="machine"></mt-checklist>
+      </div>
+    <!-- 设备类型自带背景 -->
+    <div :class="{'machine-background':isbgc}" >
+      
+    </div>
 
     <!-- 营业时间 -->
     <mt-popup v-model="timeVisible" position="bottom" class="mint-popup">
@@ -56,18 +60,22 @@
 </template>
 
 <script>
+import { MessageBox } from 'mint-ui';
 import qs from "qs";
 import UploadImg from "@/components/UploadImg/UploadImg";
 import { addOrEditShopFun } from '@/service/shop';
 import { areaListFun } from '@/service/shop';
 import { listParentTypeFun } from '@/service/shop';
 import { uploadFileFun } from '@/service/shop';
+import { manageListFun } from '@/service/shop';
 export default {
   data() {
     return {
       index:'',
+      isbgc:false,
       deviceDetail:false,
       shopName:'',
+      arrName:[],
       address:'',
       machineName:'',
       machineTypeIds:'',
@@ -219,6 +227,32 @@ export default {
     };
   },
   methods:{
+    blur(e) {
+      //校验字符长度
+      if(e.target.value.length>3 && e.target.value.length<41) {
+        this.shopName = e.target.value;
+      }
+      else {
+        e.target.value = '';
+        MessageBox.alert("请输入4到40字符的店铺名称");
+      }
+      //校验重名
+      for(let i=0; i<this.arrName.length; i++) {
+        if(e.target.value == this.arrName[i]) {
+          e.target.value = '';
+          MessageBox.alert("该店铺名称已存在，请换一个店铺名称输入哦");
+        }
+      }
+    },
+    limitTime(e) {
+      if(e.target.value<0 || e.target.value>10) {
+        MessageBox.alert("预约时长不能超过10分钟");
+        e.target.value = '';
+      }
+      else {
+        this.orderLimitMinutes = e.target.value;
+      }
+    },
     valuesChange(picker, values) {
       this.shopTypeString = values[0];
       switch(values[0]) {
@@ -263,15 +297,23 @@ export default {
           this.placeVisible = true;
           this.getArea();
           break;
-        case 2:
-          this.go("mapSearch");
+        case 2:{
+          //let city = this.cityName.slice(0,this.cityName.length-1);
+          //console.log(city);
+          this.goMap("mapSearch",this.cityName);
           this.mapVisible = true;
           break;
+        }
+          
       }
     },
-    go(msg) {
+   //跳转传值
+    goMap(x,y) {
       this.$router.push({
-        name: msg
+        name:x,
+        query: {
+          city:this.cityName
+        }
       });
     },
     confirmNews() {
@@ -283,7 +325,7 @@ export default {
           break;
         case 1:
           this.placeVisible = false;
-          //console.log(this.provinceName == this.cityName.slice(0,2));
+
           if(this.provinceName == this.cityName.slice(0,2)) {
             
             this.list[1].value = this.cityName + this.districtName;
@@ -299,6 +341,7 @@ export default {
         //设备管理
         case 3: {
           this.deviceDetail = false;
+          this.isbgc = false;
           this.machineName = this.machine.join(' , ');
           let arr = [];
           for(let i=0;i<this.machine.length;i++) {
@@ -353,6 +396,7 @@ export default {
         case 2:
           break;
         case 3:
+          this.isbgc = false;
           this.deviceDetail = false;
           break;
         case 4:
@@ -407,6 +451,7 @@ export default {
     async addDevice() {
       this.index = 3;
       this.isClass = true;
+      this.isbgc = true;
       this.deviceDetail = true;
       let obj = {
         onlyMine: false
@@ -439,7 +484,7 @@ export default {
         console.log(this.imageId);
       }
       else {
-        MessageBox.alert(res.msg);
+        MessageBox_.alert(res.msg);
       }
       this.imgId.defaultPicture = this.imageId;
     },
@@ -459,10 +504,33 @@ export default {
       this.isClass = true;
     },
     async submit() {
+      //console.log(this.cityName);
       let changeisReserve = (this.isReserve==true)? 0 :1;
+      let _this = this;
+      //经纬度
+      // AMap.plugin('AMap.Geocoder',function() {
+      //    var geocoder = new AMap.Geocoder({
+      //       city: _this.cityName, //城市，默认：“全国”
+      //       radius: 1000 //范围，默认：500
+      //     });
+      //     //地理编码,返回地理编码结果
+      //     geocoder.getLocation(_this.list[2].value, function(status, result) {
+      //         if (status === 'complete' && result.info === 'OK') {
+      //             console.log(result);
+      //             //return result;
+      //             _this.lat  = result.geocodes[0].location.lat;
+      //             _this.lng  = result.geocodes[0].location.lng;
+      //             //console.log("_this:",_this.lat);
+      //             _this.goMap("mapSearch",_this.lat,_this.lng);
+      //         }
+      //         else {
+      //           console.log('获取经纬度错误');
+      //         }
+      //     });
+      // });
+
       //判断信息是否完整
       
-
       let obj = {
         shopId: '  ',
         shopName: this.shopName,
@@ -471,8 +539,8 @@ export default {
         cityId: this.cityId,
         districtId: this.districtId,
         address: this.address,
-        lat:'33.564',
-        lng:'134.456',
+        lat:this.$route.query.lat,
+        lng:this.$route.query.lng,
         machineTypeIds: this.machineTypeIdsArray,
         isReserve: changeisReserve,
         orderLimitMinutes: this.orderLimitMinutes,
@@ -508,11 +576,20 @@ export default {
       else {
         MessageBox.alert(res.msg);
       }
+    },
+    async getShoplist() {
+      let res = await manageListFun();
+      if(res.code === 0 ) {
+        this.arrName = res.data.map((i) => {
+          return i.shopName;
+        });
+      }
     }
   },
   created() {
     //this.getArea();
     this.list[2].value = this.$route.query.place;
+    this.getShoplist();
   },
   components:{
     UploadImg
@@ -717,6 +794,24 @@ export default {
     .prop-bd {
       padding: 0.3rem;
     }
+  }
+  
+  .machine-background{
+    width: 100%;
+    height: 100%;
+    opacity: 0.5;
+    background: #000;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 2018;
+  }
+  .machine-hiden {
+    position: absolute;
+    top: 10rem;
+    background-color: rgb(255, 255, 255);
+    width: 100%;
+    z-index: 2020;
   }
 }
 </style>

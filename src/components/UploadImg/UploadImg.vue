@@ -30,7 +30,7 @@ export default {
       var newImg = this.defaultPicture;
       let files = this.$refs.input.files[0];
       let fileType = files.type === "image/png" || files.type === "image/jpeg" ;
-      let size = files.size / 1024 / 1024 < 2;
+      let size = files.size / 1024 / 1024  < 2;
       if (!fileType) {
         this.$toast({
           message: "上传图片必须是image/png或者image/jpeg",

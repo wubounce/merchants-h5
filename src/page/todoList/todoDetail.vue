@@ -26,6 +26,7 @@ import Button from "@/components/Button/Button";
 import { MessageBox } from 'mint-ui';
 import { getBatchStartFun } from '@/service/todoList';
 import { delBatchStartFun } from '@/service/todoList';
+import { batchStartNowFun } from '@/service/todoList';
   export default {
     data() {
       return {
@@ -70,16 +71,32 @@ import { delBatchStartFun } from '@/service/todoList';
             }
           });
       },
-      goStart() {
+      async goStart() {
         //立即启动
-        MessageBox.confirm('您确定要启动还未到期的设备么？').then(action => {	        
-	        let instance = this.$toast({
-            message: '启动成功',
-            iconClass: 'mint-toast-icon mintui mintui-success'
-          });
-          setTimeout(() => {
-            instance.close();
-          }, 1000);
+        console.log(this.item);
+        await MessageBox.confirm('您确定要启动还未到期的设备么？').then(action => {	        
+          let obj = {
+            shopId: this.item.shopId,
+            firstTypeId: this.item.machineParentTypeId,
+            standardFunctionId: this.item.standardFunctionId
+          };
+          let res =  batchStartNowFun(qs.stringify(obj));
+          if(res.code===0) {
+            let instance = this.$toast({
+              message: '启动成功',
+              iconClass: 'mint-toast-icon mintui mintui-success'
+            });
+            setTimeout(() => {
+              instance.close();
+            }, 1000);
+          }
+          else {
+            this.$toast({
+              message: res.msg,
+              position: "bottom",
+              duration: 3000
+            });
+          }
 	      },
 	      action => {
 	      	this.$toast({

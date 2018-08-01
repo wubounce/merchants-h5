@@ -55,10 +55,29 @@ export default {
       title: '店铺详情',
       list:[],
       shopdetail:{},
-      completeAddress:''
+      completeAddress:'',
+      what:'',
+      lng:'',
+      lat:''
     };
   },
   methods:{
+    getlatlngAddress() {
+      let lnglatXY = [this.lng, this.lat]; //已知点坐标
+      console.log(lnglatXY);
+      let _this = this;
+      AMap.plugin('AMap.Geocoder',function() {
+        var geocoder = new AMap.Geocoder({
+          radius: 1000,
+          extensions: "all"
+        });
+        geocoder.getAddress(lnglatXY, function(status, result) {
+            if (status === 'complete' && result.info === 'OK') {
+                console.log('result',result);
+            }
+        });        
+      });
+    },
     async isDeleteOrNot() {
       //删除功能
       MessageBox.confirm('您确定要取消批量启动设备么？').then(action => 
@@ -102,6 +121,9 @@ export default {
       if(res.code===0) {
         this.shopdetail = res.data;
         this.list = res.data.machineTypeNames.split(',');
+        this.lng = res.data.lng;
+        this.lat = res.data.lat;
+        console.log(this.lng);
         //店铺地址
         if(res.data.province == res.data.city.slice(0,2)) {
           this.completeAddress = res.data.city + res.data.district + res.data.address;
@@ -114,6 +136,13 @@ export default {
   },
   created() {
     this.getShopDetail();
+
+  },
+  mounted() {
+    //this.what = this.getlatlngAddress();
+    //console.log(this.what);
+    this.getlatlngAddress();
+    console.log(this.lng);
   },
   components:{
     Button

@@ -1,13 +1,13 @@
 <template>
 	<section v-title="title">
-    <ul>
+    <ul v-if="hasNews">
       <li v-for="(item,index) in list" :key="index" @click="toShopDetail(item.shopId)">
         <p class="top">
           <!-- <span class="shopName">{{item.shopName}}</span>
           <span>
             <span class="iconMark discount">惠</span><span class="iconMark reserve">预</span>
           </span> -->
-          <span>{{item.shopName}}</span>
+          <span>{{item.shopName.length>15 ? item.shopName.slice(0,15) + '...' : item.shopName }}</span>
           <span><span v-if="item.isDiscount" class="iconMark discount">惠</span><span v-if="!item.isReserve" class="iconMark reserve">预</span></span>
         </p>
         <div class="bottom">
@@ -26,10 +26,13 @@
         </div>
       </li>
     </ul>
-    <div class="circle" @click="toAddShop"><div>+</div><div class="iconShop">店铺</div></div>
+    <p v-else class="noShop">暂无店铺, 可点击右下角进行添加</p>
+    <div class="circle" @click="toAddShop">
+      <div>+</div>
+      <div class="iconShop">店铺</div>
+    </div>
 	</section>
 </template>
-
 <script>
 import { MessageBox } from 'mint-ui';
 import { manageListFun } from '@/service/shop';
@@ -37,7 +40,18 @@ export default {
   data() {
     return {
        title:'店铺管理',
-       list:[]
+       list:[
+         {
+           shopName:"1234567890一二三四五六七八九零0123456789一二三四五",
+           isDiscount:true,
+           isReserve:0,
+           machineCount:0,
+           profit:0,
+           shopId:"340095933041607089",
+           shopType:"流动人口社区",
+         }
+       ],
+       hasNews: true
     };
   },
   methods: {
@@ -57,7 +71,14 @@ export default {
     async getShopList() {
       let res = await manageListFun();
       if(res.code===0) {
-        this.list = res.data;
+
+        //判断该账号是否存在店铺
+        if(res.data == null || res.data == "") {
+          this.hasNews = false;
+        }
+        else {
+          this.list = res.data;
+        }
       }
       else {
         MessageBox.alert(res.msg);
@@ -149,6 +170,12 @@ section {
       }
     }
   }
+  .noShop {
+    text-align: center;
+    color: #999;
+    font-size: 16px;
+    padding-top: 4rem;
+  }
   .circle {
     border-radius: 50%;
     background-color: #1890FF;
@@ -161,12 +188,11 @@ section {
     div {
       color:#fff;
       &:first-child {
-        font-size: 36px;
+        font-size: 25px;
       }
     }
     .iconShop {
-      font-size: 16px;
-      margin-top: -0.2rem;
+      font-size: 0.4rem;
     }
   }
 }

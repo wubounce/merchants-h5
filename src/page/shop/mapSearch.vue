@@ -13,8 +13,29 @@ export default {
   data() {
     return {
       title: '新增店铺',
-      place:''
+      place:'',
+      fromlat:'',
+      fromlng:'',
+      fromCity:''
     };
+  },
+  methods: {
+    getLatLng(x,y,z,p) {
+      this.$router.push({
+        name:x,
+        query: {
+          lat:y,
+          lng:z,
+          place:p
+        }
+      });
+    }
+  },
+  created() {
+    //this.fromlat = this.$route.query.lat;
+    //this.fromlng = this.$route.query.lng;
+    this.fromCity = this.$route.query.city.slice(0,this.$route.query.city.length-1);
+    console.log(this.fromCity);
   },
   mounted() {
     let _this = this;
@@ -32,41 +53,41 @@ export default {
       map.addControl(geolocation);
       geolocation.getCurrentPosition();
     });
-    AMap.plugin(['AMap.Autocomplete','AMap.PlaceSearch'],function(){
+    AMap.plugin(['AMap.Autocomplete','AMap.PlaceSearch','AMap.Geocoder'],function(){
       var autoOptions = {
-        city: "北京", //城市，默认全国
+        city: _this.fromCity,
         input: "keyword"//使用联想输入的input的id
       };
       var autocomplete= new AMap.Autocomplete(autoOptions);
       var placeSearch = new AMap.PlaceSearch({
-            city:'北京',
+            city: _this.fromCity,
             map:map
       });
-      AMap.event.addListener(autocomplete, "select", function(e){
-          //TODO 针对选中的poi实现自己的功能
-          placeSearch.setCity(e.poi.adcode);
-          placeSearch.search(e.poi.name);
-          //正向地理编码
-          // var geocoder = new AMap.Geocoder({
-          //   city: "010", //城市，默认：“全国”
-          //   radius: 1000 //范围，默认：500
-          // });
-          //地理编码,返回地理编码结果
-          // geocoder.getLocation(e.poi.name, function(status, result) {
-          //     if (status === 'complete' && result.info === 'OK') {
-          //         geocoder_CallBack(result);
-          //     }
-          // });
 
-          //往新增店铺页面传值
-          _this.$router.push({
-            name:'addShop',
-            query:{
-              place: e.poi.name
+      AMap.event.addListener(autocomplete, "select", function(e){
+        placeSearch.setCity(e.poi.adcode);
+        placeSearch.search(e.poi.name);
+
+        var geocoder = new AMap.Geocoder({
+          city: _this.fromCity, //城市，默认：“全国”
+          radius: 1000 //范围，默认：500
+        });
+        geocoder.getLocation(e.poi.name, function(status, result) {
+            if (status === 'complete' && result.info === 'OK') {
+                console.log(result);
+                //return result;
+                _this.lat  = result.geocodes[0].location.lat;
+                _this.lng  = result.geocodes[0].location.lng;
+                //console.log("_this:",_this.lat);
+                _this.getLatLng("addShop",_this.lat,_this.lng,e.poi.name);
             }
-          });
+            else {
+              console.log('获取经纬度错误');
+            }
+        });
       });
     });
+
   }
 };
 </script>
