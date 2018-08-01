@@ -13,14 +13,13 @@
     </div>
   </div>
   <div class="deleteShop">
-    <router-link :to="{name:'login'}">
-      <button>退出登录</button>
-    </router-link>
+    <button @click="logOut()">退出登录</button>
   </div>
 </div>
 </template>
 <script>
 import Button from "@/components/Button/Button";
+import { mapActions } from 'vuex';
 export default {
   data() {
     return {
@@ -34,7 +33,11 @@ export default {
  
   },
   methods: {
-    
+    ...mapActions(['LogOut']),
+    logOut () {
+      this.LogOut();
+      this.$router.push({name:'login'});
+    },
   }
 };
 </script>

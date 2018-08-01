@@ -27,6 +27,7 @@
 </template>
 
 <script>
+import { setNavTabIndex, getNavTabIndex} from '@/utils/tool';
 	export default {
 		data() {
 			return {
@@ -34,7 +35,7 @@
 			};
 		},
 		 created: function(){
-          	let localData = window.sessionStorage.getItem('navTabIndex');
+          	let localData = getNavTabIndex();
           	this.selected = localData?localData:'/index';
 	    },
 		components:{
@@ -45,7 +46,7 @@
 	    },
 		selected: function (val) {
 		      this.$router.push({path: val});
-		       window.sessionStorage.setItem('navTabIndex',val);
+		       setNavTabIndex(val);
 		    }
 		 }
 	};

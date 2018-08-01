@@ -27,7 +27,11 @@ export default {
   methods: {
     async getApplyFinance(){
         let res = await getApplyFinanceFun();
-       this.data = res.data;
+        if (res.code === 0) {
+            this.data = res.data || {};
+        }else {
+            this.$toast(res.msg);
+        }
     },
     gowithdraw(){
         this.$router.push({name:'withdraw'});

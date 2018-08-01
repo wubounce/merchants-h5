@@ -21,7 +21,6 @@ const user = {
           break;
         }
       }
-      console.log(isExist);
       return isExist;
     }
   },

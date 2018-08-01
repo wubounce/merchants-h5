@@ -1,15 +1,15 @@
 <template>
 <div class="addvip"  v-title="title">
   <div class="addvip-header">
-    <p>所属店铺<span class="addvip-con">企鹅一号店VIP卡</span></p>
-    <p>VIP卡类型<span class="addvip-con">VIP年卡</span></p>
+    <p>所属店铺<span class="addvip-con" v-for="(items,index) in detail.shopList" :key="index">{{items.shopName}}<i v-if="index !== (detail.shopList.length-1)">,</i></span></p>
   </div>
-  <div class="card-wrap">
+  <div class="card-wrap" v-for="(vipitem,index) in detail.items">
+    <p class="addvip-type"><span>{{vipitem.cardType===1?'VIP年卡':vipitem.cardType===2?'VIP半年卡':'VIP季卡'}}</span></p>
     <div class="add-card-header"></div>
     <div class="add-card">
-      <p>卡售价<span>100 元</span></p>
-      <p>VIP折扣<span>80%</span></p>
-      <p>每日限用次数<span>3次</span></p>
+      <p>卡售价<span>{{vipitem.price}}元</span></p>
+      <p>VIP折扣<span>{{vipitem.discount *100}}%</span></p>
+      <p>每日限用次数<span>{{vipitem.limitTime}}次</span></p>
     </div>
     <div class="tips">
       <p>提示：</p>
@@ -28,18 +28,30 @@
 </div>
 </template>
 <script>
+import qs from 'qs';
+import { vipDetailFun } from '@/service/market';
 export default {
   data() {
     return {
       title: 'VIP详情',
+      detail:{}
     };
   },
   mounted() {
     
   },
   created(){
+    let shopVipId = this.$route.query ? this.$route.query.shopVipId:'';
+    this.getDetail(shopVipId);
   },
   methods: {
+    async getDetail(shopVipId){
+      let payload = Object.assign({},{shopVipId:shopVipId});
+      let res = await vipDetailFun(qs.stringify(payload));
+      if (res.code ===0) {
+        this.detail = res.data;
+      }
+    }
   },
   components:{
   }
@@ -101,11 +113,16 @@ export default {
       }
     }
   }
+  .addvip-type {
+    font-size: 14px;
+    padding-bottom: 0.4rem;
+  }
   .create-wrap {
     padding: 0 0.4rem;
     background: #fff;
     font-size:12px;
     color:#999;
+    margin-bottom: 1.8rem;
     p {
       line-height:0.77rem;
     }

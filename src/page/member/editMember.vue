@@ -43,79 +43,41 @@
       <span class="shop">权限</span>
     </div>
     <section class="resp-shop-wrap" style="padding:0;">
-     <!--  <div class="all-list">
-        <label class="mint-checklist-label prom">
-          <div class="check-prem-list">
-            <span class="mint-checkbox is-right">
-              <input type="checkbox" class="mint-checkbox-input" v-model="checkpermissionslist" value="12344"> 
-              <span class="mint-checkbox-core"></span>
-            </span> 
-            <span class="mint-checkbox-label shopname">首页</span>
-          </div>
-        </label>
-        <label class="mint-checklist-label prom">
-          <div class="check-prem-list">
-            <span class="mint-checkbox is-right">
-              <input type="checkbox" class="mint-checkbox-input" v-model="checkpermissionslist" value="344"> 
-              <span class="mint-checkbox-core"></span>
-            </span> 
-            <span class="mint-checkbox-label shopname">首页</span>
-          </div>
-        </label>
-        <div class="promisss-child">
-          <label class="mint-checklist-label prom">
-            <div class="check-prem-list">
-              <span class="mint-checkbox is-right">
-                <i class="silde iconfont icon-nextx"></i>
-              </span> 
-              <span class="mint-checkbox-label shopname">店铺管理</span>
-            </div>
-          </label>
-          <div class="child-slit">
-            <label class="mint-checklist-label child-prom">
+      <div class="all-list">
+        <div class="promisss-child" >
+          <div class="child-slit" v-for="(item,index) in permissionsData">
+            <label class="mint-checklist-label child-prom" style="background:#fff">
               <div class="check-prem-list" style="border:none;padding:0.27rem 0.4rem;">
-                <span class="mint-checkbox is-right">
-                  <input type="checkbox" class="mint-checkbox-input" v-model="checkpermissionslist" value="22344"> 
+                <span class="mint-checkbox is-right" v-if="item.name==='首页' || item.name==='报表'">
+                  <input type="checkbox" class="mint-checkbox-input" v-model="checkpermissionslist" :value="item.menuId"> 
                   <span class="mint-checkbox-core"></span>
-                </span> 
-                <span class="mint-checkbox-label shopname">首页</span>
+                </span>
+                <span class="mint-checkbox is-right" v-else>
+                  <span class="iconfont icon-xiangxiajiantou"></span>
+                </span>
+                <span class="mint-checkbox-label shopname">{{item.name}}</span>
               </div>
             </label>
-            <label class="mint-checklist-label child-prom">
-              <div class="check-prem-list" style="border:none;padding:0.27rem 0.4rem;">
-                <span class="mint-checkbox is-right">
-                  <input type="checkbox" class="mint-checkbox-input" v-model="checkpermissionslist" value="23444"> 
-                  <span class="mint-checkbox-core"></span>
-                </span> 
-                <span class="mint-checkbox-label shopname">首页</span>
-              </div>
-            </label>
-            <label class="mint-checklist-label child-prom">
-              <div class="check-prem-list" style="border:none;padding:0.27rem 0.4rem;">
-                <span class="mint-checkbox is-right">
-                  <input type="checkbox" class="mint-checkbox-input" v-model="checkpermissionslist" value="234344"> 
-                  <span class="mint-checkbox-core"></span>
-                </span> 
-                <span class="mint-checkbox-label shopname">首页</span>
-              </div>
-            </label>
+            <transition-group name="collapse">
+              <div class="promisss-child" v-for="(sitem,index) in item.children" :key="index" style="background:#fff;">
+                  <label class="mint-checklist-label prom">
+                    <div class="check-prem-list">
+                      <span class="mint-checkbox is-right">
+                        <input type="checkbox" class="mint-checkbox-input" v-model="checkpermissionslist" :value="sitem.menuId"> 
+                        <span class="mint-checkbox-core"></span>
+                      </span> 
+                      <span class="mint-checkbox-label shopname" style="padding-left:0.8rem;">{{sitem.name}}</span>
+                    </div>
+                  </label>
+                </div>
+              </transition-group>
           </div>
         </div>
-      </div> -->
-      <el-tree
-        v-model="permissionsMIds"
-        :data="permissionsData"
-        show-checkbox
-        node-key="menuId"
-        ref="tree"
-        highlight-current
-        check-strictly
-        :props="defaultProps">
-      </el-tree>
+      </div>
     </section>
     <section class="promiss-footer">
-       <span class="can" @click="clearPermissions">取消</span>
-       <span class="cifrm" @click="addPermissions">确定</span>
+      <span class="can" @click="permissionsVisible=false;">取消</span>
+      <span class="cifrm" @click="addPermissions">确定</span>
     </section>
   </mt-popup>
 </div>
@@ -132,18 +94,13 @@ export default {
     return {
       title: '编辑人员',
       checkshoplist: [],
-      checkpermissionslist: [],
       shopVisible:false,
       permissionsVisible:false,
 
       allmenu:[],
       permissionsData:[],
-      defaultProps: {
-        children: 'children',
-        label: 'name'
-      },
-      permissionsMIds:[],
       permissionsMIdsTxt:'',
+      checkpermissionslist: [],
 
       shoplist:[],
       operateShopIds:[],
@@ -159,9 +116,9 @@ export default {
   },
   created(){
     let query = this.$route.query;
-    this.getOperatorInfo(query.id);
     this.shopListFun();
     this.menuSelect();
+    this.getOperatorInfo(query.id);
   },
   methods: {
     validate() {
@@ -174,14 +131,18 @@ export default {
     async getOperatorInfo(id){
       let res = await getOperatorInfoFun(qs.stringify({id:id}));
       if (res.code === 0) {
-        this.username = res.data.userName;
+        this.username = res.data.realName;
         this.phone = res.data.phone;
         this.createTime = res.data.createTime;
         this.checkshoptxt = res.data.operateShopNames;
         this.checkshoplist = res.data.operateShopNames ? res.data.operateShopNames.split(',') :[];
-        this.permissionsMIds = res.data.list.map(item=>item.menuId);
+
+        let updateOperateShopIds = res.data.operateShopNames ? res.data.operateShopNames.split(',') :[];
+        updateOperateShopIds = this.shoplist.filter(v=>updateOperateShopIds.some(k=>k==v.shopName));
+        updateOperateShopIds.forEach(item=>this.operateShopIds.push(`'${item.shopId}'`));
+
+        this.checkpermissionslist = res.data.list.map(item=>item.menuId);
         this.permissionsMIdsTxt = res.data.list.map(item=>item.name).join(',');
-        this.$refs.tree.setCheckedKeys(this.permissionsMIds);
       }
     },
     async menuSelect(){
@@ -194,21 +155,20 @@ export default {
       this.shoplist = res.data;
     },
     async getcheckshop(){
+      this.operateShopIds = [];
       this.checkshoptxt = this.checkshoplist.join(',');
       let checklist = this.shoplist.filter(v=>this.checkshoplist.some(k=>k==v.shopName));
       this.shopVisible = false;
       checklist.forEach(item=>this.operateShopIds.push(`'${item.shopId}'`));
     },
+    // changeThreePerm(...arg){
+    //   this.checkpermissionslist.push(...arg); //先添加，在去重
+    //   this.checkpermissionslist = Array.from(new Set(this.checkpermissionslist));
+    // },
     addPermissions(){
-      console.log(this.$refs.tree.getCheckedKeys());
-      this.permissionsMIds = this.$refs.tree.getCheckedKeys();
       this.permissionsVisible=false;
-      let checkpers = [];
-      let checklist = this.allmenu.filter(v=>this.permissionsMIds.some(k=>k==v.menuId));
+      let checklist = this.allmenu.filter(v=>this.checkpermissionslist.some(k=>k==v.menuId));
       this.permissionsMIdsTxt = checklist.map(item=>item.name).join(',');
-    },
-    clearPermissions(){
-        this.permissionsVisible=false;
     },
     async updateMember(){
       if (this.validate()) {
@@ -217,7 +177,7 @@ export default {
           username:this.username,
           phone:this.phone,
           operateShopIds:this.operateShopIds.join(','),
-          mIds:this.permissionsMIds.join(',')
+          mIds:this.checkpermissionslist.join(',')
         };
         let res = await updateOperatorInfoFun(qs.stringify(payload));
         if (res.code === 0) {

@@ -14,6 +14,11 @@ const menuKey = 'menu';
 export const setMenu = (menu) => localStorage.setItem(menuKey, JSON.stringify(menu));
 export const getMenu = () => JSON.parse(localStorage.getItem(menuKey));
 export const removeMenu = () => localStorage.removeItem(menuKey);
+
+const navTabKey = 'navTabIndex';
+export const setNavTabIndex = (navTab) => sessionStorage.setItem(navTabKey,navTab);
+export const getNavTabIndex = () => sessionStorage.getItem(navTabKey);
+export const removeNavTabIndex = () => sessionStorage.removeItem(navTabKey);
 /**
  * 截流函数
  */

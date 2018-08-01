@@ -3,7 +3,7 @@
     <header>
         <span class="iconfont icon-zhifubao"></span>
         <div>
-            <p class="name">{{userInfo.alipayAccount}}</p>
+            <p class="name">{{userInfo.alipayAccount | replaceAliply}}</p>
             <p>24小时内到账</p>
         </div>
     </header>
@@ -21,6 +21,7 @@
 </template>
 <script>
 import qs from 'qs';
+import { MessageBox } from 'mint-ui';
 import { getApplyaccountFun, applyMoneySubmitFun } from '@/service/user';
 export default {
   data() {
@@ -39,7 +40,14 @@ export default {
   methods: {
     async getOperator(){
         let res = await getApplyaccountFun();
-        this.userInfo = res.data;
+        if (res.code === 0) {
+            this.userInfo = res.data;
+            if (!this.userInfo.alipayAccount) {
+                MessageBox.alert(`请先进行支付宝账号绑定及实名认证`).then(async () => {
+                    this.$router.push({name:'accountSet'});
+                });
+            }
+        }
     },
     allWithdraw(){
         this.money = this.userInfo.balance;
@@ -68,8 +76,10 @@ export default {
         this.money !== '' ? this.disabled = false : this.disabled = true;
     }
   },
-  components:{
-
+  filters:{
+    replaceAliply(value){
+        return String(value).replace(/^(\d{4})\d{4}(\d+)/,"$1****$2");
+    }
   }
 };
 </script>

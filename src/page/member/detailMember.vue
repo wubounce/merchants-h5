@@ -1,30 +1,33 @@
 <template>
 <div class="addmember" v-title="title">
-  <div class="add-form">
-    <div class="input-group">
-      <div class="form-title">用户名</div>
-      <div class="form-input">{{detail.username}}</div>
+ <div class="permissions" v-if="$store.getters.has('mer:person:info')">暂无相关页面权限</div>
+  <div v-else>
+    <div class="add-form">
+      <div class="input-group">
+        <div class="form-title">用户名</div>
+        <div class="form-input">{{detail.realName}}</div>
+      </div>
+      <div class="input-group">
+        <div class="form-title">手机</div>
+        <div class="form-input">{{detail.phone}}</div>
+      </div>
+      <div class="input-group">
+        <div class="form-title">负责店铺</div>
+        <div class="form-input">{{detail.operateShopNames}}</div>
+      </div>
+      <div class="input-group" style="border:none">
+        <div class="form-title">权限</div>
+        <div class="form-input" style="text-align:left"><span v-for="(item,index) in detail.list" :key="index">{{item.name}}<i v-if="index !== (detail.list.length-1)">,</i></span></div>
+      </div>
     </div>
-    <div class="input-group">
-      <div class="form-title">手机</div>
-      <div class="form-input">{{detail.phone}}</div>
+    <div class="input-group createtime">
+      <div class="form-title">创建时间</div>
+      <div class="form-input">{{detail.createTime}}</div>
     </div>
-    <div class="input-group">
-      <div class="form-title">负责店铺</div>
-      <div class="form-input">{{detail.operateShopNames}}</div>
+    <div class="footer">
+      <span class="edit"  v-has="'mer:person:update'"><router-link :to="{name:'editMember',query:{ id:detail.id }}">编辑</router-link></span>
+      <span class="del" @click="deldelMember(detail.id)" v-has="'mer:person:delete'">删除</span>
     </div>
-    <div class="input-group" style="border:none">
-      <div class="form-title">权限</div>
-      <div class="form-input" style="text-align:left"><span v-for="(item,index) in detail.list" :key="index">{{item.name}}<i v-if="index !== (detail.list.length-1)">,</i></span></div>
-    </div>
-  </div>
-  <div class="input-group createtime">
-    <div class="form-title">创建时间</div>
-    <div class="form-input">{{detail.createTime}}</div>
-  </div>
-  <div class="footer">
-    <span class="edit"><router-link :to="{name:'editMember',query:{ id:detail.id }}">编辑</router-link></span>
-    <span class="del" @click="deldelMember(detail.id)">删除</span>
   </div>
 </div>
 </template>

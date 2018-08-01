@@ -9,13 +9,13 @@
     <form ref="loginForm" :model="form">
       <div class="form-group input">
         <p class="userName">
-          <input type="text" v-model.trim="form.userName" v-on:input="userinputFunc" placeholder="请输入手机号码" style="width:90%">
+          <input type="number" v-model.trim="form.userName" v-on:input="userinputFunc" placeholder="请输入用户名" style="width:90%">
           <span class="eyes iconfont icon-guanbi" v-if="isuser" @click="form.userName='';isuser=false"></span>
         </p>
         <div class="passWord">
           <div class="pwdshow">
-            <input type="text" v-model.trim="form.password" v-if="typepwd" >
-            <input type="password" v-model.trim="form.password" v-on:input="pwdinputFunc" placeholder="请输入密码" v-else>
+            <input type="text" v-model.trim="form.password" v-if="typepwd" autocomplete="off">
+            <input type="password" v-model.trim="form.password" v-on:input="pwdinputFunc" placeholder="请输入密码" autocomplete="off" v-else>
           </div>
           <div class="eyes iconfont icon-biyanjing"  @click="openpwd"></div>
         </div>
@@ -33,8 +33,7 @@
 <script>
 import qs from "qs";
 import { mapActions } from 'vuex';
-import { removeToken, removeUser, removeMenu } from '@/utils/tool';
-import { validatPhone } from '@/utils/validate';
+import { removeToken, removeUser, removeMenu, removeNavTabIndex } from '@/utils/tool';
 import { login } from '@/service/login';
 import { menuSelectFun } from '@/service/member';
 import Button from "@/components/Button/Button";
@@ -56,6 +55,7 @@ export default {
       removeToken();
       removeUser();
       removeMenu();
+      removeNavTabIndex();
     },
     computed: {
       
@@ -65,13 +65,10 @@ export default {
         'login','getUser','getMenu'
       ]),
       validate() {
-        // if (this.form.userName === '') {
-        //   this.$toast({message: "请输入手机号码" });
-        //   return false;
-        // }else if (!validatPhone(this.form.userName)) {
-        //   this.$toast({message: "请输入正确的手机号码" });
-        //   return false;
-        // } 
+        if (this.form.userName === '') {
+          this.$toast({message: "请输入用户名" });
+          return false;
+        }
         if (this.form.password === '') {
           this.$toast({message: "请输入密码"  });
           return false;
@@ -82,11 +79,15 @@ export default {
         if (this.validate()) {
           let loginInfo = Object.assign({},this.form);
           let res = await login(qs.stringify(loginInfo));
-          if (res.code===0) {
+          if (res.code===0 || res.code === 8002) {
               this.login(res.data.token);
               let menu = await menuSelectFun();
               this.getMenu(menu.data);
-              this.$router.push({name:'index'});
+              if (res.code===0) {
+                this.$router.push({name:'index'});
+              } else if(res.code === 8002){
+                this.$router.push({name:'bindPhone'});
+              }
           }else {
              this.$toast(res.msg);
           }

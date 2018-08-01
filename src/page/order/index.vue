@@ -1,7 +1,7 @@
 <template>
 <div class="order-wrap" v-title="title">
-  <div class="permissions" v-if="$store.getters.has('mer:eportr')">暂无相关页面权限</div>
-  <div>
+  <div class="permissions" v-if="$store.getters.has('mer:order:list')">暂无相关页面权限</div>
+  <div v-else>
     <section class="sarch-wrap">
       <div class="search">
          <span class="iconfont icon-IconSearch select-back" @click="searchOrder"></span>
@@ -16,7 +16,7 @@
     </section>
     <section class="no-order" v-if="noOrderList">
       暂无订单
-    </section>
+    </section> 
     <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
      <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" 
      :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore">
@@ -40,9 +40,9 @@
           </section>
           </router-link>
           <section class="listaction" v-if="item.orderStatus === 2"> 
-              <mt-button @click="orderRefund(item.id,item.payPrice,item.subType)">退款</mt-button>
-              <mt-button @click="machineBoot(item.id,item.subType)" v-if="item.machineType === 1">启动</mt-button>
-              <mt-button @click="machineReset(item.id,item.machineId,item.subType)">复位</mt-button>
+              <mt-button @click="orderRefund(item.id,item.payPrice,item.subType)" v-has="'mer:order:refund'">退款</mt-button>
+              <mt-button @click="machineBoot(item.id,item.subType)" v-if="item.machineType === 1" v-has="'mer:order:start'">启动</mt-button>
+              <mt-button @click="machineReset(item.id,item.machineId,item.subType)" v-has="'mer:order:reset'">复位</mt-button>
           </section>
         </div>
         <div v-if="allLoaded" class="nomore-data">没有更多了</div>

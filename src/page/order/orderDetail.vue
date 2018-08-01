@@ -1,54 +1,56 @@
 <template>
 <div class="order-detail" v-title="title">
-   <div class="order-status">{{detail.orderStatus | orserStatus}}</div>
+<div class="permissions" v-if="$store.getters.has('mer:order:info')">暂无相关页面权限</div>
+  <div v-else>
+    <div class="order-status">{{detail.orderStatus | orserStatus}}</div>
     <div class="order-title">{{detail.shopAddress}}</div>
-  <div class="alllist">
-    <section class="order-list">  
-     
-      <div class="detail">  
-        <div class="orderpic"><img :src="detail.imageId" alt=""></div>
-        <div class="content">
-            <p class="con-title">{{detail.subType}}</p>
-            <p class="con-type">{{detail.machineFunctionName}}<span style="padding:0 0.346667rem">|</span>时长{{detail.markMinutes}}分钟</p>
-            <p class="con-price">¥{{detail.markPrice}}</p>
+    <div class="alllist">
+      <section class="order-list">  
+       
+        <div class="detail">  
+          <div class="orderpic"><img :src="detail.imageId" alt=""></div>
+          <div class="content">
+              <p class="con-title">{{detail.subType}}</p>
+              <p class="con-type">{{detail.machineFunctionName}}<span style="padding:0 0.346667rem">|</span>时长{{detail.markMinutes}}分钟</p>
+              <p class="con-price">¥{{detail.markPrice}}</p>
+          </div>
         </div>
+      </section>
+    </div>
+    <section class="total-wrap">
+      <div class="total-border">
+        <div class="vip"><span class="viptag">vip</span>VIP会员卡</div>
+        <div class="discount">-¥{{detail.discountPrice}}</div>
       </div>
     </section>
+    <section class="money-wrap">
+      <span class="heji">合计：</span>
+      <span class="money">¥{{detail.payPrice}}</span>
+    </section>
+    <section class="total-wrap">
+      <div class="total-border">
+        <div class="vip">用户账号：{{detail.phone}}</div>
+      </div>
+    </section>
+    <section class="total-wrap">
+      <div class="total-border">
+        <div class="vip">订单编号：{{detail.orderNo}}</div>
+      </div>
+    </section>
+    <section class="total-wrap" v-if="detail.orderStatus === 2&& detail.payType !== 0 || detail.orderStatus === 5&& detail.payType !== 0">
+      <div class="total-border">
+        <div class="vip">支付方式：{{detail.payType | PayType}}</div>
+      </div>
+    </section>
+    <section class="oder-time" style="margin-bottom:1.3rem;">
+      <span>下单时间：{{detail.payTime}}</span>
+    </section>
+     <section class="listaction" v-if="detail.orderStatus === 2"> 
+      <mt-button @click="orderRefund(detail.id,detail.payPrice)" v-has="'mer:order:refund'">退款</mt-button>
+      <mt-button @click="machineBoot(detail.id)" v-if="detail.machineType === 1" v-has="'mer:order:start'">启动</mt-button>
+      <mt-button @click="machineReset(detail.id,detail.machineId)" v-has="'mer:order:reset'">复位</mt-button>
+    </section>
   </div>
-
-  <section class="total-wrap">
-    <div class="total-border">
-      <div class="vip"><span class="viptag">vip</span>VIP会员卡</div>
-      <div class="discount">-¥{{detail.discountPrice}}</div>
-    </div>
-  </section>
-  <section class="money-wrap">
-    <span class="heji">合计：</span>
-    <span class="money">¥{{detail.payPrice}}</span>
-  </section>
-  <section class="total-wrap">
-    <div class="total-border">
-      <div class="vip">用户账号：{{detail.phone}}</div>
-    </div>
-  </section>
-  <section class="total-wrap">
-    <div class="total-border">
-      <div class="vip">订单编号：{{detail.orderNo}}</div>
-    </div>
-  </section>
-  <section class="total-wrap" v-if="detail.orderStatus === 2&& detail.payType !== 0 || detail.orderStatus === 5&& detail.payType !== 0">
-    <div class="total-border">
-      <div class="vip">支付方式：{{detail.payType | PayType}}</div>
-    </div>
-  </section>
-  <section class="oder-time" style="margin-bottom:1.3rem;">
-    <span>下单时间：{{detail.payTime}}</span>
-  </section>
-   <section class="listaction" v-if="detail.orderStatus === 2"> 
-    <mt-button @click="orderRefund(detail.id,detail.payPrice)">退款</mt-button>
-    <mt-button @click="machineBoot(detail.id)" v-if="detail.machineType === 1">启动</mt-button>
-    <mt-button @click="machineReset(detail.id,detail.machineId)">复位</mt-button>
-  </section>
 </div>
 </template>
 <script>

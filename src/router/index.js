@@ -12,127 +12,122 @@ export default new Router({
     {
       path: '/login',
       name: 'login',
-      component: () =>
-        import ('@/page/login')
+      component: () => import ('@/page/login'),
+      meta: {title: '登录'}
     },
     {
       path: '/home',
       name: 'home',
       component: () =>import ('@/page/home'),
+      meta: {title: '主页'},
       children:[
         {
           path: '/index',
           name: 'index',
-          component: () =>
-            import ('@/page/index/index')
+          component: () => import ('@/page/index/index'),
+          meta: {title: '首页'},
         },
         {
           path: '/report',
           name: 'report',
-          component: () =>
-            import ('@/page/report/index')
+          component: () => import ('@/page/report/index'),
+          meta: {title: '报表'},
         },
         {
           path: '/management',
           name: 'management',
-          component: () =>
-            import ('@/page/management/index')
+          component: () => import ('@/page/management/index'),
+          meta: {title: '管理'},
         },
-        // 我的
         {
           path: '/user',
           name: 'user',
-          component: () =>
-            import ('@/page/user/user')
+          component: () => import ('@/page/user/user'),
+          meta: {title: '我的'},
         },
       ]
     },
-    
+    // 绑定手机号
+    {
+      path: '/bindPhone',
+      name: 'bindPhone',
+      component: () => import ('@/page/bindPhone'),
+      meta: {title: '绑定手机号'},
+    },
     {
       path: '/reset',
       name: 'reset',
-      component: () =>
-        import ('@/page/reset/index')
+      component: () => import ('@/page/reset/index'),
+      meta: {title: '重置密码'},
     },
     {
       path: '/confimPwd',
       name: 'confimPwd',
-      component: () =>
-        import ('@/page/reset/confimPwd')
+      component: () => import ('@/page/reset/confimPwd'),
+      meta: {title: '确认重置密码'},
     },
       
     {
       path: '/reportdetail',
       name: 'reportdetail',
-      component: () =>
-        import ('@/page/report/detail')
+      component: () => import ('@/page/report/detail'),
+      meta: {title: '报表详情'},
     },
 
     // 设备管理
     {
       path: '/deviceMange',
       name: 'deviceMange',
-      component: () =>
-        import ('@/page/device/deviceMange/deviceMange')
+      component: () => import ('@/page/device/deviceMange/deviceMange')
     },
     {
       path: '/batchFuntionSet',
       name: 'batchFuntionSet',
-      component: () =>
-        import ('@/page/device/batchFuntionSet/batchFuntionSet')
+      component: () => import ('@/page/device/batchFuntionSet/batchFuntionSet')
     },
     {
       path: '/addDevice',
       name: 'addDevice',
-      component: () =>
-        import ('@/page/device/addDevice/addDevice')
+      component: () => import ('@/page/device/addDevice/addDevice')
     },
     {
       path: '/editDevice',
       name: 'editDevice',
-      component: () =>
-        import ('@/page/device/editDevice/editDevice')
+      component: () => import ('@/page/device/editDevice/editDevice')
     },
     {
       path: '/deviceDetail',
       name: 'deviceDetail',
-      component: () =>
-        import ('@/page/device/deviceDetail/deviceDetail')
+      component: () => import ('@/page/device/deviceDetail/deviceDetail')
     },
     {
       path: '/functionSet',
       name: 'functionSet',
-      component: () =>
-        import ('@/page/device/functionSet/functionSet')
+      component: () => import ('@/page/device/functionSet/functionSet')
     },
 
     {
       path: '/batchStart',
       name: 'batchStart',
-      component: () =>
-        import ('@/page/device/batchStart/batchStart'),
+      component: () =>import ('@/page/device/batchStart/batchStart'),
       children: [{
           path: '',
-          component: () =>
-            import ('@/page/device/batchStart/selectShop'),
+          component: () => import ('@/page/device/batchStart/selectShop'),
           name: 'selectShop'
         },
         {
           path: '/selectFirstype',
-          component: () =>
-            import ('@/page/device/batchStart/selectFirstype'),
+          component: () => import ('@/page/device/batchStart/selectFirstype'),
           name: 'selectFirstype'
         },
         {
           path: '/selectFunction',
-          component: () =>
-            import ('@/page/device/batchStart/selectFunction'),
+          component: () => import ('@/page/device/batchStart/selectFunction'),
           name: 'selectFunction'
         },
         {
           path: '/selectStartTime',
-          component: () =>
-            import ('@/page/device/batchStart/selectStartTime'),
+          component: () => import ('@/page/device/batchStart/selectStartTime'),
           name: 'selectStartTime'
         }
       ]
@@ -141,121 +136,116 @@ export default new Router({
     {
       path: '/member',
       name: 'member',
-      component: () =>
-        import ('@/page/member/index')
+      component: () => import ('@/page/member/index'),
+      meta: {title: '人员管理'},
     },
     {
       path: '/addMember',
       name: 'addMember',
-      component: () =>
-        import ('@/page/member/addMember')
+      component: () => import ('@/page/member/addMember'),
+      meta: {title: '人员新增'},
     },
     {
       path: '/detailMember',
       name: 'detailMember',
-      component: () =>
-        import ('@/page/member/detailMember')
+      component: () => import ('@/page/member/detailMember'),
+      meta: {title: '人员详情'},
     },
     {
       path: '/editMember',
       name: 'editMember',
-      component: () =>
-        import ('@/page/member/editMember')
+      component: () => import ('@/page/member/editMember'),
+      meta: {title: '人员修改'},
     },
     {
       path: '/order',
       name: 'order',
-      component: () =>
-        import ('@/page/order/index')
+      component: () => import ('@/page/order/index'),
+      meta: {title: '订单管理'},
     },
     {
       path: '/orderdetail',
       name: 'orderdetail',
-      component: () =>
-        import ('@/page/order/orderdetail')
+      component: () => import ('@/page/order/orderDetail'),
+      meta: {title: '订单详情'},
     },
 
     //店铺管理
     {
       path: '/shoplist',
       name: 'shopList',
-      component: () =>
-        import ('@/page/shop/shopList')
+      component: () => import ('@/page/shop/shopList'),
+      meta: {title: '店铺管理'},
     },
     {
       path: '/addShop',
       name: 'addShop',
-      component: () =>
-        import ('@/page/shop/addShop')
+      component: () => import ('@/page/shop/addShop'),
+      meta: {title: '店铺新增'},
     },
     {
       path: '/mapSearch',
       name: 'mapSearch',
-      component: () =>
-        import ('@/page/shop/mapSearch')
+      component: () => import ('@/page/shop/mapSearch'),
+      meta: {title: '地图搜索'},
     },
     {
       path: '/shopDetail',
       name: 'shopDetail',
-      component: () =>
-        import ('@/page/shop/shopDetail')
+      component: () => import ('@/page/shop/shopDetail'),
+      meta: {title: '店铺详情'},
     },
     {
       path: '/editShop',
       name: 'editShop',
-      component: () =>
-        import ('@/page/shop/editShop')
+      component: () => import ('@/page/shop/editShop'),
+      meta: {title: '店铺修改'},
     },
 
     //待办事项
     {
       path: '/todolist',
       name: 'todolist',
-      component: () =>
-        import ('@/page/todolist/index')
+      component: () => import ('@/page/todoList/index'),
+      meta: {title: '待办事项'},
     },
     {
       path: '/todoDetail',
       name: 'todoDetail',
-      component: () =>
-        import ('@/page/todolist/todoDetail')
+      component: () => import ('@/page/todoList/todoDetail'),
+      meta: {title: '待办事项详情'},
     },
     {
       path: '/editTodolist',
       name: 'editTodolist',
-      component: () =>
-        import ('@/page/todolist/editTodolist')
+      component: () => import ('@/page/todoList/editTodolist'),
+      meta: {title: '修改事项'},
     },
 
     //营销管理
-    { path: '/marketing', name: 'marketing', component: () => import('@/page/marketing/index') },
-    { path: '/addvip', name: 'addvip', component: () => import('@/page/marketing/addVIP') },
-    { path: '/addMarket', name: 'addMarket', component: () => import('@/page/marketing/addMarket') },
-    { path: '/detailMarket', name: 'detailMarket', component: () => import('@/page/marketing/detailMarket') },
-    { path: '/editMarket', name: 'editMarket', component: () => import('@/page/marketing/editMarket') },
-    { path: '/vipDetail', name: 'vipDetail', component: () => import('@/page/marketing/vipDetail') },
-    { path: '/editVip', name: 'editVip', component: () => import('@/page/marketing/editVip') },
-
-    
+    { path: '/marketing', name: 'marketing', component: () => import('@/page/marketing/index'),meta: {title: '营销管理'} },
+    { path: '/addvip', name: 'addvip', component: () => import('@/page/marketing/addVIP'),meta: {title: 'VIP卡新增'} },
+    { path: '/addMarket', name: 'addMarket', component: () => import('@/page/marketing/addMarket'),meta: {title: '优惠新增'} },
+    { path: '/detailMarket', name: 'detailMarket', component: () => import('@/page/marketing/detailMarket'),meta: {title: '优惠详情'} },
+    { path: '/editMarket', name: 'editMarket', component: () => import('@/page/marketing/editMarket'),meta: {title: '优惠修改'} },
+    { path: '/vipDetail', name: 'vipDetail', component: () => import('@/page/marketing/vipDetail'),meta: {title: 'VIP卡详情'} },
+    { path: '/editVip', name: 'editVip', component: () => import('@/page/marketing/editVip'),meta: {title: 'VIP卡修改'} },
     
     //设置
     {
       path: '/setting',
       name: 'setting',
-      component: () =>
-        import ('@/page/setting/index')
+      component: () => import ('@/page/setting/index')
     },
     {
       path: '/personalSet',
       name: 'personalSet',
-      component: () =>
-        import ('@/page/setting/personalSet')
+      component: () => import ('@/page/setting/personalSet')
     },
     {
       path: '/accountSet',
       name: 'accountSet',
-      component: () =>
-        import ('@/page/setting/accountSet')
+      component: () => import ('@/page/setting/accountSet')
     },
     { path: '/changePwd', name: 'changePwd', component: () => import('@/page/setting/changePwd') },
     { path: '/setAlipay', name: 'setAlipay', component: () => import('@/page/setting/setAlipay') },
@@ -270,38 +260,38 @@ export default new Router({
     {
       path: '/wallet',
       name: 'wallet',
-      component: () =>
-        import ('@/page/wallet/wallet')
+      component: () => import ('@/page/wallet/wallet'),
+      meta: {title: '钱包'}
     },
     {
       path: '/accountList',
       name: 'accountList',
-      component: () =>
-        import ('@/page/wallet/accountList')
+      component: () => import ('@/page/wallet/accountList'),
+      meta: {title: '收支明细'}
     },
     {
       path: '/accountDetail',
       name: 'accountDetail',
-      component: () =>
-        import ('@/page/wallet/accountDetail')
+      component: () => import ('@/page/wallet/accountDetail'),
+      meta: {title: '收支详情'}
     },
     {
       path: '/withdraw',
       name: 'withdraw',
-      component: () =>
-        import ('@/page/wallet/withdraw')
+      component: () => import ('@/page/wallet/withdraw'),
+      meta: {title: '余额 提现'}
     },
     {
       path: '/withdrawList',
       name: 'withdrawList',
-      component: () =>
-        import ('@/page/wallet/withdrawList')
+      component: () => import ('@/page/wallet/withdrawList'),
+      meta: {title: '提现明细'}
     },
     {
       path: '/withdrawResult',
       name: 'withdrawResult',
-      component: () =>
-        import ('@/page/wallet/withdrawResult')
+      component: () => import ('@/page/wallet/withdrawResult'),
+      meta: {title: '提现结果'}
     },
     {
       path: "*",
