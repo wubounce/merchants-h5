@@ -60,7 +60,7 @@ export default {
     }
   },
   created() {
-    this.shopId = this.$route.query.shopId
+    this.shopId = this.$route.query.shopId;
     this.fromCity = this.$route.query.city.slice(0,this.$route.query.city.length-1);
     this.name = this.$route.query.name;
     this.type = this.$route.query.type;
