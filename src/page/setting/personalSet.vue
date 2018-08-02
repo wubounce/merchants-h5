@@ -10,7 +10,11 @@
     </div>
 
     <div class="input-group" @click="chooseArea">
-      <div class="form-title"><span>所在地区</span><span class="forward iconfont icon-nextx"></span><span class="forward">{{item.address}}</span></div>
+      <div class="form-title"><span>所在地区</span><span class="forward iconfont icon-nextx"></span>
+        <span class="forward">
+          {{item.address.length>12 ? item.address.slice(0,12) + '...' : item.address}}
+        </span>
+      </div>
     </div>
   </div>
 
@@ -74,7 +78,10 @@ export default {
       districtId:'',
       provinceName:'',
       cityName:'',
-      districtName:''
+      districtName:'',
+      x: '',
+      y: '',
+      z: ''
     };
   },
   mounted() {
@@ -90,16 +97,25 @@ export default {
       this.item = res.data;
       this.noRealName = res.data.realName;
       let arr = [];
-      for(let i=0; i< this.noRealName.length;i++) {
-        arr.push(this.noRealName[i]);
-      }
-      console.log(arr);
-      for(let i=0; i< arr.length;i++) {
-        if(i>0&&i<arr.length-1) {
-          arr[i] = '*';
+      //设置隐藏名字
+      if(this.noRealName != ''  && this.noRealName != null ) {
+        for(let i=0; i< this.noRealName.length;i++) {
+          arr.push(this.noRealName[i]);
         }
+        for(let i=0; i< arr.length;i++) {
+          if(i>0&&i<arr.length-1) {
+            arr[i] = '*';
+          }
+        }
+        this.item.realName = arr.join('');
       }
-      this.item.realName = arr.join('');
+
+      //默认地址
+      this.item.address = res.data.address;
+      console.log(this.item.address.split('自治区'));
+      // if(this.item.address.split('省').length == 1 && this.item.address.split('自治区').length != 1  ) {
+      //   console.log(1);
+      // }
     },
     chooseArea() {
       this.placeVisible = true;
@@ -125,6 +141,8 @@ export default {
 
     },
     async onAddressChange(picker,values) {
+
+
       //市
       for(let i=0;i<this.provinceArray.length;i++) {
         if(values[0] == this.provinceArray[i].areaName) {
@@ -136,7 +154,6 @@ export default {
             let chooseCity = resCity.data.map((c)=> {
               return c.areaName;
             });
-
             this.cityArray = resCity.data;
             picker.setSlotValues(1, chooseCity); //设置市
           }

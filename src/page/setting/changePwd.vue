@@ -79,7 +79,11 @@
           if (res.code===0) {
              this.$router.push({name:'login'});
           }else {
-             this.$toast(res.msg);
+            this.$toast({
+              message: "您输入的旧密码有误",
+              position: "middle",
+              duration: 3000
+            });
           }
         }
       },

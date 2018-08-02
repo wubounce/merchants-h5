@@ -4,10 +4,10 @@
         <p class="user business">修改密码<span>{{user.password}}</span></p>
       </router-link>
       <router-link :to="{name:'setAlipay'}" v-has="'mer:me:aplipay'">
-        <p class="user business">绑定支付宝<span :class="{ 'isblue': isBlue, 'isBlack': !isBlue}">{{user.alipayAccount == '' ? '未绑定' : user.alipayAccount}}</span></p>
+        <p class="user business">绑定支付宝<span>{{user.alipayAccount == '' ? '未绑定' : user.alipayAccount}}</span></p>
       </router-link>
       <!-- <router-link :to="{name:'realName',  query:{ alipayAccount:user.alipayAccount }}"> -->
-        <p class="user business"  v-has="'mer:me:real'" @click="toRealName" >实名认证<span :class="{ 'status-neverordoingorfail': isStatus, 'status-success': !isStatus}">{{user.status}}</span></p>
+        <p class="user business"  v-has="'mer:me:real'" @click="toRealName" >实名认证<span>{{user.status}}</span></p>
       <!-- </router-link> -->
   </section>
 </template>
@@ -17,7 +17,7 @@ import { getAliAndStatusFun } from '@/service/setAlipayAndStatus';
 export default {
   data() {
     return {
-      title: '账号设置',
+      title: '账户设置',
       isBlue:true,
       isStatus:true,
       user:{
@@ -29,7 +29,7 @@ export default {
   },
   methods: {
     toRealName() {
-      if( this.user.status == 0 ) {
+      if( this.user.status == "未认证" || this.user.status == "未通过" ) {
         this.$router.push({
           name: 'realName',
           query:{
@@ -97,18 +97,7 @@ section {
     span {
       font-size: 16px;
       margin-right: 0.3rem;
-    }
-    .isblue {
-      color: #1890FF;
-    }
-    .isBlack {
-      color: #999999;
-    }
-    .status-neverordoingorfail {
-      color: #1890FF;
-    }
-    .status-success {
-      color: #999999;
+      color:#999999;
     }
   }
 }

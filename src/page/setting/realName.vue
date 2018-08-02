@@ -28,6 +28,7 @@ import qs from 'qs';
 import UploadImg from "@/components/UploadImg/UploadImg";
 import { uploadFileFun } from '@/service/shop';
 import { confirmOperatorFun } from '@/service/user';
+import { MessageBox } from 'mint-ui';
 export default {
   data() {
     return {
@@ -108,12 +109,10 @@ export default {
       let res = await uploadFileFun(qs.stringify(obj));
       if(res.code ===0 ) {
         this.img.defaultPicture3 = res.data[0].url;
-        //console.log(this.imageId);
       }
       else {
         MessageBox.alert(res.msg);
       }
-      //this.img.defaultPicture3 = msg;
     },
     async submitRealName() {
       let obj = {
@@ -138,6 +137,14 @@ export default {
   },
   components:{
     UploadImg
+  },
+  created() {
+    if( this.$route.query.alipayAccount == '' || this.$route.query.alipayAccount == null ) {
+      MessageBox.alert("请先绑定支付宝，再进行实名认证");
+      this.$router.push({
+        name:'accountSet'
+      });
+    }
   }
 };
 </script>
