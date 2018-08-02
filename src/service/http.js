@@ -2,7 +2,7 @@ import axios from 'axios';
 import { Indicator, MessageBox } from 'mint-ui';
 import store from '../store';
 import { getToken } from '@/utils/tool';
-const baseUrl = process.env.NODE_ENV === 'production' ? '' : 'http://192.168.5.10:8089/merchant/'; 
+const baseUrl = process.env.NODE_ENV === 'production' ? 'http://192.168.5.10:8089/merchant/' : 'http://192.168.5.10:8089/merchant/'; 
 // 创建axios实例
 const http = axios.create({
   baseURL: baseUrl, // api的base_url
