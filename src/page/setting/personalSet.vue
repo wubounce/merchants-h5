@@ -34,6 +34,7 @@ export default {
     return {
       title: '个人信息',
       item: {},
+      noRealName:'',
       placeVisible: false,
       addressSlots:[
         {
@@ -87,6 +88,18 @@ export default {
     async getPersonalInfo() {
       let res = await getPersonalInfoFun();
       this.item = res.data;
+      this.noRealName = res.data.realName;
+      let arr = [];
+      for(let i=0; i< this.noRealName.length;i++) {
+        arr.push(this.noRealName[i]);
+      }
+      console.log(arr);
+      for(let i=0; i< arr.length;i++) {
+        if(i>0&&i<arr.length-1) {
+          arr[i] = '*';
+        }
+      }
+      this.item.realName = arr.join('');
     },
     chooseArea() {
       this.placeVisible = true;
