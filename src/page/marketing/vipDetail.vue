@@ -1,29 +1,32 @@
 <template>
 <div class="addvip"  v-title="title">
-  <div class="addvip-header">
-    <p>所属店铺<span class="addvip-con" v-for="(items,index) in detail.shopList" :key="index">{{items.shopName}}<i v-if="index !== (detail.shopList.length-1)">,</i></span></p>
-  </div>
-  <div class="card-wrap" v-for="(vipitem,index) in detail.items">
-    <p class="addvip-type"><span>{{vipitem.cardType===1?'VIP年卡':vipitem.cardType===2?'VIP半年卡':'VIP季卡'}}</span></p>
-    <div class="add-card-header"></div>
-    <div class="add-card">
-      <p>卡售价<span>{{vipitem.price}}元</span></p>
-      <p>VIP折扣<span>{{vipitem.discount *100}}%</span></p>
-      <p>每日限用次数<span>{{vipitem.limitTime}}次</span></p>
+ <div class="permissions" v-if="$store.getters.has('mer:marketing:info')">暂无相关页面权限</div>
+  <div v-else>
+    <div class="addvip-header">
+      <p>所属店铺<span class="addvip-con" v-for="(items,index) in detail.shopList" :key="index">{{items.shopName}}<i v-if="index !== (detail.shopList.length-1)">,</i></span></p>
     </div>
-    <div class="tips">
-      <p>提示：</p>
-      <p>1.建议VIP折扣价不超过特惠活动价。</p>
-      <p>2.每日限用次数不填写或填写0，则不限制次数。</p>
+    <div class="card-wrap" v-for="(vipitem,index) in detail.items">
+      <p class="addvip-type"><span>{{vipitem.cardType===1?'VIP年卡':vipitem.cardType===2?'VIP半年卡':'VIP季卡'}}</span></p>
+      <div class="add-card-header"></div>
+      <div class="add-card">
+        <p>卡售价<span>{{vipitem.price}}元</span></p>
+        <p>VIP折扣<span>{{vipitem.discount *100}}%</span></p>
+        <p>每日限用次数<span>{{vipitem.limitTime}}次</span></p>
+      </div>
+      <div class="tips">
+        <p>提示：</p>
+        <p>1.建议VIP折扣价不超过特惠活动价。</p>
+        <p>2.每日限用次数不填写或填写0，则不限制次数。</p>
+      </div>
     </div>
-  </div>
-  <div class="create-wrap">
-    <p>创建人：Wendy</p>
-    <p>创建时间： 2018-07-15 15:38:05</p>
-  </div>
-   <div class="footer">
-    <span class="edit"><router-link :to="{name:'editVip'}">编辑</router-link></span>
-    <span class="del">删除</span>
+    <div class="create-wrap">
+      <p>创建人：Wendy</p>
+      <p>创建时间： 2018-07-15 15:38:05</p>
+    </div>
+     <div class="footer">
+      <span class="edit" v-has="'mer:marketing:vip:update,mer:marketing:vip:info'"><router-link :to="{name:'editVip'}">编辑</router-link></span>
+      <span class="del" v-has="'mer:marketing:vip:delete,mer:marketing:vip:info'">删除</span>
+    </div>
   </div>
 </div>
 </template>

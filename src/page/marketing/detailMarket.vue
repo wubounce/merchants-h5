@@ -13,7 +13,7 @@
     <p>创建时间： {{detail.createTime}}</p>
   </div>
   <div class="footer">
-    <span class="edit"><router-link :to="{name:'editMarket', query:{id:detail.id}}" v-has="'mer:marketing:update'">编辑</router-link></span>
+    <span class="edit" v-has="'mer:marketing:update'"><router-link :to="{name:'editMarket', query:{id:detail.id}}">编辑</router-link></span>
     <span class="del" @click="deldelMarket" v-has="'mer:marketing:delete'">删除</span>
   </div>
 </div>

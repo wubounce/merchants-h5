@@ -89,7 +89,7 @@ Vue.prototype.$_has = function(value) {
     return false;
   }
   for(let i=0;i<buttonpermsStr.length;i++){
-    if(buttonpermsStr[i].perms.indexOf(value)>-1){
+    if(buttonpermsStr[i].perms.includes(String(value))){
       isExist=true;
       break;
     }

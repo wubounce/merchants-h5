@@ -14,7 +14,7 @@
         </div>        
     </header>
     <ul class="user-list">
-        <li>
+        <li v-has="'mer:me:wallet'">
             <router-link to="wallet" class="item">
                 <div class="item-left"><span class="usericon iconfont icon-qianbao"></span><span>我的钱包</span></div>
                 <div class="item-right"><span class="go iconfont icon-nextx"></span></div>

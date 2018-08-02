@@ -1,35 +1,38 @@
 <template>
 	<section v-title="title">
-    <ul v-if="hasNews">
-      <li v-for="(item,index) in list" :key="index" @click="toShopDetail(item.shopId)">
-        <p class="top">
-          <!-- <span class="shopName">{{item.shopName}}</span>
-          <span>
-            <span class="iconMark discount">惠</span><span class="iconMark reserve">预</span>
-          </span> -->
-          <span>{{item.shopName.length>15 ? item.shopName.slice(0,15) + '...' : item.shopName }}</span>
-          <span><span v-if="item.isDiscount" class="iconMark discount">惠</span><span v-if="!item.isReserve" class="iconMark reserve">预</span></span>
-        </p>
-        <div class="bottom">
-          <div class="kindof">
-            <div class="text">分类</div>
-            <div class="text-value">{{item.shopType}}</div>
+    <div class="permissions" v-if="$store.getters.has('mer:shop:list')">暂无相关页面权限</div>
+    <div v-else>
+      <ul v-if="hasNews">
+        <li v-for="(item,index) in list" :key="index" @click="toShopDetail(item.shopId)">
+          <p class="top">
+            <!-- <span class="shopName">{{item.shopName}}</span>
+            <span>
+              <span class="iconMark discount">惠</span><span class="iconMark reserve">预</span>
+            </span> -->
+            <span>{{item.shopName.length>15 ? item.shopName.slice(0,15) + '...' : item.shopName }}</span>
+            <span><span v-if="item.isDiscount" class="iconMark discount">惠</span><span v-if="!item.isReserve" class="iconMark reserve">预</span></span>
+          </p>
+          <div class="bottom">
+            <div class="kindof">
+              <div class="text">分类</div>
+              <div class="text-value">{{item.shopType}}</div>
+            </div>
+            <div class="kindof">
+              <div class="text">设备</div>
+              <div class="text-value">{{item.machineCount}}<span class="little-font">台</span></div>
+            </div>
+            <div class="kindof">
+              <div class="text">收益</div>
+              <div class="text-value">{{item.profit}}<span class="little-font">元</span></div>
+            </div>
           </div>
-          <div class="kindof">
-            <div class="text">设备</div>
-            <div class="text-value">{{item.machineCount}}<span class="little-font">台</span></div>
-          </div>
-          <div class="kindof">
-            <div class="text">收益</div>
-            <div class="text-value">{{item.profit}}<span class="little-font">元</span></div>
-          </div>
-        </div>
-      </li>
-    </ul>
-    <p v-else class="noShop">暂无店铺, 可点击右下角进行添加</p>
-    <div class="circle" @click="toAddShop">
-      <div>+</div>
-      <div class="iconShop">店铺</div>
+        </li>
+      </ul>
+      <p v-else class="noShop">暂无店铺, 可点击右下角进行添加</p>
+      <div class="circle" @click="toAddShop" v-has="'mer:shop:add'">
+        <div>+</div>
+        <div class="iconShop">店铺</div>
+      </div>
     </div>
 	</section>
 </template>

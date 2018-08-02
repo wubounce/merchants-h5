@@ -3,11 +3,11 @@
       <router-link :to="{name:'changePwd'}">
         <p class="user business">修改密码<span>{{user.password}}</span></p>
       </router-link>
-      <router-link :to="{name:'setAlipay'}">
+      <router-link :to="{name:'setAlipay'}" v-has="'mer:me:aplipay'">
         <p class="user business">绑定支付宝<span :class="{ 'isblue': isBlue, 'isBlack': !isBlue}">{{user.alipayAccount == '' ? '未绑定' : user.alipayAccount}}</span></p>
       </router-link>
       <!-- <router-link :to="{name:'realName',  query:{ alipayAccount:user.alipayAccount }}"> -->
-        <p class="user business" @click="toRealName">实名认证<span :class="{ 'status-neverordoingorfail': isStatus, 'status-success': !isStatus}">{{user.status}}</span></p>
+        <p class="user business"  v-has="'mer:me:real'" @click="toRealName" >实名认证<span :class="{ 'status-neverordoingorfail': isStatus, 'status-success': !isStatus}">{{user.status}}</span></p>
       <!-- </router-link> -->
   </section>
 </template>

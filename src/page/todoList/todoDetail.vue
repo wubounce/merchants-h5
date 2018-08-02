@@ -1,22 +1,25 @@
 <template>
   <section class="todolist" v-title="title">
-    <!-- 第一模块 -->
-    <p class="todo-item first-todo-item"><span>所属店铺</span><span>{{item.shopName}}</span></p>
-    <p class="todo-item"><span>设备类型</span><span>{{item.machineTypeName}}</span></p>
-    <p class="todo-item"><span>启动模式</span><span>{{item.functionName}}</span></p>
-    <p class="todo-item"><span>启动时间</span><span>{{item.beginTime}}</span></p>
+  <div class="permissions" v-if="$store.getters.has('mer:order:info')">暂无相关页面权限</div>
+    <div v-else>
+      <!-- 第一模块 -->
+      <p class="todo-item first-todo-item"><span>所属店铺</span><span>{{item.shopName}}</span></p>
+      <p class="todo-item"><span>设备类型</span><span>{{item.machineTypeName}}</span></p>
+      <p class="todo-item"><span>启动模式</span><span>{{item.functionName}}</span></p>
+      <p class="todo-item"><span>启动时间</span><span>{{item.beginTime}}</span></p>
 
-    <!-- 第二模块 -->
-    <p class="todo-info second-p"><span>创建人：</span><span>{{item.createUser}}</span></p>
-    <p class="todo-info"><span>创建时间：</span><span>{{item.createTime}}</span></p>
-    <p class="blank"></p>
+      <!-- 第二模块 -->
+      <p class="todo-info second-p"><span>创建人：</span><span>{{item.createUser}}</span></p>
+      <p class="todo-info"><span>创建时间：</span><span>{{item.createTime}}</span></p>
+      <p class="blank"></p>
 
-    <!-- 第三模块 -->
-    <p class="about-button">
-      <Button btn-type="small" btn-color="spe" class="common-button" @confirm="isDeleteOrNot(item.id)">删除</Button>
-			<Button btn-type="small" btn-color="spe" class="common-button" @confirm="goTodoDetailEdit(item.id,item.machineParentTypeId)">编辑</Button>
-      <Button btn-type="small" btn-color="spe" class="common-button" @confirm="goStart()">立即启动</Button>
-    </p>
+      <!-- 第三模块 -->
+      <p class="about-button">
+        <Button btn-type="small" btn-color="spe" class="common-button" @confirm="isDeleteOrNot(item.id)" v-has="'mer:schedule:delete'">删除</Button>
+  			<Button btn-type="small" btn-color="spe" class="common-button" @confirm="goTodoDetailEdit(item.id,item.machineParentTypeId)" v-has="'mer:schedule:update'">编辑</Button>
+        <Button btn-type="small" btn-color="spe" class="common-button" @confirm="goStart()" v-has="'mer:order:reset,mer:order:info'">立即启动</Button>
+      </p>
+    </div>
   </section>
 </template>
 

@@ -35,7 +35,7 @@
   	</div>
 
   	<div class="VIP-wrap"  v-if="tabindex === 1">
-     <div class="permissions" v-if="$store.getters.has('mer:marketing:list')">暂无相关页面权限</div>
+     <div class="permissions" v-if="$store.getters.has('mer:marketing:vip:list')">暂无相关页面权限</div>
       <div v-else>
         <div class="no-discount-list" v-if="vipListData.length<=0">未设置店铺VIP卡</div>
         <div v-else> 
@@ -328,6 +328,7 @@ export default {
     position: fixed;
     bottom:0.55rem;
     right: 0.64rem;
+    z-index: 999;
     .order-action {
       display: inline-block;
       margin-top: 0.2rem;

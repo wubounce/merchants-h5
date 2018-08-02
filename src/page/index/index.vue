@@ -164,18 +164,24 @@ export default {
       } else {
         res = await countMachineFun();
       }
-      for(var i in res.data){ //json循环
-        this.barseriesData.push(res.data[i]);
-        this.barxAxisData.push(MachineStatus(i));
+      if (res.code === 0) {
+        for(var i in res.data){
+          this.barseriesData.push(res.data[i]);
+          this.barxAxisData.push(MachineStatus(i));
+        }
+        // 把配置和数据放这里
+        this.barchart.setOption(this.barOChartPtion);
       }
-      // 把配置和数据放这里
-      this.barchart.setOption(this.barOChartPtion);
+      
     },
     async totalProfitFun(){
       let res = await totalProfitFun();
-      this.allMoney = res.data.allMoney; //总收益
-      this.monthMoney = res.data.monthMoney; //当月收益
-      this.todayMoney = res.data.todayMoney;//今日收益
+      if (res.code === 0) {
+        this.allMoney = res.data.allMoney; //总收益
+        this.monthMoney = res.data.monthMoney; //当月收益
+        this.todayMoney = res.data.todayMoney;//今日收益
+      }
+     
     },
     async ProfitDate(parentTypeId,type){ //收益数据
       let payload = null;
@@ -185,13 +191,15 @@ export default {
         payload = Object.assign({},{type:0});
       }
       let res = await timeProfitFun(qs.stringify(payload));
-      res.data.forEach(item=>{
+      if (res.code === 0) {
+        res.data.forEach(item=>{
           this.lineseriesData.push(item.sum);
           this.linexAxisData.push(item.time);
-      });
+        });
+        // 把配置和数据放这里
+        this.linechart.setOption(this.lineChartOption);
+      }
       
-      // 把配置和数据放这里
-      this.linechart.setOption(this.lineChartOption);
     },
     async typeProfitData(parentTypeId,type){ //收益分布
       let payload = null;

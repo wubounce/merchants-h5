@@ -25,8 +25,8 @@
       <div class="form-input">{{detail.createTime}}</div>
     </div>
     <div class="footer">
-      <span class="edit"  v-has="'mer:person:update'"><router-link :to="{name:'editMember',query:{ id:detail.id }}">编辑</router-link></span>
-      <span class="del" @click="deldelMember(detail.id)" v-has="'mer:person:delete'">删除</span>
+      <span class="edit"  v-has="'mer:person:update,mer:person:info'"><router-link :to="{name:'editMember',query:{ id:detail.id }}">编辑</router-link></span>
+      <span class="del" @click="deldelMember(detail.id)" v-has="'mer:person:delete,mer:person:info'">删除</span>
     </div>
   </div>
 </div>

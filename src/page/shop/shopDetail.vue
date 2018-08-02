@@ -1,45 +1,48 @@
 <template>
   <section class="personal" v-title="title">
-    <!-- 第一模块 -->
-    <p class="shop-item title"><span>累计收益</span><span>{{shopdetail.profit}} 元</span></p>
-    <p class="shop-item second-p"><span>店铺名称</span><span>{{shopdetail.shopName}}</span></p>
-    <p class="shop-item"><span>店铺类型</span><span>{{shopdetail.shopType}}</span></p>
-    <p class="shop-address">
-      <span>店铺地址</span><br>
-      <span>{{ completeAddress }}</span></p>
+    <div class="permissions" v-if="$store.getters.has('mer:shop:info')">暂无相关页面权限</div>
+    <div v-else>
+        <!-- 第一模块 -->
+        <p class="shop-item title"><span>累计收益</span><span>{{shopdetail.profit}} 元</span></p>
+        <p class="shop-item second-p"><span>店铺名称</span><span>{{shopdetail.shopName}}</span></p>
+        <p class="shop-item"><span>店铺类型</span><span>{{shopdetail.shopType}}</span></p>
+        <p class="shop-address">
+          <span>店铺地址</span><br>
+          <span>{{ completeAddress }}</span></p>
 
-    <!-- 第二模块 -->
-    <div class="shop-machine">
-      <span>设备类型</span>
-      <div class="shop-machine-bottom">
-        <span class="one-machine" v-for="(item,index) in list" :key="index">{{item}}</span>
-      </div>
-    </div>
-    <p class="shop-item"><span>设备数量</span><span>{{shopdetail.machineCount}} 台</span></p>
-    <p class="shop-item"><span>预约功能</span><span>{{shopdetail.isReserve == 0? '已开通' : '未开通'}}</span></p>
-    <p class="shop-item"><span>预约时长(分钟)</span><span>{{shopdetail.orderLimitMinutes}}</span></p>
-    <p class="shop-item"><span>营业时间</span><span>{{shopdetail.workTime}}</span></p>
-    <p class="picture">
-        <span>店铺照片</span>
-        <span>
-          <img :src="shopdetail.imageId" alt="店铺图片" class="shop-img">
-        </span>
-    </p>
+        <!-- 第二模块 -->
+        <div class="shop-machine">
+          <span>设备类型</span>
+          <div class="shop-machine-bottom">
+            <span class="one-machine" v-for="(item,index) in list" :key="index">{{item}}</span>
+          </div>
+        </div>
+        <p class="shop-item"><span>设备数量</span><span>{{shopdetail.machineCount}} 台</span></p>
+        <p class="shop-item"><span>预约功能</span><span>{{shopdetail.isReserve == 0? '已开通' : '未开通'}}</span></p>
+        <p class="shop-item"><span>预约时长(分钟)</span><span>{{shopdetail.orderLimitMinutes}}</span></p>
+        <p class="shop-item"><span>营业时间</span><span>{{shopdetail.workTime}}</span></p>
+        <p class="picture">
+            <span>店铺照片</span>
+            <span>
+              <img :src="shopdetail.imageId" alt="店铺图片" class="shop-img">
+            </span>
+        </p>
 
-    <!-- 第三模块 -->
-    <p class="shop-item second-p"><span>限时优惠</span><span>{{shopdetail.isDiscount ==true ? '已设置' : '未设置'}}</span></p>
-    <p class="shop-item"><span>VIP数量</span><span>{{shopdetail.vipCount}}个</span></p>
+        <!-- 第三模块 -->
+        <p class="shop-item second-p"><span>限时优惠</span><span>{{shopdetail.isDiscount ==true ? '已设置' : '未设置'}}</span></p>
+        <p class="shop-item"><span>VIP数量</span><span>{{shopdetail.vipCount}}个</span></p>
 
-    <!-- 第四模块 -->
-    <p class="shop-info second-p"><span>创建人：</span><span>{{shopdetail.createUser}}</span></p>
-    <p class="shop-info"><span>创建时间：</span><span>{{shopdetail.createTime}}</span></p>
-    <p class="blank"></p>
+        <!-- 第四模块 -->
+        <p class="shop-info second-p"><span>创建人：</span><span>{{shopdetail.createUser}}</span></p>
+        <p class="shop-info"><span>创建时间：</span><span>{{shopdetail.createTime}}</span></p>
+        <p class="blank"></p>
 
-    <!-- 第五模块 -->
-    <p class="about-button">
-      <Button btn-type="small" btn-color="spe" id="delete" @confirm="isDeleteOrNot()">删除</Button>
-			<Button btn-type="small" btn-color="spe" id="edit" @confirm="goShopEdit()">编辑</Button>
-    </p>
+        <!-- 第五模块 -->
+        <p class="about-button">
+          <Button btn-type="small" btn-color="spe" id="delete" @confirm="isDeleteOrNot()" v-has="'mer:shop:delete'">删除</Button>
+    			<Button btn-type="small" btn-color="spe" id="edit" @confirm="goShopEdit()" v-has="'mer:shop:update'">编辑</Button>
+        </p>
+   </div>
   </section>
 </template>
 <script>

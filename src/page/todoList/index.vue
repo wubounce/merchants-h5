@@ -1,5 +1,7 @@
 <template>
   <section class="todolist" v-title="title">
+  <div class="permissions" v-if="$store.getters.has('mer:schedule:list')">暂无相关页面权限</div>
+  <div v-else>
 		<p class="shop-item title">批量定时启动设备</p>
 		<ul>
 			<li v-for="(item,index) in list" :key="index" @click="toDetail(item.id)"> 
@@ -11,6 +13,7 @@
 				</div>
 			</li>
 		</ul>
+	</div>
   </section>
 </template>
 
