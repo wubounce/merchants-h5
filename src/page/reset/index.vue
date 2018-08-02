@@ -7,8 +7,8 @@
     <div class="form-group">
       <input type="text" placeholder="请输入验证码" v-model="reset.code" require>
       <div class="verificode">
-        <p class="countdown" v-if="!btn">{{time}}s后重新获取</p>
         <p class="sendcode" @click="sendcode" v-if="btn">获取验证码</p>
+        <p class="countdown" v-else>{{time}}s后重新获取</p>
       </div>
     </div>
     </form>
@@ -30,7 +30,7 @@
           code: '',
         },
         timer: null,
-        time: 60,
+        time: 0,
         btn: true,
         title:'重置密码'
       };
@@ -50,6 +50,8 @@
         if (this.validatePhone()) {
           let res = await smscodeFun(qs.stringify({phone:this.reset.phone}));
           if (res.code===0) {
+              this.time = 60;
+              this.btn = false;
               this.countdown();
           }else {
              this.$toast(res.msg);

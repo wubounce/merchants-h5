@@ -43,7 +43,7 @@
       </div>
       <div class="bar-wrap">
         <div class="">
-          <span class="linetitle">设备监控<span  style="font-size: 14px;font-weight: 100;color: #3AA0FF;">(总设备100)</span></span>
+          <span class="linetitle">设备监控<span style="font-size: 14px;font-weight: 100;color: #3AA0FF;">(总设备{{allmMachine}})</span></span>
           <span class="equipment" @click="equipmentVisible=true">{{equipmentcurrentTags?equipmentcurrentTags.name:'全部'}}<i class="iconfont icon-nextx select-back"></i></span>
           <selectpickr :visible="equipmentVisible" :slots="equipmentSlots" :valueKey="machinepickername" @selectpicker="equipmentselectpicker" @onpickstatus="equipmentselectpickertatus"> </selectpickr>
         </div>
@@ -109,7 +109,8 @@ export default {
             textAlign: 'center'
           }
       ],
-     distributionSlots:[ //收益分布
+      allmMachine:null,
+      distributionSlots:[ //收益分布
         {
             flex: 1,
             values: [],
@@ -122,6 +123,7 @@ export default {
       barseriesData:[],
       linexAxisData:[],
       lineseriesData:[],
+      lineMaxspilt:null,
       pietypeData:[],
       piefunData:[],
       piefunDatatitle:[],
@@ -168,6 +170,9 @@ export default {
         for(var i in res.data){
           this.barseriesData.push(res.data[i]);
           this.barxAxisData.push(MachineStatus(i));
+          if (i === 'all') {
+            this.allmMachine = res.data[i]; //设备总数
+          }
         }
         this.barchart.setOption(this.barOChartOPtion);
       }
@@ -190,11 +195,13 @@ export default {
         payload = Object.assign({},{type:0});
       }
       let res = await timeProfitFun(qs.stringify(payload));
+      console.log(res);
       if (res.code === 0) {
         res.data.forEach(item=>{
           this.lineseriesData.push(item.sum);
           this.linexAxisData.push(item.time);
         });
+        this.lineMaxspilt = Math.max(...this.lineseriesData); //y轴刻度
         // 把配置和数据放这里
         this.linechart.setOption(this.lineChartOption);
       }
@@ -297,11 +304,14 @@ export default {
         tooltip: {
           trigger: 'axis',
           axisPointer: {
-              type: 'cross',
-              label: {
-                  backgroundColor: '#6a7985'
-              }
-          }
+            type : 'line',
+            label: {
+                backgroundColor: '#6a7985'
+            }
+          },
+          formatter:function(data){
+           return `${data[0].name}<br/>${data[0].seriesName}：${data[0].value.toFixed(2)}元`;
+          },
         },
         grid: {
             y:10,
@@ -330,8 +340,9 @@ export default {
           type : 'value',
           offset:10,
           min: 0,
-          max:160.00,
-          minInterval: 40,
+          max:this.lineMaxspilt*1.5,
+          splitNumber:5,
+          minInterval: this.lineMaxspilt/2,
           axisLine:{
             show:false,
             lineStyle:{
@@ -358,6 +369,7 @@ export default {
         series: [{
             symbol: 'circle',
             data: this.lineseriesData,
+            name:'收益',
             type: 'line',
              itemStyle: {
                 normal: {
@@ -392,7 +404,10 @@ export default {
                 width: '10px',                   // 阴影大小
                 color: 'rgba(150,150,150,0.3)'  // 阴影颜色
             }
-          }
+          },
+          formatter:function(data){
+           return `${data[0].name}：${data[0].value}`;
+          },
         },
         grid: {
           y:10,
@@ -441,11 +456,11 @@ export default {
             textStyle: {color: '#999'}
           },
           min:0,
-          max:80,
+          max:this.allmMachine*1.5,
           splitNumber:5
         }],
         series: [{
-          name: '直接访问',
+          name: '设备监控',
           type: 'bar',
           barWidth: '30%',
           data: this.barseriesData
@@ -457,7 +472,10 @@ export default {
       let opt = {
         tooltip: {
             trigger: 'item',
-            formatter: "{a} <br/>{b}: {c} ({d}%)"
+            formatter:function(data){
+              let num = Math.round(data.percent);
+              return `${data.name}：${num}%`;
+            },
         },
         legend: {
             orient: 'horizontal',
@@ -469,31 +487,35 @@ export default {
             data:[{
                 name:'脉冲',
                 icon : 'circle',
-                textStyle:{fontWeight:'normal', color:'#999'},
+                textStyle:{fontWeight:'normal', color:'#999',fontSize:12},
             },{
                 name:'串口',
                 icon : 'circle',
-                textStyle:{fontWeight:'normal', color:'#999'}
+                textStyle:{fontWeight:'normal', color:'#999',fontSize:12}
             }]
         },
         series: [
             {
+              name:'通信类型',
               type:'pie',
-              radius: ['50%', '70%'],
+              radius: ['40%', '60%'],
               avoidLabelOverlap: false,
               label: {
                   normal: {
                       show: true,
                       position: 'outside',
-                      formatter: '{d}%',//模板变量有 {a}、{b}、{c}、{d}，分别表示系列名，数据名，数据值，百分比。{d}数据会根据value值计算百分比
+                      formatter:function(data){
+                        let num = Math.round(data.percent);
+                        return `${num}%`;
+                      },
                       color:'#333'
                   },
               },
               labelLine: {
                   normal: {
                       show: false,
-                      length:2,
-                      length2:2,
+                      length:10,
+                      length2:10,
                   }
               },
               data:this.pietypeData,
@@ -507,38 +529,46 @@ export default {
       let opt = {
         tooltip: {
             trigger: 'item',
-            formatter: "{a} <br/>{b}: {c} ({d}%)"
+            // formatter: "{a} <br/>{b}: {c} ({d}%)"//模板变量有 {a}、{b}、{c}、{d}，分别表示系列名，数据名，数据值，百分比。{d}数据会根据value值计算百分比
+            formatter:function(data){
+              let num = Math.round(data.percent);
+              return `${data.name}：${num}%`;
+            },
         },
         legend: {
             orient: 'horizontal',
             y: 'bottom',
             x:'center',
-            bottom:'50%',
-            padding :0,
-            itemGap:4,
+            bottom:'40%',
+            // padding :0,
+            // itemGap:4,
             itemWidth:6, //图表大小
             itemHeight:6,
-            data:this.piefunDatatitle
+            data:this.piefunDatatitle,
+            textStyle:{fontSize:12},
         },
         series: [
             {
               name:'功能类型',
               type:'pie',
-              radius: ['50%', '70%'],
+              radius: ['40%', '60%'],
               avoidLabelOverlap: false,
               label: {
                   normal: {
                       show: true,
                       position: 'outside',
-                      formatter: '{d}%',//模板变量有 {a}、{b}、{c}、{d}，分别表示系列名，数据名，数据值，百分比。{d}数据会根据value值计算百分比
+                      formatter:function(data){
+                        let num = Math.round(data.percent);
+                        return `${num}%`;
+                      },
                       color:'#333'
                   },
               },
               labelLine: {
                   normal: {
                       show: false,
-                      length:1,
-                      length2:1,
+                      length:10,
+                      length2:10,
                   }
               },
               data:this.piefunData,

@@ -2,10 +2,10 @@
   <div class="reset" v-title="title">
     <form ref="resetForm" :model="reset">
     <div class="form-group">
-      <input type="password" placeholder="请输入新密码" v-model="reset.password">
+      <input type="password" placeholder="请输入新密码" v-model="reset.password" autocomplete="off">
     </div>
     <div class="form-group">
-      <input type="password" placeholder="请确认新密码" v-model="reset.repassword">
+      <input type="password" placeholder="请确认新密码" v-model="reset.repassword" autocomplete="off">
     </div>
     </form>
     <p class="btn">
@@ -52,7 +52,7 @@
         if (this.validate()) {
           let phone = this.$route.query ? this.$route.query.phone:'';
           let payload = Object.assign({},{password:this.reset.password,phone:phone});
-          let res = await updatePwdFun(qs.stringify(payload));
+          let res = await forgetPwdFun(qs.stringify(payload));
           if (res.code===0) {
             this.$toast('修改成功');
             this.$router.push({name:'login'});

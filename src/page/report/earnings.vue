@@ -166,7 +166,7 @@ export default {
         tooltip: {
             trigger: 'axis',
             axisPointer: {
-              type: 'cross',
+              type: 'line',
               animation: false,
               label: {
                   backgroundColor: '#505765'
