@@ -1,69 +1,70 @@
 <template>
-  <section>
-    <q-header :title="title"></q-header>
+  <section v-title="title">
+    <div class="permissions" v-if="$store.getters.has('mer:machine:list')">暂无相关页面权限</div>
+    <div v-else>
     <div class="search">
-      <d-search @deviceSearch="onDeviceSearch"></d-search>
-    </div>
-    <div class="device-status">
-      <div @click="titleClick()">
-        <p class="current">全部</p>
-        <span class="current">{{titleArr.all}}</span>
+        <d-search @deviceSearch="onDeviceSearch"></d-search>
       </div>
-      <div @click="titleClick(1)">
-        <p>运行</p>
-        <span>{{titleArr.run}}</span>
+      <div class="device-status">
+        <div @click="titleClick()">
+          <p class="current">全部</p>
+          <span class="current">{{titleArr.all}}</span>
+        </div>
+        <div @click="titleClick(1)">
+          <p>运行</p>
+          <span>{{titleArr.run}}</span>
+        </div>
+        <div @click="titleClick(2)"> 
+          <p>空闲</p>
+          <span>{{titleArr.idle}}</span>
+        </div>
+        <div @click="titleClick(4)">
+          <p>故障</p>
+          <span>{{title.hitch}}</span>
+        </div>
+        <div @click="titleClick(8)">
+          <p>离线</p>
+          <span>{{title.offline}}</span>
+        </div>
+        <div @click="titleClick(16)">
+          <p>超时</p>
+          <span>{{title.timeout}}</span>
+        </div>
       </div>
-      <div @click="titleClick(2)"> 
-        <p>空闲</p>
-        <span>{{titleArr.idle}}</span>
+      
+      <div class="device-list" v-for="(item,index) in list" :key="index" @click="toDeviceDetail(item.machineId)">
+        <section class="item-hd">
+          <span>{{item.machineName}}</span>
+          <span>{{item.machineState}}</span>
+        </section>
+        <section class="item-bd">
+          <span>店铺</span>
+          <span>{{item.shopName}}</span>
+        </section>
+        <section class="item-ft">
+          <p class="item-ft-right">
+            <span>类型</span>
+            <span>{{item.machineTypeName}}</span>
+          </p>
+          <p class="item-ft-right">
+            <span>收益</span>
+            <span>{{item.profit}}</span>
+          </p>
+        </section>
       </div>
-      <div @click="titleClick(4)">
-        <p>故障</p>
-        <span>{{title.hitch}}</span>
+      <div class="openItem" @click="toAddItem" v-show="isShow">···</div>
+      <div v-show="isShow2">
+        <div class="closeItem" @click="toCloseItem">X</div>
+        <router-link to="/addDevice" v-has="'mer:machine:add'"><div class="addDev showItem">新增设备</div></router-link>
+        <router-link to="/batchStart" v-has="'mer:machine:reset'"><div class="betchStartup showItem">批量启动</div></router-link>
+        <router-link to="/batchEdit" v-has="'mer:machine:update'"><div class="betchModf showItem">批量修改</div></router-link>
       </div>
-      <div @click="titleClick(8)">
-        <p>离线</p>
-        <span>{{title.offline}}</span>
-      </div>
-      <div @click="titleClick(16)">
-        <p>超时</p>
-        <span>{{title.timeout}}</span>
-      </div>
-    </div>
-    
-    <div class="device-list" v-for="(item,index) in list" :key="index" @click="toDeviceDetail(item.machineId)">
-      <section class="item-hd">
-        <span>{{item.machineName}}</span>
-        <span>{{item.machineState}}</span>
-      </section>
-      <section class="item-bd">
-        <span>店铺</span>
-        <span>{{item.shopName}}</span>
-      </section>
-      <section class="item-ft">
-        <p class="item-ft-right">
-          <span>类型</span>
-          <span>{{item.machineTypeName}}</span>
-        </p>
-        <p class="item-ft-right">
-          <span>收益</span>
-          <span>{{item.profit}}</span>
-        </p>
-      </section>
-    </div>
-    <div class="openItem" @click="toAddItem" v-show="isShow">···</div>
-    <div v-show="isShow2">
-      <div class="closeItem" @click="toCloseItem">X</div>
-      <router-link to="/addDevice"><div class="addDev showItem">新增设备</div></router-link>
-      <router-link to="/batchStart"><div class="betchStartup showItem">批量启动</div></router-link>
-      <router-link to="/batchEdit"><div class="betchModf showItem">批量修改</div></router-link>
     </div>
   </section>
 
 </template>
 <script>
   import qs from "qs";
-  import QHeader from '@/components/header';
   import DSearch from '@/components/Search/search';
   import { MessageBox } from 'mint-ui';
   import { deviceListFun , countDeviceFun } from '@/service/device';
@@ -134,7 +135,6 @@
       this.getCountDevice();
     },
     components: {
-      QHeader,
       DSearch
     }
   };

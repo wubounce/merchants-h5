@@ -58,7 +58,7 @@
           </section>
         </router-link>
       </div>
-      <div class="alllist" v-has="'mer:marketing:list'">
+      <div class="alllist" v-if="!$store.getters.has('mer:marketing:list') || !$store.getters.has('mer:marketing:vip:list')">
         <router-link :to="{ name: 'marketing'}">
           <section class="order-list">  
               <div class="detail">  

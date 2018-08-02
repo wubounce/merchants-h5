@@ -3,13 +3,13 @@
     <form ref="resetForm" :model="reset">
       <div class="resetForm">
         <div class="form-group">
-          <span class="title">旧密码</span><input type="password" placeholder="请输入旧密码" v-model="reset.oldPassword" @input="disbaledBtn">
+          <span class="title">旧密码</span><input type="password" placeholder="请输入旧密码" autocomplete="off" v-model="reset.oldPassword" @input="disbaledBtn">
         </div>
         <div class="form-group">
-          <span class="title">新密码</span><input type="password" placeholder="请输入新密码" v-model="reset.password" @input="disbaledBtn">
+          <span class="title">新密码</span><input type="password" placeholder="请输入新密码" autocomplete="off" v-model="reset.password" @input="disbaledBtn">
         </div>
         <div class="form-group">
-          <span class="title">确认新密码</span><input type="password" placeholder="请再次确认新密码" v-model="reset.checkpassword" @input="disbaledBtn">
+          <span class="title">确认新密码</span><input type="password" placeholder="请再次确认新密码" autocomplete="off" v-model="reset.checkpassword" @input="disbaledBtn">
         </div>
       </div>
     </form>

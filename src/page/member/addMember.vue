@@ -63,7 +63,7 @@
               </div>
             </label>
             <transition-group name="collapse">
-              <div class="promisss-child" v-for="(sitem,index) in item.children" :key="index" style="background:#fff;">
+              <div class="promisss-child"  v-for="(sitem,index) in item.children" :key="index" style="background:#fff;">
                   <label class="mint-checklist-label prom">
                     <div class="check-prem-list">
                       <span class="mint-checkbox is-right">
@@ -97,7 +97,7 @@ export default {
     return {
       title: '新增人员',
       detail: false,
-      show:null,
+      indexshow:null,
       shopVisible:false,
       permissionsVisible:false,
 
@@ -167,14 +167,14 @@ export default {
       this.shoplist = res.data;
     },
     toggle:function(index){
-      if(this.show===index){
-        this.show=0;
-      }
-      else{
+      if(this.show === index){
+        this.show = 0;
+        this.detail = !this.detail;
+      }else{
         this.show=index;
+        this.detail = !this.detail;
       }
     },
-
     getcheckshop(){
       this.checkshoptxt = this.checkshoplist.join(',');
       let checklist = this.shoplist.filter(v=>this.checkshoplist.some(k=>k==v.shopName));

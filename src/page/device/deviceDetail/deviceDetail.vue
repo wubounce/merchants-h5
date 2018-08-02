@@ -1,106 +1,107 @@
 <template>
-  <section>
-    <q-header :title="title"></q-header>
-    <ul class="device-detail">
-      <li class="device-detail-hd">
-        <p>累计收益</p>
-        <p>{{deviceDetail.profit}}</p>
-      </li>
-      <!-- 表单模块部分  -->
-      <li class="device-detail-item">
-        <!-- 表单元格渲染 -->
+  <section v-title="title">
+    <div class="permissions" v-if="$store.getters.has('mer:machine:info')">暂无相关页面权限</div>
+    <div v-else>
+      <ul class="device-detail">
+        <li class="device-detail-hd">
+          <p>累计收益</p>
+          <p>{{deviceDetail.profit}}</p>
+        </li>
+        <!-- 表单模块部分  -->
+        <li class="device-detail-item">
+          <!-- 表单元格渲染 -->
 
-        <ul class="device-detail-bd">
-          <li>
-            <span class="field-title">设备名称</span>
-            <p class="select-1">
-              <input type="text" v-model="deviceDetail.machineName">
+          <ul class="device-detail-bd">
+            <li>
+              <span class="field-title">设备名称</span>
+              <p class="select-1">
+                <input type="text" v-model="deviceDetail.machineName">
+              </p>
+            </li>
+            <li @click="checkDeviceSelect">
+              <span class="field-title">所属店铺</span>
+              <p class="select">{{deviceDetail.shopName}}</p>
+            </li>
+
+            <router-link to="/addDevice" tag="li">
+              <span class="field-title">设备类型</span>
+              <p class="select">{{deviceDetail.parentTypeName}}</p>
+            </router-link>
+            <li @click="checkSecondClass">
+              <span class="field-title">设备型号</span>
+              <p class="select">{{deviceDetail.subTypeName}}</p>
+            </li>
+            <li @click="getCompany">
+              <span class="field-title">公司</span>
+              <p class="select">{{deviceDetail.company}}</p>
+            </li>
+
+            <li>
+              <span class="field-title">NQT</span>
+              <p class="select-2">
+                <input type="text" v-model="deviceDetail.nqt" placeholder="请输入模块上二维码">
+              </p>
+            </li>
+            <li>
+              <span class="field-title">IMEI</span>
+              <p class="select-2">
+                <input type="text" v-model="deviceDetail.imei" placeholder="请输入模块上二维码">
+              </p>
+            </li>
+            <li @click="toFunctionSeting">
+              <span class="field-title">功能设置</span>
+              <p class="select">{{fromdata.functionType.name}}</p>
+            </li>
+          </ul>
+        </li>
+
+        <!-- 功能列表部分 -->
+        <section class="fun-item-hd">
+          <div>
+            <p v-for="(item,index) in functionListTitle " :key="index">
+              <span v-for="(it,idx) in item " :key="idx">{{it}}</span>
             </p>
-          </li>
-          <li @click="checkDeviceSelect">
-            <span class="field-title">所属店铺</span>
-            <p class="select">{{deviceDetail.shopName}}</p>
-          </li>
-
-          <router-link to="/addDevice" tag="li">
-            <span class="field-title">设备类型</span>
-            <p class="select">{{deviceDetail.parentTypeName}}</p>
-          </router-link>
-          <li @click="checkSecondClass">
-            <span class="field-title">设备型号</span>
-            <p class="select">{{deviceDetail.subTypeName}}</p>
-          </li>
-          <li @click="getCompany">
-            <span class="field-title">公司</span>
-            <p class="select">{{deviceDetail.company}}</p>
-          </li>
-
-          <li>
-            <span class="field-title">NQT</span>
-            <p class="select-2">
-              <input type="text" v-model="deviceDetail.nqt" placeholder="请输入模块上二维码">
-            </p>
-          </li>
-          <li>
-            <span class="field-title">IMEI</span>
-            <p class="select-2">
-              <input type="text" v-model="deviceDetail.imei" placeholder="请输入模块上二维码">
-            </p>
-          </li>
-          <li @click="toFunctionSeting">
-            <span class="field-title">功能设置</span>
-            <p class="select">{{fromdata.functionType.name}}</p>
-          </li>
-        </ul>
-      </li>
-
-      <!-- 功能列表部分 -->
-      <section class="fun-item-hd">
-        <div>
-          <p v-for="(item,index) in functionListTitle " :key="index">
-            <span v-for="(it,idx) in item " :key="idx">{{it}}</span>
+          </div>
+        </section>
+        <section class="fun-item-bd">
+          <p v-for="(item,index) in functionList " :key="index">
+            <span>{{item.fuctionName}}</span>
+            <span>{{item.time}}</span>
+            <span>{{item.price}}</span>
+            <span>{{item.status}}</span>
           </p>
-        </div>
-      </section>
-      <section class="fun-item-bd">
-        <p v-for="(item,index) in functionList " :key="index">
-          <span>{{item.fuctionName}}</span>
-          <span>{{item.time}}</span>
-          <span>{{item.price}}</span>
-          <span>{{item.status}}</span>
-        </p>
-      </section>
+        </section>
 
-      <li class="device-detail-ft">
-        <p>创建人：Wendy</p>
-        <p>创建时间： 2018-07-15 15:38:05</p>
-      </li>
-    </ul>
+        <li class="device-detail-ft">
+          <p>创建人：Wendy</p>
+          <p>创建时间： 2018-07-15 15:38:05</p>
+        </li>
+      </ul>
 
-    <div class="about-button">
-      <Button btn-type="small" btn-color="spe" class="ft-btn active" @click="deviceDele">删除</Button>
-      <Button btn-type="small" btn-color="spe" class="ft-btn" @click="deviceTZJ">桶自洁</Button>
-      <Button btn-type="small" btn-color="spe" class="ft-btn" @click="deviceRest">复位</Button>
-      <Button btn-type="small" btn-color="spe" class="ft-btn" @click="deviceEdit">编辑</Button>
-    </div>
-    <!-- 模块商 -->
-    <mt-popup v-model="companyVisible" position="bottom" class="select-popup">
-      <div class="select">
-        <ul class="select-list">
-          <li v-for="(item,index) in selectListA" :key="index" @click="getcompanyValue(item)">{{item.name}}</li>
-        </ul>
-        <div class="btn">
-          <Button btn-type="default" btn-color="blue" @confirm="companyVisible = false">取消</Button>
-        </div>
+      <div class="about-button">
+        <Button btn-type="small" btn-color="spe" class="ft-btn active" @click="deviceDele" v-has="'mer:machine:delete'">删除</Button>
+        <Button btn-type="small" btn-color="spe" class="ft-btn" @click="deviceTZJ" v-has="'mer:machine:clean'">桶自洁</Button>
+        <Button btn-type="small" btn-color="spe" class="ft-btn" @click="deviceRest" v-has="'mer:machine:reset'">复位</Button>
+        <Button btn-type="small" btn-color="spe" class="ft-btn" @click="deviceEdit" v-has="'mer:machine:update'">编辑</Button>
       </div>
-    </mt-popup>
+      <!-- 模块商 -->
+      <mt-popup v-model="companyVisible" position="bottom" class="select-popup">
+        <div class="select">
+          <ul class="select-list">
+            <li v-for="(item,index) in selectListA" :key="index" @click="getcompanyValue(item)">{{item.name}}</li>
+          </ul>
+          <div class="btn">
+            <Button btn-type="default" btn-color="blue" @confirm="companyVisible = false">取消</Button>
+          </div>
+        </div>
+      </mt-popup>
+    </div>
   </section>
 </template>
 
 <script>
   import qs from "qs";
   import Button from "@/components/Button/Button";
-  import QHeader from '@/components/header';
   import { MessageBox } from 'mint-ui';
   import { detailDeviceListFun,deleteDeviceFun,manageResetDeviceFun,tzjDeviceFun } from '@/service/device';
   export default {
@@ -216,7 +217,6 @@
     },
     components: {
       Button,
-      QHeader
     }
   };
 

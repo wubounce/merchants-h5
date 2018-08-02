@@ -35,7 +35,9 @@
   .erweima {
     width:2.96rem;
     height:2.52rem;
-    margin: 2.12rem auto 0;
+    padding-top: 2.12rem;
+    margin:0 auto;
+    background: #fff;
     img {
       display: block;
       width: 100%;
