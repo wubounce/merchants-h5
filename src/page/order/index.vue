@@ -18,8 +18,7 @@
       暂无订单
     </section> 
     <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
-     <mt-loadmore :top-method="loadTop" @top-status-change="handleTopChange" 
-     :bottom-method="loadBottom" @bottom-status-change="handleBottomChange" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore">
+     <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore">
         <div class="alllist" v-for="(item,index) in list" :key="index">
           <section class="ordermun">
             <span class="odernmu-phone">{{item.phone}}<span style="padding:0 0.186667rem;color:#333333">|</span>{{item.createTime}}</span>
@@ -63,8 +62,8 @@ export default {
       searchData:'',
       titleArr:[
         {value:'',lable:'全部'},
+        {value:'0',lable:'待支付'},
         {value:'2',lable:'已支付'},
-        {value:'0',lable:'未支付'},
         {value:'1',lable:'已失效'},
         {value:'5',lable:'已退款'}
       ],
@@ -73,6 +72,7 @@ export default {
       noOrderList:false,
       nosearchList:false,
       orderStatus:null, //订单状态
+
       page: 1,//页码
       pageSize:10,
       total:null,
@@ -106,7 +106,7 @@ export default {
       }
       res = await orderListFun(qs.stringify(payload));
       if (res.code === 0) {
-        this.list = res.data.items?res.data.items:[];
+        this.list = res.data.items?[...this.list,...res.data.items]:[];  //分页添加
         this.noOrderList = this.list.length<= 0 ? true: false;
         this.total = res.data.total;
       }
@@ -125,9 +125,6 @@ export default {
     godetail(oederno,machineId){
       this.$router.push({name: 'orderdetail',query:{orderNo:oederno}});
     },
-    handleBottomChange(status) {
-      this.bottomStatus = status;
-    },
     loadBottom() {
       this.page += 1;
       let allpage = this.total/this.pageSize;
@@ -138,11 +135,9 @@ export default {
       }
       this.$refs.loadmore.onBottomLoaded();
     },
-    handleTopChange(status) {
-      this.topStatus = status;
-    },
     loadTop() {
       this.page = 1;
+      this.list = [];
       this.getOrderList(this.orderStatus);
       this.allLoaded = false;//下拉刷新时解除上拉加载的禁用
       this.$refs.loadmore.onTopLoaded();

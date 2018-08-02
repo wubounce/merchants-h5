@@ -102,8 +102,8 @@ export default {
     padding: 0 0.4rem;
     background: #fff;
     p {
-      height: 1.6rem;
-      line-height: 1.6rem;
+      overflow: hidden;
+      padding: 0.51rem 0;
       font-size: 16px;
       color: #999;
       border-bottom:1px solid rgba(223,230,255,1);

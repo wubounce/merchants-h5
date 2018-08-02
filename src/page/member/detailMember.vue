@@ -54,6 +54,8 @@ export default {
       let res = await getOperatorInfoFun(qs.stringify({id:id}));
       if (res.code === 0) {
         this.detail = res.data;
+      }else {
+        this.$toast(res.msg);
       }
     },
     deldelMember(id){

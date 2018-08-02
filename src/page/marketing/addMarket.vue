@@ -1,10 +1,10 @@
 <template>
 <div class="addmarket" v-title="title">
   <div class="addvip-header">
-    <p>所属店铺<span class="addvip-con">{{checkshoptxt?checkshoptxt:''}}<span class="order-action iconfont icon-nextx" @click="shopVisible=true"></span></span></p>
+    <p>所属店铺<span class="order-action add-shop-overflow-icon iconfont icon-nextx" @click="shopVisible=true"></span><span class="addvip-con add-shop-overflow">{{checkshoptxt?checkshoptxt:''}}</span></p>
     <p>优惠期开始<span class="addvip-con">{{addmarket.startTime}}<span class="order-action iconfont icon-nextx" @click="open('picker2')"></span></span></p>
      <p>优惠期结束<span class="addvip-con">{{addmarket.endTime}}<span class="order-action iconfont icon-nextx" @click="open('picker3')"></span></span></p>
-    <p>活动日<span class="addvip-con">{{activeCurrentTags?activeCurrentTags !== '自定义'?activeCurrentTags:checkWeeklisttxt:checkWeeklisttxt}}<span class="order-action iconfont icon-nextx" @click="activeVisible=true"></span></span></p>
+    <p>活动日<span class="order-action add-shop-overflow-icon iconfont icon-nextx" @click="activeVisible=true"></span><span class="addvip-con add-shop-overflow">{{activeCurrentTags?activeCurrentTags !== '自定义'?activeCurrentTags:checkWeeklisttxt:checkWeeklisttxt}}</span></p>
     <p>每日活动时段<span class="addvip-con">{{addmarket.time}}<span class="order-action iconfont icon-nextx" @click="activeTimeVisible = true"></span></span></p>
     <p>折扣优惠<span class="addvip-con"><input type="number" placeholder="折扣优惠" class="discount-input" v-model="addmarket.discount">%</span></p>
     <p>是否开放<span class="addvip-con"><mt-switch v-model="addmarket.addstatus" class="check-switch"></mt-switch></span></p>
@@ -295,6 +295,16 @@ export default {
       border:none;
     }
     .addvip-con {
+      float: right;
+    }
+    .add-shop-overflow {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      width: 65%;
+      text-align: right;
+    }
+    .add-shop-overflow-icon {
       float: right;
     }
   }

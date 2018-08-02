@@ -43,14 +43,36 @@
               <div class="car-shop">所属店铺<span v-for="(items,index) in item.shopList" :key="index">{{items.shopName}}<i v-if="index !== (item.shopList.length-1)">,</i></span></div>
               <div class="card-banner">       
                 <swiper :options="swiperOption"  ref="mySwiper">
-                  <swiper-slide v-for="(vipitem,index) in item.items" :key="index">
+                  <swiper-slide>
                      <router-link :to="{name:'vipDetail',query:{shopVipId:item.shopVipId}}">
-                      <div :class="['card',{'year-card':vipitem.cardType ===1,'halfYear-card':vipitem.cardType ===2,'season-card':vipitem.cardType ===3}]">   
-                        <p class="vip-type">{{vipitem.cardType===1?'VIP年卡':vipitem.cardType===2?'VIP半年卡':'VIP季卡'}}</p>            
-                        <p class="price" v-if="vipitem.price !== '0.00'">{{vipitem.price}}<span>元</span></p>
+                      <div class="card year-card">   
+                        <p class="vip-type">VIP年卡</p>            
+                        <p class="price" v-if="item.yearCardPrice">{{item.yearCardPrice}}<span>元</span></p>
                         <p class="price" v-else><span>未设置</span></p>
-                        <p class="usenum">每日仅限使用{{vipitem.limitTime}}次</p>       
-                        <p class="tag">{{vipitem.discount | replace}}<span>折</span></p> 
+                        <p class="usenum">每日仅限使用{{item.yearCardLimitTime}}次</p>       
+                        <p class="tag">{{item.yearCardDiscount | replace}}<span>折</span></p> 
+                      </div>
+                     </router-link>                     
+                  </swiper-slide>  
+                  <swiper-slide>
+                     <router-link :to="{name:'vipDetail',query:{shopVipId:item.shopVipId}}">
+                      <div class="card halfYear-card">   
+                        <p class="vip-type">VIP半年卡</p>            
+                        <p class="price" v-if="item.halfYearCardPrice">{{item.halfYearCardPrice}}<span>元</span></p>
+                        <p class="price" v-else><span>未设置</span></p>
+                        <p class="usenum">每日仅限使用{{item.halfYearCardLimitTime}}次</p>       
+                        <p class="tag">{{item.halfYearCardDiscount | replace}}<span>折</span></p> 
+                      </div>
+                     </router-link>                     
+                  </swiper-slide>  
+                  <swiper-slide>
+                     <router-link :to="{name:'vipDetail',query:{shopVipId:item.shopVipId}}">
+                      <div class="card season-card">   
+                        <p class="vip-type">VIP年卡</p>            
+                        <p class="price" v-if="item.seasonCardPrice">{{item.seasonCardPrice}}<span>元</span></p>
+                        <p class="price" v-else><span>未设置</span></p>
+                        <p class="usenum">每日仅限使用{{item.seasonCardLimitTime}}次</p>       
+                        <p class="tag">{{item.seasonCardDiscount | replace}}<span>折</span></p> 
                       </div>
                      </router-link>                     
                   </swiper-slide>  

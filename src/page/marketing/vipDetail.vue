@@ -3,15 +3,20 @@
  <div class="permissions" v-if="$store.getters.has('mer:marketing:info')">暂无相关页面权限</div>
   <div v-else>
     <div class="addvip-header">
-      <p>所属店铺<span class="addvip-con" v-for="(items,index) in detail.shopList" :key="index">{{items.shopName}}<i v-if="index !== (detail.shopList.length-1)">,</i></span></p>
+      <p>所属店铺<span class="addvip-con">
+        <span v-for="(items,index) in detail.shopList" :key="index">{{items.shopName}}<i v-if="index !== (detail.shopList.length-1)">,</i></span>
+      </span>
+      </p>
     </div>
-    <div class="card-wrap" v-for="(vipitem,index) in detail.items">
-      <p class="addvip-type"><span>{{vipitem.cardType===1?'VIP年卡':vipitem.cardType===2?'VIP半年卡':'VIP季卡'}}</span></p>
+
+
+    <div class="card-wrap">
+      <p class="addvip-type"><span>VIP年卡</span></p>
       <div class="add-card-header"></div>
       <div class="add-card">
-        <p>卡售价<span>{{vipitem.price}}元</span></p>
-        <p>VIP折扣<span>{{vipitem.discount *100}}%</span></p>
-        <p>每日限用次数<span>{{vipitem.limitTime}}次</span></p>
+        <p>卡售价<span>{{detail.yearCardPrice}}元</span></p>
+        <p>VIP折扣<span>{{detail.yearCardDiscount *100}}%</span></p>
+        <p>每日限用次数<span>{{detail.yearCardLimitTime}}次</span></p>
       </div>
       <div class="tips">
         <p>提示：</p>
@@ -19,20 +24,51 @@
         <p>2.每日限用次数不填写或填写0，则不限制次数。</p>
       </div>
     </div>
-    <div class="create-wrap">
-      <p>创建人：Wendy</p>
-      <p>创建时间： 2018-07-15 15:38:05</p>
+    <div class="card-wrap">
+      <p class="addvip-type"><span>VIP半年卡</span></p>
+      <div class="add-card-header"></div>
+      <div class="add-card">
+        <p>卡售价<span>{{detail.halfYearCardPrice}}元</span></p>
+        <p>VIP折扣<span>{{detail.halfYearCardDiscount *100}}%</span></p>
+        <p>每日限用次数<span>{{detail.halfYearCardLimitTime}}次</span></p>
+      </div>
+      <div class="tips">
+        <p>提示：</p>
+        <p>1.建议VIP折扣价不超过特惠活动价。</p>
+        <p>2.每日限用次数不填写或填写0，则不限制次数。</p>
+      </div>
     </div>
-     <div class="footer">
-      <span class="edit" v-has="'mer:marketing:vip:update,mer:marketing:vip:info'"><router-link :to="{name:'editVip'}">编辑</router-link></span>
-      <span class="del" v-has="'mer:marketing:vip:delete,mer:marketing:vip:info'">删除</span>
+    <div class="card-wrap">
+      <p class="addvip-type"><span>VIP季卡卡</span></p>
+      <div class="add-card-header"></div>
+      <div class="add-card">
+        <p>卡售价<span>{{detail.seasonCardPrice}}元</span></p>
+        <p>VIP折扣<span>{{detail.seasonCardDiscount *100}}%</span></p>
+        <p>每日限用次数<span>{{detail.seasonCardLimitTime}}次</span></p>
+      </div>
+      <div class="tips">
+        <p>提示：</p>
+        <p>1.建议VIP折扣价不超过特惠活动价。</p>
+        <p>2.每日限用次数不填写或填写0，则不限制次数。</p>
+      </div>
+    </div>
+
+
+    <div class="create-wrap">
+      <p>创建人：{{detail.createUserName}}</p>
+      <p>创建时间： {{detail.createTime}}</p>
+    </div>
+     <div class="footer"><!-- v-has="'mer:marketing:vip:delete,mer:marketing:vip:info'" -->
+      <span class="edit" v-has="'mer:marketing:vip:update,mer:marketing:vip:info'"><router-link :to="{name:'editVip',query:{shopVipId:detail.shopVipId}}">编辑</router-link></span>
+      <span class="del" @click="delShopVip">删除</span>
     </div>
   </div>
 </div>
 </template>
 <script>
 import qs from 'qs';
-import { vipDetailFun } from '@/service/market';
+import { MessageBox } from 'mint-ui';
+import { vipDetailFun, delVipFun } from '@/service/market';
 export default {
   data() {
     return {
@@ -54,6 +90,18 @@ export default {
       if (res.code ===0) {
         this.detail = res.data;
       }
+    },
+    async delShopVip(){
+      MessageBox.confirm(`确定删除？`).then(async () => {
+          let payload = {shopVipId:this.detail.shopVipId};
+          let res = await delVipFun(qs.stringify(payload));
+          if (res.code === 0) {
+            this.$toast({message: '删除成功'});
+            this.$router.push({name:'marketing'});
+          } else {
+            this.$toast({message: res.msg });
+          }
+      });
     }
   },
   components:{
