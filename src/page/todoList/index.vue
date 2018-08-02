@@ -1,8 +1,10 @@
 <template>
   <section class="todolist" v-title="title">
+	
   <div class="permissions" v-if="$store.getters.has('mer:schedule:list')">暂无相关页面权限</div>
   <div v-else>
 		<p class="shop-item title">批量定时启动设备</p>
+		<p v-show="noData" class="noTodoList">暂无待办事项</p>
 		<ul>
 			<li v-for="(item,index) in list" :key="index" @click="toDetail(item.id)"> 
 				<p class="time"><span>时间</span><span class="time-blue">{{item.beginTime}}</span></p>
@@ -20,11 +22,13 @@
 <script>
 import qs from "qs";
 import { listBatchStartFun } from '@/service/todoList';
+import {Loadmore} from 'mint-ui';
   export default {
     data() {
       return {
 				title:'待办事项',
-				list:[]
+				list:[],
+				noData:false
       };
     },
     methods: {
@@ -43,8 +47,13 @@ import { listBatchStartFun } from '@/service/todoList';
         };
         let res = await listBatchStartFun(qs.stringify(obj));
         if(res.code ===0 ) {
-          this.list = res.data;
-        }
+					this.list = res.data.items;
+				}
+				else {
+					if(res.data == null || res.data == '') {
+						this.noData = true;
+					}
+				}
       }
     },
     created() {
@@ -61,6 +70,12 @@ section {
 		padding: 0.3rem;
 		border: 1px solid #F8F8F8;
 		background-color: #fff; 
+	}
+	.noTodoList {
+		text-align: center;
+    color: #999;
+    font-size: 16px;
+    padding-top: 4rem;
 	}
 	ul {
 		margin-top: 0.3rem;

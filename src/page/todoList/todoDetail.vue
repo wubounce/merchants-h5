@@ -30,6 +30,7 @@ import { MessageBox } from 'mint-ui';
 import { getBatchStartFun } from '@/service/todoList';
 import { delBatchStartFun } from '@/service/todoList';
 import { batchStartNowFun } from '@/service/todoList';
+import moment from 'moment';
   export default {
     data() {
       return {
@@ -120,9 +121,10 @@ import { batchStartNowFun } from '@/service/todoList';
         if(res.code ===0 ) {
           //参数异常，待后台确认
           this.item = res.data;
+          this.item.createTime = moment(res.data.createTime).format('YYYY-MM-DD');
         }
       }
-    },
+    }, 
     created() {
       this.getBatchStart();
     },
