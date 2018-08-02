@@ -3,7 +3,7 @@
     <header>
         <span class="iconfont icon-zhifubao"></span>
         <div>
-            <p class="name">{{userInfo.alipayAccount | replaceAliply}}</p>
+            <p class="name">{{userInfo.alipayAccount ? userInfo.alipayAccount : '' | replaceAliply}}</p>
             <p>24小时内到账</p>
         </div>
     </header>

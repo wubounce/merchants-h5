@@ -71,10 +71,10 @@
             this.$toast({message: "请输入验证码" });
             return false;
           }
-          let payload = Object.assign({},this.reset,{username:''});
+          let payload = Object.assign({},this.reset);
           let res = await validateCodeFun(qs.stringify(payload));
           if (res.code===0) {
-            this.$router.push({name:'confimPwd'});
+            this.$router.push({name:'confimPwd',query:{phone:this.reset.phone}});
           }else {
              this.$toast(res.msg);
           }

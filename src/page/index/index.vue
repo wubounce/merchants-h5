@@ -5,15 +5,15 @@
       <div class="earnings-wrap">
         <div class="earning-type">
           <p>总收益 (元)</p>
-          <p class="earning-type-size">{{allMoney}}</p>
+          <p class="earning-type-size">{{allMoney?allMoney:'0.00'}}</p>
         </div>
         <div class="today-earning">
           <p style="margin-top: 0.35rem;">今日收益 (元)</p>
-          <p class="today-earning-size">{{todayMoney}}</p>
+          <p class="today-earning-size">{{todayMoney?todayMoney:'0.00'}}</p>
         </div>
         <div class="earning-type">
           <p>当月收益 (元)</p>
-          <p class="earning-type-size">{{monthMoney}}</p>
+          <p class="earning-type-size">{{monthMoney?monthMoney:'0.00'}}</p>
         </div>
       </div>
       <div class="lineecharts-warp">
@@ -169,8 +169,7 @@ export default {
           this.barseriesData.push(res.data[i]);
           this.barxAxisData.push(MachineStatus(i));
         }
-        // 把配置和数据放这里
-        this.barchart.setOption(this.barOChartPtion);
+        this.barchart.setOption(this.barOChartOPtion);
       }
       
     },
@@ -209,28 +208,31 @@ export default {
         payload = Object.assign({},{parentTypeId:this.washingMachineId,type:0});
       }
       let res = await typeProfitFun(qs.stringify(payload));
-      let communicateTypeData = res.data ? res.data.communicateType :[];
-      communicateTypeData.forEach(item=>{
-          this.pietypeData.push({
-            value: item.sum,
-            name: communicateType(Number(item.type))
+      if (res.code === 0) {
+        let communicateTypeData = res.data ? res.data.communicateType :[];
+        communicateTypeData.forEach(item=>{
+            this.pietypeData.push({
+              value: item.sum,
+              name: communicateType(Number(item.type))
+            });
+        });
+        let machineTypeData = res.data ? res.data.machineType :[];
+        machineTypeData.forEach(item=>{
+          this.piefunDatatitle.push({
+            name:item.type,
+            icon : 'circle',
+            textStyle:{fontWeight:'normal', color:'#999',fontSize:12, padding:0},
           });
-      });
-      let machineTypeData = res.data ? res.data.machineType :[];
-      machineTypeData.forEach(item=>{
-        this.piefunDatatitle.push({
-          name:item.type,
-          icon : 'circle',
-          textStyle:{fontWeight:'normal', color:'#999',fontSize:12, padding:0},
+          this.piefunData.push({
+            value: item.sum,
+            name: item.type
+          });
         });
-        this.piefunData.push({
-          value: item.sum,
-          name: item.type
-        });
-      });
-      // 把配置和数据放这里
-      this.pietypechart.setOption(this.pietypeChartOPtion);
-      this.piefunchart.setOption(this.piefunChartOption);
+        // 把配置和数据放这里
+        this.pietypechart.setOption(this.pietypeChartOPtion);
+        this.piefunchart.setOption(this.piefunChartOption);
+      }
+     
     },
     initChart() {
       this.linechart = echarts.init(document.getElementById('line'));
@@ -379,7 +381,7 @@ export default {
       };
       return opt;
     },
-    barOChartPtion(){
+    barOChartOPtion(){
       let opt = {
         color: ['#3398DB'],
         tooltip: {

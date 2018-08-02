@@ -45,15 +45,20 @@ export default {
   methods: {
     async getMemberList(){
       let res = await operatorListFun();
-      res.data = res.data ? res.data :[];
-      res.data.forEach((item)=>{
-        if (item.isLock === 0) {
-          item.isLock = true;
-        } else {
-          item.isLock = false;
-        }
-      });
-      this.list = res.data;
+      if (res.code === 0) {
+        res.data = res.data ? res.data :[];
+        res.data.forEach((item)=>{
+          if (item.isLock === 0) {
+            item.isLock = true;
+          } else {
+            item.isLock = false;
+          }
+        });
+        this.list = res.data;
+      }else {
+        this.$toast(res.msg);
+      }
+      
     },
     async lockOperator(id,isLock){
       if (isLock === true) {
@@ -63,7 +68,6 @@ export default {
         }
       let payload = Object.assign({},{id:id,isLock:isLock});
       let res = await lockOperatorrFun(qs.stringify(payload));
-      console.log(res);
       if (res.code === 0) {
          this.$toast({message: isLock===1 ? '禁用成功':'解除禁用成功'});
       }

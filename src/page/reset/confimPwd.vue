@@ -2,10 +2,10 @@
   <div class="reset" v-title="title">
     <form ref="resetForm" :model="reset">
     <div class="form-group">
-      <input type="password" placeholder="请输入旧密码" v-model="reset.oldPassword">
+      <input type="password" placeholder="请输入新密码" v-model="reset.password">
     </div>
     <div class="form-group">
-      <input type="password" placeholder="请输入新密码" v-model="reset.password">
+      <input type="password" placeholder="请确认新密码" v-model="reset.repassword">
     </div>
     </form>
     <p class="btn">
@@ -21,8 +21,8 @@
     data() {
       return {
         reset: {
-          oldPassword: '',
           password: '',
+          repassword: '',
         },
         timer: null,
         time: 60,
@@ -34,26 +34,28 @@
     },
     methods: {
       validate() {
-        if (this.reset.oldPassword === '') {
-          this.$toast({message: "请输入旧密码" });
-          return false;
-        }
         if (this.reset.password === '') {
-          this.$toast({message: "请输入新密码" });
+          this.$toast({message: "请输入新密码"});
           return false;
         }
-        if (this.reset.oldPassword === this.reset.password) {
-          this.$toast({message: " 旧密码和新密码不允许相同" });
+        if (this.reset.repassword === '') {
+          this.$toast({message: "请确认新密码"});
+          return false;
+        }
+        if (this.reset.password !== this.reset.repassword) {
+          this.$toast({message: " 两次输入密码不一致"});
           return false;
         }
         return true;
       },
       async changePwdConfirm() {
         if (this.validate()) {
-          let payload = Object.assign({},this.reset);
+          let phone = this.$route.query ? this.$route.query.phone:'';
+          let payload = Object.assign({},{password:this.reset.password,phone:phone});
           let res = await updatePwdFun(qs.stringify(payload));
           if (res.code===0) {
-               this.countdown();
+            this.$toast('修改成功');
+            this.$router.push({name:'login'});
           }else {
              this.$toast(res.msg);
           }

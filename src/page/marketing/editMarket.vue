@@ -3,10 +3,10 @@
   <div class="permissions" v-if="$store.getters.has('mer:marketing:update')">暂无相关页面权限</div>
   <div v-else>
     <div class="addvip-header">
-      <p>所属店铺<span class="addvip-con">{{checkshoptxt?checkshoptxt:''}}<span class="order-action iconfont icon-nextx" @click="shopVisible=true"></span></span></p>
+      <p>所属店铺<span class="order-action add-shop-overflow-icon iconfont icon-nextx" @click="shopVisible=true"></span><span class="addvip-con add-shop-overflow">{{checkshoptxt?checkshoptxt:''}}</span></p>
       <p>优惠期开始<span class="addvip-con">{{addmarket.startTime}}<span class="order-action iconfont icon-nextx" @click="open('picker2')"></span></span></p>
        <p>优惠期结束<span class="addvip-con">{{addmarket.endTime}}<span class="order-action iconfont icon-nextx" @click="open('picker3')"></span></span></p>
-      <p>活动日<span class="addvip-con">{{activeCurrentTags?activeCurrentTags !== '自定义'?activeCurrentTags:checkWeeklisttxt:checkWeeklisttxt}}<span class="order-action iconfont icon-nextx" @click="activeVisible=true"></span></span></p>
+      <p>活动日<span class="order-action add-shop-overflow-icon iconfont icon-nextx" @click="activeVisible=true"></span><span class="addvip-con add-shop-overflow">{{activeCurrentTags?activeCurrentTags !== '自定义'?activeCurrentTags:checkWeeklisttxt:checkWeeklisttxt}}</span></p>
       <p>每日活动时段<span class="addvip-con">{{addmarket.time}}<span class="order-action iconfont icon-nextx" @click="activeTimeVisible = true"></span></span></p>
       <p>折扣优惠<span class="addvip-con"><input type="number" placeholder="折扣优惠" class="discount-input" v-model="addmarket.discount">%</span></p>
       <p>是否开放<span class="addvip-con"><mt-switch v-model="addmarket.addstatus" class="check-switch"></mt-switch></span></p>
@@ -185,23 +185,27 @@ export default {
       let query = this.$route.query;
       let payload = {timeId:query.id};
       let res = await detailMarketFun(qs.stringify(payload));
-      let detail = res.data;
-      this.addmarket.startTime = detail.noDiscountStart ? moment(detail.noDiscountStart).format('YYYY-MM-DD') : '';
-      this.addmarket.endTime = detail.noDiscountEnd ? moment(detail.noDiscountEnd).format('YYYY-MM-DD'): '';
-      this.addmarket.addstatus =  detail.status ===  0 ? this.addmarket.addstatus = true  : this.addmarket.addstatus = false;
-      this.addmarket.time = detail.noTime;
-      this.addmarket.discount = detail.discount;
+      if (res.code === 0) {
+        let detail = res.data;
+        this.addmarket.startTime = detail.noDiscountStart ? moment(detail.noDiscountStart).format('YYYY-MM-DD') : '';
+        this.addmarket.endTime = detail.noDiscountEnd ? moment(detail.noDiscountEnd).format('YYYY-MM-DD'): '';
+        this.addmarket.addstatus =  detail.status ===  0 ? this.addmarket.addstatus = true  : this.addmarket.addstatus = false;
+        this.addmarket.time = detail.noTime;
+        this.addmarket.discount = detail.discount;
+        let beshop = [];
+        detail.shop.forEach(item=>{
+          beshop.push(item.name);
+        });
+        this.checkshoptxt = beshop.join(',');
+        this.checkshoplist = beshop;
 
-      let beshop = [];
-      detail.shop.forEach(item=>{
-        beshop.push(item.name);
-      });
-      this.checkshoptxt = beshop.join(',');
-      this.checkshoplist = beshop;
+        this.shopIds = detail.shop.map(item=>item.id);
 
-      this.activeCurrentTags = this.filterweek(detail.noWeek);
-      this.pickerstartDate = new Date(detail.noDiscountStart);
-      this.pickerEndDate = new Date(detail.noDiscountEnd);
+        this.activeCurrentTags = this.filterweek(detail.noWeek);
+        this.pickerstartDate = new Date(detail.noDiscountStart);
+        this.pickerEndDate = new Date(detail.noDiscountEnd);
+      }
+      
     },
     filterweek(value){
       if (value === '1,2,3,4,5,6,7') {
@@ -239,8 +243,10 @@ export default {
     getcheckshop(){
       this.checkshoptxt = this.checkshoplist.join(',');
       let checklist = this.shoplist.filter(v=>this.checkshoplist.some(k=>k==v.shopName));
+
       this.shopVisible = false;
       checklist.forEach(item=>this.shopIds.push(item.shopId));
+      this.shopIds = Array.from(new Set(this.shopIds));
     },
     activeselectpicker(data){ //打开自定义星期
       this.activeCurrentTags = data;
@@ -331,6 +337,16 @@ export default {
       border:none;
     }
     .addvip-con {
+      float: right;
+    }
+    .add-shop-overflow {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      width: 65%;
+      text-align: right;
+    }
+    .add-shop-overflow-icon {
       float: right;
     }
   }
