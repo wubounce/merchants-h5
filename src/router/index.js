@@ -190,6 +190,12 @@ export default new Router({
       meta: {title: '地图搜索'},
     },
     {
+      path: '/editMap',
+      name: 'editMap',
+      component: () => import ('@/page/shop/editMap'),
+      meta: {title: '地图搜索'},
+    },
+    {
       path: '/shopDetail',
       name: 'shopDetail',
       component: () => import ('@/page/shop/shopDetail'),

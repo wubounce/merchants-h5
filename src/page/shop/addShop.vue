@@ -1,7 +1,7 @@
 <template>
   <section class="personal" v-title="title">
     <ul class="personal-list">
-      <p class="shopname-p"><span>店铺名称</span><span><input @change="blur" type="text" class='addressInput'  maxlength="40" placeholder="请填写店铺名称"></span></p>
+      <p class="shopname-p"><span>店铺名称</span><span><input @change="blur" type="text" class='addressInput' v-model="shopName" maxlength="40" placeholder="请填写店铺名称"></span></p>
       <li v-for="(item,index) in list" :key="index" class="personal-item" @click="toDetail(index)">
         {{item.title}}
         <span>{{item.value == ''|| item.value==null? '' : item.value}}</span>
@@ -10,8 +10,16 @@
     </ul>
     <div class="second">
       <li class="device business" @click="addDevice">设备类型<span>{{machineName}}</span></li>
-      <p class="isReserve"><span>预约功能</span><span><mt-switch class="check-switch" v-model="isReserve"></mt-switch></span></p>
-      <p class="reserveTime"><span>预约时长(分钟)</span><span><input type="number" class='timeInput' @change="limitTime"  placeholder="请填写预约有效时长"></span></p>
+      <p class="isReserve">
+        <span>预约功能</span>
+        <span><mt-switch class="check-switch" v-model="isReserve" @change="editTime(isReserve)"></mt-switch></span>
+      </p>
+      <p class="reserveTime">
+        <span>预约时长(分钟)</span>
+        <span>
+          <input v-model="orderLimitMinutes" :disabled="noEdit" :placeholder="placeholdercontent" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" maxlength='1'>
+        </span>
+      </p>
       <li class="business" @click="chooseTime">营业时间<span>{{addBusinessTime}}</span></li>
       <p class="picture">
         <span>店铺照片</span>
@@ -83,6 +91,8 @@ export default {
       machineTypeIdsArray:'',
       orderLimitMinutes:'',
       addBusinessTime:'',
+      noEdit:true,
+      placeholdercontent:'开启预约功能后可填',
       title:'新增店铺',
       list: [
         {
@@ -244,13 +254,16 @@ export default {
         }
       }
     },
-    limitTime(e) {
-      if(e.target.value<0 || e.target.value>10) {
-        MessageBox.alert("预约时长不能超过10分钟");
-        e.target.value = '';
+    //设置预约相关
+    editTime(i) {
+      if(i) {
+        this.noEdit =false;
+        this.placeholdercontent = "请填写预约有效时长";
       }
       else {
-        this.orderLimitMinutes = e.target.value;
+        this.noEdit =true;
+        this.orderLimitMinutes = "";
+        this.placeholdercontent = "开启预约功能后可填";
       }
     },
     valuesChange(picker, values) {
@@ -298,24 +311,38 @@ export default {
           this.getArea();
           break;
         case 2:{
-          //let city = this.cityName.slice(0,this.cityName.length-1);
-          //console.log(city);
-          this.goMap("mapSearch",this.cityName);
+          this.goMap("mapSearch",this.cityName,this.shopName,this.shopType,
+                      this.list[1].value,this.provinceId, this.cityId, this.districtId,this.address,this.machineName,this.machineTypeIdsArray,
+                      this.isReserve,this.orderLimitMinutes,this.addBusinessTime,
+                      this.imageId);
           this.mapVisible = true;
           break;
         }
-          
       }
     },
    //跳转传值
-    goMap(x,y) {
+    goMap(x,y,name,type,place,provinceId,cityId,districtId,address,machineName,machinetype,isReserve,LimitMinutes,worktime,img) {
       this.$router.push({
         name:x,
         query: {
-          city:this.cityName
+          city:this.cityName,
+          name:name,
+          type:type,
+          place:place,
+          provinceId: provinceId,
+          cityId: cityId,
+          districtId: districtId,
+          address:address,
+          machineName:machineName,
+          machinetype:machinetype,
+          isReserve:isReserve,
+          LimitMinutes:LimitMinutes,
+          worktime:worktime,
+          img:img
         }
       });
     },
+    //确认按钮
     confirmNews() {
       this.isClass = false;
       switch(this.index) {
@@ -507,28 +534,6 @@ export default {
       //console.log(this.cityName);
       let changeisReserve = (this.isReserve==true)? 0 :1;
       let _this = this;
-      //经纬度
-      // AMap.plugin('AMap.Geocoder',function() {
-      //    var geocoder = new AMap.Geocoder({
-      //       city: _this.cityName, //城市，默认：“全国”
-      //       radius: 1000 //范围，默认：500
-      //     });
-      //     //地理编码,返回地理编码结果
-      //     geocoder.getLocation(_this.list[2].value, function(status, result) {
-      //         if (status === 'complete' && result.info === 'OK') {
-      //             console.log(result);
-      //             //return result;
-      //             _this.lat  = result.geocodes[0].location.lat;
-      //             _this.lng  = result.geocodes[0].location.lng;
-      //             //console.log("_this:",_this.lat);
-      //             _this.goMap("mapSearch",_this.lat,_this.lng);
-      //         }
-      //         else {
-      //           console.log('获取经纬度错误');
-      //         }
-      //     });
-      // });
-
       //判断信息是否完整
       
       let obj = {
@@ -584,12 +589,67 @@ export default {
           return i.shopName;
         });
       }
+    },
+    //从mapSearch里取数据
+    getFromValue(data) {
+      this.list[2].value = this.$route.query.special;
+      this.shopName = (this.$route.query.name == '') ? '' : this.$route.query.name;
+      switch(this.$route.query.type) {
+        case 1:
+          this.list[0].value = '学校';
+          break;
+        case 2:
+          this.list[0].value = '公寓';
+          break;
+        case 3:
+          this.list[0].value = '流动人口社区';
+          break;
+        case 4:
+          this.list[0].value = '酒店';
+          break;
+          case 5:
+          this.list[0].value = '医院';
+          break;
+        case 6:
+          this.list[0].value = '养老院';
+          break;
+          case 7:
+          this.list[0].value = '工厂';
+          break;
+        case 8:
+          this.list[0].value = '浴场';
+          break;
+        case 9:
+          this.list[0].value = '其他';
+          break;
+        default:
+          this.list[0].value = '';
+          break;
+      }
+      this.list[1].value = (this.$route.query.place == '') ? '' : this.$route.query.place;
+      this.provinceId = (this.$route.query.provinceId == '') ? '' : this.$route.query.provinceId;
+      this.cityId = (this.$route.query.cityId == '') ? '' : this.$route.query.cityId;
+      this.districtId = (this.$route.query.districtId == '') ? '' : this.$route.query.districtId;
+
+      this.address = (this.$route.query.address == '') ? '' : this.$route.query.address;
+      this.machineName = (this.$route.query.machineName == '') ? '' : this.$route.query.machineName;
+      this.isReserve = (this.$route.query.isReserve == true) ? true : false;
+      this.orderLimitMinutes = (this.$route.query.LimitMinutes == '') ? '' : this.$route.query.LimitMinutes;
+      this.addBusinessTime = (this.$route.query.worktime == '') ? '' : this.$route.query.worktime;
+      if(this.$route.query.img != "" && this.$route.query.img != undefined) {
+        this.imgId.defaultPicture = this.$route.query.img;
+      }
+      else {
+        this.imgId.defaultPicture = '../../../static/image/shop/add.png';
+      }
+      
     }
   },
   created() {
-    //this.getArea();
-    this.list[2].value = this.$route.query.place;
+    
     this.getShoplist();
+    this.getFromValue();
+    console.log("img:",this.$route.query.img);
   },
   components:{
     UploadImg
@@ -711,6 +771,7 @@ export default {
         input {
           margin-left:0.5rem;
           height: 1rem;
+          background-color: #fff;
         }
         ::-webkit-input-placeholder {
           color: #999999;

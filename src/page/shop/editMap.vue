@@ -13,6 +13,7 @@ export default {
   data() {
     return {
       title: '新增店铺',
+      shopId:'',
       special:'',
       fromlat:'',
       fromlng:'',
@@ -33,10 +34,11 @@ export default {
     };
   },
   methods: {
-    getLatLng(x,y,z,p,name,type,place,provinceId,cityId,districtId,address,machineName,machinetype,isReserve,LimitMinutes,worktime,img) {
+    getLatLng(x,shopId,y,z,p,name,type,place,provinceId,cityId,districtId,address,machineName,machinetype,isReserve,LimitMinutes,worktime,img) {
       this.$router.push({
         name:x,
         query: {
+          shopId: shopId,
           lat:y,
           lng:z,
           special:p,
@@ -58,9 +60,8 @@ export default {
     }
   },
   created() {
-    
+    this.shopId = this.$route.query.shopId
     this.fromCity = this.$route.query.city.slice(0,this.$route.query.city.length-1);
-    //this.fromCity = '北京';
     this.name = this.$route.query.name;
     this.type = this.$route.query.type;
     this.place = this.$route.query.place;
@@ -118,7 +119,7 @@ export default {
                 _this.lat  = result.geocodes[0].location.lat;
                 _this.lng  = result.geocodes[0].location.lng;
                 //console.log("_this:",_this.lat);
-                _this.getLatLng("addShop",_this.lat,_this.lng,e.poi.name,_this.name,_this.type,_this.place,_this.provinceId, _this.cityId, _this.districtId,_this.address,_this.machineName,_this.machinetype,_this.isReserve,_this.LimitMinutes,_this.worktime,_this.img);
+                _this.getLatLng("editShop",_this.shopId,_this.lat,_this.lng,e.poi.name,_this.name,_this.type,_this.place,_this.provinceId, _this.cityId, _this.districtId,_this.address,_this.machineName,_this.machinetype,_this.isReserve,_this.LimitMinutes,_this.worktime,_this.img);
             }
             else {
               console.log('获取经纬度错误');

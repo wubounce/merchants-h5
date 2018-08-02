@@ -1,7 +1,7 @@
 <template>
   <section class="personal" v-title="title">
     <ul class="personal-list">
-      <p class="shopname-p"><span>店铺名称</span><span><input type="text" class='addressInput' v-model="shopName" maxlength="12" placeholder="请填写店铺名称"></span></p>
+      <p class="shopname-p"><span>店铺名称</span><span><input @change="blur" type="text" class='addressInput' v-model="shopName" maxlength="40" placeholder="请填写店铺名称"></span></p>
       <li v-for="(item,index) in list" :key="index" class="personal-item" @click="toDetail(index)">
         {{item.title}}
         <span>{{item.value == ''|| item.value==null? '' : item.value}}</span>
@@ -10,8 +10,19 @@
     </ul>
     <div class="second">
       <li class="device business" @click="addDevice">设备类型<span>{{machineName}}</span></li>
-      <p class="isReserve"><span>预约功能</span><span><mt-switch class="check-switch" v-model="isReserve"></mt-switch></span></p>
-      <p class="reserveTime"><span>预约时长(分钟)</span><span><input type="text" class='timeInput' v-model="orderLimitMinutes" maxlength="2" placeholder="请填写预约有效时长"></span></p>
+      <p class="isReserve">
+        <span>预约功能</span>
+        <span>
+          <mt-switch @change="editTime(isReserve)" class="check-switch" v-model="isReserve">
+          </mt-switch>
+        </span>
+      </p>
+      <p class="reserveTime">
+        <span>预约时长(分钟)</span>
+        <span>
+          <input v-model="orderLimitMinutes" :disabled="noEdit" :placeholder="placeholdercontent" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" maxlength='1'>
+        </span>
+      </p>
       <li class="business" @click="chooseTime">营业时间<span>{{addBusinessTime}}</span></li>
       <p class="picture">
         <span>店铺照片</span>
@@ -42,10 +53,14 @@
     </mt-popup>
     
     <!-- 设备类型 -->
-    <mt-popup v-model="deviceDetail" position="bottom" class="mint-popup">
+    <div v-show="deviceDetail" class="machine-hiden">
       <p class="toolBar"><span @click="cancel">取消</span><span>设备类型</span><span @click="confirmNews">确定</span></p>
       <mt-checklist align="right" :options="options" v-model="machine"></mt-checklist>
-    </mt-popup>
+    </div>
+    <!-- 设备类型自带背景 -->
+    <div :class="{'machine-background':isbgc}" >
+      
+    </div>
 
     <!-- 营业时间 -->
     <mt-popup v-model="timeVisible" position="bottom" class="mint-popup">
@@ -63,12 +78,19 @@ import { addOrEditShopFun } from '@/service/shop';
 import { areaListFun } from '@/service/shop';
 import { listParentTypeFun } from '@/service/shop';
 import { uploadFileFun } from '@/service/shop';
+import { manageListFun } from '@/service/shop';
+import { MessageBox } from 'mint-ui';
 export default {
   data() {
     return {
       index:'',
+      shopId:'',
+      isbgc:false,
       deviceDetail:false,
       shopName:'',
+      oldName:'',
+      noEdit: false,
+      placeholdercontent:'开启预约功能后可填',
       address:'',
       machineName:'',
       machineTypeIds:'',
@@ -77,6 +99,7 @@ export default {
       orderLimitMinutes:'',
       addBusinessTime:'',
       title:'编辑店铺',
+      arrName:[],
       list: [
         {
           title: "店铺类型",
@@ -220,6 +243,36 @@ export default {
     };
   },
   methods:{
+     blur(e) {
+      //校验字符长度
+      console.log(this.oldName);
+      if(e.target.value.length>3 && e.target.value.length<41) {
+        this.shopName = e.target.value;
+      }
+      else {
+        this.shopName = this.oldName;
+        MessageBox.alert("请输入4到40字符的店铺名称");
+      }
+      //校验重名
+      for(let i=0; i<this.arrName.length; i++) {
+        if(e.target.value == this.arrName[i]) {
+          this.shopName = this.oldName;
+          MessageBox.alert("该店铺名称已存在，请换一个店铺名称输入哦");
+        }
+      }
+    },
+    //设置预约相关
+    editTime(i) {
+      if(i) {
+        this.noEdit =false;
+        this.placeholdercontent = "请填写预约有效时长";
+      }
+      else {
+        this.noEdit =true;
+        this.orderLimitMinutes = "";
+        this.placeholdercontent = "开启预约功能后可填";
+      }
+    },
     valuesChange(picker, values) {
       this.shopTypeString = values[0];
       switch(values[0]) {
@@ -265,16 +318,38 @@ export default {
           this.getArea();
           break;
         case 2:
-          this.go("mapSearch");
+          this.goMap("editMap",this.shopId,this.cityName,this.shopName,this.shopType,
+                      this.list[1].value,this.provinceId, this.cityId, this.districtId,this.address,this.machineName,this.machineTypeIdsArray,
+                      this.isReserve,this.orderLimitMinutes,this.addBusinessTime,
+                      this.imgId.defaultPicture);
           this.mapVisible = true;
           break;
       }
     },
-    go(msg) {
+    //跳转传值
+    goMap(x,shopId,y,name,type,place,provinceId,cityId,districtId,address,machineName,machinetype,isReserve,LimitMinutes,worktime,img) {
       this.$router.push({
-        name: msg
+        name:x,
+        query: {
+          shopId: shopId,
+          city:y,
+          name:name,
+          type:type,
+          place:place,
+          provinceId: provinceId,
+          cityId: cityId,
+          districtId: districtId,
+          address:address,
+          machineName:machineName,
+          machinetype:machinetype,
+          isReserve:isReserve,
+          LimitMinutes:LimitMinutes,
+          worktime:worktime,
+          img:img
+        }
       });
     },
+    //确认按钮
     confirmNews() {
       this.isClass = false;
       switch(this.index) {
@@ -300,6 +375,7 @@ export default {
         //设备管理
         case 3: {
           this.deviceDetail = false;
+          this.isbgc = false;
           this.machineName = this.machine.join(' , ');
           let arr = [];
           for(let i=0;i<this.machine.length;i++) {
@@ -355,6 +431,7 @@ export default {
           break;
         case 3:
           this.deviceDetail = false;
+          this.isbgc = false;
           break;
         case 4:
           this.timeVisible = false;
@@ -410,6 +487,7 @@ export default {
     async addDevice() {
       this.index = 3;
       this.isClass = true;
+      this.isbgc = true;
       this.deviceDetail = true;
       let obj = {
         onlyMine: false
@@ -515,7 +593,9 @@ export default {
       let obj = { shopId: this.$route.query.shopId };
       let res = await shopDetailFun(qs.stringify(obj));
       if(res.code===0) {
+        this.shopId = res.data.shopId;
         this.shopName = res.data.shopName; //店铺名称
+        this.oldName = res.data.shopName; //旧店铺名称
         this.list[0].value = res.data.shopType; //店铺类型
         //店铺地址
         if(res.data.province == res.data.city.slice(0,2)) {
@@ -532,7 +612,8 @@ export default {
         //设备类型
         this.machineName = res.data.machineTypeNames;
         //预约功能
-        this.isReserve = res.data.isReserve == 0 ? true: false;
+        this.isReserve = res.data.isReserve == 0 ? true : false;
+        this.noEdit = res.data.isReserve == 0 ? false :true;
         //预约时长
         this.orderLimitMinutes = res.data.orderLimitMinutes;
         //营业时间
@@ -570,7 +651,6 @@ export default {
         };
         let resMachine = await listParentTypeFun(qs.stringify(objMachine));
         if(resMachine.code ===0 ) {
-          console.log(resMachine.data[0].name);
           let arrmachine = res.data.machineTypeNames.split(',');
           let arr = [];
           for(let i=0;i<arrmachine.length;i++) {
@@ -583,11 +663,80 @@ export default {
           this.machineTypeIdsArray = arr.join(',');
         }
       }
+    },
+    async getShoplist() {
+      let res = await manageListFun();
+      if(res.code === 0 ) {
+        this.arrName = res.data.map((i) => {
+          return i.shopName;
+        });
+      }
+    },
+    //从editMap里取数据
+    async getFromValue() {
+      this.list[2].value = this.$route.query.special;
+      this.shopName = (this.$route.query.name == '') ? '' : this.$route.query.name;
+      switch(this.$route.query.type) {
+        case 1:
+          this.list[0].value = '学校';
+          break;
+        case 2:
+          this.list[0].value = '公寓';
+          break;
+        case 3:
+          this.list[0].value = '流动人口社区';
+          break;
+        case 4:
+          this.list[0].value = '酒店';
+          break;
+          case 5:
+          this.list[0].value = '医院';
+          break;
+        case 6:
+          this.list[0].value = '养老院';
+          break;
+          case 7:
+          this.list[0].value = '工厂';
+          break;
+        case 8:
+          this.list[0].value = '浴场';
+          break;
+        case 9:
+          this.list[0].value = '其他';
+          break;
+        default:
+          this.list[0].value = '';
+          break;
+      }
+      this.list[1].value = (this.$route.query.place == '') ? '' : this.$route.query.place;
+      this.provinceId = (this.$route.query.provinceId == '') ? '' : this.$route.query.provinceId;
+      this.cityId = (this.$route.query.cityId == '') ? '' : this.$route.query.cityId;
+      this.districtId = (this.$route.query.districtId == '') ? '' : this.$route.query.districtId;
+
+      this.address = (this.$route.query.address == '') ? '' : this.$route.query.address;
+      this.machineName = (this.$route.query.machineName == '') ? '' : this.$route.query.machineName;
+      this.isReserve = (this.$route.query.isReserve == true) ? true : false;
+      this.orderLimitMinutes = (this.$route.query.LimitMinutes == '') ? '' : this.$route.query.LimitMinutes;
+      this.addBusinessTime = (this.$route.query.worktime == '') ? '' : this.$route.query.worktime;
+      if(this.$route.query.img != "" && this.$route.query.img != undefined) {
+        this.imgId.defaultPicture = this.$route.query.img;
+      }
+      else {
+        this.imgId.defaultPicture = '../../../static/image/shop/add.png';
+      }
     }
   },
   created() {
+    console.log(this.shopName);
     this.getShopDetail();
+    console.log(this.shopName);
     //this.getArea();
+    this.getShoplist();
+    this.getFromValue();
+    console.log(this.shopName);
+  },
+  mounted() {
+    console.log(this.shopName);
   },
   components:{
     UploadImg
@@ -708,6 +857,7 @@ export default {
         input {
           margin-left:0.5rem;
           height: 1rem;
+          background-color: #fff;
         }
         ::-webkit-input-placeholder {
           color: #999999;
@@ -791,6 +941,23 @@ export default {
     .prop-bd {
       padding: 0.3rem;
     }
+  }
+  .machine-background{
+    width: 100%;
+    height: 100%;
+    opacity: 0.5;
+    background: #000;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 2018;
+  }
+  .machine-hiden {
+    position: absolute;
+    top: 10rem;
+    background-color: rgb(255, 255, 255);
+    width: 100%;
+    z-index: 2020;
   }
 }
 </style>
