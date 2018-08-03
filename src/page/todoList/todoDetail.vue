@@ -121,7 +121,7 @@ import moment from 'moment';
         if(res.code ===0 ) {
           //参数异常，待后台确认
           this.item = res.data;
-          this.item.createTime = moment(res.data.createTime).format('YYYY-MM-DD');
+          this.item.createTime = moment(res.data.createTime).format('YYYY-MM-DD HH:mm:ss');
         }
       }
     }, 

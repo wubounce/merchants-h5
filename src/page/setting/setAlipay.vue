@@ -2,7 +2,7 @@
   <section v-title="title">
     <p class="shopname-p">
       <span>支付宝账号</span><span>
-        <input type="text" class='addressInput' v-model="account"  placeholder="请填写支付宝账号" @input="disbaledBtn">
+        <input type="text" class='addressInput' onkeyup="value=value.replace(/[\u4E00-\u9FA5]/g,'')" v-model="account"  placeholder="请填写支付宝账号" @input="disbaledBtn">
       </span>
     </p>
     <p class="alipay-btn" @click="submitAlipay">
@@ -26,52 +26,34 @@ export default {
       this.disabled = false;
     },
     async submitAlipay() {
-      //let arrPhone = this.account.split('');
-      //console.log(this.account.length);
-      let len = this.account.length;
-      let arr = this.account.split('');
-      //console.log(arr);
-      if(len == 10) {
-        for(let i=0;i<arr.length;i++) {
-          if(arr[i]*1 >= 0 && arr[i]*1 <= 9) {
-            console.log('正确的字符串——手机号');
-          }
-          else {
-            console.log('不是手机号');
-            break;
-          }
+      if(this.account.length <6 ) {
+        this.$toast({
+          message: "支付宝帐号不符合规则",
+          position: "bottom",
+          duration: 3000
+        });
+      }
+      else {
+        let obj ={
+          alipayAccount: this.account
+        };
+        let res = await updateOperatorFun(qs.stringify(obj));
+        if(res.code === 0 ) {
+          this.$router.push({
+            name: 'accountSet'
+          });
+          let instance = this.$toast({
+            message: '支付宝账号修改成功',
+            iconClass: 'mint-toast-icon mintui mintui-success'
+          });
+          setTimeout(() => {
+            instance.close();
+          }, 2000);
+        }
+        else {
+          this.$toast(res.msg);
         }
       }
-      // if(this.account.length = 10) {
-      //   let arr = this.account.split('');
-      //   console.log(arr);
-      //   // this.$toast({
-      //   //   message: "支付宝帐号不符合规则",
-      //   //   position: "bottom",
-      //   //   duration: 3000
-      //   // });
-      // }
-      // else {
-      //   let obj ={
-      //     alipayAccount: this.account
-      //   };
-      //   let res = await updateOperatorFun(qs.stringify(obj));
-      //   if(res.code === 0 ) {
-      //     this.$router.push({
-      //       name: 'accountSet'
-      //     });
-      //     let instance = this.$toast({
-      //       message: '支付宝账号修改成功',
-      //       iconClass: 'mint-toast-icon mintui mintui-success'
-      //     });
-      //     setTimeout(() => {
-      //       instance.close();
-      //     }, 2000);
-      //   }
-      //   else {
-      //     this.$toast(res.msg);
-      //   }
-      // }
     }
   },
   created() {

@@ -85,7 +85,11 @@ export default new Router({
     {
       path: '/addDevice',
       name: 'addDevice',
-      component: () => import ('@/page/device/addDevice/addDevice')
+      component: () => import ('@/page/device/addDevice/addDevice'),
+      meta: {
+        keepAlive: true, //此组件需要被缓存
+      }
+
     },
     {
       path: '/editDevice',
