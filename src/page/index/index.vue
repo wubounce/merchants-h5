@@ -1,7 +1,6 @@
 <template>
   <div class="main" v-title="'首页'">
-    <div class="permissions" v-if="$store.getters.has('mer:index')">暂无相关页面权限</div>
-    <div v-else>
+    
       <div class="earnings-wrap">
         <div class="earning-type">
           <p>总收益 (元)</p>
@@ -50,8 +49,9 @@
         <div class="bar" id="bar" :style="{height:height,width:width}" ref="bar"></div>
       </div>
     </div>
-    
-  </div>
+  <!-- <div class="permissions">暂无相关页面权限</div>
+    <div v-else>  
+  </div> -->
 </template>
 <script>
 import qs from 'qs';
@@ -340,7 +340,7 @@ export default {
           type : 'value',
           offset:10,
           min: 0,
-          max:this.lineMaxspilt*1.5,
+          max:this.lineMaxspilt*1,
           splitNumber:5,
           minInterval: this.lineMaxspilt/2,
           axisLine:{
@@ -456,7 +456,7 @@ export default {
             textStyle: {color: '#999'}
           },
           min:0,
-          max:this.allmMachine*1.5,
+          max:this.allmMachine*1,
           splitNumber:5
         }],
         series: [{
@@ -514,8 +514,8 @@ export default {
               labelLine: {
                   normal: {
                       show: false,
-                      length:10,
-                      length2:10,
+                      length:5,
+                      length2:5,
                   }
               },
               data:this.pietypeData,
@@ -567,8 +567,8 @@ export default {
               labelLine: {
                   normal: {
                       show: false,
-                      length:10,
-                      length2:10,
+                      length:6,
+                      length2:6,
                   }
               },
               data:this.piefunData,

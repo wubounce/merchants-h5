@@ -1,7 +1,6 @@
 <template>
 <div class="report" v-title="title">
-  <div class="permissions" v-if="$store.getters.has('mer:report')">暂无相关页面权限</div>
-  <div v-else>
+  
     <mt-navbar class="tab" v-model="selected">
     <mt-tab-item id="1">收益</mt-tab-item>
     <mt-tab-item id="2">退款</mt-tab-item>
@@ -14,8 +13,10 @@
         <refund></refund>
       </mt-tab-container-item>
     </mt-tab-container>
-    <div style="width:100%;height:1.73rem;"></div>
-  </div>
+    <!-- <div style="width:100%;height:1.73rem;"></div>
+      <div class="permissions" v-if="$store.getters.has('mer:report')">暂无相关页面权限</div>
+    <div v-else>
+ -->  </div>
 </div>
 </template>
 <script>

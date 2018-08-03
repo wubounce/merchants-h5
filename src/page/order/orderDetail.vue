@@ -6,7 +6,6 @@
     <div class="order-title">{{detail.shopAddress}}</div>
     <div class="alllist">
       <section class="order-list">  
-       
         <div class="detail">  
           <div class="orderpic"><img :src="detail.imageId" alt=""></div>
           <div class="content">
@@ -18,8 +17,12 @@
       </section>
     </div>
     <section class="total-wrap">
-      <div class="total-border">
+      <div class="total-border" v-if="detail.discountType===1 && detail.discountPrice>0">
         <div class="vip"><span class="viptag">vip</span>VIP会员卡</div>
+        <div class="discount">-¥{{detail.discountPrice}}</div>
+      </div>
+       <div class="total-border" v-if="detail.discountType===2&&detail.discountPrice>0">
+        <div class="vip">优惠券</div>
         <div class="discount">-¥{{detail.discountPrice}}</div>
       </div>
     </section>
@@ -37,13 +40,13 @@
         <div class="vip">订单编号：{{detail.orderNo}}</div>
       </div>
     </section>
-    <section class="total-wrap" v-if="detail.orderStatus === 2&& detail.payType !== 0 || detail.orderStatus === 5&& detail.payType !== 0">
+    <section class="total-wrap" v-if="detail.orderStatus === 2|| detail.orderStatus === 5">
       <div class="total-border">
         <div class="vip">支付方式：{{detail.payType | PayType}}</div>
       </div>
     </section>
     <section class="oder-time" style="margin-bottom:1.3rem;">
-      <span>下单时间：{{detail.payTime}}</span>
+      <span>下单时间：{{detail.createTime}}</span>
     </section>
      <section class="listaction" v-if="detail.orderStatus === 2"> 
       <mt-button @click="orderRefund(detail.id,detail.payPrice)" v-has="'mer:order:refund,mer:order:info'">退款</mt-button>

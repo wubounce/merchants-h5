@@ -58,6 +58,8 @@ export const orderStatus = (ststus)=>{
 // 支付方式
 export const PayType = (ststus)=>{
 	switch (ststus){
+		case 0:
+			return '其他';
 		case 1:
 			return '支付宝';
 		case 2:

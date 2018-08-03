@@ -5,7 +5,10 @@
     <section class="sarch-wrap">
       <div class="search">
          <span class="iconfont icon-IconSearch select-back" @click="searchOrder"></span>
-          <input type="text" v-model.trim="searchData" @input="clearSearch" placeholder="请输入用户手机号/订单号查询">
+          <form action="" target="frameFile" v-on:submit.prevent="">
+            <input type="search" v-model.trim="searchData" @keyup.enter="searchOrder" @input="clearSearch" placeholder="请输入用户手机号/订单号查询" class="serch">
+            <iframe name='frameFile' style="display: none;"></iframe>
+          </form>
       </div>
     </section>
     <section class="order-status">
@@ -71,7 +74,7 @@ export default {
       titleIndex:0,
       noOrderList:false,
       nosearchList:false,
-      orderStatus:null, //订单状态
+      orderStatus:'', //订单状态
 
       page: 1,//页码
       pageSize:10,
@@ -89,38 +92,56 @@ export default {
   },
   methods: {
     titleClick: function(index) {
+      this.list = [];
+      this.searchData = '';
       this.titleIndex = index;
       this.orderStatus = this.titleArr[this.titleIndex].value;
       this.page = 1; //从第一页起
       this.allLoaded = false;//下拉刷新时解除上拉加载的禁用
-      this.getOrderList(this.orderStatus);
+      this.getOrderList();
     },
-    async getOrderList(orderStatus){
+    async getOrderList(){
       let res = null;
       this.nosearchList = false;
       let payload = null;
-      if (orderStatus) {
-         payload = {orderStatus:orderStatus,page:this.page,pageSize:this.pageSize};
+      console.log(this.searchData);
+      console.log(this.orderStatus);
+      if (this.searchData !== '') {
+         payload = {search:this.searchData,page:1,pageSize:this.pageSize};
       } else {
-        payload = {page:this.page,pageSize:this.pageSize};
+        payload = {orderStatus:this.orderStatus,page:this.page,pageSize:this.pageSize};
       }
       res = await orderListFun(qs.stringify(payload));
       if (res.code === 0) {
         this.list = res.data.items?[...this.list,...res.data.items]:[];  //分页添加
-        this.noOrderList = this.list.length<= 0 ? true: false;
         this.total = res.data.total;
+        if (this.searchData) {
+          this.nosearchList = this.list.length<= 0 ? true: false;
+        } else {
+          this.noOrderList = this.list.length<= 0 ? true: false;
+        }
+      }else {
+        if (this.searchData) {
+          this.nosearchList = true;
+        } else {
+          this.noOrderList = this.list.length<= 0 ? true: false;
+        }
+        
       }
     },
-    async searchOrder(){ //搜索
+    async searchOrder(e){ //搜索
       this.noOrderList = false;
-      let res = await searchOrderFun(qs.stringify({orderNo:this.searchData,phone:this.searchData,page:1,pageSize:20}));
-      if (res.code === 0) {
-        this.list = res.data.items?res.data.items:[];
-        this.nosearchList = this.list.length<= 0 ? true: false;
+      this.titleIndex = 0; //全部tab 显示数据
+      this.orderStatus = '';//全部tab 显示数据
+      this.list = [];
+      var keyCode = window.event? e.keyCode:e.which;
+      if(keyCode =='13'){
+        this.getOrderList();
+        document.activeElement.blur();
       }
     },
     clearSearch(){ //清楚搜索
-      if(this.searchData.length<=0)this.getOrderList(this.orderStatus);
+      if(this.searchData.length<=0)this.getOrderList();
     },
     godetail(oederno,machineId){
       this.$router.push({name: 'orderdetail',query:{orderNo:oederno}});
@@ -129,7 +150,7 @@ export default {
       this.page += 1;
       let allpage = this.total/this.pageSize;
       if(this.page <= allpage){
-        this.getOrderList(this.orderStatus);
+        this.getOrderList();
       }else{
         this.allLoaded = true;//模拟数据加载完毕 禁用上拉加载
       }
@@ -138,7 +159,7 @@ export default {
     loadTop() {
       this.page = 1;
       this.list = [];
-      this.getOrderList(this.orderStatus);
+      this.getOrderList();
       this.allLoaded = false;//下拉刷新时解除上拉加载的禁用
       this.$refs.loadmore.onTopLoaded();
     },
@@ -201,7 +222,12 @@ export default {
     font-size: 16px;
     height: 1.173333rem;
     display: flex;
+    form {
+      display: inline-block;
+      width: 100%;
+    }
     input {
+      width: 90%;
       font-size: 16px;
       height:1.173333rem;
     }
