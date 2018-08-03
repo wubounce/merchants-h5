@@ -69,7 +69,9 @@
         return true;
       },
       disbaledBtn(){
-        if (this.reset.oldPassword !== '' ||this.reset.password !== '' || this.reset.checkpassword !== '') this.disabled = false;
+        if (this.reset.oldPassword !== '' && this.reset.password !== '' && this.reset.checkpassword !== '') {
+          this.disabled = false;
+        }
       },
       async changePwdConfirm() {
         if (this.validate()) { 

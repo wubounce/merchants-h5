@@ -4,7 +4,7 @@
         <p class="user business">修改密码<span>{{user.password}}</span></p>
       </router-link>
       <router-link :to="{name:'setAlipay'}" v-has="'mer:me:aplipay'">
-        <p class="user business">绑定支付宝<span>{{user.alipayAccount == '' ? '未绑定' : user.alipayAccount}}</span></p>
+        <p class="user business">绑定支付宝<span>{{ user.alipayAccount ? user.alipayAccount : '未绑定' | replaceAliply}}</span></p>
       </router-link>
       <!-- <router-link :to="{name:'realName',  query:{ alipayAccount:user.alipayAccount }}"> -->
         <p class="user business"  v-has="'mer:me:real'" @click="toRealName" >实名认证<span>{{user.status}}</span></p>
@@ -33,13 +33,14 @@ export default {
         this.$router.push({
           name: 'realName',
           query:{
-            alipayAccount: this.user.alipayAccount
+            alipayAccount: this.user.alipayAccount,
+            status: this.user.status
           }
         });
       }
       else {
         this.$router.push({
-          name: 'realNameGet'
+          name: 'realNameGet',
         });
       }
     },
@@ -66,6 +67,11 @@ export default {
                 break;
             }
       }
+    }
+  },
+  filters:{
+    replaceAliply(value){
+        return String(value).replace(/^(\d{4})\d{4}(\d+)/,"$1****$2");
     }
   },
   created() {

@@ -43,7 +43,7 @@ export default {
             name: 'accountSet'
           });
           let instance = this.$toast({
-            message: '支付宝账号修改成功',
+            message: '操作成功',
             iconClass: 'mint-toast-icon mintui mintui-success'
           });
           setTimeout(() => {
