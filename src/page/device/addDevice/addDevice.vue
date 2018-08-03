@@ -1,58 +1,78 @@
 <template>
   <section>
     <q-header :title="title"></q-header>
-    <ul class="device-detail">
+    <div v-show="modelShow">
+      <ul class="device-detail">
+    
+        <!-- 表单模块部分  -->
+        <li class="device-detail-item">
+          <!-- 表单元格渲染 -->
+          <ul class="device-detail-bd">
+            <li>
+              <span class="field-title">设备名称</span>
+              <p class="select-1">
+                <input type="text" v-model="fromdata.machineName">
+              </p>
+            </li>
+            <li @click="checkDeviceSelect">
+              <span class="field-title">所属店铺</span>
+              <p class="select">{{fromdata.shopType.name}}</p>
+            </li>
+            <li @click="checkFirstClass">
+              <span class="field-title">设备类型</span>
+              <p class="select">{{fromdata.firstType.name}}</p>
+            </li>
+            <li @click="checkSecondClass">
+              <span class="field-title">设备型号</span>
+              <p class="select">{{fromdata.secondType.name}}</p>
+            </li>
+            <li>
+              <span class="field-title">NQT</span>
+              <p class="select-2" @click="wxScan($event,'npt')">
+                <span>{{fromdata.nqt}}</span>
+              </p>
+            </li>
+            <li>
+              <span class="field-title">IMEI</span>
+              <p class="select-2" @click="wxScan($event,'imei')">
+                <span>{{fromdata.imei}}</span>
+              </p>
+            </li>
+            <li @click="toFunctionSeting">
+              <span class="field-title">功能设置</span>
+              <p class="select">{{fromdata.functionType.name}}</p>
+            </li>
+          </ul>
+        </li>
 
-      <!-- 表单模块部分  -->
-      <li class="device-detail-item">
-        <!-- 表单元格渲染 -->
-        <ul class="device-detail-bd">
-          <li>
-            <span class="field-title">设备名称</span>
-            <p class="select-1">
-              <input type="text" v-model="fromdata.machineName">
-            </p>
-          </li>
-          <li @click="checkDeviceSelect">
-            <span class="field-title">所属店铺</span>
-            <p class="select">{{fromdata.shopType.name}}</p>
-          </li>
-
-          <li @click="checkFirstClass">
-            <span class="field-title">设备类型</span>
-            <p class="select">{{fromdata.firstType.name}}</p>
-          </li>
-          <li @click="checkSecondClass">
-            <span class="field-title">设备型号</span>
-            <p class="select">{{fromdata.secondType.name}}</p>
-          </li>
-          <!-- <li @click="getCompany">
-            <span class="field-title">公司</span>
-            <p class="select">{{fromdata.companyType.name}}</p>
-          </li> -->
-
-          <li>
-            <span class="field-title">NQT</span>
-            <p class="select-2" @click="wxScan($event,'npt')">
-              <span>{{fromdata.nqt}}</span>
-            </p>
-          </li>
-          <li>
-            <span class="field-title">IMEI</span>
-            <p class="select-2" @click="wxScan($event,'imei')">
-              <span>{{fromdata.imei}}</span>
-            </p>
-          </li>
-          <li @click="toFunctionSeting">
-            <span class="field-title">功能设置</span>
-            <p class="select">{{fromdata.functionType.name}}</p>
-          </li>
-        </ul>
-      </li>
-
-    </ul>
+      </ul>
     <button class="submitBtn" @click="submit">提交</button>
-
+    </div>
+    <!--功能列表-->
+    <div v-show="setModelShow">
+    <section class="fun-item-hd">
+      <div>
+        <p v-for="(item,index) in functionListTitle " :key="index">
+          <span v-for="(it,idx) in item " :key="idx">{{it}}</span>
+        </p>
+      </div>
+    </section>
+    <section class="fun-item-bd funlist">
+      <div v-for="(item,index) in functionSetList " :key="index">
+        <input type="text" class="fun-list-item" v-model.lazy="item.functionName" @change="changeItem(item.functionName,index,0)"/>
+        <input type="text" class="fun-list-item" v-model.lazy="item.needMinutes" @change="changeItem(item.needMinutes,index,1)"/>
+        <input type="text" class="fun-list-item" v-model.lazy="item.functionPrice" @change="changeItem(item.functionPrice,index,2)"/>
+        <input type="text" class="fun-list-item" v-model.lazy="item.functionPrice" v-show="isShow2" @change="changeItem(item.functionPrice,index,3)"/>
+        <p class="fun-list-item">
+          <mt-switch v-model="item.ifOpen" @change="changeItem(item.ifOpen,index,4)"></mt-switch>
+        </p>
+      </div>
+    </section>
+    <section class="fun-ft">
+      <router-link :to="{name:'addDevice'}"><Button class="btn cancle" btn-type="default" btn-color="blue">取消</Button></router-link>
+      <Button class="btn" btn-type="default" btn-color="blue" @click.native="goFirst">确定</Button>
+    </section>
+    </div>
     <!-- 模块商 -->
     <mt-popup v-model="companyVisible" position="bottom" class="select-popup">
       <div class="select">
@@ -102,17 +122,36 @@
     Actionsheet
   } from "mint-ui";
   import AddCount from "@/components/AddCount/AddCount";
-  import { getWxconfigFun,getShopFun,getlistParentTypeFun,getlistSubTypeFun,deviceAddorEditFun } from '@/service/device';
+  import { getWxconfigFun,getShopFun,getlistParentTypeFun,getlistSubTypeFun,deviceAddorEditFun,getFunctionSetListFun } from '@/service/device';
  
 
 
   export default {
     data() {
       return {
+        setModelShow: false,
+        isShow2: false,
+        modelShow: true,
         companyVisible: false,
-        parentType: false,
-        isOpenArr:[{"functionId":"7e044cce-1d58-4bff-ab3c-33f195d03b8d","functionName":"单脱","needMinutes":5,"functionPrice":1.0,"ifOpen":0},{"functionId":"23a53227-5d3f-461e-a777-9e9dafd6a289","functionName":"快洗","needMinutes":25,"functionPrice":2.0,"ifOpen":0},{"functionId":"dd9222c6-2f3d-42b8-aa60-4e67a3247cc6","functionName":"标准洗","needMinutes":35,"functionPrice":3.0,"ifOpen":0},{"functionId":"349d4422-f0b9-4f45-a696-ad406fe811f0","functionName":"超净洗","needMinutes":45,"functionPrice":4.0,"ifOpen":0},{"functionId":"2330a3eb-788e-4eb5-88df-5bac3277ada1","functionName":"加温洗","needMinutes":50,"functionPrice":5.0,"ifOpen":0}],
+        parentType: false,    
         subType: false,
+        functionTempletType: null,
+        itemName:["functionName","needMinutes","functionPrice","functionPrice","ifOpen"],
+        functionSetList: [],
+        jsonArr:[],
+        functionListTitle: [
+          ['功能'],
+          ['耗时', '/分'],
+          ['原价', '/元'],
+          ['脉冲数'],
+          ['状态']
+        ],
+        functionListTitle2: [
+          ['功能'],
+          ['耗时', '/分'],
+          ['原价', '/元'],
+          ['状态']
+        ],
         title: '添加设备',
         fromdata: {
           machineName: "",
@@ -157,6 +196,14 @@
         this.fromdata.secondType.name = msg.name;
         this.fromdata.secondType.id = msg.id;
         this.subType = false;
+      },
+      changeItem(item,index,flag){       
+        let name = this.itemName[flag];
+        if (flag === 4){
+          !this.functionSetList[index].ifOpen;
+        }else{
+          this.functionSetList[index].name = item;
+        }
       },
       wxScan(e, type) {
         var self = this;
@@ -237,7 +284,28 @@
           MessageBox.alert("请先选择店铺或者类型");
         }
       },
+      async getFunctionSetList() {  //获取功能数据
+        let payload = {subTypeId: this.fromdata.secondType.id,shopId: this.fromdata.shopType.id} ;     
+        let res = await getFunctionSetListFun(qs.stringify(payload));
+         if(res.code === 0) {
+           this.functionTempletType = res.data.functionTempletType;
+           if(res.data.communicateType === 1){
+             this.functionListTitle = this.functionListTitle2;
+             this.isShow = false;            
+           } 
+          res.data.list.forEach(item=>{
+            item.ifOpen=item.ifOpen === "0"?(!item.ifOpen) : (!!item.ifOpen);
+          });
+            this.functionSetList = res.data.list;
+        }
+        else {
+          MessageBox.alert(res.msg);
+        }
+      },
       async submit() {
+        if(localStorage.getItem('objStr')){
+          var objStr = localStorage.getItem('objStr');
+        }
         let obj = {
           machineName: this.fromdata.machineName,
           shopId: this.fromdata.shopType.id,
@@ -248,8 +316,8 @@
           communicateType: 1,
           ver: 3,
           imei: this.fromdata.imei,
-          functionTempletType: 3,
-          functionJson: JSON.stringify(this.isOpenArr)
+          functionTempletType: this.functionTempletType,
+          functionJson: JSON.stringify(this.jsonArr)
         };
         let res = await deviceAddorEditFun(qs.stringify(obj));
         if(res.code===0) {
@@ -259,17 +327,27 @@
       },
       toFunctionSeting() {
         if(this.fromdata.shopType.id && this.fromdata.firstType.id && this.fromdata.secondType.id) {
-          this.$router.push({
-            name: 'functionSet',
-            query: {
-              subTypeId: this.fromdata.secondType.id,
-              shopId: this.fromdata.shopType.id
-            }
-          });
+          this.getFunctionSetList();
+          this.setModelShow= true;
+          this.modelShow = false;
         }else{
           MessageBox.alert("请先选择上级列表");
         }
        
+      },
+      goFirst(){
+        this.functionSetList.forEach(item=>{
+            item.ifOpen=item.ifOpen?"1":"0";
+          });
+        MessageBox.confirm('您确定要更改吗？').then(action => {       
+          this.setModelShow= false;
+          this.modelShow = true;
+          this.jsonArr = this.functionSetList;
+        });
+      },
+      goBack(){
+       this.setModelShow= false;
+       this.modelShow = true;
       }
 
 
@@ -383,5 +461,84 @@
     color: #fff;
     font-size: 18px;
   }
+  
+  .fun-item-hd {
+    padding: 0;
+    background: #FAFCFF;
+    color: #1890FF;
+    font-size: 0.37rem;
+    padding: .6rem 0;
+    div {
+      display: flex;
+      p {
+        flex: 2.19;
+        text-align: center;
+        position: relative;
+        border-right: rgb(24, 144, 255) .03rem solid;
+        box-sizing: border-box;
+        &:nth-child(1) {
+          flex: 3.32;
+        }
+        &:nth-child(4) {
+          flex: 2.21;
+          border-right: none;
+        }
+        span {
+          &:nth-child(2) {
+            font-size: 70%;
+            letter-spacing: .001rem
+          }
+        }
+      }
+    }
+  }
 
+  .fun-item-bd {
+    line-height: 1.6rem; // padding: 0 .4rem;
+    font-size: 0.37rem;
+    color: #333333;
+    background: #fff;
+    div {
+      display: flex; // justify-content: space-between;
+      .fun-list-item {
+        flex: 2.19;
+        text-align: center;
+        line-height: 1.6rem;
+        &:nth-child(1) {
+          flex: 3.32;
+        }
+        &:nth-child(4) {
+          flex: 2.21;
+          box-sizing: border-box;
+        }
+      }
+      p {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        .mint-switch-input:checked+.mint-switch-core {
+          border-color: #4DD865;
+          background-color: #4DD865;
+        }
+      }
+    }
+  }
+
+  .fun-ft {
+    position: fixed;
+    bottom: 0;
+    display: flex;
+    justify-content: space-between;
+    .btn {
+      width: 5rem;
+      border-radius: 0;
+      font-size: 0.48rem;
+      box-sizing: border-box;
+      display: inline-block;
+    }
+    .cancle {
+      background: #fff;
+      color: #1890FF;
+    }
+  }
 </style>

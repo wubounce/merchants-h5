@@ -21,8 +21,8 @@
       </div>
     </section>
     <section class="fun-ft">
-      <router-link :to="{name:'addDevice'}"><Button class="btn cancle" btn-type="default" btn-color="blue" @click="goBack">取消</Button></router-link>
-      <Button class="btn" btn-type="default" btn-color="blue" @click="goFirst">确定</Button>
+      <router-link :to="{name:'addDevice'}"><Button class="btn cancle" btn-type="default" btn-color="blue">取消</Button></router-link>
+      <Button class="btn" btn-type="default" btn-color="blue" @click.native="goFirst">确定</Button>
     </section>
   </section>
 </template>
@@ -64,10 +64,10 @@
         let payload = {subTypeId: subTypeId,shopId: shopId} ;     
         let res = await getFunctionSetListFun(qs.stringify(payload));
          if(res.code === 0) {
-           if(res.data.communicateType){
+           localStorage.setItem('functionTempletType',res.data.functionTempletType);
+           if(res.data.communicateType === 1){
              this.functionListTitle = this.functionListTitle2;
-             this.isShow = false;
-             this.functionGetList = res.data.list;
+             this.isShow = false;            
            } 
           res.data.list.forEach(item=>{
             item.ifOpen=item.ifOpen === "0"?(!item.ifOpen) : (!!item.ifOpen);
@@ -78,18 +78,24 @@
           MessageBox.alert(res.msg);
         }
       },
-      changeItem(item,index,flag){
+      changeItem(item,index,flag){       
         let name = this.itemName[flag];
-        if (flag === 5){
-          let newIsOpen = item ? 1:0;
-          this.functionGetList[index].ifOpen = newIsOpen;
+        if (flag === 4){
+          !this.functionSetList[index].ifOpen;
         }else{
-          this.functionGetList[index].name= item;
+          this.functionSetList[index].name = item;
         }
       },
       goFirst(){
-        this.$router.push({
+        this.functionSetList.forEach(item=>{
+            item.ifOpen=item.ifOpen?1:0;
+          });
+        MessageBox.confirm('您确定要更改吗？').then(action => {       
+          let obj = this.functionSetList;
+          localStorage.setItem('objStr',JSON.stringify(obj));
+          this.$router.push({
             name: 'addDevice'
+           }); 
         });
       },
       goBack(){
