@@ -75,31 +75,21 @@ import moment from 'moment';
             }
           });
       },
-      async goStart() {
+      goStart() {
         //立即启动
-        console.log(this.item);
-        await MessageBox.confirm('您确定要启动还未到期的设备么？').then(action => {	        
+        MessageBox.confirm('您确定要启动还未到期的设备么？').then(async() => {	        
           let obj = {
             shopId: this.item.shopId,
             firstTypeId: this.item.machineParentTypeId,
             standardFunctionId: this.item.standardFunctionId
           };
-          let res =  batchStartNowFun(qs.stringify(obj));
+          let res = await batchStartNowFun(qs.stringify(obj));
           if(res.code===0) {
-            let instance = this.$toast({
-              message: '启动成功',
-              iconClass: 'mint-toast-icon mintui mintui-success'
-            });
-            setTimeout(() => {
-              instance.close();
-            }, 1000);
+           this.$toast({message: '启动成功' });
+           this.$router.push({name:'todolist'});
           }
           else {
-            this.$toast({
-              message: res.msg,
-              position: "bottom",
-              duration: 3000
-            });
+           this.$toast({message: res.msg });
           }
 	      },
 	      action => {
