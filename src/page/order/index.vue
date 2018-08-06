@@ -32,7 +32,7 @@
               </section>
               <router-link :to="{ name: 'orderdetail', query:{orderNo:item.orderNo}}">
               <section class="order-list">  
-                  <div class="title">{{item.shopName}}<span class="go iconfont icon-nextx"></span></div>
+                  <div class="title"><span class="ovh-shop">{{item.shopName}}</span><span class="go iconfont icon-nextx"></span></div>
                   <div class="detail">  
                     <div class="orderpic"><img :src="item.imageId" alt=""></div>
                     <div class="content">
@@ -306,6 +306,9 @@ export default {
   background:rgba(248,252,255,1);
   .title {
     font-size: 16px;
+    display: flex;
+  }
+  .ovh-shop {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -388,7 +391,6 @@ export default {
 .page-top {
   padding-top: 2.88rem;
   height: 100%;
-  background: #fff;
 }
 .page-loadmore-wrapper {
   overflow: scroll
