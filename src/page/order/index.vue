@@ -2,54 +2,59 @@
 <div class="order-wrap" v-title="title">
   <div class="permissions" v-if="$store.getters.has('mer:order:list')">暂无相关页面权限</div>
   <div v-else>
-    <section class="sarch-wrap">
-      <div class="search">
-         <span class="iconfont icon-IconSearch select-back" @click="searchOrder"></span>
-          <form action="" target="frameFile" v-on:submit.prevent="">
-            <input type="search" v-model.trim="searchData" @keyup.enter="searchOrder" @input="clearSearch" placeholder="请输入用户手机号/订单号查询" class="serch">
-            <iframe name='frameFile' style="display: none;"></iframe>
-          </form>
-      </div>
-    </section>
-    <section class="order-status">
-      <div v-for="(item,index) in titleArr" @click="titleClick(index)"><span :class="{current: titleIndex === index}">{{item.lable}}</span></div>
-    </section>
+    <div class="search-header">
+      <section class="sarch-wrap">
+        <div class="search">
+            <form action="" target="frameFile" v-on:submit.prevent="">
+              <input type="search" v-model.trim="searchData" @keyup.enter="searchOrder" @input="clearSearch" placeholder="请输入用户手机号/订单号查询" class="serch">
+              <iframe name='frameFile' style="display: none;"></iframe>
+              <span class="select-back" @click="searchOrder">搜索</span>
+            </form>
+        </div>
+      </section>
+      <section class="order-status">
+        <div v-for="(item,index) in titleArr" @click="titleClick(index)"><span :class="{current: titleIndex === index}">{{item.lable}}</span></div>
+      </section>
+    </div>
     <section class="no-order" v-if="nosearchList">
       未找到符合的结果
     </section>
     <section class="no-order" v-if="noOrderList">
       暂无订单
     </section> 
-    <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
-     <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore">
-        <div class="alllist" v-for="(item,index) in list" :key="index">
-          <section class="ordermun">
-            <span class="odernmu-phone">{{item.phone}}<span style="padding:0 0.186667rem;color:#333333">|</span>{{item.createTime}}</span>
-            <span class="ordernum-status">{{item.orderStatus | orserStatus}}</span>
-          </section>
-          <router-link :to="{ name: 'orderdetail', query:{orderNo:item.orderNo}}">
-          <section class="order-list">  
-              <div class="title">{{item.shopName}}<span class="go iconfont icon-nextx"></span></div>
-              <div class="detail">  
-                <div class="orderpic"><img :src="item.imageId" alt=""></div>
-                <div class="content">
-                    <p class="con-title">{{item.subType}}</p>
-                    <p class="con-type">{{item.machineFunctionName}}<span style="padding:0 0.346667rem">|</span>时长{{item.markMinutes}}分钟</p>
-                    <p class="con-price">¥{{item.payPrice}}</p>
-                </div>
-                <div class="order-action" v-if="item.orderType === 2">预约</div>
-              </div>
-          </section>
-          </router-link>
-          <section class="listaction" v-if="item.orderStatus === 2"> 
-              <mt-button @click="orderRefund(item.id,item.payPrice,item.subType)" v-has="'mer:order:refund,mer:order:info'">退款</mt-button>
-              <mt-button @click="machineBoot(item.id,item.subType)" v-if="item.machineType === 1" v-has="'mer:order:start,mer:order:info'">启动</mt-button>
-              <mt-button @click="machineReset(item.id,item.machineId,item.subType)" v-has="'mer:order:reset,mer:order:info'">复位</mt-button>
-          </section>
+    <div class="page-top">
+       <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
+         <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore">
+            <div class="alllist" v-for="(item,index) in list" :key="index">
+              <section class="ordermun">
+                <span class="odernmu-phone">{{item.phone}}<span style="padding:0 0.186667rem;color:#333333">|</span>{{item.createTime}}</span>
+                <span class="ordernum-status">{{item.orderStatus | orserStatus}}</span>
+              </section>
+              <router-link :to="{ name: 'orderdetail', query:{orderNo:item.orderNo}}">
+              <section class="order-list">  
+                  <div class="title">{{item.shopName}}<span class="go iconfont icon-nextx"></span></div>
+                  <div class="detail">  
+                    <div class="orderpic"><img :src="item.imageId" alt=""></div>
+                    <div class="content">
+                        <p class="con-title">{{item.subType}}</p>
+                        <p class="con-type">{{item.machineFunctionName}}<span style="padding:0 0.346667rem">|</span>时长{{item.markMinutes}}分钟</p>
+                        <p class="con-price">¥{{item.payPrice}}</p>
+                    </div>
+                    <div class="order-action" v-if="item.orderType === 2">预约</div>
+                  </div>
+              </section>
+              </router-link>
+              <section class="listaction" v-if="item.orderStatus === 2"> 
+                  <mt-button @click="orderRefund(item.id,item.payPrice,item.subType)" v-has="'mer:order:refund,mer:order:info'">退款</mt-button>
+                  <mt-button @click="machineBoot(item.id,item.subType)" v-if="item.machineType === 1" v-has="'mer:order:start,mer:order:info'">启动</mt-button>
+                  <mt-button @click="machineReset(item.id,item.machineId,item.subType)" v-has="'mer:order:reset,mer:order:info'">复位</mt-button>
+              </section>
+            </div>
+            <div v-if="allLoaded" class="nomore-data">没有更多了</div>
+          </mt-loadmore>
         </div>
-        <div v-if="allLoaded" class="nomore-data">没有更多了</div>
-      </mt-loadmore>
     </div>
+   
   </div>
 </div>
 </template>
@@ -85,7 +90,7 @@ export default {
   },
   mounted() {
     let windowWidth = document.documentElement.clientWidth;//获取屏幕高度
-    this.wrapperHeight = document.documentElement.clientHeight - 60;
+    this.wrapperHeight = document.documentElement.clientHeight - 30;
   },
   created(){
     this.getOrderList();
@@ -138,6 +143,8 @@ export default {
       if(keyCode =='13'){
         this.getOrderList();
         document.activeElement.blur();
+      }else {
+        this.getOrderList();
       }
     },
     clearSearch(){ //清楚搜索
@@ -212,6 +219,13 @@ export default {
 };
 </script>
 <style type="text/css" lang="less" scoped>
+.search-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 999;
+}
 .sarch-wrap{
   background: #ffffff;
   padding: 0.27rem;
@@ -225,17 +239,19 @@ export default {
     form {
       display: inline-block;
       width: 100%;
+      padding-left: 0.33rem;
     }
     input {
-      width: 90%;
+      width: 80%;
       font-size: 16px;
       height:1.173333rem;
     }
     .select-back {
       line-height: 1.173333rem;
-      margin-right: 0.27rem;
-      margin-left: 0.27rem;
-      color: #999;
+      padding-right: 0.27rem;
+      padding-left: 0.27rem;
+      color: #1890FF;
+      border-left:1px solid rgba(216,216,216,1);
     }
   }
 }
@@ -362,8 +378,13 @@ export default {
   font-size: 14px;
   color: #999;
   text-align: center;
-  margin: 2rem 0;
-  background: #efeff4;
+  padding: 3.33rem 0;
+  background: #fff;
+}
+.page-top {
+  padding-top: 2.88rem;
+  height: 100%;
+  background: #fff;
 }
 .page-loadmore-wrapper {
   overflow: scroll

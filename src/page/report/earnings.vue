@@ -171,7 +171,7 @@ export default {
               label: {
                   backgroundColor: '#505765'
               }
-            }
+            },
         },
         grid: {
             y:10,
@@ -204,9 +204,7 @@ export default {
           {
               type: 'value',
               min: 0,
-              max:function(value) {
-               return (value.max *1.2);
-              },
+              max:80,
               splitNumber:5,
               axisLine:{
                 show:false,

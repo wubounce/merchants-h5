@@ -14,8 +14,8 @@
 		<ul class="record" v-if="data.type===1">
 			<li>
                 <div><p>订单金额</p><p>{{data.markPrice}}</p></div>   
-				<div class="discounts"><p>优惠券</p><p><span >-</span>{{data.discountPrice}}</p></div>
-                <div class="discounts"><p>限时折扣</p><p><span>-</span>{{data.discountPrice}}</p></div>  
+				<div class="discounts" v-if="data.discountPrice"><p>优惠券</p><p><span >-</span>{{data.discountPrice}}</p></div>
+                <div class="discounts" v-if="data.discountPrice"><p>限时折扣</p><p><span>-</span>{{data.discountPrice}}</p></div>  
             </li>	
             <li>
                 <div><p>支付方式</p><p>{{data.payType | PayType}}</p></div>
@@ -38,8 +38,8 @@
 		</ul>
         <ul class="record" v-if="data.type===3">
             <li>
-                <div><p>付款金额</p><p>{{data.price}}</p></div>   
-                <div class="discounts"><p>退款金额</p><p><span >-</span>{{data.payPrice}}</p></div>            
+                <div><p>付款金额</p><p>{{data.payPrice}}</p></div>   
+                <div class="discounts"><p>退款金额</p><p><span >-</span>{{data.price}}</p></div>            
             </li>   
             <li>
                 <div><p>用户账号</p><p>{{data.userPhone}}</p></div>
