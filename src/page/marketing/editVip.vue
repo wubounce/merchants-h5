@@ -10,8 +10,8 @@
       <div class="card-wrap">
         <div class="add-card-header"></div>
         <div class="add-card">
-          <p>卡售价<span>元</span><input type="number" v-model="vipform.yearCardPrice"></p>
-          <p>VIP折扣<span>%</span><input type="number"  v-model="vipform.yearCardDiscount"></p>
+          <p>卡售价<span>元</span><input type="number" placeholder="请填写卡售价…" v-model="vipform.yearCardPrice"></p>
+          <p>VIP折扣<span>%</span><input type="number" placeholder="请填写折扣数…" v-model="vipform.yearCardDiscount"></p>
           <p>每日限用次数<span>次</span><input type="number" class="num"  v-model="vipform.yearCardLimitTime"></p>
         </div>
         <div class="tips">
@@ -26,8 +26,8 @@
       <div class="card-wrap">
         <div class="add-card-header"></div>
         <div class="add-card">
-          <p>卡售价<span>元</span><input type="number" v-model="vipform.halfYearCardPrice"></p>
-          <p>VIP折扣<span>%</span><input type="number" v-model="vipform.halfYearCardDiscount"></p>
+          <p>卡售价<span>元</span><input type="number" placeholder="请填写卡售价…" v-model="vipform.halfYearCardPrice"></p>
+          <p>VIP折扣<span>%</span><input type="number" placeholder="请填写折扣数…" v-model="vipform.halfYearCardDiscount"></p>
           <p>每日限用次数<span>次</span><input type="number" class="num" v-model="vipform.halfYearCardLimitTime"></p>
         </div>
         <div class="tips">
@@ -42,8 +42,8 @@
       <div class="card-wrap">
         <div class="add-card-header"></div>
         <div class="add-card">
-          <p>卡售价<span>元</span><input type="number" v-model="vipform.seasonCardPrice"></p>
-          <p>VIP折扣<span>%</span><input type="number" v-model="vipform.seasonCardDiscount"></p>
+          <p>卡售价<span>元</span><input type="number" placeholder="请填写卡售价…" v-model="vipform.seasonCardPrice"></p>
+          <p>VIP折扣<span>%</span><input type="number" placeholder="请填写折扣数…" v-model="vipform.seasonCardDiscount"></p>
           <p>每日限用次数<span>次</span><input type="number" v-model="vipform.seasonCardLimitTime" class="num"></p>
         </div>
         <div class="tips">
@@ -118,9 +118,13 @@ export default {
         this.shopIds = res.data.shopList.map(item=>item.shopId);
         
         this.vipform = res.data;
-        this.vipform.yearCardDiscount = this.vipform.yearCardDiscount *100;
-        this.vipform.halfYearCardDiscount = this.vipform.halfYearCardDiscount *100;
-        this.vipform.seasonCardDiscount = this.vipform.seasonCardDiscount *100;
+        this.vipform.yearCardPrice = this.vipform.yearCardPrice?Number(this.vipform.yearCardPrice).toFixed(0):'';
+        this.vipform.halfYearCardPrice = this.vipform.halfYearCardPrice?Number(this.vipform.halfYearCardPrice).toFixed(0) : '';
+        this.vipform.seasonCardPrice = this.vipform.seasonCardPrice?Number(this.vipform.seasonCardPrice).toFixed(0) : '';
+
+        this.vipform.yearCardDiscount = this.vipform.yearCardDiscount?this.vipform.yearCardDiscount *100:'';
+        this.vipform.halfYearCardDiscount = this.vipform.halfYearCardDiscount?this.vipform.halfYearCardDiscount *100 : '';
+        this.vipform.seasonCardDiscount = this.vipform.seasonCardDiscount?this.vipform.seasonCardDiscount *100 : '';
         this.shopListFun(res.data.shopVipId);
       }
     },
@@ -186,7 +190,7 @@ export default {
   },
   components:{
     selectpickr
-  }
+  },
 };
 </script>
 <style type="text/css" lang="scss" scoped>

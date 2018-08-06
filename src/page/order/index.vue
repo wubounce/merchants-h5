@@ -46,7 +46,7 @@
               </router-link>
               <section class="listaction" v-if="item.orderStatus === 2"> 
                   <mt-button @click="orderRefund(item.id,item.payPrice,item.subType)" v-has="'mer:order:refund,mer:order:info'">退款</mt-button>
-                  <mt-button @click="machineBoot(item.id,item.machineName)" v-if="item.machineType === 1" v-has="'mer:order:start,mer:order:info'">启动</mt-button>
+                  <mt-button @click="machineBoot(item.id,item.machineName)" v-has="'mer:order:start,mer:order:info'">启动</mt-button>
                   <mt-button @click="machineReset(item.id,item.machineId,item.machineName)" v-has="'mer:order:reset,mer:order:info'">复位</mt-button>
               </section>
             </div>

@@ -4,12 +4,12 @@
   <div v-else>
     <div class="add-form">
       <div class="input-group">
-        <div class="form-title">用户名</div>
-        <div class="form-input">{{detail.realName}}</div>
-      </div>
-      <div class="input-group">
         <div class="form-title">手机</div>
         <div class="form-input">{{detail.phone}}</div>
+      </div>
+      <div class="input-group">
+        <div class="form-title">用户名</div>
+        <div class="form-input">{{detail.realName}}</div>
       </div>
       <div class="input-group">
         <div class="form-title">负责店铺</div>

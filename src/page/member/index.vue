@@ -6,18 +6,20 @@
     <div class="no-discount-list" v-if="list.length<=0">暂无二级管理账号</div>
     <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
      <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore">
-        <div class="meber-list" v-for="(item,index) in list" :key="index">
-          <div class="momber-wrap">
-            <div class="name">
-              <router-link :to="{name:'detailMember',query:{ id:item.id }}">
-                <p>{{item.userName}}</p><p class="phonenum">{{item.phone}}</p>
-              </router-link>
+       <div class="page-member-pull">
+         <div class="meber-list" v-for="(item,index) in list" :key="index">
+            <div class="momber-wrap">
+              <div class="name">
+                <router-link :to="{name:'detailMember',query:{ id:item.id }}">
+                  <p>{{item.userName}}</p><p class="phonenum">{{item.phone}}</p>
+                </router-link>
+              </div>
+              <div class="phone">
+                <div class="right"><mt-switch v-model="item.isLock" class="check-switch" @change="lockOperator(item.id,item.isLock)"></mt-switch></div>
+              </div>
             </div>
-            <div class="phone">
-              <div class="right"><mt-switch v-model="item.isLock" class="check-switch" @change="lockOperator(item.id,item.isLock)"></mt-switch></div>
-            </div>
+            <p class="memberdesc">权限：<span v-for="(items,index) in item.list" :key="index">{{items.name}}<i v-if="index !== (item.list.length-1)">,</i></span></p>
           </div>
-          <p class="memberdesc">权限：<span v-for="(items,index) in item.list" :key="index">{{items.name}}<i v-if="index !== (item.list.length-1)">,</i></span></p>
         </div>
         <div v-if="allLoaded" class="nomore-data">没有更多了</div>
       </mt-loadmore>
@@ -69,8 +71,6 @@ export default {
           }
         });
         this.list = [...this.list,...res.data.items];
-      }else {
-        this.$toast(res.msg);
       }
       
     },

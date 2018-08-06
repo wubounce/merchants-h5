@@ -14,8 +14,8 @@
       <p class="addvip-type"><span>VIP年卡</span></p>
       <div class="add-card-header"></div>
       <div class="add-card">
-        <p>卡售价<span>{{detail.yearCardPrice}}元</span></p>
-        <p>VIP折扣<span>{{detail.yearCardDiscount *100}}%</span></p>
+        <p>卡售价<span>{{detail.yearCardPrice | tofixd}}元</span></p>
+        <p>VIP折扣<span>{{detail.yearCardDiscount?detail.yearCardDiscount *100:''}}%</span></p>
         <p>每日限用次数<span>{{detail.yearCardLimitTime}}次</span></p>
       </div>
       <div class="tips">
@@ -28,8 +28,8 @@
       <p class="addvip-type"><span>VIP半年卡</span></p>
       <div class="add-card-header"></div>
       <div class="add-card">
-        <p>卡售价<span>{{detail.halfYearCardPrice}}元</span></p>
-        <p>VIP折扣<span>{{detail.halfYearCardDiscount *100}}%</span></p>
+        <p>卡售价<span>{{detail.halfYearCardPrice | tofixd}}元</span></p>
+        <p>VIP折扣<span>{{detail.halfYearCardDiscount?detail.halfYearCardDiscount *100:''}}%</span></p>
         <p>每日限用次数<span>{{detail.halfYearCardLimitTime}}次</span></p>
       </div>
       <div class="tips">
@@ -42,8 +42,8 @@
       <p class="addvip-type"><span>VIP季卡卡</span></p>
       <div class="add-card-header"></div>
       <div class="add-card">
-        <p>卡售价<span>{{detail.seasonCardPrice}}元</span></p>
-        <p>VIP折扣<span>{{detail.seasonCardDiscount *100}}%</span></p>
+        <p>卡售价<span>{{detail.seasonCardPrice | tofixd}}元</span></p>
+        <p>VIP折扣<span>{{detail.seasonCardDiscount?detail.seasonCardDiscount *100:''}}%</span></p>
         <p>每日限用次数<span>{{detail.seasonCardLimitTime}}次</span></p>
       </div>
       <div class="tips">
@@ -58,7 +58,7 @@
       <p>创建人：{{detail.createUserName}}</p>
       <p>创建时间： {{detail.createTime}}</p>
     </div>
-     <div class="footer"><!-- v-has="'mer:marketing:vip:delete,mer:marketing:vip:info'" -->
+     <div class="footer">
       <span class="edit" v-has="'mer:marketing:vip:update,mer:marketing:vip:info'"><router-link :to="{name:'editVip',query:{shopVipId:detail.shopVipId}}">编辑</router-link></span>
       <span class="del" @click="delShopVip">删除</span>
     </div>
@@ -102,6 +102,11 @@ export default {
             this.$toast({message: res.msg });
           }
       });
+    }
+  },
+  filters:{
+    tofixd(value){
+     return value? Number(value).toFixed(0):'';
     }
   },
   components:{

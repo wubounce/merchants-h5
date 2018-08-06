@@ -11,7 +11,7 @@
                      <router-link :to="{name:'vipDetail',query:{shopVipId:item.shopVipId}}">
                       <div class="card year-card">   
                         <p class="vip-type">VIP年卡</p>            
-                        <p class="price" v-if="item.yearCardPrice">{{item.yearCardPrice}}<span>元</span></p>
+                        <p class="price" v-if="item.yearCardPrice">{{item.yearCardPrice | tofixd}}<span>元</span></p>
                         <p class="price" v-else><span>未设置</span></p>
                         <p class="usenum">{{item.yearCardLimitTime === null ?'':item.yearCardLimitTime===0?'每日使用次数无限制':`每日仅限使用${item.yearCardLimitTime}次`}}</p>
                         <p class="tag" v-if="item.yearCardDiscount">{{item.yearCardDiscount | replace}}<span>折</span></p> 
@@ -99,6 +99,9 @@ export default {
   filters:{
     replace(value){
       return value*10;
+    },
+    tofixd(value){
+     return Number(value).toFixed(0);
     }
   }
 };
