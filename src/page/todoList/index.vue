@@ -6,14 +6,18 @@
 		<p class="shop-item title">批量定时启动设备</p>
 		<p v-show="noData" class="noTodoList">暂无待办事项</p>
 		<ul>
-			<li v-for="(item,index) in list" :key="index" @click="toDetail(item.id)"> 
-				<p class="time"><span>时间</span><span class="time-blue">{{item.beginTime}}</span></p>
-				<p class="time"><span>店铺</span><span class="text">{{item.shopName}}</span></p>
-				<div class="time display-flex">
-					<div><span>类型</span><span class="text">{{item.machineTypeName}}</span></div>
-					<div><span>模式</span><span class="text">{{item.functionName}}</span></div>
-				</div>
-			</li>
+			<div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
+				<mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore">
+					<li class="list" v-for="(item,index) in list" :key="index" @click="toDetail(item.id)"> 
+						<p class="time"><span>时间</span><span class="time-blue">{{item.beginTime}}</span></p>
+						<p class="time"><span>店铺</span><span class="text">{{item.shopName.length>15 ? item.shopName.slice(0,15) + '...' : item.shopName }}</span></p>
+						<div class="time display-flex">
+							<div><span>类型</span><span class="text">{{item.machineTypeName}}</span></div>
+							<div><span>模式</span><span class="text">{{item.functionName}}</span></div>
+						</div>
+					</li>
+				</mt-loadmore>
+			</div>
 		</ul>
 	</div>
   </section>
@@ -28,10 +32,35 @@ import {Loadmore} from 'mint-ui';
       return {
 				title:'待办事项',
 				list:[],
-				noData:false
+				noData:false,
+				//分页
+				wrapperHeight: 0,//容器高度
+				page: 1,//页码
+				pageSize:10,
+				total:null,
+				allLoaded: false//数据是否加载完毕
       };
     },
     methods: {
+			loadBottom() {
+				this.page += 1;
+				let allpage = Math.ceil(this.total/this.pageSize);
+				console.log(allpage);
+				console.log(this.page);
+				if(this.page <= allpage){
+					this.getListBatchStart();
+				}else{
+					this.allLoaded = true;//模拟数据加载完毕 禁用上拉加载
+				}
+				this.$refs.loadmore.onBottomLoaded();
+			},
+			loadTop() {
+				this.page = 1;
+				this.list = [];
+				this.getListBatchStart();
+				this.allLoaded = false;//下拉刷新时解除上拉加载的禁用
+				this.$refs.loadmore.onTopLoaded();
+			},
       toDetail(i) {
         this.$router.push({
           name:'todoDetail',
@@ -41,24 +70,33 @@ import {Loadmore} from 'mint-ui';
         });
       },
       async getListBatchStart() {
-        let obj = {
-          page : 1,
-          pageSize : 10
-        };
-        let res = await listBatchStartFun(qs.stringify(obj));
-        if(res.code ===0 ) {
-					this.list = res.data.items;
+       let obj = {
+					page: this.page,
+					pageSize: this.pageSize
+				};
+				let res = await listBatchStartFun(qs.stringify(obj));
+				if(res.code===0) {
+					//判断该账号是否存在店铺
+					if(res.data == null || res.data == "") {
+						this.hasNews = false;
+					}
+					else {
+						this.list = res.data.items?[...this.list,...res.data.items]:[];  //分页添加
+						this.total = res.data.total;
+					}
 				}
 				else {
-					if(res.data == null || res.data == '') {
-						this.noData = true;
-					}
+					MessageBox.alert(res.msg);
 				}
       }
     },
     created() {
       this.getListBatchStart();
-    }
+		},
+		mounted() {
+			let windowWidth = document.documentElement.clientWidth;//获取屏幕高度
+			this.wrapperHeight = document.documentElement.clientHeight;
+		}
   };
 </script>
 
@@ -79,7 +117,9 @@ section {
 	}
 	ul {
 		margin-top: 0.3rem;
-		li {
+		.page-loadmore-wrapper {
+      overflow: scroll;
+			.list {
 			background-color: #fff;
 			margin-bottom: 0.3rem;
 			.time {
@@ -116,6 +156,8 @@ section {
 				display: flex;
 			}
 		}
+		}
+
 	}
 }
 </style>
