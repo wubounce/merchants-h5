@@ -36,7 +36,7 @@
                   <div class="detail">  
                     <div class="orderpic"><img :src="item.imageId" alt=""></div>
                     <div class="content">
-                        <p class="con-title">{{item.subType}}</p>
+                        <p class="con-title">{{item.machineName}}</p>
                         <p class="con-type">{{item.machineFunctionName}}<span style="padding:0 0.346667rem">|</span>时长{{item.markMinutes}}分钟</p>
                         <p class="con-price">¥{{item.payPrice}}</p>
                     </div>
@@ -46,8 +46,8 @@
               </router-link>
               <section class="listaction" v-if="item.orderStatus === 2"> 
                   <mt-button @click="orderRefund(item.id,item.payPrice,item.subType)" v-has="'mer:order:refund,mer:order:info'">退款</mt-button>
-                  <mt-button @click="machineBoot(item.id,item.subType)" v-if="item.machineType === 1" v-has="'mer:order:start,mer:order:info'">启动</mt-button>
-                  <mt-button @click="machineReset(item.id,item.machineId,item.subType)" v-has="'mer:order:reset,mer:order:info'">复位</mt-button>
+                  <mt-button @click="machineBoot(item.id,item.machineName)" v-if="item.machineType === 1" v-has="'mer:order:start,mer:order:info'">启动</mt-button>
+                  <mt-button @click="machineReset(item.id,item.machineId,item.machineName)" v-has="'mer:order:reset,mer:order:info'">复位</mt-button>
               </section>
             </div>
             <div v-if="allLoaded" class="nomore-data">没有更多了</div>
@@ -90,7 +90,7 @@ export default {
   },
   mounted() {
     let windowWidth = document.documentElement.clientWidth;//获取屏幕高度
-    this.wrapperHeight = document.documentElement.clientHeight - 30;
+    this.wrapperHeight = document.documentElement.clientHeight - 60;
   },
   created(){
     this.getOrderList();
@@ -205,7 +205,7 @@ export default {
         if (res.code === 0) {
           this.$toast({message: '退款成功' });
         } else {
-          this.$toast({message: '退款失败' });
+          this.$toast(res.msg);
         }
       });
     },
@@ -306,6 +306,9 @@ export default {
   background:rgba(248,252,255,1);
   .title {
     font-size: 16px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
   .go {
     float: right;

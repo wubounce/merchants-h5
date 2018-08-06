@@ -3,13 +3,13 @@
 <div class="permissions" v-if="$store.getters.has('mer:order:info')">暂无相关页面权限</div>
   <div v-else>
     <div class="order-status">{{detail.orderStatus | orserStatus}}</div>
-    <div class="order-title">{{detail.shopAddress}}</div>
+    <div class="order-title">{{detail.shopName}}</div>
     <div class="alllist">
       <section class="order-list">  
         <div class="detail">  
           <div class="orderpic"><img :src="detail.imageId" alt=""></div>
           <div class="content">
-              <p class="con-title">{{detail.subType}}</p>
+              <p class="con-title">{{detail.machineName}}</p>
               <p class="con-type">{{detail.machineFunctionName}}<span style="padding:0 0.346667rem">|</span>时长{{detail.markMinutes}}分钟</p>
               <p class="con-price">¥{{detail.markPrice}}</p>
           </div>
@@ -81,7 +81,7 @@ export default {
       this.detail = res.data;
     },
     machineReset(id,machineId){ //设备复位
-      MessageBox.confirm(`确定复位${this.detail.subType}？`).then(async () => {
+      MessageBox.confirm(`确定复位${this.detail.machineName}？`).then(async () => {
           let query = this.$route.query;
           let payload = {machineId:machineId,orderNo:id};
           let res = await machineResetFun(qs.stringify(payload));
@@ -94,7 +94,7 @@ export default {
       
     },
     machineBoot(id){ //设备启动
-      MessageBox.confirm(`您确定要启动${this.detail.subType}？`).then(async () => {
+      MessageBox.confirm(`您确定要启动${this.detail.machineName}？`).then(async () => {
         let query = this.$route.query;
         let payload = {orderId:id};
         let res = await machineBootFun(qs.stringify(payload));
@@ -115,7 +115,7 @@ export default {
           this.$toast({message: '退款成功' });
           this.$router.push({name:'order'});
         } else {
-          this.$toast({message: '退款失败' });
+          this.$toast(res.msg);
         }
       });
     },
@@ -151,9 +151,7 @@ export default {
     font-size: 16px;
     color: #333;
     background: #fff;
-    padding-left: 0.4rem;
-    height: 1.31rem;
-    line-height: 1.31rem;
+    padding: 0.35rem 0.4rem;
   }
   .order-list {
     padding:0.4rem;
