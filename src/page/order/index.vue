@@ -38,16 +38,17 @@
                     <div class="content">
                         <p class="con-title">{{item.machineName}}</p>
                         <p class="con-type">{{item.machineFunctionName}}<span style="padding:0 0.346667rem">|</span>时长{{item.markMinutes}}分钟</p>
-                        <p class="con-price">¥{{item.payPrice}}</p>
+                        <p class="con-price" v-if="item.orderType ===2 && item.orderStatus ===1 || item.orderType ===2 && item.orderStatus ===0"></p>
+                        <p class="con-price" v-else>¥{{item.payPrice}}</p>
                     </div>
                     <div class="order-action" v-if="item.orderType === 2">预约</div>
                   </div>
               </section>
               </router-link>
               <section class="listaction" v-if="item.orderStatus === 2"> 
-                  <mt-button @click="orderRefund(item.id,item.payPrice,item.subType)" v-has="'mer:order:refund,mer:order:info'">退款</mt-button>
+                  <mt-button @click="orderRefund(item.orderNo,item.payPrice)" v-has="'mer:order:refund,mer:order:info'">退款</mt-button>
                   <mt-button @click="machineBoot(item.id,item.machineName)" v-has="'mer:order:start,mer:order:info'">启动</mt-button>
-                  <mt-button @click="machineReset(item.id,item.machineId,item.machineName)" v-has="'mer:order:reset,mer:order:info'">复位</mt-button>
+                  <mt-button @click="machineReset(item.orderNo,item.machineId,item.machineName)" v-has="'mer:order:reset,mer:order:info'">复位</mt-button>
               </section>
             </div>
             <div v-if="allLoaded" class="nomore-data">没有更多了</div>
@@ -171,10 +172,10 @@ export default {
       this.allLoaded = false;//下拉刷新时解除上拉加载的禁用
       this.$refs.loadmore.onTopLoaded();
     },
-    machineReset(id,machineId,subType){ //设备复位
-      MessageBox.confirm(`确定复位${subType}？`).then(async () => {
+    machineReset(oederno,machineId,machineName){ //设备复位
+      MessageBox.confirm(`确定复位${machineName}？`).then(async () => {
           let query = this.$route.query;
-          let payload = {machineId:machineId,orderNo:id};
+          let payload = {machineId:machineId,orderNo:oederno};
           let res = await machineResetFun(qs.stringify(payload));
           if (res.code === 0) {
             this.$toast({message: '复位成功' });
@@ -184,8 +185,8 @@ export default {
       });
       
     },
-    machineBoot(id,subType){ //设备启动
-      MessageBox.confirm(`您确定要启动${subType}？`).then(async () => {
+    machineBoot(id,machineName){ //设备启动
+      MessageBox.confirm(`您确定要启动${machineName}？`).then(async () => {
         let query = this.$route.query;
         let payload = {orderId:id};
         let res = await machineBootFun(qs.stringify(payload));
@@ -197,13 +198,14 @@ export default {
       });
       
     },
-    orderRefund(id,payPrice){ //退款
+    orderRefund(oederno,payPrice){ //退款
       MessageBox.confirm('确定发起退款？').then(async () => {
         let query = this.$route.query;
-        let payload = {orderNo:id,refundMoney:payPrice};
+        let payload = {orderNo:oederno,refundMoney:payPrice};
         let res = await ordeRrefundFun(qs.stringify(payload));
         if (res.code === 0) {
           this.$toast({message: '退款成功' });
+          this.getOrderList();
         } else {
           this.$toast(res.msg);
         }
