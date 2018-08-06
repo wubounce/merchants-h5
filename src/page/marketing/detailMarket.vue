@@ -48,7 +48,7 @@ export default {
       this.detail = res.data;
       this.detail.noDiscountStart = this.detail.noDiscountStart ? moment(this.detail.noDiscountStart).format('YYYY-MM-DD') : '';
       this.detail.noDiscountEnd = this.detail.noDiscountEnd ? moment(this.detail.noDiscountEnd).format('YYYY-MM-DD'): '';
-      this.detail.createTime = this.detail.createTime? moment(this.detail.createTime).format('YYYY-MM-DD'): '';
+      this.detail.createTime = this.detail.createTime? moment(this.detail.createTime).format('YYYY-MM-DD HH:mm:ss'): '';
     },
     deldelMarket(id){
       MessageBox.confirm(`确认删除？`).then(async () => {

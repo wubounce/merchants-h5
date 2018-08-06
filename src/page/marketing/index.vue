@@ -26,7 +26,7 @@ export default {
   data() {
     return {
       title: '营销管理',
-      tabtitle:['显示优惠','VIP'],
+      tabtitle:['限时优惠','VIP'],
       tabindex:0,
     };
   },

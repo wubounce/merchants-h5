@@ -58,7 +58,7 @@
         <div class="all-list">
           <label class="mint-checklist-label" v-for="(item,index) in shoplist" :key="index">
             <span class="mint-checkbox is-right">
-              <input type="checkbox" class="mint-checkbox-input" v-model="checkshoplist" :value="item.shopName"> 
+              <input type="checkbox" class="mint-checkbox-input" v-model="shopIds" :value="item.shopId"> 
               <span class="mint-checkbox-core"></span>
             </span> 
             <p class="mint-checkbox-label shopname">{{item.shopName}}</p>
@@ -88,7 +88,6 @@ export default {
       shopVisible:false,
       checkshoptxt:'',
       shoplist:[],
-      checkshoplist:[],
       shopIds:[],
 
       activeVisible: false,
@@ -195,12 +194,10 @@ export default {
         let beshop = [];
         detail.shop.forEach(item=>{
           beshop.push(item.name);
+          this.shopIds.push(item.id);
         });
         this.checkshoptxt = beshop.join(',');
-        this.checkshoplist = beshop;
-
-        this.shopIds = detail.shop.map(item=>item.id);
-
+        
         this.activeCurrentTags = this.filterweek(detail.noWeek);
         this.pickerstartDate = new Date(detail.noDiscountStart);
         this.pickerEndDate = new Date(detail.noDiscountEnd);
@@ -241,12 +238,9 @@ export default {
       this.shoplist = res.data;
     },
     getcheckshop(){
-      this.checkshoptxt = this.checkshoplist.join(',');
-      let checklist = this.shoplist.filter(v=>this.checkshoplist.some(k=>k==v.shopName));
-
+      let checklist = this.shoplist.filter(v=>this.shopIds.some(k=>k==v.shopId));
       this.shopVisible = false;
-      checklist.forEach(item=>this.shopIds.push(item.shopId));
-      this.shopIds = Array.from(new Set(this.shopIds));
+      this.checkshoptxt = checklist.map(item=>item.shopName).join(',');
     },
     activeselectpicker(data){ //打开自定义星期
       this.activeCurrentTags = data;
@@ -287,6 +281,10 @@ export default {
       this.addmarket.endTime = moment(value).format('YYYY-MM-DD');
     },
     async toaddMaket(){
+      if (this.shopIds.length<=0) {
+        this.$toast({message: "请选择店铺" });
+        return false;
+      }
       let startTime = new Date(this.addmarket.startTime.replace(/\-/g, "\/"));  
       let endTime = new Date(this.addmarket.endTime.replace(/\-/g, "\/"));  
       if(startTime > endTime){  

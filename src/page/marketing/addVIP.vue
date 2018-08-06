@@ -68,7 +68,7 @@
       <div class="all-list">
         <label class="mint-checklist-label" v-for="(item,index) in shoplist" :key="index">
           <span class="mint-checkbox is-right">
-            <input type="checkbox" class="mint-checkbox-input" v-model="checkshoplist" :value="item.shopName"> 
+            <input type="checkbox" class="mint-checkbox-input" v-model="shopIds" :value="item.shopId"> 
             <span class="mint-checkbox-core"></span>
           </span> 
           <p class="mint-checkbox-label shopname">{{item.shopName}}</p>
@@ -89,7 +89,6 @@ export default {
       title: '新增VIP',
       shoplist:[],
       shopVisible:false,
-      checkshoplist:[],
       checkshoptxt:'',
       shopIds:[],
       vipform:{
@@ -115,10 +114,9 @@ export default {
       }
     },
     getcheckshop(){
-      this.checkshoptxt = this.checkshoplist.join(',');
-      let checklist = this.shoplist.filter(v=>this.checkshoplist.some(k=>k==v.shopName));
+      let checklist = this.shoplist.filter(v=>this.shopIds.some(k=>k==v.shopId));
       this.shopVisible = false;
-      checklist.forEach(item=>this.shopIds.push(item.shopId));
+      this.checkshoptxt = checklist.map(item=>item.shopName).join(',');
     },
     async addvip(){
       if (this.shopIds.length <=0 ) {
@@ -159,6 +157,10 @@ export default {
       paylod.yearCardDiscount =  paylod.yearCardDiscount? paylod.yearCardDiscount / 100:null;
       paylod.halfYearCardDiscount =  paylod.halfYearCardDiscount? paylod.halfYearCardDiscount / 100:null;
       paylod.seasonCardDiscount =  paylod.seasonCardDiscount? paylod.seasonCardDiscount / 100:null;
+
+      paylod.yearCardLimitTime =  paylod.yearCardLimitTime ?  paylod.yearCardLimitTime:0;
+      paylod.halfYearCardLimitTime =  paylod.halfYearCardLimitTime ?  paylod.halfYearCardLimitTime:0;
+      paylod.seasonCardLimitTime =  paylod.seasonCardLimitTime ?  paylod.seasonCardLimitTime:0;
       let res = await addOrUpdateVipFun(qs.stringify(paylod));
       if (res.code === 0) {
          this.$toast({message: "新增成功" });
@@ -293,6 +295,10 @@ export default {
     .shopname {
       font-size: 15px;
       color: #333;
+    }
+    .all-list {
+      height: 11.96rem;
+      overflow-y: scroll;
     }
   }
 </style>

@@ -3,11 +3,11 @@
   <div class="add-form">
     <div class="input-group">
       <div class="form-title"><span>手机</span></div>
-      <div class="form-input"><input type="number" v-model="phone" placeholder="请输入手机号码"><span class="forward iconfont icon-nextx"></span></div>
+      <div class="form-input"><input type="number" v-model="phone" placeholder="请输入手机号码"></div>
     </div>
     <div class="input-group">
       <div class="form-title"><span>用户名</span></div>
-      <div class="form-input"><input type="text" v-model="username" placeholder="账号密码自动发送此手机" @blur="validatName" maxlength="20"><span class="forward iconfont icon-nextx"></span></div>
+      <div class="form-input"><input type="text" v-model="username" placeholder="账号密码自动发送此手机" @blur="validatName" maxlength="20"></div>
     </div>
     <div class="input-group">
       <div class="form-title"><span>负责店铺</span></div>

@@ -68,7 +68,7 @@
       <div class="all-list">
         <label class="mint-checklist-label" v-for="(item,index) in shoplist" :key="index">
           <span class="mint-checkbox is-right">
-            <input type="checkbox" class="mint-checkbox-input" v-model="checkshoplist" :value="item.shopName"> 
+            <input type="checkbox" class="mint-checkbox-input" v-model="shopIds" :value="item.shopId"> 
             <span class="mint-checkbox-core"></span>
           </span> 
           <p class="mint-checkbox-label shopname">{{item.shopName}}</p>
@@ -89,7 +89,6 @@ export default {
       title: '新增VIP',
       shoplist:[],
       shopVisible:false,
-      checkshoplist:[], //选择的店铺
       checkshoptxt:'', //显示店铺名字
       shopIds:[],
       vipform:{
@@ -110,27 +109,25 @@ export default {
       let payload = Object.assign({},{shopVipId:shopVipId});
       let res = await vipDetailFun(qs.stringify(payload));
       if (res.code ===0) {
-
         let beshop = [];
         res.data.shopList.forEach(item=>{
           beshop.push(item.shopName);
+          this.shopIds.push(item.shopId);
         });
         this.checkshoptxt = beshop.join(',');
-        this.checkshoplist = beshop;
-        this.shopIds = res.data.shopList.map(item=>item.shopId);
         
-        this.vipform = res.data;
-        this.vipform.yearCardPrice = this.vipform.yearCardPrice?Number(this.vipform.yearCardPrice).toFixed(0):'';
-        this.vipform.halfYearCardPrice = this.vipform.halfYearCardPrice?Number(this.vipform.halfYearCardPrice).toFixed(0) : '';
-        this.vipform.seasonCardPrice = this.vipform.seasonCardPrice?Number(this.vipform.seasonCardPrice).toFixed(0) : '';
+        this.vipform.yearCardPrice = res.data.yearCardPrice?Number(res.data.yearCardPrice).toFixed(0):'';
+        this.vipform.halfYearCardPrice = res.data.halfYearCardPrice?Number(res.data.halfYearCardPrice).toFixed(0) : '';
+        this.vipform.seasonCardPrice = res.data.seasonCardPrice?Number(res.data.seasonCardPrice).toFixed(0) : '';
 
-        this.vipform.yearCardDiscount = this.vipform.yearCardDiscount?this.vipform.yearCardDiscount *100:'';
-        this.vipform.halfYearCardDiscount = this.vipform.halfYearCardDiscount?this.vipform.halfYearCardDiscount *100 : '';
-        this.vipform.seasonCardDiscount = this.vipform.seasonCardDiscount?this.vipform.seasonCardDiscount *100 : '';
+        this.vipform.yearCardDiscount = res.data.yearCardDiscount?res.data.yearCardDiscount *100:'';
+        this.vipform.halfYearCardDiscount = res.data.halfYearCardDiscount?res.data.halfYearCardDiscount *100 : '';
+        this.vipform.seasonCardDiscount = res.data.seasonCardDiscount?res.data.seasonCardDiscount *100 : '';
         
-        this.vipform.yearCardLimitTime = this.vipformyearCardLimitTime? this.vipformyearCardLimitTime :0;
-        this.vipform.halfYearCardLimitTime= this.vipform.halfYearCardLimitTime? this.vipform.halfYearCardLimitTime: 0;
-        this.vipform.seasonCardLimitTime = this.vipform.seasonCardLimitTime? this.vipform.seasonCardLimitTime:0;
+        this.vipform.yearCardLimitTime = res.datayearCardLimitTime? res.datayearCardLimitTime :0;
+        this.vipform.halfYearCardLimitTime= res.data.halfYearCardLimitTime? res.data.halfYearCardLimitTime: 0;
+        this.vipform.seasonCardLimitTime = res.data.seasonCardLimitTime? res.data.seasonCardLimitTime:0;
+        this.vipform.shopVipId  = res.data.shopVipId ? res.data.shopVipId:'';
         this.shopListFun(res.data.shopVipId);
       }
     },
@@ -142,11 +139,9 @@ export default {
       }
     },
     getcheckshop(){
-      this.checkshoptxt = this.checkshoplist.join(',');
-      let checklist = this.shoplist.filter(v=>this.checkshoplist.some(k=>k==v.shopName));
+      let checklist = this.shoplist.filter(v=>this.shopIds.some(k=>k==v.shopId));
       this.shopVisible = false;
-      checklist.forEach(item=>this.shopIds.push(item.shopId));
-      this.shopIds = Array.from(new Set(this.shopIds));
+      this.checkshoptxt = checklist.map(item=>item.shopName).join(',');
     },
     async addvip(){
       if (this.shopIds.length <=0 ) {
@@ -183,7 +178,7 @@ export default {
         this.$toast({message: "季卡折扣优惠请输入1-100之间" });
         return false;
       }
-      let paylod = Object.assign({},this.vipform,{shopIds:this.shopIds.join(','),shopVipId:this.vipform.shopVipId});
+      let paylod = Object.assign({},this.vipform,{shopIds:this.shopIds.join(',')});
       paylod.yearCardDiscount =  paylod.yearCardDiscount? paylod.yearCardDiscount/100:null;
       paylod.halfYearCardDiscount =  paylod.halfYearCardDiscount? paylod.halfYearCardDiscount/100:null;
       paylod.seasonCardDiscount =  paylod.seasonCardDiscount? paylod.seasonCardDiscount/100:null;
