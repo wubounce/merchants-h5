@@ -121,10 +121,10 @@ export default {
       checklist.forEach(item=>this.shopIds.push(item.shopId));
     },
     async addvip(){
-      // if (this.shopIds.length <=0 ) {
-      //   this.$toast({message: "请输入选择店铺" });
-      //   return false;
-      // }
+      if (this.shopIds.length <=0 ) {
+        this.$toast({message: "请输入选择店铺" });
+        return false;
+      }
       if ((!this.vipform.yearCardPrice || !this.vipform.yearCardDiscount) && (!this.vipform.halfYearCardPrice || !this.vipform.halfYearCardDiscount)&&(!this.vipform.seasonCardPrice || !this.vipform.seasonCardDiscount)) {
         this.$toast({message: "请完整填写至少一种vip卡信息" });
         return false;
