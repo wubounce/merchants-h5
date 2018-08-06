@@ -49,9 +49,9 @@
       <span>下单时间：{{detail.createTime}}</span>
     </section>
      <section class="listaction" v-if="detail.orderStatus === 2"> 
-      <mt-button @click="orderRefund(detail.id,detail.payPrice)" v-has="'mer:order:refund,mer:order:info'">退款</mt-button>
+      <mt-button @click="orderRefund(detail.orderNo,detail.payPrice)" v-has="'mer:order:refund,mer:order:info'">退款</mt-button>
       <mt-button @click="machineBoot(detail.id)" v-has="'mer:order:start,mer:order:info'">启动</mt-button>
-      <mt-button @click="machineReset(detail.id,detail.machineId)" v-has="'mer:order:reset,mer:order:info'">复位</mt-button>
+      <mt-button @click="machineReset(detail.orderNo,detail.machineId)" v-has="'mer:order:reset,mer:order:info'">复位</mt-button>
     </section>
   </div>
 </div>
@@ -80,10 +80,10 @@ export default {
       let res = await orderDetailFun(qs.stringify({orderNo:orderNo}));
       this.detail = res.data;
     },
-    machineReset(id,machineId){ //设备复位
+    machineReset(orderNo,machineId){ //设备复位
       MessageBox.confirm(`确定复位${this.detail.machineName}？`).then(async () => {
           let query = this.$route.query;
-          let payload = {machineId:machineId,orderNo:id};
+          let payload = {machineId:machineId,orderNo:orderNo};
           let res = await machineResetFun(qs.stringify(payload));
           if (res.code === 0) {
             this.$toast({message: '复位成功' });
@@ -106,10 +106,10 @@ export default {
       });
       
     },
-    orderRefund(id,payPrice){ //退款
+    orderRefund(orderNo,payPrice){ //退款
       MessageBox.confirm('确定发起退款？').then(async () => {
         let query = this.$route.query;
-        let payload = {orderNo:id,refundMoney:payPrice};
+        let payload = {orderNo:orderNo,refundMoney:payPrice};
         let res = await ordeRrefundFun(qs.stringify(payload));
         if (res.code === 0) {
           this.$toast({message: '退款成功' });

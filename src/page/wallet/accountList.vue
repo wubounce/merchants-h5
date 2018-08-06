@@ -6,40 +6,43 @@
     <div class="no-discount-list" v-if="applylsit.length<=0">暂无相关明细</div>
     <!-- 记录为收益类，增加class：add -->
     <div class="apply--list-wrap" v-else>
-        <div class="all" v-for="(item,index) in applylsit" :key="index" >
-            <div class="list add" v-if="item.type === 1 "> 
-                <router-link :to="{name:'accountDetail', query:{balanceLogId:item.id,type:item.type}}">
-                    <div class="icon-type"> 
-                        <span class="usericon iconfont icon-dianpu"></span>
-                    </div>
-                    <div class="accountList-content clearfix">
-                        <div class="left">
-                            <p class="title">{{item.shopName}}</p>
-                            <p class="status">交易成功</p>
-                            <p class="time">{{item.createTime}}</p>
+        <div class="all-list">
+            <div class="all" v-for="(item,index) in applylsit" :key="index" >
+                <div class="list add" v-if="item.type === 1 "> 
+                    <router-link :to="{name:'accountDetail', query:{balanceLogId:item.id,type:item.type}}">
+                        <div class="icon-type"> 
+                            <span class="usericon iconfont icon-dianpu"></span>
                         </div>
-                        <p class="price">+{{item.price}}</p>
-                    </div>
-                </router-link>                
-            </div>
-            <div class="list" v-if="item.type === 3">
-                <router-link :to="{name:'accountDetail', query:{balanceLogId:item.id}}">
-                    <div class="icon-type"> 
-                        <span class="usericon iconfont icon-tuikuan">  </span>
-                    </div>
-                    <div class="accountList-content clearfix">
-                        <div class="left">
-                            <p class="title">退款订单</p>
-                            <p class="status">交易成功</p>
-                            <p class="time">{{item.createTime}}</p>
+                        <div class="accountList-content clearfix">
+                            <div class="left">
+                                <p class="title">{{item.shopName}}</p>
+                                <p class="status">交易成功</p>
+                                <p class="time">{{item.createTime}}</p>
+                            </div>
+                            <p class="price">+{{item.price}}</p>
+                        </div>
+                    </router-link>                
+                </div>
+                <div class="list" v-if="item.type === 3">
+                    <router-link :to="{name:'accountDetail', query:{balanceLogId:item.id}}">
+                        <div class="icon-type"> 
+                            <span class="usericon iconfont icon-tuikuan">  </span>
+                        </div>
+                        <div class="accountList-content clearfix">
+                            <div class="left">
+                                <p class="title">退款订单</p>
+                                <p class="status">交易成功</p>
+                                <p class="time">{{item.createTime}}</p>
+                            </div> 
+                            <p class="price">-{{item.price}}</p>
                         </div> 
-                        <p class="price">-{{item.price}}</p>
-                    </div> 
-                </router-link>                
-            </div> 
-        </div>           
+                    </router-link>                
+                </div> 
+            </div>   
+        </div>
+        <p class="info">只展示近6个月记录</p>           
     </div>
-    <p class="info">只展示近6个月记录</p>
+    
 </div>
 </template>
 <script>

@@ -39,7 +39,7 @@
       </div>
     </div>
     <div class="card-wrap">
-      <p class="addvip-type"><span>VIP季卡卡</span></p>
+      <p class="addvip-type"><span>VIP季卡</span></p>
       <div class="add-card-header"></div>
       <div class="add-card">
         <p>卡售价<span>{{detail.seasonCardPrice | tofixd}}元</span></p>
