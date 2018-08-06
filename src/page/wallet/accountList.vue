@@ -37,9 +37,9 @@
                     </div> 
                 </router-link>                
             </div> 
-        </div>    
-        <p class="info">只展示近6个月记录</p>
+        </div>           
     </div>
+    <p class="info">只展示近6个月记录</p>
 </div>
 </template>
 <script>
@@ -117,13 +117,14 @@ export default {
               border-bottom: 0.08rem solid #1890FF;
               border-radius:0.04rem;
             }
-        }
+        }       
         .list{
             padding-left:2.15rem;
             position: relative;
             background-color: #fff;
             overflow: hidden; 
-            box-sizing: border-box;          
+            box-sizing: border-box; 
+
             .icon-type{
                 position: absolute;
                 top: .33rem;
@@ -145,7 +146,7 @@ export default {
                 overflow: hidden;
                 border-bottom: $first-border;
                 padding: .33rem .4rem .33rem 0;
-                box-sizing: border-box;   
+                box-sizing: border-box;                  
                 .left{
                     float: left;
                     width: 78%;
@@ -175,7 +176,7 @@ export default {
                     color: $highlight-color;
                 }
             }
-        }
+        }   
         .info{
             text-align: center;
             margin-top: .53rem;
@@ -183,7 +184,14 @@ export default {
             font-size: .37rem;
             line-height: .53rem;
             color: $third-color;
-        }
+        } 
+        .all{
+            &:last-child{
+                .accountList-content{
+                    border: none;
+                }
+            }            
+        }       
     }
 </style>
 <style lang="scss">
@@ -205,7 +213,6 @@ export default {
                 color:$highlight-color;
             }
         }
-        
     }
 </style>
 
