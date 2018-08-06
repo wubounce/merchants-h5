@@ -38,7 +38,7 @@
       </div>
     </div>
     <div class="add-vip-list-wrap">
-      <div class="car-shop">VIP卡类型<span>VIP季卡卡</span></div>
+      <div class="car-shop">VIP卡类型<span>VIP季卡</span></div>
       <div class="card-wrap">
         <div class="add-card-header"></div>
         <div class="add-card">
@@ -82,6 +82,7 @@
 import qs from 'qs';
 import selectpickr from '@/components/selectPicker';
 import { vipDetailFun, vipShopsFun, addOrUpdateVipFun} from '@/service/market';
+import { validatDiscount } from '@/utils/validate';
 export default {
   data() {
     return {
@@ -142,13 +143,29 @@ export default {
         this.$toast({message: "请输入选择店铺" });
         return false;
       }
+      if ((!this.vipform.yearCardPrice || !this.vipform.yearCardDiscount) && (!this.vipform.halfYearCardPrice || !this.vipform.halfYearCardDiscount)&&(!this.vipform.seasonCardPrice || !this.vipform.seasonCardDiscount)) {
+        this.$toast({message: "请至少填写完整一种vip卡信息" });
+        return false;
+      }
+      if ((this.vipform.yearCardDiscount&& !validatDiscount(this.vipform.yearCardDiscount))) {
+        this.$toast({message: "年卡折扣优惠请输入0-100之间" });
+        return false;
+      }
+      if ((this.vipform.halfYearCardDiscount && !validatDiscount(this.vipform.halfYearCardDiscount))) {
+        this.$toast({message: "半年卡折扣优惠请输入0-100之间" });
+        return false;
+      }
+      if ((this.vipform.seasonCardDiscount && !validatDiscount(this.vipform.seasonCardDiscount))) {
+        this.$toast({message: "季卡折扣优惠请输入0-100之间" });
+        return false;
+      }
       let paylod = Object.assign({},this.vipform,{shopIds:this.shopIds.join(','),shopVipId:this.vipform.shopVipId});
       paylod.yearCardDiscount =  paylod.yearCardDiscount? paylod.yearCardDiscount/100:null;
       paylod.halfYearCardDiscount =  paylod.halfYearCardDiscount? paylod.halfYearCardDiscount/100:null;
       paylod.seasonCardDiscount =  paylod.seasonCardDiscount? paylod.seasonCardDiscount/100:null;
       let res = await addOrUpdateVipFun(qs.stringify(paylod));
       if (res.code === 0) {
-         this.$toast({message: "新增成功" });
+         this.$toast({message: "修改成功" });
          this.$router.push({name:'marketing'});
       }
     }

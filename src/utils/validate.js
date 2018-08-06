@@ -43,7 +43,7 @@ export const validatPwd = (str) => {
 
 /* 数字 */
 export const validatDiscount = (str) => {
-  const reg = /^[0-9]*$/;
+  const reg = /^(\d{1,2}|100)$/;
   return reg.test(str);
 };
 

@@ -156,17 +156,17 @@ export default {
   .todo {
     position: relative;
   }
-  .todo:after{
-    position: absolute;  
-    width: 0.24rem;
-    height: 0.24rem;
-    background: #FF5F5F;  
-    content: "";  
-    border-radius: 50%;
-    position: absolute;  
-    top: -0.1rem;
-    right: -0.1rem;  
-  }
+  // .todo:after{
+  //   position: absolute;  
+  //   width: 0.24rem;
+  //   height: 0.24rem;
+  //   background: #FF5F5F;  
+  //   content: "";  
+  //   border-radius: 50%;
+  //   position: absolute;  
+  //   top: -0.1rem;
+  //   right: -0.1rem;  
+  // }
 </style>
 <style>
   .mang .mint-header {

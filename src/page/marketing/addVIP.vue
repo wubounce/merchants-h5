@@ -10,8 +10,8 @@
       <div class="card-wrap">
         <div class="add-card-header"></div>
         <div class="add-card">
-          <p>卡售价<span>元</span><input type="number" v-model="vipform.yearCardPrice"></p>
-          <p>VIP折扣<span>%</span><input type="number"  v-model="vipform.yearCardDiscount"></p>
+          <p>卡售价<span>元</span><input type="number" placeholder="请填写卡售价…" v-model="vipform.yearCardPrice"></p>
+          <p>VIP折扣<span>%</span><input type="number" placeholder="请填写折扣数…" v-model="vipform.yearCardDiscount"></p>
           <p>每日限用次数<span>次</span><input type="number" class="num"  v-model="vipform.yearCardLimitTime"></p>
         </div>
         <div class="tips">
@@ -26,8 +26,8 @@
       <div class="card-wrap">
         <div class="add-card-header"></div>
         <div class="add-card">
-          <p>卡售价<span>元</span><input type="number" v-model="vipform.halfYearCardPrice"></p>
-          <p>VIP折扣<span>%</span><input type="number" v-model="vipform.halfYearCardDiscount"></p>
+          <p>卡售价<span>元</span><input type="number" placeholder="请填写卡售价…" v-model="vipform.halfYearCardPrice"></p>
+          <p>VIP折扣<span>%</span><input type="number" placeholder="请填写折扣数…" v-model="vipform.halfYearCardDiscount"></p>
           <p>每日限用次数<span>次</span><input type="number" class="num" v-model="vipform.halfYearCardLimitTime"></p>
         </div>
         <div class="tips">
@@ -38,12 +38,12 @@
       </div>
     </div>
     <div class="add-vip-list-wrap">
-      <div class="car-shop">VIP卡类型<span>VIP季卡卡</span></div>
+      <div class="car-shop">VIP卡类型<span>VIP季卡</span></div>
       <div class="card-wrap">
         <div class="add-card-header"></div>
         <div class="add-card">
-          <p>卡售价<span>元</span><input type="number" v-model="vipform.seasonCardPrice"></p>
-          <p>VIP折扣<span>%</span><input type="number" v-model="vipform.seasonCardDiscount"></p>
+          <p>卡售价<span>元</span><input type="number" placeholder="请填写卡售价…" v-model="vipform.seasonCardPrice"></p>
+          <p>VIP折扣<span>%</span><input type="number" placeholder="请填写折扣数…" v-model="vipform.seasonCardDiscount"></p>
           <p>每日限用次数<span>次</span><input type="number" v-model="vipform.seasonCardLimitTime" class="num"></p>
         </div>
         <div class="tips">
@@ -82,6 +82,7 @@
 import qs from 'qs';
 import selectpickr from '@/components/selectPicker';
 import { vipShopsFun, addOrUpdateVipFun} from '@/service/market';
+import { validatDiscount } from '@/utils/validate';
 export default {
   data() {
     return {
@@ -91,7 +92,11 @@ export default {
       checkshoplist:[],
       checkshoptxt:'',
       shopIds:[],
-      vipform:{},
+      vipform:{
+        yearCardLimitTime:0,
+        halfYearCardLimitTime:0,
+        seasonCardLimitTime:0
+      },
      
     };
   },
@@ -120,16 +125,20 @@ export default {
         this.$toast({message: "请输入选择店铺" });
         return false;
       }
-      if (!this.vipform.yearCardPrice || !this.vipform.yearCardDiscount) {
-        this.$toast({message: "年卡信息不完整" });
+      if ((!this.vipform.yearCardPrice || !this.vipform.yearCardDiscount) && (!this.vipform.halfYearCardPrice || !this.vipform.halfYearCardDiscount)&&(!this.vipform.seasonCardPrice || !this.vipform.seasonCardDiscount)) {
+        this.$toast({message: "请完整填写至少一种vip卡信息" });
         return false;
       }
-      if (!this.vipform.halfYearCardPrice || !this.vipform.halfYearCardDiscount) {
-        this.$toast({message: "半年卡信息不完整" });
+      if ((this.vipform.yearCardDiscount&& !validatDiscount(this.vipform.yearCardDiscount))) {
+        this.$toast({message: "年卡折扣优惠请输入0-100之间" });
         return false;
       }
-      if (!this.vipform.seasonCardPrice || !this.vipform.seasonCardDiscount) {
-        this.$toast({message: "季卡卡信息不完整" });
+      if ((this.vipform.halfYearCardDiscount && !validatDiscount(this.vipform.halfYearCardDiscount))) {
+        this.$toast({message: "半年卡折扣优惠请输入0-100之间" });
+        return false;
+      }
+      if ((this.vipform.seasonCardDiscount && !validatDiscount(this.vipform.seasonCardDiscount))) {
+        this.$toast({message: "季卡折扣优惠请输入0-100之间" });
         return false;
       }
       let paylod = Object.assign({},this.vipform,{shopIds:this.shopIds.join(',')});

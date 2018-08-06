@@ -71,7 +71,7 @@ import moment from 'moment';
 import selectpickr from '@/components/selectPicker';
 import { shopListFun } from '@/service/report';
 import { addOruPdateFun } from '@/service/market';
-// import { validatDiscount } from '@/utils/validate';
+import { validatDiscount } from '@/utils/validate';
 export default {
   data() {
     return {
@@ -237,6 +237,12 @@ export default {
         this.$toast({message: "请选择优惠期结束时间" });
         return false;
       }
+      let startTime = new Date(this.addmarket.startTime.replace(/\-/g, "\/"));  
+      let endTime = new Date(this.addmarket.endTime.replace(/\-/g, "\/"));  
+      if(startTime > endTime){  
+        this.$toast({message: "优惠期开始时间不能大于结束时间"});
+        return false;
+      }
       if (!this.activeCurrentTags && !this.checkWeeklisttxt) {
         this.$toast({message: "请选择活动日" });
         return false;
@@ -247,6 +253,10 @@ export default {
       }
       if (!this.addmarket.discount) {
         this.$toast({message: "请填写折扣优惠" });
+        return false;
+      }
+      if (!validatDiscount(this.addmarket.discount)) {
+        this.$toast({message: "折扣优惠请输入0-100之间" });
         return false;
       }
       let week = null;

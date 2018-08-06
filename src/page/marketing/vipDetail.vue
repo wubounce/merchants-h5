@@ -110,21 +110,21 @@ export default {
 </script>
 <style type="text/css" lang="scss" scoped>
   .addvip-header {
-    padding: 0 0.4rem;
+    padding: 0.49rem 0.4rem;
     background: #fff;
     p {
-      height: 1.6rem;
-      line-height: 1.6rem;
       font-size: 16px;
       color: #333;
       border-bottom:1px solid rgba(223,230,255,1);
+      line-height: 0.67rem;
     }
     p:last-child{
       border:none;
     }
     .addvip-con {
-      float: right;
+      text-align: right;
       color: #999;
+      padding-left: 0.27rem;
     }
   }
   .card-wrap {

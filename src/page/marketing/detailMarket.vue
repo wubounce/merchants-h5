@@ -3,7 +3,7 @@
   <div class="permissions" v-if="$store.getters.has('mer:marketing:info')">暂无相关页面权限</div>
   <div v-else>
     <div class="addvip-header">
-      <p>所属店铺<span class="addvip-con" v-for="(item,index) in detail.shop" :key="index">{{item.name}}</span></p>
+      <p>所属店铺<span class="addvip-con overflow-shop" v-for="(item,index) in detail.shop" :key="index">{{item.name}}</span></p>
       <p>优惠期<span class="addvip-con">{{detail.noDiscountStart}}<span v-if="detail.noDiscountStart&&detail.noDiscountEnd">-</span>{{detail.noDiscountEnd}}</span></p>
       <p>活动日<span class="addvip-con">{{detail.noWeek | week}}</span></p>
       <p>每日活动时段<span class="addvip-con">{{detail.noTime}}</span></p>
