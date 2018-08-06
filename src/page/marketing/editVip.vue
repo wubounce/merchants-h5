@@ -92,7 +92,9 @@ export default {
       checkshoplist:[], //选择的店铺
       checkshoptxt:'', //显示店铺名字
       shopIds:[],
-      vipform:{},
+      vipform:{
+
+      },
      
     };
   },
@@ -125,6 +127,10 @@ export default {
         this.vipform.yearCardDiscount = this.vipform.yearCardDiscount?this.vipform.yearCardDiscount *100:'';
         this.vipform.halfYearCardDiscount = this.vipform.halfYearCardDiscount?this.vipform.halfYearCardDiscount *100 : '';
         this.vipform.seasonCardDiscount = this.vipform.seasonCardDiscount?this.vipform.seasonCardDiscount *100 : '';
+        
+        this.vipform.yearCardLimitTime = this.vipformyearCardLimitTime? this.vipformyearCardLimitTime :0;
+        this.vipform.halfYearCardLimitTime= this.vipform.halfYearCardLimitTime? this.vipform.halfYearCardLimitTime: 0;
+        this.vipform.seasonCardLimitTime = this.vipform.seasonCardLimitTime? this.vipform.seasonCardLimitTime:0;
         this.shopListFun(res.data.shopVipId);
       }
     },
