@@ -82,7 +82,7 @@
 import qs from 'qs';
 import selectpickr from '@/components/selectPicker';
 import { vipShopsFun, addOrUpdateVipFun} from '@/service/market';
-import { validatDiscount } from '@/utils/validate';
+import { validatDiscount, validatCradPrice } from '@/utils/validate';
 export default {
   data() {
     return {
@@ -129,16 +129,30 @@ export default {
         this.$toast({message: "请完整填写至少一种vip卡信息" });
         return false;
       }
-      if ((this.vipform.yearCardDiscount&& !validatDiscount(this.vipform.yearCardDiscount))) {
-        this.$toast({message: "年卡折扣优惠请输入0-100之间" });
+
+      if ((this.vipform.yearCardPrice&& !validatCradPrice(this.vipform.yearCardPrice))) {
+        this.$toast({message: "年卡售价请输入1-999之间" });
+        return false;
+      }
+      if ((this.vipform.halfYearCardPrice && !validatCradPrice(this.vipform.halfYearCardPrice))) {
+        this.$toast({message: "半年卡售价请输入1-999之间" });
+        return false;
+      }
+      if ((this.vipform.seasonCardPrice && !validatDiscount(this.vipform.seasonCardPrice))) {
+        this.$toast({message: "季卡售价请输入1-999之间" });
+        return false;
+      }
+
+      if ((this.vipform.yearCardDiscount&& !validatCradPrice(this.vipform.yearCardDiscount))) {
+        this.$toast({message: "年卡折扣优惠请输入1-100之间" });
         return false;
       }
       if ((this.vipform.halfYearCardDiscount && !validatDiscount(this.vipform.halfYearCardDiscount))) {
-        this.$toast({message: "半年卡折扣优惠请输入0-100之间" });
+        this.$toast({message: "半年卡折扣优惠请输入1-100之间" });
         return false;
       }
       if ((this.vipform.seasonCardDiscount && !validatDiscount(this.vipform.seasonCardDiscount))) {
-        this.$toast({message: "季卡折扣优惠请输入0-100之间" });
+        this.$toast({message: "季卡折扣优惠请输入1-100之间" });
         return false;
       }
       let paylod = Object.assign({},this.vipform,{shopIds:this.shopIds.join(',')});

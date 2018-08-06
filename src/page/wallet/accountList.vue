@@ -184,7 +184,13 @@ export default {
             line-height: .53rem;
             color: $third-color;
         }
+        .all {
+            &:last-child {
+                border:none
+            }
+        }
     }
+    
 </style>
 <style lang="scss">
     @import "../../assets/scss/common";
