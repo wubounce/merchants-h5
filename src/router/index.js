@@ -78,6 +78,11 @@ export default new Router({
       component: () => import ('@/page/device/deviceMange/deviceMange')
     },
     {
+      path: '/deviceSearch',
+      name: 'deviceSearch',
+      component: () => import ('@/page/device/deviceMange/deviceSearch')
+    },
+    {
       path: '/batchFuntionSet',
       name: 'batchFuntionSet',
       component: () => import ('@/page/device/batchFuntionSet/batchFuntionSet')

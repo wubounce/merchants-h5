@@ -2,62 +2,8 @@
   <section v-title="title">
     <div class="permissions" v-if="$store.getters.has('mer:machine:list')">暂无相关页面权限</div>
     <div v-else>
-    <div class="search">
+      <div class="search">
         <d-search @deviceSearch="onDeviceSearch"></d-search>
-      </div>
-      <div class="device-status">
-        <div @click="titleClick()">
-          <p :class="{current:!index}">全部</p>
-          <span :class="{current:!index}">{{titleArr.all}}</span>
-        </div>
-        <div @click="titleClick(2)">
-          <p :class="{current:index===2}">运行</p>
-          <span :class="{current:index===2}">{{titleArr.run}}</span>
-        </div>
-        <div @click="titleClick(1)"> 
-          <p :class="{current:index===1}">空闲</p>
-          <span :class="{current:index===1}">{{titleArr.idle}}</span>
-        </div>
-        <div @click="titleClick(4)">
-          <p :class="{current:index===4}">故障</p>
-          <span :class="{current:index===4}">{{titleArr.hitch}}</span>
-        </div>
-        <div @click="titleClick(8)">
-          <p :class="{current:index===8}">离线</p>
-          <span :class="{current:index===8}">{{titleArr.offline}}</span>
-        </div>
-        <div @click="titleClick(16)">
-          <p :class="{current:index===16}">超时</p>
-          <span :class="{current:index===16}">{{titleArr.timeout}}</span>
-        </div>
-      </div>
-      
-      <div class="device-list" v-for="(item,index) in list" :key="index" @click="toDeviceDetail(item.machineId)">
-        <section class="item-hd">
-          <span>{{item.machineName}}</span>
-          <span class="state">{{item.machineState}}</span>
-        </section>
-        <section class="item-bd">
-          <span>店铺</span>
-          <div>{{item.shopName}}</div>
-        </section>
-        <section class="item-ft">
-          <p class="item-ft-right">
-            <span>类型</span>
-            <span>{{item.machineTypeName}}</span>
-          </p>
-          <p class="item-ft-right">
-            <span>收益</span>
-            <span>{{item.profit}}</span>
-          </p>
-        </section>
-      </div>
-      <div class="openItem" @click="toAddItem" v-show="isShow">···</div>
-      <div v-show="isShow2">
-        <div class="closeItem" @click="toCloseItem">X</div>
-        <router-link to="/addDevice" v-has="'mer:machine:add'"><div class="addDev showItem">新增设备</div></router-link>
-        <router-link :to="{name:'batchStart'}" v-has="'mer:machine:reset'"><div class="betchStartup showItem">批量启动</div></router-link>
-        <router-link to="/batchEdit" v-has="'mer:machine:update'"><div class="betchModf showItem">批量修改</div></router-link>
       </div>
     </div>
   </section>
@@ -65,9 +11,8 @@
 </template>
 <script>
   import qs from "qs";
-  import DSearch from '@/components/Search/search';
+  import DSearch from '@/components/Search/detailSearch';
   import { MessageBox } from 'mint-ui';
-  import { deviceListFun , countDeviceFun } from '@/service/device';
   export default {
     data() {
       return {
@@ -107,65 +52,13 @@
         this.isShow2 = !this.isShow2;
         this.isShow = !this.isShow;
       },
-      async getCountDevice(){      
-        let res = await countDeviceFun();
-         if(res.code === 0) {
-          this.titleArr= res.data; 
-        }
-        else {
-          MessageBox.alert(res.msg);
-        }
-      }, 
-      async getDeviceList(titleIndex,name)  {
-        let payload = {machineState: titleIndex,machineName: this.name};
-        let res = await deviceListFun(qs.stringify(payload));
-        if(res.code === 0) {
-          this.list = res.data;
-          this.list.forEach(item=>{
-            switch(item.machineState){
-            case 1:
-            item.machineState = "空闲";
-            break;
-            case 2:
-            item.machineState = "运行";
-            break;
-            case 3:
-            item.machineState = "预约";
-            break;
-            case 4:
-            item.machineState = "故障";
-            break;
-            case 5:
-            item.machineState = "参数设置";
-            break;
-            case 6:
-            item.machineState = "自检";
-            break;
-            case 7:
-            item.machineState = "预约";
-            break;
-            case 8:
-            item.machineState = "离线";
-            break;
-            case 16:
-            item.machineState = "超时未工作";
-            break;
-
-          }
-        });
-        }
-        else {
-          MessageBox.alert(res.msg);
-        }
-      },
       onDeviceSearch(msg){ //搜索
          this.name = msg;
          this.getDeviceList(this.titleIndex,this.name);
       }
     },
     created() {
-      this.getDeviceList();
-      this.getCountDevice();
+      
     },
     components: {
       DSearch
