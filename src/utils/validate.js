@@ -43,10 +43,14 @@ export const validatPwd = (str) => {
 
 /* 数字 */
 export const validatDiscount = (str) => {
-  const reg = /^(\d{1,2}|100)$/;
+  const reg = /^([1-9]\d{0,1}|100)$/;
   return reg.test(str);
 };
-
+/*价格*/
+export const validatCradPrice = (str)=>{
+  const reg = /^[1-9]\d{0,2}$/;
+  return reg.test(str);
+};
 /* 中文*/
 export const validatName = (str) => {
   const reg = /^[\u4E00-\u9FA5]{2,20}$/;

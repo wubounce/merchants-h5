@@ -1,15 +1,17 @@
 <template>
 <div class="withdrawList-wrapper" v-title="'提现记录'">
+    <div class="no-discount-list" v-if="applylsit.length<=0">暂无提现记录</div>
     <div  v-for="(item,index) in applylsit" :key="index" :class="['list', {'fall':item.status === 2}]" >
         <router-link :to="{name:'withdrawResult',query:{balanceLogId:item.id}}">
             <span class="iconfont icon-tixian"></span>
             <div class="accountList-content clearfix">
                 <div class="left">
-                    <p class="title">余额提现</p>
-                    <p class="status">{{item.status === 0 ? '处理中':item.status === 1 ? '提现成功':'提现失败'}}</p>
-                    <p class="time">5月25日 18:16</p>
+                    <p class="title process" v-if="item.status === 0">提现中</p>
+                    <p class="title success" v-if="item.status === 1">提现成功</p>
+                    <p class="title fall" v-if="item.status === 2">提现失败</p>
+                    <p class="time">{{item.createTime}}</p>
                 </div>
-                <p class="price">-1000</p>
+                <p class="price">{{item.price}}</p>
             </div>     
         </router-link>
     </div>
@@ -54,7 +56,7 @@ export default {
             padding-left:2.15rem;
             position: relative;
             background-color: #fff;
-            height: 2.32rem ;  
+            height: 2.32rem;  
             box-sizing: border-box;          
             span{
                 position: absolute;
@@ -72,7 +74,7 @@ export default {
                 width: 100%;
                 height: 100%;
                 border-bottom: $first-border;
-                padding: .33rem .4rem .33rem 0;
+                padding: 0.59rem .4rem .33rem 0;
                 box-sizing: border-box;   
                 .left{
                     float: left;
@@ -84,6 +86,16 @@ export default {
                         font-size: .43rem;
                         line-height: .6rem;
                     }
+                    .process {
+                        color: #1890FF;
+                    }  
+                    .success {
+                        color: #52C41A
+                    }
+                    .fall {
+                        color: #FF5F5F;
+                    } 
+                
                     .status{
                         margin: .12rem 0 .11rem;
                     }
@@ -97,16 +109,12 @@ export default {
                 }
                 
             }  
-            &.fall{
-                .price{
-                    color: #ff5f5f;
-                }
-            }
             &:last-child{
                 .accountList-content{
                     border-bottom: none;
                 }
-            }          
+            }
+                   
         }
         .info{
             text-align: center;

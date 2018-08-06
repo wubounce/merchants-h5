@@ -3,13 +3,15 @@
 	<div class="accountDetail-wrapper" v-title="title">
 		<header>
 			<p class="title">
-                <span class="usericon iconfont icon-dianpu" v-if="data.type===1"></span>
-                <span class="usericon iconfont icon-tuikuan" v-if="data.type===3"></span>
-                {{data.shopName}}
+            <span class="usericon iconfont icon-dianpu" v-if="data.type===1"></span>
+            <span class="usericon iconfont icon-tuikuan" v-if="data.type===3"></span>
+            <span v-if="data.type===1">{{data.shopName}}</span>
+            <span v-if="data.type===3">退款订单</span>
             </p>
 			<p class="price" v-if="data.type===1">+{{data.payPrice}}</p>
             <p class="price" v-if="data.type===3">-{{data.payPrice}}</p>
-			<p class="satus">交易成功</p>
+			<p class="satus" v-if="data.type===1">交易成功</p>
+            <p class="satus" v-if="data.type===3">退款成功</p>
 		</header>		
 		<ul class="record" v-if="data.type===1">
 			<li>
@@ -24,7 +26,6 @@
             <li>
                 <div><p>创建之间</p><p>{{data.createTime}}</p></div>
                 <div><p>订单号</p><p>{{data.orderNo}}</p></div>
-                <div><p>店铺</p><p>{{data.shopName}}</p></div>
             </li>
             <li>
                 <div><p>类型</p><p>{{data.parentType}}</p></div>
@@ -109,11 +110,10 @@ export default {
         background: #FFFFFF;
         header{
             text-align: center;
-            padding: .6667rem 0;
+            padding: .6667rem 0.4rem;
             .title{
                 display: flex;
                 justify-content: center;
-                align-items: center;
                 .icon-tuikuan {
                     color: #FAAD14;
                     font-size:0.64rem;
@@ -186,5 +186,6 @@ export default {
             }
         }
     }
+
 		
 </style>
