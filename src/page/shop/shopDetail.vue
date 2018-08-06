@@ -39,7 +39,7 @@
 
         <!-- 第五模块 -->
         <p class="about-button">
-          <Button btn-type="small" btn-color="spe" id="delete" @confirm="isDeleteOrNot()" v-has="'mer:shop:delete'">删除</Button>
+          <Button btn-type="small" btn-color="spe" id="delete" @confirm="isDeleteOrNot(shopdetail.shopId)" v-has="'mer:shop:delete'">删除</Button>
     			<Button btn-type="small" btn-color="spe" id="edit" @confirm="goShopEdit()" v-has="'mer:shop:update'">编辑</Button>
         </p>
    </div>
@@ -81,33 +81,44 @@ export default {
         });        
       });
     },
-    async isDeleteOrNot() {
-      //删除功能
-      MessageBox.confirm('您确定要取消批量启动设备么？').then(action => 
-        {	    
-          //调用删除接口
-          let obj = { shopId: this.$route.query.shopId };
-          let res = deleteShopFun(qs.stringify(obj));
-
-          let instance = this.$toast({
-            message: '删除成功',
-            iconClass: 'mint-toast-icon mintui mintui-success'
-          });
-          setTimeout(() => {
-            instance.close();
-          }, 1000);
-          this.$router.push({
-            name:'shopList'
-          });
-        },
-        action => {
-          this.$toast({
-              message: "已取消",
-              position: "middle",
-              duration: 3000
-            });
+    // async isDeleteOrNot(id) {
+    //   //删除功能
+    //   MessageBox.confirm('您确定要删除该店铺么？').then(async() => 
+    //     {	    
+    //       //调用删除接口
+    //       let query = this.$route.query;
+    //       let obj = { shopId: query.shopId };
+    //       let res = deleteShopFun(qs.stringify(obj));
+    //       if(res.code === 0) {
+    //         this.$toast({message: '删除成功' });
+    //         this.$router.push({
+    //           name:'shopList'
+    //         });
+    //       }
+    //       else {
+    //         this.$toast(res.msg);
+    //       }
+    //     },
+    //     action => {
+    //       this.$toast({
+    //           message: "已取消",
+    //           position: "middle",
+    //           duration: 3000
+    //         });
+    //     }
+    //   );
+    // },
+    isDeleteOrNot(id) {
+      MessageBox.confirm(`确认删除店铺？`).then(async () => {
+        let payload = {shopId: id};
+        let res = await deleteShopFun(qs.stringify(payload));
+        if (res.code === 0) {
+          this.$toast({message: '删除成功' });
+           this.$router.push({name:'shopList'});
+        } else {
+          this.$toast({message: res.msg });
         }
-      );
+      });
     },
     goShopEdit() {
       //编辑功能
@@ -139,13 +150,9 @@ export default {
   },
   created() {
     this.getShopDetail();
-
   },
   mounted() {
-    //this.what = this.getlatlngAddress();
-    //console.log(this.what);
     this.getlatlngAddress();
-    console.log(this.lng);
   },
   components:{
     Button
