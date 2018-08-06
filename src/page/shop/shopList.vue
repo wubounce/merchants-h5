@@ -37,6 +37,7 @@
 	</section>
 </template>
 <script>
+import qs from "qs";
 import { MessageBox } from 'mint-ui';
 import { manageListFun } from '@/service/shop';
 export default {
@@ -72,15 +73,18 @@ export default {
       });
     },
     async getShopList() {
-      let res = await manageListFun();
+      let obj = {
+        page: 1,
+        pageSize:10
+      };
+      let res = await manageListFun(qs.stringify(obj));
       if(res.code===0) {
-
         //判断该账号是否存在店铺
         if(res.data == null || res.data == "") {
           this.hasNews = false;
         }
         else {
-          this.list = res.data;
+          this.list = res.data.items;
         }
       }
       else {
@@ -93,7 +97,7 @@ export default {
   },
   watch: {
     $route(to,from) {
-      if(from.name == 'shopDetail') {
+      if(to.name === 'shopList') {
         this.getShopList();
       }
     }

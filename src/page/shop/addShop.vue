@@ -239,13 +239,23 @@ export default {
   methods:{
     blur(e) {
       //校验字符长度
-      if(e.target.value.length>3 && e.target.value.length<41) {
+      if(e.target.value.length>1 && e.target.value.length<21) {
         this.shopName = e.target.value;
       }
       else {
         e.target.value = '';
-        MessageBox.alert("请输入4到40字符的店铺名称");
+        MessageBox.alert("请输入2到20字符的店铺名称");
       }
+      //校验名字的特殊字符'-'和'_'
+      let arr = e.target.value.split('');
+      for (let i=0; i<e.target.value.length; i++) {
+        if(arr[i] == '-' || arr[i] == '_' || arr[i] == '——') {
+          if(arr[i+1] == '-' || arr[i+1] == '_' || arr[i] == '——') {
+            MessageBox.alert('店铺名称不符合规范，请重新输入');
+          }
+        }
+      }
+      
       //校验重名
       for(let i=0; i<this.arrName.length; i++) {
         if(e.target.value == this.arrName[i]) {
@@ -311,21 +321,27 @@ export default {
           this.getArea();
           break;
         case 2:{
-          this.goMap("mapSearch",this.cityName,this.shopName,this.shopType,
+          if(this.list[1].value == undefined) {
+            this.$toast({
+              message: '请先选择所在地区，再选择小区/大厦/学校'
+            });
+          }
+          else {
+            this.goMap("mapSearch",this.shopName,this.shopType,
                       this.list[1].value,this.provinceId, this.cityId, this.districtId,this.address,this.machineName,this.machineTypeIdsArray,
                       this.isReserve,this.orderLimitMinutes,this.addBusinessTime,
                       this.imageId);
-          this.mapVisible = true;
+            this.mapVisible = true;
+          }
           break;
         }
       }
     },
    //跳转传值
-    goMap(x,y,name,type,place,provinceId,cityId,districtId,address,machineName,machinetype,isReserve,LimitMinutes,worktime,img) {
+    goMap(x,name,type,place,provinceId,cityId,districtId,address,machineName,machinetype,isReserve,LimitMinutes,worktime,img) {
       this.$router.push({
         name:x,
         query: {
-          city:this.cityName,
           name:name,
           type:type,
           place:place,
@@ -571,6 +587,9 @@ export default {
         this.$router.push({
           name:'shopList'
         });
+      }
+      else {
+        this.$toast(res.msg);
       }
     },
     //省市区联动

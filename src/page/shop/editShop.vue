@@ -246,12 +246,22 @@ export default {
      blur(e) {
       //校验字符长度
       console.log(this.oldName);
-      if(e.target.value.length>3 && e.target.value.length<41) {
+      if(e.target.value.length>1 && e.target.value.length<21) {
         this.shopName = e.target.value;
       }
       else {
         this.shopName = this.oldName;
-        MessageBox.alert("请输入4到40字符的店铺名称");
+        MessageBox.alert("请输入2到20字符的店铺名称");
+      }
+
+      //校验名字的特殊字符'-'和'_'
+      let arr = e.target.value.split('');
+      for (let i=0; i<e.target.value.length; i++) {
+        if(arr[i] == '-' || arr[i] == '_' || arr[i] == '——') {
+          if(arr[i+1] == '-' || arr[i+1] == '_' || arr[i] == '——') {
+            MessageBox.alert('店铺名称不符合规范，请重新输入');
+          }
+        }
       }
       //校验重名
       for(let i=0; i<this.arrName.length; i++) {
