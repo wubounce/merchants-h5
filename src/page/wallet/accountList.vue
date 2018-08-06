@@ -3,8 +3,9 @@
     <section class="apply-status">
         <div v-for="(item,index) in titleArr" @click="titleClick(index)"><span :class="{current: titleIndex === index}">{{item.lable}}</span></div>
     </section>
+    <div class="no-discount-list" v-if="applylsit.length<=0">暂无相关明细</div>
     <!-- 记录为收益类，增加class：add -->
-    <div class="apply--list-wrap">
+    <div class="apply--list-wrap" v-else>
         <div class="all" v-for="(item,index) in applylsit" :key="index" >
             <div class="list add" v-if="item.type === 1 "> 
                 <router-link :to="{name:'accountDetail', query:{balanceLogId:item.id,type:item.type}}">
@@ -121,7 +122,7 @@ export default {
             padding-left:2.15rem;
             position: relative;
             background-color: #fff;
-            height: 2.32rem ;  
+            overflow: hidden; 
             box-sizing: border-box;          
             .icon-type{
                 position: absolute;
@@ -141,12 +142,13 @@ export default {
             }
             .accountList-content{
                 width: 100%;
-                height: 100%;
+                overflow: hidden;
                 border-bottom: $first-border;
                 padding: .33rem .4rem .33rem 0;
                 box-sizing: border-box;   
                 .left{
                     float: left;
+                    width: 78%;
                     font-size: .32rem;
                     line-height: .44rem;
                     color: $third-color;           
@@ -177,13 +179,11 @@ export default {
         .info{
             text-align: center;
             margin-top: .53rem;
+            margin-bottom: .53rem;
             font-size: .37rem;
             line-height: .53rem;
             color: $third-color;
         }
-        .all:last-child .accountList-content{
-            border:none
-        } 
     }
 </style>
 <style lang="scss">

@@ -38,8 +38,8 @@
 		</ul>
         <ul class="record" v-if="data.type===3">
             <li>
-                <div><p>付款金额</p><p>{{data.markPrice}}</p></div>   
-                <div class="discounts"><p>退款金额</p><p><span >-</span>{{data.discountPrice}}</p></div>            
+                <div><p>付款金额</p><p>{{data.price}}</p></div>   
+                <div class="discounts"><p>退款金额</p><p><span >-</span>{{data.payPrice}}</p></div>            
             </li>   
             <li>
                 <div><p>用户账号</p><p>{{data.userPhone}}</p></div>

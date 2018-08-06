@@ -11,7 +11,8 @@
         <p class="title">提现金额</p>
         <label><span>￥</span><input v-model="money" @input="btndisabdisabled" type="number"></label>
         <div class="total">
-            <p class="balance">账户余额 ￥{{userInfo.balance}}，最低提现10元</p>
+            <p class="fullbalance" v-if="thanBalance">输入金额超过账户余额</p>
+            <p class="balance" v-else>账户余额 ￥{{userInfo.balance}}，最低提现10元</p>
             <p class="withdraw-all" @click="allWithdraw">全部提现</p>
         </div>
     </div>
@@ -28,7 +29,9 @@ export default {
     return {
       userInfo:{},
       money:'',
-      disabled:true
+      disabled:true,
+      thanBalance:false,
+      balanceErrTxt:''
     };
   },
   mounted() {
@@ -59,7 +62,11 @@ export default {
             return false;
         }
         if (Number(this.money) > this.userInfo.balance ) {
-            this.$toast('最高提现不能超过账户余额');
+            this.$toast('超出本次可提现金额');
+            return false;
+        }
+        if (Number(this.money) > 50000.1 ) {
+            this.$toast('单笔提现到支付宝不能超过50000元');
             return false;
         }
         let payload = Object.assign({},{money:this.money});
@@ -68,12 +75,33 @@ export default {
             this.$toast('提现成功');
             console.log(res);
             this.$router.push({name:'withdrawResult',query:{balanceLogId:res.data.id,applyMoney:true}});
+        }else if(res.code === 1004 || res.code === 1014) {
+            MessageBox.alert(`请先进行支付宝账号绑定及实名认证`).then(async () => {
+                this.$router.push({name:'accountSet'});
+            });
         }else {
             this.$toast(res.msg);
         }
     },
     btndisabdisabled(){
-        this.money !== '' ? this.disabled = false : this.disabled = true;
+        if (this.money !== '') {
+            this.disabled = false;
+        } else {
+            this.disabled = true;
+        }
+        Number(this.money) > this.userInfo.balance ? this.thanBalance = true: this.thanBalance = false;
+        // if (Number(this.money) < 10) {
+        //     this.thanBalance = true;
+        //     this.balanceErrTxt = '输入金额低于10元';
+        // } 
+        // if(Number(this.money) > this.userInfo.balance){
+        //     this.thanBalance = true;
+        //     this.balanceErrTxt = '输入金额超过账户余额';
+        // } 
+        // if(Number(this.money) > 50000.1){
+        //     this.thanBalance = true;
+        //     this.balanceErrTxt = '单笔提现到支付宝不能超过50000元';
+        // }
     }
   },
   filters:{
@@ -151,6 +179,9 @@ export default {
                     color: $highlight-color;
                 }
             }
+        }
+        .fullbalance {
+            color: #f00;
         }
         .btn{
             margin-top: .6667rem;

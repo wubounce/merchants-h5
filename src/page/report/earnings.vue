@@ -204,8 +204,9 @@ export default {
           {
               type: 'value',
               min: 0,
-              max:160.00,
-              minInterval: 40,
+              max:function(value) {
+               return (value.max *1.2);
+              },
               splitNumber:5,
               axisLine:{
                 show:false,

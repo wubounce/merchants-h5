@@ -123,7 +123,6 @@ export default {
       barseriesData:[],
       linexAxisData:[],
       lineseriesData:[],
-      lineMaxspilt:null,
       pietypeData:[],
       piefunData:[],
       piefunDatatitle:[],
@@ -195,13 +194,11 @@ export default {
         payload = Object.assign({},{type:0});
       }
       let res = await timeProfitFun(qs.stringify(payload));
-      console.log(res);
       if (res.code === 0) {
         res.data.forEach(item=>{
           this.lineseriesData.push(item.sum);
           this.linexAxisData.push(item.time);
         });
-        this.lineMaxspilt = Math.max(...this.lineseriesData); //y轴刻度
         // 把配置和数据放这里
         this.linechart.setOption(this.lineChartOption);
       }
@@ -335,14 +332,16 @@ export default {
               type:'solid'
             }
           },
+          axisTick: {length:5},
         }],
         yAxis : [{
           type : 'value',
           offset:10,
           min: 0,
-          max:this.lineMaxspilt*1,
+          max:function(value) {
+           return (value.max *1.2);
+          },
           splitNumber:5,
-          minInterval: this.lineMaxspilt/2,
           axisLine:{
             show:false,
             lineStyle:{
@@ -456,7 +455,9 @@ export default {
             textStyle: {color: '#999'}
           },
           min:0,
-          max:this.allmMachine*1,
+          max:function(value) {
+           return (value.max *1);
+          },
           splitNumber:5
         }],
         series: [{

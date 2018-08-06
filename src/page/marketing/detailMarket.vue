@@ -1,20 +1,23 @@
 <template>
 <div class="addmarket" v-title="title">
-  <div class="addvip-header">
-    <p>所属店铺<span class="addvip-con" v-for="(item,index) in detail.shop" :key="index">{{item.name}}</span></p>
-    <p>优惠期<span class="addvip-con">{{detail.noDiscountStart}}<span v-if="detail.noDiscountStart&&detail.noDiscountEnd">-</span>{{detail.noDiscountEnd}}</span></p>
-    <p>活动日<span class="addvip-con">{{detail.noWeek | week}}</span></p>
-    <p>每日活动时段<span class="addvip-con">{{detail.noTime}}</span></p>
-    <p>折扣优惠<span class="addvip-con">{{detail.discount}}%</span></p>
-    <p>活动状态<span class="addvip-con">{{detail.status === 0 ? '开放':'暂停'}}</span></p>
-  </div>
-  <div class="create-wrap">
-    <p>创建人：{{detail.createUserName}}</p>
-    <p>创建时间： {{detail.createTime}}</p>
-  </div>
-  <div class="footer">
-    <span class="edit" v-has="'mer:marketing:update'"><router-link :to="{name:'editMarket', query:{id:detail.id}}">编辑</router-link></span>
-    <span class="del" @click="deldelMarket" v-has="'mer:marketing:delete'">删除</span>
+  <div class="permissions" v-if="$store.getters.has('mer:marketing:info')">暂无相关页面权限</div>
+  <div v-else>
+    <div class="addvip-header">
+      <p>所属店铺<span class="addvip-con" v-for="(item,index) in detail.shop" :key="index">{{item.name}}</span></p>
+      <p>优惠期<span class="addvip-con">{{detail.noDiscountStart}}<span v-if="detail.noDiscountStart&&detail.noDiscountEnd">-</span>{{detail.noDiscountEnd}}</span></p>
+      <p>活动日<span class="addvip-con">{{detail.noWeek | week}}</span></p>
+      <p>每日活动时段<span class="addvip-con">{{detail.noTime}}</span></p>
+      <p>折扣优惠<span class="addvip-con">{{detail.discount}}%</span></p>
+      <p>活动状态<span class="addvip-con">{{detail.status === 0 ? '开放':'暂停'}}</span></p>
+    </div>
+    <div class="create-wrap">
+      <p>创建人：{{detail.createUserName}}</p>
+      <p>创建时间： {{detail.createTime}}</p>
+    </div>
+    <div class="footer">
+      <span class="edit" v-has="'mer:marketing:update'"><router-link :to="{name:'editMarket', query:{id:detail.id}}">编辑</router-link></span>
+      <span class="del" @click="deldelMarket" v-has="'mer:marketing:delete'">删除</span>
+    </div>
   </div>
 </div>
 </template>

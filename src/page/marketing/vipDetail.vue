@@ -1,6 +1,6 @@
 <template>
 <div class="addvip"  v-title="title">
- <div class="permissions" v-if="$store.getters.has('mer:marketing:info')">暂无相关页面权限</div>
+ <div class="permissions" v-if="$store.getters.has('mer:marketing:vip:info')">暂无相关页面权限</div>
   <div v-else>
     <div class="addvip-header">
       <p>所属店铺<span class="addvip-con">

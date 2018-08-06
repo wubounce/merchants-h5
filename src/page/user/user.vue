@@ -75,7 +75,7 @@ export default {
     @import "../../assets/scss/common";
     .user-wrapper{        
         header{
-            padding: 0.37rem 0.83rem 0.8rem 0.4rem;
+            padding: 0.37rem 0.4rem 1.0rem 0.87rem;
             background:url(../../../static/image/user/user@2x.png);
             background-size: cover;
             .guide{

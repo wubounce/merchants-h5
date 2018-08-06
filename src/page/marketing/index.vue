@@ -5,8 +5,6 @@
   </section>
   <section class="tab-contont">
 
-
-
   	<div class="discount-wrap" v-if="tabindex === 0">
       <div class="permissions" v-if="$store.getters.has('mer:marketing:list')">暂无相关页面权限</div>
       <div v-else>
