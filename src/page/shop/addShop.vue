@@ -518,6 +518,7 @@ export default {
     },
     async UpdatedImgFiles(msg) {
       //判断图片类型
+      console.log(msg);
       if(msg.substring(0,22)=="data:image/png;base64,") {
         console.log(msg.substring(0,22));
         msg = msg.replace("data:image/png;base64,","");
@@ -610,7 +611,7 @@ export default {
     async getShoplist() {
       let res = await manageListFun();
       if(res.code === 0 ) {
-        this.arrName = res.data.map((i) => {
+        this.arrName = res.data.items.map((i) => {
           return i.shopName;
         });
       }

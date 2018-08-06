@@ -28,7 +28,6 @@
               <img :src="shopdetail.imageId" alt="店铺图片" class="shop-img">
             </span>
         </p>
-
         <!-- 第三模块 -->
         <p class="shop-item second-p"><span>限时优惠</span><span>{{shopdetail.isDiscount ==true ? '已设置' : '未设置'}}</span></p>
         <p class="shop-item"><span>VIP数量</span><span>{{shopdetail.vipCount}}个</span></p>
