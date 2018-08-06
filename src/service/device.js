@@ -14,11 +14,13 @@ const deleteDevice = '/machine/delete'; //删除设备
 const manageResetDevice = '/machine/manageReset' ;//设备复位
 const tzjDevice = '/machine/tzj'; //桶自洁
 const getWxConfig = '/common/getWxConfig'; //获取微信接口配置信息
-const getShop = '/shop/listShop'; // 店铺管理 method 'post'
+const getShop = '/shop/manageList'; // 店铺管理 method 'post'
 const getlistParentType = '/machine/listParentType'; //一级类型 method 'post'
 const getlistSubType = '/machine/listSubType'; //二级类型 method 'post'
 const getFunctionSetList = '/machine/functionList'; //功能设置列表 method 'post'
 const deviceAddorEdit = '/machine/addOrEdit'; //设备编辑 method 'post'
+const batchFunctionSetList = '/batchExecutePlan/getFunctionList'; //批量获取功能列表 method ‘post'
+const batchEdit = '/machine/batchEdit'; //批量编辑
 
 
 export const device = (payload) => fetch.get(deviceApi, {params: payload}); //登录
@@ -34,6 +36,8 @@ export const getlistParentTypeFun = (payload) => fetch.post(getlistParentType,pa
 export const getlistSubTypeFun = (payload) => fetch.post(getlistSubType,payload); //获取二级类型
 export const getFunctionSetListFun = (payload) => fetch.post(getFunctionSetList,payload); //获取功能列表
 export const deviceAddorEditFun = (payload) => fetch.post(deviceAddorEdit,payload); //设备编辑添加
+export const batchFunctionSetListFun = (payload) => fetch.post(batchFunctionSetList,payload); //批量回能功能列表
+export const batchEditFun = (payload) => fetch.post(batchEdit,payload); //批量编辑
 
 
 

@@ -65,16 +65,16 @@
         </section>
         <section class="fun-item-bd">
           <p v-for="(item,index) in functionList " :key="index">
-            <span>{{item.fuctionName}}</span>
-            <span>{{item.time}}</span>
-            <span>{{item.price}}</span>
-            <span>{{item.status}}</span>
+            <span>{{item.functionName}}</span>
+            <span>{{item.needMinutes}}</span>
+            <span>{{item.functionPrice}}</span>
+            <span>{{item.ifOpen}}</span>
           </p>
         </section>
 
         <li class="device-detail-ft">
-          <p>创建人：Wendy</p>
-          <p>创建时间： 2018-07-15 15:38:05</p>
+          <p>创建人：{{deviceDetail.createUser}}</p>
+          <p>创建时间： {{deviceDetail.createTime}}</p>
         </li>
       </ul>
 
@@ -166,7 +166,8 @@
         let payload = { machineId: this.$route.query.machineId} ;     
         let res = await detailDeviceListFun(qs.stringify(payload));
          if(res.code === 0) {
-          this.deviceDetail= res.data; 
+          this.deviceDetail= res.data;
+          this.functionList = res.data.functionList;
         }
         else {
           MessageBox.alert(res.msg);
@@ -178,7 +179,7 @@
         MessageBox.confirm('确定执行此操作?').then(async () => {
           let res = await deleteDeviceFun(qs.stringify({machineId: this.$route.query.machineId}));
           if(res.code === 0) {
-            this.$router.push({name:'deviceDetail'});
+            this.$router.push({name:'deviceMange'});
           }
           else {
             MessageBox.alert(res.msg);
@@ -210,7 +211,14 @@
         });
 
       },
-      deviceEdit() {},
+      deviceEdit() {
+        this.$router.push({
+          name:'editDevice',
+          query:{
+            machineId: this.$route.query.machineId 
+          }
+        });
+      },
     },
     created(){
       this.getDetailDevice();
@@ -362,8 +370,7 @@
       }
     }
     .fun-item-bd {
-      height: 1.6rem;
-      line-height: 1.6rem;
+      line-height: 1.2rem;
       padding: 0 .4rem;
       font-size: 0.37rem;
       color: #333333;

@@ -59,12 +59,12 @@
     </section>
     <section class="fun-item-bd funlist">
       <div v-for="(item,index) in functionSetList " :key="index">
-        <input type="text" class="fun-list-item" v-model.lazy="item.functionName" @change="changeItem(item.functionName,index,0)"/>
-        <input type="text" class="fun-list-item" v-model.lazy="item.needMinutes" @change="changeItem(item.needMinutes,index,1)"/>
-        <input type="text" class="fun-list-item" v-model.lazy="item.functionPrice" @change="changeItem(item.functionPrice,index,2)"/>
-        <input type="text" class="fun-list-item" v-model.lazy="item.functionPrice" v-show="isShow2" @change="changeItem(item.functionPrice,index,3)"/>
+        <input type="text" class="fun-list-item" v-model.lazy="item.functionName"/>
+        <input type="text" class="fun-list-item" v-model.lazy="item.needMinutes"/>
+        <input type="text" class="fun-list-item" v-model.lazy="item.functionPrice"/>
+        <input type="text" class="fun-list-item" v-model.lazy="item.functionPrice" v-show="isShow2"/>
         <p class="fun-list-item">
-          <mt-switch v-model="item.ifOpen" @change="changeItem(item.ifOpen,index,4)"></mt-switch>
+          <mt-switch v-model="item.ifOpen"></mt-switch>
         </p>
       </div>
     </section>
@@ -136,9 +136,10 @@
         parentType: false,    
         subType: false,
         functionTempletType: null,
-        itemName:["functionName","needMinutes","functionPrice","functionPrice","ifOpen"],
+        itemName:["functionName","needMinutes","functionPrice","ifOpen"],
         functionSetList: [],
         jsonArr:[],
+        getJsonArr:[],
         functionListTitle: [
           ['功能'],
           ['耗时', '/分'],
@@ -152,7 +153,7 @@
           ['原价', '/元'],
           ['状态']
         ],
-        title: '添加设备',
+        title: '新增设备',
         fromdata: {
           machineName: "",
           firstClass: "",
@@ -197,15 +198,7 @@
         this.fromdata.secondType.id = msg.id;
         this.subType = false;
       },
-      changeItem(item,index,flag){       
-        let name = this.itemName[flag];
-        if (flag === 4){
-          !this.functionSetList[index].ifOpen;
-        }else{
-          this.functionSetList[index].name = item;
-        }
-      },
-      wxScan(e, type) {
+      wxScan(e, type) { //微信扫码
         var self = this;
         wx.scanQRCode({
           needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
@@ -241,7 +234,7 @@
         });
 
       },
-      async initWechat(){
+      async initWechat(){ //微信配置初始化
         let payload = {url: window.location.href.split('#')[0]};
         let res = await getWxconfigFun(qs.stringify(payload));
           wx.config({
@@ -253,14 +246,14 @@
           jsApiList: ['chooseWXPay', 'scanQRCode', 'checkJsApi', 'getLocation'] // 必填，需要使用的JS接口列表
         });   
       },
-      async checkDeviceSelect() {
+      async checkDeviceSelect() { //获取店铺
         let res = await getShopFun();
          if(res.code === 0) {
           this.selectListA = res.data; 
          }
          this.companyVisible = true;
       },
-      async checkFirstClass() {
+      async checkFirstClass() { //获取一级列表
         if(this.fromdata.shopType.id){
            let payload = {shopid:this.fromdata.shopType.id};
            let res = await getlistParentTypeFun(qs.stringify(payload));
@@ -272,7 +265,7 @@
           MessageBox.alert("请先选择店铺");
         }
       },
-      async checkSecondClass() {
+      async checkSecondClass() { //获取二级列表
          if(this.fromdata.shopType.id && this.fromdata.firstType.id) {
            let payload = {shopid:this.fromdata.shopType.id,parentTypeId:this.fromdata.firstType.id};
            let res = await getlistSubTypeFun(qs.stringify(payload));
@@ -284,17 +277,18 @@
           MessageBox.alert("请先选择店铺或者类型");
         }
       },
-      async getFunctionSetList() {  //获取功能数据
+      async getFunctionSetList() {  //获取功能列表数据
         let payload = {subTypeId: this.fromdata.secondType.id,shopId: this.fromdata.shopType.id} ;     
         let res = await getFunctionSetListFun(qs.stringify(payload));
          if(res.code === 0) {
            this.functionTempletType = res.data.functionTempletType;
+           this.getJsonArr = res.data.list;
            if(res.data.communicateType === 1){
              this.functionListTitle = this.functionListTitle2;
              this.isShow = false;            
            } 
           res.data.list.forEach(item=>{
-            item.ifOpen=item.ifOpen === "0"?(!item.ifOpen) : (!!item.ifOpen);
+            item.ifOpen=item.ifOpen === "0"?(!!item.ifOpen) : (!item.ifOpen);
           });
             this.functionSetList = res.data.list;
         }
@@ -302,10 +296,11 @@
           MessageBox.alert(res.msg);
         }
       },
-      async submit() {
-        if(localStorage.getItem('objStr')){
-          var objStr = localStorage.getItem('objStr');
-        }
+      async submit() {  //提交
+        this.getJsonArr = this.functionSetList;
+        this.getJsonArr.forEach(item=>{
+            item.ifOpen=item.ifOpen?0:1;
+          });
         let obj = {
           machineName: this.fromdata.machineName,
           shopId: this.fromdata.shopType.id,
@@ -317,7 +312,7 @@
           ver: 3,
           imei: this.fromdata.imei,
           functionTempletType: this.functionTempletType,
-          functionJson: JSON.stringify(this.jsonArr)
+          functionJson: JSON.stringify(this.getJsonArr)
         };
         let res = await deviceAddorEditFun(qs.stringify(obj));
         if(res.code===0) {
@@ -325,29 +320,28 @@
         }
 
       },
-      toFunctionSeting() {
+      toFunctionSeting() { //切换到功能列表
         if(this.fromdata.shopType.id && this.fromdata.firstType.id && this.fromdata.secondType.id) {
           this.getFunctionSetList();
           this.setModelShow= true;
           this.modelShow = false;
+          this.title = "功能列表";
         }else{
           MessageBox.alert("请先选择上级列表");
         }
        
       },
-      goFirst(){
-        this.functionSetList.forEach(item=>{
-            item.ifOpen=item.ifOpen?"1":"0";
-          });
+      goFirst(){ //功能列表确认
         MessageBox.confirm('您确定要更改吗？').then(action => {       
           this.setModelShow= false;
           this.modelShow = true;
-          this.jsonArr = this.functionSetList;
+          this.title = "新增设备";
         });
       },
-      goBack(){
+      goBack(){ //功能列表返回
        this.setModelShow= false;
        this.modelShow = true;
+       this.title = "新增设备";
       }
 
 

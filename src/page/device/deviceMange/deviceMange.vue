@@ -56,7 +56,7 @@
       <div v-show="isShow2">
         <div class="closeItem" @click="toCloseItem">X</div>
         <router-link to="/addDevice" v-has="'mer:machine:add'"><div class="addDev showItem">新增设备</div></router-link>
-        <router-link to="/batchStart" v-has="'mer:machine:reset'"><div class="betchStartup showItem">批量启动</div></router-link>
+        <router-link :to="{name:'batchStart'}" v-has="'mer:machine:reset'"><div class="betchStartup showItem">批量启动</div></router-link>
         <router-link to="/batchEdit" v-has="'mer:machine:update'"><div class="betchModf showItem">批量修改</div></router-link>
       </div>
     </div>

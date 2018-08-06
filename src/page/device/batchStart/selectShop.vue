@@ -1,9 +1,21 @@
 <template>
   <section class="ss-wrappper">
+    <q-header :title="title"></q-header>
+    <div class="bat-step">
+      <p v-for="(item,index) in stepArr " :key="index" :class="{active:currIndex==index}">
+        <span @click="chooseStep(index)">{{item.text}}</span>
+      </p>
+    </div>
+    <ul>
+      <li class="bat-hd">
+        <span>{{hdTitleArr[currIndex]}}</span>
+        <span>{{selectedShop}}</span>
+      </li>
+    </ul>
     <div class="ss-hd">
       <div class="search-input">
         <p class="left" :class="{ 'result-left': isResult }">
-          <input type="text" v-model.trim="keyword" placeholder="请输入设备名称/IMEI 号" @input="inputHandle">
+          <input type="text" v-model.trim="keyword" placeholder="请输入设备名称/IMEI 号">
           <span v-if="isResult">
             <img src="../../../assets/img/device/devic_scan_icon.jpeg">
             <span class="gap-border"></span>
@@ -17,22 +29,24 @@
     <div class="ss-bd">
       <div class="search-res">
         <transition-group name="itemfade" tag="ul" mode="out-in" v-cloak>
-          <li v-for="(item,index) in resData" :class="{'curr-selected':index==selectIndex}" class="search-res-item" @click="selectClick(index)"
-            :key="item">
+          <li v-for="(item,index) in shopList" :class="{'curr-selected':index==selectIndex}" class="search-res-item" @click="selectClick(index)"
+            :key="index">
             <p>{{item.shopName}}</p>
-            <p>{{item.adress}}</p>
+            <p>{{item.address}}</p>
           </li>
         </transition-group>
       </div>
     </div>
+    <button class="submitBtn" @click="goNext">下一步</button>
   </section>
 </template>
 
 <script>
   /* eslint-disable */
-  import {
-    delay
-  } from "@/utils/tool";
+  import qs from "qs";
+  import QHeader from "@/components/header";
+  import {delay} from "@/utils/tool";
+  import { getShopFun } from '@/service/device';
   export default {
     data() {
       return {
@@ -40,25 +54,69 @@
           shopName: '企鹅一号店',
           adress: '紫金花路2号联合大厦1幢1层10号1层联合大厦1幢1层10…',
         }],
+        shopList: [],
         isResult: false,
         selectIndex: -1,
-        keyword: ''
+        keyword: '',
+        shopId:'',
+        title: "批量启动",
+        selectedShop: "",
+        stepArr: [
+          {
+            text: "店铺",
+            name: "selectShop"
+          },
+          {
+            text: "类型",
+            name: "selectFirstype"
+          },
+          {
+            text: "功能",
+            name: "selectFunction"
+          },
+          {
+            text: "时间",
+            name: "selectStartTime"
+          }
+        ],
+        currIndex: 0,
+        hdTitleArr: [
+          "1.请选择相应店铺",
+          "2.请选择设备类型",
+          "3.请选择设备相应功能",
+          "4.请选择启动时间"
+        ],
       }
     },
     methods: {
       fetchData: function () {
-        console.log('获取数据')
+        console.log('获取数据');
       },
       selectClick: function (index) {
         this.selectIndex = index
+        this.shopId = this.shopList[index].shopId;
+
         // this.keyword = this.resData[index];
         // this.search();
+      },
+      goNext(){
+        this.$router.push({
+          name: "selectFirstype",
+          query: ({shopId: this.shopId})
+        });
       },
       clearInput: function () {
         this.keyword = "";
         this.isResult = false
+      },
+      async checkShopSelect() { //获取店铺
+        let res = await getShopFun();
+         if(res.code === 0) {
+          this.shopList= res.data; 
+         }
       }
     },
+
     watch: {
       keyword: function (newVal) {
         if (newVal !== '') {
@@ -69,8 +127,16 @@
         } else {
           this.isResult = false
         }
-      },
-    }
+      }
+    },
+
+    created() {
+      this.checkShopSelect();
+    },
+
+    components: {
+      QHeader
+    },
   };
 
 </script>
@@ -78,6 +144,52 @@
 <style lang="scss" scoped>
   section {
     width: 100%;
+    .bat-step {
+      display: flex;
+      justify-content: space-between;
+      height: 2.08rem;
+      font-size: 0.37rem;
+      color: #1890ff;
+      background: #f9fcff;
+      p {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        span {
+          text-align: center;
+          width: 1.11rem;
+          height: 0.64rem;
+          line-height: 0.64rem;
+          box-shadow: 0rem 0.03rem 0.05rem 0rem rgba(179, 218, 255, 1);
+          border-radius: 0.39rem;
+          border: 0rem solid rgba(255, 255, 255, 1);
+        }
+      }
+      .active {
+        span {
+          color: #fff;
+          background: #1890ff;
+        }
+      }
+    }
+    .bat-hd {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 0.4rem;
+      margin-bottom: 0.13rem;
+      font-size: 0.43rem;
+      height: 1.6rem;
+      color: rgba(51, 51, 51, 1);
+      background: #fff;
+      span {
+        &:nth-child(2) {
+          font-size: 0.37rem;
+          color: #1890ff;
+        }
+      }
+    }
     .search-input {
       display: flex;
       align-items: center;
@@ -190,6 +302,17 @@
 
   .itemfade-leave-active {
     position: absolute;
+  }
+
+  .submitBtn {
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    border: none;
+    padding: 0.45rem 0;
+    background-color: #1890FF;
+    color: #fff;
+    font-size: 18px;
   }
 
 </style>

@@ -54,6 +54,9 @@
       clearInput: function () {
         this.keyword = "";
         this.isResult = false
+      },
+      inputHandle: function() { 
+        
       }
     },
     watch: {

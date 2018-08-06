@@ -38,10 +38,8 @@
       return {
         title: '设备详情',
         isShow: true,
-        isOpenArr:[],
         itemName:["functionName","needMinutes","functionPrice","functionPrice","ifOpen"],
         functionSetList: [],
-        functionGetList: [],
         functionListTitle: [
           ['功能'],
           ['耗时', '/分'],
