@@ -12,7 +12,7 @@
     <div class="input-group" @click="chooseArea">
       <div class="form-title"><span>所在地区</span><span class="forward iconfont icon-nextx"></span>
         <span class="forward">
-          {{item.address.length>12 ? item.address.slice(0,12) + '...' : item.address}}
+          {{item.address}}
         </span>
       </div>
     </div>
@@ -39,6 +39,7 @@ export default {
       title: '个人信息',
       item: {},
       noRealName:'',
+      autoPlace:'',
       placeVisible: false,
       addressSlots:[
         {
@@ -78,10 +79,7 @@ export default {
       districtId:'',
       provinceName:'',
       cityName:'',
-      districtName:'',
-      x: '',
-      y: '',
-      z: ''
+      districtName:''
     };
   },
   mounted() {
@@ -109,16 +107,16 @@ export default {
         }
         this.item.realName = arr.join('');
       }
-
       //默认地址
-      this.item.address = res.data.address;
-      console.log(this.item.address.split('自治区'));
-      // if(this.item.address.split('省').length == 1 && this.item.address.split('自治区').length != 1  ) {
-      //   console.log(1);
-      // }
+      if(res.data.address != '' && res.data.address != null) {
+        this.autoPlace = res.data.address;
+        this.item.address = res.data.address.length >10 ? res.data.address.slice(0,10) + '...' : res.data.address;
+      }
     },
     chooseArea() {
       this.placeVisible = true;
+      
+      this.addressSlots[0].defaultIndex = 2;
     },
     cancel() {
       //取消
@@ -142,7 +140,7 @@ export default {
     },
     async onAddressChange(picker,values) {
 
-
+      
       //市
       for(let i=0;i<this.provinceArray.length;i++) {
         if(values[0] == this.provinceArray[i].areaName) {
