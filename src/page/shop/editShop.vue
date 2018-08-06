@@ -376,7 +376,12 @@ export default {
         case 3: {
           this.deviceDetail = false;
           this.isbgc = false;
-          this.machineName = this.machine.join(' , ');
+          if(this.machine.join(' , ').length > 20 ) {
+            this.machineName = this.machine.join(' , ').slice(0,20) + '...';
+          }
+          else {
+            this.machineName = this.machine.join(' , ');   
+          }
           let arr = [];
           for(let i=0;i<this.machine.length;i++) {
             for(let j=0;j<this.machineArray.length;j++) {

@@ -362,10 +362,10 @@ export default {
           }
           
           break;
-        //经纬度
+        //经纬度 
         case 2:
           break;
-        //设备管理
+        //设备管理修改
         case 3: {
           this.deviceDetail = false;
           this.isbgc = false;
@@ -373,7 +373,7 @@ export default {
             this.machineName = this.machine.join(' , ').slice(0,20) + '...';
           }
           else {
-            this.machineName = this.machine.join(' , ');
+            this.machineName = this.machine.join(' , ');   
           }
           let arr = [];
           for(let i=0;i<this.machine.length;i++) {
