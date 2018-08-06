@@ -57,6 +57,7 @@ import moment from 'moment';
       changemachineFunc() {
         this.popupVisible = true;
         this.index = 0;
+        this.slots[0].defaultIndex = 2;
       },
       open(picker) {
         this.$refs[picker].open();

@@ -62,15 +62,6 @@ export default {
     };
   },
   methods: {
-    // titleClick: function(index) {
-    //   this.list = [];
-    //   this.searchData = '';
-    //   this.titleIndex = index;
-    //   this.orderStatus = this.titleArr[this.titleIndex].value;
-    //   this.page = 1; //从第一页起
-    //   this.allLoaded = false;//下拉刷新时解除上拉加载的禁用
-    //   this.getShopList();
-    // },
     loadBottom() {
       this.page += 1;
       let allpage = Math.ceil(this.total/this.pageSize);
@@ -213,6 +204,12 @@ section {
             }
           }
         }
+      }
+      .nomore-data {
+        text-align: center;
+        color: #999;
+        font-size: 12px;
+        margin-bottom: 0.266667rem;
       }
     }
   }

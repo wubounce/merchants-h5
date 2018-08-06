@@ -16,6 +16,7 @@
 							<div><span>模式</span><span class="text">{{item.functionName}}</span></div>
 						</div>
 					</li>
+					<div v-if="allLoaded" class="nomore-data">没有更多了</div>
 				</mt-loadmore>
 			</div>
 		</ul>
@@ -27,6 +28,7 @@
 import qs from "qs";
 import { listBatchStartFun } from '@/service/todoList';
 import {Loadmore} from 'mint-ui';
+import { MessageBox } from 'mint-ui';
   export default {
     data() {
       return {
@@ -120,44 +122,49 @@ section {
 		.page-loadmore-wrapper {
       overflow: scroll;
 			.list {
-			background-color: #fff;
-			margin-bottom: 0.3rem;
-			.time {
-				padding: 0.1rem;
-				border-bottom: 1px solid #F8F8F8;
-				span {
-					&:first-child {
-						font-size: 14px;
-						padding: 0 0.3rem;
+				background-color: #fff;
+				margin-bottom: 0.3rem;
+				.time {
+					padding: 0.2rem;
+					border-bottom: 1px solid #F8F8F8;
+					span {
+						&:first-child {
+							font-size: 14px;
+							padding: 0 0.3rem;
+							vertical-align: middle;
+							color: rgba(153,153,153,1);
+						}
+					}
+					.time-blue {
+						font-size: 18px;
+						color: #1890FF;
 						vertical-align: middle;
-						color: rgba(153,153,153,1);
+					}
+					.text {
+						font-size: 16px;
+						vertical-align: middle;
+					}
+					div {
+						&:first-child {
+							border-right: 1px solid #DFE6FF;
+							padding-right: 2.3rem;
+						}
+						&:last-child {
+							margin-left: 1rem;
+						}
 					}
 				}
-				.time-blue {
-					font-size: 18px;
-					color: #1890FF;
-					vertical-align: middle;
-				}
-				.text {
-					font-size: 16px;
-					vertical-align: middle;
-				}
-				div {
-					&:first-child {
-						border-right: 1px solid #DFE6FF;
-						padding-right: 2.3rem;
-					}
-					&:last-child {
-						margin-left: 1rem;
-					}
+				.display-flex {
+					display: flex;
 				}
 			}
-			.display-flex {
-				display: flex;
-			}
+			.nomore-data {
+        text-align: center;
+        color: #999;
+        font-size: 12px;
+        margin-bottom: 0.266667rem;
+      }
 		}
-		}
-
 	}
 }
 </style>

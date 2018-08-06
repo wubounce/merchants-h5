@@ -20,9 +20,9 @@
       }
     },
     watch: {
-      // '$route' () {
-      //   this.initWechat()
-      // }
+      '$route' () {
+        this.initWechat();
+      }
     },
   };
 

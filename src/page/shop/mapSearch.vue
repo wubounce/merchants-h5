@@ -58,9 +58,6 @@ export default {
     }
   },
   created() {
-    
-    this.fromCity = this.$route.query.city.slice(0,this.$route.query.city.length-1);
-    //this.fromCity = '北京';
     this.name = this.$route.query.name;
     this.type = this.$route.query.type;
     this.place = this.$route.query.place;
@@ -74,7 +71,10 @@ export default {
     this.LimitMinutes = this.$route.query.LimitMinutes;
     this.worktime = this.$route.query.worktime;
     this.img = this.$route.query.img;
-    console.log(this.name);
+    
+    //取出城市
+    let arr = this.place.split('省');
+    //console.log(arr.length);
   },
   mounted() {
     let _this = this;
@@ -152,8 +152,6 @@ export default {
       -ms-flex-align: center;
       align-items: center;
       width: 9rem;
-      height: 1rem;
-      line-height: 1rem;
       padding-left: .3rem;
       border-radius: 0.2rem;
       background: white;
@@ -170,6 +168,32 @@ export default {
           color: #BAC0D2;
           border-radius: .1rem;
           font-size: 16px;
+          input {
+            padding-top: 0.3rem;
+            padding-bottom: 0.22rem;
+          }
+          ::-webkit-input-placeholder {
+            color: #999999;
+            font-size: 16px;
+            padding-top: 0.1rem; 
+          }
+          :-moz-placeholder {
+            /* Firefox 18- */
+            color: #999999;
+            font-size: 16px;
+            padding-top: 0.1rem;
+          }
+          ::-moz-placeholder {
+            /* Firefox 19+ */
+            color: #999999;
+            font-size: 16px;
+            padding-top: 0.1rem;
+          }
+          :-ms-input-placeholder {
+            color: #999999;
+            font-size: 16px;
+            padding-top: 0.1rem;
+          }
       }
     }
   }

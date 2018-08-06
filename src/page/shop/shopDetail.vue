@@ -81,33 +81,6 @@ export default {
         });        
       });
     },
-    // async isDeleteOrNot(id) {
-    //   //删除功能
-    //   MessageBox.confirm('您确定要删除该店铺么？').then(async() => 
-    //     {	    
-    //       //调用删除接口
-    //       let query = this.$route.query;
-    //       let obj = { shopId: query.shopId };
-    //       let res = deleteShopFun(qs.stringify(obj));
-    //       if(res.code === 0) {
-    //         this.$toast({message: '删除成功' });
-    //         this.$router.push({
-    //           name:'shopList'
-    //         });
-    //       }
-    //       else {
-    //         this.$toast(res.msg);
-    //       }
-    //     },
-    //     action => {
-    //       this.$toast({
-    //           message: "已取消",
-    //           position: "middle",
-    //           duration: 3000
-    //         });
-    //     }
-    //   );
-    // },
     isDeleteOrNot(id) {
       MessageBox.confirm(`确认删除店铺？`).then(async () => {
         let payload = {shopId: id};
