@@ -14,7 +14,7 @@
             </div>
             <div class="dis-con-title">
               <p>折扣优惠</p>
-              <p :class="['dis-con-shop', {'stop-discount':item.status === 1}]">{{item.discountVO?item.discountVO:'0'}}<span>折</span></p>
+              <p :class="['dis-con-shop', {'stop-discount':item.status === 1}]">{{item.discount?item.discount :'0'  | replace}}<span>折</span></p>
             </div>
           </div>
         </router-link>
@@ -59,6 +59,11 @@ export default {
       this.$router.push({name:'addMarket'});
     }
   },
+  filters:{
+    replace(value){
+      return value/10;
+    }
+  }
 };
 </script>
 <style type="text/css" lang="scss" scoped>

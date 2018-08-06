@@ -166,12 +166,11 @@ export default {
         res = await countMachineFun();
       }
       if (res.code === 0) {
+        this.allmMachine = res.data.all; //设备总数
+        delete res.data.all; //图表删除总数
         for(var i in res.data){
           this.barseriesData.push(res.data[i]);
           this.barxAxisData.push(MachineStatus(i));
-          if (i === 'all') {
-            this.allmMachine = res.data[i]; //设备总数
-          }
         }
         this.barchart.setOption(this.barOChartOPtion);
       }
@@ -515,8 +514,8 @@ export default {
               labelLine: {
                   normal: {
                       show: false,
-                      length:5,
-                      length2:5,
+                      length:4,
+                      length2:4,
                   }
               },
               data:this.pietypeData,
@@ -568,8 +567,8 @@ export default {
               labelLine: {
                   normal: {
                       show: false,
-                      length:6,
-                      length2:6,
+                      length:3,
+                      length2:3,
                   }
               },
               data:this.piefunData,
