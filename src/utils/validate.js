@@ -49,7 +49,7 @@ export const validatDiscount = (str) => {
 /*价格*/
 export const validatCradPrice = (str)=>{
   const reg = /^[1-9]\d{0,2}$/;
-  return rge.test(str);
+  return reg.test(str);
 };
 /* 中文*/
 export const validatName = (str) => {
