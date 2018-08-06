@@ -23,7 +23,7 @@
             </div>
             <div class="kindof">
               <div class="text">收益</div>
-              <div class="text-value">{{item.profit}}<span class="little-font">元</span></div>
+              <div class="text-value">{{ item.profit == '0' ? item.profit + '.00' : item.profit }}<span class="little-font">元</span></div>
             </div>
           </div>
         </li>
