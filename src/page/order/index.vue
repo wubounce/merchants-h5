@@ -6,7 +6,7 @@
       <section class="sarch-wrap">
         <div class="search">
             <form action="" target="frameFile" v-on:submit.prevent="">
-              <input type="search" v-model.trim="searchData" @keyup.enter="searchOrder" @input="clearSearch" placeholder="请输入用户手机号/订单号查询" class="serch">
+              <input type="number" value='搜索' v-model.trim="searchData" @keyup.enter="searchOrder" @input="clearSearch" placeholder="请输入用户手机号/订单号查询" class="serch">
               <iframe name='frameFile' style="display: none;"></iframe>
               <span class="select-back" @click="searchOrder">搜索</span>
             </form>
@@ -109,10 +109,8 @@ export default {
       let res = null;
       this.nosearchList = false;
       let payload = null;
-      console.log(this.searchData);
-      console.log(this.orderStatus);
       if (this.searchData !== '') {
-         payload = {search:this.searchData,page:1,pageSize:this.pageSize};
+         payload = {search:this.searchData,page:this.page,pageSize:this.pageSize};
       } else {
         payload = {orderStatus:this.orderStatus,page:this.page,pageSize:this.pageSize};
       }
@@ -139,6 +137,7 @@ export default {
       this.titleIndex = 0; //全部tab 显示数据
       this.orderStatus = '';//全部tab 显示数据
       this.list = [];
+      this.page = 1;
       var keyCode = window.event? e.keyCode:e.which;
       if(keyCode =='13'){
         this.getOrderList();
@@ -155,7 +154,9 @@ export default {
     },
     loadBottom() {
       this.page += 1;
-      let allpage = this.total/this.pageSize;
+      let allpage = Math.ceil(this.total/this.pageSize);
+      console.log(allpage);
+      console.log(this.page);
       if(this.page <= allpage){
         this.getOrderList();
       }else{
