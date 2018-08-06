@@ -275,7 +275,7 @@ export default {
     editTime(i) {
       if(i) {
         this.noEdit =false;
-        this.placeholdercontent = "请填写预约有效时长";
+        this.placeholdercontent = "请填写个位数预约有效时长";
       }
       else {
         this.noEdit =true;

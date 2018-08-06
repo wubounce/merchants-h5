@@ -4,7 +4,7 @@
           <span>姓名</span><span>{{item.cardName}}</span>
        </p>
        <p class="shopname-p">
-          <span>身份认证</span><span>{{item.idcardNo}}</span>
+          <span>身份证号</span><span>{{item.idcardNo}}</span>
        </p>
        <p class="imgShow">{{item.status}}</p>
        <div class="bgc">

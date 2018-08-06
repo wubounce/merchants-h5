@@ -7,7 +7,7 @@
           </span>
        </p>
        <p class="shopname-p">
-          <span>身份认证</span><span>
+          <span>身份证号</span><span>
               <input type="text" class='statusInput' v-model="IDCardNo" placeholder="请填写身份证号">
           </span>
        </p>
@@ -19,7 +19,7 @@
        </div>
        <p class="showFont">认证通过审核后不可修改, 请谨慎操作。</p>
        <div class="confirmNews">
-        <button  @click="submitRealName" :disabled="isDisable" :class="{'isDis' : isDisable}">提交审核</button>
+        <button  @click="submitRealName">提交审核</button>
        </div>
    </section>
 </template>

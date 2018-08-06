@@ -20,7 +20,8 @@
           <input v-model="orderLimitMinutes" :disabled="noEdit" :placeholder="placeholdercontent" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" maxlength='1'>
         </span>
       </p>
-      <li class="business" @click="chooseTime">营业时间<span>{{addBusinessTime}}</span></li>
+      <!-- 先注释掉，下个版本做营业时间 -->
+      <!-- <li class="business" @click="chooseTime">营业时间<span>{{addBusinessTime}}</span></li> -->
       <p class="picture">
         <span>店铺照片</span>
         <span>
@@ -59,10 +60,10 @@
       
     </div>
 
-    <!-- 营业时间 -->
-    <mt-popup v-model="timeVisible" position="bottom" class="mint-popup">
+    <!-- 先注释掉，下个版本再做营业时间 -->
+    <!-- <mt-popup v-model="timeVisible" position="bottom" class="mint-popup">
        <mt-picker class="picker"  :slots="slotsTime" @change="changeTime" :showToolbar="true"><p class="toolBar"><span @click="cancel">取消</span><span @click="chooseDay" id="allDay">全天</span><span @click="confirmNews">确定</span></p></mt-picker>
-    </mt-popup>
+    </mt-popup> -->
 
   </section>
 </template>
@@ -268,7 +269,7 @@ export default {
     editTime(i) {
       if(i) {
         this.noEdit =false;
-        this.placeholdercontent = "请填写预约有效时长";
+        this.placeholdercontent = "请填写个位数预约有效时长";
       }
       else {
         this.noEdit =true;

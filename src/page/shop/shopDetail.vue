@@ -20,7 +20,8 @@
         <p class="shop-item"><span>设备数量</span><span>{{shopdetail.machineCount}} 台</span></p>
         <p class="shop-item"><span>预约功能</span><span>{{shopdetail.isReserve == 0? '已开通' : '未开通'}}</span></p>
         <p class="shop-item"><span>预约时长(分钟)</span><span>{{shopdetail.orderLimitMinutes}}</span></p>
-        <p class="shop-item"><span>营业时间</span><span>{{shopdetail.workTime}}</span></p>
+        <!-- 下个版本再做，营业时间 -->
+        <!-- <p class="shop-item"><span>营业时间</span><span>{{shopdetail.workTime}}</span></p> -->
         <p class="picture">
             <span>店铺照片</span>
             <span>
@@ -134,6 +135,9 @@ export default {
       let res = await shopDetailFun(qs.stringify(obj));
       if(res.code===0) {
         this.shopdetail = res.data;
+        if(res.data.imageId == null || res.data.imageId == '' ) {
+          this.shopdetail.imageId = '../../../static/image/shop/add.png';
+        }
         this.list = res.data.machineTypeNames.split(',');
         this.lng = res.data.lng;
         this.lat = res.data.lat;
