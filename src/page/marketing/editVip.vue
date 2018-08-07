@@ -317,6 +317,10 @@ export default {
       font-size: 15px;
       color: #333;
     }
+    .all-list {
+      height: 11.96rem;
+      overflow-y: scroll;
+    }
   }
 </style>
 <style>
