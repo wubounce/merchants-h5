@@ -3,41 +3,37 @@
     <q-header :title="title"></q-header>
     <div class="bat-step">
       <p v-for="(item,index) in stepArr " :key="index" :class="{active:currIndex==index}">
-        <span @click="chooseStep(index)">{{item.text}}</span>
+        <span>{{item.text}}</span>
       </p>
     </div>
     <ul>
       <li class="bat-hd">
         <span>{{hdTitleArr[currIndex]}}</span>
-        <span>{{selectedShop}}</span>
+        <div>{{selectedShop}}</div>
       </li>
     </ul>
     <div class="ss-hd">
       <div class="search-input">
         <p class="left" :class="{ 'result-left': isResult }">
-          <input type="text" v-model.trim="keyword" placeholder="请输入设备名称/IMEI 号">
-          <span v-if="isResult">
-            <img src="../../../assets/img/device/devic_scan_icon.jpeg">
-            <span class="gap-border"></span>
-            <span class="search-reset" @click="clearInput">返回</span>
-          </span>
-        </p>
-        <p class="right" :class="{ 'result-right': isResult }">
+          <input type="text" v-model.trim="keyword" placeholder="请输入相关店铺名称">
         </p>
       </div>
     </div>
     <div class="ss-bd">
       <div class="search-res">
         <transition-group name="itemfade" tag="ul" mode="out-in" v-cloak>
-          <li v-for="(item,index) in shopList" :class="{'curr-selected':index==selectIndex}" class="search-res-item" @click="selectClick(index,item.shopName)"
+          <li v-for="(item,index) in shopList"  class="search-res-item" :class="{'selected':index==selectIndex}" @click="selectClick(index,item.shopName)"
             :key="index">
-            <p>{{item.shopName}}</p>
-            <p>{{item.address}}</p>
+            <div>
+              <p>{{item.shopName}}</p>
+              <p>{{item.address}}</p>
+            </div>
+            <div><span class="iconfont" :class="{'icon-xuanze':index==selectIndex}"></span></div>
           </li>
         </transition-group>
       </div>
     </div>
-    <button class="submitBtn" @click="goNext">下一步</button>
+    <button class="submitBtn" @click="goNext" >下一步</button>
   </section>
 </template>
 
@@ -45,6 +41,7 @@
   /* eslint-disable */
   import qs from "qs";
   import QHeader from "@/components/header";
+  import { MessageBox } from 'mint-ui';
   import {delay} from "@/utils/tool";
   import { getShopFun } from '@/service/device';
   export default {
@@ -101,10 +98,15 @@
         // this.search();
       },
       goNext(){
-        this.$router.push({
-          name: "selectFirstype",
-          query: ({shopId: this.shopId})
-        });
+        let id = this.shopId;
+        if (id){
+          this.$router.push({
+            name: "selectFirstype",
+            query: ({shopId: id})
+          });
+        }else{
+          MessageBox.alert("请先选择店铺");
+        }
       },
       clearInput: function () {
         this.keyword = "";
@@ -185,10 +187,17 @@
       color: rgba(51, 51, 51, 1);
       background: #fff;
       span {
-        &:nth-child(2) {
-          font-size: 0.37rem;
-          color: #1890ff;
-        }
+        width: 5.2rem;
+      }
+      div {
+        flex-grow: 1;
+        width: auto;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-size: 0.37rem;
+        color: #1890ff;
+        text-align: right;
       }
     }
     .search-input {
@@ -207,11 +216,11 @@
         display: flex;
         justify-content: space-around;
         align-items: center;
-        flex: 0 1 7.93rem;
+        width: 100%;
         height: 1.17rem;
         padding-right: .27rem;
         box-sizing: border-box;
-        box-shadow: 0rem 0.05rem 0.13rem 0rem rgba(186, 192, 210, 0.3);
+        box-shadow: 0.05rem 0.05rem 0.13rem 0.05rem rgba(186, 192, 210, 0.3);
         border-radius: 0.1rem;
         input {
           background: url("../../../assets/img/device/devic_search_icon.png") no-repeat 0.27rem;
@@ -261,6 +270,7 @@
 
   .ss-bd {
     .search-res {
+      margin-bottom: 2rem;
       .search-res-item {
         height: 1.71rem;
         background: rgba(255, 255, 255, 1);
@@ -268,23 +278,37 @@
         font-size: 0.43rem;
         color: rgba(51, 51, 51, 1);
         box-sizing: border-box;
-        p {
-          height: .6rem;
-          line-height: .6rem;
+        display: flex;
+        div {
+          &:nth-child(1) {
+            width: 90%;
+            p {
+              height: .6rem;
+              line-height: .6rem;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap;
+              &:nth-child(2) {
+              height: 0.44rem;
+              line-height: 0.44rem;
+              font-size: 0.32rem;
+              margin-top: .1rem;
+              color: rgba(153, 153, 153, 1);
+              }
+            }
+          }
           &:nth-child(2) {
-            height: 0.44rem;
-            line-height: 0.44rem;
-            font-size: 0.32rem;
-            margin-top: .1rem;
-            color: rgba(153, 153, 153, 1);
+            width: 10%;
+            color: rgba(24, 144, 255, 1);
+            text-align: center;
+            line-height: 1.4rem;
           }
         }
       }
-      .curr-selected {
-        background: url('../../../../static/image/device/selected-bgc-icon.jpeg') no-repeat 96% 50%  padding-box;
-        background-size: .6rem;
-        background-color:  rgba(24, 144, 255, 0.05);
+      .selected {
+        background-color: rgba(24, 144, 255, 0.05);
       }
+        
     }
   }
 

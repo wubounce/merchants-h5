@@ -3,7 +3,7 @@
     <q-header :title="title"></q-header>
     <div class="bat-step">
       <p v-for="(item,index) in stepArr " :key="index" :class="{active:currIndex==index}">
-        <span @click="chooseStep(index)">{{item.text}}</span>
+        <span>{{item.text}}</span>
       </p>
     </div>
     <ul>
@@ -21,13 +21,15 @@
         </div>
       </section>
       <section class="fun-item-bd funlist">
-        <div v-for="(item,index) in secondTypeList " :key="index">
-          <input type="text" class="fun-list-item" v-model.lazy="item.functionName"/>
-          <input type="text" class="fun-list-item" v-model.lazy="item.needMinutes"/>
-          <input type="text" class="fun-list-item" v-model.lazy="item.functionPrice"/>
-          <input type="text" class="fun-list-item" v-model.lazy="item.functionPrice" v-show="isShow2"/>
+        <div v-for="(item,index) in secondTypeList " :key="index" class="">
+          <span class="fun-list-item">{{item.functionName}}</span>
+          <span class="fun-list-item">{{item.needMinutes}}</span>
+          <span class="fun-list-item">{{item.functionPrice}}</span>         
           <p class="fun-list-item">
             <mt-switch v-model="item.ifOpen"></mt-switch>
+          </p>
+          <p class="fun-list-item checkBox">
+            <span class="iconfont icon-weixuanzhong" :class="{'icon-xuanze':index==selectIndex}" @click="checkItemBox(index)"></span>
           </p>
         </div>
       </section>
@@ -39,20 +41,23 @@
       <span class="cifrm" @click="goNext">下一步</span>
     </section> 
     <section v-show="!functionSetModel">
-      <button class="submitBtn" @click="goNext">确定</button>
+      <button class="submitBtn" @click="submit">确定</button>
     </section>
   </section>
 </template>
 <script>
 import qs from "qs";
 import QHeader from "@/components/header";
-import { batchFunctionSetListFun } from '@/service/device';
+import { MessageBox } from 'mint-ui';
+import { batchFunctionSetListFun,batchStartOnFun } from '@/service/device';
 import moment from 'moment';
 
 export default {
     data() {
       return {
         secondTypeList: [],
+        aaa:[],
+        isCheck: 'weixuanzhong',
         title: "批量启动",
         isResult: false,
         functionSetModel: true,
@@ -60,7 +65,9 @@ export default {
         isShow2: false,
         keyword: '',
         beginTime: '',
+        functionId: '',
         selectedFunction: '',
+        selectIndex: -1,
         hdTitleArr: [
           "1.请选择相应店铺",
           "2.请选择设备类型",
@@ -90,8 +97,8 @@ export default {
           ['功能'],
           ['耗时', '/分'],
           ['原价', '/元'],
-          ['脉冲数'],
-          ['状态']
+          ['状态'],
+          ['操作']
         ],
         functionListTitle2: [
           ['功能'],
@@ -102,17 +109,34 @@ export default {
       };
     },
     methods: {
-      async checkSecondClass() { //获取二级列表
+      checkItemBox: function (index) {
+        this.selectIndex = index;
+        this.functionId = this.secondTypeList[index].functionId;
+      },
+      async checkSecondClass() { //获取功能列表
         let query = this.$route.query;
-        let payload = {machineParentTypeId: query.parentTypeId};
+        let payload = {machineParentTypeId: query.parentTypeId,shopId: query.shopId};
         let res = await batchFunctionSetListFun(qs.stringify(payload));
           if(res.code === 0) {
+            res.data.forEach(item=>{
+              item.ifOpen=item.ifOpen === "0"?(!!item.ifOpen) : (!item.ifOpen);
+            });
             this.secondTypeList = res.data; 
           }
       },
       chooseTime() {
         if (!this.functionSetModel){
           this.$refs.pickerStarTime.open();
+        }
+      },
+      async submit() {
+        let query = this.$route.query;
+        let time = this.beginTime + ":00";
+        let payload = {machineParentTypeId:query.parentTypeId,shopId:query.shopId,standardFunctionId:this.functionId,startTime:time};
+        let res = await batchStartOnFun(qs.stringify(payload));
+        if(res.code === 0) {
+          MessageBox.alert("操作成功");
+          this.$router.push({name:'todolist'});
         }
       },
       handleConfirm(data) {
@@ -202,72 +226,6 @@ export default {
     }
   }
 
-  .search-input {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    box-sizing: border-box;
-    font-size: 0.43rem;
-    color: rgba(153, 153, 153, 1);
-    padding: 0.4rem 0.3rem 0.4rem 0.27rem;
-    background: rgba(255, 255, 255, 1);
-    p {
-      display: flex;
-    }
-    .left {
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-      flex: 0 1 7.93rem;
-      height: 1.17rem;
-      padding-right: .27rem;
-      box-sizing: border-box;
-      box-shadow: 0rem 0.05rem 0.13rem 0rem rgba(186, 192, 210, 0.3);
-      border-radius: 0.1rem;
-      input {
-        background: url("../../../assets/img/device/devic_search_icon.png") no-repeat 0.27rem;
-        background-size: 0.53rem;
-        padding: 0.29rem 0 0.29rem 1.07rem;
-        border-radius: 0.13rem;
-      }
-      span {
-        display: inline-block;
-        white-space: nowrap;
-      }
-      img {
-        width: 0.4rem;
-      }
-      .gap-border {
-        position: relative;
-        width: .28rem;
-        height: .32rem;
-        margin-right: .28rem;
-        &:after {
-          content: '';
-          position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: .32rem;
-          border-right: 0.04rem solid rgba(216, 216, 216, 1);
-        }
-      }
-    }
-    .result-left {
-      flex: 1;
-    }
-    .right {
-      flex: 0 1 1.17rem;
-      height: 1.17rem;
-      background: url("../../../assets/img/device/devic_scan_icon.jpeg") no-repeat center;
-      background-size: 60%;
-      box-shadow: 0rem 0.05rem 0.13rem 0rem rgba(186, 192, 210, 0.3);
-      border-radius: 0.13rem;
-    }
-    .result-right {
-      display: none
-    }
-  }  
   .fun-item-hd {
     padding: 0;
     background: #FAFCFF;
@@ -284,9 +242,16 @@ export default {
         box-sizing: border-box;
         &:nth-child(1) {
           flex: 3.32;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
         }
         &:nth-child(4) {
           flex: 2.21;
+          border-right: none;
+        }
+        &:nth-child(5) {
+          flex: 1.5;
           border-right: none;
         }
         span {
@@ -294,6 +259,49 @@ export default {
             font-size: 70%;
             letter-spacing: .001rem
           }
+        }
+      }
+    }
+  }
+
+  .fun-item-bd {
+    line-height: 1.6rem; // padding: 0 .4rem;
+    font-size: 0.37rem;
+    color: #333333;
+    background: #fff;
+    div {
+      display: flex; // justify-content: space-between;
+      .fun-list-item {
+        flex: 2.19;
+        text-align: center;
+        line-height: 1.6rem;
+        &:nth-child(1) {
+          flex: 3.32;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+        &:nth-child(4) {
+          flex: 2.21;
+          box-sizing: border-box;
+        }
+        &:nth-child(5) {
+          flex: 1.5;
+          box-sizing: border-box;
+        }
+      }
+      p {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        .mint-switch-input:checked+.mint-switch-core {
+          border-color: #4DD865;
+          background-color: #4DD865;
+        }
+      }
+      .checkBox {
+        .icon-xuanze {
+          color: #1890ff;
         }
       }
     }

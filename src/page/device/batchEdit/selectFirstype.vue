@@ -12,20 +12,6 @@
         <span>{{selectedFirstype}}</span>
       </li>
     </ul>
-    <div class="ss-hd">
-      <div class="search-input">
-        <p class="left" :class="{ 'result-left': isResult }">
-          <input type="text" v-model.trim="keyword" placeholder="请输入设备名称/IMEI 号">
-          <span v-if="isResult">
-            <img src="../../../assets/img/device/devic_scan_icon.jpeg">
-            <span class="gap-border"></span>
-            <span class="search-reset" @click="clearInput">返回</span>
-          </span>
-        </p>
-        <p class="right" :class="{ 'result-right': isResult }">
-        </p>
-      </div>
-    </div>
     <div class="sf-bd">
       <p class="item" v-for="(item,index) in parentTypeList" :class="{selected:index==selectIndex}" :key="index" @click="selectClick(index,item.name)">{{item.name}}</p>
     </div>
@@ -38,6 +24,7 @@
 <script>
 import qs from "qs";
 import QHeader from "@/components/header";
+import { MessageBox } from 'mint-ui';
 import { getlistParentTypeFun } from '@/service/device';
   export default {
     data() {
@@ -99,11 +86,14 @@ import { getlistParentTypeFun } from '@/service/device';
       },
       goNext(){
         let query = this.$route.query;
-        console.log(query.shopId);
-        this.$router.push({
-          name: "selectSecondtypeEdit",
-          query: ({shopId:query.shopId, parentTypeId:this.parentTypeId})
-        });
+        if(this.parentTypeId){
+          this.$router.push({
+            name: "selectSecondtypeEdit",
+            query: ({shopId:query.shopId, parentTypeId:this.parentTypeId})
+          });
+        }else{
+          MessageBox.alert("请先选择类型");
+        }
       },
     },
     created() {

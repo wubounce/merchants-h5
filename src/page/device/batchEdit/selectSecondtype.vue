@@ -12,20 +12,6 @@
         <span>{{selectedSecondType}}</span>
       </li>
     </ul>
-    <div class="ss-hd">
-      <div class="search-input">
-        <p class="left" :class="{ 'result-left': isResult }">
-          <input type="text" v-model.trim="keyword" placeholder="请输入设备名称/IMEI 号">
-          <span v-if="isResult">
-            <img src="../../../assets/img/device/devic_scan_icon.jpeg">
-            <span class="gap-border"></span>
-            <span class="search-reset" @click="clearInput">返回</span>
-          </span>
-        </p>
-        <p class="right" :class="{ 'result-right': isResult }">
-        </p>
-      </div>
-    </div>
     <div class="sf-bd">
       <p class="item" v-for="(item,index) in secondTypeList" :class="{selected:index==selectIndex}" :key="index" @click="selectClick(index,item.name,item.id)">{{item.name}}</p>
     </div>
@@ -230,6 +216,7 @@ import { getlistParentTypeFun, getlistSubTypeFun} from '@/service/device';
       }
     }
     .sf-bd {
+      margin-bottom: 1.7rem;
       .item {
         text-align: center;
         height: 1.17rem;

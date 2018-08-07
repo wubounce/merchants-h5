@@ -3,7 +3,7 @@
     <q-header :title="title"></q-header>
     <div class="bat-step">
       <p v-for="(item,index) in stepArr " :key="index" :class="{active:currIndex==index}">
-        <span @click="chooseStep(index)">{{item.text}}</span>
+        <span>{{item.text}}</span>
       </p>
     </div>
     <ul>
@@ -12,22 +12,13 @@
         <span>{{selectedFirstype}}</span>
       </li>
     </ul>
-    <div class="ss-hd">
-      <div class="search-input">
-        <p class="left" :class="{ 'result-left': isResult }">
-          <input type="text" v-model.trim="keyword" placeholder="请输入设备名称/IMEI 号">
-          <span v-if="isResult">
-            <img src="../../../assets/img/device/devic_scan_icon.jpeg">
-            <span class="gap-border"></span>
-            <span class="search-reset" @click="clearInput">返回</span>
-          </span>
-        </p>
-        <p class="right" :class="{ 'result-right': isResult }">
-        </p>
-      </div>
-    </div>
     <div class="sf-bd">
-      <p class="item" v-for="(item,index) in parentTypeList" :class="{selected:index==selectIndex}" :key="index" @click="selectClick(index,item.name)">{{item.name}}</p>
+      <ul>
+        <li class="item" v-for="(item,index) in parentTypeList" :class="{selected:index==selectIndex}" :key="index" @click="selectClick(index,item.name)">
+          <div>{{item.name}}</div>
+          <div class="select"><span class="iconfont" :class="{'icon-xuanze':index==selectIndex}"></span></div>
+        </li>
+      </ul>
     </div>
     <section class="promiss-footer">
       <span class="can" @click="goBack">上一步</span>
@@ -38,6 +29,7 @@
 <script>
 import qs from "qs";
 import QHeader from "@/components/header";
+import { MessageBox } from 'mint-ui';
 import { getlistParentTypeFun } from '@/service/device';
   export default {
     data() {
@@ -95,15 +87,18 @@ import { getlistParentTypeFun } from '@/service/device';
         }
       },
       goBack(){
-
+        this.$router.go(-1);
       },
       goNext(){
         let query = this.$route.query;
-        console.log(query.shopId);
-        this.$router.push({
-          name: "selectFunction",
-          query: ({shopId:query.shopId, parentTypeId:this.parentTypeId})
-        });
+        if(this.parentTypeId){
+          this.$router.push({
+            name: "selectFunction",
+            query: ({shopId:query.shopId, parentTypeId:this.parentTypeId})
+          });
+        }else {
+          MessageBox.alert("请先选择类型");
+        }
       },
     },
     created() {
@@ -232,19 +227,34 @@ import { getlistParentTypeFun } from '@/service/device';
       }
     }
     .sf-bd {
-      .item {
-        text-align: center;
-        height: 1.17rem;
-        line-height: 1.17rem;
-        background: rgba(255, 255, 255, 1);
-        font-size: 0.4rem;
-        color: rgba(51, 51, 51, 1)
+      margin-bottom: 1.7rem;
+      ul {
+        width:100%;
+        li {
+          display: flex;
+          text-align:center;
+          height: 1.17rem;
+          line-height: 1.17rem;
+          background: rgba(255, 255, 255, 1);
+          font-size: 0.4rem;
+          color: rgba(51, 51, 51, 1);
+          div {
+            &:nth-child(1) {
+              width: 90%;
+            }
+            &:nth-child(2) {
+              width: 10%;
+              color: #1890ff;
+              text-align: center;
+            }
+            
+          }
+        }
+        .selected {
+              background-color:rgba(24, 144, 255, 0.05);
+            }
       }
-      .selected {
-        background: url('../../../../static/image/device/selected-bgc-icon.jpeg') no-repeat 96% 50% padding-box;
-        background-size: .6rem;
-        background-color: rgba(24, 144, 255, 0.05);
-      }
+      
     }
     
     .promiss-footer {

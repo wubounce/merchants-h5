@@ -12,20 +12,6 @@
         <span>{{selectedFunction}}</span>
       </li>
     </ul>
-    <div class="ss-hd">
-      <div class="search-input">
-        <p class="left" :class="{ 'result-left': isResult }">
-          <input type="text" v-model.trim="keyword" placeholder="请输入设备名称/IMEI 号">
-          <span v-if="isResult">
-            <img src="../../../assets/img/device/devic_scan_icon.jpeg">
-            <span class="gap-border"></span>
-            <span class="search-reset" @click="clearInput">返回</span>
-          </span>
-        </p>
-        <p class="right" :class="{ 'result-right': isResult }">
-        </p>
-      </div>
-    </div>
     <section class="fun-item-hd">
       <div>
         <p v-for="(item,index) in functionListTitle " :key="index">
@@ -38,7 +24,6 @@
         <input type="text" class="fun-list-item" v-model.lazy="item.functionName"/>
         <input type="text" class="fun-list-item" v-model.lazy="item.needMinutes"/>
         <input type="text" class="fun-list-item" v-model.lazy="item.functionPrice"/>
-        <input type="text" class="fun-list-item" v-model.lazy="item.functionPrice" v-show="isShow2"/>
         <p class="fun-list-item">
           <mt-switch v-model="item.ifOpen"></mt-switch>
         </p>
@@ -52,15 +37,15 @@
 <script>
 import qs from "qs";
 import QHeader from "@/components/header";
-import { batchFunctionSetListFun,batchEditFun } from '@/service/device';
+import { MessageBox } from 'mint-ui';
+import { getFunctionSetListFun,batchEditFun,batchEditMachineListFun } from '@/service/device';
 
 export default {
     data() {
       return {
         funTypeList: [],
         title: "批量编辑",
-        isResult: false,
-        keyword: '',
+        getJsonArr: [],
         selectedFunction: '',
         hdTitleArr: [
           "1.请选择相应店铺",
@@ -105,22 +90,58 @@ export default {
     methods: {
       async checkFunctionSetClass() { //获取功能列表
         let query = this.$route.query;
-        let payload = {machineParentTypeId: query.parentTypeId};
-        let res = await batchFunctionSetListFun(qs.stringify(payload));
+        let payload = {shopId: query.shopId,subTypeId: query.subTypeId};
+        let res = await getFunctionSetListFun(qs.stringify(payload));
           if(res.code === 0) {
-            this.funTypeList = res.data;          
+             this.getJsonArr = res.data.list;        
+             if(res.data.communicateType === 1){
+               this.functionListTitle = this.functionListTitle2;
+               this.isShow = false;            
+             } 
+            res.data.list.forEach(item=>{
+              item.ifOpen=item.ifOpen === "0"?(!!item.ifOpen) : (!item.ifOpen);
+             });
+            this.funTypeList = res.data.list;         
           }
-      },
+      },   
       async goNext() {
         let query = this.$route.query;
-        let payload = {subTypeId: query.subTypeId, shopId: query.shopId, functionJson: JSON.stringify(this.funTypeList)};
-        let res = await batchFunctionSetListFun(qs.stringify(payload));
+        let obj ={
+          subTypeId: query.subTypeId,
+          shopId: query.shopId,
+        };
+        let res = await batchEditMachineListFun(qs.stringify(obj));
           if(res.code === 0) {
+            if(!res.data.machineCount){
+              MessageBox.alert("不能批量编辑");
+            }else {
+              this.submit();
+            }
+           // MessageBox.alert(res.mes);
+            //this.$router.push({name:'deviceMange'});
+          }else{
             MessageBox.alert(res.mes);
-            this.$router.push({name:'deviceMange'});
           }
       }
 
+    },
+
+    async submit() {
+        let query = this.$route.query;
+        let arr= [].concat(JSON.parse(JSON.stringify(this.funTypeList))); 
+        arr.forEach(item=>{
+          return item.ifOpen=item.ifOpen?0:1;
+        });
+        let obj ={
+          subTypeId: query.subTypeId,
+          shopId: query.shopId,
+          functionJson: JSON.stringify(arr)
+        };
+        let res = await batchEditFun(qs.stringify(obj));
+          if(res.code === 0) {
+            MessageBox.alert("操作成功");
+            this.$router.push({name:'deviceMange'});
+          }
     },
 
     created() {
@@ -274,6 +295,37 @@ export default {
             font-size: 70%;
             letter-spacing: .001rem
           }
+        }
+      }
+    }
+  }
+
+  .fun-item-bd {
+    line-height: 1.6rem; // padding: 0 .4rem;
+    font-size: 0.37rem;
+    color: #333333;
+    background: #fff;
+    div {
+      display: flex; // justify-content: space-between;
+      .fun-list-item {
+        flex: 2.19;
+        text-align: center;
+        line-height: 1.6rem;
+        &:nth-child(1) {
+          flex: 3.32;
+        }
+        &:nth-child(4) {
+          flex: 2.21;
+          box-sizing: border-box;
+        }
+      }
+      p {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        .mint-switch-input:checked+.mint-switch-core {
+          border-color: #4DD865;
+          background-color: #4DD865;
         }
       }
     }

@@ -19,9 +19,11 @@ const getlistParentType = '/machine/listParentType'; //一级类型 method 'post
 const getlistSubType = '/machine/listSubType'; //二级类型 method 'post'
 const getFunctionSetList = '/machine/functionList'; //功能设置列表 method 'post'
 const deviceAddorEdit = '/machine/addOrEdit'; //设备编辑 method 'post'
-const batchFunctionSetList = '/batchExecutePlan/getFunctionList'; //批量获取功能列表 method ‘post'
+const batchFunctionSetList = '/batchExecutePlan/getFunctionList'; //批量启动获取功能列表 method ‘post'
 const batchEdit = '/machine/batchEdit'; //批量编辑
+const batchEditMachineList = '/machine/batchEditMachineList';
 const listByNameOrlmei = '/machine/listByNameOrImei'; //设备搜索
+const batchStartOn = '/batchExecutePlan/add'; //批量启动
 
 
 export const device = (payload) => fetch.get(deviceApi, {params: payload}); //登录
@@ -39,7 +41,9 @@ export const getFunctionSetListFun = (payload) => fetch.post(getFunctionSetList,
 export const deviceAddorEditFun = (payload) => fetch.post(deviceAddorEdit,payload); //设备编辑添加
 export const batchFunctionSetListFun = (payload) => fetch.post(batchFunctionSetList,payload); //批量回能功能列表
 export const batchEditFun = (payload) => fetch.post(batchEdit,payload); //批量编辑
+export const batchEditMachineListFun = (payload) => fetch.post(batchEditMachineList,payload); //批量编辑
 export const listByNameOrlmeiFun = (payload) => fetch.post(listByNameOrlmei,payload); //设备搜索
+export const batchStartOnFun = (payload) => fetch.post(batchStartOn,payload); //批量启动
 
 
 

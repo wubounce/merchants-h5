@@ -73,36 +73,44 @@
       <Button class="btn" btn-type="default" btn-color="blue" @click.native="goFirst">确定</Button>
     </section>
     </div>
-    <!-- 模块商 -->
-    <mt-popup v-model="companyVisible" position="bottom" class="select-popup">
-      <div class="select">
-        <ul class="select-list">
-          <li v-for="(item,index) in selectListA" :key="index" @click="getcompanyValue(item)">{{item.shopName}}</li>
-        </ul>
-        <div class="btn">
-          <Button btn-type="default" btn-color="blue" @confirm="companyVisible = false">取消</Button>
-        </div>
+    <!-- 店铺-->
+    <mt-popup v-model="companyVisible" position="bottom">
+      <div class="resp-shop">
+        <span class="quxi" @click="companyVisible= false">取消</span>
+        <span class="shop">店铺</span>
+        <span class="qued" @click="getCheckShop">确定</span>
       </div>
+      <section class="resp-shop-wrap">
+        <ul class="all-list">
+          <li class="mint-checklist-label" :class="{'selected':index==selectedIndex}" v-for="(item,index) in selectListA" :key="index" @click="checkItem(index)">{{item.shopName}}</li>
+        </ul>
+      </section>
     </mt-popup>
-    <mt-popup v-model="parentType" position="bottom" class="select-popup">
-      <div class="select">
-        <ul class="select-list">
-          <li v-for="(item,index) in functionList" :key="index" @click="getFirstValue(item)">{{item.name}}</li>
-        </ul>
-        <div class="btn">
-          <Button btn-type="default" btn-color="blue" @confirm="parentType = false">取消</Button>
-        </div>
+    <!-- 类型 -->
+    <mt-popup v-model="parentType" position="bottom">
+      <div class="resp-shop">
+        <span class="quxi" @click="companyVisible= false">取消</span>
+        <span class="shop">类型</span>
+        <span class="qued" @click="getFirstValue">确定</span>
       </div>
+      <section class="resp-shop-wrap">
+        <ul class="all-list">
+          <li class="mint-checklist-label" :class="{'selected':index==selectedIndex}" v-for="(item,index) in functionList" :key="index" @click="checkItem(index)">{{item.name}}</li>
+        </ul>
+      </section>
     </mt-popup>
-    <mt-popup v-model="subType" position="bottom" class="select-popup">
-      <div class="select">
-        <ul class="select-list">
-          <li v-for="(item,index) in funList" :key="index" @click="getSecondValue(item)">{{item.name}}</li>
-        </ul>
-        <div class="btn">
-          <Button btn-type="default" btn-color="blue" @confirm="subType = false">取消</Button>
-        </div>
+     <!-- 型号 -->
+    <mt-popup v-model="subType" position="bottom">
+      <div class="resp-shop">
+        <span class="quxi" @click="companyVisible= false">取消</span>
+        <span class="shop">型号</span>
+        <span class="qued" @click="getSecondValue">确定</span>
       </div>
+      <section class="resp-shop-wrap">
+        <ul class="all-list">
+          <li class="mint-checklist-label" :class="{'selected':index==selectedIndex}" v-for="(item,index) in funList" :key="index" @click="checkItem(index)">{{item.name}}</li>
+        </ul>
+      </section>
     </mt-popup>
   </section>
 </template>
@@ -136,6 +144,7 @@
         parentType: false,    
         subType: false,
         functionTempletType: null,
+        selectedIndex: -1,
         itemName:["functionName","needMinutes","functionPrice","ifOpen"],
         functionSetList: [],
         jsonArr:[],
@@ -183,19 +192,22 @@
       };
     },
     methods: {
-      getcompanyValue(msg) {
-        this.fromdata.shopType.name = msg.shopName;
-        this.fromdata.shopType.id = msg.shopId;
+      checkItem(index) {
+        this.selectedIndex = index;
+      },
+      getCheckShop() {
+        this.fromdata.shopType.name = this.selectListA[this.selectedIndex].shopName;
+        this.fromdata.shopType.id = this.selectListA[this.selectedIndex].shopId;
         this.companyVisible = false;
       },
-      getFirstValue(msg) {
-        this.fromdata.firstType.name = msg.name;
-        this.fromdata.firstType.id = msg.id;
+      getFirstValue() {
+        this.fromdata.firstType.name = this.functionList[this.selectedIndex].name;
+        this.fromdata.firstType.id = this.functionList[this.selectedIndex].id;
         this.parentType = false;
       },
-      getSecondValue(msg) {
-        this.fromdata.secondType.name = msg.name;
-        this.fromdata.secondType.id = msg.id;
+      getSecondValue() {
+        this.fromdata.secondType.name = this.funList[this.selectedIndex].name;
+        this.fromdata.secondType.id = this.funList[this.selectedIndex].id;
         this.subType = false;
       },
       wxScan(e, type) { //微信扫码
@@ -297,8 +309,8 @@
         }
       },
       async submit() {  //提交
-        this.getJsonArr = this.functionSetList;
-        this.getJsonArr.forEach(item=>{
+        let arr= [].concat(JSON.parse(JSON.stringify(this.funTypeList))); 
+        arr.forEach(item=>{
             item.ifOpen=item.ifOpen?0:1;
           });
         let obj = {
@@ -312,7 +324,7 @@
           ver: 3,
           imei: this.fromdata.imei,
           functionTempletType: this.functionTempletType,
-          functionJson: JSON.stringify(this.getJsonArr)
+          functionJson: JSON.stringify(arr)
         };
         let res = await deviceAddorEditFun(qs.stringify(obj));
         if(res.code===0) {
@@ -387,6 +399,7 @@
           overflow: hidden;
           box-sizing: border-box;
           position: relative;
+          display: flex;
           &::after {
             content: '';
             display: block;
@@ -398,6 +411,12 @@
           .field-title {
             width: 30%;
             float: left;
+          }
+          p {
+            flex-grow: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
           }
           .select,
           .select-1,
@@ -533,6 +552,47 @@
     .cancle {
       background: #fff;
       color: #1890FF;
+    }
+  }
+
+  .resp-shop {
+    display: flex;
+    height: 1.17rem;
+    line-height: 1.17rem;
+    background:rgba(251,251,252,1);
+    padding: 0 0.4rem;
+    >span {
+      flex: 1;
+      font-size: 15px;
+    }
+    .quxi {
+      color: #999;
+    }
+    .shop {
+      text-align: center;
+      font-size: 16px;
+    }
+    .qued {
+      text-align:right;
+      color: #1890FF;
+    }
+  }
+
+  .resp-shop-wrap {
+    padding: 0.4rem 0.2rem;
+    .all-list {
+      height: 6rem;
+      overflow-y: scroll;
+      .mint-checklist-label {
+        padding: 0 0.4rem;
+        text-align: center;
+        height: 1.17rem;
+        line-height: 1.17rem;
+        font-size: 0.4rem;
+      }
+      .selected {
+        background-color: rgba(14, 14, 255, 0.05);
+      }
     }
   }
 </style>
