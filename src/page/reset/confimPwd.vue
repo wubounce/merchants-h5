@@ -70,8 +70,7 @@ import { validatPwd } from '@/utils/validate';
           let phone = this.$route.query ? this.$route.query.phone:'';
           let payload = Object.assign({},{password:this.reset.password,phone:phone});
           let res = await forgetPwdFun(qs.stringify(payload));
-          if (res.code===1) {
-            this.$toast('修改成功');
+          if (res.code===0) {
             this.$router.push({name:'login'});
           }else {
              this.$toast(res.msg);
