@@ -41,6 +41,12 @@ export const validatPwd = (str) => {
   return reg.test(str);
 };
 
+/* 搜索 */
+export const validatSearch = (str) => {
+  const reg = /^[a-zA-Z0-9]{0,}$/; 
+  return reg.test(str);
+};
+
 /* 数字 */
 export const validatDiscount = (str) => {
   const reg = /^([1-9]\d{0,1}|100)$/;

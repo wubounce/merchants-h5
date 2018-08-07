@@ -66,6 +66,7 @@ import { orderListFun,searchOrderFun, ordeRrefundFun, machineResetFun, machineBo
 import { MessageBox } from 'mint-ui';
 import QCountDown from '@/components/CountDown';
 import { getDuration } from '@/utils/tool';
+import { validatSearch } from '@/utils/validate';
 import PagerMixin from '@/mixins/pagerMixin';
 export default {
   mixins: [PagerMixin],
@@ -143,6 +144,10 @@ export default {
     //   this.activeTime = 0;
     // },
     async searchOrder(e){ //搜索
+      if (!validatSearch(this.searchData)) {
+        this.$toast({message: "搜索内容只支持英文字母和数字" });
+        return false;
+      }
       this.noOrderList = false;
       this.titleIndex = 0; //全部tab 显示数据
       this.orderStatus = '';//全部tab 显示数据
@@ -157,7 +162,11 @@ export default {
       }
     },
     clearSearch(){ //清楚搜索
-      if(this.searchData.length<=0)this._getList();
+      if (!validatSearch(this.searchData)) {
+        this.$toast({message: "搜索内容只支持英文字母和数字" });
+        return false;
+      }
+      if(this.searchData.length <= 0 )this._getList();
     },
     godetail(oederno,machineId){
       this.$router.push({name: 'orderdetail',query:{orderNo:oederno}});

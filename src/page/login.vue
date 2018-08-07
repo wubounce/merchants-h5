@@ -82,11 +82,11 @@ export default {
         if (this.validate()) {
           let loginInfo = Object.assign({},this.form);
           let res = await login(qs.stringify(loginInfo));
-          if (res.code===0 || res.code === 8002) {
+          if (res.code===1 || res.code === 8002) {
               this.login(res.data.token);
               let menu = await menuSelectFun();
               this.getMenu(menu.data);
-              if (res.code===0) {
+              if (res.code===1) {
                 this.$router.push({name:'index'});
               } else if(res.code === 8002){
                 this.$router.push({name:'bindPhone'});

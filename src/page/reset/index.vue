@@ -83,7 +83,7 @@
           }
           let payload = Object.assign({},this.reset);
           let res = await validateCodeFun(qs.stringify(payload));
-          if (res.code===0) {
+          if (res.code===1) {
             this.$router.push({name:'confimPwd',query:{phone:this.reset.phone}});
           }else {
              this.$toast(res.msg);
