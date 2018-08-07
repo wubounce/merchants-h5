@@ -102,7 +102,7 @@ export default {
       let res = await manageListFun(qs.stringify(obj));
       if(res.code===0) {
         //判断该账号是否存在店铺
-        if(res.data == null || res.data == "") {
+        if(res.data.items == null || res.data.items == "") {
           this.hasNews = false;
         }
         else {
