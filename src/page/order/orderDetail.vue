@@ -13,6 +13,7 @@
               <p class="con-type">{{detail.machineFunctionName}}<span style="padding:0 0.346667rem">|</span>时长{{detail.markMinutes}}分钟</p>
               <p class="con-price" v-if="!detail.orderType ===2 && !detail.orderStatus ===1 || !detail.orderType ===2 && !detail.orderStatus ===0">¥{{detail.markPrice}}</p>
           </div>
+          <div class="order-action" v-if="orderType === 2">预约</div>
         </div>
       </section>
     </div>
@@ -65,14 +66,16 @@ export default {
   data() {
     return {
       title: '订单详情',
-      detail:{}
+      detail:{},
+      orderType:null,
     };
   },
   mounted() {
     
   },
   created(){
-    let query = this.$route.query;
+    let query = this.$route.query?this.$route.query:{};
+    this.orderType = Number(query.orderType);
     this.getDetail(query.orderNo);
   },
   methods: {
@@ -173,6 +176,7 @@ export default {
       }
     }
     .content {
+      width: 6.293333rem;
       height: 2.653333rem;
       padding-left: 0.266667rem; 
       .con-title {

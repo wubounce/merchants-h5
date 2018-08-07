@@ -6,7 +6,8 @@ const user = {
     name: '',
     roles: [],
     userInfo: getUser(),
-    menu:[]
+    menu:[],
+    timeOffset: 0,
   },
   getters:{
     has: (state) => (value) => {
@@ -22,6 +23,10 @@ const user = {
         }
       }
       return isExist;
+    },
+    // 获取服务器时间（毫秒）
+    getServerTime: state => () => {
+      return state.timeOffset * 1000 + new Date().getTime();
     }
   },
   mutations: {
@@ -39,7 +44,10 @@ const user = {
     },
     setMenu: (state, menu) => {
       state.menu = menu;
-    }
+    },
+    setServerTimeOffset (state, data) {
+      state.timeOffset = data;
+    },
   },
 
   actions: {

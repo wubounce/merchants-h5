@@ -426,10 +426,8 @@ export default {
 </style>
 <style>
   .addmarket .mint-checklist-label {
-    padding:0 0.4rem;
+    padding:0.33rem 0.4rem;
     text-align: center;
-    height: 1.17rem;
-    line-height: 1.17rem;
   }
   .addmarket .mint-switch-input:checked + .mint-switch-core {
     border-color: #4DD865;
@@ -440,5 +438,9 @@ export default {
   }
   .addmarket .picker, .addmarket .picker-items {
     width: 100%;
+  }
+  .addmarket .mint-checkbox-core {
+    vertical-align: top;
+    margin-top: -0.03rem;
   }
 </style>

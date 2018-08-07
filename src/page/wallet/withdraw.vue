@@ -46,6 +46,7 @@ export default {
         if (res.code === 0) {
             this.userInfo = res.data;
         }else if(res.code === 1004 || res.code === 1014) {
+            this.disabled = true;
             MessageBox.alert(`请先进行支付宝账号绑定及实名认证`).then(async () => {
                 this.$router.push({name:'accountSet'});
             });

@@ -325,9 +325,11 @@ export default {
 </style>
 <style>
   .addvip .mint-checklist-label {
-    padding:0 0.4rem;
+    padding:0.33rem 0.4rem;
     text-align: center;
-    height: 1.17rem;
-    line-height: 1.17rem;
+  }
+  .addvip .mint-checkbox-core {
+    vertical-align: top;
+    margin-top: -0.04rem;
   }
 </style>

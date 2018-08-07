@@ -1,4 +1,6 @@
 import Cookies from 'js-cookie';
+import moment from 'moment';
+import store from '@/store';
 
 const TokenKey = 'Token';
 export const getToken = () => Cookies.get(TokenKey);
@@ -59,4 +61,22 @@ export const formatTree = (items, parentId) => {
 	  result.push(t);
 	}
 	return result;
+};
+
+
+// 格式化时间差为00:00:00格式时间
+export const formatDuration = (timestamp) => {
+  const format = (v) => {
+    return (v + "").padStart(2, 0);
+  };
+  let duration = moment.duration(timestamp, 'seconds');
+  return format(duration.hours()) + ':' + format(duration.minutes()) + ':' + format(duration.seconds());
+};
+
+// 通过标准时间（yyyy-MM-dd HH:mm:ss）,转换和服务器时间的时间差
+export const  getDuration = (dateStr) => {
+  let date = moment(dateStr);
+  let now = moment(store.getters.getServerTime());
+  console.log(now.diff(date, 'seconds'));
+  return now.diff(date, 'seconds');
 };

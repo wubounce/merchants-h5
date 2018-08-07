@@ -25,6 +25,7 @@ http.interceptors.request.use(config => {
       spinnerType: "fading-circle"
     });
   }
+  
   let token = getToken();
   if (config.method === 'post' && config.headers['Content-Type'] !== 'multipart/form-data') {
     config.headers['content-type'] = 'application/x-www-form-urlencoded';
@@ -43,6 +44,17 @@ http.interceptors.response.use(
   response => {
     if (response.status === 200) {
       Indicator.close();
+      // 时间验证 & 把时间放到vuex中
+      if (response.data.t > 0) {
+        let offset = response.data.t - new Date().getTime();
+        if (Math.abs(offset) > 10 * 60 * 1000) {
+          console.log(offset);
+          MessageBox.alert('客户端时间不合法，会影响正常业务使用[t: ' + offset + ']', '注意');
+        }
+
+        store.commit('setServerTimeOffset', parseInt(offset / 1000));
+
+      }
       return Promise.resolve(response.data);
     }else {
       // 50008:非法的token; 50012:其他客户端登录了;  50014:Token 过期了;

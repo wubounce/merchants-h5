@@ -30,7 +30,7 @@
                 <span class="odernmu-phone">{{item.phone}}<span style="padding:0 0.186667rem;color:#333333">|</span>{{item.createTime}}</span>
                 <span class="ordernum-status">{{item.orderStatus | orserStatus}}</span>
               </section>
-              <router-link :to="{ name: 'orderdetail', query:{orderNo:item.orderNo}}">
+              <router-link :to="{ name: 'orderdetail', query:{orderNo:item.orderNo,orderType:item.orderType}}"> 
               <section class="order-list">  
                   <div class="title"><span class="ovh-shop">{{item.shopName}}</span><span class="go iconfont icon-nextx"></span></div>
                   <div class="detail">  
@@ -39,6 +39,7 @@
                         <p class="con-title">{{item.machineName}}</p>
                         <p class="con-type">{{item.machineFunctionName}}<span style="padding:0 0.346667rem">|</span>时长{{item.markMinutes}}分钟</p>
                         <p class="con-price" v-if="!item.orderType ===2 && !item.orderStatus ===1 || !item.orderType ===2 && !item.orderStatus ===0">¥{{item.payPrice}}</p>
+                        <!-- <p><q-count-down :type="2" :time="item.activeTime" @finish="hanldeActive"/></q-count-dow></p> -->
                     </div>
                     <div class="order-action" v-if="item.orderType === 2">预约</div>
                   </div>
@@ -63,6 +64,8 @@ import qs from 'qs';
 import { orderStatus } from '@/utils/mapping';
 import { orderListFun,searchOrderFun, ordeRrefundFun, machineResetFun, machineBootFun } from '@/service/order';
 import { MessageBox } from 'mint-ui';
+import QCountDown from '@/components/CountDown';
+import { getDuration } from '@/utils/tool';
 export default {
   data() {
     return {
@@ -118,6 +121,15 @@ export default {
       if (res.code === 0) {
         this.list = res.data.items?[...this.list,...res.data.items]:[];  //分页添加
         this.total = res.data.total;
+        // this.list.forEach(item => {
+        //   var time = getDuration(item.activeTime);
+        //   console.log(time);
+        //       if(time > 0) {
+        //         item.activeTime = time;
+        //       } else {
+        //          item.activeTime = -time;
+        //       }
+        // });
         if (this.searchData) {
           this.nosearchList = this.list.length<= 0 ? true: false;
         } else {
@@ -132,6 +144,10 @@ export default {
         
       }
     },
+    // // 预约订单倒计时回调
+    // hanldeActive() {
+    //   this.activeTime = 0;
+    // },
     async searchOrder(e){ //搜索
       this.noOrderList = false;
       this.titleIndex = 0; //全部tab 显示数据
@@ -204,6 +220,8 @@ export default {
         let res = await ordeRrefundFun(qs.stringify(payload));
         if (res.code === 0) {
           this.$toast({message: '退款成功' });
+          this.page = 1;
+          this.list = [];
           this.getOrderList();
         } else {
           this.$toast(res.msg);
@@ -217,6 +235,7 @@ export default {
     },
   },
   components:{
+    QCountDown
   }
 };
 </script>
@@ -310,6 +329,8 @@ export default {
     display: flex;
   }
   .ovh-shop {
+    display: inline-block;
+    width: 100%;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
