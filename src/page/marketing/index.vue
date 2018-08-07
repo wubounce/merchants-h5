@@ -53,6 +53,8 @@ export default {
     color: #333333;
     text-align: center;
     display: flex;
+    z-index: 9999;
+    position: relative;
     >div {
       flex: 1;
     }

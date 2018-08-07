@@ -66,7 +66,9 @@ import { orderListFun,searchOrderFun, ordeRrefundFun, machineResetFun, machineBo
 import { MessageBox } from 'mint-ui';
 import QCountDown from '@/components/CountDown';
 import { getDuration } from '@/utils/tool';
+import PagerMixin from '@/mixins/pagerMixin';
 export default {
+  mixins: [PagerMixin],
   data() {
     return {
       title: '订单管理',
@@ -83,19 +85,12 @@ export default {
       noOrderList:false,
       nosearchList:false,
       orderStatus:'', //订单状态
-
-      page: 1,//页码
-      pageSize:10,
-      total:null,
-      allLoaded: false,//数据是否加载完毕
-      wrapperHeight: 0,//容器高度
     };
   },
   mounted() {
     this.wrapperHeight = document.documentElement.clientHeight;
   },
   created(){
-    this.getOrderList();
   },
   methods: {
     titleClick: function(index) {
@@ -105,9 +100,9 @@ export default {
       this.orderStatus = this.titleArr[this.titleIndex].value;
       this.page = 1; //从第一页起
       this.allLoaded = false;//下拉刷新时解除上拉加载的禁用
-      this.getOrderList();
+      this._getList();
     },
-    async getOrderList(){
+    async _getList(){
       let res = null;
       this.nosearchList = false;
       let payload = null;
@@ -155,34 +150,17 @@ export default {
       this.page = 1;
       var keyCode = window.event? e.keyCode:e.which;
       if(keyCode =='13'){
-        this.getOrderList();
+        this._getList();
         document.activeElement.blur();
       }else {
-        this.getOrderList();
+        this._getList();
       }
     },
     clearSearch(){ //清楚搜索
-      if(this.searchData.length<=0)this.getOrderList();
+      if(this.searchData.length<=0)this._getList();
     },
     godetail(oederno,machineId){
       this.$router.push({name: 'orderdetail',query:{orderNo:oederno}});
-    },
-    loadBottom() {
-      this.page += 1;
-      let allpage = Math.ceil(this.total/this.pageSize);
-      if(this.page <= allpage){
-        this.getOrderList();
-      }else{
-        this.allLoaded = true;//模拟数据加载完毕 禁用上拉加载
-      }
-      this.$refs.loadmore.onBottomLoaded();
-    },
-    loadTop() {
-      this.page = 1;
-      this.list = [];
-      this.getOrderList();
-      this.allLoaded = false;//下拉刷新时解除上拉加载的禁用
-      this.$refs.loadmore.onTopLoaded();
     },
     machineReset(oederno,machineId,machineName){ //设备复位
       MessageBox.confirm(`确定复位${machineName}？`).then(async () => {
@@ -219,7 +197,7 @@ export default {
           this.$toast({message: '退款成功' });
           this.page = 1;
           this.list = [];
-          this.getOrderList();
+          this._getList();
         } else {
           this.$toast(res.msg);
         }

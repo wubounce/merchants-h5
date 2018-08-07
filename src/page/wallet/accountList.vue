@@ -3,44 +3,48 @@
     <section class="apply-status">
         <div v-for="(item,index) in titleArr" @click="titleClick(index)"><span :class="{current: titleIndex === index}">{{item.lable}}</span></div>
     </section>
-    <div class="no-discount-list" v-if="applylsit.length<=0">暂无相关明细</div>
+    <div class="no-discount-list" v-if="list.length<=0">暂无相关明细</div>
     <!-- 记录为收益类，增加class：add -->
-    <div class="apply--list-wrap" v-else>
-        <div class="all-list">
-            <div class="all" v-for="(item,index) in applylsit" :key="index" >
-                <div class="list add" v-if="item.type === 1 "> 
-                    <router-link :to="{name:'accountDetail', query:{balanceLogId:item.id,type:item.type}}">
-                        <div class="icon-type"> 
-                            <span class="usericon iconfont icon-dianpu"></span>
+    <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }"  v-else>
+        <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore">
+            <div class="apply--list-wrap">
+                <div class="all-list">
+                    <div class="all" v-for="(item,index) in list" :key="index" >
+                        <div class="list add" v-if="item.type === 1 "> 
+                            <router-link :to="{name:'accountDetail', query:{balanceLogId:item.id,type:item.type}}">
+                                <div class="icon-type"> 
+                                    <span class="usericon iconfont icon-dianpu"></span>
+                                </div>
+                                <div class="accountList-content clearfix">
+                                    <div class="left">
+                                        <p class="title">{{item.shopName}}</p>
+                                        <p class="status">交易成功</p>
+                                        <p class="time">{{item.createTime}}</p>
+                                    </div>
+                                    <p class="price">+{{item.price}}</p>
+                                </div>
+                            </router-link>                
                         </div>
-                        <div class="accountList-content clearfix">
-                            <div class="left">
-                                <p class="title">{{item.shopName}}</p>
-                                <p class="status">交易成功</p>
-                                <p class="time">{{item.createTime}}</p>
-                            </div>
-                            <p class="price">+{{item.price}}</p>
-                        </div>
-                    </router-link>                
-                </div>
-                <div class="list" v-if="item.type === 3">
-                    <router-link :to="{name:'accountDetail', query:{balanceLogId:item.id}}">
-                        <div class="icon-type"> 
-                            <span class="usericon iconfont icon-tuikuan">  </span>
-                        </div>
-                        <div class="accountList-content clearfix">
-                            <div class="left">
-                                <p class="title">退款订单</p>
-                                <p class="status">交易成功</p>
-                                <p class="time">{{item.createTime}}</p>
-                            </div> 
-                            <p class="price">-{{item.price}}</p>
+                        <div class="list" v-if="item.type === 3">
+                            <router-link :to="{name:'accountDetail', query:{balanceLogId:item.id}}">
+                                <div class="icon-type"> 
+                                    <span class="usericon iconfont icon-tuikuan">  </span>
+                                </div>
+                                <div class="accountList-content clearfix">
+                                    <div class="left">
+                                        <p class="title">退款订单</p>
+                                        <p class="status">交易成功</p>
+                                        <p class="time">{{item.createTime}}</p>
+                                    </div> 
+                                    <p class="price">-{{item.price}}</p>
+                                </div> 
+                            </router-link>                
                         </div> 
-                    </router-link>                
-                </div> 
-            </div>   
-        </div>
-        <p class="info">只展示近6个月记录</p>           
+                    </div>   
+                </div>
+                <p class="info">只展示近6个月记录</p>  
+            </div>
+        </mt-loadmore>
     </div>
     
 </div>
@@ -50,38 +54,40 @@ import qs from 'qs';
 import { Navbar, TabItem } from 'mint-ui';
 import { getApplyListFun } from '@/service/user';
 import { ApplyType } from '@/utils/mapping';
+import PagerMixin from '@/mixins/pagerMixin';
 export default {
+    mixins: [PagerMixin],
   data() {
     return {
       titleIndex:0,
-      page:1,
-      pageSize:10,
       type:'',
       titleArr:[
         {value:'',lable:'全部'},
         {value:1,lable:'收入'},
         {value:3,lable:'支出'},
       ],
-      applylsit:[]
+      list:[]
     };
   },
   mounted() {
-    
+    this.wrapperHeight = document.documentElement.clientHeight-44;
   },
   created(){
-    this.getApplyList();
+    
   },
   methods: {
     titleClick: function(index) {
       this.titleIndex = index;
       this.type = this.titleArr[this.titleIndex].value;
       this.page = 1; //从第一页起
-      this.getApplyList(this.type);
+      this.list = [];
+      this._getList(this.type);
     },
-    async getApplyList(type){
+    async _getList(type){
         let payload = {page:this.page,pageSize: this.pageSize,type:this.type};
         let res = await getApplyListFun(qs.stringify(payload));
-       this.applylsit = res.data?res.data.items :[];
+        this.list = res.data.items?[...this.list,...res.data.items]:[];  //分页添加
+        this.total = res.data.total;
     }
   },
   filters: {

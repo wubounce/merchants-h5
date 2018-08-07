@@ -48,10 +48,9 @@ export default {
     };
   },
   mounted() {
-    this.wrapperHeight = document.documentElement.clientHeight-30;
+    this.wrapperHeight = document.documentElement.clientHeight-42;
   },
   created(){
-    this._getList();
   },
   methods: {
     async _getList(){

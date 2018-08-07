@@ -41,7 +41,6 @@ export default {
     this.wrapperHeight = document.documentElement.clientHeight;
   },
   created(){
-     this._getList();
   },
   methods: {
     async _getList(){
