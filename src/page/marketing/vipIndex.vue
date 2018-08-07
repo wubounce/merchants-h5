@@ -22,7 +22,7 @@
                      <router-link :to="{name:'vipDetail',query:{shopVipId:item.shopVipId}}">
                       <div class="card halfYear-card">   
                         <p class="vip-type">VIP半年卡</p>            
-                        <p class="price" v-if="item.halfYearCardPrice">{{item.halfYearCardPrice}}<span>元</span></p>
+                        <p class="price" v-if="item.halfYearCardPrice">{{item.halfYearCardPrice | tofixd}}<span>元</span></p>
                         <p class="price" v-else><span>未设置</span></p>
                         <p class="usenum">{{item.halfYearCardLimitTime === null ?'':item.halfYearCardLimitTime===0?'每日使用次数无限制':`每日仅限使用${item.halfYearCardLimitTime}次`}}</p>
                         <p class="tag"  v-if="item.halfYearCardDiscount">{{item.halfYearCardDiscount | replace}}<span>折</span></p> 
@@ -33,7 +33,7 @@
                      <router-link :to="{name:'vipDetail',query:{shopVipId:item.shopVipId}}">
                       <div class="card season-card">   
                         <p class="vip-type">VIP季卡</p>            
-                        <p class="price" v-if="item.seasonCardPrice">{{item.seasonCardPrice}}<span>元</span></p>
+                        <p class="price" v-if="item.seasonCardPrice">{{item.seasonCardPrice  | tofixd}}<span>元</span></p>
                         <p class="price" v-else><span>未设置</span></p>
                         <p class="usenum">{{item.seasonCardLimitTime === null ?'':item.seasonCardLimitTime===0?'每日使用次数无限制':`每日仅限使用${item.seasonCardLimitTime}次`}}</p>
                         <p class="tag"  v-if="item.seasonCardDiscount">{{item.seasonCardDiscount | replace}}<span>折</span></p> 
@@ -98,7 +98,7 @@ export default {
   },
   filters:{
     replace(value){
-      return value*10;
+     return parseFloat(value*10).toString().length >= 2? parseFloat(value*10).toFixed(1):parseFloat(value*10);
     },
     tofixd(value){
      return Number(value).toFixed(0);

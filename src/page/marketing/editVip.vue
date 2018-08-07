@@ -182,6 +182,10 @@ export default {
       paylod.yearCardDiscount =  paylod.yearCardDiscount? paylod.yearCardDiscount/100:null;
       paylod.halfYearCardDiscount =  paylod.halfYearCardDiscount? paylod.halfYearCardDiscount/100:null;
       paylod.seasonCardDiscount =  paylod.seasonCardDiscount? paylod.seasonCardDiscount/100:null;
+
+      paylod.yearCardLimitTime =  paylod.yearCardLimitTime ?  paylod.yearCardLimitTime:0;
+      paylod.halfYearCardLimitTime =  paylod.halfYearCardLimitTime ?  paylod.halfYearCardLimitTime:0;
+      paylod.seasonCardLimitTime =  paylod.seasonCardLimitTime ?  paylod.seasonCardLimitTime:0;
       let res = await addOrUpdateVipFun(qs.stringify(paylod));
       if (res.code === 0) {
          this.$toast({message: "修改成功" });

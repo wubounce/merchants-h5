@@ -120,9 +120,9 @@ export default {
     }
     .add-market-shop {
       color: #333;
-      display: inline-block;
-      width: 7.2rem;
       text-align: right;
+      margin-left: 0.13rem;
+      float: right;
     }
   }
  .create-wrap {
