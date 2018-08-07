@@ -17,7 +17,7 @@
       </div>
       <div class="input-group" style="border:none">
         <div class="form-title">权限</div>
-        <div class="form-input" style="text-align:left"><span v-for="(item,index) in detail.list" :key="index">{{item.name}}<i v-if="index !== (detail.list.length-1)">,</i></span></div>
+        <div class="form-input"><span v-for="(item,index) in detail.list" :key="index">{{item.name}}<i v-if="index !== (detail.list.length-1)">,</i></span></div>
       </div>
     </div>
     <div class="input-group createtime">

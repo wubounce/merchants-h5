@@ -124,7 +124,7 @@ export default {
         this.vipform.halfYearCardDiscount = res.data.halfYearCardDiscount?res.data.halfYearCardDiscount *100 : '';
         this.vipform.seasonCardDiscount = res.data.seasonCardDiscount?res.data.seasonCardDiscount *100 : '';
         
-        this.vipform.yearCardLimitTime = res.datayearCardLimitTime? res.datayearCardLimitTime :0;
+        this.vipform.yearCardLimitTime = res.data.yearCardLimitTime? res.data.yearCardLimitTime :0;
         this.vipform.halfYearCardLimitTime= res.data.halfYearCardLimitTime? res.data.halfYearCardLimitTime: 0;
         this.vipform.seasonCardLimitTime = res.data.seasonCardLimitTime? res.data.seasonCardLimitTime:0;
         this.vipform.shopVipId  = res.data.shopVipId ? res.data.shopVipId:'';

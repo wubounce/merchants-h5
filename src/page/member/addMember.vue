@@ -139,6 +139,10 @@ export default {
         this.$toast({message: '请输入用户名' });
         return false;
       }
+      if (!validatName(this.username)) {
+        this.$toast({message: '用户名2-20个字符，支持中文和英文' });
+        return false;
+      } 
       if (this.checkshoptxt === '') {
         this.$toast({message: '请选择店铺' });
         return false;
@@ -151,7 +155,7 @@ export default {
     },
     validatName(){
       if (!validatName(this.username)) {
-        this.$toast({message: '用户名2-20个字符，只支持中文' });
+        this.$toast({message: '用户名2-20个字符，支持中文和英文' });
       } 
     },
     async menuSelect(){

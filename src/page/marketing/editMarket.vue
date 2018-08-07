@@ -177,13 +177,13 @@ export default {
   },
   created(){
     this.getDetail();
-    this.shopListFun();
   },
   methods: {
      async getDetail(){
       let query = this.$route.query;
       let payload = {timeId:query.id};
       let res = await detailMarketFun(qs.stringify(payload));
+      this.shopListFun(query.id);
       if (res.code === 0) {
         let detail = res.data;
         this.addmarket.startTime = detail.noDiscountStart ? moment(detail.noDiscountStart).format('YYYY-MM-DD') : '';
@@ -233,8 +233,9 @@ export default {
         return weeklsit.join(',');
       }
     },
-    async shopListFun(){
-      let res = await shopListFun();
+    async shopListFun(timeid){
+      let payload = {timeId:timeid};
+      let res = await shopListFun(qs.stringify(payload));
       this.shoplist = res.data;
     },
     getcheckshop(){

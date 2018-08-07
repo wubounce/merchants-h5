@@ -53,6 +53,6 @@ export const validatCradPrice = (str)=>{
 };
 /* 中文*/
 export const validatName = (str) => {
-  const reg = /^[\u4E00-\u9FA5]{2,20}$/;
+  const reg = /^[\u0391-\uFFE5A-Za-z]{2,20}$/;
   return reg.test(str);
 };
