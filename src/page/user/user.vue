@@ -8,7 +8,7 @@
                 <img src="../../../static/image/user/avatar@2x.png" v-else>
             </div>
             <div class="info-content">
-                <p class="name">{{userInfo.cardName}}</p>
+                <p class="name">{{userInfo.realName}}</p>
                 <p class="phone">{{userInfo.phone}}</p>
             </div>
         </div>        

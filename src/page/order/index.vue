@@ -38,8 +38,7 @@
                     <div class="content">
                         <p class="con-title">{{item.machineName}}</p>
                         <p class="con-type">{{item.machineFunctionName}}<span style="padding:0 0.346667rem">|</span>时长{{item.markMinutes}}分钟</p>
-                        <p class="con-price" v-if="item.orderType ===2 && item.orderStatus ===1 || item.orderType ===2 && item.orderStatus ===0"></p>
-                        <p class="con-price" v-else>¥{{item.payPrice}}</p>
+                        <p class="con-price" v-if="!item.orderType ===2 && !item.orderStatus ===1 || !item.orderType ===2 && !item.orderStatus ===0">¥{{item.payPrice}}</p>
                     </div>
                     <div class="order-action" v-if="item.orderType === 2">预约</div>
                   </div>

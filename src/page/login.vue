@@ -9,7 +9,7 @@
     <form ref="loginForm" :model="form">
       <div class="form-group input">
         <p class="userName">
-          <input type="number" v-model.trim="form.userName" v-on:input="userinputFunc" placeholder="请输入用户名" style="width:90%">
+          <input type="number" v-model.trim="form.userName" v-on:input="userinputFunc" placeholder="请输入用户名/手机号" style="width:90%">
           <span class="eyes iconfont icon-guanbi" v-if="isuser" @click="form.userName='';isuser=false"></span>
         </p>
         <div class="passWord">
@@ -25,7 +25,7 @@
       </div>
       <div class="form-group">
         <p @click="goToReset" class="reset">忘记密码?</p>
-        <mt-button type="primary" class="btn-blue" @click.prevent ="handleSubmit">登录</mt-button>
+        <mt-button type="primary" class="btn-blue" @click.prevent ="handleSubmit" :disabled="disabled">登录</mt-button>
       </div>
     </form>
   </div>
@@ -45,8 +45,8 @@ export default {
     data () {
       return {
         form: {
-          userName: '18948788872',
-          password: '123456'
+          userName: '',
+          password: ''
         },
         isuser:false,
         typepwd:false,
@@ -98,7 +98,12 @@ export default {
       },
       userinputFunc(){
         this.isuser = true;
-        this.disabled = false;
+        if (!this.form.userName) {
+          this.disabled = true;
+        } else {
+          this.disabled = false;
+        }
+        
       },
       pwdinputFunc(){
         this.ispwd = true;

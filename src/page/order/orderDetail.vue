@@ -11,7 +11,7 @@
           <div class="content">
               <p class="con-title">{{detail.machineName}}</p>
               <p class="con-type">{{detail.machineFunctionName}}<span style="padding:0 0.346667rem">|</span>时长{{detail.markMinutes}}分钟</p>
-              <p class="con-price">¥{{detail.markPrice}}</p>
+              <p class="con-price" v-if="!detail.orderType ===2 && !detail.orderStatus ===1 || !detail.orderType ===2 && !detail.orderStatus ===0">¥{{detail.markPrice}}</p>
           </div>
         </div>
       </section>
@@ -26,7 +26,7 @@
         <div class="discount">-¥{{detail.discountPrice}}</div>
       </div>
     </section>
-    <section class="money-wrap">
+    <section class="money-wrap" v-if="!detail.orderType ===2 && !detail.orderStatus ===1 || !detail.orderType ===2 && !detail.orderStatus ===0">
       <span class="heji">合计：</span>
       <span class="money">¥{{detail.payPrice}}</span>
     </section>

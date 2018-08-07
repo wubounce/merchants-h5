@@ -5,7 +5,8 @@
     <div class="no-discount-list" v-if="timeMarket.length<=0">未设置限时优惠活动</div>
 		<div class="discoun-list" v-for="(item,index) in timeMarket" :key="index">
       <router-link :to="{name:'detailMarket', query:{id:item.id}}">
-        <span class="discountag" v-if="item.status === 1"><img src="../../../static/image/market/makretStop@2x.png"></span>
+          <span class="discountag" v-if="item.status === 2"><img src="../../../static/image/market/overdue@2x.png"></span>
+          <span class="discountag" v-if="item.status === 1"><img src="../../../static/image/market/makretStop@2x.png"></span>
           <p class="time">优惠期<span :class="{'stop-discount':item.status === 1}">{{item.noDiscountStart}}</span>至<span :class="{'stop-discount':item.status === 1}">{{item.noDiscountEnd}}</span></p>
           <div class="discoun-content">
             <div class="dis-con-title">
