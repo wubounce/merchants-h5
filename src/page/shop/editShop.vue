@@ -586,6 +586,9 @@ export default {
           name:'shopList'
         });
       }
+      else {
+        MessageBox.alert(res.msg);
+      }
     },
     //省市区联动
     async getArea() {
