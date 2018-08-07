@@ -3,7 +3,10 @@
     <div id="container" class="mymap"></div>
     <div class="home-search">
 			<i class=" iconfont icon-IconSearch"></i>
-			<p class="search-shop"><input type="text" v-model="special" id="keyword" name="keyword" placeholder="查找小区/大厦/学校等" onfocus='this.value=""'></p>
+			<p class="search-shop">
+        <input type="text" v-model.trim="special" v-on:input="inputFunc" id="keyword" name="keyword" placeholder="查找小区/大厦/学校等" style="width:90%" onfocus='this.value=""'>
+        <span class="eyes iconfont icon-guanbi" v-if="isuser" @click="closeInput"></span>
+      </p>
 		</div>
 	</div>
 </template>
@@ -29,7 +32,8 @@ export default {
       isReserve:'',
       LimitMinutes:'',
       worktime:'',
-      img:''
+      img:'',
+      isuser:false
     };
   },
   methods: {
@@ -55,6 +59,18 @@ export default {
           img:img
         }
       });
+    },
+    inputFunc(){
+      this.isuser = true;
+      if (!this.special) {
+        this.disabled = true;
+      } else {
+        this.disabled = false;
+      }
+    },
+    closeInput() {
+      this.special = '';
+      this.isuser = false;
     }
   },
   created() {
@@ -193,6 +209,9 @@ export default {
             color: #999999;
             font-size: 16px;
             padding-top: 0.1rem;
+          }
+          .eyes {
+            color:#979797;
           }
       }
     }
