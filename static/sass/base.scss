@@ -98,4 +98,21 @@ input :-ms-input-placeholder {
     color: #999;
     text-align: center;
     padding-top: 4rem;
+}
+.page-loadmore-wrapper {
+    overflow: scroll
   }
+
+.mint-loadmore-top, .mint-loadmore-text {
+    font-size: 14px;
+    text-align: center;
+    color: #999;
+}
+
+.nomore-data {
+  text-align: center;
+  color: #999;
+  font-size: 12px;
+  margin-bottom: 0.266667rem;
+   margin-top: 0.266667rem;
+}

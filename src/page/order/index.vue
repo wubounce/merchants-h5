@@ -92,8 +92,7 @@ export default {
     };
   },
   mounted() {
-    let windowWidth = document.documentElement.clientWidth;//获取屏幕高度
-    this.wrapperHeight = document.documentElement.clientHeight - 60;
+    this.wrapperHeight = document.documentElement.clientHeight;
   },
   created(){
     this.getOrderList();
@@ -171,8 +170,6 @@ export default {
     loadBottom() {
       this.page += 1;
       let allpage = Math.ceil(this.total/this.pageSize);
-      console.log(allpage);
-      console.log(this.page);
       if(this.page <= allpage){
         this.getOrderList();
       }else{
@@ -417,22 +414,11 @@ export default {
 .page-loadmore-wrapper {
   overflow: scroll
 }
-.nomore-data {
-  text-align: center;
-  color: #999;
-  font-size: 12px;
-  margin-bottom: 0.266667rem;
-}
 </style>
 <style>
   .order-wrap .mint-header {
     background: #fff !important;
     border-bottom:1px solid #DCE0E6;
-  }
-  .order-wrap .mint-loadmore-top, .mint-loadmore-text {
-    font-size: 14px;
-    text-align: center;
-    color: #999;
   }
 </style>
 

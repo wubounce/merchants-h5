@@ -3,11 +3,11 @@
   <div class="add-form">
     <div class="input-group">
       <div class="form-title"><span>手机</span></div>
-      <div class="form-input"><input type="number" v-model="phone" placeholder="请输入手机号码"></div>
+      <div class="form-input"><input type="number" v-model="phone" @blur="validatPhone" placeholder="账号密码自动发送此手机"></div>
     </div>
     <div class="input-group">
       <div class="form-title"><span>用户名</span></div>
-      <div class="form-input"><input type="text" v-model="username" placeholder="账号密码自动发送此手机" @blur="validatName" maxlength="20"></div>
+      <div class="form-input"><input type="text" v-model="username" placeholder="用户名2-20个字符，支持中文和英文" @blur="validatName" maxlength="20"></div>
     </div>
     <div class="input-group">
       <div class="form-title"><span>负责店铺</span></div>
@@ -156,6 +156,11 @@ export default {
     validatName(){
       if (!validatName(this.username)) {
         this.$toast({message: '用户名2-20个字符，支持中文和英文' });
+      } 
+    },
+    validatPhone(){
+      if (!validatPhone(this.phone)) {
+        this.$toast({message: '请输入正确的手机号码' });
       } 
     },
     async menuSelect(){

@@ -1,19 +1,26 @@
 <template>
 <div class="withdrawList-wrapper" v-title="'提现记录'">
-    <div class="no-discount-list" v-if="applylsit.length<=0">暂无提现记录</div>
-    <div  v-for="(item,index) in applylsit" :key="index" :class="['list', {'fall':item.status === 2}]" >
-        <router-link :to="{name:'withdrawResult',query:{balanceLogId:item.id}}">
-            <span class="iconfont icon-tixian"></span>
-            <div class="accountList-content clearfix">
-                <div class="left">
-                    <p class="title process" v-if="item.status === 0">提现中</p>
-                    <p class="title success" v-if="item.status === 1">提现成功</p>
-                    <p class="title fall" v-if="item.status === 2">提现失败</p>
-                    <p class="time">{{item.createTime}}</p>
+    <div class="no-discount-list" v-if="list.length<=0">暂无提现记录</div>
+    <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
+        <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore">
+            <div class="page-with-list">
+                <div  v-for="(item,index) in list" :key="index" :class="['list', {'fall':item.status === 2}]" >
+                    <router-link :to="{name:'withdrawResult',query:{balanceLogId:item.id}}">
+                        <span class="iconfont icon-tixian"></span>
+                        <div class="accountList-content clearfix">
+                            <div class="left">
+                                <p class="title process" v-if="item.status === 0">提现中</p>
+                                <p class="title success" v-if="item.status === 1">提现成功</p>
+                                <p class="title fall" v-if="item.status === 2">提现失败</p>
+                                <p class="time">{{item.createTime}}</p>
+                            </div>
+                            <p class="price">{{item.price}}</p>
+                        </div>     
+                    </router-link>
                 </div>
-                <p class="price">{{item.price}}</p>
-            </div>     
-        </router-link>
+            </div>
+            <div v-if="allLoaded" class="nomore-data">没有更多了</div>
+        </mt-loadmore>
     </div>
    
 </div>
@@ -22,27 +29,29 @@
 import qs from 'qs';
 import { getApplyListFun } from '@/service/user';
 import { ApplyType } from '@/utils/mapping';
+import PagerMixin from '@/mixins/pagerMixin';
 export default {
-  data() {
-    return {
-        selected: 1,
-        page:1,
-        pageSize:10,
-        applylsit:[]
-    };
+    mixins: [PagerMixin],
+    data() {
+        return {
+            list:[],
+        };
   },
   mounted() {
-   
+    this.wrapperHeight = document.documentElement.clientHeight;
   },
   created(){
-     this.getApplyList();
+     this._getList();
   },
   methods: {
-    async getApplyList(){
+    async _getList(){
         let payload = {page:this.page,pageSize: this.pageSize,type:2};
         let res = await getApplyListFun(qs.stringify(payload));
-       this.applylsit = res.data.items;
-    }
+         if (res.code === 0) {
+            this.list = res.data.items?[...this.list,...res.data.items]:[];  //分页添加
+            this.total = res.data.total;
+        }
+    },
   },
   components:{
   

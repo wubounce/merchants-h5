@@ -269,7 +269,7 @@ export default {
       }
      let status = null;
       this.addmarket.addstatus === true ? status = 0  : status = 1;
-      let payload = Object.assign({},this.addmarket,{week:week,shopIds:this.shopIds.join(','),status:status});
+      let payload = Object.assign({},this.addmarket,{week:week,shopIds:this.shopIds.join(','),status:status,timeId:'123'});
       delete payload.addstatus;
       let res = await addOruPdateFun(qs.stringify(payload));
       if (res.code === 0) {

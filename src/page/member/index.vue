@@ -36,33 +36,29 @@
 import qs from 'qs';
 import { operatorListFun, lockOperatorrFun } from '@/service/member';
 import { memberIsLock } from '@/utils/mapping';
-
+import PagerMixin from '@/mixins/pagerMixin';
 export default {
+  mixins: [PagerMixin],
   data() {
     return {
       title: '人员管理',
       value: false,
       list:[],
-      page: 1,//页码
-      pageSize:10,
-      total:null,
-      allLoaded: false,//数据是否加载完毕
-      wrapperHeight: 0,//容器高度
     };
   },
   mounted() {
-    let windowWidth = document.documentElement.clientWidth;//获取屏幕高度
-    this.wrapperHeight = document.documentElement.clientHeight - 30;
+    this.wrapperHeight = document.documentElement.clientHeight;
   },
   created(){
-    this.getMemberList();
+    this._getList();
   },
   methods: {
-    async getMemberList(){
+    async _getList(){
       let payload = {page:this.page,pageSize:this.pageSize};
       let res = await operatorListFun(qs.stringify(payload));
       if (res.code === 0) {
-        res.data.items = res.data ? res.data.items :[];
+        this.list = res.data.items?[...this.list,...res.data.items]:[];  //分页添加
+        this.total = res.data.total;
         res.data.items.forEach((item)=>{
           if (item.isLock === 0) {
             item.isLock = true;
@@ -70,26 +66,8 @@ export default {
             item.isLock = false;
           }
         });
-        this.list = [...this.list,...res.data.items];
       }
       
-    },
-    loadBottom() {
-      this.page += 1;
-      let allpage = this.total/this.pageSize;
-      if(this.page <= allpage){
-        this.getMemberList();
-      }else{
-        this.allLoaded = true;//模拟数据加载完毕 禁用上拉加载
-      }
-      this.$refs.loadmore.onBottomLoaded();
-    },
-    loadTop() {
-      this.page = 1;
-      this.list = [];
-      this.getMemberList();
-      this.allLoaded = false;//下拉刷新时解除上拉加载的禁用
-      this.$refs.loadmore.onTopLoaded();
     },
     async lockOperator(id,isLock){
       if (isLock === true) {
