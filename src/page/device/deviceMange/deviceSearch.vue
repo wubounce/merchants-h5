@@ -1,242 +1,199 @@
 <template>
-  <section v-title="title">
-    <div class="permissions" v-if="$store.getters.has('mer:machine:list')">暂无相关页面权限</div>
-    <div v-else>
-      <div class="search">
-        <d-search @deviceSearch="onDeviceSearch"></d-search>
+  <section>
+    <div class="search">
+      <div class="search-input">
+        <p class="left" :class="{ 'result-left': isResult }">
+          <input type="text" v-model.trim="keyword" placeholder="请输入设备名称/IMEI 号" @input="inputHandle">
+          <span v-if="isResult">
+            <img src="../../../assets/img/device/devic_scan_icon.jpeg">
+            <span class="gap-border"></span>
+            <span class="search-reset" @click="clearInput">返回</span>
+          </span>
+        </p>
+        <p class="right" :class="{ 'result-right': isResult }"></p>
       </div>
     </div>
+    <div class="search-select">
+        <ul>
+          <li v-for="(item,index) in searchList" :class="{selectback:index==now}" class="search-select-option search-select-list" @click="selectClick(index)"
+          :key="index">{{item.nameOrImei}}
+          </li>
+          <li class="search-item border-bottom" v-show="hasNoData">没有找到匹配数据</li>
+        </ul>
+    </div>
   </section>
-
 </template>
-<script>
-  import qs from "qs";
-  import DSearch from '@/components/Search/detailSearch';
-  import { MessageBox } from 'mint-ui';
+
+<script type="text/javascript">
+import qs from "qs";
+import { listByNameOrlmeiFun } from '@/service/device';
+  /* eslint-disable */
+  import {
+    delay
+  } from "@/utils/tool";
   export default {
     data() {
       return {
-        isShow: true,
-        isShow2: false,
-        title: '设备管理',
-        titleArr: [],
-        index: null,
-        list: [],
-        machineState: null,
-        checkClass: false,
-        name: ""
+        myData: [], // 用来接收 ajax 得到的数据
+        now: -1,
+        isResult: false,
+        keyword: '',
+        searchList:[]
       };
     },
-    mounted() {
-
-    },
     methods: {
-      titleClick(index) {
-        this.index = index;
-        this.getDeviceList(this.index,this.name);
-
+      async fetchData(e) {
+        let keywords = this.keyword;
+        let payload = {nameOrImei: keywords};
+        let res = await listByNameOrlmeiFun(qs.stringify(payload));
+          if(res.code === 0) {
+            this.searchList = res.data;  
+          }
       },
-      toDeviceDetail(i) {       
+      selectClick: function (index) {
+        let machineId = this.searchList[index].machineId;
         this.$router.push({
-        name:'deviceDetail',
-        query:{
-          machineId: i
-        }
-      });
+          name: 'deviceDetail',
+          query: ({machineId: machineId})
+        })
       },
-      toAddItem() {
-        this.isShow = !this.isShow;
-        this.isShow2 = !this.isShow2;
+      clearInput: function () {
+        this.keyword = "";
+        this.isResult = false
       },
-      toCloseItem() {
-        this.isShow2 = !this.isShow2;
-        this.isShow = !this.isShow;
-      },
-      onDeviceSearch(msg){ //搜索
-         this.name = msg;
-         this.getDeviceList(this.titleIndex,this.name);
+      inputHandle: function() { 
+        
       }
     },
-    created() {
-      
+    computed: {
+      hasNoData () {
+        return !this.searchList.length;
+      }
     },
-    components: {
-      DSearch
+    watch: {
+      keyword: function (newVal) {
+        if (newVal) {
+          delay(() => {
+            this.fetchData();
+          }, 300);
+          this.isResult = true
+        }
+      },
     }
   };
 
 </script>
+
 <style lang="scss" scoped>
   .search {
-    width: 100%;
-    display: flex;
-  }
-
-  .device-status {
-    display: flex;
-    font-size: 0.35rem;
-    color: #333;
-    text-align: center;
-    background: #fff;
-    height: 1.5rem;
-    border-bottom: 1px solid rgba(220, 224, 230, 1);
-    div {
-      flex: 1;
-      span {
-        display: inline-block;
-        width: 0.73rem;
-        height: 0.43rem;
-        line-height: 0.43rem;
-        margin-top: 0.1rem;
-        color: rgba(24, 144, 255, 1);
-        border-radius: 0.2rem;
-      }
-      p {
-        margin-top: .25rem;
-      }
-      p.current {
-        font-weight: bolder;
-      }
-      span.current {
-        display: inline-block;
-        position: relative;
-        color: #fff;
-        background: rgba(24, 144, 255, 1);
-        &::after {
-          content: '';
-          display: block;
-          width: 100%;
-          position: absolute;
-          bottom: -0.24rem;
-          border-bottom: 0.08rem solid #1890FF;
-        }
-
-      }
-    }
-
-  }
-
-  .device-list {
-    margin-top: .27rem;
-    padding: 0 .4rem;
-    background: #FFFFFF;
-    color: rgba(153, 153, 153, 1);
-    font-size: .37rem;
-    section {
-      padding: .1rem 0;
-      height: 1rem;
-      line-height: 1rem;
-      border-bottom: 0.01rem solid rgba(223, 230, 255, 1);
-      &:nth-child(3) {
-        border: none;
-      }
-    }
-    .item-hd {
+    padding: 0.2rem 0.3rem 0.2rem;
+    background-color: #fff;
+    .search-input {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-sizing: border-box;
       font-size: 0.43rem;
-      color: rgba(51, 51, 51, 1);
-      span {
-        &:nth-child(2) {
-          float: right;
-          color: #1890FF
-        }
-      }
-      .state{
-        font-size: 0.37rem;
-      }
-    } 
-
-    .item-bd {
-      display: flex;
-      span {
-        width: 1.2rem;
-      }
-      div {
-        flex-grow: 1;
-        width: auto;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
-      }
-    }
-    .item-ft {
-      display: flex;
+      color: rgba(153, 153, 153, 1);
+      background: rgba(255, 255, 255, 1);
+      box-shadow: 0rem 0.05rem 0.13rem 0.05rem rgba(186, 192, 210, 0.3);
+      border-radius: 0.1rem;
       p {
-        flex: 1;
-        &:nth-child(2) {
-          display: flex;
-          justify-content: flex-end;
-          border-left: 0.01rem solid rgba(223, 230, 255, 1);
+        display: flex;
+      }
+      .left {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        flex: 0 1 7.93rem;
+        height: 1.17rem;
+        padding-right: .27rem;
+        
+        input {
+          background: url("../../../assets/img/device/devic_search_icon.png") no-repeat 0.27rem;
+          background-size: 0.53rem;
+          padding: 0.29rem 0 0.29rem 1.07rem;
+          border-radius: 0.13rem;
         }
         span {
           display: inline-block;
-          &:nth-child(1) {
-            width: 1.125rem;
+          white-space: nowrap;
         }
+        img {
+          width: 0.4rem;
         }
-
+        .gap-border {
+          position: relative;
+          width: .28rem;
+          height: .32rem;
+          margin-right: .28rem;
+          &:after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: .32rem;
+            border-right: 0.04rem solid rgba(216, 216, 216, 1); // transform: scaleY(0.5);
+          }
+        }
       }
-      span {
-        &:nth-child(2) {
-          color: #1890FF
-        }
+      .result-left {
+        flex: 1;
+      }
+      .right {
+        flex: 0 1 1.17rem;
+        height: 1.17rem;
+        background: url("../../../assets/img/device/devic_scan_icon.jpeg") no-repeat center;
+        background-size: 60%;
+        box-shadow: 0rem 0.05rem 0.13rem 0rem rgba(186, 192, 210, 0.3);
+        border-radius: 0.13rem;
+      }
+      .result-right {
+        display: none
       }
     }
   }
-  .openItem{
-    width: 1.49rem;
-    height: 1.49rem;
-    text-align: center;
-    overflow: auto;
-    background: rgba(24,144,255,1);
-    border-radius: 50%;
-    position: fixed;
-    bottom: 0.67rem;
-    right: 0.54rem;
-    line-height: 1.49rem;
-    color: rgba(255,255,255,1);
-    font-size: 34px;
+  .search-select {
+    background: #fff;
+    li {
+      color:rgba(51, 51, 51, 1);
+      width: 100%;
+      font-size: 0.43rem;
+    }
+    .search-select-option {
+      box-sizing: border-box;
+      padding: 6px 10px;
+    }
   }
-  .closeItem{
-    width: 1.49rem;
-    height: 1.49rem;
-    text-align: center;
-    overflow: auto;
-    background: rgba(24,144,255,1);
-    border-radius: 50%;
-    position: fixed;
-    bottom: 0.67rem;
-    right: 0.54rem;
-    line-height: 1.49rem;
-    color: rgba(255,255,255,1);
-    font-size: 24px;
+
+  input::-ms-clear {
+    display: none;
   }
-  .showItem{
-    width: 1.49rem;
-    height: 1.49rem;
-    text-align: center;
-    overflow: auto;
-    background: rgba(19, 194, 194, 1);
-    border-radius: 50%;
-    position: fixed;
-    right: 0.54rem;
-    line-height: 1.49rem;
-    font-size: 12px;
-    color: rgba(255,255,255,1);
+
+  .search-select-list {
+    transition: all 0.5s;
   }
-  .addDev{
-    bottom: 2.52rem;
-    transition:all 0.2s 
+
+  .itemfade-enter,
+  .itemfade-leave-active {
+    opacity: 0;
   }
+
+  .itemfade-leave-active {
+    position: absolute;
+  }
+
+  .selectback {
+    background-color: #eee !important;
+    cursor: pointer;
+  }
+
+  .search-select ul {
+    margin: 0;
+    text-align: left;
+    padding: 10px 10px;
+  }
+
   
-  .betchStartup{
-    bottom: 4.32rem;
-    transition:all 0.3s 
-  }
-   
-  .betchModf{
-    bottom: 6.12rem;
-    transition:all 0.4s 
-  }
-
-
 </style>

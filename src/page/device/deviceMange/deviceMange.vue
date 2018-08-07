@@ -2,11 +2,16 @@
   <section v-title="title">
     <div class="permissions" v-if="$store.getters.has('mer:machine:list')">暂无相关页面权限</div>
     <div v-else>
-    <div class="search">
-        <d-search @deviceSearch="onDeviceSearch"></d-search>
+      <div class="search">
+        <router-link :to="{name:'deviceSearch'}">
+          <div class="search-input">
+            <p placeholder="请输入设备名称/IMEI 号" class="left"></p>
+            <p class="right"></p>
+          </div>
+        </router-link>
       </div>
       <div class="device-status">
-        <div @click="titleClick()">
+        <div @click="titleClick(null)">
           <p :class="{current:!index}">全部</p>
           <span :class="{current:!index}">{{titleArr.all}}</span>
         </div>
@@ -88,7 +93,7 @@
     methods: {
       titleClick(index) {
         this.index = index;
-        this.getDeviceList(this.index,this.name);
+        this.getDeviceList();
 
       },
       toDeviceDetail(i) {       
@@ -116,8 +121,8 @@
           MessageBox.alert(res.msg);
         }
       }, 
-      async getDeviceList(titleIndex,name)  {
-        let payload = {machineState: titleIndex,machineName: this.name};
+      async getDeviceList(index)  {
+        let payload = {machineState: this.index,};
         let res = await deviceListFun(qs.stringify(payload));
         if(res.code === 0) {
           this.list = res.data;
@@ -158,10 +163,6 @@
           MessageBox.alert(res.msg);
         }
       },
-      onDeviceSearch(msg){ //搜索
-         this.name = msg;
-         this.getDeviceList(this.titleIndex,this.name);
-      }
     },
     created() {
       this.getDeviceList();
@@ -175,8 +176,44 @@
 </script>
 <style lang="scss" scoped>
   .search {
-    width: 100%;
-    display: flex;
+    .search-input {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-sizing: border-box;
+      font-size: 0.43rem;
+      color: rgba(153, 153, 153, 1);
+      padding: 0.4rem 0.3rem 0.4rem 0.27rem;
+      background: rgba(255, 255, 255, 1);
+      p {
+        display: flex;
+        &:nth-child(1){
+          background: url("../../../assets/img/device/devic_search_icon.png") no-repeat 0.27rem;
+          background-size: 0.53rem;
+          padding: 0.29rem 0 0.29rem 1.07rem;
+          border-radius: 0.13rem;
+        }
+      }
+      .left {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        flex: 0 1 7.93rem;
+        height: 1.17rem;
+        padding-right: .27rem;
+        box-sizing: border-box;
+        box-shadow: 0.05rem 0.08rem 0.13rem 0.05rem rgba(186, 192, 210, 0.3);
+        border-radius: 0.1rem;
+      }
+      .right {
+        flex: 0 1 1.17rem;
+        height: 1.17rem;
+        background: url("../../../assets/img/device/devic_scan_icon.jpeg") no-repeat center;
+        background-size: 60%;
+        box-shadow: 0rem 0.05rem 0.13rem 0rem rgba(186, 192, 210, 0.3);
+        border-radius: 0.13rem;
+      }
+    }
   }
 
   .device-status {

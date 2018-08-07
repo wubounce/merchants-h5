@@ -9,51 +9,45 @@
     <ul>
       <li class="bat-hd">
         <span>{{hdTitleArr[currIndex]}}</span>
-        <span>{{selectedFunction}}</span>
+        <span @click="chooseTime">{{beginTime}}</span>
       </li>
     </ul>
-    <div class="ss-hd">
-      <div class="search-input">
-        <p class="left" :class="{ 'result-left': isResult }">
-          <input type="text" v-model.trim="keyword" placeholder="请输入设备名称/IMEI 号">
-          <span v-if="isResult">
-            <img src="../../../assets/img/device/devic_scan_icon.jpeg">
-            <span class="gap-border"></span>
-            <span class="search-reset" @click="clearInput">返回</span>
-          </span>
-        </p>
-        <p class="right" :class="{ 'result-right': isResult }">
-        </p>
-      </div>
+    <div v-show="functionSetModel"> 
+      <section class="fun-item-hd">
+        <div>
+          <p v-for="(item,index) in functionListTitle " :key="index">
+            <span v-for="(it,idx) in item " :key="idx">{{it}}</span>
+          </p>
+        </div>
+      </section>
+      <section class="fun-item-bd funlist">
+        <div v-for="(item,index) in secondTypeList " :key="index">
+          <input type="text" class="fun-list-item" v-model.lazy="item.functionName"/>
+          <input type="text" class="fun-list-item" v-model.lazy="item.needMinutes"/>
+          <input type="text" class="fun-list-item" v-model.lazy="item.functionPrice"/>
+          <input type="text" class="fun-list-item" v-model.lazy="item.functionPrice" v-show="isShow2"/>
+          <p class="fun-list-item">
+            <mt-switch v-model="item.ifOpen"></mt-switch>
+          </p>
+        </div>
+      </section>
     </div>
-    <section class="fun-item-hd">
-      <div>
-        <p v-for="(item,index) in functionListTitle " :key="index">
-          <span v-for="(it,idx) in item " :key="idx">{{it}}</span>
-        </p>
-      </div>
-    </section>
-    <section class="fun-item-bd funlist">
-      <div v-for="(item,index) in secondTypeList " :key="index">
-        <input type="text" class="fun-list-item" v-model.lazy="item.functionName"/>
-        <input type="text" class="fun-list-item" v-model.lazy="item.needMinutes"/>
-        <input type="text" class="fun-list-item" v-model.lazy="item.functionPrice"/>
-        <input type="text" class="fun-list-item" v-model.lazy="item.functionPrice" v-show="isShow2"/>
-        <p class="fun-list-item">
-          <mt-switch v-model="item.ifOpen"></mt-switch>
-        </p>
-      </div>
-    </section>
-    <section class="promiss-footer">
+    <!-- 启动时间 -->
+    <mt-datetime-picker ref="pickerStarTime" type="datetime" v-model="pickerValue"  @confirm="handleConfirm"></mt-datetime-picker>
+    <section class="promiss-footer" v-show="functionSetModel">
       <span class="can" @click="goBack">上一步</span>
       <span class="cifrm" @click="goNext">下一步</span>
     </section> 
+    <section v-show="!functionSetModel">
+      <button class="submitBtn" @click="goNext">确定</button>
+    </section>
   </section>
 </template>
 <script>
 import qs from "qs";
 import QHeader from "@/components/header";
-import { getlistSubTypeFun } from '@/service/device';
+import { batchFunctionSetListFun } from '@/service/device';
+import moment from 'moment';
 
 export default {
     data() {
@@ -61,7 +55,11 @@ export default {
         secondTypeList: [],
         title: "批量启动",
         isResult: false,
+        functionSetModel: true,
+        pickerValue: new Date(),
+        isShow2: false,
         keyword: '',
+        beginTime: '',
         selectedFunction: '',
         hdTitleArr: [
           "1.请选择相应店铺",
@@ -106,19 +104,40 @@ export default {
     methods: {
       async checkSecondClass() { //获取二级列表
         let query = this.$route.query;
-        let payload = {shopId:query.shopId,parentTypeId:query.parentTypeId};
-        let res = await getlistSubTypeFun(qs.stringify(payload));
+        let payload = {machineParentTypeId: query.parentTypeId};
+        let res = await batchFunctionSetListFun(qs.stringify(payload));
           if(res.code === 0) {
             this.secondTypeList = res.data; 
           }
       },
+      chooseTime() {
+        if (!this.functionSetModel){
+          this.$refs.pickerStarTime.open();
+        }
+      },
+      handleConfirm(data) {
+        //判断启动时间是否小于当前时间
+        let nowDate = new Date();
+        if(this.pickerValue <= nowDate) {
+          this.$toast({
+              message: '启动时间不得小于等于当前时间',
+              position: "middle",
+              duration: 3000
+            });
+        }
+        else {
+          let date = moment(data).format('YYYY-MM-DD HH:mm');
+          this.pickerValue = date;
+          this.beginTime = this.pickerValue;
+        }
+      },
+      goBack() {
+        this.$router.go(-1);
+      },
       goNext() {
-        let query = this.$route.query;
-        console.log(query.shopId);
-        this.$router.push({
-          name: "selectStartTime",
-          query: ({shopId:query.shopId, parentTypeId:query.parentTypeId})
-        });
+        this.$refs.pickerStarTime.open();
+        this.currIndex = 3;
+        this.functionSetModel = false;
       }
 
     },
@@ -126,6 +145,7 @@ export default {
     created() {
       this.checkSecondClass();
     },
+   
 
     components: {
       QHeader
@@ -301,6 +321,17 @@ export default {
       background: #1890FF;
       font-size: 18px;
       color: #fff;
+    }
+
+    .submitBtn {
+      width: 100%;
+      position: fixed;
+      bottom: 0;
+      border: none;
+      padding: 0.45rem 0;
+      background-color: #1890FF;
+      color: #fff;
+      font-size: 18px;
     }
 
 </style>

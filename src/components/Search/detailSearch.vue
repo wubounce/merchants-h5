@@ -1,26 +1,26 @@
 <template>
   <section>
-    <div class="search-input">
-      <p class="left" :class="{ 'result-left': isResult }">
-        <input type="text" v-model.trim="keyword" placeholder="请输入设备名称/IMEI 号" @input="inputHandle">
-        <span v-if="isResult">
-          <img src="../../assets/img/device/devic_scan_icon.jpeg">
-          <span class="gap-border"></span>
-          <span class="search-reset" @click="clearInput">返回</span>
-        </span>
-      </p>
-      <p class="right" :class="{ 'result-right': isResult }">
-
-      </p>
+    <div class="search">
+      <div class="search-input">
+        <p class="left" :class="{ 'result-left': isResult }">
+          <input type="text" v-model.trim="keyword" placeholder="请输入设备名称/IMEI 号" @input="inputHandle">
+          <span v-if="isResult">
+            <img src="../../assets/img/device/devic_scan_icon.jpeg">
+            <span class="gap-border"></span>
+            <span class="search-reset" @click="clearInput">返回</span>
+          </span>
+        </p>
+        <p class="right" :class="{ 'result-right': isResult }"></p>
+      </div>
     </div>
     <div class="search-select">
-      <transition-group name="itemfade" tag="ul" mode="out-in" v-cloak>
-        <li v-for="(value,index) in myData" :class="{selectback:index==now}" class="search-select-option search-select-list" @click="selectClick(index)"
-          :key="value">
-          {{value}}
-        </li>
-      </transition-group>
-    </div>
+        <transition-group name="itemfade" tag="ul" mode="out-in" v-cloak>
+          <li v-for="(item,index) in searchList" :class="{selectback:index==now}" class="search-select-option search-select-list" @click="selectClick(index)"
+          :key="index">{{item.name}}
+          </li>
+          <li class="search-select-option search-select-list" v-show="hasNoData">没有找到匹配数据</li>
+        </transition-group>
+      </div>
   </section>
 </template>
 
@@ -74,8 +74,9 @@
 </script>
 
 <style lang="scss" scoped>
-  section {
-    width: 100%;
+  .search {
+    padding: 0.2rem 0.3rem 0.2rem;
+    background-color: #fff;
     .search-input {
       display: flex;
       align-items: center;
@@ -83,9 +84,8 @@
       box-sizing: border-box;
       font-size: 0.43rem;
       color: rgba(153, 153, 153, 1);
-      margin: 0.4rem 0.3rem 0.4rem 0.27rem;
       background: rgba(255, 255, 255, 1);
-      box-shadow: 0rem 0.05rem 0.13rem 0rem rgba(186, 192, 210, 0.3);
+      box-shadow: 0rem 0.05rem 0.13rem 0.05rem rgba(186, 192, 210, 0.3);
       border-radius: 0.1rem;
       p {
         display: flex;
@@ -143,23 +143,16 @@
       }
     }
   }
-
   .search-select {
-    position: absolute;
-    top: 45px;
-    width: 500px;
-    box-sizing: border-box;
-    z-index: 999;
+    background: #fff;
     li {
-      border: 1px solid #d4d4d4;
-      border-top: none;
-      border-bottom: none;
-      background-color: #fff;
+      color:rgba(51, 51, 51, 1);
       width: 100%;
+      font-size: 0.43rem;
     }
     .search-select-option {
       box-sizing: border-box;
-      padding: 7px 10px;
+      padding: 10px 18px;
     }
   }
 
@@ -190,4 +183,5 @@
     text-align: left;
   }
 
+  
 </style>
