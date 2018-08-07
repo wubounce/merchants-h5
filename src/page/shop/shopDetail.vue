@@ -59,27 +59,16 @@ export default {
       list:[],
       shopdetail:{},
       completeAddress:'',
+      address:'',
       what:'',
       lng:'',
-      lat:''
+      lat:'',
+      formattedAddress:''
     };
   },
   methods:{
-    getlatlngAddress() {
-      let lnglatXY = [this.lng, this.lat]; //已知点坐标
-      console.log(lnglatXY);
-      let _this = this;
-      AMap.plugin('AMap.Geocoder',function() {
-        var geocoder = new AMap.Geocoder({
-          radius: 1000,
-          extensions: "all"
-        });
-        geocoder.getAddress(lnglatXY, function(status, result) {
-            if (status === 'complete' && result.info === 'OK') {
-                console.log('result',result);
-            }
-        });        
-      });
+    geocoder_CallBack(data) {
+      this.completeAddress = data + this.address;
     },
     isDeleteOrNot(id) {
       MessageBox.confirm(`确认删除店铺？`).then(async () => {
@@ -113,14 +102,28 @@ export default {
         this.list = res.data.machineTypeNames.split(',');
         this.lng = res.data.lng;
         this.lat = res.data.lat;
-        console.log(this.lng);
+        console.log('初始化',this.lng);
         //店铺地址
-        if(res.data.province == res.data.city.slice(0,2)) {
-          this.completeAddress = res.data.city + res.data.district + res.data.address;
-        }
-        else {
-          this.completeAddress = res.data.province + res.data.city + res.data.district + res.data.address;
-        }
+        this.address = res.data.address;
+
+        //逆地理坐标
+        let lnglatXY = [this.lng, this.lat]; //已知点坐标
+        console.log(lnglatXY);
+        let _this = this;
+        AMap.plugin('AMap.Geocoder',function() {
+          var geocoder = new AMap.Geocoder({
+            radius: 1000,
+            extensions: "all"
+          });
+          geocoder.getAddress(lnglatXY, function(status, result) {
+              if (status === 'complete' && result.info === 'OK') {
+                  console.log('result',result.regeocode.formattedAddress);
+                  _this.geocoder_CallBack(result.regeocode.formattedAddress);
+              }
+          });        
+        });
+
+        this.geocoder_CallBack();
       }
     }
   },
@@ -128,7 +131,6 @@ export default {
     this.getShopDetail();
   },
   mounted() {
-    this.getlatlngAddress();
   },
   components:{
     Button
