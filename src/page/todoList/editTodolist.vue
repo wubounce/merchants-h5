@@ -3,7 +3,7 @@
     <!-- 第一模块 -->
     <div class="ul-list">
       <p class="personal-item" @click="changemachineFunc"><span>启动模式</span><span>{{item.functionName}}</span></p>
-      <p class="personal-item" @click="open('pickerStarTime')"><span>启动时间</span><span>{{item.beginTime + ':00'}}</span></p>
+      <p class="personal-item" @click="open('pickerStarTime')"><span>启动时间</span><span>{{item.beginTime}}</span></p>
     </div>
     <button class="submit" @click="submit">提交</button>
 
@@ -75,7 +75,7 @@ import moment from 'moment';
         else {
           let date = moment(data).format('YYYY-MM-DD HH:mm');
           this.pickerValue = date;
-          this.item.beginTime = this.pickerValue;
+          this.item.beginTime = this.pickerValue + ':00';
         }
       },
       async submit() {
@@ -91,7 +91,7 @@ import moment from 'moment';
           machineParentTypeId: this.$route.query.machineParentTypeId,
           shopId: this.item.shopId,
           standardFunctionId: this.standardFunctionId,
-          startTime: this.item.beginTime + ':00'
+          startTime: this.item.beginTime
         };
 
         let resUpdate = await updateBatchStartFun(qs.stringify(objUpdate));
