@@ -41,7 +41,7 @@ import moment from 'moment';
     methods: {
       async isDeleteOrNot() {
         //删除
-        MessageBox.confirm('您确定要取消批量启动设备么？').then(action => {
+        MessageBox.confirm('您确定要取消批量启动设备么？','').then(action => {
           let objDel = { id:this.$route.query.id };
           let resDel = delBatchStartFun(qs.stringify(objDel));
 
@@ -77,7 +77,7 @@ import moment from 'moment';
       },
       goStart() {
         //立即启动
-        MessageBox.confirm('您确定要启动还未到期的设备么？').then(async() => {	        
+        MessageBox.confirm('您确定要立即批量启动设备么？').then(async() => {	        
           let obj = {
             shopId: this.item.shopId,
             firstTypeId: this.item.machineParentTypeId,

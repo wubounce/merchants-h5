@@ -32,7 +32,7 @@ import moment from 'moment';
   export default {
     data() {
       return {
-        title:'批量定时启动设备',
+        title:'编辑待办事项',
         item:{},
         popupVisible:false,
         index:'',
