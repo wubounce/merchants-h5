@@ -163,7 +163,7 @@ export default {
       this.$router.push({name: 'orderdetail',query:{orderNo:oederno}});
     },
     machineReset(oederno,machineId,machineName){ //设备复位
-      MessageBox.confirm(`确定复位${machineName}？`).then(async () => {
+      MessageBox.confirm(`您确定要复位${machineName}？`,'').then(async () => {
           let query = this.$route.query;
           let payload = {machineId:machineId,orderNo:oederno};
           let res = await machineResetFun(qs.stringify(payload));
@@ -176,7 +176,7 @@ export default {
       
     },
     machineBoot(id,machineName){ //设备启动
-      MessageBox.confirm(`您确定要启动${machineName}？`).then(async () => {
+      MessageBox.confirm(`您确定要启动${machineName}？`,'').then(async () => {
         let query = this.$route.query;
         let payload = {orderId:id};
         let res = await machineBootFun(qs.stringify(payload));
@@ -189,7 +189,7 @@ export default {
       
     },
     orderRefund(oederno,payPrice){ //退款
-      MessageBox.confirm('确定发起退款？').then(async () => {
+      MessageBox.confirm('确定发起退款？','').then(async () => {
         let query = this.$route.query;
         let payload = {orderNo:oederno,refundMoney:payPrice};
         let res = await ordeRrefundFun(qs.stringify(payload));

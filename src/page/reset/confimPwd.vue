@@ -2,21 +2,22 @@
   <div class="reset" v-title="title">
     <form ref="resetForm" :model="reset">
     <div class="form-group">
-      <input type="password" placeholder="请输入新密码" v-model="reset.password" autocomplete="off">
+      <input type="password" placeholder="请输入新密码" v-model="reset.password" @input="disabledBtn" autocomplete="off">
     </div>
     <div class="form-group">
-      <input type="password" placeholder="请确认新密码" v-model="reset.repassword" autocomplete="off">
+      <input type="password" placeholder="请确认新密码" v-model="reset.repassword" @input="disabledBtn" autocomplete="off">
     </div>
     </form>
     <p class="btn">
-       <mt-button type="primary" class="btn-blue" @click.prevent="changePwdConfirm">确定</mt-button>
+       <mt-button type="primary" class="btn-blue" @click.prevent="changePwdConfirm" :disabled="disabled">确定</mt-button>
     </p>
   </div>
 </template>
 
 <script>
-  import { forgetPwdFun } from '@/service/resetPwd';
-  import qs from 'qs';
+import qs from 'qs';
+import { forgetPwdFun } from '@/service/resetPwd';
+import { validatPwd } from '@/utils/validate';
   export default {
     data() {
       return {
@@ -27,23 +28,39 @@
         timer: null,
         time: 60,
         btn: true,
-        title:'重置密码'
+        title:'重置密码',
+        disabled:true
       };
     },
     created(){
     },
     methods: {
+      disabledBtn(){
+        if (!this.reset.password || !this.reset.repassword) {
+          this.disabled = true;
+        } else {
+          this.disabled = false;
+        }
+      },
       validate() {
         if (this.reset.password === '') {
           this.$toast({message: "请输入新密码"});
           return false;
+        }else if (!validatPwd(this.reset.password)) {
+          this.$toast({message: "密码6-20位，支持英文字母和数字" });
+          return false;
         }
+
         if (this.reset.repassword === '') {
           this.$toast({message: "请确认新密码"});
           return false;
-        }
+        }else if (!validatPwd(this.reset.repassword)) {
+          this.$toast({message: "密码6-20位，支持英文字母和数字" });
+          return false;
+        } 
+
         if (this.reset.password !== this.reset.repassword) {
-          this.$toast({message: " 两次输入密码不一致"});
+          this.$toast({message: "两次输入密码不一致"});
           return false;
         }
         return true;

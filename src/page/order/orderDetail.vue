@@ -27,7 +27,7 @@
         <div class="discount">-¥{{detail.discountPrice}}</div>
       </div>
     </section>
-    <section class="money-wrap" v-if="!detail.orderType ===2 && !detail.orderStatus ===1 || !detail.orderType ===2 && !detail.orderStatus ===0">
+    <section class="money-wrap"  v-if="detail.orderType !== 2 && detail.orderStatus !==1 || detail.orderType !==2 && detail.orderStatus !==0">
       <span class="heji">合计：</span>
       <span class="money">¥{{detail.payPrice}}</span>
     </section>
@@ -82,7 +82,7 @@ export default {
       this.detail = res.data;
     },
     machineReset(orderNo,machineId){ //设备复位
-      MessageBox.confirm(`确定复位${this.detail.machineName}？`).then(async () => {
+      MessageBox.confirm(`您确定要复位${this.detail.machineName}？`,'').then(async () => {
           let query = this.$route.query;
           let payload = {machineId:machineId,orderNo:orderNo};
           let res = await machineResetFun(qs.stringify(payload));
@@ -95,7 +95,7 @@ export default {
       
     },
     machineBoot(id){ //设备启动
-      MessageBox.confirm(`您确定要启动${this.detail.machineName}？`).then(async () => {
+      MessageBox.confirm(`您确定要启动${this.detail.machineName}？`,'').then(async () => {
         let query = this.$route.query;
         let payload = {orderId:id};
         let res = await machineBootFun(qs.stringify(payload));
@@ -108,7 +108,7 @@ export default {
       
     },
     orderRefund(orderNo,payPrice){ //退款
-      MessageBox.confirm('确定发起退款？').then(async () => {
+      MessageBox.confirm('确定发起退款？','').then(async () => {
         let query = this.$route.query;
         let payload = {orderNo:orderNo,refundMoney:payPrice};
         let res = await ordeRrefundFun(qs.stringify(payload));

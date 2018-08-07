@@ -28,7 +28,7 @@
       <div class="all-list">
         <label class="mint-checklist-label" v-for="(item,index) in shoplist" :key="index">
           <span class="mint-checkbox is-right">
-            <input type="checkbox" class="mint-checkbox-input" v-model="checkshoplist" :value="item.shopName"> 
+            <input type="checkbox" class="mint-checkbox-input" v-model="operateShopIds" :value="item.shopId"> 
             <span class="mint-checkbox-core"></span>
           </span> 
           <p class="mint-checkbox-label shopname">{{item.shopName}}</p>
@@ -106,7 +106,6 @@ export default {
       permissionsMIdsTxt:'',
       checkpermissionslist: [],
 
-      checkshoplist: [],
       shoplist:[],
       operateShopIds:[],
       username:'',
@@ -143,7 +142,7 @@ export default {
         this.$toast({message: '用户名2-20个字符，支持中文和英文' });
         return false;
       } 
-      if (this.checkshoptxt === '') {
+      if (this.operateShopIds.length <= 0) {
         this.$toast({message: '请选择店铺' });
         return false;
       }
@@ -182,16 +181,10 @@ export default {
       }
     },
     getcheckshop(){
-      this.checkshoptxt = this.checkshoplist.join(',');
-      let checklist = this.shoplist.filter(v=>this.checkshoplist.some(k=>k==v.shopName));
+      let checklist = this.shoplist.filter(v=>this.operateShopIds.some(k=>k==v.shopId));
       this.shopVisible = false;
-      checklist.forEach(item=>this.operateShopIds.push(`'${item.shopId}'`));
+      this.checkshoptxt = checklist.map(item=>item.shopName).join(',');
     },
-    // changeThreePerm(...arg){
-    //   this.checkpermissionslist.push(...arg); //先添加，在去重
-    //   this.checkpermissionslist = Array.from(new Set(this.checkpermissionslist));
-    //   console.log(this.checkpermissionslist);
-    // },
     addPermissions(){
       this.permissionsVisible=false;
       let checklist = this.allmenu.filter(v=>this.checkpermissionslist.some(k=>k==v.menuId));
@@ -199,6 +192,9 @@ export default {
     },
     async addmember(){
       if (this.validate()) {
+        let menshopids = [];
+        this.operateShopIds.forEach(item=>menshopids.push(`'${item}'`));
+        this.operateShopIds = [...menshopids];
         let payload = {
           username:this.username,
           phone:this.phone,

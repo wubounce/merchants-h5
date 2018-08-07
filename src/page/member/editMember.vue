@@ -3,7 +3,7 @@
   <div class="add-form">
     <div class="input-group">
       <div class="form-title"><span>负责店铺</span></div>
-      <div class="form-input"><span class="more">{{checkshoptxt?checkshoptxt:'请选择店铺'}}</span><span class="forward iconfont icon-nextx" @click="shopVisible=true"></span></div>
+      <div class="form-input"><span :class="['more',{'more-color':checkshoptxt === ''}]">{{checkshoptxt?checkshoptxt:'请选择店铺'}}</span><span class="forward iconfont icon-nextx" @click="shopVisible=true"></span></div>
     </div>
     <div class="input-group" style="border:none">
       <div class="form-title"><span>权限</span></div>
@@ -24,7 +24,7 @@
       <div class="all-list">
         <label class="mint-checklist-label" v-for="(item,index) in shoplist" :key="index">
           <span class="mint-checkbox is-right">
-            <input type="checkbox" class="mint-checkbox-input" v-model="checkshoplist" :value="item.shopName"> 
+            <input type="checkbox" class="mint-checkbox-input" v-model="operateShopIds" :value="item.shopId"> 
             <span class="mint-checkbox-core"></span>
           </span> 
           <p class="mint-checkbox-label shopname">{{item.shopName}}</p>
@@ -93,7 +93,6 @@ export default {
   data() {
     return {
       title: '编辑人员',
-      checkshoplist: [],
       shopVisible:false,
       permissionsVisible:false,
 
@@ -122,8 +121,12 @@ export default {
   },
   methods: {
     validate() {
-      if (this.checkshoptxt === '') {
+      if (this.operateShopIds.length <= 0) {
         this.$toast({message: '请选择店铺' });
+        return false;
+      }
+      if (this.checkpermissionslist.length <= 0) {
+        this.$toast({message: '请选择权限' });
         return false;
       }
       return true;
@@ -135,11 +138,10 @@ export default {
         this.phone = res.data.phone;
         this.createTime = res.data.createTime;
         this.checkshoptxt = res.data.operateShopNames;
-        this.checkshoplist = res.data.operateShopNames ? res.data.operateShopNames.split(',') :[];
 
         let updateOperateShopIds = res.data.operateShopNames ? res.data.operateShopNames.split(',') :[];
         updateOperateShopIds = this.shoplist.filter(v=>updateOperateShopIds.some(k=>k==v.shopName));
-        updateOperateShopIds.forEach(item=>this.operateShopIds.push(`'${item.shopId}'`));
+        this.operateShopIds = updateOperateShopIds.map(item=>item.shopId);
 
         this.checkpermissionslist = res.data.list.map(item=>item.menuId);
         this.permissionsMIdsTxt = res.data.list.map(item=>item.name).join(',');
@@ -155,16 +157,10 @@ export default {
       this.shoplist = res.data;
     },
     async getcheckshop(){
-      this.operateShopIds = [];
-      this.checkshoptxt = this.checkshoplist.join(',');
-      let checklist = this.shoplist.filter(v=>this.checkshoplist.some(k=>k==v.shopName));
+      let checklist = this.shoplist.filter(v=>this.operateShopIds.some(k=>k==v.shopId));
       this.shopVisible = false;
-      checklist.forEach(item=>this.operateShopIds.push(`'${item.shopId}'`));
+      this.checkshoptxt = checklist.map(item=>item.shopName).join(',');
     },
-    // changeThreePerm(...arg){
-    //   this.checkpermissionslist.push(...arg); //先添加，在去重
-    //   this.checkpermissionslist = Array.from(new Set(this.checkpermissionslist));
-    // },
     addPermissions(){
       this.permissionsVisible=false;
       let checklist = this.allmenu.filter(v=>this.checkpermissionslist.some(k=>k==v.menuId));
@@ -172,6 +168,9 @@ export default {
     },
     async updateMember(){
       if (this.validate()) {
+        let menshopids = [];
+        this.operateShopIds.forEach(item=>menshopids.push(`'${item}'`));
+        this.operateShopIds = [...menshopids];
         let payload = {
           id:this.$route.query.id,
           username:this.username,
@@ -238,10 +237,8 @@ export default {
     font-size: 16px;
     padding: 0.53rem 0.4rem;
     display: flex;
-    >div {
-      flex: 1;
-    }
     .form-input {
+      width: 70%;
       text-align: right;
     }
     .form-title {

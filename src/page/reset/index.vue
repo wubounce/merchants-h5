@@ -2,10 +2,10 @@
   <div class="reset" v-title="title">
     <form ref="resetForm" :model="reset">
     <div class="form-group">
-      <input type="text" placeholder="请输入手机号码" v-model="reset.phone" require>
+      <input type="text" placeholder="请输入手机号码" v-model="reset.phone" @input="disabledBtn" require>
     </div>
     <div class="form-group">
-      <input type="text" placeholder="请输入验证码" v-model="reset.code" require>
+      <input type="text" placeholder="请输入验证码" v-model="reset.code" @input="disabledBtn" require>
       <div class="verificode">
         <p class="sendcode" @click="sendcode" v-if="btn">获取验证码</p>
         <p class="countdown" v-else>{{time}}s后重新获取</p>
@@ -13,7 +13,7 @@
     </div>
     </form>
     <p class="btn">
-       <mt-button type="primary" class="btn-blue" @click.prevent="gotonext">下一步</mt-button>
+       <mt-button type="primary" class="btn-blue" @click.prevent="gotonext" :disabled="disabled">下一步</mt-button>
     </p>
   </div>
 </template>
@@ -25,6 +25,7 @@
   export default {
     data() {
       return {
+        title:'重置密码',
         reset: {
           phone: '',
           code: '',
@@ -32,10 +33,17 @@
         timer: null,
         time: 0,
         btn: true,
-        title:'重置密码'
+        disabled:true
       };
     },
     methods: {
+      disabledBtn(){
+        if (!this.reset.phone || !this.reset.code) {
+          this.disabled = true;
+        } else {
+          this.disabled = false;
+        }
+      },
       validatePhone() {
         if (this.reset.phone === '') {
           this.$toast({message: "请输入手机号码" });
@@ -91,7 +99,7 @@
 <style lang="scss" scoped>
   .reset {
     background: #fff;
-     height: 100%;
+    height: 100%;
     .form-group {
       position: relative;
       margin: 0 0.92rem;
@@ -118,8 +126,10 @@
         }
       }
     }
-    .btn {
-      margin:1.47rem 0.92rem;
+    .btn button {
+      width: 8.13rem;
+      height: 1.17rem;
+      margin:1.47rem auto;
     }
   }
 </style>

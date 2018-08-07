@@ -10,7 +10,7 @@
       <div class="form-group input">
         <p class="userName">
           <input type="number" v-model.trim="form.userName" v-on:input="userinputFunc" placeholder="请输入用户名/手机号" style="width:90%">
-          <span class="eyes iconfont icon-guanbi" v-if="isuser" @click="form.userName='';isuser=false"></span>
+          <span class="eyes iconfont icon-guanbi" v-if="isuser" @click="form.userName='';isuser=false;disabled=true"></span>
         </p>
         <div class="passWord">
           <div class="pwdshow">
@@ -98,7 +98,7 @@ export default {
       },
       userinputFunc(){
         this.isuser = true;
-        if (!this.form.userName) {
+        if (!this.form.userName || !this.form.password) {
           this.disabled = true;
         } else {
           this.disabled = false;
@@ -107,6 +107,11 @@ export default {
       },
       pwdinputFunc(){
         this.ispwd = true;
+        if (!this.form.userName || !this.form.password) {
+          this.disabled = true;
+        } else {
+          this.disabled = false;
+        }
       },
       openpwd(){
         this.typepwd = !this.typepwd;
@@ -123,7 +128,7 @@ export default {
 
 <style lang="scss" scoped>
 .login {
-  height: 100%;
+  min-height: 100%;
   background: #fff;
   .header {
     text-align: center;
@@ -140,8 +145,9 @@ export default {
     }
   }
   .form {
-    margin: 0 0.92rem;
+    margin: 1rem 0.92rem;
     .form-group {
+      background: #fff;
       .userName , .passWord {
         height: 1.57rem;
         border-bottom:1px solid rgba(229,229,229,1);
@@ -173,13 +179,11 @@ export default {
   }
 }
 .company {
+  background: #fff;
   text-align: center;
   font-size:14px;
   color:#999;
-  position:absolute;
-  bottom: 0.53rem;
-  left: 50%;
-  transform: translateX(-50%);
+  margin-top: 5.0rem;
 }
 </style>
 <style lang="scss">
