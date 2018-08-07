@@ -23,7 +23,7 @@
           <input v-model="orderLimitMinutes" :disabled="noEdit" :placeholder="placeholdercontent" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" maxlength='1'>
         </span>
       </p>
-      <li class="business" @click="chooseTime">营业时间<span>{{addBusinessTime}}</span></li>
+      <!-- <li class="business" @click="chooseTime">营业时间<span>{{addBusinessTime}}</span></li> -->
       <p class="picture">
         <span>店铺照片</span>
         <span>
@@ -63,9 +63,9 @@
     </div>
 
     <!-- 营业时间 -->
-    <mt-popup v-model="timeVisible" position="bottom" class="mint-popup">
+    <!-- <mt-popup v-model="timeVisible" position="bottom" class="mint-popup">
        <mt-picker class="picker"  :slots="slotsTime" @change="changeTime" :showToolbar="true"><p class="toolBar"><span @click="cancel">取消</span><span @click="chooseDay" id="allDay">全天</span><span @click="confirmNews">确定</span></p></mt-picker>
-    </mt-popup>
+    </mt-popup> -->
 
   </section>
 </template>
@@ -126,8 +126,7 @@ export default {
           className: 'shop-type',
           textAlign: 'center',
           position:'bottom',
-          name:'店铺类型',
-          defaultIndex:2
+          name:'店铺类型'
         }
       ],
       addressSlots:[
@@ -377,6 +376,7 @@ export default {
           else {
             this.list[1].value = this.provinceName + this.cityName + this.districtName;
           }
+          MessageBox.alert('请同步更改[小区/大厦/学校]选项');
           
           break;
         //经纬度
@@ -617,8 +617,6 @@ export default {
           this.list[1].value = res.data.province + res.data.city + res.data.district;
         }
         //经纬度
-        //待完成...
-
         //详细地址
         this.address = res.data.address;
         //设备类型
@@ -631,7 +629,12 @@ export default {
         //营业时间
         this.addBusinessTime = res.data.workTime;
         //店铺图片
-        this.imgId.defaultPicture = res.data.imageId;
+        if(res.data.imageId == null || res.data.imageId == '' || res.data.imageId == undefined) {
+          this.imgId.defaultPicture = '../../../static/image/shop/add.png';
+        }
+        else {
+          this.imgId.defaultPicture = res.data.imageId;
+        }
         //省
         let objPro = { parentId: 0 };
         let resPro = await areaListFun(qs.stringify(objPro));
@@ -658,10 +661,7 @@ export default {
           }
         }
         //设备类型
-        let objMachine = {
-          onlyMine: false
-        };
-        let resMachine = await listParentTypeFun(qs.stringify(objMachine));
+        let resMachine = await listParentTypeFun();
         if(resMachine.code ===0 ) {
           let arrmachine = res.data.machineTypeNames.split(',');
           let arr = [];
@@ -679,9 +679,7 @@ export default {
     async getShoplist() {
       let res = await manageListFun();
       if(res.code === 0 ) {
-        this.arrName = res.data.map((i) => {
-          return i.shopName;
-        });
+        // this.arrName = res.data.map();
       }
     },
     //从editMap里取数据
@@ -739,16 +737,11 @@ export default {
     }
   },
   created() {
-    console.log(this.shopName);
     this.getShopDetail();
-    console.log(this.shopName);
-    //this.getArea();
     this.getShoplist();
     this.getFromValue();
-    console.log(this.shopName);
   },
   mounted() {
-    console.log(this.shopName);
   },
   components:{
     UploadImg
