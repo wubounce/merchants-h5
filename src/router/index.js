@@ -212,7 +212,10 @@ export default new Router({
       path: '/addShop',
       name: 'addShop',
       component: () => import ('@/page/shop/addShop'),
-      meta: {title: '店铺新增'},
+      meta: {
+        title: '店铺新增',
+        keepAlive: true
+      }
     },
     {
       path: '/mapSearch',
@@ -224,7 +227,10 @@ export default new Router({
       path: '/editMap',
       name: 'editMap',
       component: () => import ('@/page/shop/editMap'),
-      meta: {title: '地图搜索'},
+      meta: {
+        title: '地图搜索',
+        keepAlive: true
+      },
     },
     {
       path: '/shopDetail',
@@ -236,7 +242,7 @@ export default new Router({
       path: '/editShop',
       name: 'editShop',
       component: () => import ('@/page/shop/editShop'),
-      meta: {title: '店铺修改'},
+      meta: {title: '店铺修改',keepAlive: true},
     },
 
     //待办事项

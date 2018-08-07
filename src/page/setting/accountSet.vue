@@ -24,12 +24,13 @@ export default {
         password:'',
         alipayAccount:'未绑定',
         status:''
-      }
+      },
+      isAlipay:''
     };
   },
   methods: {
     toRealName() {
-      if( this.user.alipayAccount == '未绑定') {
+      if( this.isAlipay == '' || this.isAlipay == null || this.isAlipay == undefined ) {
         this.$toast({
           message:'请先绑定支付宝，再进行实名认证'
         });
@@ -56,7 +57,7 @@ export default {
       if(res.code ===0) {
         this.user = res.data;
         this.isBlue = res.data.alipayAccount == "" || res.data.alipayAccount == null ? true : false;
-
+        this.isAlipay = res.data.alipayAccount;
         //判断认证情况
         switch(res.data.status) {
               case 0: 
