@@ -17,7 +17,10 @@
             <input type="text" v-model.trim="form.password" v-if="typepwd" autocomplete="off">
             <input type="password" v-model.trim="form.password" v-on:input="pwdinputFunc" placeholder="请输入密码" autocomplete="off" v-else>
           </div>
-          <div class="eyes iconfont icon-biyanjing"  @click="openpwd"></div>
+          <div @click="openpwd">
+            <span  class="eyes iconfont icon-yanjing" v-if="typepwd"></span>
+            <span  class="eyes iconfont icon-biyanjing" v-else></span>
+          </div>
         </div>
       </div>
       <div class="form-group">
