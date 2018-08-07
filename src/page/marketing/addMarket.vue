@@ -176,7 +176,8 @@ export default {
   },
   methods: {
     async shopListFun(){
-      let res = await shopListFun();
+      let payload = Object.assign({},{timeId:'123'});
+      let res = await shopListFun(qs.stringify(payload));
       this.shoplist = res.data;
     },
     getcheckshop(){
@@ -269,7 +270,7 @@ export default {
       }
      let status = null;
       this.addmarket.addstatus === true ? status = 0  : status = 1;
-      let payload = Object.assign({},this.addmarket,{week:week,shopIds:this.shopIds.join(','),status:status,timeId:'123'});
+      let payload = Object.assign({},this.addmarket,{week:week,shopIds:this.shopIds.join(','),status:status});
       delete payload.addstatus;
       let res = await addOruPdateFun(qs.stringify(payload));
       if (res.code === 0) {
