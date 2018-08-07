@@ -26,7 +26,7 @@
       <div class="all-list">
         <label class="mint-checklist-label" v-for="(item,index) in  weekTitle" :key="index">
           <span class="mint-checkbox is-right">
-            <input type="checkbox" class="mint-checkbox-input" v-model="checkWeeklist" :value="item.value"> 
+            <input type="checkbox" class="mint-checkbox-input" v-model="weeklist" :value="item.value"> 
             <span class="mint-checkbox-core"></span>
           </span> 
           <span class="mint-checkbox-label shopname">{{item.label}}</span>
@@ -106,7 +106,7 @@ export default {
         {value:7,label:'周日'}
       ],
       weekVisible:false,
-      checkWeeklist:[],
+      weeklist:[],
       checkWeeklisttxt:'',
       
       addmarket:{
@@ -195,10 +195,9 @@ export default {
       this.activeVisible = data;
     },
     checkeWeekList(){ //选择自定星期
-      let checklist = this.weekTitle.filter(v=>this.checkWeeklist.some(k=>k==v.value));
-      let checkActiveList = [];
-      checklist.forEach(item=>checkActiveList.push(item.label));
-      this.checkWeeklisttxt = checkActiveList.join(',');
+      this.activeCurrentTags = '';
+      let checklist = this.weekTitle.filter(v=>this.weeklist.some(k=>k==v.value));
+      this.checkWeeklisttxt = checklist.map(item=>item.label).join(',');
       this.weekVisible = false;
     },
     chooseDay() {
@@ -242,12 +241,19 @@ export default {
         this.$toast({message: "优惠期开始时间不能大于结束时间"});
         return false;
       }
-      if (!this.activeCurrentTags && !this.checkWeeklisttxt) {
+      if (!this.activeCurrentTags && this.weeklist.length <= 0) {
         this.$toast({message: "请选择活动日" });
         return false;
       }
       if (!this.addmarket.time) {
         this.$toast({message: "请选择每日活动时段" });
+        return false;
+      }
+      let timearry = this.addmarket.time.split('-');
+      let timearrystart = timearry[0].replace(/\:/g, '');  
+      let timearrystartend = timearry[1].replace(/\:/g, '');  
+      if(timearrystart > timearrystartend){  
+        this.$toast({message: "每日活动时段开始时间不能大于结束时间"});
         return false;
       }
       if (!this.addmarket.discount) {
@@ -259,8 +265,8 @@ export default {
         return false;
       }
       let week = null;
-      if(this.checkWeeklisttxt){   
-        week = this.checkWeeklisttxt;
+      if(this.weeklist.length>0){   
+        week = this.weeklist.join(',');
       }else{
         if (this.activeCurrentTags === '周一至周五') {
           week = '1,2,3,4,5';

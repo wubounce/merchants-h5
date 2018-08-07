@@ -169,14 +169,12 @@ export default {
             .tag{
                 transform: rotate(45deg); 
                 position: absolute;
-                width: .88rem;
-                height: .88rem;
                 text-align: center;
                 line-height: .88rem;
-                top: 0;
-                right: 0;
+                top: 0.01rem;
+                right: 0.04rem;
                 color: #FFE199;
-                font-size: 18px;
+                font-size: 16px;
                 span{
                   font-size: 12px;
                 }     

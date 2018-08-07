@@ -6,7 +6,7 @@
       <section class="sarch-wrap">
         <div class="search">
             <form action="" target="frameFile" v-on:submit.prevent="">
-              <input type="number" value='搜索' v-model.trim="searchData" @keyup.enter="searchOrder" @input="clearSearch" placeholder="请输入用户手机号/订单号查询" class="serch">
+              <input type="text" value='搜索' v-model.trim="searchData" @keyup.enter="searchOrder" @input="clearSearch" placeholder="请输入用户手机号/订单号查询" class="serch">
               <iframe name='frameFile' style="display: none;"></iframe>
               <span class="select-back" @click="searchOrder">搜索</span>
             </form>
@@ -144,7 +144,7 @@ export default {
     //   this.activeTime = 0;
     // },
     async searchOrder(e){ //搜索
-      if (!validatSearch(this.searchData)) {
+      if (this.searchData !== '' && !validatSearch(this.searchData)) {
         this.$toast({message: "搜索内容只支持英文字母和数字" });
         return false;
       }
