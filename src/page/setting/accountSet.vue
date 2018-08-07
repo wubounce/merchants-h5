@@ -29,19 +29,26 @@ export default {
   },
   methods: {
     toRealName() {
-      if( this.user.status == "未认证" || this.user.status == "未通过" ) {
-        this.$router.push({
-          name: 'realName',
-          query:{
-            alipayAccount: this.user.alipayAccount,
-            status: this.user.status
-          }
+      if( this.user.alipayAccount == '未绑定') {
+        this.$toast({
+          message:'请先绑定支付宝，再进行实名认证'
         });
       }
       else {
-        this.$router.push({
-          name: 'realNameGet',
-        });
+        if( this.user.status == "未认证" || this.user.status == "未通过" ) {
+          this.$router.push({
+            name: 'realName',
+            query:{
+              alipayAccount: this.user.alipayAccount,
+              status: this.user.status
+            }
+          });
+        }
+        else {
+          this.$router.push({
+            name: 'realNameGet',
+          });
+        }
       }
     },
     async getAliAndStatus() {

@@ -178,16 +178,8 @@ export default {
     UploadImg
   },
   created() {
-    if( this.$route.query.alipayAccount == '' || this.$route.query.alipayAccount == null ) {
-      MessageBox.alert("请先绑定支付宝，再进行实名认证");
-      this.$router.push({
-        name:'setAlipay'
-      });
-    }
-    else {
-      if(this.$route.query.status == "未通过") {
-        this.getRealName();
-      }
+    if(this.$route.query.status == "未通过") {
+      this.getRealName();
     }
   }
 };
