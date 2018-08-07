@@ -326,7 +326,7 @@ export default {
             MessageBox.alert('请先选择所在地区，再选择小区/大厦/学校');
           }
           else {
-            this.goMap("mapSearch",this.shopName,this.shopType,
+            this.goMap("mapSearch",this.cityName,this.shopName,this.shopType,
                       this.list[1].value,this.provinceId, this.cityId, this.districtId,this.address,this.machineName,this.machineTypeIdsArray,
                       this.isReserve,this.orderLimitMinutes,this.addBusinessTime,
                       this.imageId);
@@ -337,10 +337,11 @@ export default {
       }
     },
    //跳转传值
-    goMap(x,name,type,place,provinceId,cityId,districtId,address,machineName,machinetype,isReserve,LimitMinutes,worktime,img) {
+    goMap(x,y,name,type,place,provinceId,cityId,districtId,address,machineName,machinetype,isReserve,LimitMinutes,worktime,img) {
       this.$router.push({
         name:x,
         query: {
+          city:y,
           name:name,
           type:type,
           place:place,
@@ -364,6 +365,7 @@ export default {
         case 0:
           this.popupVisible = false;
           this.list[0].value = this.shopTypeString;
+          console.log(this.shopType);
           break;
         case 1:
           this.placeVisible = false;
@@ -621,6 +623,8 @@ export default {
     getFromValue(data) {
       this.list[2].value = this.$route.query.special;
       this.shopName = (this.$route.query.name == '') ? '' : this.$route.query.name;
+      
+      this.slots[0].defaultIndex = this.$route.query.type-1;
       switch(this.$route.query.type) {
         case 1:
           this.list[0].value = '学校';
