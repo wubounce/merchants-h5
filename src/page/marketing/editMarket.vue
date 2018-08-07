@@ -289,8 +289,6 @@ export default {
       this.addmarket.endTime = moment(value).format('YYYY-MM-DD');
     },
     async toaddMaket(){
-      console.log(this.activeCurrentTags)
-      console.log(this.weeklist)
       if (this.shopIds.length<=0) {
         this.$toast({message: "请选择店铺" });
         return false;
