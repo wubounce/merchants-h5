@@ -504,10 +504,7 @@ export default {
       this.isClass = true;
       this.isbgc = true;
       this.deviceDetail = true;
-      let obj = {
-        onlyMine: false
-      };
-      let res = await listParentTypeFun(qs.stringify(obj));
+      let res = await listParentTypeFun();
       if(res.code ===0 ) {
         this.machineArray = res.data;
         let arr = [];
