@@ -67,7 +67,7 @@ export const PayType = (ststus)=>{
 		case 3:
 		 	 return '微信 ';
 		default:
-  			return ststus;
+  			return '其他';
 	}
 };
 

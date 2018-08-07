@@ -11,9 +11,9 @@
           <div class="content">
               <p class="con-title">{{detail.machineName}}</p>
               <p class="con-type">{{detail.machineFunctionName}}<span style="padding:0 0.346667rem">|</span>时长{{detail.markMinutes}}分钟</p>
-              <p class="con-price" v-if="!detail.orderType ===2 && !detail.orderStatus ===1 || !detail.orderType ===2 && !detail.orderStatus ===0">¥{{detail.markPrice}}</p>
+              <p class="con-price" v-if="detail.orderType !== 2 && detail.orderStatus !==1 || detail.orderType !==2 && detail.orderStatus !==0">¥{{detail.markPrice}}</p>
           </div>
-          <div class="order-action" v-if="orderType === 2">预约</div>
+          <div class="order-action" v-if="detail.isReserve === 1">预约</div>
         </div>
       </section>
     </div>
@@ -22,8 +22,8 @@
         <div class="vip"><span class="viptag">vip</span>VIP会员卡</div>
         <div class="discount">-¥{{detail.discountPrice}}</div>
       </div>
-       <div class="total-border" v-if="detail.discountType===2&&detail.discountPrice>0">
-        <div class="vip">优惠券</div>
+       <div class="total-border" v-if="detail.discountPrice>0">
+        <div class="vip">限时优惠</div>
         <div class="discount">-¥{{detail.discountPrice}}</div>
       </div>
     </section>
@@ -67,7 +67,6 @@ export default {
     return {
       title: '订单详情',
       detail:{},
-      orderType:null,
     };
   },
   mounted() {
@@ -75,7 +74,6 @@ export default {
   },
   created(){
     let query = this.$route.query?this.$route.query:{};
-    this.orderType = Number(query.orderType);
     this.getDetail(query.orderNo);
   },
   methods: {
