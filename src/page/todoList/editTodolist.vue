@@ -144,7 +144,8 @@ import moment from 'moment';
       },
       async getFunctionList() {
         let objFunList = {
-          machineParentTypeId: this.$route.query.machineParentTypeId
+          machineParentTypeId: this.$route.query.machineParentTypeId,
+          shopId: this.$route.query.shopId
         };
         let resFunList = await getFunctionListFun(qs.stringify(objFunList));
         if(resFunList.code === 0 ) {
