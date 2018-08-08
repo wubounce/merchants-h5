@@ -620,6 +620,7 @@ export default {
                   _this.geocoder_CallBack(result.regeocode.formattedAddress);
               }
               else {
+                MessageBox.alert('定位有问题');
               }
           });        
         });
