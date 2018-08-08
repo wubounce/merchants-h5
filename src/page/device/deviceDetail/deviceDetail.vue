@@ -14,43 +14,44 @@
           <ul class="device-detail-bd">
             <li>
               <span class="field-title">设备名称</span>
-              <p class="select-1">
-                <input type="text" v-model="deviceDetail.machineName">
+              <p>
+                <span>{{deviceDetail.machineName}}</span>
               </p>
             </li>
             <li @click="checkDeviceSelect">
               <span class="field-title">所属店铺</span>
-              <p class="select">{{deviceDetail.shopName}}</p>
+              <p>{{deviceDetail.shopName}}</p>
             </li>
 
             <router-link to="/addDevice" tag="li">
               <span class="field-title">设备类型</span>
-              <p class="select">{{deviceDetail.parentTypeName}}</p>
+              <p>{{deviceDetail.parentTypeName}}</p>
             </router-link>
             <li @click="checkSecondClass">
               <span class="field-title">设备型号</span>
-              <p class="select">{{deviceDetail.subTypeName}}</p>
+              <p>{{deviceDetail.subTypeName}}</p>
             </li>
             <li @click="getCompany">
               <span class="field-title">公司</span>
-              <p class="select">{{deviceDetail.company}}</p>
+              <p>{{deviceDetail.company}}</p>
             </li>
 
             <li>
               <span class="field-title">NQT</span>
-              <p class="select-2">
-                <input type="text" v-model="deviceDetail.nqt" placeholder="请输入模块上二维码">
+              <p>
+                {{deviceDetail.nqt}}
               </p>
             </li>
             <li>
               <span class="field-title">IMEI</span>
-              <p class="select-2">
-                <input type="text" v-model="deviceDetail.imei" placeholder="请输入模块上二维码">
+              <p>
+                {{deviceDetail.imei}}
               </p>
             </li>
             <li @click="toFunctionSeting">
               <span class="field-title">功能设置</span>
-              <p class="select">{{fromdata.functionType.name}}</p>
+              <p>已设置</p>
+              <span class="iconfont icon-xiangshangjiantou"></span>
             </li>
           </ul>
         </li>
@@ -258,6 +259,7 @@
           overflow: hidden;
           box-sizing: border-box;
           position: relative;
+          display: flex;
           &::after {
             content: '';
             display: block;
@@ -267,37 +269,17 @@
             border-bottom: rgb(244, 247, 254) solid 1px;
           }
           .field-title {
-            width: 30%;
-            float: left;
+            width: 50%;
+            text-align: left;
+            color: rgba(153, 153, 153, 1);
           }
-          .select,
-          .select-1,
-          .select-2 {
-            border: 0;
-            color: #7f7f7f;
-            width: 70%;
-            margin: 0;
-            padding: 0 0.3rem 0 0;
+         p {
+            flex-grow: 1;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
             text-align: right;
-            box-sizing: border-box;
-            float: left;
-            height: 0.4rem;
-            input {
-              text-align: right;
-            }
-          }
-          .select-2 {
-            padding: 0 0.35rem;
-            font-size: 90%;
-            background: url("../../../../static/image/center/icon_scon.png") no-repeat right;
-            background-size: 0.3rem 0.3rem;
-            .nqt {
-              font-size: 80%;
-            }
-          }
-          .select {
-            background: url("../../../../static/image/center/right.png") no-repeat right;
-            background-size: 0.16rem 0.27rem;
+            color:rgba(51, 51, 51, 1);
           }
           .right {
             float: right;

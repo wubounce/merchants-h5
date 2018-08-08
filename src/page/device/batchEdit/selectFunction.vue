@@ -28,6 +28,7 @@
         </p>
       </div>
     </section>
+    <div style="width:100%;height:1.73rem;"></div>
     <section>
       <button class="submitBtn" @click="goNext">确定</button>
     </section> 

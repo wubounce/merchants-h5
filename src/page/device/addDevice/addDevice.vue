@@ -15,15 +15,15 @@
             </li>
             <li @click="checkDeviceSelect">
               <span class="field-title">所属店铺</span>
-              <p class="select">{{fromdata.shopType.name}}</p>
+              <p class="select"><span>{{fromdata.shopType.name}}</span></p>
             </li>
             <li @click="checkFirstClass">
               <span class="field-title">设备类型</span>
-              <p class="select">{{fromdata.firstType.name}}</p>
+              <p class="select"><span>{{fromdata.firstType.name}}</span></p>
             </li>
             <li @click="checkSecondClass">
               <span class="field-title">设备型号</span>
-              <p class="select">{{fromdata.secondType.name}}</p>
+              <p class="select"><span>{{fromdata.secondType.name}}</span></p>
             </li>
             <li>
               <span class="field-title">NQT</span>
@@ -308,10 +308,10 @@
         }
       },
       async submit() {  //提交
-        let arr= [].concat(JSON.parse(JSON.stringify(this.funTypeList))); 
+        let arr= [].concat(JSON.parse(JSON.stringify(this.functionSetList))); 
         arr.forEach(item=>{
-            item.ifOpen=item.ifOpen?0:1;
-          });
+          return item.ifOpen=item.ifOpen?0:1;
+        });
         let obj = {
           machineName: this.fromdata.machineName,
           shopId: this.fromdata.shopType.id,
@@ -328,6 +328,8 @@
         let res = await deviceAddorEditFun(qs.stringify(obj));
         if(res.code===0) {
           this.$router.push({name: 'deviceMange'});
+        }else {
+          MessageBox.alert(res.msg);
         }
 
       },
@@ -411,10 +413,14 @@
             float: left;
           }
           p {
-            flex-grow: 1;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            white-space: nowrap;
+            display: flex;
+            span {
+              margin-right: 10px;
+              flex-grow: 1;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap;
+            }
           }
           .select,
           .select-1,
@@ -423,11 +429,9 @@
             color: #7f7f7f;
             width: 70%;
             margin: 0;
-            padding: 0 0.3rem 0 0;
             text-align: right;
             box-sizing: border-box;
             float: left;
-            height: 0.4rem;
             input {
               text-align: right;
             }

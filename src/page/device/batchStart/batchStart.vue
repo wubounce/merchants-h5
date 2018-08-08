@@ -127,14 +127,9 @@
 
     watch: {
       keyword: function (newVal) {
-        if (newVal !== '') {
           delay(() => {
             this.fetchData();
-          }, 300);
-          this.isResult = true
-        } else {
-          this.isResult = false
-        }
+          }, 200);     
       }
     },
     computed: {
