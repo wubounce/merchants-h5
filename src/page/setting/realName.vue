@@ -11,7 +11,7 @@
               <input type="text" class='statusInput' v-model="IDCardNo" placeholder="请填写身份证号">
           </span>
        </p>
-       <p class="imgShow">上传身份证照片</p>
+       <p class="imgShow">{{showText}}</p>
        <div class="bgc">
          <UploadImg :id="imgId.a"  :defaultPicture="img.defaultPicture1" :isStatus="imgStatus.isStatus" @onImgFiles="UpdatedImgFiles1"></UploadImg>
          <UploadImg :id="imgId.b"  :defaultPicture="img.defaultPicture2" :isStatus="imgStatus.isStatus" @onImgFiles="UpdatedImgFiles2"></UploadImg>
@@ -35,6 +35,7 @@ export default {
     return {
       title: '实名认证',
       alipay: '1374862991@qq.com',
+      showText:'',
       isDisable: true,
       cardName:'',
       IDCardNo:'',
@@ -178,8 +179,14 @@ export default {
     UploadImg
   },
   created() {
-    if(this.$route.query.status == "未通过") {
+    if(this.$route.query.status == "未通过" || this.$route.query.status == "审核中" ) {
       this.getRealName();
+    }
+    if(this.$route.query.status == "审核中") {
+      this.showText = '正在进行审核';
+    }
+    else {
+      this.showText = '上传身份证照片';
     }
   }
 };

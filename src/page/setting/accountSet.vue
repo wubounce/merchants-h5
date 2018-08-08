@@ -30,13 +30,13 @@ export default {
   },
   methods: {
     toRealName() {
-      if( this.isAlipay == '' || this.isAlipay == null || this.isAlipay == undefined ) {
+      if(!this.isAlipay) {
         this.$toast({
           message:'请先绑定支付宝，再进行实名认证'
         });
       }
       else {
-        if( this.user.status == "未认证" || this.user.status == "未通过" ) {
+        if( this.user.status == "未认证" || this.user.status == "未通过" || this.user.status == "审核中" ) {
           this.$router.push({
             name: 'realName',
             query:{
