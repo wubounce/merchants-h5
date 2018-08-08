@@ -57,11 +57,7 @@ import moment from 'moment';
           });
 	      },
 	      action => {
-	      	this.$toast({
-              message: "已取消",
-              position: "middle",
-              duration: 3000
-            });
+	      	
 	      }
 	     );
       },
@@ -77,7 +73,7 @@ import moment from 'moment';
       },
       goStart() {
         //立即启动
-        MessageBox.confirm('您确定要立即批量启动设备么？').then(async() => {	        
+        MessageBox.confirm('您确定要立即批量启动设备么？','').then(async() => {	        
           let obj = {
             shopId: this.item.shopId,
             firstTypeId: this.item.machineParentTypeId,
@@ -93,11 +89,6 @@ import moment from 'moment';
           }
 	      },
 	      action => {
-	      	this.$toast({
-              message: "已取消",
-              position: "middle",
-              duration: 3000
-            });
 	      }
 	     );
       },
