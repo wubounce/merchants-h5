@@ -12,8 +12,8 @@
 						<p class="time"><span>时间</span><span class="time-blue">{{item.beginTime}}</span></p>
 						<p class="time"><span>店铺</span><span class="text">{{item.shopName.length>15 ? item.shopName.slice(0,15) + '...' : item.shopName }}</span></p>
 						<div class="time display-flex">
-							<div><span>类型</span><span class="text">{{item.machineTypeName}}</span></div>
-							<div><span>模式</span><span class="text">{{item.functionName}}</span></div>
+							<div class='type'><span>类型</span><span class="text">{{item.machineTypeName}}</span></div>
+							<div class='type'><span>模式</span><span class="text">{{item.functionName}}</span></div>
 						</div>
 					</li>
 					<div v-if="allLoaded" class="nomore-data">没有更多了</div>
@@ -147,15 +147,17 @@ section {
 					div {
 						&:first-child {
 							border-right: 1px solid #DFE6FF;
-							padding-right: 2.3rem;
 						}
 						&:last-child {
-							margin-left: 1rem;
+							//margin-left: 1rem;
 						}
 					}
 				}
 				.display-flex {
 					display: flex;
+					.type {
+						width: 50%;
+					}
 				}
 			}
 			.nomore-data {
