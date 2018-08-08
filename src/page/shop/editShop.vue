@@ -616,7 +616,7 @@ export default {
             extensions: "all"
           });
           geocoder.getAddress(lnglatXY, function(status, result) {
-              if (status === 'complete' && result.info === 'OK') {
+              if(status === 'complete' && result.info === 'OK') {
                   _this.geocoder_CallBack(result.regeocode.formattedAddress);
               }
               else {
