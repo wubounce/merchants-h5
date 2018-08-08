@@ -122,10 +122,10 @@
         }
       }, 
       async getDeviceList(index)  {
-        let payload = {machineState: this.index,};
+        let payload = {machineState: this.index,page: 1,pageSize: 10};
         let res = await deviceListFun(qs.stringify(payload));
         if(res.code === 0) {
-          this.list = res.data;
+          this.list = res.data.items;
           this.list.forEach(item=>{
             switch(item.machineState){
             case 1:
