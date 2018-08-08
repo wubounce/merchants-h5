@@ -669,8 +669,6 @@ export default {
     },
     async getShoplist() {
       let res = await manageListFun();
-      if(res.code === 0 ) {
-      }
     },
     geocoder_CallBack(data) {
       this.list[2].value = data;
