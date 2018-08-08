@@ -71,7 +71,7 @@ export default {
   },
   filters:{
     tofixd(value){
-     return Number(value).toFixed(0);
+     return Number(value).toFixed(1);
     }
   }
 };
