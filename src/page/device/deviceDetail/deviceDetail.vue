@@ -177,37 +177,59 @@
       checkSecondClass() {},
       toFunctionSeting() {},
       deviceDele() {  //删除
-        MessageBox.confirm('确定执行此操作?').then(async () => {
+        MessageBox.confirm('确定删除此设备?').then(async () => {
           let res = await deleteDeviceFun(qs.stringify({machineId: this.$route.query.machineId}));
           if(res.code === 0) {
-            this.$router.push({name:'deviceMange'});
-          }
+            let instance = this.$toast({
+              message: '删除设备成功',
+              iconClass: 'mint-toast-icon mintui mintui-success'
+            });
+            setTimeout(() => {
+              instance.close();
+              this.$router.push({name:'deviceMange'});
+              }, 2000);
+          
+            }
           else {
-            MessageBox.alert(res.msg);
+          this.$toast(res.msg);
           }
         });   
         
       },
       deviceTZJ() {
-        MessageBox.confirm('确定执行此操作?').then(async () => {
+        MessageBox.confirm('是否确认筒自洁此设备?').then(async () => {
           let res = await tzjDeviceFun(qs.stringify({machineId: this.$route.query.machineId}));
           if(res.code === 0) {
-            MessageBox.alert("操作成功");
+            let instance = this.$toast({
+              message: '筒自洁成功',
+              iconClass: 'mint-toast-icon mintui mintui-success'
+            });
+            setTimeout(() => {
+              instance.close();
+              this.$router.push({name:'deviceMange'});
+              }, 2000);
         }
         else {
-          MessageBox.alert(res.msg);
+          this.$toast(res.msg);
           }
         });
         
       },
       deviceRest() {  //复位
-        MessageBox.confirm('确定执行此操作?').then(async ()=> {
+        MessageBox.confirm('是否确认复位此设备?').then(async ()=> {
           let res = await manageResetDeviceFun(qs.stringify({machineId: this.$route.query.machineId}));
           if(res.code === 0) {
-            MessageBox.alert("操作成功");
+            let instance = this.$toast({
+              message: '复位成功',
+              iconClass: 'mint-toast-icon mintui mintui-success'
+            });
+            setTimeout(() => {
+              instance.close();
+              this.$router.push({name:'deviceMange'});
+              }, 2000);
           }
           else {
-            MessageBox.alert(res.msg);
+            this.$toast(res.msg);
           }
         });
 

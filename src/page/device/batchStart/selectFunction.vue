@@ -8,30 +8,20 @@
     <ul>
       <li class="bat-hd">
         <span>{{hdTitleArr[currIndex]}}</span>
-        <span @click="chooseTime">{{beginTime}}</span>
+        <span v-show="functionSetModel">{{selectedFunction}}</span>
+        <span @click="chooseTime" v-show="!functionSetModel">{{beginTime}}</span>
       </li>
     </ul>
     <div v-show="functionSetModel"> 
-      <section class="fun-item-hd">
-        <div>
-          <p v-for="(item,index) in functionListTitle " :key="index">
-            <span v-for="(it,idx) in item " :key="idx">{{it}}</span>
-          </p>
-        </div>
-      </section>
-      <section class="fun-item-bd funlist">
-        <div v-for="(item,index) in secondTypeList " :key="index" class="">
-          <span class="fun-list-item">{{item.functionName}}</span>
-          <span class="fun-list-item">{{item.needMinutes}}</span>
-          <span class="fun-list-item">{{item.functionPrice}}</span>         
-          <p class="fun-list-item">
-            <mt-switch v-model="item.ifOpen"></mt-switch>
-          </p>
-          <p class="fun-list-item checkBox">
-            <span class="iconfont icon-weixuanzhong" :class="{'icon-xuanze':index==selectIndex}" @click="checkItemBox(index)"></span>
-          </p>
-        </div>
-      </section>
+      <div class="sf-bd">
+        <ul>
+          <li class="item" v-for="(item,index) in secondTypeList" :class="{selected:index==selectIndex}" :key="index" @click="selectClick(index,item.functionName)">
+            <div></div>
+            <div>{{item.functionName}}</div>
+            <div class="select"><span class="iconfont" :class="{'icon-xuanze':index==selectIndex}"></span></div>
+          </li>
+        </ul>
+      </div>
     </div>
     <div style="width:100%;height:1.73rem;"></div>
     <!-- 启动时间 -->
@@ -108,9 +98,10 @@ export default {
       };
     },
     methods: {
-      checkItemBox: function (index) {
+      selectClick: function (index,name) {
         this.selectIndex = index;
         this.functionId = this.secondTypeList[index].functionId;
+        this.selectedFunction= name;
       },
       async checkSecondClass() { //获取功能列表
         let query = this.$route.query;
@@ -134,8 +125,16 @@ export default {
         let payload = {machineParentTypeId:query.parentTypeId,shopId:query.shopId,standardFunctionId:this.functionId,startTime:time};
         let res = await batchStartOnFun(qs.stringify(payload));
         if(res.code === 0) {
-          MessageBox.alert("操作成功");
-          this.$router.push({name:'todolist'});
+          let instance = this.$toast({
+              message: '批量启动成功',
+              iconClass: 'mint-toast-icon mintui mintui-success'
+            });
+            setTimeout(() => {
+              instance.close();
+              this.$router.push({name:'todolist'});
+              }, 2000);
+        }else {
+          this.$toast(res.msg);
         }
       },
       handleConfirm(data) {
@@ -304,7 +303,41 @@ export default {
       }
     }
   }
-
+   .sf-bd {
+      ul {
+        width:100%;
+        li {
+          display: flex;
+          text-align:center;
+          height: 1.17rem;
+          line-height: 1.17rem;
+          background: rgba(255, 255, 255, 1);
+          font-size: 0.4rem;
+          color: rgba(51, 51, 51, 1);
+          div {
+            &:nth-child(1) {
+              width: 10%;
+            }
+            &:nth-child(2) {
+              width: 80%;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap;
+            }
+            &:nth-child(3) {
+              width: 10%;
+              color: #1890ff;
+              text-align: center;
+            }
+            
+          }
+        }
+        .selected {
+              background-color:rgba(24, 144, 255, 0.05);
+            }
+      }
+      
+    }
   .promiss-footer {
       display: flex;
       height: 1.33rem;

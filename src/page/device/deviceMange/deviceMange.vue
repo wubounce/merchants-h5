@@ -117,7 +117,7 @@
           this.titleArr= res.data; 
         }
         else {
-          MessageBox.alert(res.msg);
+          this.$toast(res.msg);
         }
       }, 
       async getDeviceList(index)  {
@@ -159,7 +159,7 @@
         });
         }
         else {
-          MessageBox.alert(res.msg);
+          this.$toast(res.msg);
         }
       },
     },

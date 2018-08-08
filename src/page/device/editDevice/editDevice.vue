@@ -1,43 +1,42 @@
 <template>
   <section v-title="title">
     <div v-show="modelShow">
-    <ul class="device-detail">
+      <ul class="device-detail">
+    
+        <!-- 表单模块部分  -->
+        <li class="device-detail-item">
+          <!-- 表单元格渲染 -->
+          <ul class="device-detail-bd">
+            <li>
+              <span class="field-title">设备名称</span>
+              <p class="select-1">
+                <input type="text" v-model="fromdata.machineName">
+              </p>
+            </li>
+            <li @click="checkDeviceSelect">
+              <span class="field-title">所属店铺</span>
+              <p class="select"><span>{{fromdata.shopType.name}}</span></p>
+            </li>
+            <li>
+              <span class="field-title">NQT</span>
+              <p class="select-2" @click="wxScan($event,'npt')">
+                <span>{{fromdata.nqt}}</span>
+              </p>
+            </li>
+            <li>
+              <span class="field-title">IMEI</span>
+              <p class="select-2" @click="wxScan($event,'imei')">
+                <span>{{fromdata.imei}}</span>
+              </p>
+            </li>
+            <li @click="toFunctionSeting">
+              <span class="field-title">功能设置</span>
+              <p class="select"><span>已设置</span></p>
+            </li>
+          </ul>
+        </li>
 
-      <!-- 表单模块部分  -->
-      <li class="device-detail-item">
-        <!-- 表单元格渲染 -->
-        <ul class="device-detail-bd">
-          <li>
-            <span class="field-title">机器名称</span>
-            <p class="select-1">
-              <input type="text" v-model="fromdata.machineName">
-            </p>
-          </li>
-          <li>
-            <span class="field-title">所属店铺</span>
-            <p class="select" @click="checkDeviceSelect">{{fromdata.shopName}}</p>
-          </li>
-          <li>
-            <span class="field-title">NQT</span>
-            <p class="select-2">
-              <input type="text" v-model="fromdata.nqt" placeholder="请输入模块上二维码">
-            </p>
-          </li>
-          <li>
-            <span class="field-title">IMEI</span>
-            <p class="select-2">
-              <input type="text" v-model="fromdata.imei" placeholder="请输入模块上二维码">
-            </p>
-          </li>
-
-          <li @click="toFunctionSeting">
-            <span class="field-title">功能设置</span>
-            <p class="select"></p>
-          </li>
-        </ul>
-      </li>
-
-    </ul>
+      </ul>
     <button class="submitBtn" @click="submit">提交</button>
     </div>
     <!--功能列表-->
@@ -50,7 +49,7 @@
       </div>
     </section>
     <section class="fun-item-bd funlist">
-      <div v-for="(item,index) in functionList " :key="index">
+      <div v-for="(item,index) in functionList" :key="index">
         <input type="text" class="fun-list-item" v-model.lazy="item.functionName"/>
         <input type="text" class="fun-list-item" v-model.lazy="item.needMinutes"/>
         <input type="text" class="fun-list-item" v-model.lazy="item.functionPrice"/>
@@ -60,21 +59,24 @@
         </p>
       </div>
     </section>
+    <div style="width:100%;height:1.73rem;"></div>
     <section class="fun-ft">
       <router-link :to="{name:'addDevice'}"><Button class="btn cancle" btn-type="default" btn-color="blue">取消</Button></router-link>
       <Button class="btn" btn-type="default" btn-color="blue" @click.native="goFirst">确定</Button>
     </section>
     </div>
-    <!-- 模块商 -->
-    <mt-popup v-model="companyVisible" position="bottom" class="select-popup">
-      <div class="select">
-        <ul class="select-list">
-          <li v-for="(item,index) in selectListA" :key="index" @click="getcompanyValue(item)">{{item.shopName}}</li>
-        </ul>
-        <div class="btn">
-          <Button btn-type="default" btn-color="blue" @confirm="companyVisible = false">取消</Button>
-        </div>
+    <!-- 店铺-->
+    <mt-popup v-model="companyVisible" position="bottom">
+      <div class="resp-shop">
+        <span class="quxi" @click="companyVisible= false">取消</span>
+        <span class="shop">店铺</span>
+        <span class="qued" @click="getCheckShop">确定</span>
       </div>
+      <section class="resp-shop-wrap">
+        <ul class="all-list">
+          <li class="mint-checklist-label" :class="{'selected':index==selectedIndex}" v-for="(item,index) in selectListA" :key="index" @click="checkItem(index)">{{item.shopName}}</li>
+        </ul>
+      </section>
     </mt-popup>
   </section>
 </template>
@@ -85,13 +87,16 @@
   //   device
   // } from "@/service/device";
   import qs from "qs";
-  import Button from "@/components/Button/Button";
+  import Api from '@/utils/Api';
+  import Web from '@/utils/Web';
   import { MessageBox } from 'mint-ui';
+  import Button from "@/components/Button/Button";
   import {
     Actionsheet
   } from "mint-ui";
   import AddCount from "@/components/AddCount/AddCount";
-  import { detailDeviceListFun,deleteDeviceFun,manageResetDeviceFun,tzjDeviceFun,deviceAddorEditFun ,getShopFun } from '@/service/device';
+  import {getWxconfigFun,detailDeviceListFun,getShopFun,deviceAddorEditFun } from '@/service/device';
+ 
 
 
   export default {
@@ -101,16 +106,18 @@
         isShow2: false,
         modelShow: true,
         companyVisible: false,
-        title: '编辑设备',
-        deviceDetail: [],
-        getJsonArr :[],
-        selectListA: [],
-        functionList:[],
+        parentType: false,    
+        subType: false,
+        functionTempletType: null,
+        selectedIndex: -1,
+        itemName:["functionName","needMinutes","functionPrice","ifOpen"],
+        functionSetList: [],
+        jsonArr:[],
+        getJsonArr:[],
         functionListTitle: [
           ['功能'],
           ['耗时', '/分'],
           ['原价', '/元'],
-          ['脉冲数'],
           ['状态']
         ],
         functionListTitle2: [
@@ -119,44 +126,113 @@
           ['原价', '/元'],
           ['状态']
         ],
+        title: '编辑设备',
         fromdata: {
           machineName: "",
-          shopName: "",
-          nqt: "",
-          imei: "",
-          shopId:""
+          firstClass: "",
+          secondClass: "",
+          shopType: {
+            name:"",
+            id:""
+          },
+          firstType: {
+            name: "",
+            value: ""
+          },
+          secondType: {
+            name: "",
+            value: ""
+          },
+          functionType: {
+            name: "未设置",
+            value: ""
+          },
+          nqt: "84e5397409274f718ec52509f0be91f2",
+          imei: "865933031201524"
         },
+        selectListA: [],
+        functionList: [],
+        funList: [],
+        deviceDetail: []
       };
     },
     methods: {
-      getcompanyValue(msg) {
-        this.fromdata.shopName = msg.shopName;
-        this.fromdata.shopId = msg.shopId;
+      checkItem(index) {
+        this.selectedIndex = index;
+      },
+      getCheckShop() {
+        this.fromdata.shopType.name = this.selectListA[this.selectedIndex].shopName;
+        this.fromdata.shopType.id = this.selectListA[this.selectedIndex].shopId;
         this.companyVisible = false;
+      },
+      wxScan(e, type) { //微信扫码
+        var self = this;
+        wx.scanQRCode({
+          needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
+          scanType: ["qrCode", "barCode"], // 可以指定扫二维码还是一维码，默认二者都有
+          success: function (res) {
+            // 回调
+            try {
+              // alert(JSON.stringify(res))
+              let scanResult = this.analyzeResult(res.resultStr);
+              // alert(JSON.stringify(scanResult))
+
+              let _NQT = scanResult['NQT'];
+              let _IMEI = scanResult['IMEI'];
+              let _company = scanResult['Company'];
+              _NQT ? this.fromdata.nqt = _NQT : '';
+              _IMEI ? this.fromdata.imei = _IMEI : '';
+              // if (type === 'nqt') {
+              //   this.fromdata.nqt = _NQT
+              // } else {
+              //   this.fromdata.imei = _IMEI
+              // } 
+            } catch (error) {
+              alert(error);
+            }
+
+
+          }.bind(this),
+          error: function (res) {
+            if (res.errMsg.indexOf('function_not_exist') > 0) {
+              alert('版本过低请升级');
+            }
+          }
+        });
+
+      },
+      async initWechat(){ //微信配置初始化
+        let payload = {url: window.location.href.split('#')[0]};
+        let res = await getWxconfigFun(qs.stringify(payload));
+          wx.config({
+          debug: process.env.NODE_ENV === 'development', // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+          appId: res.data.appId, // 必填，公众号的唯一标识
+          timestamp: res.data.timestamp, // 必填，生成签名的时间戳
+          nonceStr: res.data.nonceStr, // 必填，生成签名的随机串
+          signature: res.data.signature, // 必填，签名
+          jsApiList: ['chooseWXPay', 'scanQRCode', 'checkJsApi', 'getLocation'] // 必填，需要使用的JS接口列表
+        });   
       },
       async getDetailDevice() {  //获取数据
         let payload = { machineId: this.$route.query.machineId} ;     
         let res = await detailDeviceListFun(qs.stringify(payload));
          if(res.code === 0) {
-          this.deviceDetail = res.data;
-          this.fromdata.shopId = res.data.shopId;
           this.fromdata.machineName = res.data.machineName;
-          this.fromdata.shopName = res.data.shopName;
+          this.fromdata.shopType.name = res.data.shopName;
+          this.fromdata.shopType.id = res.data.shopId;
+          this.fromdata.firstType.id = res.data.parentTypeId;
+          this.fromdata.secondType.id = res.data.subTypeId;
           this.fromdata.nqt = res.data.nqt;
           this.fromdata.imei = res.data.imei;
-          if(res.data.communicateType === 1){
-             this.functionListTitle = this.functionListTitle2;
-             this.isShow = false;            
-           } 
-           res.data.functionList.forEach(item=>{
+          this.functionList = res.data.functionList;
+          this.functionList.forEach(item=>{
             item.ifOpen=item.ifOpen === "0"?(!!item.ifOpen) : (!item.ifOpen);
           });
-          this.functionList = res.data.functionList;
         }
         else {
           MessageBox.alert(res.msg);
         }
-      },
+      }, 
       async checkDeviceSelect() { //获取店铺
         let res = await getShopFun();
          if(res.code === 0) {
@@ -164,7 +240,34 @@
          }
          this.companyVisible = true;
       },
-      toFunctionSeting() {
+
+      async submit() {  //提交
+          let arr= [].concat(JSON.parse(JSON.stringify(this.functionList))); 
+          arr.forEach(item=>{
+            return item.ifOpen=item.ifOpen?0:1;
+          });
+          let obj = {
+            machineName: this.fromdata.machineName,
+            shopId: this.fromdata.shopType.id,
+            parentTypeId: this.fromdata.firstType.id,
+            subTypeId: this.fromdata.secondType.id,
+            nqt: this.fromdata.nqt,
+            company: "youfang",
+            communicateType: 1,
+            ver: 3,
+            imei: this.fromdata.imei,
+            functionTempletType: 3,
+            functionJson: JSON.stringify(arr)
+          };
+          let res = await deviceAddorEditFun(qs.stringify(obj));
+          if(res.code===0) {
+            this.$router.push({name: 'deviceMange'});
+          }else {
+            this.$toast(res.msg);
+          }
+      },
+
+      toFunctionSeting() { //切换到功能列表
           this.setModelShow= true;
           this.modelShow = false;
           this.title = "功能列表";
@@ -180,41 +283,18 @@
        this.setModelShow= false;
        this.modelShow = true;
        this.title = "编辑设备";
-      },
-      async submit() {  //提交
-        this.getJsonArr = this.functionList;
-        this.getJsonArr.forEach(item=>{
-            item.ifOpen=item.ifOpen?0:1;
-          });
-        let obj = {
-          machineId: this.deviceDetail.machineId,
-          machineName: this.fromdata.machineName,
-          shopId: this.fromdata.shopId,
-          parentTypeId: this.deviceDetail.parentTypeId,
-          subTypeId: this.deviceDetail.subTypeId,
-          nqt: this.fromdata.nqt,
-          company: "youfang",
-          communicateType: 1,
-          ver: 3,
-          imei: this.fromdata.imei,
-          functionTempletType: this.deviceDetail.functionTempletType,
-          functionJson: JSON.stringify(this.getJsonArr)
-        };
-        let res = await deviceAddorEditFun(qs.stringify(obj));
-        if(res.code===0) {
-          this.$router.push({name: 'deviceMange'});
-        }
+      }
 
-      },
 
     },
-    created(){
-      this.getDetailDevice();
+    created() {
+        this.initWechat();
+        this.getDetailDevice();
     },
     components: {
       Actionsheet,
       AddCount,
-      Button
+      Button,
     }
   };
 
@@ -248,6 +328,7 @@
           overflow: hidden;
           box-sizing: border-box;
           position: relative;
+          display: flex;
           &::after {
             content: '';
             display: block;
@@ -260,18 +341,25 @@
             width: 30%;
             float: left;
           }
+          p {
+            display: flex;
+            span {
+              margin-right: 10px;
+              flex-grow: 1;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap;
+            }
+          }
           .select,
           .select-1,
           .select-2 {
             border: 0;
-            color: #7f7f7f;
             width: 70%;
             margin: 0;
-            padding: 0 0.3rem 0 0;
             text-align: right;
             box-sizing: border-box;
             float: left;
-            height: 0.4rem;
             input {
               text-align: right;
             }
@@ -305,6 +393,7 @@
       }
     }
   }
+
   .submitBtn {
     width: 100%;
     position: fixed;
@@ -315,7 +404,7 @@
     color: #fff;
     font-size: 18px;
   }
-
+  
   .fun-item-hd {
     padding: 0;
     background: #FAFCFF;
@@ -396,4 +485,44 @@
     }
   }
 
+  .resp-shop {
+    display: flex;
+    height: 1.17rem;
+    line-height: 1.17rem;
+    background:rgba(251,251,252,1);
+    padding: 0 0.4rem;
+    >span {
+      flex: 1;
+      font-size: 15px;
+    }
+    .quxi {
+      color: #999;
+    }
+    .shop {
+      text-align: center;
+      font-size: 16px;
+    }
+    .qued {
+      text-align:right;
+      color: #1890FF;
+    }
+  }
+
+  .resp-shop-wrap {
+    padding: 0.4rem 0.2rem;
+    .all-list {
+      height: 6rem;
+      overflow-y: scroll;
+      .mint-checklist-label {
+        padding: 0 0.4rem;
+        text-align: center;
+        height: 1.17rem;
+        line-height: 1.17rem;
+        font-size: 0.4rem;
+      }
+      .selected {
+        background-color: rgba(14, 14, 255, 0.05);
+      }
+    }
+  }
 </style>

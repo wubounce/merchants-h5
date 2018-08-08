@@ -97,7 +97,7 @@ import { getlistParentTypeFun } from '@/service/device';
             query: ({shopId:query.shopId, parentTypeId:this.parentTypeId})
           });
         }else{
-          MessageBox.alert("请先选择类型");
+          this.$toast("请先选择类型");
         }
       },
     },

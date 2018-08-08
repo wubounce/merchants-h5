@@ -95,15 +95,15 @@ export default {
         let res = await batchEditMachineListFun(qs.stringify(obj));
           if(res.code === 0) {
             if(!res.data.machineCount){
+              this.$toast("没有功能列表，不能批量编辑");
               return false;
-              MessageBox.alert("没有功能列表，不能批量编辑");
             }else {
               this.getFunctionSetList();
             }
            // MessageBox.alert(res.mes);
             //this.$router.push({name:'deviceMange'});
           }else{
-            MessageBox.alert(res.msg);
+            this.$toast(res.msg);
           }
       },
         
@@ -137,8 +137,16 @@ export default {
         };
         let res = await batchEditFun(qs.stringify(obj));
           if(res.code === 0) {
-            MessageBox.alert("操作成功");
-            this.$router.push({name:'deviceMange'});
+            let instance = this.$toast({
+              message: '批量编辑成功',
+              iconClass: 'mint-toast-icon mintui mintui-success'
+            });
+            setTimeout(() => {
+              instance.close();
+              this.$router.push({name:'deviceMange'});
+              }, 2000);
+          }else {
+            this.$toast(res.msg);
           }
       }
 

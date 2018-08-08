@@ -110,7 +110,7 @@
             query: ({shopId: id})
           });
         }else{
-          MessageBox.alert("请先选择店铺");
+          this.$toast("请先选择店铺");
         }
       },
       clearInput: function () {

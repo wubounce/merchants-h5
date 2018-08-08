@@ -76,9 +76,6 @@ import { getlistParentTypeFun } from '@/service/device';
         this.selectIndex = index;
         this.parentTypeId= this.parentTypeList[index].id;
         this.selectedFirstype= name;
-
-        // this.keyword = this.resData[index];
-        // this.search();
       },
       async checkFirstClass() { //获取一级列表
         let query = this.$route.query;
@@ -99,7 +96,7 @@ import { getlistParentTypeFun } from '@/service/device';
             query: ({shopId:query.shopId, parentTypeId:this.parentTypeId})
           });
         }else {
-          MessageBox.alert("请先选择类型");
+          this.$toast("请先选择类型");
         }
       },
     },

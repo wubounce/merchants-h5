@@ -39,7 +39,7 @@
             </li>
             <li @click="toFunctionSeting">
               <span class="field-title">功能设置</span>
-              <p class="select">{{fromdata.functionType.name}}</p>
+              <p class="select"><span>{{fromdata.functionType.name}}</span></p>
             </li>
           </ul>
         </li>
@@ -179,7 +179,7 @@
             value: ""
           },
           functionType: {
-            name: "",
+            name: "未设置",
             value: ""
           },
           nqt: "84e5397409274f718ec52509f0be91f2",
@@ -293,7 +293,8 @@
         let res = await getFunctionSetListFun(qs.stringify(payload));
          if(res.code === 0) {
            this.functionTempletType = res.data.functionTempletType;
-           this.getJsonArr = res.data.list;
+           this.functionSetList = res.data.list;
+           this.fromdata.functionType.name = "已设置";
            if(res.data.communicateType === 1){
              this.functionListTitle = this.functionListTitle2;
              this.isShow = false;            
@@ -301,35 +302,39 @@
           res.data.list.forEach(item=>{
             item.ifOpen=item.ifOpen === "0"?(!!item.ifOpen) : (!item.ifOpen);
           });
-            this.functionSetList = res.data.list;
+            
         }
         else {
           MessageBox.alert(res.msg);
         }
       },
       async submit() {  //提交
-        let arr= [].concat(JSON.parse(JSON.stringify(this.functionSetList))); 
-        arr.forEach(item=>{
-          return item.ifOpen=item.ifOpen?0:1;
-        });
-        let obj = {
-          machineName: this.fromdata.machineName,
-          shopId: this.fromdata.shopType.id,
-          parentTypeId: this.fromdata.firstType.id,
-          subTypeId: this.fromdata.secondType.id,
-          nqt: this.fromdata.nqt,
-          company: "youfang",
-          communicateType: 1,
-          ver: 3,
-          imei: this.fromdata.imei,
-          functionTempletType: this.functionTempletType,
-          functionJson: JSON.stringify(arr)
-        };
-        let res = await deviceAddorEditFun(qs.stringify(obj));
-        if(res.code===0) {
-          this.$router.push({name: 'deviceMange'});
+        if(this.fromdata.machineName && this.fromdata.shopType.id && this.fromdata.firstType.id && this.fromdata.secondType.id && this.functionSetList.length){
+          let arr= [].concat(JSON.parse(JSON.stringify(this.functionSetList))); 
+          arr.forEach(item=>{
+            return item.ifOpen=item.ifOpen?0:1;
+          });
+          let obj = {
+            machineName: this.fromdata.machineName,
+            shopId: this.fromdata.shopType.id,
+            parentTypeId: this.fromdata.firstType.id,
+            subTypeId: this.fromdata.secondType.id,
+            nqt: this.fromdata.nqt,
+            company: "youfang",
+            communicateType: 1,
+            ver: 3,
+            imei: this.fromdata.imei,
+            functionTempletType: this.functionTempletType,
+            functionJson: JSON.stringify(arr)
+          };
+          let res = await deviceAddorEditFun(qs.stringify(obj));
+          if(res.code===0) {
+            this.$router.push({name: 'deviceMange'});
+          }else {
+            this.$toast(res.msg);
+          }
         }else {
-          MessageBox.alert(res.msg);
+          this.$toast("参数不能为空");
         }
 
       },
@@ -426,7 +431,6 @@
           .select-1,
           .select-2 {
             border: 0;
-            color: #7f7f7f;
             width: 70%;
             margin: 0;
             text-align: right;
