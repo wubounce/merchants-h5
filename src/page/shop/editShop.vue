@@ -24,12 +24,6 @@
         </span>
       </p>
       <!-- <li class="business" @click="chooseTime">营业时间<span>{{addBusinessTime}}</span></li> -->
-      <p class="picture">
-        <span>店铺照片</span>
-        <span>
-           <UploadImg :id="imgId.a" :defaultPicture="imgId.defaultPicture" :isStatus="imgId.isStatus" @onImgFiles="UpdatedImgFiles"></UploadImg>
-        </span>
-      </p>
     </div>
     <p class="blank"></p>
     <button class="submit" @click="submit">提交</button>
@@ -111,7 +105,7 @@ export default {
         },
         {
           title: "小区/大厦/学校",
-          value: ""
+          value: this.$route.query.special
         }
       ],
       shopType: "",
@@ -119,6 +113,8 @@ export default {
       popupVisible:false,
       placeVisible:false,
       mapVisible:false,
+      lng:'',
+      lat:'',
       slots: [
         {
           flex: 1,
@@ -274,7 +270,7 @@ export default {
     editTime(i) {
       if(i) {
         this.noEdit =false;
-        this.placeholdercontent = "请填写个位数预约有效时长";
+        this.placeholdercontent = "请填个位数的时长";
       }
       else {
         this.noEdit =true;
@@ -327,34 +323,18 @@ export default {
           this.getArea();
           break;
         case 2:
-          this.goMap("editMap",this.shopId,this.cityName,this.shopName,this.shopType,
-                      this.list[1].value,this.provinceId, this.cityId, this.districtId,this.address,this.machineName,this.machineTypeIdsArray,
-                      this.isReserve,this.orderLimitMinutes,this.addBusinessTime,
-                      this.imgId.defaultPicture);
+          this.goMap("editMap",this.shopId);
           this.mapVisible = true;
           break;
       }
     },
+    
     //跳转传值
-    goMap(x,shopId,y,name,type,place,provinceId,cityId,districtId,address,machineName,machinetype,isReserve,LimitMinutes,worktime,img) {
+    goMap(x,shopId) {
       this.$router.push({
         name:x,
         query: {
-          shopId: shopId,
-          city:y,
-          name:name,
-          type:type,
-          place:place,
-          provinceId: provinceId,
-          cityId: cityId,
-          districtId: districtId,
-          address:address,
-          machineName:machineName,
-          machinetype:machinetype,
-          isReserve:isReserve,
-          LimitMinutes:LimitMinutes,
-          worktime:worktime,
-          img:img
+          shopId: shopId
         }
       });
     },
@@ -376,8 +356,6 @@ export default {
           else {
             this.list[1].value = this.provinceName + this.cityName + this.districtName;
           }
-          MessageBox.alert('请同步更改[小区/大厦/学校]选项');
-          
           break;
         //经纬度
         case 2:
@@ -386,8 +364,8 @@ export default {
         case 3: {
           this.deviceDetail = false;
           this.isbgc = false;
-          if(this.machine.join(' , ').length > 20 ) {
-            this.machineName = this.machine.join(' , ').slice(0,20) + '...';
+          if(this.machine.join(' , ').length > 15 ) {
+            this.machineName = this.machine.join(' , ').slice(0,15) + '...';
           }
           else {
             this.machineName = this.machine.join(' , ');   
@@ -453,7 +431,7 @@ export default {
           break;
       }
     },
-    async  onAddressChange(picker, values) {
+    async onAddressChange(picker, values) {
       //根据省，找出与之对应的市
       for(let i=0;i<this.provinceArray.length;i++) {
         if(values[0] == this.provinceArray[i].areaName) {
@@ -554,7 +532,7 @@ export default {
     //提交修改信息
     async submit() {
       let changeisReserve = (this.isReserve==true)? 0 :1;
-      //console.log(this.provinceId);
+      console.log('提交',this.lng,this.lat);
       let obj = {
         shopId: this.$route.query.shopId,
         shopName: this.shopName,
@@ -563,8 +541,8 @@ export default {
         cityId: this.cityId,
         districtId: this.districtId,
         address: this.address,
-        lat:'33.564',
-        lng:'134.456',
+        lat:this.lat,
+        lng:this.lng,
         machineTypeIds: this.machineTypeIdsArray,
         isReserve: changeisReserve,
         orderLimitMinutes: this.orderLimitMinutes,
@@ -620,10 +598,19 @@ export default {
           this.list[1].value = res.data.province + res.data.city + res.data.district;
         }
         //经纬度
+        this.lng = res.data.lng;
+        this.lat = res.data.lat;
         //详细地址
         this.address = res.data.address;
         //设备类型
-        this.machineName = res.data.machineTypeNames;
+        
+        if(res.data.machineTypeNames.length > 15) {
+          this.machineName = res.data.machineTypeNames.slice(0,10) + '...';
+        }
+        else {
+          this.machineName = res.data.machineTypeNames;
+        }
+        
         //预约功能
         this.isReserve = res.data.isReserve == 0 ? true : false;
         this.noEdit = res.data.isReserve == 0 ? false :true;
@@ -631,13 +618,29 @@ export default {
         this.orderLimitMinutes = res.data.orderLimitMinutes;
         //营业时间
         this.addBusinessTime = res.data.workTime;
-        //店铺图片
-        if(res.data.imageId == null || res.data.imageId == '' || res.data.imageId == undefined) {
-          this.imgId.defaultPicture = '../../../static/image/shop/add.png';
-        }
-        else {
-          this.imgId.defaultPicture = res.data.imageId;
-        }
+        
+        //逆地理坐标
+        let lnglatXY = [this.lng, this.lat]; //已知点坐标
+        console.log(lnglatXY);
+        let _this = this;
+        AMap.plugin('AMap.Geocoder',function() {
+          var geocoder = new AMap.Geocoder({
+            //radius: 1000,
+            extensions: "all"
+          });
+          geocoder.getAddress(lnglatXY, function(status, result) {
+              if (status === 'complete' && result.info === 'OK') {
+                  console.log('result1111:',result);
+                  _this.geocoder_CallBack(result.regeocode.formattedAddress);
+              }
+              else {
+                console.log("error");
+              }
+          });        
+        });
+
+        this.geocoder_CallBack();
+        
         //省
         let objPro = { parentId: 0 };
         let resPro = await areaListFun(qs.stringify(objPro));
@@ -685,69 +688,38 @@ export default {
         // this.arrName = res.data.map();
       }
     },
-    //从editMap里取数据
-    async getFromValue() {
-      this.list[2].value = this.$route.query.special;
-      this.shopName = (this.$route.query.name == '') ? '' : this.$route.query.name;
-      switch(this.$route.query.type) {
-        case 1:
-          this.list[0].value = '学校';
-          break;
-        case 2:
-          this.list[0].value = '公寓';
-          break;
-        case 3:
-          this.list[0].value = '流动人口社区';
-          break;
-        case 4:
-          this.list[0].value = '酒店';
-          break;
-          case 5:
-          this.list[0].value = '医院';
-          break;
-        case 6:
-          this.list[0].value = '养老院';
-          break;
-          case 7:
-          this.list[0].value = '工厂';
-          break;
-        case 8:
-          this.list[0].value = '浴场';
-          break;
-        case 9:
-          this.list[0].value = '其他';
-          break;
-        default:
-          this.list[0].value = '';
-          break;
+    geocoder_CallBack(data) {
+      this.list[2].value = data;
+      if(this.list[1].value) {
+        if(this.list[2].value) {
+          console.log(this.list[2].value.slice(this.list[1].value.length));
+          if(this.list[2].value.slice(this.list[1].value.length).length >9 ) {
+            this.list[2].value = this.list[2].value.slice(this.list[1].value.length).slice(0,10) + '...';
+          }
+          else {
+            this.list[2].value = this.list[2].value.slice(this.list[1].value.length);
+          }
+        }
       }
-      this.list[1].value = (this.$route.query.place == '') ? '' : this.$route.query.place;
-      this.provinceId = (this.$route.query.provinceId == '') ? '' : this.$route.query.provinceId;
-      this.cityId = (this.$route.query.cityId == '') ? '' : this.$route.query.cityId;
-      this.districtId = (this.$route.query.districtId == '') ? '' : this.$route.query.districtId;
-
-      this.address = (this.$route.query.address == '') ? '' : this.$route.query.address;
-      this.machineName = (this.$route.query.machineName == '') ? '' : this.$route.query.machineName;
-      this.isReserve = (this.$route.query.isReserve == true) ? true : false;
-      this.orderLimitMinutes = (this.$route.query.LimitMinutes == '') ? '' : this.$route.query.LimitMinutes;
-      this.addBusinessTime = (this.$route.query.worktime == '') ? '' : this.$route.query.worktime;
-      if(this.$route.query.img != "" && this.$route.query.img != undefined) {
-        this.imgId.defaultPicture = this.$route.query.img;
-      }
-      else {
-        this.imgId.defaultPicture = '../../../static/image/shop/add.png';
-      }
-    }
+     }
   },
   created() {
     this.getShopDetail();
     this.getShoplist();
-    this.getFromValue();
   },
   mounted() {
   },
-  components:{
-    UploadImg
+  watch: {
+    $route(to,from) {
+      if(from.name == 'editMap') {
+        this.list[2].value = this.$route.query.special.length >9 ? this.$route.query.special.slice(0,10) +'...' : this.$route.query.special;
+        this.lng = this.$route.query.lng;
+        this.lat = this.$route.query.lat;
+      }
+      else if(from.name == 'shopDetail'){
+        location.reload();
+      }
+    }
   }
 };
 </script>

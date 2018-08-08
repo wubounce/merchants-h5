@@ -22,12 +22,6 @@
         <p class="shop-item"><span>预约时长(分钟)</span><span>{{shopdetail.orderLimitMinutes}}</span></p>
         <!-- 下个版本再做，营业时间 -->
         <!-- <p class="shop-item"><span>营业时间</span><span>{{shopdetail.workTime}}</span></p> -->
-        <p class="picture">
-            <span>店铺照片</span>
-            <span>
-              <img :src="shopdetail.imageId" alt="店铺图片" class="shop-img">
-            </span>
-        </p>
         <!-- 第三模块 -->
         <p class="shop-item second-p"><span>限时优惠</span><span>{{shopdetail.isDiscount ==true ? '已设置' : '未设置'}}</span></p>
         <p class="shop-item"><span>VIP数量</span><span>{{shopdetail.vipCount}}个</span></p>
@@ -102,7 +96,6 @@ export default {
         this.list = res.data.machineTypeNames.split(',');
         this.lng = res.data.lng;
         this.lat = res.data.lat;
-        console.log('初始化',this.lng);
         //店铺地址
         this.address = res.data.address;
 
@@ -112,13 +105,16 @@ export default {
         let _this = this;
         AMap.plugin('AMap.Geocoder',function() {
           var geocoder = new AMap.Geocoder({
-            radius: 1000,
+            //radius: 1000,
             extensions: "all"
           });
           geocoder.getAddress(lnglatXY, function(status, result) {
               if (status === 'complete' && result.info === 'OK') {
-                  console.log('result',result.regeocode.formattedAddress);
+                  console.log('result1111:',result);
                   _this.geocoder_CallBack(result.regeocode.formattedAddress);
+              }
+              else {
+                console.log("error");
               }
           });        
         });

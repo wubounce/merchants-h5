@@ -3,7 +3,10 @@
     <div id="container" class="mymap"></div>
     <div class="home-search">
 			<i class=" iconfont icon-IconSearch"></i>
-			<p class="search-shop"><input type="text" v-model="special" id="keyword" name="keyword" placeholder="查找小区/大厦/学校等" onfocus='this.value=""'></p>
+			<p class="search-shop">
+        <input type="text" v-model.trim="special" v-on:input="inputFunc" id="keyword" name="keyword" style="width:90%" placeholder="查找小区/大厦/学校等" onfocus='this.value=""'>
+        <span class="eyes iconfont icon-guanbi" v-if="isuser" @click="closeInput"></span>
+      </p>
 		</div>
 	</div>
 </template>
@@ -12,70 +15,39 @@
 export default {
   data() {
     return {
-      title: '新增店铺',
+      title: '编辑店铺',
       shopId:'',
       special:'',
-      fromlat:'',
-      fromlng:'',
-      fromCity:'',
-      name:'',
-      type:'',
-      place:'',
-      provinceId:'',
-      cityId:'',
-      districtId:'',
-      address:'',
-      machineName:'',
-      machinetype:'',
-      isReserve:'',
-      LimitMinutes:'',
-      worktime:'',
-      img:''
+      isuser:false
     };
   },
   methods: {
-    getLatLng(x,shopId,y,z,p,name,type,place,provinceId,cityId,districtId,address,machineName,machinetype,isReserve,LimitMinutes,worktime,img) {
+    getLatLng(x,shopId,y,z,p) {
       this.$router.push({
         name:x,
         query: {
           shopId: shopId,
           lat:y,
           lng:z,
-          special:p,
-          name:name,
-          type:type,
-          place:place,
-          provinceId: provinceId,
-          cityId: cityId,
-          districtId: districtId,
-          address:address,
-          machineName:machineName,
-          machinetype:machinetype,
-          isReserve:isReserve,
-          LimitMinutes:LimitMinutes,
-          worktime:worktime,
-          img:img
+          special:p
         }
       });
+    },
+    inputFunc(){
+      this.isuser = true;
+      if (!this.special) {
+        this.disabled = true;
+      } else {
+        this.disabled = false;
+      }
+    },
+    closeInput() {
+      this.special = '';
+      this.isuser = false;
     }
   },
   created() {
     this.shopId = this.$route.query.shopId;
-    this.fromCity = this.$route.query.city.slice(0,this.$route.query.city.length-1);
-    this.name = this.$route.query.name;
-    this.type = this.$route.query.type;
-    this.place = this.$route.query.place;
-    this.provinceId = this.$route.query.provinceId;
-    this.cityId = this.$route.query.cityId;
-    this.districtId = this.$route.query.districtId;
-    this.address = this.$route.query.address;
-    this.machineName = this.$route.query.machineName;
-    this.machinetype = this.$route.query.machinetype;
-    this.isReserve = this.$route.query.isReserve;
-    this.LimitMinutes = this.$route.query.LimitMinutes;
-    this.worktime = this.$route.query.worktime;
-    this.img = this.$route.query.img;
-    console.log(this.name);
   },
   mounted() {
     let _this = this;
@@ -95,12 +67,12 @@ export default {
     });
     AMap.plugin(['AMap.Autocomplete','AMap.PlaceSearch','AMap.Geocoder'],function(){
       var autoOptions = {
-        city: _this.fromCity,
+        //city: '_this.fromCity',
         input: "keyword"//使用联想输入的input的id
       };
       var autocomplete= new AMap.Autocomplete(autoOptions);
       var placeSearch = new AMap.PlaceSearch({
-            city: _this.fromCity,
+            //city: _this.fromCity,
             map:map
       });
 
@@ -109,7 +81,7 @@ export default {
         placeSearch.search(e.poi.name);
 
         var geocoder = new AMap.Geocoder({
-          city: _this.fromCity, //城市，默认：“全国”
+          //city: _this.fromCity, //城市，默认：“全国”
           radius: 1000 //范围，默认：500
         });
         geocoder.getLocation(e.poi.name, function(status, result) {
@@ -119,7 +91,7 @@ export default {
                 _this.lat  = result.geocodes[0].location.lat;
                 _this.lng  = result.geocodes[0].location.lng;
                 //console.log("_this:",_this.lat);
-                _this.getLatLng("editShop",_this.shopId,_this.lat,_this.lng,e.poi.name,_this.name,_this.type,_this.place,_this.provinceId, _this.cityId, _this.districtId,_this.address,_this.machineName,_this.machinetype,_this.isReserve,_this.LimitMinutes,_this.worktime,_this.img);
+                _this.getLatLng("editShop",_this.shopId,_this.lat,_this.lng,e.poi.name);
             }
             else {
               console.log('获取经纬度错误');
@@ -153,8 +125,6 @@ export default {
       -ms-flex-align: center;
       align-items: center;
       width: 9rem;
-      height: 1rem;
-      line-height: 1rem;
       padding-left: .3rem;
       border-radius: 0.2rem;
       background: white;
@@ -171,6 +141,35 @@ export default {
           color: #BAC0D2;
           border-radius: .1rem;
           font-size: 16px;
+          input {
+            padding-top: 0.2rem;
+            padding-bottom: 0.22rem;
+          }
+          ::-webkit-input-placeholder {
+            color: #999999;
+            font-size: 16px;
+            padding-top: 0.1rem; 
+          }
+          :-moz-placeholder {
+            /* Firefox 18- */
+            color: #999999;
+            font-size: 16px;
+            padding-top: 0.1rem;
+          }
+          ::-moz-placeholder {
+            /* Firefox 19+ */
+            color: #999999;
+            font-size: 16px;
+            padding-top: 0.1rem;
+          }
+          :-ms-input-placeholder {
+            color: #999999;
+            font-size: 16px;
+            padding-top: 0.1rem;
+          }
+          .eyes {
+            color:#979797;
+          }
       }
     }
   }

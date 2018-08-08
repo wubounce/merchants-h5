@@ -22,12 +22,6 @@
       </p>
       <!-- 先注释掉，下个版本做营业时间 -->
       <!-- <li class="business" @click="chooseTime">营业时间<span>{{addBusinessTime}}</span></li> -->
-      <p class="picture">
-        <span>店铺照片</span>
-        <span>
-          <UploadImg :id="imgId.a" :defaultPicture="imgId.defaultPicture" :isStatus="imgId.isStatus" @onImgFiles="UpdatedImgFiles"></UploadImg>
-        </span>
-      </p>
     </div>
     <p class="blank"></p>
     <button class="submit" @click="submit">确定</button>
@@ -71,7 +65,6 @@
 <script>
 import { MessageBox } from 'mint-ui';
 import qs from "qs";
-import UploadImg from "@/components/UploadImg/UploadImg";
 import { addOrEditShopFun } from '@/service/shop';
 import { areaListFun } from '@/service/shop';
 import { listParentTypeFun } from '@/service/shop';
@@ -234,7 +227,9 @@ export default {
       ],
       timeVisible: false,
       isTime:true,
-      isReserve:true
+      isReserve:true,
+      lat:'',
+      lng:''
     };
   },
   methods:{
@@ -269,7 +264,7 @@ export default {
     editTime(i) {
       if(i) {
         this.noEdit =false;
-        this.placeholdercontent = "请填写个位数预约有效时长";
+        this.placeholdercontent = "请填个位数的时长";
       }
       else {
         this.noEdit =true;
@@ -322,40 +317,16 @@ export default {
           this.getArea();
           break;
         case 2:{
-          if(this.list[1].value == undefined) {
-            MessageBox.alert('请先选择所在地区，再选择小区/大厦/学校');
-          }
-          else {
-            this.goMap("mapSearch",this.cityName,this.shopName,this.shopType,
-                      this.list[1].value,this.provinceId, this.cityId, this.districtId,this.address,this.machineName,this.machineTypeIdsArray,
-                      this.isReserve,this.orderLimitMinutes,this.addBusinessTime,
-                      this.imageId);
-            this.mapVisible = true;
-          }
+          this.goMap("mapSearch");
+          this.mapVisible = true;
           break;
         }
       }
     },
    //跳转传值
-    goMap(x,y,name,type,place,provinceId,cityId,districtId,address,machineName,machinetype,isReserve,LimitMinutes,worktime,img) {
+    goMap(x) {
       this.$router.push({
-        name:x,
-        query: {
-          city:y,
-          name:name,
-          type:type,
-          place:place,
-          provinceId: provinceId,
-          cityId: cityId,
-          districtId: districtId,
-          address:address,
-          machineName:machineName,
-          machinetype:machinetype,
-          isReserve:isReserve,
-          LimitMinutes:LimitMinutes,
-          worktime:worktime,
-          img:img
-        }
+        name:x
       });
     },
     //确认按钮
@@ -369,15 +340,14 @@ export default {
           break;
         case 1:
           this.placeVisible = false;
-
-          if(this.provinceName == this.cityName.slice(0,2)) {
-            
-            this.list[1].value = this.cityName + this.districtName;
+          if( this.cityName != '' && this.cityName != null && this.cityName != undefined ) {
+            if(this.provinceName == this.cityName.slice(0,2)) {
+              this.list[1].value = this.cityName + this.districtName;
+            }
+            else {
+              this.list[1].value = this.provinceName + this.cityName + this.districtName;
+            }
           }
-          else {
-            this.list[1].value = this.provinceName + this.cityName + this.districtName;
-          }
-          
           break;
         //经纬度 
         case 2:
@@ -567,8 +537,8 @@ export default {
           cityId: this.cityId,
           districtId: this.districtId,
           address: this.address,
-          lat:this.$route.query.lat,
-          lng:this.$route.query.lng,
+          lat:this.lat,
+          lng:this.lng,
           machineTypeIds: this.machineTypeIdsArray,
           isReserve: changeisReserve,
           orderLimitMinutes: this.orderLimitMinutes,
@@ -673,15 +643,23 @@ export default {
       else {
         this.imgId.defaultPicture = '../../../static/image/shop/add.png';
       }
-      
     }
   },
   created() {
     this.getShoplist();
     this.getFromValue();
   },
-  components:{
-    UploadImg
+  watch: {
+    $route(to,from) {
+      if(from.name == 'mapSearch') {
+        this.list[2].value = this.$route.query.special;
+        this.lng = this.$route.query.lng;
+        this.lat = this.$route.query.lat;
+      }
+      else if(from.name == 'shopList'){
+        location.reload();
+      }
+    }
   }
 };
 </script>
@@ -819,21 +797,6 @@ export default {
         :-ms-input-placeholder {
           color: #999999;
           font-size: 16px;
-        }
-      }
-    }
-    .picture {
-      display: flex;
-      margin-top: 0.18rem;
-      justify-content: space-between;
-      span {
-        &:first-child {
-          font-size: 16px;
-          line-height: 2rem;
-          padding-left: 0.3rem;
-        }
-        &:last-child {
-          padding-right: 0.3rem;
         }
       }
     }

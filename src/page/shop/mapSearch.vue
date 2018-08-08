@@ -17,46 +17,17 @@ export default {
     return {
       title: '新增店铺',
       special:'',
-      fromlat:'',
-      fromlng:'',
-      fromCity:'',
-      name:'',
-      type:'',
-      place:'',
-      provinceId:'',
-      cityId:'',
-      districtId:'',
-      address:'',
-      machineName:'',
-      machinetype:'',
-      isReserve:'',
-      LimitMinutes:'',
-      worktime:'',
-      img:'',
       isuser:false
     };
   },
   methods: {
-    getLatLng(x,y,z,p,name,type,place,provinceId,cityId,districtId,address,machineName,machinetype,isReserve,LimitMinutes,worktime,img) {
+    getLatLng(x,y,z,p) {
       this.$router.push({
         name:x,
         query: {
           lat:y,
           lng:z,
-          special:p,
-          name:name,
-          type:type,
-          place:place,
-          provinceId: provinceId,
-          cityId: cityId,
-          districtId: districtId,
-          address:address,
-          machineName:machineName,
-          machinetype:machinetype,
-          isReserve:isReserve,
-          LimitMinutes:LimitMinutes,
-          worktime:worktime,
-          img:img
+          special:p
         }
       });
     },
@@ -74,23 +45,7 @@ export default {
     }
   },
   created() {
-    this.name = this.$route.query.name;
-    this.type = this.$route.query.type;
-    this.place = this.$route.query.place;
-    this.provinceId = this.$route.query.provinceId;
-    this.cityId = this.$route.query.cityId;
-    this.districtId = this.$route.query.districtId;
-    this.address = this.$route.query.address;
-    this.machineName = this.$route.query.machineName;
-    this.machinetype = this.$route.query.machinetype;
-    this.isReserve = this.$route.query.isReserve;
-    this.LimitMinutes = this.$route.query.LimitMinutes;
-    this.worktime = this.$route.query.worktime;
-    this.img = this.$route.query.img;
-    
-    //取出城市
-    let arr = this.place.split('省');
-    //console.log(arr.length);
+
   },
   mounted() {
     let _this = this;
@@ -103,19 +58,19 @@ export default {
     map.plugin('AMap.Geolocation',function() {
       let geolocation = new AMap.Geolocation({
         enableHighAccuracy: true,//是否使用高精度定位，默认:true
-        zoomToAccuracy: true,      //定位成功后调整地图视野范围使定位位置及精度范围视野内可见，默认：false
+        zoomToAccuracy: true      //定位成功后调整地图视野范围使定位位置及精度范围视野内可见，默认：false
       });
       map.addControl(geolocation);
       geolocation.getCurrentPosition();
     });
     AMap.plugin(['AMap.Autocomplete','AMap.PlaceSearch','AMap.Geocoder'],function(){
       var autoOptions = {
-        city: _this.fromCity,
+        //city: _this.fromCity,
         input: "keyword"//使用联想输入的input的id
       };
       var autocomplete= new AMap.Autocomplete(autoOptions);
       var placeSearch = new AMap.PlaceSearch({
-            city: _this.fromCity,
+            //city: _this.fromCity,
             map:map
       });
 
@@ -124,7 +79,7 @@ export default {
         placeSearch.search(e.poi.name);
 
         var geocoder = new AMap.Geocoder({
-          city: _this.fromCity, //城市，默认：“全国”
+          //city: _this.fromCity, //城市，默认：“全国”
           radius: 1000 //范围，默认：500
         });
         geocoder.getLocation(e.poi.name, function(status, result) {
@@ -134,7 +89,7 @@ export default {
                 _this.lat  = result.geocodes[0].location.lat;
                 _this.lng  = result.geocodes[0].location.lng;
                 //console.log("_this:",_this.lat);
-                _this.getLatLng("addShop",_this.lat,_this.lng,e.poi.name,_this.name,_this.type,_this.place,_this.provinceId, _this.cityId, _this.districtId,_this.address,_this.machineName,_this.machinetype,_this.isReserve,_this.LimitMinutes,_this.worktime,_this.img);
+                _this.getLatLng("addShop",_this.lat,_this.lng,e.poi.name);
             }
             else {
               console.log('获取经纬度错误');
@@ -185,7 +140,7 @@ export default {
           border-radius: .1rem;
           font-size: 16px;
           input {
-            padding-top: 0.3rem;
+            padding-top: 0.2rem;
             padding-bottom: 0.22rem;
           }
           ::-webkit-input-placeholder {
