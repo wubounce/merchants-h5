@@ -243,9 +243,9 @@ export default {
     },
     filterweek(value){
       if (value === '9') {
-        this.activeCurrentTags['label'] = '每天';
+        this.activeCurrentTags = {label:'每天'};
       } else if(value === '8'){
-        this.activeCurrentTags['label'] = '周一至周五';
+        this.activeCurrentTags.label = {label:'周一至周五'};
       }else {
         let arr = [];
         let weeklsit = [];
