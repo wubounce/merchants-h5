@@ -1,6 +1,5 @@
 <template>
-  <section class="ss-wrappper">
-    <q-header :title="title"></q-header>
+  <section class="ss-wrappper" v-title="title">
     <div class="bat-step">
       <p v-for="(item,index) in stepArr " :key="index" :class="{active:currIndex==index}">
         <span>{{item.text}}</span>
@@ -34,6 +33,7 @@
         </ul>
       </div>
     </div>
+    <div style="width:100%;height:1.73rem;"></div>
     <button class="submitBtn" @click="goNext" >下一步</button>
   </section>
 </template>
@@ -41,7 +41,6 @@
 <script>
   /* eslint-disable */
   import qs from "qs";
-  import QHeader from "@/components/header";
   import { MessageBox } from 'mint-ui';
   import {delay} from "@/utils/tool";
   import { getShopFun,shopSearchFun } from '@/service/device';
@@ -149,8 +148,8 @@
     },
 
     components: {
-      QHeader
-  },
+
+    },
   };
 
 </script>
@@ -281,7 +280,6 @@
 
   .ss-bd {
     .search-res {
-      margin-bottom: 2rem;
       .searchNoItem {
         font-size: 0.43rem;
         text-align: center;

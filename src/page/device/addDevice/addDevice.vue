@@ -1,6 +1,5 @@
 <template>
-  <section>
-    <q-header :title="title"></q-header>
+  <section v-title="title">
     <div v-show="modelShow">
       <ul class="device-detail">
     
@@ -365,7 +364,6 @@
       Actionsheet,
       AddCount,
       Button,
-      QHeader
     }
   };
 

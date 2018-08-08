@@ -77,7 +77,7 @@
           <p>创建时间： {{deviceDetail.createTime}}</p>
         </li>
       </ul>
-
+      <div style="width:100%;height:1.73rem;"></div>
       <div class="about-button">
         <Button btn-type="small" btn-color="spe" class="ft-btn active" @click.native="deviceDele">删除</Button>
         <Button btn-type="small" btn-color="spe" class="ft-btn" @click.native="deviceTZJ">桶自洁</Button>
@@ -330,7 +330,7 @@
     }
     .device-detail-ft {
       padding: 0.13rem 0.4rem;
-      margin: .4rem 0 2.9rem;
+      margin: .4rem 0;
       background: rgba(255, 255, 255, 1);
       p {
         width: 10rem;

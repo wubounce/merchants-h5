@@ -1,6 +1,5 @@
 <template>
-  <section class="ss-wrappper">
-    <q-header :title="title"></q-header>
+  <section class="ss-wrappper" v-title="title">
     <div class="bat-step">
       <p v-for="(item,index) in stepArr " :key="index" :class="{active:currIndex==index}">
         <span @click="chooseStep(index)">{{item.text}}</span>
@@ -36,7 +35,6 @@
 </template>
 <script>
 import qs from "qs";
-import QHeader from "@/components/header";
 import { MessageBox } from 'mint-ui';
 import { getFunctionSetListFun,batchEditFun,batchEditMachineListFun } from '@/service/device';
 
@@ -149,7 +147,6 @@ export default {
     },
 
     components: {
-      QHeader
     },
 };
 

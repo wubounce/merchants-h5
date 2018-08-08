@@ -1,6 +1,5 @@
 <template>
-  <section>
-    <q-header :title="title"></q-header>
+  <section v-title="title">
     <div v-show="modelShow">
     <ul class="device-detail">
 
@@ -88,7 +87,6 @@
   import qs from "qs";
   import Button from "@/components/Button/Button";
   import { MessageBox } from 'mint-ui';
-  import QHeader from '@/components/header';
   import {
     Actionsheet
   } from "mint-ui";
@@ -216,8 +214,7 @@
     components: {
       Actionsheet,
       AddCount,
-      Button,
-      QHeader
+      Button
     }
   };
 

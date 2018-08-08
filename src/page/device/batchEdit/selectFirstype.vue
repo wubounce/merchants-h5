@@ -1,6 +1,5 @@
 <template>
-  <section class="sf-wrappper">
-    <q-header :title="title"></q-header>
+  <section class="sf-wrappper" v-title="title">
     <div class="bat-step">
       <p v-for="(item,index) in stepArr " :key="index" :class="{active:currIndex==index}">
         <span @click="chooseStep(index)">{{item.text}}</span>
@@ -21,6 +20,7 @@
         </li>
       </ul>
     </div>
+    <div style="width:100%;height:1.73rem;"></div>
     <section class="promiss-footer">
       <span class="can" @click="goBack">上一步</span>
       <span class="cifrm" @click="goNext">下一步</span>
@@ -29,7 +29,6 @@
 </template>
 <script>
 import qs from "qs";
-import QHeader from "@/components/header";
 import { MessageBox } from 'mint-ui';
 import { getlistParentTypeFun } from '@/service/device';
   export default {
@@ -106,7 +105,6 @@ import { getlistParentTypeFun } from '@/service/device';
       this.checkFirstClass();
     },
     components: {
-      QHeader
     },
   };
 
@@ -228,7 +226,6 @@ import { getlistParentTypeFun } from '@/service/device';
       }
     }
     .sf-bd {
-      margin-bottom: 1.7rem;
       ul {
         width:100%;
         li {
