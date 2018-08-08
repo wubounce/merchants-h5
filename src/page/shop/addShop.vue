@@ -306,7 +306,6 @@ export default {
     },
     toDetail(value) {
       this.index = value;
-      console.log('index:',this.index);
       switch (value) {
         case 0:
           this.popupVisible = true;
@@ -336,7 +335,6 @@ export default {
         case 0:
           this.popupVisible = false;
           this.list[0].value = this.shopTypeString;
-          console.log(this.shopType);
           break;
         case 1:
           this.placeVisible = false;
@@ -371,7 +369,6 @@ export default {
             }
           }
           this.machineTypeIdsArray = arr.join(',');
-          console.log(this.machineTypeIdsArray);
           break;
         }
         case 4:
@@ -488,20 +485,16 @@ export default {
     },
     async UpdatedImgFiles(msg) {
       //判断图片类型
-      console.log(msg);
       if(msg.substring(0,22)=="data:image/png;base64,") {
-        console.log(msg.substring(0,22));
         msg = msg.replace("data:image/png;base64,","");
       }
       else if(msg.substring(0,23)=="data:image/jpeg;base64,") {
-        console.log(msg.substring(0,23));
         msg = msg.replace("data:image/jpeg;base64,","");
       }
       let obj = { files:msg };
       let res = await uploadFileFun(qs.stringify(obj));
       if(res.code ===0 ) {
         this.imageId = res.data[0].url;
-        console.log(this.imageId);
       }
       else {
         this.$toast(res.msg);

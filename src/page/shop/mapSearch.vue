@@ -11,7 +11,7 @@
 	</div>
 </template>
 <script>
-
+import { MessageBox } from 'mint-ui';
 export default {
   data() {
     return {
@@ -65,34 +65,27 @@ export default {
     });
     AMap.plugin(['AMap.Autocomplete','AMap.PlaceSearch','AMap.Geocoder'],function(){
       var autoOptions = {
-        //city: _this.fromCity,
         input: "keyword"//使用联想输入的input的id
       };
       var autocomplete= new AMap.Autocomplete(autoOptions);
       var placeSearch = new AMap.PlaceSearch({
-            //city: _this.fromCity,
             map:map
       });
 
       AMap.event.addListener(autocomplete, "select", function(e){
         placeSearch.setCity(e.poi.adcode);
         placeSearch.search(e.poi.name);
-
         var geocoder = new AMap.Geocoder({
-          //city: _this.fromCity, //城市，默认：“全国”
           radius: 1000 //范围，默认：500
         });
         geocoder.getLocation(e.poi.name, function(status, result) {
             if (status === 'complete' && result.info === 'OK') {
-                console.log(result);
-                //return result;
                 _this.lat  = result.geocodes[0].location.lat;
                 _this.lng  = result.geocodes[0].location.lng;
-                //console.log("_this:",_this.lat);
                 _this.getLatLng("addShop",_this.lat,_this.lng,e.poi.name);
             }
             else {
-              console.log('获取经纬度错误');
+              MessageBox.alert('输入的地点有误,再输一次试试哦');
             }
         });
       });

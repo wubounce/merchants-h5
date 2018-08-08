@@ -47,8 +47,6 @@ import { MessageBox } from 'mint-ui';
 			loadBottom() {
 				this.page += 1;
 				let allpage = Math.ceil(this.total/this.pageSize);
-				console.log(allpage);
-				console.log(this.page);
 				if(this.page <= allpage){
 					this.getListBatchStart();
 				}else{
