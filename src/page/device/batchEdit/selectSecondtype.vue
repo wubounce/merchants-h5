@@ -9,11 +9,17 @@
     <ul>
       <li class="bat-hd">
         <span>{{hdTitleArr[currIndex]}}</span>
-        <span>{{selectedSecondType}}</span>
+        <div>{{selectedSecondType}}</div>
       </li>
     </ul>
     <div class="sf-bd">
-      <p class="item" v-for="(item,index) in secondTypeList" :class="{selected:index==selectIndex}" :key="index" @click="selectClick(index,item.name,item.id)">{{item.name}}</p>
+      <ul>
+        <li class="item" v-for="(item,index) in secondTypeList" :class="{selected:index==selectIndex}" :key="index" @click="selectClick(index,item.name)">
+          <div></div>
+          <div>{{item.name}}</div>
+          <div class="select"><span class="iconfont" :class="{'icon-xuanze':index==selectIndex}"></span></div>
+        </li>
+      </ul>
     </div>
     <section class="promiss-footer">
       <span class="can" @click="goBack">上一步</span>
@@ -24,6 +30,7 @@
 <script>
 import qs from "qs";
 import QHeader from "@/components/header";
+import { MessageBox } from 'mint-ui';
 import { getlistParentTypeFun, getlistSubTypeFun} from '@/service/device';
   export default {
     data() {
@@ -67,7 +74,7 @@ import { getlistParentTypeFun, getlistSubTypeFun} from '@/service/device';
       selectClick: function (index,name,id) {
         this.selectIndex = index;
         this.selectedSecondType= name;
-        this.subTypeId = id;
+        this.subTypeId = this.secondTypeList[index].id;
         // this.keyword = this.resData[index];
         // this.search();
       },
@@ -84,10 +91,14 @@ import { getlistParentTypeFun, getlistSubTypeFun} from '@/service/device';
       },
       goNext(){
         let query = this.$route.query;
-        this.$router.push({
-          name: "selectFunctionEdit",
-          query: ({shopId:query.shopId, parentTypeId:query.parentTypeId, subTypeId:this.subTypeId})
-        });
+        if(this.subTypeId){
+          this.$router.push({
+            name: "selectFunctionEdit",
+            query: ({shopId:query.shopId, parentTypeId:query.parentTypeId, subTypeId:this.subTypeId})
+          });
+        }else{
+          MessageBox.alert("请先选择型号");
+        }
       },
     },
     created() {
@@ -142,10 +153,17 @@ import { getlistParentTypeFun, getlistSubTypeFun} from '@/service/device';
       color: rgba(51, 51, 51, 1);
       background: #fff;
       span {
-        &:nth-child(2) {
-          font-size: 0.37rem;
-          color: #1890ff;
-        }
+        width: 5.2rem;
+      }
+      div {
+        flex-grow: 1;
+        width: auto;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-size: 0.37rem;
+        color: #1890ff;
+        text-align: right;
       }
     }
 
@@ -217,19 +235,39 @@ import { getlistParentTypeFun, getlistSubTypeFun} from '@/service/device';
     }
     .sf-bd {
       margin-bottom: 1.7rem;
-      .item {
-        text-align: center;
-        height: 1.17rem;
-        line-height: 1.17rem;
-        background: rgba(255, 255, 255, 1);
-        font-size: 0.4rem;
-        color: rgba(51, 51, 51, 1)
+      ul {
+        width:100%;
+        li {
+          display: flex;
+          text-align:center;
+          height: 1.17rem;
+          line-height: 1.17rem;
+          background: rgba(255, 255, 255, 1);
+          font-size: 0.4rem;
+          color: rgba(51, 51, 51, 1);
+          div {
+            &:nth-child(1) {
+              width: 10%;
+            }
+            &:nth-child(2) {
+              width: 80%;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap;
+            }
+            &:nth-child(3) {
+              width: 10%;
+              color: #1890ff;
+              text-align: center;
+            }
+            
+          }
+        }
+        .selected {
+              background-color:rgba(24, 144, 255, 0.05);
+            }
       }
-      .selected {
-        background: url('../../../../static/image/device/selected-bgc-icon.jpeg') no-repeat 96% 50% padding-box;
-        background-size: .6rem;
-        background-color: rgba(24, 144, 255, 0.05);
-      }
+      
     }
     
     .promiss-footer {

@@ -13,7 +13,13 @@
       </li>
     </ul>
     <div class="sf-bd">
-      <p class="item" v-for="(item,index) in parentTypeList" :class="{selected:index==selectIndex}" :key="index" @click="selectClick(index,item.name)">{{item.name}}</p>
+      <ul>
+        <li class="item" v-for="(item,index) in parentTypeList" :class="{selected:index==selectIndex}" :key="index" @click="selectClick(index,item.name)">
+          <div></div>
+          <div>{{item.name}}</div>
+          <div class="select"><span class="iconfont" :class="{'icon-xuanze':index==selectIndex}"></span></div>
+        </li>
+      </ul>
     </div>
     <section class="promiss-footer">
       <span class="can" @click="goBack">上一步</span>
@@ -222,19 +228,40 @@ import { getlistParentTypeFun } from '@/service/device';
       }
     }
     .sf-bd {
-      .item {
-        text-align: center;
-        height: 1.17rem;
-        line-height: 1.17rem;
-        background: rgba(255, 255, 255, 1);
-        font-size: 0.4rem;
-        color: rgba(51, 51, 51, 1)
+      margin-bottom: 1.7rem;
+      ul {
+        width:100%;
+        li {
+          display: flex;
+          text-align:center;
+          height: 1.17rem;
+          line-height: 1.17rem;
+          background: rgba(255, 255, 255, 1);
+          font-size: 0.4rem;
+          color: rgba(51, 51, 51, 1);
+          div {
+            &:nth-child(1) {
+              width: 10%;
+            }
+            &:nth-child(2) {
+              width: 80%;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap;
+            }
+            &:nth-child(3) {
+              width: 10%;
+              color: #1890ff;
+              text-align: center;
+            }
+            
+          }
+        }
+        .selected {
+              background-color:rgba(24, 144, 255, 0.05);
+            }
       }
-      .selected {
-        background: url('../../../../static/image/device/selected-bgc-icon.jpeg') no-repeat 96% 50% padding-box;
-        background-size: .6rem;
-        background-color: rgba(24, 144, 255, 0.05);
-      }
+      
     }
     
     .promiss-footer {

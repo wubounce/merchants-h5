@@ -21,7 +21,7 @@
     </div>
     <div class="ss-bd">
       <div class="search-res">
-        <transition-group name="itemfade" tag="ul" mode="out-in" v-cloak>
+        <ul>
           <li v-for="(item,index) in shopList"  class="search-res-item" :class="{'selected':index==selectIndex}" @click="selectClick(index,item.shopName)"
             :key="index">
             <div>
@@ -30,7 +30,8 @@
             </div>
             <div><span class="iconfont" :class="{'icon-xuanze':index==selectIndex}"></span></div>
           </li>
-        </transition-group>
+          <li class="searchNoItem" v-show="hasNoData">没有找到匹配数据</li>
+        </ul>
       </div>
     </div>
     <button class="submitBtn" @click="goNext" >下一步</button>
@@ -43,7 +44,7 @@
   import QHeader from "@/components/header";
   import { MessageBox } from 'mint-ui';
   import {delay} from "@/utils/tool";
-  import { getShopFun } from '@/service/device';
+  import { getShopFun,shopSearchFun } from '@/service/device';
   export default {
     data() {
       return {
@@ -86,8 +87,13 @@
       }
     },
     methods: {
-      fetchData: function () {
-        console.log('获取数据');
+      async fetchData(e) {
+        let keywords = this.keyword;
+        let payload = {shopName: keywords};
+        let res = await shopSearchFun(qs.stringify(payload));
+          if(res.code === 0) {
+            this.shopList = res.data;  
+          }
       },
       selectClick: function (index,name) {
         this.selectIndex = index
@@ -117,6 +123,11 @@
          if(res.code === 0) {
           this.shopList= res.data; 
          }
+      }
+    },
+    computed: {
+      hasNoData () {
+        return !this.shopList.length;
       }
     },
 
@@ -271,6 +282,12 @@
   .ss-bd {
     .search-res {
       margin-bottom: 2rem;
+      .searchNoItem {
+        font-size: 0.43rem;
+        text-align: center;
+        height: 2rem;
+        line-height: 2rem;
+      }
       .search-res-item {
         height: 1.71rem;
         background: rgba(255, 255, 255, 1);

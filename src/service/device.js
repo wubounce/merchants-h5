@@ -24,6 +24,7 @@ const batchEdit = '/machine/batchEdit'; //批量编辑
 const batchEditMachineList = '/machine/batchEditMachineList';
 const listByNameOrlmei = '/machine/listByNameOrImei'; //设备搜索
 const batchStartOn = '/batchExecutePlan/add'; //批量启动
+const shopSearch = '/shop/listShop'; //店铺模糊查询 
 
 
 export const device = (payload) => fetch.get(deviceApi, {params: payload}); //登录
@@ -44,6 +45,7 @@ export const batchEditFun = (payload) => fetch.post(batchEdit,payload); //批量
 export const batchEditMachineListFun = (payload) => fetch.post(batchEditMachineList,payload); //批量编辑
 export const listByNameOrlmeiFun = (payload) => fetch.post(listByNameOrlmei,payload); //设备搜索
 export const batchStartOnFun = (payload) => fetch.post(batchStartOn,payload); //批量启动
+export const shopSearchFun= (payload) => fetch.post(shopSearch,payload); //店铺模糊查询
 
 
 

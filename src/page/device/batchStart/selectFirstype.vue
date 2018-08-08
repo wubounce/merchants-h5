@@ -15,6 +15,7 @@
     <div class="sf-bd">
       <ul>
         <li class="item" v-for="(item,index) in parentTypeList" :class="{selected:index==selectIndex}" :key="index" @click="selectClick(index,item.name)">
+          <div></div>
           <div>{{item.name}}</div>
           <div class="select"><span class="iconfont" :class="{'icon-xuanze':index==selectIndex}"></span></div>
         </li>
@@ -240,9 +241,15 @@ import { getlistParentTypeFun } from '@/service/device';
           color: rgba(51, 51, 51, 1);
           div {
             &:nth-child(1) {
-              width: 90%;
+              width: 10%;
             }
             &:nth-child(2) {
+              width: 80%;
+              overflow: hidden;
+              text-overflow: ellipsis;
+              white-space: nowrap;
+            }
+            &:nth-child(3) {
               width: 10%;
               color: #1890ff;
               text-align: center;
