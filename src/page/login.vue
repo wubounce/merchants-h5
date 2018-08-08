@@ -9,7 +9,7 @@
     <form ref="loginForm" :model="form">
       <div class="form-group input">
         <p class="userName">
-          <input type="number" v-model.trim="form.userName" v-on:input="userinputFunc" placeholder="请输入用户名/手机号" style="width:90%">
+          <input type="text" v-model.trim="form.userName" v-on:input="userinputFunc" placeholder="请输入用户名/手机号" style="width:90%">
           <span class="eyes iconfont icon-guanbi" v-if="isuser" @click="form.userName='';isuser=false;disabled=true"></span>
         </p>
         <div class="passWord">

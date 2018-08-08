@@ -6,23 +6,21 @@
       <section class="sarch-wrap">
         <div class="search">
             <form action="" target="frameFile" v-on:submit.prevent="">
-              <input type="text" value='搜索' v-model.trim="searchData" @keyup.enter="searchOrder" @input="clearSearch" placeholder="请输入用户手机号/订单号查询" class="serch">
+              <input type="number" value='搜索' v-model.trim="searchData" @keyup.enter="searchOrder" @input="clearSearch" placeholder="请输入用户手机号/订单号查询" class="serch">
               <iframe name='frameFile' style="display: none;"></iframe>
               <span class="select-back" @click="searchOrder">搜索</span>
             </form>
         </div>
       </section>
-      <section class="order-status">
-        <div v-for="(item,index) in titleArr" @click="titleClick(index)"><span :class="{current: titleIndex === index}">{{item.lable}}</span></div>
-      </section>
+      <div class="hidden-tab"  v-if="hiddenTab">  
+        <section class="order-status">
+          <div v-for="(item,index) in titleArr" @click="titleClick(index)"><span :class="{current: titleIndex === index}">{{item.lable}}</span></div>
+        </section>
+      </div>
     </div>
-    <section class="no-order" v-if="nosearchList">
-      未找到符合的结果
-    </section>
-    <section class="no-order" v-if="noOrderList">
-      暂无订单
-    </section> 
-    <div class="page-top">
+    <div class="no-order" v-if="nosearchList"><p>未找到符合的结果</p></div>
+    <div class="no-order" v-if="noOrderList"><p>暂无订单</p></div> 
+    <div class="page-top" :style="{ 'padding-top': hiddenPageHeight + 'rem' }">
        <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
          <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore">
             <div class="alllist" v-for="(item,index) in list" :key="index">
@@ -86,6 +84,8 @@ export default {
       noOrderList:false,
       nosearchList:false,
       orderStatus:'', //订单状态
+      hiddenTab:true,
+      hiddenPageHeight:2.88 
     };
   },
   mounted() {
@@ -127,6 +127,7 @@ export default {
         // });
         if (this.searchData) {
           this.nosearchList = this.list.length<= 0 ? true: false;
+          this.hiddenPageHeight = 1.71;
         } else {
           this.noOrderList = this.list.length<= 0 ? true: false;
         }
@@ -148,6 +149,7 @@ export default {
         this.$toast({message: "搜索内容只支持英文字母和数字" });
         return false;
       }
+      this.hiddenTab = false;
       this.noOrderList = false;
       this.titleIndex = 0; //全部tab 显示数据
       this.orderStatus = '';//全部tab 显示数据
@@ -166,7 +168,11 @@ export default {
         this.$toast({message: "搜索内容只支持英文字母和数字" });
         return false;
       }
-      if(this.searchData.length <= 0 )this._getList();
+      if(this.searchData.length <= 0 ){
+        this._getList();
+        this.hiddenTab = true;
+        this.hiddenPageHeight = 2.88;
+      }
     },
     godetail(oederno,machineId){
       this.$router.push({name: 'orderdetail',query:{orderNo:oederno}});
@@ -224,6 +230,12 @@ export default {
 };
 </script>
 <style type="text/css" lang="less" scoped>
+.order-wrap {
+  height: 100%;
+  >div {
+    height: 100%;
+  }
+}
 .search-header {
     position: fixed;
     top: 0;
@@ -391,11 +403,12 @@ export default {
   font-size: 14px;
   color: #999;
   text-align: center;
-  padding: 3.33rem 0;
   background: #fff;
+  height: 100%;
+  line-height: 100%;
+  padding-top: 4rem;
 }
 .page-top {
-  padding-top: 2.88rem;
   height: 100%;
 }
 .page-loadmore-wrapper {

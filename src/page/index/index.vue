@@ -263,7 +263,6 @@ export default {
       this.pietypeData=[];
       this.piefunData=[];
       let type = this.lineSearchTime[this.pieSearchIndex].value;
-      console.log(this.distributioncurrentTags,type);
       this.typeProfitData(this.distributioncurrentTags.id,type);
     },
     distributionselectpickertatus(data){
@@ -521,7 +520,6 @@ export default {
               itemStyle: {
                 normal : { 
                   color:function(data){
-                      console.log(data);
                       if (data.name==='脉冲') {
                         if (data.value>1) {
                           return 'rgb(59,161,255)';
@@ -594,7 +592,6 @@ export default {
               itemStyle: {
                 normal : { 
                   color:function(data){
-                      console.log(data);
                       if (data.name==='超净洗') {
                         if (data.value>1) {
                           return 'rgb(243,100,124)';

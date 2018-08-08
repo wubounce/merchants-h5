@@ -28,7 +28,7 @@
               <!-- 若提现失败则给下status增加class：fall -->
               <p :class="['status',{'fall':data.status === 2}]">{{data.status === 2? '提现失败': '提现成功'}}</p>
               <p class="time" v-if="data.status === 2">{{data.content}}</p>  
-              <p class="time" v-if="data.status === 1">{{data.completeTime}}</p>                          
+              <p class="time" v-if="data.status !== 0">{{data.completeTime}}</p>                          
             </div>            
           </li>
         </ul>

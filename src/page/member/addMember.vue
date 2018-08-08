@@ -236,6 +236,7 @@ export default {
           font-size: 16px;
           color: #333;
           text-align: right;
+          letter-spacing:0.01rem;
         }
         .more {
           display: inline-block;
