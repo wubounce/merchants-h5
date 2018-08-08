@@ -1,57 +1,71 @@
-<template>
+ <template>
 <div class="report" v-title="title">
-  
-    <mt-navbar class="tab" v-model="selected">
-    <mt-tab-item id="1">收益</mt-tab-item>
-    <mt-tab-item id="2">退款</mt-tab-item>
-    </mt-navbar>
-    <mt-tab-container v-model="selected">
-      <mt-tab-container-item id="1">
-        <reporteaning></reporteaning>
-      </mt-tab-container-item>
-      <mt-tab-container-item id="2">
-        <refund></refund>
-      </mt-tab-container-item>
-    </mt-tab-container>
-    <!-- <div style="width:100%;height:1.73rem;"></div>
-      <div class="permissions" v-if="$store.getters.has('mer:report')">暂无相关页面权限</div>
-    <div v-else>
- -->  </div>
+  <section class="tab-title">
+    <div v-for="(item,index) in tabtitle" @click="tabclick(index)"><span :class="{tabcurrent:tabindex === index}" >{{item}}</span></div>
+  </section>
+  <section class="tab-contont">
+    <div class="discount-wrap" v-if="tabindex === 0">
+       <reporteaning></reporteaning>
+    </div>
+
+    <div class="VIP-wrap"  v-if="tabindex === 1">
+      <refund></refund>
+    </div>
+  </section>
+   <div style="width:100%;height:1.73rem;"></div>
 </div>
 </template>
 <script>
 import reporteaning from './earnings';
 import refund from './refund';
 export default {
-  data() {
-    return {
-       title:'报表',
-       selected: '1'
-    };
-  },
-  created(){
-  },
-  methods: {
-  },
   components:{
     reporteaning,
     refund
-  }
+  },
+  data() {
+    return {
+      title: '报表',
+      tabtitle:['收益','退款'],
+      tabindex:0,
+    };
+  },
+  mounted() {
+    
+  },
+  created(){
+   
+  },
+  methods: {
+    tabclick(index){
+      this.tabindex = index;
+    },
+  },
 };
 </script>
-<style lang="scss" scoped>
-  
-</style>
-<style lang="scss">
-  .report .mint-header {
-    background: #F2F2F2 !important;
-    border-bottom:1px solid rgba(229,229,229,1);
-  }
-  .tab {
-    border-bottom:1px solid rgba(229,229,229,1);
-    .mint-tab-item-label {
-      font-size: 16px;
-      color: #666;
+<style type="text/css" lang="scss" scoped>
+  .tab-title {
+    background: #fff;
+    width: 100%;
+    height: 1.33rem;
+    line-height: 1.33rem;
+    font-size: 16px;
+    color: #333333;
+    text-align: center;
+    display: flex;
+    z-index: 9999;
+    position: relative;
+    border-bottom:1px solid #E5E5E5;
+    >div {
+      flex: 1;
+    }
+    .tabcurrent{
+      color:#1890FF;
+      border-bottom: 0.08rem solid #1890FF;
+      border-radius:0.04rem;
+      display: inline-block;
+      padding:0 0.27rem;
     }
   }
 </style>
+

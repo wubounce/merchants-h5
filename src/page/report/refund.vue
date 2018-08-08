@@ -133,10 +133,16 @@ export default {
           this.reportMoney.push(item.money);
         });
         this.lsitdata = res.data;
+        this.lsitdata.sort(this.ortId); //时间倒序
       }else {
         this.$toast({message: res.msg });
       }
       this.chart.setOption(this.chartOption);
+    },
+    ortId(a,b){ 
+      let k = a.date.replace(/\-/g, '');   
+      let h = b.date.replace(/\-/g, '');
+      return h-k;
     },
     open(picker) {
       this.$refs[picker].open();
@@ -161,7 +167,7 @@ export default {
     chartOption(){
       let option = {
         title: {
-            text: '退款表'
+            text: '收益表'
         },
         tooltip: {
             trigger: 'axis',
@@ -169,20 +175,21 @@ export default {
               type: 'line',
               animation: false,
               label: {
-                  backgroundColor: '#505765'
+                backgroundColor: '#505765'
               }
-            }
+            },
+            formatter:function(data){
+            return `${data[0].name}<br/>${data[0].marker}${data[0].seriesName}：${data[0].value.toFixed(2)}元<br/>${data[1].marker}${data[1].seriesName}：${data[1].value}`;
+            },
         },
         grid: {
             y:10,
             x:0,
             x2:0,
-            y2:10,
+            y2:10, //网格下方距离
             containLabel: true,
         },
         dataZoom: [{
-          startValue: '05-29'
-        }, {
           type: 'inside'
         }],
         xAxis : [{
@@ -201,11 +208,42 @@ export default {
           },
         }],
         yAxis: [
-          {
+          {   name: '退款金额',
               type: 'value',
               min: 0,
-              max:160.00,
-              minInterval: 40,
+              max:function(data){
+                return data.max;
+              },
+              splitNumber:5,
+              axisLine:{
+                show:false,
+                lineStyle:{
+                  color:'#e6e6e6',
+                }
+              },
+              axisTick: {
+                  show: false
+              },
+              axisLabel: {
+                textStyle: {color: '#999'},
+                formatter: function (value) {           
+                 return value.toFixed(2);  
+                }  
+              },
+              splitLine:{  
+                show:true,
+                lineStyle:{
+                  color:'#e6e6e6',
+                  type:'soild'
+                }
+              }
+          },
+          {   name: '订单数量',
+              type: 'value',
+              min: 0,
+              max:function(data){
+                return data.max;
+              },
               splitNumber:5,
               axisLine:{
                 show:false,
@@ -230,37 +268,13 @@ export default {
                 }
               }
           },
-          {
-              min:0,
-              max:40,
-              splitNumber:5,
-              type: 'value',
-              axisLine:{
-                show:false,
-                lineStyle:{
-                  color:'#e6e6e6'
-                }
-              },
-              axisTick: {
-                  show: false
-              },
-              axisLabel: {
-                textStyle: {color: '#999'}
-              },
-              splitLine:{  
-                show:true,
-                lineStyle:{
-                  color:'#e6e6e6',
-                  type:'soild'
-                }
-              }
-          }
+
         ],
         series: [
             {
                 name:'退款金额',
                 type:'line',
-                stack: '总量',
+                yAxisIndex:0,
                 symbol: 'circle',
                 data:this.reportMoney,
                 itemStyle: {
@@ -285,7 +299,7 @@ export default {
             {
                 name:'订单数量',
                 type:'line',
-                stack: '总量',
+                yAxisIndex:1,
                 symbol: 'circle',
                 data:this.reportCount,
                 itemStyle: {

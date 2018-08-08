@@ -56,7 +56,7 @@
 
     <!-- 优惠时段 -->
     <mt-popup v-model="activeTimeVisible" position="bottom" class="mint-popup">
-       <mt-picker class="pickerActiveTimes"  :slots="activeTimeslots" @change="changeTime" :showToolbar="true"><p class="toolBar"><span class="timequx" @click="activeTimeVisible = false;">取消</span><span @click="chooseDay" class="tiem-picker-title">全天</span><span @click="confirmNews" class="queding">确定</span></p></mt-picker>
+       <mt-picker class="pickerActiveTimes"  :slots="activeTimeslots" @change="changeTime" :showToolbar="true"><p class="toolBar"><span class="timequx" @click="activeTimeVisible = false;">取消</span><span @click="chooseDay" class="tiem-picker-title">全天</span><span @click="confirmNews('pickerActiveTimes')" class="queding">确定</span></p></mt-picker>
     </mt-popup>
 
     <!-- 优惠期开始 -->

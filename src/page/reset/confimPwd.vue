@@ -113,8 +113,10 @@ import { validatPwd } from '@/utils/validate';
         }
       }
     }
-    .btn {
-      margin:1.47rem 0.92rem;
+    .btn button {
+      width: 8.13rem;
+      height: 1.17rem;
+      margin:1.47rem auto;
     }
   }
 </style>

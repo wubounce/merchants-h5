@@ -13,7 +13,7 @@
         </div>
       </div>
     </form>
-    <p class="change-pwd-btn">
+    <p class="btn">
        <mt-button type="primary" class="btn-blue" @click.prevent="changePwdConfirm" :disabled="disabled">确定</mt-button>
     </p>
   </div>
@@ -122,11 +122,11 @@
     .form-group:last-child {
       border: none;
     }
-    .btn-blue {
-      margin-top: 0.67rem;
-      margin-left: 0.4rem;
-      width: 90%;
+    .btn button {
+      display: block;
+      width: 8.13rem;
       height: 1.17rem;
+      margin:0.67rem auto;
     }
   }
 </style>

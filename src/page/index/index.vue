@@ -1,57 +1,53 @@
 <template>
   <div class="main" v-title="'首页'">
-    
-      <div class="earnings-wrap">
-        <div class="earning-type">
-          <p>总收益 (元)</p>
-          <p class="earning-type-size">{{allMoney?allMoney:'0.00'}}</p>
-        </div>
-        <div class="today-earning">
-          <p style="margin-top: 0.35rem;">今日收益 (元)</p>
-          <p class="today-earning-size">{{todayMoney?todayMoney:'0.00'}}</p>
-        </div>
-        <div class="earning-type">
-          <p>当月收益 (元)</p>
-          <p class="earning-type-size">{{monthMoney?monthMoney:'0.00'}}</p>
-        </div>
+    <div class="earnings-wrap">
+      <div class="earning-type">
+        <p>总收益 (元)</p>
+        <p class="earning-type-size">{{allMoney?allMoney:'0.00'}}</p>
       </div>
-      <div class="lineecharts-warp">
-        <div>
-          <div class="lineechart-title">
-            <span class="linetitle">收益数据 <span @click="machineVisible = true;" class="choose-select">{{machinecurrentTags?machinecurrentTags.name:'全部'}}<i class="iconfont icon-nextx select-back"></i></span></span>
-            <span class="linedata">
-            <span :class="['linedatachoose', {linecurrent: lineSearchIndex === index}]" v-for="(item,index) in lineSearchTime" @click="lineTimeSearch(index)">{{item.lable}}</span>
-            </span>
-            <selectpickr :visible="machineVisible" :slots="equipmentSlots" :valueKey="machinepickername" @selectpicker="machineselectpicker" @onpickstatus="machineselectpickertatus"> </selectpickr>
-          </div>
-          <div class="line" id="line" :style="{height:lineheight,width:width}" ref="line"></div>
-        </div>
+      <div class="today-earning">
+        <p style="margin-top: 0.35rem;">今日收益 (元)</p>
+        <p class="today-earning-size">{{todayMoney?todayMoney:'0.00'}}</p>
       </div>
-      <div class="pei-wrap">
-        <div class="lineechart-title pie-title">
-          <span class="linetitle">收益分布 <span @click="distributionVisible = true;" class="choose-select">{{distributioncurrentTags?distributioncurrentTags.name:'洗衣机'}}<i class="iconfont icon-nextx select-back"></i></span></span>
-          <span class="linedata">
-             <span :class="['linedatachoose', {linecurrent: pieSearchIndex === index}]" v-for="(item,index) in lineSearchTime" @click="pieTimeSearch(index)">{{item.lable}}</span>
-          </span>
-           <selectpickr :visible="distributionVisible" :slots="distributionSlots" :valueKey="machinepickername" @selectpicker="distributionselectpicker" @onpickstatus="distributionselectpickertatus"> </selectpickr>
-        </div>
-        <div class="piebox">
-         <div class="pietype" id="pietype" :style="{height:pieheight,width:width}" ref="pietype"></div>
-         <div class="piefun" id="piefun" :style="{height:pieheight,width:width}" ref="piefun"></div>
-        </div>
-      </div>
-      <div class="bar-wrap">
-        <div class="">
-          <span class="linetitle">设备监控<span style="font-size: 14px;font-weight: 100;color: #3AA0FF;">(总设备{{allmMachine}})</span></span>
-          <span class="equipment" @click="equipmentVisible=true">{{equipmentcurrentTags?equipmentcurrentTags.name:'全部'}}<i class="iconfont icon-nextx select-back"></i></span>
-          <selectpickr :visible="equipmentVisible" :slots="equipmentSlots" :valueKey="machinepickername" @selectpicker="equipmentselectpicker" @onpickstatus="equipmentselectpickertatus"> </selectpickr>
-        </div>
-        <div class="bar" id="bar" :style="{height:height,width:width}" ref="bar"></div>
+      <div class="earning-type">
+        <p>当月收益 (元)</p>
+        <p class="earning-type-size">{{monthMoney?monthMoney:'0.00'}}</p>
       </div>
     </div>
-  <!-- <div class="permissions">暂无相关页面权限</div>
-    <div v-else>  
-  </div> -->
+    <div class="lineecharts-warp">
+      <div>
+        <div class="lineechart-title">
+          <span class="linetitle">收益数据 <span @click="machineVisible = true;" class="choose-select">{{machinecurrentTags?machinecurrentTags.name:'全部'}}<i class="iconfont icon-nextx select-back"></i></span></span>
+          <span class="linedata">
+          <span :class="['linedatachoose', {linecurrent: lineSearchIndex === index}]" v-for="(item,index) in lineSearchTime" @click="lineTimeSearch(index)">{{item.lable}}</span>
+          </span>
+          <selectpickr :visible="machineVisible" :slots="equipmentSlots" :valueKey="machinepickername" @selectpicker="machineselectpicker" @onpickstatus="machineselectpickertatus"> </selectpickr>
+        </div>
+        <div class="line" id="line" :style="{height:lineheight,width:width}" ref="line"></div>
+      </div>
+    </div>
+    <div class="pei-wrap">
+      <div class="lineechart-title pie-title">
+        <span class="linetitle">收益分布 <span @click="distributionVisible = true;" class="choose-select">{{distributioncurrentTags?distributioncurrentTags.name:'洗衣机'}}<i class="iconfont icon-nextx select-back"></i></span></span>
+        <span class="linedata">
+           <span :class="['linedatachoose', {linecurrent: pieSearchIndex === index}]" v-for="(item,index) in lineSearchTime" @click="pieTimeSearch(index)">{{item.lable}}</span>
+        </span>
+         <selectpickr :visible="distributionVisible" :slots="distributionSlots" :valueKey="machinepickername" @selectpicker="distributionselectpicker" @onpickstatus="distributionselectpickertatus"> </selectpickr>
+      </div>
+      <div class="piebox">
+       <div class="pietype" id="pietype" :style="{height:pieheight,width:width}" ref="pietype"></div>
+       <div class="piefun" id="piefun" :style="{height:pieheight,width:width}" ref="piefun"></div>
+      </div>
+    </div>
+    <div class="bar-wrap">
+      <div class="">
+        <span class="linetitle">设备监控<span style="font-size: 14px;font-weight: 100;color: #3AA0FF;">(总设备{{allmMachine}})</span></span>
+        <span class="equipment" @click="equipmentVisible=true">{{equipmentcurrentTags?equipmentcurrentTags.name:'全部'}}<i class="iconfont icon-nextx select-back"></i></span>
+        <selectpickr :visible="equipmentVisible" :slots="equipmentSlots" :valueKey="machinepickername" @selectpicker="equipmentselectpicker" @onpickstatus="equipmentselectpickertatus"> </selectpickr>
+      </div>
+      <div class="bar" id="bar" :style="{height:height,width:width}" ref="bar"></div>
+    </div>
+  </div>
 </template>
 <script>
 import qs from 'qs';
@@ -306,16 +302,19 @@ export default {
             }
           },
           formatter:function(data){
-           return `${data[0].name}<br/>${data[0].seriesName}：${data[0].value.toFixed(2)}元`;
+           return `${data[0].name}<br/>${data[0].marker}${data[0].seriesName}：${data[0].value.toFixed(2)}元`;
           },
         },
         grid: {
             y:10,
             x:10,
-            x2:15,
+            x2:20,
             y2:10,
             containLabel: true,
         },
+        dataZoom: [{
+          type: 'inside'
+        }],
         xAxis : [{
           type : 'category',
           boundaryGap : false,
@@ -404,7 +403,7 @@ export default {
             }
           },
           formatter:function(data){
-           return `${data[0].name}：${data[0].value}`;
+           return `${data[0].marker}${data[0].name}：${data[0].value}`;
           },
         },
         grid: {
@@ -474,7 +473,7 @@ export default {
             trigger: 'item',
             formatter:function(data){
               let num = Math.round(data.percent);
-              return `${data.name}：${num}%`;
+              return `${data.marker}${data.name}：${num}%`;
             },
         },
         legend: {
@@ -495,7 +494,7 @@ export default {
             }]
         },
         series: [
-            {
+          {
               name:'通信类型',
               type:'pie',
               radius: ['40%', '60%'],
@@ -506,7 +505,7 @@ export default {
                       position: 'outside',
                       formatter:function(data){
                         let num = Math.round(data.percent);
-                        return `${num}%`;
+                        return num>0 ?`${num}%`:'';
                       },
                       color:'#333'
                   },
@@ -514,12 +513,32 @@ export default {
               labelLine: {
                   normal: {
                       show: false,
-                      length:4,
-                      length2:4,
+                      length:10,
+                      length2:0,
                   }
               },
               data:this.pietypeData,
-              color: ['rgb(59,161,255)','rgb(243,100,124)']
+              itemStyle: {
+                normal : { 
+                  color:function(data){
+                      console.log(data);
+                      if (data.name==='脉冲') {
+                        if (data.value>1) {
+                          return 'rgb(59,161,255)';
+                        } else {
+                          return '#ccc';
+                        }
+                      } else if(data.name==='串口'){
+                         if (data.value>1) {
+                          return 'rgb(243,100,124)';
+                        } else {
+                          return '#ccc';
+                        }
+                      }
+                      
+                  }
+                }
+              }
           }
         ]
       };
@@ -532,7 +551,7 @@ export default {
             // formatter: "{a} <br/>{b}: {c} ({d}%)"//模板变量有 {a}、{b}、{c}、{d}，分别表示系列名，数据名，数据值，百分比。{d}数据会根据value值计算百分比
             formatter:function(data){
               let num = Math.round(data.percent);
-              return `${data.name}：${num}%`;
+              return `${data.marker}${data.name}：${num}%`;
             },
         },
         legend: {
@@ -559,7 +578,7 @@ export default {
                       position: 'outside',
                       formatter:function(data){
                         let num = Math.round(data.percent);
-                        return `${num}%`;
+                        return num>0 ?`${num}%`:'';
                       },
                       color:'#333'
                   },
@@ -567,12 +586,38 @@ export default {
               labelLine: {
                   normal: {
                       show: false,
-                      length:3,
-                      length2:3,
+                      length:10,
+                      length2:0,
                   }
               },
               data:this.piefunData,
-              color: ['rgb(59,161,255)','#37CCCC','rgb(243,100,124)','#4ECC74','#FBD438']
+              itemStyle: {
+                normal : { 
+                  color:function(data){
+                      console.log(data);
+                      if (data.name==='超净洗') {
+                        if (data.value>1) {
+                          return 'rgb(243,100,124)';
+                        } else {
+                          return '#ccc';
+                        }
+                      } else if(data.name === '单脱'){
+                        if (data.value>1) {
+                          return '#3BA1FF';
+                        } else {
+                          return '#ccc';
+                        }
+                      }else {
+                        if (data.value>1) {
+                          return '#37CCCC';
+                        } else {
+                          return '#ccc';
+                        }
+                      }
+                      
+                  }
+                }
+              },
           }
         ]
       };

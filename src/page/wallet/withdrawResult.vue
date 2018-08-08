@@ -9,7 +9,7 @@
             <p class="icon-wrapper"><span class="icon"></span>  </p>   
             <div>
               <p class="status">发起提现申请</p>
-              <p class="time">{{data.createTime}}</p>
+              <p class="time">{{data.buildTime}}</p>
             </div>
           </li>
           <li :class="['second',{'active':data.status === 0}]" >
@@ -17,7 +17,7 @@
             <div>
               <p class="status">处理中</p>
               <p class="time" v-if="data.status === 0">预计{{data.forecastTime}}前到账</p>
-              <p class="time" v-else>{{data.createTime}}</p>
+              <p class="time" v-else>{{data.buildTime}}</p>
             </div>
             
           </li>
@@ -27,7 +27,7 @@
             <div>
               <!-- 若提现失败则给下status增加class：fall -->
               <p :class="['status',{'fall':data.status === 2}]">{{data.status === 2? '提现失败': '提现成功'}}</p>
-              <p class="time" v-if="data.status === 2">{{data.reason}}</p>  
+              <p class="time" v-if="data.status === 2">{{data.content}}</p>  
               <p class="time" v-if="data.status === 1">{{data.completeTime}}</p>                          
             </div>            
           </li>

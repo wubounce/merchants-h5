@@ -133,10 +133,16 @@ export default {
           this.reportMoney.push(item.money);
         });
         this.lsitdata = res.data;
+        this.lsitdata.sort(this.ortId); //时间倒序
       }else {
         this.$toast({message: res.msg });
       }
       this.chart.setOption(this.chartOption);
+    },
+    ortId(a,b){ 
+      let k = a.date.replace(/\-/g, '');   
+      let h = b.date.replace(/\-/g, '');
+      return h-k;
     },
     open(picker) {
       this.$refs[picker].open();
@@ -169,22 +175,23 @@ export default {
               type: 'line',
               animation: false,
               label: {
-                  backgroundColor: '#505765'
+                backgroundColor: '#505765'
               }
+            },
+            formatter:function(data){
+            return `${data[0].name}<br/>${data[0].marker}${data[0].seriesName}：${data[0].value.toFixed(2)}元<br/>${data[1].marker}${data[1].seriesName}：${data[1].value}`;
             },
         },
         grid: {
-            y:0,
+            y:10,
             x:0,
             x2:0,
-            y2:0,
+            y2:10, //网格下方距离
             containLabel: true,
         },
-        // dataZoom: [{
-        //   startValue: '05-29'
-        // }, {
-        //   type: 'inside'
-        // }],
+        dataZoom: [{
+          type: 'inside'
+        }],
         xAxis : [{
           type : 'category',
           offset:8,
@@ -192,6 +199,7 @@ export default {
           axisLabel: {
             textStyle: {color: '#999'},
           },
+          splitNumber:8,
           axisLine:{
             show:false,
             lineStyle:{
@@ -201,7 +209,37 @@ export default {
           },
         }],
         yAxis: [
-          {
+          {   name: '收益金额',
+              type: 'value',
+              min: 0,
+              max:function(data){
+                return data.max;
+              },
+              splitNumber:5,
+              axisLine:{
+                show:false,
+                lineStyle:{
+                  color:'#e6e6e6',
+                }
+              },
+              axisTick: {
+                  show: false
+              },
+              axisLabel: {
+                textStyle: {color: '#999'},
+                formatter: function (value) {           
+                 return value.toFixed(2);  
+                }  
+              },
+              splitLine:{  
+                show:true,
+                lineStyle:{
+                  color:'#e6e6e6',
+                  type:'soild'
+                }
+              }
+          },
+          {   name: '订单数量',
               type: 'value',
               min: 0,
               max:function(data){
@@ -231,37 +269,13 @@ export default {
                 }
               }
           },
-          {
-              min:0,
-              max:40,
-              splitNumber:5,
-              type: 'value',
-              axisLine:{
-                show:false,
-                lineStyle:{
-                  color:'#e6e6e6'
-                }
-              },
-              axisTick: {
-                  show: false
-              },
-              axisLabel: {
-                textStyle: {color: '#999'}
-              },
-              splitLine:{  
-                show:true,
-                lineStyle:{
-                  color:'#e6e6e6',
-                  type:'soild'
-                }
-              }
-          }
+
         ],
         series: [
             {
                 name:'收益金额',
                 type:'line',
-                stack: '总量',
+                yAxisIndex:0,
                 symbol: 'circle',
                 data:this.reportMoney,
                 itemStyle: {
@@ -286,7 +300,7 @@ export default {
             {
                 name:'订单数量',
                 type:'line',
-                stack: '总量',
+                yAxisIndex:1,
                 symbol: 'circle',
                 data:this.reportCount,
                 itemStyle: {
@@ -408,7 +422,7 @@ export default {
   }
   .search {
     display: flex;
-    padding: 0.4rem 0.32rem 0 0.32rem;
+    padding: 0.4rem 0.2rem 0 0.2rem;
   }
   .slectdata {
     display: flex;
@@ -426,7 +440,7 @@ export default {
     }
   }
   .timechoose {
-    width: 60%;
+    width: 75%;
     span {
       width: 45%;
       text-align: center;
@@ -446,6 +460,7 @@ export default {
   }
   .select-back {
     float: right;
+    color: #999;
   }
   .nodata {
     font-size: 14px;
