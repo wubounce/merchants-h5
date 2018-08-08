@@ -61,13 +61,10 @@ export default {
   },
   methods: {
     async UpdatedImgFiles1(msg) {
-      //console.log(msg);
       if(msg.substring(0,22)=="data:image/png;base64,") {
-        console.log(msg.substring(0,22));
         msg = msg.replace("data:image/png;base64,","");
       }
       else if(msg.substring(0,23)=="data:image/jpeg;base64,") {
-        console.log(msg.substring(0,23));
         msg = msg.replace("data:image/jpeg;base64,","");
       }
       let obj = { files:msg };
@@ -82,20 +79,16 @@ export default {
       this.imgChange.a = this.img.defaultPicture1;
     },
     async UpdatedImgFiles2(msg) {
-      //console.log(msg);
       if(msg.substring(0,22)=="data:image/png;base64,") {
-        //console.log(msg.substring(0,22));
         msg = msg.replace("data:image/png;base64,","");
       }
       else if(msg.substring(0,23)=="data:image/jpeg;base64,") {
-        //console.log(msg.substring(0,23));
         msg = msg.replace("data:image/jpeg;base64,","");
       }
       let obj = { files:msg };
       let res = await uploadFileFun(qs.stringify(obj));
       if(res.code ===0 ) {
         this.img.defaultPicture2 = res.data[0].url;
-        //console.log(this.imageId);
       }
       else {
         MessageBox.alert(res.msg);
@@ -103,13 +96,10 @@ export default {
       this.imgChange.b = this.img.defaultPicture2;
     },
     async UpdatedImgFiles3(msg) {
-      //console.log(msg);
       if(msg.substring(0,22)=="data:image/png;base64,") {
-        //console.log(msg.substring(0,22));
         msg = msg.replace("data:image/png;base64,","");
       }
       else if(msg.substring(0,23)=="data:image/jpeg;base64,") {
-        //console.log(msg.substring(0,23));
         msg = msg.replace("data:image/jpeg;base64,","");
       }
       let obj = { files:msg };

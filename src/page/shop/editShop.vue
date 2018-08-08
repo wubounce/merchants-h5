@@ -240,7 +240,6 @@ export default {
   methods:{
      blur(e) {
       //校验字符长度
-      console.log(this.oldName);
       if(e.target.value.length>1 && e.target.value.length<21) {
         this.shopName = e.target.value;
       }
@@ -312,7 +311,6 @@ export default {
     },
     toDetail(value) {
       this.index = value;
-      console.log('index:',this.index);
       switch (value) {
         case 0:
           this.popupVisible = true;
@@ -348,7 +346,6 @@ export default {
           break;
         case 1:
           this.placeVisible = false;
-          //console.log(this.provinceName == this.cityName.slice(0,2));
           if(this.provinceName == this.cityName.slice(0,2)) {
             
             this.list[1].value = this.cityName + this.districtName;
@@ -379,7 +376,6 @@ export default {
             }
           }
           this.machineTypeIdsArray = arr.join(',');
-          console.log(this.machineTypeIdsArray);
           break;
         }
         case 4:
@@ -496,18 +492,15 @@ export default {
     async UpdatedImgFiles(msg) {
       //判断图片类型
       if(msg.substring(0,22)=="data:image/png;base64,") {
-        console.log(msg.substring(0,22));
         msg = msg.replace("data:image/png;base64,","");
       }
       else if(msg.substring(0,23)=="data:image/jpeg;base64,") {
-        console.log(msg.substring(0,23));
         msg = msg.replace("data:image/jpeg;base64,","");
       }
       let obj = { files:msg };
       let res = await uploadFileFun(qs.stringify(obj));
       if(res.code ===0 ) {
         this.imageId = res.data[0].url;
-        console.log(this.imageId);
       }
       else {
         MessageBox.alert(res.msg);
@@ -532,7 +525,6 @@ export default {
     //提交修改信息
     async submit() {
       let changeisReserve = (this.isReserve==true)? 0 :1;
-      console.log('提交',this.lng,this.lat);
       let obj = {
         shopId: this.$route.query.shopId,
         shopName: this.shopName,
@@ -602,39 +594,32 @@ export default {
         this.lat = res.data.lat;
         //详细地址
         this.address = res.data.address;
-        //设备类型
-        
+        //设备类型        
         if(res.data.machineTypeNames.length > 15) {
           this.machineName = res.data.machineTypeNames.slice(0,10) + '...';
         }
         else {
           this.machineName = res.data.machineTypeNames;
-        }
-        
+        }       
         //预约功能
         this.isReserve = res.data.isReserve == 0 ? true : false;
         this.noEdit = res.data.isReserve == 0 ? false :true;
         //预约时长
         this.orderLimitMinutes = res.data.orderLimitMinutes;
         //营业时间
-        this.addBusinessTime = res.data.workTime;
-        
+        this.addBusinessTime = res.data.workTime;      
         //逆地理坐标
         let lnglatXY = [this.lng, this.lat]; //已知点坐标
-        console.log(lnglatXY);
         let _this = this;
         AMap.plugin('AMap.Geocoder',function() {
           var geocoder = new AMap.Geocoder({
-            //radius: 1000,
             extensions: "all"
           });
           geocoder.getAddress(lnglatXY, function(status, result) {
               if (status === 'complete' && result.info === 'OK') {
-                  console.log('result1111:',result);
                   _this.geocoder_CallBack(result.regeocode.formattedAddress);
               }
               else {
-                console.log("error");
               }
           });        
         });
@@ -646,7 +631,6 @@ export default {
         let resPro = await areaListFun(qs.stringify(objPro));
         for(let x=0;x<resPro.data.length;x++) {
           if(res.data.province == resPro.data[x].areaName) {
-            //console.log(resPro.data[x].areaId);
             this.provinceId = resPro.data[x].areaId;  //获取初始化的省级单位
           }
         }
@@ -685,14 +669,12 @@ export default {
     async getShoplist() {
       let res = await manageListFun();
       if(res.code === 0 ) {
-        // this.arrName = res.data.map();
       }
     },
     geocoder_CallBack(data) {
       this.list[2].value = data;
       if(this.list[1].value) {
         if(this.list[2].value) {
-          console.log(this.list[2].value.slice(this.list[1].value.length));
           if(this.list[2].value.slice(this.list[1].value.length).length >9 ) {
             this.list[2].value = this.list[2].value.slice(this.list[1].value.length).slice(0,10) + '...';
           }

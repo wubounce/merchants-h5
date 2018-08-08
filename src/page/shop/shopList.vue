@@ -52,7 +52,6 @@ export default {
        title:'店铺管理',
        list:[],
        hasNews: true,
-
        //分页
        wrapperHeight: 0,//容器高度
        page: 1,//页码
@@ -65,8 +64,6 @@ export default {
     loadBottom() {
       this.page += 1;
       let allpage = Math.ceil(this.total/this.pageSize);
-      console.log(allpage);
-      console.log(this.page);
       if(this.page <= allpage){
         this.getShopList();
       }else{

@@ -101,7 +101,6 @@ export default {
 
         //逆地理坐标
         let lnglatXY = [this.lng, this.lat]; //已知点坐标
-        console.log(lnglatXY);
         let _this = this;
         AMap.plugin('AMap.Geocoder',function() {
           var geocoder = new AMap.Geocoder({
@@ -110,11 +109,10 @@ export default {
           });
           geocoder.getAddress(lnglatXY, function(status, result) {
               if (status === 'complete' && result.info === 'OK') {
-                  console.log('result1111:',result);
                   _this.geocoder_CallBack(result.regeocode.formattedAddress);
               }
               else {
-                console.log("error");
+                MessageBox.alert('地点出bug啦');
               }
           });        
         });

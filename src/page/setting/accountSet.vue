@@ -6,9 +6,7 @@
       <router-link :to="{name:'setAlipay'}" v-has="'mer:me:aplipay'">
         <p class="user business">绑定支付宝<span>{{ user.alipayAccount ? user.alipayAccount : '未绑定' | replaceAliply}}</span></p>
       </router-link>
-      <!-- <router-link :to="{name:'realName',  query:{ alipayAccount:user.alipayAccount }}"> -->
-        <p class="user business"  v-has="'mer:me:real'" @click="toRealName" >实名认证<span>{{user.status}}</span></p>
-      <!-- </router-link> -->
+      <p class="user business"  v-has="'mer:me:real'" @click="toRealName" >实名认证<span>{{user.status}}</span></p>
   </section>
 </template>
 <script>

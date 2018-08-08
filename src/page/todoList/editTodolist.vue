@@ -79,7 +79,6 @@ import moment from 'moment';
         }
       },
       async submit() {
-        console.log(this.funArr);
         for(let i=0; i<this.funArr.length; i++) {
           if(this.item.functionName == this.funArr[i].functionName) {
             this.standardFunctionId = this.funArr[i].functionId;
@@ -133,7 +132,6 @@ import moment from 'moment';
         };
         let res = await getBatchStartFun(qs.stringify(obj));
         if(res.code ===0 ) {
-          //console.log(res.data);
           //参数异常，待后台确认
           this.item = res.data;
           this.pickerValue = res.data.beginTime;
