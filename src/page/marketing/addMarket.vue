@@ -317,7 +317,9 @@ export default {
       let status = null;
       this.addmarket.addstatus === true ? status = 0  : status = 1;
       let payload = Object.assign({},this.addmarket,{week:this.weeklist.join(','),shopIds:this.shopIds.join(','),status:status});
-      payload.noWork = payload.noWorkStart+'~'+payload.noWorkEnd;
+      payload.noWork = payload.noWorkStart&&payload.noWorkEnd ? payload.noWorkStart+'~'+payload.noWorkEnd: null;
+      payload.noWork ? payload.noWork : delete payload.noWork;
+      payload.noWorkTime ? payload.noWorkTime : delete payload.noWorkTime;
       delete payload.addstatus;
       delete payload.noWorkStart;
       delete payload.noWorkEnd;
