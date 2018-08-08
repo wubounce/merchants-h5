@@ -115,8 +115,6 @@ export default {
     },
     chooseArea() {
       this.placeVisible = true;
-      
-      this.addressSlots[0].defaultIndex = 2;
     },
     cancel() {
       //取消
@@ -136,11 +134,9 @@ export default {
         address: this.item.address
       };
       let res = await updateOperatorFun(qs.stringify(objUpdate));
-
+      this.getPersonalInfo();
     },
     async onAddressChange(picker,values) {
-
-      
       //市
       for(let i=0;i<this.provinceArray.length;i++) {
         if(values[0] == this.provinceArray[i].areaName) {
