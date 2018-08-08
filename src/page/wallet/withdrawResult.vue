@@ -26,8 +26,9 @@
             <p :class="['icon-wrapper','iconfont',{'icon-shibai':data.status === 2,'icon-chenggong':data.status === 1}]"><span class="icon"></span> </p>   
             <div>
               <!-- 若提现失败则给下status增加class：fall -->
-              <p :class="['status',{'fall':data.status === 2}]">{{data.status === 2? '提现失败': '到账成功'}}</p>
-              <p class="time">{{data.completeTime}}</p>                           
+              <p :class="['status',{'fall':data.status === 2}]">{{data.status === 2? '提现失败': '提现成功'}}</p>
+              <p class="time" v-if="data.status === 2">{{data.reason}}</p>  
+              <p class="time" v-if="data.status === 1">{{data.completeTime}}</p>                          
             </div>            
           </li>
         </ul>
@@ -67,7 +68,7 @@ export default {
   },
   created(){
     let query = this.$route.query; 
-    query.applyMoney? this.ishow = true:this.ishow = false;
+    query.applyMoney ? this.ishow = true:this.ishow = false;
     this.getMoneySubmitDetail(query.balanceLogId);
   }, 
   methods: {

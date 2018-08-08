@@ -174,17 +174,17 @@ export default {
             },
         },
         grid: {
-            y:10,
+            y:0,
             x:0,
             x2:0,
-            y2:10,
+            y2:0,
             containLabel: true,
         },
-        dataZoom: [{
-          startValue: '05-29'
-        }, {
-          type: 'inside'
-        }],
+        // dataZoom: [{
+        //   startValue: '05-29'
+        // }, {
+        //   type: 'inside'
+        // }],
         xAxis : [{
           type : 'category',
           offset:8,
@@ -204,7 +204,9 @@ export default {
           {
               type: 'value',
               min: 0,
-              max:80,
+              max:function(data){
+                return data.max;
+              },
               splitNumber:5,
               axisLine:{
                 show:false,

@@ -17,7 +17,7 @@
                 </div>
                 <div class="dis-con-title">
                   <p>折扣优惠</p>
-                  <p :class="['dis-con-shop', {'stop-discount':item.status === 1|| item.status === 2}]">{{item.discount?item.discount :'0'  | replace}}<span>折</span></p>
+                  <p :class="['dis-con-shop', {'stop-discount':item.status === 1|| item.status === 2}]">{{item.discountVO?item.discountVO :'0'  | tofixd}}<span>折</span></p>
                 </div>
               </div>
             </router-link>
@@ -70,8 +70,8 @@ export default {
     }
   },
   filters:{
-    replace(value){
-      return value/10;
+    tofixd(value){
+     return Number(value).toFixed(0);
     }
   }
 };

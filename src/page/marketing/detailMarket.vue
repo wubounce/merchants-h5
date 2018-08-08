@@ -7,8 +7,15 @@
       <p>优惠期<span class="addvip-con">{{detail.noDiscountStart}}<span v-if="detail.noDiscountStart&&detail.noDiscountEnd">-</span>{{detail.noDiscountEnd}}</span></p>
       <p>活动日<span class="addvip-con">{{detail.noWeek | week}}</span></p>
       <p>每日活动时段<span class="addvip-con">{{detail.noTime}}</span></p>
-      <p>折扣优惠<span class="addvip-con">{{detail.discount}}%</span></p>
+      <p>折扣优惠<span class="addvip-con">{{detail.discountVO | tofixd}}%</span></p>
       <p>活动状态<span class="addvip-con">{{detail.status === 0 ? '开放':'暂停'}}</span></p>
+    </div>
+    <div class="nopay-time">
+      <h6>不可支付时段</h6>
+      <div class="time-chose">
+        <p>不可支付日期<span class="addvip-con">{{detail.noWork}}</span></p>
+        <p>每日不可支付时间<span class="addvip-con">{{detail.noWorkTime}}</span></p>
+      </div>
     </div>
     <div class="create-wrap">
       <p>创建人：{{detail.createUserName}}</p>
@@ -49,6 +56,7 @@ export default {
       this.detail.noDiscountStart = this.detail.noDiscountStart ? moment(this.detail.noDiscountStart).format('YYYY年MM月DD日') : '';
       this.detail.noDiscountEnd = this.detail.noDiscountEnd ? moment(this.detail.noDiscountEnd).format('YYYY年MM月DD日'): '';
       this.detail.createTime = this.detail.createTime? moment(this.detail.createTime).format('YYYY-MM-DD HH:mm:ss'): '';
+      this.detail.noWork = this.detail.noWorkStart&& this.detail.noWorkEnd ? moment(this.detail.noWorkStart).format('YYYY年MM月DD日')+'-'+moment(this.detail.noWorkEnd).format('YYYY年MM月DD日'):'';
     },
     deldelMarket(id){
       MessageBox.confirm(`确认删除？`).then(async () => {
@@ -66,9 +74,9 @@ export default {
   },
   filters: {
     week: function (value) {
-      if (value === '1,2,3,4,5,6,7') {
+      if (value === '9') {
         return '每天';
-      } else if(value === '1,2,3,4,5'){
+      } else if(value === '8'){
         return '周一至周五';
       }else {
         let arr = [];
@@ -93,15 +101,17 @@ export default {
         });
         return weeklsit.join(',');
       }
-      
     },
+    tofixd(value){
+     return Number(value).toFixed(0);
+    }
   },
   components:{
   },
 };
 </script>
 <style type="text/css" lang="scss" scoped>
-  .addvip-header {
+  .addvip-header, .time-chose {
     padding: 0 0.4rem;
     background: #fff;
     p {
@@ -159,6 +169,16 @@ export default {
       a {
         color: #1890FF;
       }
+    }
+  }
+  .nopay-time {
+    h6 {
+      color:rgba(153,153,153,1);
+      line-height:0.44rem;
+      font-size: 12px;
+      font-weight: normal;
+      padding: 0.4rem 0 0.13rem 0.4rem;
+          background: #efeff4;
     }
   }
 </style>

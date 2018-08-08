@@ -22,7 +22,7 @@
         <div class="vip"><span class="viptag">vip</span>VIP会员卡</div>
         <div class="discount">-¥{{detail.discountPrice}}</div>
       </div>
-       <div class="total-border" v-if="detail.discountPrice>0">
+       <div class="total-border" v-if="detail.discountType===2&&detail.discountPrice>0 || detail.discountType===null&&detail.discountPrice>0">
         <div class="vip">限时优惠</div>
         <div class="discount">-¥{{detail.discountPrice}}</div>
       </div>

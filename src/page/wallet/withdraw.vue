@@ -73,6 +73,11 @@ export default {
         }
         let payload = Object.assign({},{money:this.money});
         let res = await applyMoneySubmitFun(qs.stringify(payload));
+        if (res.code ===0) {
+            this.$router.push({name:'withdrawResult',query:{applyMoney:true,balanceLogId:res.data.id}});
+        } else {
+            this.$toast(res.msg);
+        }
     },
     btndisabdisabled(){
         if (this.money === ''|| this.money<10 || Number(this.money) > Number(this.userInfo.balance) || this.userInfo.balance > 50000.1) {
