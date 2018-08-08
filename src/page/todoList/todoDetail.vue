@@ -16,7 +16,7 @@
       <!-- 第三模块 -->
       <p class="about-button">
         <Button btn-type="small" btn-color="spe" class="common-button" @confirm="isDeleteOrNot(item.id)" v-has="'mer:schedule:delete'">删除</Button>
-  			<Button btn-type="small" btn-color="spe" class="common-button" @confirm="goTodoDetailEdit(item.id,item.machineParentTypeId)" v-has="'mer:schedule:update'">编辑</Button>
+  			<Button btn-type="small" btn-color="spe" class="common-button" @confirm="goTodoDetailEdit(item.id,item.machineParentTypeId,item.shopId)" v-has="'mer:schedule:update'">编辑</Button>
         <Button btn-type="small" btn-color="spe" class="common-button" @confirm="goStart()" v-has="'mer:order:reset,mer:order:info'">立即启动</Button>
       </p>
     </div>
@@ -61,13 +61,14 @@ import moment from 'moment';
 	      }
 	     );
       },
-      goTodoDetailEdit(i,j) {
+      goTodoDetailEdit(i,j,k) {
         //编辑
         this.$router.push({
             name: 'editTodolist',
             query: {
               id: i,
-              machineParentTypeId: j
+              machineParentTypeId: j,
+              shopId:k
             }
           });
       },
