@@ -107,11 +107,6 @@ export default {
       },
       pwdinputFunc(){
         this.ispwd = true;
-        if (!this.form.userName || !this.form.password) {
-          this.disabled = true;
-        } else {
-          this.disabled = false;
-        }
       },
       openpwd(){
         this.typepwd = !this.typepwd;
