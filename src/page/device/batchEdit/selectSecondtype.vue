@@ -23,7 +23,7 @@
     <div style="width:100%;height:1.73rem;"></div>
     <section class="promiss-footer">
       <span class="can" @click="goBack">上一步</span>
-      <span class="cifrm" @click="goNext">下一步</span>
+      <span class="cifrm" @click="goNext" :disabled="hasNoData" :class="{'noClick':hasNoData}">下一步</span>
     </section> 
   </section>
 </template>
@@ -99,6 +99,11 @@ import { getlistParentTypeFun, getlistSubTypeFun} from '@/service/device';
           MessageBox.alert("请先选择型号");
         }
       },
+    },
+    computed: {
+      hasNoData () {
+        return !this.secondTypeList.length;
+      }
     },
     created() {
       this.checkSecondClass();
@@ -290,7 +295,10 @@ import { getlistParentTypeFun, getlistSubTypeFun} from '@/service/device';
       font-size: 18px;
       color: #fff;
     }
-   
+    
+    .promiss-footer .noClick {
+      background-color: #cccccc;
+    }
   }
 
   

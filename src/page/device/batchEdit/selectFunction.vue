@@ -21,7 +21,7 @@
     <section class="fun-item-bd funlist">
       <div v-for="(item,index) in funTypeList " :key="index">
         <input type="text" class="fun-list-item" v-model.lazy="item.functionName"/>
-        <input type="text" class="fun-list-item" v-model.lazy="item.needMinutes"/>
+        <span class="fun-list-item">{{item.needMinutes}}</span>
         <input type="text" class="fun-list-item" v-model.lazy="item.functionPrice"/>
         <p class="fun-list-item">
           <mt-switch v-model="item.ifOpen"></mt-switch>
@@ -30,7 +30,7 @@
     </section>
     <div style="width:100%;height:1.73rem;"></div>
     <section>
-      <button class="submitBtn" @click="goNext">确定</button>
+      <button class="submitBtn" @click="goNext" :disabled="hasNoData" :class="{'noClick':hasNoData}">确定</button>
     </section> 
   </section>
 </template>
@@ -75,7 +75,6 @@ export default {
           ['功能'],
           ['耗时', '/分'],
           ['原价', '/元'],
-          ['脉冲数'],
           ['状态']
         ],
         functionListTitle2: [
@@ -88,6 +87,27 @@ export default {
     },
     methods: {
       async checkFunctionSetClass() { //获取功能列表
+        let query = this.$route.query;
+        let obj ={
+          subTypeId: query.subTypeId,
+          shopId: query.shopId,
+        };
+        let res = await batchEditMachineListFun(qs.stringify(obj));
+          if(res.code === 0) {
+            if(!res.data.machineCount){
+              return false;
+              MessageBox.alert("没有功能列表，不能批量编辑");
+            }else {
+              this.getFunctionSetList();
+            }
+           // MessageBox.alert(res.mes);
+            //this.$router.push({name:'deviceMange'});
+          }else{
+            MessageBox.alert(res.msg);
+          }
+      },
+        
+      async getFunctionSetList() {
         let query = this.$route.query;
         let payload = {shopId: query.shopId,subTypeId: query.subTypeId};
         let res = await getFunctionSetListFun(qs.stringify(payload));
@@ -102,30 +122,9 @@ export default {
              });
             this.funTypeList = res.data.list;         
           }
-      },   
+      },  
+     
       async goNext() {
-        let query = this.$route.query;
-        let obj ={
-          subTypeId: query.subTypeId,
-          shopId: query.shopId,
-        };
-        let res = await batchEditMachineListFun(qs.stringify(obj));
-          if(res.code === 0) {
-            if(!res.data.machineCount){
-              MessageBox.alert("不能批量编辑");
-            }else {
-              this.submit();
-            }
-           // MessageBox.alert(res.mes);
-            //this.$router.push({name:'deviceMange'});
-          }else{
-            MessageBox.alert(res.mes);
-          }
-      }
-
-    },
-
-    async submit() {
         let query = this.$route.query;
         let arr= [].concat(JSON.parse(JSON.stringify(this.funTypeList))); 
         arr.forEach(item=>{
@@ -141,6 +140,14 @@ export default {
             MessageBox.alert("操作成功");
             this.$router.push({name:'deviceMange'});
           }
+      }
+
+    },
+
+    computed: {
+      hasNoData () {
+        return !this.funTypeList.length;
+      }
     },
 
     created() {
@@ -286,6 +293,9 @@ export default {
         }
         &:nth-child(4) {
           flex: 2.21;
+        }
+        &:last-child {
+          flex: 2.21;
           border-right: none;
         }
         span {
@@ -339,5 +349,7 @@ export default {
     color: #fff;
     font-size: 18px;
   }
-
+  .noClick {
+    background-color: #cccccc;
+  }
 </style>

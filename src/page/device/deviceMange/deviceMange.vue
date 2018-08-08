@@ -5,7 +5,7 @@
       <div class="search">
         <router-link :to="{name:'deviceSearch'}">
           <div class="search-input">
-            <p placeholder="请输入设备名称/IMEI 号" class="left"></p>
+            <p class="left">请输入设备名称/IMEI 号</p>
             <p class="right"></p>
           </div>
         </router-link>
@@ -36,7 +36,6 @@
           <span :class="{current:index===16}">{{titleArr.timeout}}</span>
         </div>
       </div>
-      
       <div class="device-list" v-for="(item,index) in list" :key="index" @click="toDeviceDetail(item.machineId)">
         <section class="item-hd">
           <span>{{item.machineName}}</span>
@@ -57,6 +56,7 @@
           </p>
         </section>
       </div>
+      <p v-show="hasNoData" class="noData">暂无设备</p>
       <div class="openItem" @click="toAddItem" v-show="isShow">···</div>
       <div v-show="isShow2">
         <div class="closeItem" @click="toCloseItem">X</div>
@@ -70,7 +70,6 @@
 </template>
 <script>
   import qs from "qs";
-  import DSearch from '@/components/Search/search';
   import { MessageBox } from 'mint-ui';
   import { deviceListFun , countDeviceFun } from '@/service/device';
   export default {
@@ -168,8 +167,13 @@
       this.getDeviceList();
       this.getCountDevice();
     },
+    computed: {
+      hasNoData () {
+        return !this.list.length;
+      }
+    },
     components: {
-      DSearch
+
     }
   };
 
@@ -195,8 +199,6 @@
         }
       }
       .left {
-        display: flex;
-        justify-content: space-around;
         align-items: center;
         flex: 0 1 7.93rem;
         height: 1.17rem;
@@ -325,6 +327,12 @@
         }
       }
     }
+  }
+  .noData {
+    text-align: center;
+    padding: 0.6rem 0;
+    font-size: 0.43rem;
+    color: #333;
   }
   .openItem{
     width: 1.49rem;

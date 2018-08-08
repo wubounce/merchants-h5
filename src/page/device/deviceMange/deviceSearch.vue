@@ -4,13 +4,12 @@
       <div class="search-input">
         <p class="left" :class="{ 'result-left': isResult }">
           <input type="text" v-model.trim="keyword" placeholder="请输入设备名称/IMEI 号" @input="inputHandle">
-          <span v-if="isResult">
+          <span>
             <img src="../../../assets/img/device/devic_scan_icon.jpeg">
             <span class="gap-border"></span>
             <span class="search-reset" @click="clearInput">返回</span>
           </span>
         </p>
-        <p class="right" :class="{ 'result-right': isResult }"></p>
       </div>
     </div>
     <div class="search-select">
@@ -18,7 +17,7 @@
           <li v-for="(item,index) in searchList" :class="{selectback:index==now}" class="search-select-option search-select-list" @click="selectClick(index)"
           :key="index">{{item.nameOrImei}}
           </li>
-          <li class="search-item border-bottom" v-show="hasNoData">没有找到匹配数据</li>
+          <li class="noData" v-show="hasNoData">没有找到匹配数据</li>
         </ul>
     </div>
   </section>
@@ -36,7 +35,7 @@ import { listByNameOrlmeiFun } from '@/service/device';
       return {
         myData: [], // 用来接收 ajax 得到的数据
         now: -1,
-        isResult: false,
+        isResult: true,
         keyword: '',
         searchList:[]
       };
@@ -59,7 +58,6 @@ import { listByNameOrlmeiFun } from '@/service/device';
       },
       clearInput: function () {
         this.keyword = "";
-        this.isResult = false
       },
       inputHandle: function() { 
         
@@ -116,26 +114,31 @@ import { listByNameOrlmeiFun } from '@/service/device';
           border-radius: 0.13rem;
         }
         span {
-          display: inline-block;
           white-space: nowrap;
+          height: 0.51rem;
+          line-height: 0.6rem;
+          display: flex;
         }
         img {
-          width: 0.4rem;
+          width: 0.51rem;
         }
         .gap-border {
           position: relative;
-          width: .28rem;
-          height: .32rem;
-          margin-right: .28rem;
+          width: .2rem;
+          height: .51rem;
+          margin-right: .2rem;
           &:after {
             content: '';
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
-            height: .32rem;
-            border-right: 0.04rem solid rgba(216, 216, 216, 1); // transform: scaleY(0.5);
+            height: .51rem;
+            border-right: 0.01rem solid rgba(216, 216, 216, 1); // transform: scaleY(0.5);
           }
+        }
+        .search-reset {
+          color: rgba(51, 51, 51, 1)
         }
       }
       .result-left {
@@ -156,6 +159,9 @@ import { listByNameOrlmeiFun } from '@/service/device';
   }
   .search-select {
     background: #fff;
+    .noData {
+      text-align: center;
+    }
     li {
       color:rgba(51, 51, 51, 1);
       width: 100%;
