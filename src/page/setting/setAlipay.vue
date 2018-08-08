@@ -2,7 +2,7 @@
   <section v-title="title">
     <p class="shopname-p">
       <span>支付宝账号</span><span>
-        <input type="text" class='addressInput' onkeyup="value=value.replace(/[\u4E00-\u9FA5]/g,'')" v-model="account"  placeholder="请填写支付宝账号" @input="disbaledBtn">
+        <input type="text" class='addressInput' v-model="account"  placeholder="请填写支付宝账号" @input="disbaledBtn">
       </span>
     </p>
     <p class="alipay-btn" @click="submitAlipay">
@@ -26,14 +26,12 @@ export default {
       this.disabled = false;
     },
     async submitAlipay() {
-      if(this.account.length <6 ) {
-        this.$toast({
-          message: "支付宝帐号不符合规则",
-          position: "bottom",
-          duration: 3000
-        });
-      }
-      else {
+      //校验邮箱
+      let emali = /^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\.[a-zA-Z0-9-]+)*\.[a-zA-Z0-9]{2,6}$/;
+      //校验手机号
+      let phone = /^1[3456789]\d{9}$/;
+      //判断支付宝账号是否符合规范
+      if(emali.test(this.account) || phone.test(this.account) ) {
         let obj ={
           alipayAccount: this.account
         };
@@ -53,6 +51,13 @@ export default {
         else {
           this.$toast(res.msg);
         }
+      }
+      else {
+        this.$toast({
+          message: "支付宝帐号不符合规则",
+          position: "bottom",
+          duration: 3000
+        });
       }
     }
   },
