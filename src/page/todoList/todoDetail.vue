@@ -78,9 +78,7 @@ import moment from 'moment';
         //立即启动
         MessageBox.confirm('您确定要立即批量启动设备么？','').then(async() => {	        
           let obj = {
-            shopId: this.item.shopId,
-            firstTypeId: this.item.machineParentTypeId,
-            standardFunctionId: this.item.standardFunctionId
+            id: this.$route.query.id
           };
           let res = await batchStartNowFun(qs.stringify(obj));
           if(res.code===0) {

@@ -234,7 +234,8 @@ export default {
       ],
       timeVisible: false,
       isTime:true,
-      isReserve:true
+      isReserve:true,
+      machine_typeNames:[]
     };
   },
   methods:{
@@ -361,8 +362,8 @@ export default {
         case 3: {
           this.deviceDetail = false;
           this.isbgc = false;
-          if(this.machine.join(' , ').length > 15 ) {
-            this.machineName = this.machine.join(' , ').slice(0,15) + '...';
+          if(this.machine.join(' , ').length > 10 ) {
+            this.machineName = this.machine.join(' , ').slice(0,10) + '...';
           }
           else {
             this.machineName = this.machine.join(' , ');   
@@ -595,7 +596,7 @@ export default {
         //详细地址
         this.address = res.data.address;
         //设备类型        
-        if(res.data.machineTypeNames.length > 15) {
+        if(res.data.machineTypeNames.length > 10) {
           this.machineName = res.data.machineTypeNames.slice(0,10) + '...';
         }
         else {
