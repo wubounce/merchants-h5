@@ -8,7 +8,7 @@
       <input type="password" placeholder="请确认新密码" v-model="reset.repassword" @input="disabledBtn" autocomplete="off">
     </div>
     </form>
-    <p class="btn">
+    <p class="btn-reset">
        <mt-button type="primary" class="btn-blue" @click.prevent="changePwdConfirm" :disabled="disabled">确定</mt-button>
     </p>
   </div>
@@ -113,7 +113,7 @@ import { validatPwd } from '@/utils/validate';
         }
       }
     }
-    .btn button {
+    .btn-reset button {
       width: 8.13rem;
       height: 1.17rem;
       margin:1.47rem auto;
