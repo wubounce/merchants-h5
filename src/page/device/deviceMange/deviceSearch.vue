@@ -5,7 +5,7 @@
         <p class="left" :class="{ 'result-left': isResult }">
           <input type="text" v-model.trim="keyword" placeholder="请输入设备名称/IMEI 号" @input="inputHandle">
           <span>
-            <img src="../../../assets/img/device/devic_scan_icon.jpeg">
+            <span @click="wxScan"><img src="../../../assets/img/device/devic_scan_icon.jpeg"></span>
             <span class="gap-border"></span>
             <span class="search-reset" @click="clearInput">返回</span>
           </span>
@@ -25,6 +25,8 @@
 
 <script type="text/javascript">
 import qs from "qs";
+import Api from '@/utils/Api';
+import Web from '@/utils/Web';
 import { listByNameOrlmeiFun } from '@/service/device';
   /* eslint-disable */
   import {
@@ -41,12 +43,17 @@ import { listByNameOrlmeiFun } from '@/service/device';
       };
     },
     methods: {
-      async fetchData(e) {
+      fetchData(e) {
         let keywords = this.keyword;
-        let payload = {nameOrImei: keywords};
+        this.search(keywords);
+      },
+      async search(name) {
+        let payload = {nameOrImei: name};
         let res = await listByNameOrlmeiFun(qs.stringify(payload));
           if(res.code === 0) {
             this.searchList = res.data;  
+          }else{
+            this.$toast(res.msg);
           }
       },
       selectClick: function (index) {
@@ -61,7 +68,18 @@ import { listByNameOrlmeiFun } from '@/service/device';
       },
       inputHandle: function() { 
         
-      }
+      },
+       wxScan() { //微信扫码
+         Web.scanQRCode(res => {
+          let url = res;
+          let parameter = url.substring(0,4);
+          if(parameter == "http"){           
+            this.$toast("请扫描EMIE码");
+          }else{
+            this.search(url);
+          } 
+				});
+      },
     },
     computed: {
       hasNoData () {

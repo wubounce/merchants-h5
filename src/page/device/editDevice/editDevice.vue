@@ -19,13 +19,13 @@
             </li>
             <li>
               <span class="field-title">NQT</span>
-              <p class="select-2" @click="wxScan($event,'npt')">
+              <p class="select-2" @click="wxScan">
                 <span>{{fromdata.nqt}}</span>
               </p>
             </li>
             <li>
               <span class="field-title">IMEI</span>
-              <p class="select-2" @click="wxScan($event,'imei')">
+              <p class="select-2" @click="wxScan">
                 <span>{{fromdata.imei}}</span>
               </p>
             </li>
@@ -50,7 +50,7 @@
     </section>
     <section class="fun-item-bd funlist">
       <div v-for="(item,index) in functionList" :key="index">
-        <input type="text" class="fun-list-item" v-model.lazy="item.functionName"/>
+        <span class="fun-list-item" title="item.functionName">{{item.functionName}}</span>
         <input type="text" class="fun-list-item" v-model.lazy="item.needMinutes"/>
         <input type="text" class="fun-list-item" v-model.lazy="item.functionPrice"/>
         <input type="text" class="fun-list-item" v-model.lazy="item.functionPrice" v-show="isShow2"/>
@@ -60,9 +60,9 @@
       </div>
     </section>
     <div style="width:100%;height:1.73rem;"></div>
-    <section class="fun-ft">
-      <router-link :to="{name:'addDevice'}"><Button class="btn cancle" btn-type="default" btn-color="blue">取消</Button></router-link>
-      <Button class="btn" btn-type="default" btn-color="blue" @click.native="goFirst">确定</Button>
+    <section class="promiss-footer">
+      <span class="can" @click="goBack">上一步</span>
+      <span class="cifrm" @click="goNext">下一步</span>
     </section>
     </div>
     <!-- 店铺-->
@@ -128,9 +128,14 @@
         ],
         title: '编辑设备',
         fromdata: {
+          machineId: "",
+          functionTempletType: "",
           machineName: "",
           firstClass: "",
           secondClass: "",
+          company: "",
+          communicateType: "",
+          ver: "",
           shopType: {
             name:"",
             id:""
@@ -165,41 +170,29 @@
         this.fromdata.shopType.id = this.selectListA[this.selectedIndex].shopId;
         this.companyVisible = false;
       },
-      wxScan(e, type) { //微信扫码
-        var self = this;
-        wx.scanQRCode({
-          needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
-          scanType: ["qrCode", "barCode"], // 可以指定扫二维码还是一维码，默认二者都有
-          success: function (res) {
-            // 回调
-            try {
-              // alert(JSON.stringify(res))
-              let scanResult = this.analyzeResult(res.resultStr);
-              // alert(JSON.stringify(scanResult))
-
-              let _NQT = scanResult['NQT'];
-              let _IMEI = scanResult['IMEI'];
-              let _company = scanResult['Company'];
-              _NQT ? this.fromdata.nqt = _NQT : '';
-              _IMEI ? this.fromdata.imei = _IMEI : '';
-              // if (type === 'nqt') {
-              //   this.fromdata.nqt = _NQT
-              // } else {
-              //   this.fromdata.imei = _IMEI
-              // } 
-            } catch (error) {
-              alert(error);
-            }
-
-
-          }.bind(this),
-          error: function (res) {
-            if (res.errMsg.indexOf('function_not_exist') > 0) {
-              alert('版本过低请升级');
-            }
-          }
-        });
-
+      wxScan() { //微信扫码
+         Web.scanQRCode(res => {
+          let url = res;
+          let parameter = url.substring(0,4);
+          if(parameter == "http"){           
+            let object = url.split("?")[1];
+            let nqt = this.getUrlParam(object,"NQT");
+            let company = this.getUrlParam(object,"Company");
+            let communicateType= this.getUrlParam(object,"CommunicateType");
+            let ver = this.getUrlParam(object,"Ver")?this.getUrlParam(object,"Ver"):0;
+            this.fromdata.nqt = nqt;
+            this.fromdata.company = company;
+            this.fromdata.communicateType = communicateType;
+            this.fromdata.ver = ver;
+          }else{
+            this.fromdata.imei= res;
+          } 
+				});
+      },
+       getUrlParam(url,name) {
+        let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+        let r = url.match(reg);  //匹配目标参数
+        if (r != null) return unescape(r[2]); return null; //返回参数值
       },
       async initWechat(){ //微信配置初始化
         let payload = {url: window.location.href.split('#')[0]};
@@ -218,10 +211,15 @@
         let res = await detailDeviceListFun(qs.stringify(payload));
          if(res.code === 0) {
           this.fromdata.machineName = res.data.machineName;
+          this.fromdata.machineId = res.data.machineId;
           this.fromdata.shopType.name = res.data.shopName;
           this.fromdata.shopType.id = res.data.shopId;
           this.fromdata.firstType.id = res.data.parentTypeId;
           this.fromdata.secondType.id = res.data.subTypeId;
+          this.fromdata.functionTempletType = res.data.functionTempletType;
+          this.fromdata.company = res.data.company;
+          this.fromdata.ver = res.data.ver;
+          this.fromdata.communicateType = res.data.communicateType;
           this.fromdata.nqt = res.data.nqt;
           this.fromdata.imei = res.data.imei;
           this.functionList = res.data.functionList;
@@ -247,16 +245,17 @@
             return item.ifOpen=item.ifOpen?0:1;
           });
           let obj = {
+            machineId: this.fromdata.machineId,
             machineName: this.fromdata.machineName,
             shopId: this.fromdata.shopType.id,
             parentTypeId: this.fromdata.firstType.id,
             subTypeId: this.fromdata.secondType.id,
             nqt: this.fromdata.nqt,
-            company: "youfang",
-            communicateType: 1,
-            ver: 3,
+            company: this.fromdata.company,
+            communicateType: this.fromdata.communicateType,
+            ver: this.fromdata.ver,
             imei: this.fromdata.imei,
-            functionTempletType: 3,
+            functionTempletType: this.fromdata.functionTempletType,
             functionJson: JSON.stringify(arr)
           };
           let res = await deviceAddorEditFun(qs.stringify(obj));
@@ -272,7 +271,7 @@
           this.modelShow = false;
           this.title = "功能列表";
       },
-      goFirst(){ //功能列表确认
+      goNext(){ //功能列表确认
         MessageBox.confirm('您确定要更改吗？').then(action => {       
           this.setModelShow= false;
           this.modelShow = true;
@@ -399,10 +398,11 @@
     position: fixed;
     bottom: 0;
     border: none;
-    padding: 0.45rem 0;
+    height: 1.33rem;
+    line-height: 1.33rem;
     background-color: #1890FF;
     color: #fff;
-    font-size: 18px;
+    font-size: 0.48rem;
   }
   
   .fun-item-hd {
@@ -410,7 +410,7 @@
     background: #FAFCFF;
     color: #1890FF;
     font-size: 0.37rem;
-    padding: .6rem 0;
+    padding: .6rem .4rem;
     div {
       display: flex;
       p {
@@ -441,6 +441,7 @@
     font-size: 0.37rem;
     color: #333333;
     background: #fff;
+    padding: 0 0.4rem;
     div {
       display: flex; // justify-content: space-between;
       .fun-list-item {
@@ -449,6 +450,9 @@
         line-height: 1.6rem;
         &:nth-child(1) {
           flex: 3.32;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
         }
         &:nth-child(4) {
           flex: 2.21;
@@ -467,23 +471,30 @@
     }
   }
 
-  .fun-ft {
-    position: fixed;
-    bottom: 0;
-    display: flex;
-    justify-content: space-between;
-    .btn {
-      width: 5rem;
-      border-radius: 0;
-      font-size: 0.48rem;
-      box-sizing: border-box;
-      display: inline-block;
+  .promiss-footer {
+      display: flex;
+      height: 1.33rem;
+      line-height: 1.33rem;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
     }
-    .cancle {
-      background: #fff;
+    .promiss-footer > span {
+     flex: 1;
+     text-align: center;
+    }
+    .promiss-footer .can {
+      font-size: 18px;
       color: #1890FF;
+      background: #f6f8ff;
     }
-  }
+    .promiss-footer .cifrm {
+      background: #1890FF;
+      font-size: 18px;
+      color: #fff;
+    }
+   
 
   .resp-shop {
     display: flex;

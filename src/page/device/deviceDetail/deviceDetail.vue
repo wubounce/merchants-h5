@@ -169,6 +169,9 @@
          if(res.code === 0) {
           this.deviceDetail= res.data;
           this.functionList = res.data.functionList;
+          this.functionList.forEach(item=>{
+            item.ifOpen=item.ifOpen === 0? "开启":"关闭";
+          });
         }
         else {
           MessageBox.alert(res.msg);
@@ -387,6 +390,9 @@
           text-align: center;
           &:nth-child(1) {
             flex: 3.32;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
           }
           &:nth-child(4) {
             flex: 2.21;

@@ -27,13 +27,13 @@
             </li>
             <li>
               <span class="field-title">NQT</span>
-              <p class="select-2" @click="wxScan('nqt')">
+              <p class="select-2" @click="wxScan">
                 <span>{{fromdata.nqt}}</span>
               </p>
             </li>
             <li>
               <span class="field-title">IMEI</span>
-              <p class="select-2" @click="wxScan('imei')">
+              <p class="select-2" @click="wxScan">
                 <span>{{fromdata.imei}}</span>
               </p>
             </li>
@@ -67,9 +67,9 @@
         </p>
       </div>
     </section>
-    <section class="fun-ft">
-      <router-link :to="{name:'addDevice'}"><Button class="btn cancle" btn-type="default" btn-color="blue">取消</Button></router-link>
-      <Button class="btn" btn-type="default" btn-color="blue" @click.native="goFirst">确定</Button>
+    <section class="promiss-footer">
+      <span class="can" @click="goBack">上一步</span>
+      <span class="cifrm" @click="goNext">下一步</span>
     </section>
     </div>
     <!-- 店铺-->
@@ -291,7 +291,7 @@
              this.isShow = false;            
            } 
           res.data.list.forEach(item=>{
-            item.ifOpen=item.ifOpen === "0"?(!!item.ifOpen) : (!item.ifOpen);
+            item.ifOpen=item.ifOpen === 0?(!item.ifOpen) : (!!item.ifOpen);
           });
             
         }
@@ -300,32 +300,56 @@
         }
       },
       async submit() {  //提交
-        if(this.fromdata.machineName && this.fromdata.shopType.id && this.fromdata.firstType.id && this.fromdata.secondType.id && this.functionSetList.length){
-          let arr= [].concat(JSON.parse(JSON.stringify(this.functionSetList))); 
-          arr.forEach(item=>{
-            return item.ifOpen=item.ifOpen?0:1;
-          });
-          let obj = {
-            machineName: this.fromdata.machineName,
-            shopId: this.fromdata.shopType.id,
-            parentTypeId: this.fromdata.firstType.id,
-            subTypeId: this.fromdata.secondType.id,
-            nqt: this.fromdata.nqt,
-            company: this.fromdata.company,
-            communicateType: this.fromdata.communicateType,
-            ver: this.fromdata.ver,
-            imei: this.fromdata.imei,
-            functionTempletType: this.functionTempletType,
-            functionJson: JSON.stringify(arr)
-          };
-          let res = await deviceAddorEditFun(qs.stringify(obj));
-          if(res.code===0) {
-            this.$router.push({name: 'deviceMange'});
-          }else {
-            this.$toast(res.msg);
-          }
+        if(!this.fromdata.machineName) {
+          this.$toast("请填写机器名称");
+          return false;
+        }
+        if(!this.fromdata.shopType.id) {
+          this.$toast("请选择所属店铺");
+          return false;
+        }
+        if(!this.fromdata.firstType.id) {
+          this.$toast("请选择设备类型");
+          return false;
+        }
+        if(!this.fromdata.secondType.id) {
+          this.$toast("请选择设备型号");
+          return false;
+        }
+        if(!this.fromdata.nqt) {
+          this.$toast("请扫NQT码");
+          return false;
+        }
+        if(!this.fromdata.imei) {
+          this.$toast("请IMEI码");
+          return false;
+        }
+        if(!this.functionSetList) {
+          this.$toast("请设置功能列表");
+          return false;
+        }
+        let arr= [].concat(JSON.parse(JSON.stringify(this.functionSetList))); 
+        arr.forEach(item=>{
+          return item.ifOpen=item.ifOpen?0:1;
+        });
+        let obj = {
+          machineName: this.fromdata.machineName,
+          shopId: this.fromdata.shopType.id,
+          parentTypeId: this.fromdata.firstType.id,
+          subTypeId: this.fromdata.secondType.id,
+          nqt: this.fromdata.nqt,
+          company: this.fromdata.company,
+          communicateType: this.fromdata.communicateType,
+          ver: this.fromdata.ver,
+          imei: this.fromdata.imei,
+          functionTempletType: this.functionTempletType,
+          functionJson: JSON.stringify(arr)
+        };
+        let res = await deviceAddorEditFun(qs.stringify(obj));
+        if(res.code===0) {
+          this.$router.push({name: 'deviceMange'});
         }else {
-          this.$toast("参数不能为空");
+          this.$toast(res.msg);
         }
 
       },
@@ -340,7 +364,7 @@
         }
        
       },
-      goFirst(){ //功能列表确认
+      goNext(){ //功能列表确认
         MessageBox.confirm('您确定要更改吗？').then(action => {       
           this.setModelShow= false;
           this.modelShow = true;
@@ -478,7 +502,7 @@
     background: #FAFCFF;
     color: #1890FF;
     font-size: 0.37rem;
-    padding: .6rem 0;
+    padding: .6rem .4rem;
     div {
       display: flex;
       p {
@@ -509,6 +533,7 @@
     font-size: 0.37rem;
     color: #333333;
     background: #fff;
+    padding: 0 .4rem;
     div {
       display: flex; // justify-content: space-between;
       .fun-list-item {
@@ -535,23 +560,29 @@
     }
   }
 
-  .fun-ft {
-    position: fixed;
-    bottom: 0;
-    display: flex;
-    justify-content: space-between;
-    .btn {
-      width: 5rem;
-      border-radius: 0;
-      font-size: 0.48rem;
-      box-sizing: border-box;
-      display: inline-block;
+  .promiss-footer {
+      display: flex;
+      height: 1.33rem;
+      line-height: 1.33rem;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
     }
-    .cancle {
-      background: #fff;
+    .promiss-footer > span {
+     flex: 1;
+     text-align: center;
+    }
+    .promiss-footer .can {
+      font-size: 18px;
       color: #1890FF;
+      background: #f6f8ff;
     }
-  }
+    .promiss-footer .cifrm {
+      background: #1890FF;
+      font-size: 18px;
+      color: #fff;
+    }
 
   .resp-shop {
     display: flex;
