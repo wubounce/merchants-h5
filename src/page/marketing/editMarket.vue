@@ -417,6 +417,9 @@ export default {
 };
 </script>
 <style type="text/css" lang="scss" scoped>
+    .addmarket {
+      padding-bottom: 2rem;
+    }
   .addvip-header, .time-chose {
     padding: 0 0.4rem;
     background: #fff;
@@ -554,7 +557,6 @@ export default {
     }
   }
   .nopay-time {
-    margin-bottom: 2.2rem;
     h6 {
       color:rgba(153,153,153,1);
       line-height:0.44rem;

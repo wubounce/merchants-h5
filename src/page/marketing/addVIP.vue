@@ -180,6 +180,9 @@ export default {
 };
 </script>
 <style type="text/css" lang="scss" scoped>
+    .addvip {
+      padding-bottom: 2rem;
+    }
   .addvip-header {
     padding: 0 0.4rem;
     background: #fff;
@@ -251,9 +254,6 @@ export default {
       color: #333;
       margin-left: 0.27rem;
     }
-  }
-  .addvip-from {
-    margin-bottom: 1.8rem;
   }
   .add-shop-overflow {
     overflow: hidden;

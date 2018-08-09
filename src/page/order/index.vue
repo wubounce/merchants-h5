@@ -89,7 +89,7 @@ export default {
     };
   },
   mounted() {
-    this.wrapperHeight = document.documentElement.clientHeight;
+    this.wrapperHeight = document.documentElement.clientHeight-30;
   },
   created(){
   },

@@ -114,6 +114,9 @@ export default {
 };
 </script>
 <style type="text/css" lang="scss" scoped>
+  .addvip {
+    padding-bottom: 2rem;
+  }
   .addvip-header {
     padding: 0.49rem 0.4rem;
     background: #fff;
@@ -178,7 +181,6 @@ export default {
     background: #fff;
     font-size:12px;
     color:#999;
-    margin-bottom: 1.8rem;
     p {
       line-height:0.77rem;
     }

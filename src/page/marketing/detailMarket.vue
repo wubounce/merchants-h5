@@ -111,6 +111,9 @@ export default {
 };
 </script>
 <style type="text/css" lang="scss" scoped>
+    .addmarket {  
+      padding-bottom: 2rem;
+    }
   .addvip-header, .time-chose {
     padding: 0 0.4rem;
     background: #fff;
@@ -137,7 +140,6 @@ export default {
   }
  .create-wrap {
     margin-top: 0.27rem;
-    margin-bottom: 1.75rem;
     padding: 0 0.4rem;
     background: #fff;
     font-size:12px;

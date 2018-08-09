@@ -134,6 +134,9 @@ export default {
 };
 </script>
 <style type="text/css" lang="less" scoped>
+  .order-detail {
+    padding-bottom: 2rem;
+  }
   .order-status {
     width:1005;
     height:1.33rem;
