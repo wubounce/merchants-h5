@@ -109,7 +109,7 @@ import moment from 'moment';
         else {
           this.$toast({
             message:resUpdate.msg
-          })
+          });
         }
       },
       valuesChange(picker, values) {
