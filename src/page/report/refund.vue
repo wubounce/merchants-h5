@@ -1,5 +1,5 @@
 <template>
-<div class="refund">
+<div class="earnings">
   <div class="search">
     <div class="slectdata timechoose">
       <span @click="open('picker2')">{{startDate}}</span>至<span @click="open('picker3')">{{endDate}}<i class="iconfont icon-nextx select-back"></i></span>
@@ -18,12 +18,12 @@
     <div class="listcon">
       <span>日期</span>
       <span>订单数量</span>
-      <span>订单金额</span>
+      <span>退款金额</span>
     </div>
     <div class="tableearn">
-      <div class="nodata" v-if="lsitdata.length <= 0">暂无数据</div>
+       <div class="nodata" v-if="lsitdata.length <= 0">暂无数据</div>
       <div class="listcon tableearn-list" v-for="(item,index) in  lsitdata" :key="index">
-        <router-link class="detail" :to="{name:'reportdetail', query:{date:item.date,type:3}}" >
+        <router-link class="detail" :to="{name:'reportdetail', query:{date:item.date,type:1}}" >
           <span class="listtime">{{item.date}}</span>
           <span>{{item.count}}</span>
           <span>{{item.money}}</span>
@@ -31,7 +31,7 @@
       </div>
     </div>
   </div>
-  <mt-datetime-picker ref="picker2" type="date" v-model="searchStartDate" @confirm="handleStartDateChange"></mt-datetime-picker>
+  <mt-datetime-picker ref="picker2" type="date" v-model="searchStartDate" @confirm="handleStartDateChange" :endDate="pickerEndDate"></mt-datetime-picker>
   <mt-datetime-picker ref="picker3" type="date" v-model="searchEndDate" @confirm="handleEndDateChange"></mt-datetime-picker>
 </div>
 </template>
@@ -91,6 +91,7 @@ export default {
       reportDate:[],
       reportCount:[],
       reportMoney:[],
+      pickerEndDate:new Date(moment().format('YYYY-MM-DD')),
     };
   },
   mounted() {
@@ -149,10 +150,20 @@ export default {
     },
     handleStartDateChange(value) {
       this.startDate = moment(value).format('YYYY-MM-DD');
+      let startDate = new Date(this.startDate.replace(/\-/g, "\/"));  
+      let endDate = new Date(this.endDate.replace(/\-/g, "\/"));  
+      if(startDate > endDate){ 
+        [this.endDate,this.startDate] = [this.startDate,this.endDate]; 
+      }
       this.dayReportFun();
     },
     handleEndDateChange(value) {
       this.endDate = moment(value).format('YYYY-MM-DD');
+      let startDate = new Date(this.startDate.replace(/\-/g, "\/"));  
+      let endDate = new Date(this.endDate.replace(/\-/g, "\/"));  
+      if(startDate > endDate){ 
+        [this.endDate,this.startDate] = [this.startDate,this.endDate]; 
+      }
       this.dayReportFun();
     },
     shopselectpicker(data){
@@ -167,7 +178,7 @@ export default {
     chartOption(){
       let option = {
         title: {
-            text: '收益表'
+            text: '退款表'
         },
         tooltip: {
             trigger: 'axis',
@@ -199,6 +210,7 @@ export default {
           axisLabel: {
             textStyle: {color: '#999'},
           },
+          splitNumber:8,
           axisLine:{
             show:false,
             lineStyle:{
@@ -332,140 +344,140 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-  .refund {
+  .earnings {
     background: #fff;
-      .echarts-warp {
+  }
+  .echarts-warp {
     padding: 0.32rem;
   }
-    .echart-title {
-      font-size: 12px;
-      color:rgba(153,153,153,1);
-      text-align: center;
-      margin-top: 0.4rem;
-      span {
-        width: 0.2rem;
-        height: 0.2rem;
-        display: inline-block;;
-        background: #f60;
-        border-radius: 50%;
-        margin-right: 0.133333rem;
-        margin-left: 0.133333rem;
-      }
-    }
-    .tabletit {
-      background: #fff !important;
-    }
-    .mint-navbar{
-      height: 1.066667rem;
-      border:1px solid rgba(229,229,229,1);
-    }
-    .mint-tab-item-label {
-      font-size: 16px;
-    }
-    .listcon {
-      display: flex;
-      font-size: 14px;
-      height: 40px;
-      line-height: 40px;
-      text-align: center;
-      span {
-        flex:1;
-        font-weight: 600;
-      }
-    }
-    .detail {
-      display: block;
-      width: 100%;
-      -webkit-box-align: center;
-      -ms-flex-align: center;
-      align-items: center;
-      -webkit-box-sizing: border-box;
-      box-sizing: border-box;
-      color: #333333;
-      display: -webkit-box;
-      display: -ms-flexbox;
-      display: flex;
-      font-size: 14px;
-      height: 40px;
-      line-height: 1;
-      padding: 0 10px;
-      position: relative;
-      text-align: center;
-      white-space: nowrap;
-      border-top: 1px solid #E5E5E5;
-      span {
-        flex:1;
-        font-weight: 600;
-      }
-    }
-    .detail {
-      span {
-        font-weight: normal;
-        color: #666666;
-      }
-      .listtime {
-        color: #1890FF;
-      }
-    }
-    .tableearn {
-      height: 4.3rem;
-      overflow-y: scroll;
-    }
-    .tableearn .tableearn-list:nth-child(2n) {
-      background: #fff !important;
-    }
-    .tableearn .tableearn-list:nth-child(2n-1) {
-      background: #FAFCFE !important;
-    }
-    .search {
-      display: flex;
-      padding: 0.4rem 0.2rem 0 0.2rem;
-    }
-    .slectdata {
-      display: flex;
-      border-bottom: 1px solid #e5e5e5;
-      border-radius: 0.053333rem;
-      height: 0.746667rem;
-      line-height: 0.746667rem;
-      background: #fff;
-      font-size: 14px;
-      span {
-        width: 100%;
-        height: 0.746667rem;
-        line-height: 0.746667rem;
-        display: inline-block;
-      }
-    }
-    .timechoose {
-      width: 75%;
-      span {
-        width: 45%;
-        text-align: center;
-      }
-    }
-    .shopchoose {
-      width: 40%;
-      margin-left: .2rem;
-      span {
-        width: 100% !important;
-        display: inline-block;
-        color: #666;
-      }
-    }
-    .mint-popup {
-      width: 100%;
-    }
-    .select-back {
-      float: right;
-      color: #999;
-    }
-    .nodata {
-      font-size: 14px;
-      color: #999;
-      text-align: center;
-      padding: 2rem 0;
-      background: #efeff4;
+  .echart-title {
+    font-size: 12px;
+    color:rgba(153,153,153,1);
+    text-align: center;
+    margin-top: 0.4rem;
+    span {
+      width: 0.2rem;
+      height: 0.2rem;
+      display: inline-block;;
+      background: #f60;
+      border-radius: 50%;
+      margin-right: 0.133333rem;
+      margin-left: 0.133333rem;
     }
   }
+  .tabletit {
+    background: #fff !important;
+  }
+  .mint-navbar{
+    height: 1.066667rem;
+    border:1px solid rgba(229,229,229,1);
+  }
+  .mint-tab-item-label {
+    font-size: 16px;
+  }
 
+  .listcon {
+    display: flex;
+    font-size: 14px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    span {
+      flex:1;
+      font-weight: 600;
+    }
+  }
+  .detail {
+    display: block;
+    width: 100%;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    color: #333333;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    font-size: 14px;
+    height: 40px;
+    line-height: 1;
+    padding: 0 10px;
+    position: relative;
+    text-align: center;
+    white-space: nowrap;
+    border-top: 1px solid #E5E5E5;
+    span {
+      flex:1;
+      font-weight: 600;
+    }
+  }
+  .detail {
+    span {
+      font-weight: normal;
+      color: #666666;
+    }
+    .listtime {
+      color: #1890FF;
+    }
+  }
+  .tableearn {
+    height: 4.3rem;
+    overflow-y: scroll;
+  }
+  .tableearn .tableearn-list:nth-child(2n) {
+    background: #fff !important;
+  }
+  .tableearn .tableearn-list:nth-child(2n-1) {
+    background: #FAFCFE !important;
+  }
+  .search {
+    display: flex;
+    padding: 0.4rem 0.2rem 0 0.2rem;
+  }
+  .slectdata {
+    display: flex;
+    border-bottom: 1px solid #e5e5e5;
+    border-radius: 0.053333rem;
+    height: 0.746667rem;
+    line-height: 0.746667rem;
+    background: #fff;
+    font-size: 14px;
+    span {
+      width: 100%;
+      height: 0.746667rem;
+      line-height: 0.746667rem;
+      display: inline-block;
+    }
+  }
+  .timechoose {
+    width: 75%;
+    span {
+      width: 45%;
+      text-align: center;
+    }
+  }
+  .shopchoose {
+    width: 40%;
+    margin-left: .2rem;
+    span {
+      width: 100% !important;
+      display: inline-block;
+      color: #666;
+    }
+  }
+  .mint-popup {
+    width: 100%;
+  }
+  .select-back {
+    float: right;
+    color: #999;
+  }
+  .nodata {
+    font-size: 14px;
+    color: #999;
+    text-align: center;
+    padding: 2rem 0;
+    background: #efeff4;
+  }
 </style>
