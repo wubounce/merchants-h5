@@ -13,7 +13,7 @@
       </div>
     </div>
     </form>
-    <p class="btn">
+    <p class="bind-btn">
        <mt-button type="primary" class="btn-blue" :disabled="disabled" @click.prevent="gotonext">确定</mt-button>
     </p>
   </div>
@@ -131,8 +131,11 @@
         }
       }
     }
-    .btn {
-      margin:1.47rem 0.92rem;
+    .bind-btn button {
+      display: block;
+      width: 8.13rem;
+      height: 1.17rem;
+      margin:0.67rem auto;
     }
   }
 </style>
