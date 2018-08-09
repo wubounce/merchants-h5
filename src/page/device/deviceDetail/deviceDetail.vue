@@ -208,9 +208,9 @@
               instance.close();
               this.$router.push({name:'deviceMange'});
               }, 2000);
-        }
-        else {
-          this.$toast(res.msg);
+          }
+          else {
+            this.$toast(res.msg);
           }
         });
         
