@@ -260,7 +260,14 @@
           };
           let res = await deviceAddorEditFun(qs.stringify(obj));
           if(res.code===0) {
-            this.$router.push({name: 'deviceMange'});
+            let instance = this.$toast({
+              message: '编辑成功',
+              iconClass: 'mint-toast-icon mintui mintui-success'
+            });
+            setTimeout(() => {
+              instance.close();
+              this.$router.push({name:'deviceMange'});
+              }, 2000);
           }else {
             this.$toast(res.msg);
           }

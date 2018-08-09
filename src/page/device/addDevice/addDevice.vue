@@ -51,17 +51,17 @@
     <div v-show="setModelShow">
     <section class="fun-item-hd">
       <div>
-        <p v-for="(item,index) in functionListTitle " :key="index">
+        <p v-for="(item,index) in functionListTitle2 " :key="index">
           <span v-for="(it,idx) in item " :key="idx">{{it}}</span>
         </p>
       </div>
     </section>
     <section class="fun-item-bd funlist">
-      <div v-for="(item,index) in functionSetList " :key="index">
-        <input type="text" class="fun-list-item" v-model.lazy="item.functionName"/>
+      <div v-for="(item,index) in functionSetList" :key="index">
+        <span class="fun-list-item">{{item.functionName}}</span>
         <input type="text" class="fun-list-item" v-model.lazy="item.needMinutes"/>
         <input type="text" class="fun-list-item" v-model.lazy="item.functionPrice"/>
-        <input type="text" class="fun-list-item" v-model.lazy="item.functionPrice" v-show="isShow2"/>
+        <input type="text" class="fun-list-item" v-model.lazy="item.functionCode" v-show="isShow2"/>
         <p class="fun-list-item">
           <mt-switch v-model="item.ifOpen"></mt-switch>
         </p>
@@ -148,6 +148,7 @@
         functionSetList: [],
         jsonArr:[],
         getJsonArr:[],
+        ok: true,
         functionListTitle: [
           ['功能'],
           ['耗时', '/分'],
@@ -286,11 +287,11 @@
            this.functionTempletType = res.data.functionTempletType;
            this.functionSetList = res.data.list;
            this.fromdata.functionType.name = "已设置";
-           if(res.data.communicateType === 1){
-             this.functionListTitle = this.functionListTitle2;
-             this.isShow = false;            
-           } 
-          res.data.list.forEach(item=>{
+           if(res.data.communicateType !== 1){
+             this.functionListTitle2 = this.functionListTitle;
+             this.isShow2 = true;
+           }
+          this.functionSetList.forEach(item=>{
             item.ifOpen=item.ifOpen === 0?(!item.ifOpen) : (!!item.ifOpen);
           });
             
@@ -516,6 +517,9 @@
         }
         &:nth-child(4) {
           flex: 2.21;
+        }
+        &:last-child {
+          flex: 2.21;
           border-right: none;
         }
         span {
@@ -542,6 +546,9 @@
         line-height: 1.6rem;
         &:nth-child(1) {
           flex: 3.32;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
         }
         &:nth-child(4) {
           flex: 2.21;

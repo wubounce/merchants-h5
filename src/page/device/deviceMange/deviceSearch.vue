@@ -188,6 +188,7 @@ import { listByNameOrlmeiFun } from '@/service/device';
     .search-select-option {
       box-sizing: border-box;
       padding: 6px 10px;
+      text-align: center;
     }
   }
 
