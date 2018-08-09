@@ -94,17 +94,23 @@ import moment from 'moment';
         };
 
         let resUpdate = await updateBatchStartFun(qs.stringify(objUpdate));
-
-        let instance = this.$toast({
-          message: '编辑成功',
-          iconClass: 'mint-toast-icon mintui mintui-success'
-        });
-        setTimeout(() => {
-          instance.close();
-        }, 1000);
-        this.$router.push({
-          name:'todolist'
-        });
+        if(resUpdate.code ===0) {
+          let instance = this.$toast({
+            message: '编辑成功',
+            iconClass: 'mint-toast-icon mintui mintui-success'
+          });
+          setTimeout(() => {
+            instance.close();
+          }, 1000);
+          this.$router.push({
+            name:'todolist'
+          });
+        }
+        else {
+          this.$toast({
+            message:resUpdate.msg
+          })
+        }
       },
       valuesChange(picker, values) {
         this.machineFunction = values[0];

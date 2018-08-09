@@ -11,7 +11,7 @@
 	</div>
 </template>
 <script>
-import { MessageBox } from 'mint-ui';
+import { MessageBox,Toast } from 'mint-ui';
 export default {
   data() {
     return {
@@ -21,6 +21,13 @@ export default {
     };
   },
   methods: {
+    friendGps() {
+      this.$toast({
+        message:'请确保手机GPS定位功能已开启',
+        position:'middle',
+        duration:5000
+      });
+    },
     getLatLng(x,y,z,p) {
       this.$router.push({
         name:x,
@@ -45,8 +52,8 @@ export default {
     }
   },
   created() {
-
-  },
+    this.friendGps();
+  },  
   mounted() {
     let _this = this;
     var map = new AMap.Map("container", {
@@ -63,6 +70,7 @@ export default {
       map.addControl(geolocation);
       geolocation.getCurrentPosition();
     });
+
     AMap.plugin(['AMap.Autocomplete','AMap.PlaceSearch','AMap.Geocoder'],function(){
       var autoOptions = {
         input: "keyword"//使用联想输入的input的id
@@ -133,8 +141,8 @@ export default {
           border-radius: .1rem;
           font-size: 16px;
           input {
-            padding-top: 0.2rem;
-            padding-bottom: 0.22rem;
+            padding-top: 0.30rem;
+            padding-bottom: 0.28rem;
           }
           ::-webkit-input-placeholder {
             color: #999999;
