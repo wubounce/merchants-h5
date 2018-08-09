@@ -3,11 +3,11 @@
   <div class="add-form">
     <div class="input-group">
       <div class="form-title"><span>手机号码</span></div>
-      <div class="form-input"><input type="number" v-model="phone" @blur="validatPhone" placeholder="账号密码自动发送此手机"></div>
+      <div class="form-input"><input type="number" v-model="phone" @blur="validatPhone" @input="disabledBtn" placeholder="账号密码自动发送此手机"></div>
     </div>
     <div class="input-group">
       <div class="form-title"><span>姓名</span></div>
-      <div class="form-input"><input type="text" v-model="username" @blur="validatName" maxlength="20"></div>
+      <div class="form-input"><input type="text" v-model="username" @blur="validatName" @input="disabledBtn" maxlength="20"></div>
     </div>
     <div class="input-group">
       <div class="form-title"><span>负责店铺</span></div>
@@ -18,7 +18,7 @@
       <div class="form-input"><span :class="['more',{'more-color':permissionsMIdsTxt === ''}]">{{permissionsMIdsTxt?permissionsMIdsTxt:'请选择权限'}}</span><span class="forward iconfont icon-nextx"  @click="permissionsVisible=true"></span></div>
     </div>
   </div>
-  <div class="confirm" @click="addmember">提交</div>
+  <mt-button class="confirm" @click="addmember" :disabled="disabled">提交</mt-button>
   <!-- 选择店铺 -->
   <mt-popup v-model="shopVisible" position="bottom">
     <div class="resp-shop">
@@ -37,7 +37,7 @@
       </div>
     </section>
     <section class="promiss-footer">
-      <span class="can" @click="shopVisible=false">取消</span>
+      <span class="can" @click="cancelCheckshop">取消</span>
       <span class="cifrm" @click="getcheckshop">确定</span>
     </section>
   </mt-popup>
@@ -96,6 +96,7 @@ export default {
   data() {
     return {
       title: '新增人员',
+      disabled:true,
       detail: false,
       indexshow:null,
       shopVisible:false,
@@ -126,6 +127,13 @@ export default {
       
   },
   methods: {
+    disabledBtn(){
+      if (!this.phone || !this.username) {
+          this.disabled = true;
+        } else {
+          this.disabled = false;
+        }
+    },
     validate() {
       if (this.phone === '') {
         this.$toast({message: '请输入手机号码' });
@@ -185,12 +193,21 @@ export default {
       this.shopVisible = false;
       this.checkshoptxt = checklist.map(item=>item.shopName).join(',');
     },
+    cancelCheckshop(){
+      console.log(this.operateShopIds)
+      if (this.operateShopIds.length<=0) {
+        this.checkshoptxt = '';
+      }
+      this.shopVisible = false;
+    },
     addPermissions(){
       this.permissionsVisible=false;
       let checklist = this.allmenu.filter(v=>this.checkpermissionslist.some(k=>k==v.menuId));
       this.permissionsMIdsTxt = checklist.map(item=>item.name).join(',');
     },
     async addmember(){
+      console.log(this.operateShopIds);
+      console.log(this.checkpermissionslist);
       if (this.validate()) {
         let menshopids = [];
         this.operateShopIds.forEach(item=>menshopids.push(`'${item}'`));
@@ -273,6 +290,7 @@ export default {
     color: #fff;
     position: fixed;
     bottom: 0;
+    border-radius: 0;
   }
   
   .resp-shop {

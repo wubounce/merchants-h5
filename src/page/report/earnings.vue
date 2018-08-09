@@ -5,7 +5,7 @@
       <span @click="open('picker2')">{{startDate}}</span>至<span @click="open('picker3')">{{endDate}}<i class="iconfont icon-nextx select-back"></i></span>
     </div>
     <div class="slectdata shopchoose">
-      <span @click="popupVisible=true">{{currentTags?currentTags.shopName:'全部'}}<i class="iconfont icon-nextx select-back"></i></span>
+      <span @click="popupVisible=true">{{currentTags?currentTags.shopName:'全部店铺'}}<i class="iconfont icon-nextx select-back"></i></span>
       <selectpickr :visible="popupVisible" :slots="shopSlots" :valueKey="shopName" @selectpicker="shopselectpicker" @onpickstatus="shopselectpickertatus"> </selectpickr>
     </div>
   </div>
@@ -113,7 +113,7 @@ export default {
     },
     async shopListFun(){
       let res = await shopListFun();
-      this.shopSlots[0].values = [{shopName:'全部'},...res.data];
+      this.shopSlots[0].values = [{shopName:'全部店铺'},...res.data];
     },
     async dayReportFun(shopId){
       let payload = null;

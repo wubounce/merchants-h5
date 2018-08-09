@@ -59,7 +59,7 @@ export default {
       }
     },
     deldelMember(id){
-      MessageBox.confirm(`确认删除？`).then(async () => {
+      MessageBox.confirm(`确认删除？`,'').then(async () => {
         let query = this.$route.query;
         let payload = {id:query.id};
         let res = await delOperatorFun(qs.stringify(payload));

@@ -6,7 +6,7 @@
       <section class="sarch-wrap">
         <div class="search">
             <form action="" target="frameFile" v-on:submit.prevent="">
-              <input type="number" value='搜索' v-model.trim="searchData" @keyup.enter="searchOrder" @input="clearSearch" placeholder="请输入用户手机号/订单号查询" class="serch">
+              <input type="text" value='搜索' v-model.trim="searchData" @keyup.enter="searchOrder" @input="clearSearch" placeholder="请输入用户手机号/订单号查询" class="serch">
               <iframe name='frameFile' style="display: none;"></iframe>
               <span class="select-back" @click="searchOrder">搜索</span>
             </form>
@@ -132,6 +132,7 @@ export default {
           this.noOrderList = this.list.length<= 0 ? true: false;
         }
       }else {
+        this.$toast({message: res.msg });
         if (this.searchData) {
           this.nosearchList = true;
         } else {
@@ -145,10 +146,6 @@ export default {
     //   this.activeTime = 0;
     // },
     async searchOrder(e){ //搜索
-      if (this.searchData !== '' && !validatSearch(this.searchData)) {
-        this.$toast({message: "搜索内容只支持英文字母和数字" });
-        return false;
-      }
       this.hiddenTab = false;
       this.noOrderList = false;
       this.titleIndex = 0; //全部tab 显示数据
@@ -164,10 +161,6 @@ export default {
       }
     },
     clearSearch(){ //清楚搜索
-      if (!validatSearch(this.searchData)) {
-        this.$toast({message: "搜索内容只支持英文字母和数字" });
-        return false;
-      }
       if(this.searchData.length <= 0 ){
         this._getList();
         this.hiddenTab = true;

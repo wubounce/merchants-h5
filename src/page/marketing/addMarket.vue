@@ -64,7 +64,7 @@
   <!-- 选择店铺 -->
   <mt-popup v-model="shopVisible" position="bottom">
     <div class="resp-shop">
-      <span class="quxi" @click="shopVisible = false">取消</span>
+      <span class="quxi" @click="cancelCheckshop">取消</span>
       <span class="shop">店铺</span>
       <span class="qued" @click="getcheckshop">确定</span>
     </div>
@@ -211,6 +211,12 @@ export default {
       this.shopVisible = false;
       this.checkshoptxt = checklist.map(item=>item.shopName).join(',');
     },
+    cancelCheckshop(){
+      if (this.shopIds.length<=0) {
+        this.checkshoptxt = '';
+      }
+      this.shopVisible = false;
+    },
     activeselectpicker(data){ //打开自定义星期
       let weeklist = [];
       this.activeCurrentTags = data;
@@ -314,6 +320,7 @@ export default {
         this.$toast({message: "折扣优惠请输入1-100之间" });
         return false;
       }
+
       let status = null;
       this.addmarket.addstatus === true ? status = 0  : status = 1;
       let payload = Object.assign({},this.addmarket,{week:this.weeklist.join(','),shopIds:this.shopIds.join(','),status:status});

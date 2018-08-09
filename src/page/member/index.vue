@@ -106,6 +106,7 @@ export default {
   }
   .name a {
     color: #333;
+    display: block;
   }
   .phone {
     .right {
