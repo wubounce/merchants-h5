@@ -9,15 +9,21 @@
       <div class="form-title"><span>姓名</span><span class="forward">{{item.realName}}</span></div>
     </div>
 
-    <div class="input-group" @click="chooseArea">
-      <div class="form-title"><span>所在地区</span><span class="forward iconfont icon-nextx"></span>
+    <div class="input-group2" @click="chooseArea">
+      <div class="form-title" v-if='row'><span>所在地区</span><span class="forward iconfont icon-nextx"></span>
         <span class="forward">
           {{item.address}}
         </span>
       </div>
+      <div class="form-title" v-else>
+        <div class="key">
+          <div>所在地区</div>
+          <div class='key-color'>{{item.address}}</div>
+        </div>
+        <div class="forward iconfont icon-nextx value"></div>
+      </div>
     </div>
   </div>
-
   <!-- 所在地区 -->
     <mt-popup v-model="placeVisible" position="bottom" class="mint-popup">
       <div class="prop-bd">
@@ -37,6 +43,7 @@ export default {
   data() {
     return {
       title: '个人信息',
+      row:true,
       item: {},
       noRealName:'',
       autoPlace:'',
@@ -108,9 +115,18 @@ export default {
         this.item.realName = arr.join('');
       }
       //默认地址
-      if(res.data.address != '' && res.data.address != null) {
-        this.autoPlace = res.data.address;
-        this.item.address = res.data.address.length >10 ? res.data.address.slice(0,10) + '...' : res.data.address;
+      // if(res.data.address != '' && res.data.address != null) {
+      //   this.autoPlace = res.data.address;
+      //   this.item.address = res.data.address.length >10 ? res.data.address.slice(0,10) + '...' : res.data.address;
+      // }
+      this.item.address = res.data.address;
+      if(res.data.address) {
+        if( res.data.address.length>12) {
+          this.row = false;
+        }
+        else {
+          this.row = true;
+        }
       }
     },
     chooseArea() {
@@ -210,6 +226,22 @@ export default {
       line-height: 1.17rem;
       border-bottom:1px solid #E5E5E5;
       font-size: 16px;
+    }
+    .input-group2 {
+      line-height: 1.17rem;
+      border-bottom:1px solid #E5E5E5;
+      font-size: 16px;
+      .form-title {
+        .key,.value {
+          display: inline-block;
+          .key-color {
+            color:#999;
+          }
+        }
+        .value {
+          line-height: 2.34rem;
+        }
+      }
     }
     .input-group:last-child {
       border:none;
