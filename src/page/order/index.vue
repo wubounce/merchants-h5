@@ -405,7 +405,8 @@ export default {
   height: 100%;
 }
 .page-loadmore-wrapper {
-  overflow: scroll
+  overflow: scroll;
+  -webkit-overflow-scrolling: touch;
 }
 </style>
 <style>

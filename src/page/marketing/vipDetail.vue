@@ -92,7 +92,7 @@ export default {
       }
     },
     async delShopVip(){
-      MessageBox.confirm(`确定删除？`).then(async () => {
+      MessageBox.confirm(`确定删除？`,'').then(async () => {
           let payload = {shopVipId:this.detail.shopVipId};
           let res = await delVipFun(qs.stringify(payload));
           if (res.code === 0) {

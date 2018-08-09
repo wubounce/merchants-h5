@@ -4,7 +4,7 @@
   <div v-else>
     <div class="addvip-header">
       <p>所属店铺<span class="add-market-shop"><span v-for="(item,index) in detail.shop" :key="index">{{item.name}}<i v-if="index !== (detail.shop.length-1)">,</i></span></span></p>
-      <p>优惠期<span class="addvip-con">{{detail.noDiscountStart}}<span v-if="detail.noDiscountStart&&detail.noDiscountEnd">-</span>{{detail.noDiscountEnd}}</span></p>
+      <p>优惠期<span class="addvip-con">{{detail.noDiscountStart}}<span v-if="detail.noDiscountStart&&detail.noDiscountEnd">~</span>{{detail.noDiscountEnd}}</span></p>
       <p>活动日<span class="addvip-con">{{detail.noWeek | week}}</span></p>
       <p>每日活动时段<span class="addvip-con">{{detail.noTime}}</span></p>
       <p>折扣优惠<span class="addvip-con">{{detail.discountVO | tofixd}}%</span></p>
@@ -53,13 +53,13 @@ export default {
       let payload = {timeId:query.id};
       let res = await detailMarketFun(qs.stringify(payload));
       this.detail = res.data;
-      this.detail.noDiscountStart = this.detail.noDiscountStart ? moment(this.detail.noDiscountStart).format('YYYY年MM月DD日') : '';
-      this.detail.noDiscountEnd = this.detail.noDiscountEnd ? moment(this.detail.noDiscountEnd).format('YYYY年MM月DD日'): '';
+      this.detail.noDiscountStart = this.detail.noDiscountStart ? moment(this.detail.noDiscountStart).format('YYYY-MM-DD') : '';
+      this.detail.noDiscountEnd = this.detail.noDiscountEnd ? moment(this.detail.noDiscountEnd).format('YYYY-MM-DD'): '';
       this.detail.createTime = this.detail.createTime? moment(this.detail.createTime).format('YYYY-MM-DD HH:mm:ss'): '';
-      this.detail.noWork = this.detail.noWorkStart&& this.detail.noWorkEnd ? moment(this.detail.noWorkStart).format('YYYY年MM月DD日')+'-'+moment(this.detail.noWorkEnd).format('YYYY年MM月DD日'):'';
+      this.detail.noWork = this.detail.noWorkStart&& this.detail.noWorkEnd ? moment(this.detail.noWorkStart).format('YYYY-MM-DD')+'~'+moment(this.detail.noWorkEnd).format('YYYY-MM-DD'):'';
     },
     deldelMarket(id){
-      MessageBox.confirm(`确认删除？`).then(async () => {
+      MessageBox.confirm(`确认删除？`,'').then(async () => {
         let query = this.$route.query;
         let payload = {timeId:query.id};
         let res = await delMarketFun(qs.stringify(payload));
@@ -137,6 +137,7 @@ export default {
   }
  .create-wrap {
     margin-top: 0.27rem;
+    margin-bottom: 1.75rem;
     padding: 0 0.4rem;
     background: #fff;
     font-size:12px;

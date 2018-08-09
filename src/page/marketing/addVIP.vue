@@ -58,9 +58,9 @@
   
   <div class="confirm" @click="addvip">提交</div>
    <!-- 选择店铺 -->
-  <mt-popup v-model="shopVisible" position="bottom">
+  <mt-popup v-model="shopVisible" position="bottom" :closeOnClickModal="false">
     <div class="resp-shop">
-      <span class="quxi" @click="shopVisible = false">取消</span>
+      <span class="quxi" @click="cancelCheckshop">取消</span>
       <span class="shop">店铺</span>
       <span class="qued" @click="getcheckshop">确定</span>
     </div>
@@ -117,6 +117,12 @@ export default {
       let checklist = this.shoplist.filter(v=>this.shopIds.some(k=>k==v.shopId));
       this.shopVisible = false;
       this.checkshoptxt = checklist.map(item=>item.shopName).join(',');
+    },
+    cancelCheckshop(){
+      let canceIds = this.checkshoptxt ?  this.checkshoptxt.split(',') :[];
+      canceIds = this.shoplist.filter(v=>canceIds.some(k=>k==v.shopName));
+      this.shopIds = canceIds.map(item=>item.shopId);
+      this.shopVisible = false;
     },
     async addvip(){
       if (this.shopIds.length <=0 ) {
@@ -212,7 +218,8 @@ export default {
         display: inline-block;
         width: 50%;
         height: 1.47rem;
-        line-height: 1.47rem;
+        padding-top: 0.49rem;
+        padding-bottom: 0.48rem;
         text-align: right;
         float: right;
         margin-right: 0.16rem;

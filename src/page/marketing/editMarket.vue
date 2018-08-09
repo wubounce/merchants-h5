@@ -35,7 +35,7 @@
     <!-- 活动日 -->
     <selectpickr :visible="activeVisible" :slots="activeSlots" :valueKey="label" @selectpicker="activeselectpicker" @onpickstatus="activeselectpickertatus"> </selectpickr>
     <!-- 选择自定义星期-->
-    <mt-popup v-model="weekVisible" position="bottom">
+    <mt-popup v-model="weekVisible" position="bottom" :closeOnClickModal="false">
       <div class="resp-shop">
         <span class="quxi" @click="weekVisible = false">取消</span>
         <span class="shop">活动日</span>
@@ -65,7 +65,7 @@
     <mt-datetime-picker ref="picker3" type="date" @confirm="handleEndTimeTimeChange" :startDate="pickerstartDate"></mt-datetime-picker>
 
     <!-- 选择店铺 -->
-    <mt-popup v-model="shopVisible" position="bottom">
+    <mt-popup v-model="shopVisible" position="bottom" :closeOnClickModal="false">
       <div class="resp-shop">
         <span class="quxi" @click="cancelCheckshop">取消</span>
         <span class="shop">店铺</span>
@@ -245,7 +245,7 @@ export default {
       if (value === '9') {
         this.activeCurrentTags = {label:'每天'};
       } else if(value === '8'){
-        this.activeCurrentTags.label = {label:'周一至周五'};
+        this.activeCurrentTags = {label:'周一至周五'};
       }else {
         let arr = [];
         let weeklsit = [];
@@ -281,9 +281,9 @@ export default {
       this.checkshoptxt = checklist.map(item=>item.shopName).join(',');
     },
     cancelCheckshop(){
-      if (this.shopIds.length<=0) {
-        this.checkshoptxt = '';
-      }
+      let canceIds = this.checkshoptxt ?  this.checkshoptxt.split(',') :[];
+      canceIds = this.shoplist.filter(v=>canceIds.some(k=>k==v.shopName));
+      this.shopIds = canceIds.map(item=>item.shopId);
       this.shopVisible = false;
     },
     activeselectpicker(data){ //打开自定义星期
@@ -500,6 +500,8 @@ export default {
     }
   }
 .discount-input {
+  padding-top: 0.51rem;
+  padding-bottom: 0.49rem;
   text-align: right;
   width: 90%;
 }

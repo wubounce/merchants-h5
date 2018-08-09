@@ -122,3 +122,8 @@ input :-ms-input-placeholder {
   margin-bottom: 0.266667rem;
    margin-top: 0.266667rem;
 }
+
+.page-loadmore-wrapper {
+  overflow: scroll;
+  -webkit-overflow-scrolling: touch;
+}

@@ -16,7 +16,7 @@
   </div>
   <div class="confirm" @click="updateMember">提交</div>
   <!-- 选择店铺 -->
-  <mt-popup v-model="shopVisible" position="bottom">
+  <mt-popup v-model="shopVisible" position="bottom" :closeOnClickModal="false">
     <div class="resp-shop">
       <span class="shop">负责店铺</span>
     </div>
@@ -33,12 +33,12 @@
       </div>
     </section>
     <section class="promiss-footer">
-      <span class="can" @click="shopVisible=false">取消</span>
+      <span class="can" @click="cancelCheckshop">取消</span>
       <span class="cifrm" @click="getcheckshop">确定</span>
     </section>
   </mt-popup>
   <!-- 选择权限 -->
-  <mt-popup v-model="permissionsVisible" position="bottom">
+  <mt-popup v-model="permissionsVisible" position="bottom" :closeOnClickModal="false">
     <div class="resp-shop">
       <span class="shop">权限</span>
     </div>
@@ -76,7 +76,7 @@
       </div>
     </section>
     <section class="promiss-footer">
-      <span class="can" @click="permissionsVisible=false;">取消</span>
+      <span class="can" @click="cancelPermissions">取消</span>
       <span class="cifrm" @click="addPermissions">确定</span>
     </section>
   </mt-popup>
@@ -161,21 +161,32 @@ export default {
       this.shopVisible = false;
       this.checkshoptxt = checklist.map(item=>item.shopName).join(',');
     },
+    cancelCheckshop(){
+      let canceIds = this.checkshoptxt ?  this.checkshoptxt.split(',') :[];
+      canceIds = this.shoplist.filter(v=>canceIds.some(k=>k==v.shopName));
+      this.operateShopIds = canceIds.map(item=>item.shopId);
+      this.shopVisible = false;
+    },
     addPermissions(){
       this.permissionsVisible=false;
       let checklist = this.allmenu.filter(v=>this.checkpermissionslist.some(k=>k==v.menuId));
       this.permissionsMIdsTxt = checklist.map(item=>item.name).join(',');
     },
+    cancelPermissions(){
+      let canceIds = this.permissionsMIdsTxt ?  this.permissionsMIdsTxt.split(',') :[];
+      canceIds = this.allmenu.filter(v=>canceIds.some(k=>k==v.name));
+      this.checkpermissionslist = canceIds.map(item=>item.menuId);
+      this.permissionsVisible = false;
+    },
     async updateMember(){
       if (this.validate()) {
         let menshopids = [];
         this.operateShopIds.forEach(item=>menshopids.push(`'${item}'`));
-        this.operateShopIds = [...menshopids];
         let payload = {
           id:this.$route.query.id,
           username:this.username,
           phone:this.phone,
-          operateShopIds:this.operateShopIds.join(','),
+          operateShopIds:menshopids.join(','),
           mIds:this.checkpermissionslist.join(',')
         };
         let res = await updateOperatorInfoFun(qs.stringify(payload));
