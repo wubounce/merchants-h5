@@ -419,7 +419,7 @@ export default {
     }
     .search {
       display: flex;
-      padding: 0.4rem 0.32rem 0 0.32rem;
+      padding: 0.4rem 0.2rem 0 0.2rem;
     }
     .slectdata {
       display: flex;
@@ -437,7 +437,7 @@ export default {
       }
     }
     .timechoose {
-      width: 60%;
+      width: 75%;
       span {
         width: 45%;
         text-align: center;
@@ -457,6 +457,7 @@ export default {
     }
     .select-back {
       float: right;
+      color: #999;
     }
     .nodata {
       font-size: 14px;

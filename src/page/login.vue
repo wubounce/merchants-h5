@@ -14,7 +14,7 @@
         </p>
         <div class="passWord">
           <div class="pwdshow">
-            <input type="text" v-model.trim="form.password" v-if="typepwd" autocomplete="off">
+            <input type="text" v-model.trim="form.password" v-if="typepwd" v-on:input="pwdinputFunc" autocomplete="off">
             <input type="password" v-model.trim="form.password" v-on:input="pwdinputFunc" placeholder="请输入密码" autocomplete="off" v-else>
           </div>
           <div @click="openpwd">
