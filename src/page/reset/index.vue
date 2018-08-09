@@ -56,7 +56,7 @@
       },          
       async sendcode() {
         if (this.validatePhone()) {
-          let res = await smscodeFun(qs.stringify({phone:this.reset.phone}));
+          let res = await smscodeFun(qs.stringify({phone:this.reset.phone,mark:false}));
           if (res.code===0) {
               this.time = 60;
               this.btn = false;

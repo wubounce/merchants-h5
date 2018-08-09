@@ -50,7 +50,7 @@
       },          
       async sendcode() {
         if (this.validatePhone()) {
-          let res = await smscodeFun(qs.stringify({phone:this.bindPhone.phone}));
+          let res = await smscodeFun(qs.stringify({phone:this.bindPhone.phone,mark:true}));
           if (res.code===0) {
               this.countdown();
           }else {
@@ -73,13 +73,12 @@
             this.$toast({message: "请输入验证码" });
             return false;
           }
-          let payload = Object.assign({},this.bindPhone,{username:''});
+          let payload = Object.assign({},this.bindPhone);
           let res = await validateCodeFun(qs.stringify(payload));
           if (res.code===0) {
             let bindpayload = Object.assign({},this.bindPhone);
             let bindres = await bindPhoneFun(qs.stringify(bindpayload));
             if (bindres.code ===0) {
-              this.$toast('绑定手机号成功');
               this.$router.push({name:'index'});
             }
           }else {

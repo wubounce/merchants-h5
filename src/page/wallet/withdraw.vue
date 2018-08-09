@@ -9,7 +9,7 @@
     </header>
     <div class="withdraw-money">
         <p class="title">提现金额</p>
-        <label><span>￥</span><input v-model="money" @input="btndisabdisabled" type="number" v-focus></label>
+        <label><span>￥</span><input v-model="money" @input="btndisabdisabled" :disabled="inputDisabled" type="number" v-focus></label>
         <div class="total">
             <p class="fullbalance" v-if="thanBalance">输入金额超过账户余额</p>
             <p class="balance" v-else>账户余额 ￥{{userInfo.balance}}，最低提现10元</p>
@@ -29,9 +29,10 @@ export default {
     return {
       userInfo:{},
       money:'',
-      disabled:true,
       thanBalance:false,
-      balanceErrTxt:''
+      balanceErrTxt:'',
+      disabled:true,
+      inputDisabled:true,
     };
   },
   mounted() {
@@ -45,8 +46,9 @@ export default {
         let res = await getApplyaccountFun();
         if (res.code === 0) {
             this.userInfo = res.data;
+            this.disabled = false;
+            this.inputDisabled = false;
         }else if(res.code === 1004 || res.code === 1014) {
-            this.disabled = true;
             MessageBox.alert(`请先进行支付宝账号绑定及实名认证`).then(async () => {
                 this.$router.push({name:'accountSet'});
             });
@@ -86,18 +88,6 @@ export default {
             this.disabled = false;
         }
         Number(this.money) > this.userInfo.balance ? this.thanBalance = true: this.thanBalance = false;
-        // if (Number(this.money) < 10) {
-        //     this.thanBalance = true;
-        //     this.balanceErrTxt = '输入金额低于10元';
-        // } 
-        // if(Number(this.money) > this.userInfo.balance){
-        //     this.thanBalance = true;
-        //     this.balanceErrTxt = '输入金额超过账户余额';
-        // } 
-        // if(Number(this.money) > 50000.1){
-        //     this.thanBalance = true;
-        //     this.balanceErrTxt = '单笔提现到支付宝不能超过50000元';
-        // }
     }
   },
   filters:{
@@ -165,6 +155,7 @@ export default {
                     font-size: .8533rem;
                     margin-left: .0533rem;
                     line-height: 1.2rem;
+                    background: #fff;
                 }
             }
             .total{
