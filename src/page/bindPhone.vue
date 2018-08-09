@@ -31,7 +31,7 @@
           code: '',
         },
         timer: null,
-        time: 60,
+        time: 0,
         btn: true,
         disabled:true,
         title:'绑定手机'
@@ -52,6 +52,8 @@
         if (this.validatePhone()) {
           let res = await smscodeFun(qs.stringify({phone:this.bindPhone.phone,mark:true}));
           if (res.code===0) {
+              this.time = 60;
+              this.btn = false;
               this.countdown();
           }else {
              this.$toast(res.msg);
@@ -74,15 +76,11 @@
             return false;
           }
           let payload = Object.assign({},this.bindPhone);
-          let res = await validateCodeFun(qs.stringify(payload));
+          let res = await bindPhoneFun(qs.stringify(payload));
           if (res.code===0) {
-            let bindpayload = Object.assign({},this.bindPhone);
-            let bindres = await bindPhoneFun(qs.stringify(bindpayload));
-            if (bindres.code ===0) {
-              this.$router.push({name:'index'});
-            }
+            this.$router.push({name:'index'});
           }else {
-             this.$toast(res.msg);
+            this.$toast(res.msg);
           }
         }
       },

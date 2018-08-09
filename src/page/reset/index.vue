@@ -7,8 +7,8 @@
     <div class="form-group">
       <input type="text" placeholder="请输入验证码" v-model="reset.code" @input="disabledBtn" require>
       <div class="verificode">
+        <p class="countdown" v-if="!btn">{{time}}s后重新获取</p>
         <p class="sendcode" @click="sendcode" v-if="btn">获取验证码</p>
-        <p class="countdown" v-else>{{time}}s后重新获取</p>
       </div>
     </div>
     </form>
