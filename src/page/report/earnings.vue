@@ -31,7 +31,7 @@
       </div>
     </div>
   </div>
-  <mt-datetime-picker ref="picker2" type="date" v-model="searchStartDate" @confirm="handleStartDateChange"></mt-datetime-picker>
+  <mt-datetime-picker ref="picker2" type="date" v-model="searchStartDate" @confirm="handleStartDateChange" :endDate="pickerEndDate"></mt-datetime-picker>
   <mt-datetime-picker ref="picker3" type="date" v-model="searchEndDate" @confirm="handleEndDateChange"></mt-datetime-picker>
 </div>
 </template>
@@ -91,6 +91,7 @@ export default {
       reportDate:[],
       reportCount:[],
       reportMoney:[],
+      pickerEndDate:new Date(moment().format('YYYY-MM-DD')),
     };
   },
   mounted() {
@@ -149,10 +150,20 @@ export default {
     },
     handleStartDateChange(value) {
       this.startDate = moment(value).format('YYYY-MM-DD');
+      let startDate = new Date(this.startDate.replace(/\-/g, "\/"));  
+      let endDate = new Date(this.endDate.replace(/\-/g, "\/"));  
+      if(startDate > endDate){ 
+        [this.endDate,this.startDate] = [this.startDate,this.endDate]; 
+      }
       this.dayReportFun();
     },
     handleEndDateChange(value) {
       this.endDate = moment(value).format('YYYY-MM-DD');
+      let startDate = new Date(this.startDate.replace(/\-/g, "\/"));  
+      let endDate = new Date(this.endDate.replace(/\-/g, "\/"));  
+      if(startDate > endDate){ 
+        [this.endDate,this.startDate] = [this.startDate,this.endDate]; 
+      }
       this.dayReportFun();
     },
     shopselectpicker(data){

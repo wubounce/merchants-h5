@@ -25,9 +25,9 @@
     </section> 
     
     <!-- 不可支付日期开始 -->
-    <mt-datetime-picker ref="picker4" type="date" @confirm="handleNoWorkTimeStartChange"></mt-datetime-picker>
+    <mt-datetime-picker ref="picker4" type="date" @confirm="handleNoWorkTimeStartChange" :startDate="pickerstartDate"></mt-datetime-picker>
       <!-- 不可支付日期结束 -->
-    <mt-datetime-picker ref="picker5" type="date" @confirm="handleNoWorkTimeEndChange"></mt-datetime-picker>
+    <mt-datetime-picker ref="picker5" type="date" @confirm="handleNoWorkTimeEndChange" :startDate="pickerstartDate"></mt-datetime-picker>
      <!-- 每日不可支付时间 -->
     <mt-popup v-model="noWorkVisible" position="bottom" class="mint-popup">
        <mt-picker class="pickerNoWork"  :slots="activeTimeslots" @change="changeNoWorkTime" :showToolbar="true"><p class="toolBar"><span class="timequx" @click="noWorkVisible = false;">取消</span><span @click="chooseDay" class="tiem-picker-title">全天</span><span @click="confirmNews('pickerNoWork')" class="queding">确定</span></p></mt-picker>
@@ -234,10 +234,6 @@ export default {
         
         this.filterweek(detail.noWeek); //活动日期
         this.weeklist = detail.noWeek ?detail.noWeek.split(',') :[];
-        // this.pickerstartDate = new Date(detail.noDiscountStart);
-        // this.pickerEndDate = new Date(detail.noDiscountEnd);
-        // this.pickerstartDate = new Date(moment(detail.noDiscountStart).add('days',1).format('YYYY-MM-DD'));
-        // this.pickerEndDate = new Date(moment(detail.noDiscountEnd).add('days',1).format('YYYY-MM-DD'));
       }
       
     },
@@ -393,12 +389,7 @@ export default {
       let status = null;
       this.addmarket.addstatus === true ? status = 0  : status = 1;
       let payload = Object.assign({},this.addmarket,{week:this.weeklist.join(','),shopIds:this.shopIds.join(','),timeId:this.$route.query.id,status:status});
-      payload.noWork = payload.noWorkStart&&payload.noWorkEnd ? payload.noWorkStart+'~'+payload.noWorkEnd: null;
-      payload.noWork ? payload.noWork : delete payload.noWork;
-      payload.noWorkTime ? payload.noWorkTime : delete payload.noWorkTime;
       delete payload.addstatus;
-      delete payload.noWorkStart;
-      delete payload.noWorkEnd;
       let res = await addOruPdateFun(qs.stringify(payload));
       if (res.code === 0) {
         this.$toast({message: '编辑成功' });
