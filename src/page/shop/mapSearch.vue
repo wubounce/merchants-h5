@@ -21,13 +21,6 @@ export default {
     };
   },
   methods: {
-    friendGps() {
-      this.$toast({
-        message:'请确保手机GPS定位功能已开启',
-        position:'middle',
-        duration:5000
-      });
-    },
     getLatLng(x,y,z,p) {
       this.$router.push({
         name:x,
@@ -52,7 +45,6 @@ export default {
     }
   },
   created() {
-    this.friendGps();
   },  
   mounted() {
     let _this = this;

@@ -39,25 +39,27 @@ import moment from 'moment';
       };
     },
     methods: {
-      async isDeleteOrNot() {
+       isDeleteOrNot() {
         //删除
-        MessageBox.confirm('您确定要取消批量启动设备么？','').then(action => {
+        MessageBox.confirm('您确定要取消批量启动设备么？','').then(async() => {
           let objDel = { id:this.$route.query.id };
-          let resDel = delBatchStartFun(qs.stringify(objDel));
-
-	        let instance = this.$toast({
-            message: '删除成功',
-            iconClass: 'mint-toast-icon mintui mintui-success'
-          });
-          setTimeout(() => {
-            instance.close();
-          }, 1000);
-          this.$router.push({
-            name:'todolist'
-          });
-	      },
-	      action => {
-	      	
+          let resDel = await delBatchStartFun(qs.stringify(objDel));
+          if(resDel.code ===0 ) {
+            let instance = this.$toast({
+              message: '删除成功',
+              iconClass: 'mint-toast-icon mintui mintui-success'
+            });
+            setTimeout(() => {
+              instance.close();
+            }, 1000);
+            this.$router.push({
+              name:'todolist'
+            });
+          }
+          else {
+            this.$router.push({name:'todolist'});
+            MessageBox.alert(resDel.msg);
+          }
 	      }
 	     );
       },
@@ -86,7 +88,8 @@ import moment from 'moment';
            this.$router.push({name:'todolist'});
           }
           else {
-           this.$toast({message: res.msg });
+            this.$router.push({name:'todolist'});
+            MessageBox.alert(res.msg);
           }
 	      },
 	      action => {
