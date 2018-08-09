@@ -27,13 +27,13 @@
             </li>
             <li>
               <span class="field-title">NQT</span>
-              <p class="select-2" @click="wxScan($event,'npt')">
+              <p class="select-2" @click="wxScan('nqt')">
                 <span>{{fromdata.nqt}}</span>
               </p>
             </li>
             <li>
               <span class="field-title">IMEI</span>
-              <p class="select-2" @click="wxScan($event,'imei')">
+              <p class="select-2" @click="wxScan('imei')">
                 <span>{{fromdata.imei}}</span>
               </p>
             </li>
@@ -182,8 +182,11 @@
             name: "未设置",
             value: ""
           },
-          nqt: "84e5397409274f718ec52509f0be91f2",
-          imei: "865933031201524"
+          ver: '',
+          nqt: '',
+          imei: '',
+          companyVisible: '',
+          company: ''
         },
         selectListA: [],
         functionList: [],
@@ -209,41 +212,29 @@
         this.fromdata.secondType.id = this.funList[this.selectedIndex].id;
         this.subType = false;
       },
-      wxScan(e, type) { //微信扫码
-        var self = this;
-        wx.scanQRCode({
-          needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
-          scanType: ["qrCode", "barCode"], // 可以指定扫二维码还是一维码，默认二者都有
-          success: function (res) {
-            // 回调
-            try {
-              // alert(JSON.stringify(res))
-              let scanResult = this.analyzeResult(res.resultStr);
-              // alert(JSON.stringify(scanResult))
-
-              let _NQT = scanResult['NQT'];
-              let _IMEI = scanResult['IMEI'];
-              let _company = scanResult['Company'];
-              _NQT ? this.fromdata.nqt = _NQT : '';
-              _IMEI ? this.fromdata.imei = _IMEI : '';
-              // if (type === 'nqt') {
-              //   this.fromdata.nqt = _NQT
-              // } else {
-              //   this.fromdata.imei = _IMEI
-              // } 
-            } catch (error) {
-              alert(error);
-            }
-
-
-          }.bind(this),
-          error: function (res) {
-            if (res.errMsg.indexOf('function_not_exist') > 0) {
-              alert('版本过低请升级');
-            }
-          }
-        });
-
+      wxScan(name) { //微信扫码
+        Web.scanQRCode(res => {
+          let url = res;
+          let parameter = url.substring(0,4);
+          if(parameter == "http"){           
+            let object = url.split("?")[1];
+            let nqt = this.getUrlParam(object,"NQT");
+            let company = this.getUrlParam(object,"Company");
+            let communicateType= this.getUrlParam(object,"CommunicateType");
+            let ver = this.getUrlParam(object,"Ver")?this.getUrlParam(object,"Ver"):0;
+            this.fromdata.nqt = nqt;
+            this.fromdata.company = company;
+            this.fromdata.communicateType = communicateType;
+            this.fromdata.ver = ver;
+          }else{
+            this.fromdata.imei= res;
+          } 
+				});       
+      },
+      getUrlParam(url,name) {
+        let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+        let r = url.match(reg);  //匹配目标参数
+        if (r != null) return unescape(r[2]); return null; //返回参数值
       },
       async initWechat(){ //微信配置初始化
         let payload = {url: window.location.href.split('#')[0]};
@@ -320,9 +311,9 @@
             parentTypeId: this.fromdata.firstType.id,
             subTypeId: this.fromdata.secondType.id,
             nqt: this.fromdata.nqt,
-            company: "youfang",
-            communicateType: 1,
-            ver: 3,
+            company: this.fromdata.company,
+            communicateType: this.fromdata.communicateType,
+            ver: this.fromdata.ver,
             imei: this.fromdata.imei,
             functionTempletType: this.functionTempletType,
             functionJson: JSON.stringify(arr)
@@ -366,6 +357,7 @@
     },
     created() {
         this.initWechat();
+
     },
     components: {
       Actionsheet,
