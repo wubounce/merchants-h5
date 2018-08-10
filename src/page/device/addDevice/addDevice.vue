@@ -1,8 +1,7 @@
 <template>
   <section v-title="title">
     <div v-show="modelShow">
-      <ul class="device-detail">
-    
+      <ul class="device-detail"> 
         <!-- 表单模块部分  -->
         <li class="device-detail-item">
           <!-- 表单元格渲染 -->
@@ -45,7 +44,7 @@
         </li>
 
       </ul>
-    <button class="submitBtn" @click="submit">提交</button>
+    <button class="submitBtn" @click="submit" :class="{'default':!fromdata.machineName}" :disabled="!fromdata.machineName">提交</button>
     </div>
     <!--功能列表-->
     <div v-show="setModelShow">
@@ -263,6 +262,8 @@
            if(res.code === 0) {
              this.functionList = res.data; 
             }
+          this.stop();
+          this.move();
           this.parentType = true;
         }else{
           MessageBox.alert("请先选择店铺");
@@ -348,9 +349,16 @@
         };
         let res = await deviceAddorEditFun(qs.stringify(obj));
         if(res.code===0) {
-          this.$router.push({name: 'deviceMange'});
+          let instance = this.$toast({
+            message: '新增设备成功',
+            iconClass: 'mint-toast-icon mintui mintui-success'
+          });
+          setTimeout(() => {
+            instance.close();
+            this.$router.push({name:'deviceMange'});
+          }, 2000);
         }else {
-          this.$toast(res.msg);
+          this.$toast((res.msg).toUpperCase());
         }
 
       },
@@ -376,6 +384,17 @@
        this.setModelShow= false;
        this.modelShow = true;
        this.title = "新增设备";
+      },
+      stop(){
+        var mo=function(e){e.preventDefault();};
+        document.body.style.overflow='hidden';
+        document.addEventListener("touchmove",mo,false);//禁止页面滑动
+      },
+      /***取消滑动限制***/
+      move(){
+        var mo=function(e){e.preventDefault();};
+        document.body.style.overflow='';//出现滚动条
+        document.removeEventListener("touchmove",mo,false);
       }
 
 
@@ -486,6 +505,7 @@
       }
     }
   }
+  
 
   .submitBtn {
     width: 100%;
@@ -496,6 +516,9 @@
     background-color: #1890FF;
     color: #fff;
     font-size: 18px;
+  }
+  .default {
+    background-color:rgba(24,144,255,0.5);
   }
   
   .fun-item-hd {
@@ -546,9 +569,6 @@
         line-height: 1.6rem;
         &:nth-child(1) {
           flex: 3.32;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
         }
         &:nth-child(4) {
           flex: 2.21;

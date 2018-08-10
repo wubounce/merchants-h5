@@ -157,9 +157,13 @@ export default {
         this.$router.go(-1);
       },
       goNext() {
-        this.$refs.pickerStarTime.open();
-        this.currIndex = 3;
-        this.functionSetModel = false;
+        if(this.selectedFunction){
+          this.$refs.pickerStarTime.open();
+          this.currIndex = 3;
+          this.functionSetModel = false;
+        } else {
+          this.$toast("请先选择相应功能");
+        }
       }
 
     },

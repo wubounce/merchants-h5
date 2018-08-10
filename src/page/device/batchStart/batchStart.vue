@@ -20,17 +20,21 @@
     </div>
     <div class="ss-bd">
       <div class="search-res">
-        <ul>
-          <li v-for="(item,index) in shopList"  class="search-res-item" :class="{'selected':index==selectIndex}" @click="selectClick(index,item.shopName)"
-            :key="index">
-            <div>
-              <p>{{item.shopName}}</p>
-              <p>{{item.address}}</p>
-            </div>
-            <div><span class="iconfont" :class="{'icon-xuanze':index==selectIndex}"></span></div>
-          </li>
-          <li class="searchNoItem" v-show="hasNoData">没有找到匹配数据</li>
-        </ul>
+        <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
+          <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore">
+            <ul>
+              <li v-for="(item,index) in shopList"  class="search-res-item" :class="{'selected':index==selectIndex}" @click="selectClick(index,item.shopName)"
+                :key="index">
+                <div>
+                  <p>{{item.shopName}}</p>
+                  <p>{{item.address}}</p>
+                </div>
+                <div><span class="iconfont" :class="{'icon-xuanze':index==selectIndex}"></span></div>
+              </li>
+              <li class="searchNoItem" v-if="shopList.length<=0">">没有找到匹配数据</li>
+            </ul>
+          </mt-loadmore>
+        </div>
       </div>
     </div>
     <div style="width:100%;height:1.73rem;"></div>
@@ -43,15 +47,15 @@
   import qs from "qs";
   import { MessageBox } from 'mint-ui';
   import {delay} from "@/utils/tool";
+  import PagerMixin from '@/mixins/pagerMixin';
   import { getShopFun,shopSearchFun } from '@/service/device';
   export default {
+    mixins: [PagerMixin],
     data() {
       return {
-        resData: [{
-          shopName: '企鹅一号店',
-          adress: '紫金花路2号联合大厦1幢1层10号1层联合大厦1幢1层10…',
-        }],
+        //分页
         shopList: [],
+        wrapperHeight: null,
         isResult: false,
         selectIndex: -1,
         selectedShop: '',
@@ -85,6 +89,11 @@
         ],
       }
     },
+
+    mounted() {
+      this.wrapperHeight = document.documentElement.clientHeight-42;
+    },
+
     methods: {
       async fetchData(e) {
         let keywords = this.keyword;
@@ -98,9 +107,6 @@
         this.selectIndex = index
         this.shopId = this.shopList[index].shopId;
         this.selectedShop = name;
-
-        // this.keyword = this.resData[index];
-        // this.search();
       },
       goNext(){
         let id = this.shopId;
@@ -132,17 +138,10 @@
           }, 200);     
       }
     },
-    computed: {
-      hasNoData () {
-        return !this.shopList.length;
-      }
-    },
+   
     created() {
       this.checkShopSelect();
     },
-
-    components: {
-   },
   };
 
 </script>

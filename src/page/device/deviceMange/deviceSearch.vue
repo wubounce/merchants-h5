@@ -7,7 +7,7 @@
           <span>
             <span @click="wxScan"><img src="../../../assets/img/device/devic_scan_icon.jpeg"></span>
             <span class="gap-border"></span>
-            <span class="search-reset" @click="clearInput">返回</span>
+            <span class="search-reset" @click="goBack">返回</span>
           </span>
         </p>
       </div>
@@ -17,7 +17,7 @@
           <li v-for="(item,index) in searchList" :class="{selectback:index==now}" class="search-select-option search-select-list" @click="selectClick(index)"
           :key="index">{{item.nameOrImei}}
           </li>
-          <li class="noData" v-show="hasNoData">没有找到匹配数据</li>
+          <li class="noData" v-show="hasNoData">{{message}}</li>
         </ul>
     </div>
   </section>
@@ -29,9 +29,7 @@ import Api from '@/utils/Api';
 import Web from '@/utils/Web';
 import { listByNameOrlmeiFun } from '@/service/device';
   /* eslint-disable */
-  import {
-    delay
-  } from "@/utils/tool";
+import {delay } from "@/utils/tool";
   export default {
     data() {
       return {
@@ -39,10 +37,14 @@ import { listByNameOrlmeiFun } from '@/service/device';
         now: -1,
         isResult: true,
         keyword: '',
-        searchList:[]
+        searchList:[],
+        message: ''
       };
     },
     methods: {
+      goBack() {
+        this.$router.go(-1);
+      },
       fetchData(e) {
         let keywords = this.keyword;
         this.search(keywords);
@@ -51,6 +53,7 @@ import { listByNameOrlmeiFun } from '@/service/device';
         let payload = {nameOrImei: name};
         let res = await listByNameOrlmeiFun(qs.stringify(payload));
           if(res.code === 0) {
+            this.message = "未找到相关结果"
             this.searchList = res.data;  
           }else{
             this.$toast(res.msg);
@@ -69,12 +72,12 @@ import { listByNameOrlmeiFun } from '@/service/device';
       inputHandle: function() { 
         
       },
-       wxScan() { //微信扫码
-         Web.scanQRCode(res => {
+      wxScan() { //微信扫码
+        Web.scanQRCode(res => {
           let url = res;
           let parameter = url.substring(0,4);
           if(parameter == "http"){           
-            this.$toast("请扫描EMIE码");
+            this.$toast("请扫描IMEI码");
           }else{
             this.search(url);
           } 
@@ -86,6 +89,12 @@ import { listByNameOrlmeiFun } from '@/service/device';
         return !this.searchList.length;
       }
     },
+
+    created() {
+      let query = this.$route.query;
+      if(query.imei)this.search(query.imei);
+    },
+
     watch: {
       keyword: function (newVal) {
         if (newVal) {
@@ -101,124 +110,127 @@ import { listByNameOrlmeiFun } from '@/service/device';
 </script>
 
 <style lang="scss" scoped>
-  .search {
-    padding: 0.2rem 0.3rem 0.2rem;
-    background-color: #fff;
-    .search-input {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      box-sizing: border-box;
-      font-size: 0.43rem;
-      color: rgba(153, 153, 153, 1);
-      background: rgba(255, 255, 255, 1);
-      box-shadow: 0rem 0.05rem 0.13rem 0.05rem rgba(186, 192, 210, 0.3);
-      border-radius: 0.1rem;
-      p {
+  section {
+    height: 100%;
+    background-color: #ffffff;
+    .search {
+      padding: 0.4rem 0.3rem 0.4rem 0.27rem;
+      background-color: #fff;
+      .search-input {
         display: flex;
-      }
-      .left {
-        display: flex;
-        justify-content: space-around;
         align-items: center;
-        flex: 0 1 7.93rem;
-        height: 1.17rem;
-        padding-right: .27rem;
-        
-        input {
-          background: url("../../../assets/img/device/devic_search_icon.png") no-repeat 0.27rem;
-          background-size: 0.53rem;
-          padding: 0.29rem 0 0.29rem 1.07rem;
-          border-radius: 0.13rem;
-        }
-        span {
-          white-space: nowrap;
-          height: 0.51rem;
-          line-height: 0.6rem;
+        justify-content: space-between;
+        box-sizing: border-box;
+        font-size: 0.43rem;
+        color: rgba(153, 153, 153, 1);
+        background: rgba(255, 255, 255, 1);
+        box-shadow: 0rem 0.05rem 0.13rem 0.05rem rgba(186, 192, 210, 0.3);
+        border-radius: 0.1rem;
+        p {
           display: flex;
         }
-        img {
-          width: 0.51rem;
-        }
-        .gap-border {
-          position: relative;
-          width: .2rem;
-          height: .51rem;
-          margin-right: .2rem;
-          &:after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
+        .left {
+          display: flex;
+          justify-content: space-around;
+          align-items: center;
+          flex: 0 1 7.93rem;
+          height: 1.17rem;
+          padding-right: .27rem;
+          
+          input {
+            background: url("../../../assets/img/device/devic_search_icon.png") no-repeat 0.27rem;
+            background-size: 0.53rem;
+            padding: 0.29rem 0 0.29rem 1.07rem;
+            border-radius: 0.13rem;
+          }
+          span {
+            white-space: nowrap;
+            height: 0.51rem;
+            line-height: 0.6rem;
+            display: flex;
+          }
+          img {
+            width: 0.51rem;
+          }
+          .gap-border {
+            position: relative;
+            width: .2rem;
             height: .51rem;
-            border-right: 0.01rem solid rgba(216, 216, 216, 1); // transform: scaleY(0.5);
+            margin-right: .2rem;
+            &:after {
+              content: '';
+              position: absolute;
+              top: 0;
+              left: 0;
+              width: 100%;
+              height: .51rem;
+              border-right: 0.01rem solid rgba(216, 216, 216, 1); // transform: scaleY(0.5);
+            }
+          }
+          .search-reset {
+            color: rgba(51, 51, 51, 1)
           }
         }
-        .search-reset {
-          color: rgba(51, 51, 51, 1)
+        .result-left {
+          flex: 1;
+        }
+        .right {
+          flex: 0 1 1.17rem;
+          height: 1.17rem;
+          background: url("../../../assets/img/device/devic_scan_icon.jpeg") no-repeat center;
+          background-size: 60%;
+          box-shadow: 0rem 0.05rem 0.13rem 0rem rgba(186, 192, 210, 0.3);
+          border-radius: 0.13rem;
+        }
+        .result-right {
+          display: none
         }
       }
-      .result-left {
-        flex: 1;
+    }
+    .search-select {
+      background: #fff;
+      .noData {
+        text-align: center;
       }
-      .right {
-        flex: 0 1 1.17rem;
-        height: 1.17rem;
-        background: url("../../../assets/img/device/devic_scan_icon.jpeg") no-repeat center;
-        background-size: 60%;
-        box-shadow: 0rem 0.05rem 0.13rem 0rem rgba(186, 192, 210, 0.3);
-        border-radius: 0.13rem;
+      li {
+        color:rgba(51, 51, 51, 1);
+        width: 100%;
+        font-size: 0.43rem;
       }
-      .result-right {
-        display: none
+      .search-select-option {
+        box-sizing: border-box;
+        padding: 6px 10px;
+        text-align: center;
       }
     }
-  }
-  .search-select {
-    background: #fff;
-    .noData {
-      text-align: center;
+
+    input::-ms-clear {
+      display: none;
     }
-    li {
-      color:rgba(51, 51, 51, 1);
-      width: 100%;
-      font-size: 0.43rem;
+
+    .search-select-list {
+      transition: all 0.5s;
     }
-    .search-select-option {
-      box-sizing: border-box;
-      padding: 6px 10px;
-      text-align: center;
+
+    .itemfade-enter,
+    .itemfade-leave-active {
+      opacity: 0;
+    }
+
+    .itemfade-leave-active {
+      position: absolute;
+    }
+
+    .selectback {
+      background-color: #eee !important;
+      cursor: pointer;
+    }
+
+    .search-select ul {
+      margin: 0;
+      text-align: left;
+      padding: 10px 10px;
     }
   }
-
-  input::-ms-clear {
-    display: none;
-  }
-
-  .search-select-list {
-    transition: all 0.5s;
-  }
-
-  .itemfade-enter,
-  .itemfade-leave-active {
-    opacity: 0;
-  }
-
-  .itemfade-leave-active {
-    position: absolute;
-  }
-
-  .selectback {
-    background-color: #eee !important;
-    cursor: pointer;
-  }
-
-  .search-select ul {
-    margin: 0;
-    text-align: left;
-    padding: 10px 10px;
-  }
-
   
 </style>
