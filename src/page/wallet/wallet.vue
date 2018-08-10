@@ -4,7 +4,7 @@
         <router-link to="accountList">收支明细</router-link>
         <img src="../../../static/image/user/money@2x.png">
         <p class="font-title">账户余额 (元)</p>
-        <p class="price">{{data.balance}}</p>
+        <p class="price">{{data.balance ? data.balance:0}}</p>
         <p class="total">累计收益 {{data.orderCount ? data.orderCount:0}}</p>
     </div>
     <div class="btn" @click="gowithdraw">余额提现</div>
@@ -12,6 +12,7 @@
 </div>
 </template>
 <script>
+import { MessageBox } from 'mint-ui';
 import { getApplyFinanceFun } from '@/service/user';
 export default {
   data() {
@@ -29,7 +30,7 @@ export default {
         let res = await getApplyFinanceFun();
         if (res.code === 0) {
             this.data = res.data || {};
-            if(res.data.code === 1004 || res.data.code === 1014) {
+            if(Number(res.data.code) === 1014 || Number(res.data.code === 1004)) {
                 MessageBox.alert(`请先进行支付宝账号绑定及实名认证`,'').then(async () => {
                     this.$router.push({name:'accountSet'});
                 });

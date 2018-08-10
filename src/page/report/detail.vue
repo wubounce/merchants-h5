@@ -2,18 +2,18 @@
 <div class="report-detail" v-title="title">
     <div class="tabledata">
         <div class="listcon">
-          <span>设备名称</span>
-          <span>设备类型</span>
-          <span>订单数量</span>
-          <span>订单金额</span>
+          <span class="report-table-date">设备名称</span>
+          <span class="report-table-date">设备类型</span>
+          <span class="report-table-order">订单数量</span>
+          <span class="report-table-order">订单金额</span>
         </div>
         <div class="tableearn">
           <div class="nodata" v-if="list.length <= 0">暂无数据</div>
           <div class="listcon tableearn-list" v-for="(item,index) in list" :key="index">
-            <span>{{item.machineName}}</span>
-            <span>{{item.machineTypeName}}</span>
-            <span>{{item.count}}</span>
-            <span>{{item.money}}</span>
+            <span class="report-table-date">{{item.machineName}}</span>
+            <span class="report-table-date">{{item.machineTypeName}}</span>
+            <span class="report-table-order">{{item.count}}</span>
+            <span class="report-table-order">{{item.money}}</span>
           </div>
         </div>
     </div>
@@ -67,17 +67,22 @@ export default {
     display: -ms-flexbox;
     display: flex;
     font-size: 14px;
-    height: 40px;
-    line-height: 1;
-    padding: 0 10px;
+    height: 1.04rem;
+    line-height: 1.04rem;
+    padding: 0 0.4rem;
     position: relative;
-    text-align: center;
     white-space: nowrap;
     border-bottom:1px solid rgba(229,229,229,1);
     span {
       flex:1;
       font-weight: 600;
     }
+  }
+  .report-table-date {
+    text-align: left;
+  }
+  .report-table-order {
+    text-align: right;
   }
   .nodata {
     font-size: 14px;

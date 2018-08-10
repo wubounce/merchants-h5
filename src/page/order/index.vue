@@ -90,7 +90,8 @@ export default {
     };
   },
   mounted() {
-    this.wrapperHeight = document.documentElement.clientHeight-30;
+    // var html=document.getElementsByTagName("html")[0].style.fontSize;
+    this.wrapperHeight = document.documentElement.clientHeight;
   },
   created(){
   },

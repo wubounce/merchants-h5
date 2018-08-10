@@ -2,10 +2,10 @@
 <div class="earnings">
   <div class="search">
     <div class="slectdata timechoose">
-      <span @click="open('picker2')">{{startDate}}</span>至<span @click="open('picker3')">{{endDate}}<i class="iconfont icon-nextx select-back"></i></span>
+      <span @click="open('picker2')">{{startDate}}</span>至<span @click="open('picker3')">{{endDate}}<i class="iconfont icon-xiangxiajiantou select-back"></i></span>
     </div>
     <div class="slectdata shopchoose">
-      <span @click="popupVisible=true">{{currentTags?currentTags.shopName:'全部店铺'}}<i class="iconfont icon-nextx select-back"></i></span>
+      <span @click="popupVisible=true">{{currentTags?currentTags.shopName:'全部店铺'}}<i class="iconfont icon-xiangxiajiantou select-back"></i></span>
       <selectpickr :visible="popupVisible" :slots="shopSlots" :valueKey="shopName" @selectpicker="shopselectpicker" @onpickstatus="shopselectpickertatus"> </selectpickr>
     </div>
   </div>
@@ -16,17 +16,17 @@
 
   <div class="tabledata">
     <div class="listcon">
-      <span>日期</span>
-      <span>订单数量</span>
-      <span>订单金额</span>
+      <span class="report-table-date">日期</span>
+      <span class="report-table-order">订单数量</span>
+      <span class="report-table-order">订单金额</span>
     </div>
     <div class="tableearn">
        <div class="nodata" v-if="lsitdata.length <= 0">暂无数据</div>
       <div class="listcon tableearn-list" v-for="(item,index) in  lsitdata" :key="index">
         <router-link class="detail" :to="{name:'reportdetail', query:{date:item.date,type:1}}" >
-          <span class="listtime">{{item.date}}</span>
-          <span>{{item.count}}</span>
-          <span>{{item.money}}</span>
+          <span class="listtime report-table-date">{{item.date}}</span>
+          <span  class="report-table-order">{{item.count}}</span>
+          <span  class="report-table-order">{{item.money}}</span>
         </router-link>
       </div>
     </div>
@@ -66,7 +66,7 @@ export default {
     },
     height: {
       type: String,
-      default: '4.453333rem' 
+      default: '4.33rem'
     }
   },
   data() {
@@ -348,7 +348,7 @@ export default {
     background: #fff;
   }
   .echarts-warp {
-    padding: 0.32rem;
+    padding: 0.32rem 0.32rem 0 0.32rem;
   }
   .echart-title {
     font-size: 12px;
@@ -356,8 +356,8 @@ export default {
     text-align: center;
     margin-top: 0.4rem;
     span {
-      width: 0.2rem;
-      height: 0.2rem;
+      width: 0.19rem;
+      height: 0.19rem;
       display: inline-block;;
       background: #f60;
       border-radius: 50%;
@@ -375,13 +375,21 @@ export default {
   .mint-tab-item-label {
     font-size: 16px;
   }
-
+  .report-table-date {
+    text-align: left;
+  }
+  .report-table-order {
+    text-align: right;
+  }
+  .tabledata {
+    padding-top: 0.65rem;
+  }
   .listcon {
     display: flex;
     font-size: 14px;
-    height: 40px;
-    line-height: 40px;
-    text-align: center;
+    height: 1.04rem;
+    line-height: 1.04rem;
+    padding: 0 0.4rem;
     span {
       flex:1;
       font-weight: 600;
@@ -400,9 +408,6 @@ export default {
     display: -ms-flexbox;
     display: flex;
     font-size: 14px;
-    height: 40px;
-    line-height: 1;
-    padding: 0 10px;
     position: relative;
     text-align: center;
     white-space: nowrap;

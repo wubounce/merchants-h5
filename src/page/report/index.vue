@@ -50,7 +50,7 @@ export default {
     height: 1.33rem;
     line-height: 1.33rem;
     font-size: 16px;
-    color: #333333;
+    color: #666666;
     text-align: center;
     display: flex;
     z-index: 9999;
@@ -64,7 +64,8 @@ export default {
       border-bottom: 0.08rem solid #1890FF;
       border-radius:0.04rem;
       display: inline-block;
-      padding:0 0.27rem;
+      padding:0 0.85rem;
+      font-weight: 600;
     }
   }
 </style>

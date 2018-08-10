@@ -41,7 +41,7 @@
     </div>
     <div class="bar-wrap">
       <div class="">
-        <span class="linetitle">设备监控<span style="font-size: 14px;font-weight: 100;color: #1890FF;">(总设备{{allmMachine}})</span></span>
+        <span class="linetitle">设备监控<span style="font-size: 14px;font-weight:normal;color: #1890FF;">(总设备{{allmMachine}})</span></span>
         <span class="equipment" @click="equipmentVisible=true">{{equipmentcurrentTags?equipmentcurrentTags.name:'全部'}}<i class="iconfont icon-xiangxiajiantou select-back"></i></span>
         <selectpickr :visible="equipmentVisible" :slots="equipmentSlots" :valueKey="machinepickername" @selectpicker="equipmentselectpicker" @onpickstatus="equipmentselectpickertatus"> </selectpickr>
       </div>
@@ -215,23 +215,31 @@ export default {
               name: communicateType(Number(item.type))
             });
         });
+       
         let machineTypeData = res.data ? res.data.machineType :[];
+        machineTypeData = machineTypeData.sort(this.ortId).slice(0,3); //类型标题只显示最大的三个类型
         machineTypeData.forEach(item=>{
           this.piefunDatatitle.push({
             name:item.type,
             icon : 'circle',
             textStyle:{fontWeight:'normal', color:'#999',fontSize:12, padding:0},
           });
+        });
+        res.data.machineType.forEach(item=>{
           this.piefunData.push({
             value: item.sum,
             name: item.type
           });
         });
+        console.log(this.piefunData);
         // 把配置和数据放这里
         this.pietypechart.setOption(this.pietypeChartOPtion);
         this.piefunchart.setOption(this.piefunChartOption);
       }
      
+    },
+    ortId(k,h){ 
+      return h.sum-k.sum;
     },
     initChart() {
       this.linechart = echarts.init(document.getElementById('line'));
@@ -460,7 +468,7 @@ export default {
         series: [{
           name: '设备监控',
           type: 'bar',
-          barWidth: '30%',
+          barWidth: 24,
           data: this.barseriesData
         }]
       };
@@ -471,8 +479,7 @@ export default {
         tooltip: {
             trigger: 'item',
             formatter:function(data){
-              let num = Math.round(data.percent);
-              return `${data.marker}${data.name}：${num}%`;
+              return `${data.marker}${data.name}：${data.percent}%`;
             },
         },
         legend: {
@@ -496,15 +503,16 @@ export default {
           {
               name:'通信类型',
               type:'pie',
-              radius: ['40%', '60%'],
+              radius: ['50%', '70%'],
               avoidLabelOverlap: false,
               label: {
                   normal: {
                       show: true,
                       position: 'outside',
                       formatter:function(data){
-                        let num = Math.round(data.percent);
-                        return num>0 ?`${num}%`:'';
+                        // let num = Math.round(data.percent);
+                        // return num>0 ?`${num}%`:'';
+                        return '';
                       },
                       color:'#333'
                   },
@@ -521,14 +529,14 @@ export default {
                 normal : { 
                   color:function(data){
                       if (data.name==='脉冲') {
-                        if (data.value>1) {
-                          return 'rgb(59,161,255)';
+                        if (data.value>0) {
+                          return '#3BA1FF';
                         } else {
                           return '#ccc';
                         }
                       } else if(data.name==='串口'){
-                         if (data.value>1) {
-                          return 'rgb(243,100,124)';
+                         if (data.value>0) {
+                          return '#F3647C';
                         } else {
                           return '#ccc';
                         }
@@ -548,8 +556,7 @@ export default {
             trigger: 'item',
             // formatter: "{a} <br/>{b}: {c} ({d}%)"//模板变量有 {a}、{b}、{c}、{d}，分别表示系列名，数据名，数据值，百分比。{d}数据会根据value值计算百分比
             formatter:function(data){
-              let num = Math.round(data.percent);
-              return `${data.marker}${data.name}：${num}%`;
+              return `${data.marker}${data.name}：${data.percent}%`;
             },
         },
         legend: {
@@ -557,8 +564,6 @@ export default {
             y: 'bottom',
             x:'center',
             bottom:'40%',
-            // padding :0,
-            // itemGap:4,
             itemWidth:6, //图表大小
             itemHeight:6,
             data:this.piefunDatatitle,
@@ -568,15 +573,14 @@ export default {
             {
               name:'功能类型',
               type:'pie',
-              radius: ['40%', '60%'],
-              avoidLabelOverlap: false,
+              radius: ['50%', '70%'],
+              avoidLabelOverlap: true,
               label: {
                   normal: {
                       show: true,
                       position: 'outside',
                       formatter:function(data){
-                        let num = Math.round(data.percent);
-                        return num>0 ?`${num}%`:'';
+                        return '';
                       },
                       color:'#333'
                   },
@@ -589,32 +593,39 @@ export default {
                   }
               },
               data:this.piefunData,
-              itemStyle: {
-                normal : { 
-                  color:function(data){
-                      if (data.name==='超净洗') {
-                        if (data.value>1) {
-                          return 'rgb(243,100,124)';
-                        } else {
-                          return '#ccc';
-                        }
-                      } else if(data.name === '单脱'){
-                        if (data.value>1) {
-                          return '#3BA1FF';
-                        } else {
-                          return '#ccc';
-                        }
-                      }else {
-                        if (data.value>1) {
-                          return '#37CCCC';
-                        } else {
-                          return '#ccc';
-                        }
-                      }
+              color:['#3BA1FF','#F3647C','#FBD438','#4ECC74','#37CCCC']
+              // itemStyle: {
+              //   normal : { 
+              //     color:function(data){
+              //         if (data.name==='超净洗') {
+              //           if (data.value>0) {
+              //             return 'rgb(243,100,124)';
+              //           } else {
+              //             return '#ccc';
+              //           }
+              //         } else if(data.name === '单脱'){
+              //           if (data.value>0) {
+              //             return '#3BA1FF';
+              //           } else {
+              //             return '#ccc';
+              //           }
+              //         }else if(data.name.includes('普通混合')){
+              //           if (data.value>0) {
+              //             return '#4ECC74';
+              //           } else {
+              //             return '#ccc';
+              //           }
+              //         }else {
+              //           if (data.value>0) {
+              //             return '#FBD438';
+              //           } else {
+              //             return '#ccc';
+              //           }
+              //         }
                       
-                  }
-                }
-              },
+              //     }
+              //   }
+              // },
           }
         ]
       };
