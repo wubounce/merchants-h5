@@ -68,7 +68,7 @@ export default {
             box-sizing: border-box;          
             span{
                 position: absolute;
-                top: .33rem;
+                top: 0.59rem;
                 left: .4rem;
                 width: 1.17rem;
                 height: 1.17rem;
@@ -76,13 +76,13 @@ export default {
             }
             .icon-tixian {
                 color:#1890FF;
-                font-size: 1.2rem;
+                font-size: 1.1rem;
             }
             .accountList-content{
                 width: 100%;
                 height: 100%;
                 border-bottom: $first-border;
-                padding: 0.59rem .4rem .33rem 0;
+                padding: 0.59rem 0.4rem 0.55rem 0;
                 box-sizing: border-box;   
                 .left{
                     float: left;
@@ -106,6 +106,10 @@ export default {
                 
                     .status{
                         margin: .12rem 0 .11rem;
+                    }
+                    .time {
+                        padding-top: 0.15rem;
+
                     }
                 }
                 .price{

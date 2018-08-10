@@ -506,6 +506,6 @@ export default {
     color: #999;
     text-align: center;
     padding: 2rem 0;
-    background: #efeff4;
+    background: #fff;
   }
 </style>

@@ -166,6 +166,7 @@ export default {
                     }
                     .fall{
                       color: #FF5F5F;
+                      font-size: 18px;
                     }
                   }                                    
                 }

@@ -24,7 +24,7 @@
     <div class="tableearn">
        <div class="nodata" v-if="lsitdata.length <= 0">暂无数据</div>
       <div class="listcon tableearn-list" v-for="(item,index) in  lsitdata" :key="index">
-        <router-link class="detail" :to="{name:'reportdetail', query:{date:item.date,type:1}}" >
+        <router-link class="detail" :to="{name:'reportdetail', query:{date:item.date,type:3}}" >
           <span class="listtime report-table-date">{{item.date}}</span>
           <span  class="report-table-order">{{item.count}}</span>
           <span  class="report-table-order">{{item.money}}</span>
@@ -506,7 +506,7 @@ export default {
     color: #999;
     text-align: center;
     padding: 2rem 0;
-    background: #efeff4;
+    background: #fff;
   }
 </style>
 
