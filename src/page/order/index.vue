@@ -36,7 +36,7 @@
                     <div class="content">
                         <p class="con-title">{{item.machineName}}</p>
                         <p class="con-type">{{item.machineFunctionName}}<span style="padding:0 0.346667rem">|</span>时长{{item.markMinutes}}分钟</p>
-                        <p class="con-price" v-if="item.orderType !== 2 && item.orderStatus !==1 || item.orderType !==2 && item.orderStatus !==0">¥{{item.payPrice}}</p>
+                        <p class="con-price" v-if="item.orderType !== 2 && item.orderStatus !==1 || item.orderType !==2 && item.orderStatus !==0">{{item.payPrice>0?'¥'+item.payPrice:''}}</p>
                         <!-- <p><q-count-down :type="2" :time="item.activeTime" @finish="hanldeActive"/></q-count-dow></p> -->
                     </div>
                     <div class="order-action" v-if="item.isReserve === 1">预约</div>
@@ -44,7 +44,7 @@
               </section>
               </router-link>
               <section class="listaction" v-if="item.orderStatus === 2"> 
-                  <mt-button @click="orderRefund(item.orderNo,item.payPrice)" v-has="'mer:order:refund,mer:order:info'">退款</mt-button>
+                  <mt-button @click="orderRefund(item.orderNo,item.payPrice)" v-has="'mer:order:refund,mer:order:info'" :disabled="refundDisabled">退款</mt-button>
                   <mt-button @click="machineBoot(item.id,item.machineName)" v-has="'mer:order:start,mer:order:info'">启动</mt-button>
                   <mt-button @click="machineReset(item.orderNo,item.machineId,item.machineName)" v-has="'mer:order:reset,mer:order:info'">复位</mt-button>
               </section>
@@ -85,7 +85,8 @@ export default {
       nosearchList:false,
       orderStatus:'', //订单状态
       hiddenTab:true,
-      hiddenPageHeight:2.88 
+      hiddenPageHeight:2.88,
+      refundDisabled:false,
     };
   },
   mounted() {
@@ -132,7 +133,6 @@ export default {
           this.noOrderList = this.list.length<= 0 ? true: false;
         }
       }else {
-        this.$toast({message: res.msg });
         if (this.searchData) {
           this.nosearchList = true;
         } else {
@@ -197,18 +197,26 @@ export default {
       
     },
     orderRefund(oederno,payPrice){ //退款
-      MessageBox.confirm('确定发起退款？','').then(async () => {
+      this.refundDisabled = true;
+      MessageBox.confirm('',{ 
+        message: '确定发起退款？', 
+        closeOnClickModal:false
+      }).then(async () => {
         let query = this.$route.query;
         let payload = {orderNo:oederno,refundMoney:payPrice};
         let res = await ordeRrefundFun(qs.stringify(payload));
         if (res.code === 0) {
+          this.refundDisabled = false;
           this.$toast({message: '退款成功' });
-          this.page = 1;
-          this.list = [];
-          this._getList();
         } else {
           this.$toast(res.msg);
+          this.refundDisabled = false;
         }
+        this.page = 1;
+        this.list = [];
+        this._getList();
+      }).catch(err => { 
+         this.refundDisabled = false;
       });
     },
   },
