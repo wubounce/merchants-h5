@@ -130,7 +130,7 @@ export default {
         this.reportCount = [];
         this.reportMoney = [];
         res.data.forEach(item=>{
-          this.reportDate.push(item.date);
+          this.reportDate.push(moment(item.date).format('MM-DD'));
           this.reportCount.push(item.count);
           this.reportMoney.push(item.money);
         });

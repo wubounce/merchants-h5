@@ -31,7 +31,7 @@ export default {
         if (res.code === 0) {
             this.data = res.data || {};
             if(Number(res.data.code) === 1014 || Number(res.data.code === 1004)) {
-                MessageBox.alert(`请先进行支付宝账号绑定及实名认证`,'').then(async () => {
+                MessageBox.alert(res.data.msg,'').then(async () => {
                     this.$router.push({name:'accountSet'});
                 });
             }
@@ -41,7 +41,7 @@ export default {
     },
     gowithdraw(){
         if(this.data.code === 1004 || this.data.code === 1014) {
-            MessageBox.alert(`请先进行支付宝账号绑定及实名认证`,'').then(async () => {
+            MessageBox.alert(res.data.msg,'').then(async () => {
                 this.$router.push({name:'accountSet'});
             });
             return false;
