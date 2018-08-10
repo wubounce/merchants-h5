@@ -41,7 +41,7 @@
           <mt-loadmore :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" ref="loadmore">
             <div class="device-list" v-for="(item,index) in list" :key="index" @click="toDeviceDetail(item.machineId)">
               <section class="item-hd">
-                <span>{{item.machineName}}</span>
+                <span><b>{{item.machineName}}</b></span>
                 <span class="state">{{item.machineState}}</span>
               </section>
               <section class="item-bd">
@@ -59,6 +59,7 @@
                 </p>
               </section>
             </div>
+            <div class="noData" v-show="hasNoData">暂无设备</div>
           </mt-loadmore>
         </div>
       </div>
@@ -90,7 +91,8 @@
         index: null,
         list: [],
         checkClass: false,
-        name: "",
+        name: '',
+        message: ''
         
       };
     },
@@ -193,6 +195,7 @@
     computed: {
       hasNoData () {
         return !this.list.length;
+        this.message = "暂无设备";
       }
     },
     components: {
@@ -296,6 +299,11 @@
   .page-top {
     height: 100%;
     padding-top: 3.47rem;
+    .noData {
+      font-size: 0.43rem;
+      text-align: center;
+      padding: 0.5rem 0;
+    }
     .device-list {
       margin-top: .27rem;
       padding: 0 .4rem;
@@ -343,7 +351,8 @@
         p {
           flex: 1;
           &:nth-child(2) {
-            display: flex;
+            flex: 1;
+            text-align: center;
             justify-content: flex-end;
             border-left: 0.01rem solid rgba(223, 230, 255, 1);
           }
@@ -357,7 +366,8 @@
         }
         span {
           &:nth-child(2) {
-            color: #1890FF
+            color: #1890FF;
+            font-size: 0.43rem;
           }
         }
       }

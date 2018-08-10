@@ -77,7 +77,7 @@ import {delay } from "@/utils/tool";
           let url = res;
           let parameter = url.substring(0,4);
           if(parameter == "http"){           
-            this.$toast("请扫描IMEI码");
+            this.$toast("二维码有误，请换个试试");
           }else{
             this.search(url);
           } 
@@ -142,6 +142,8 @@ import {delay } from "@/utils/tool";
             background-size: 0.53rem;
             padding: 0.29rem 0 0.29rem 1.07rem;
             border-radius: 0.13rem;
+            font-family: "PingFang SC", 'Avenir', Helvetica, Arial, sans-serif;
+
           }
           span {
             white-space: nowrap;
