@@ -23,7 +23,6 @@
           <input v-model="orderLimitMinutes" :disabled="noEdit" :placeholder="placeholdercontent" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" maxlength='1'>
         </span>
       </p>
-      <!-- <li class="business" @click="chooseTime">营业时间<span>{{addBusinessTime}}</span></li> -->
     </div>
     <p class="blank"></p>
     <button class="submit" @click="submit">提交</button>
@@ -47,14 +46,12 @@
     </mt-popup>
     
     <!-- 设备类型 -->
-    <div v-show="deviceDetail" class="machine-hiden">
+    <mt-popup v-model='deviceDetail' position="bottom" class="mint-popup">
       <p class="toolBar"><span @click="cancel">取消</span><span>设备类型</span><span @click="confirmNews">确定</span></p>
-      <mt-checklist align="right" :options="options" v-model="machine"></mt-checklist>
-    </div>
-    <!-- 设备类型自带背景 -->
-    <div :class="{'machine-background':isbgc}" >
-      
-    </div>
+      <div class='resp-shop-wrap'>
+        <mt-checklist align="right" :options="options" v-model="machine"></mt-checklist>
+      </div>
+    </mt-popup>
 
     <!-- 营业时间 -->
     <!-- <mt-popup v-model="timeVisible" position="bottom" class="mint-popup">
@@ -235,11 +232,15 @@ export default {
       timeVisible: false,
       isTime:true,
       isReserve:true,
-      machine_typeNames:[]
+      machine_typeNames:[],
+      sort:[],
+      proIndex:1,
+      cityIndex:2,
+      disIndex:3
     };
   },
   methods:{
-     blur(e) {
+    blur(e) {
       //校验字符长度
       if(e.target.value.length>1 && e.target.value.length<21) {
         this.shopName = e.target.value;
@@ -320,6 +321,9 @@ export default {
         case 1:
           this.placeVisible = true;
           this.getArea();
+          this.addressSlots[0].defaultIndex = this.proIndex;
+          this.addressSlots[2].defaultIndex = this.cityIndex;
+          this.addressSlots[4].defaultIndex = this.disIndex;
           break;
         case 2:
           this.goMap("editMap",this.shopId);
@@ -354,6 +358,9 @@ export default {
           else {
             this.list[1].value = this.provinceName + this.cityName + this.districtName;
           }
+          if(this.list[1].value) {
+            this.list[1].value = this.list[1].value.length>10? this.list[1].value.slice(0,10)+'...' : this.list[1].value;
+          }
           break;
         //经纬度
         case 2:
@@ -362,6 +369,15 @@ export default {
         case 3: {
           this.deviceDetail = false;
           this.isbgc = false;
+          this.sort = [];
+          for(let i=0; i<this.options.length;i++) {
+            for(let j=0; j<this.machine.length;j++) {
+              if(this.options[i].value == this.machine[j]) {
+                this.sort.push(this.options[i].value);
+              }
+            }
+          }
+          this.machine = this.sort;
           if(this.machine.join(' , ').length > 10 ) {
             this.machineName = this.machine.join(' , ').slice(0,10) + '...';
           }
@@ -582,26 +598,38 @@ export default {
         this.shopId = res.data.shopId;
         this.shopName = res.data.shopName; //店铺名称
         this.oldName = res.data.shopName; //旧店铺名称
-        this.list[0].value = res.data.shopType; //店铺类型
-        //店铺地址
-        if(res.data.province == res.data.city.slice(0,2)) {
-          this.list[1].value = res.data.city + res.data.district;
+        this.slots[0].defaultIndex = res.data.shopTypeId-1;
+        this.list[0].value = res.data.shopTypeName;
+        //所在地区
+        if(res.data.cityName) {
+          if(res.data.provinceName == res.data.cityName.slice(0,2)) {
+            this.list[1].value = res.data.cityName + res.data.districtName;
+          }
+          else {
+            this.list[1].value = res.data.provinceName + res.data.cityName + res.data.districtName;
+          }
         }
-        else {
-          this.list[1].value = res.data.province + res.data.city + res.data.district;
+        if(this.list[1].value) {
+          this.list[1].value = this.list[1].value.length>10? this.list[1].value.slice(0,10)+'...' : this.list[1].value;
         }
         //经纬度
         this.lng = res.data.lng;
         this.lat = res.data.lat;
         //详细地址
         this.address = res.data.address;
-        //设备类型        
-        if(res.data.machineTypeNames.length > 10) {
-          this.machineName = res.data.machineTypeNames.slice(0,10) + '...';
-        }
-        else {
-          this.machineName = res.data.machineTypeNames;
-        }       
+        //设备类型
+        this.machine = res.data.machineTypeNames;
+        if(this.machine) {
+          this.machine = this.machine.split(','); 
+        } 
+        if(res.data.machineTypeNames) {
+          if(res.data.machineTypeNames.length > 10) {
+            this.machineName = res.data.machineTypeNames.slice(0,10) + '...';
+          }
+          else {
+            this.machineName = res.data.machineTypeNames;
+          }  
+        }           
         //预约功能
         this.isReserve = res.data.isReserve == 0 ? true : false;
         this.noEdit = res.data.isReserve == 0 ? false :true;
@@ -627,29 +655,35 @@ export default {
         });
 
         this.geocoder_CallBack();
-        
+
+        //省、市、区
+        this.provinceId = res.data.provinceId;
+        this.cityId = res.data.cityId;
+        this.districtId = res.data.districtId;
+
         //省
         let objPro = { parentId: 0 };
         let resPro = await areaListFun(qs.stringify(objPro));
+        console.log('省：',resPro.data.length);
         for(let x=0;x<resPro.data.length;x++) {
-          if(res.data.province == resPro.data[x].areaName) {
-            this.provinceId = resPro.data[x].areaId;  //获取初始化的省级单位
+          if(res.data.provinceName == resPro.data[x].areaName) {
+            this.proIndex = x;
           }
         }
         //市
         let objCity = { parentId: this.provinceId };
         let resCity = await areaListFun(qs.stringify(objCity));
         for(let x=0;x<resCity.data.length;x++) {
-          if(res.data.city == resCity.data[x].areaName) {
-            this.cityId = resCity.data[x].areaId; //获取初始化的市级单位
+          if(res.data.cityName == resCity.data[x].areaName) {
+            this.cityIndex = x;
           }
         }
         //区
         let objDis = { parentId: this.cityId };
         let resDis = await areaListFun(qs.stringify(objDis));
         for(let x=0;x<resDis.data.length;x++) {
-          if(res.data.district == resDis.data[x].areaName) {
-            this.districtId = resDis.data[x].areaId; //获取初始化的区级单位
+          if(res.data.districtName == resDis.data[x].areaName) {
+            this.disIndex = x;
           }
         }
         //设备类型
@@ -688,6 +722,7 @@ export default {
   created() {
     this.getShopDetail();
     this.getShoplist();
+    this.getArea();
   },
   mounted() {
   },
@@ -874,6 +909,7 @@ export default {
     display: flex;
     justify-content: center;
     padding-top: 0.2rem;
+    line-height: 1rem;
     #allDay {
       color: #fff;
       background-color: #1890FF;
@@ -902,6 +938,11 @@ export default {
     width: 100%;
     .prop-bd {
       padding: 0.3rem;
+    }
+    .resp-shop-wrap {
+      height: 10.67rem;
+      overflow-y: scroll;
+      margin-bottom: 0.5rem;
     }
   }
   .machine-background{

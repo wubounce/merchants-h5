@@ -96,6 +96,9 @@ export default {
         this.list = res.data.machineTypeNames.split(',');
         this.lng = res.data.lng;
         this.lat = res.data.lat;
+
+        //店铺类型
+        this.shopdetail.shopType = res.data.shopTypeName;
         //店铺地址
         this.address = res.data.address;
 

@@ -43,16 +43,15 @@
         </div>
       </div>
     </mt-popup>
+
     
     <!-- 设备类型 -->
-      <div v-show="deviceDetail"  class="machine-hiden">
-        <p class="toolBar"><span @click="cancel">取消</span><span>设备类型</span><span @click="confirmNews">确定</span></p>
+    <mt-popup v-model='deviceDetail' position="bottom" class="mint-popup">
+      <p class="toolBar"><span @click="cancel">取消</span><span>设备类型</span><span @click="confirmNews">确定</span></p>
+      <div class='resp-shop-wrap'>
         <mt-checklist align="right" :options="options" v-model="machine"></mt-checklist>
       </div>
-    <!-- 设备类型自带背景 -->
-    <div :class="{'machine-background':isbgc}" >
-      
-    </div>
+    </mt-popup>
 
     <!-- 先注释掉，下个版本再做营业时间 -->
     <!-- <mt-popup v-model="timeVisible" position="bottom" class="mint-popup">
@@ -251,7 +250,6 @@ export default {
           }
         }
       }
-      
       //校验重名
       for(let i=0; i<this.arrName.length; i++) {
         if(e.target.value == this.arrName[i]) {
@@ -345,6 +343,9 @@ export default {
             else {
               this.list[1].value = this.provinceName + this.cityName + this.districtName;
             }
+          }
+          if(this.list[1].value) {
+            this.list[1].value = this.list[1].value.length>10? this.list[1].value.slice(0,10)+'...' : this.list[1].value;
           }
           break;
         //经纬度 
@@ -645,7 +646,9 @@ export default {
   watch: {
     $route(to,from) {
       if(from.name == 'mapSearch') {
-        this.list[2].value = this.$route.query.special;
+        if(this.$route.query.special) {
+          this.list[2].value = this.$route.query.special.length>6 ? this.$route.query.special.slice(0,6) + '...': this.$route.query.special;
+        }
         this.lng = this.$route.query.lng;
         this.lat = this.$route.query.lat;
       }
@@ -811,6 +814,7 @@ export default {
     display: flex;
     justify-content: center;
     padding-top: 0.2rem;
+    line-height: 1rem;
     #allDay {
       color: #fff;
       background-color: #1890FF;
@@ -839,6 +843,11 @@ export default {
     width: 100%;
     .prop-bd {
       padding: 0.3rem;
+    }
+    .resp-shop-wrap {
+      height: 10.67rem;
+      overflow-y: scroll;
+      margin-bottom: 0.5rem;
     }
   }
   
