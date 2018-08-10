@@ -68,6 +68,7 @@ export default {
           this.$router.push({name:'marketing'});
         } else {
           this.$toast({message: res.msg });
+          this.$router.push({name:'marketing'});
         }
       });
     }

@@ -133,7 +133,9 @@ export default {
     }
     .content {
       width: 7rem;
+      height:1.33rem;
       padding-left: 0.27rem; 
+      position: relative;
       .con-title {
           font-size: 17px;
           color: #333;
@@ -141,7 +143,8 @@ export default {
       .con-type{
           font-size: 12px;
           color: #999999;
-          padding-top: 0.24rem;
+          position: absolute;
+          bottom: 0;
       }
     }
   }

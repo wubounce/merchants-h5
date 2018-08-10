@@ -11,7 +11,7 @@
           <div class="content">
               <p class="con-title">{{detail.machineName}}</p>
               <p class="con-type">{{detail.machineFunctionName}}<span style="padding:0 0.346667rem">|</span>时长{{detail.markMinutes}}分钟</p>
-              <p class="con-price" v-if="detail.orderType !== 2 && detail.orderStatus !==1 || detail.orderType !==2 && detail.orderStatus !==0">¥{{detail.markPrice}}</p>
+              <p class="con-price" v-if="detail.orderType !== 2 && detail.orderStatus !==1 || detail.orderType !==2 && detail.orderStatus !==0">¥{{detail.markPrice?detail.markPrice:''}}</p>
           </div>
           <div class="order-action" v-if="detail.isReserve === 1">预约</div>
         </div>
@@ -50,7 +50,7 @@
       <span>下单时间：{{detail.createTime}}</span>
     </section>
      <section class="listaction" v-if="detail.orderStatus === 2"> 
-      <mt-button @click="orderRefund(detail.orderNo,detail.payPrice)" v-has="'mer:order:refund,mer:order:info'">退款</mt-button>
+      <mt-button @click="orderRefund(detail.orderNo,detail.payPrice)" v-has="'mer:order:refund,mer:order:info'" :disabled="refundDisabled">退款</mt-button>
       <mt-button @click="machineBoot(detail.id)" v-has="'mer:order:start,mer:order:info'">启动</mt-button>
       <mt-button @click="machineReset(detail.orderNo,detail.machineId)" v-has="'mer:order:reset,mer:order:info'">复位</mt-button>
     </section>
@@ -67,6 +67,7 @@ export default {
     return {
       title: '订单详情',
       detail:{},
+      refundDisabled:false,
     };
   },
   mounted() {
@@ -108,7 +109,11 @@ export default {
       
     },
     orderRefund(orderNo,payPrice){ //退款
-      MessageBox.confirm('确定发起退款？','').then(async () => {
+      this.refundDisabled = true;
+      MessageBox.confirm('',{ 
+        message: '确定发起退款？', 
+        closeOnClickModal:false
+      }).then(async () => {
         let query = this.$route.query;
         let payload = {orderNo:orderNo,refundMoney:payPrice};
         let res = await ordeRrefundFun(qs.stringify(payload));
@@ -117,7 +122,12 @@ export default {
           this.$router.push({name:'order'});
         } else {
           this.$toast(res.msg);
+          this.$router.push({name:'order'});
         }
+        this.refundDisabled = false;
+
+      }).catch(err => { 
+         this.refundDisabled = false;
       });
     },
   },

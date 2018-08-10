@@ -98,7 +98,6 @@ export default {
                     width: 1.973333rem;
                     height: 1.973333rem;
                     border-radius: 50%;
-                    border: .066667rem solid #cee7ff;
                     background-color: #fff;
                     margin-right: .533333rem;
                     border-radius: 50%;
@@ -123,7 +122,6 @@ export default {
         .user-list{
             background-color: #fff;
             border-bottom: $first-border;
-            border-top: $first-border;
             padding-left: .4rem;
             margin-bottom: .266667rem;
             .item{
@@ -140,7 +138,10 @@ export default {
                 .item-left{
                     span{
                         color: $first-color;
-                        font-size: 16px;
+                        font-size: 0.43rem;
+                    }
+                    .usericon {
+                        font-size: 0.48rem;
                     }
                 }
             }

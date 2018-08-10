@@ -72,11 +72,14 @@ export default {
             this.$toast('单笔提现到支付宝不能超过50000元');
             return false;
         }
+        this.disabled = true;
         let payload = Object.assign({},{money:this.money});
         let res = await applyMoneySubmitFun(qs.stringify(payload));
         if (res.code ===0) {
+             this.disabled = false;
             this.$router.push({name:'withdrawResult',query:{applyMoney:true,balanceLogId:res.data.id}});
         } else {
+            this.disabled = false;
             this.$toast(res.msg);
         }
     },
