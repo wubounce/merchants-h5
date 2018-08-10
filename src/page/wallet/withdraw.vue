@@ -47,10 +47,6 @@ export default {
         if (res.code === 0) {
             this.userInfo = res.data;
             this.inputDisabled = false;
-        }else if(res.code === 1004 || res.code === 1014) {
-            MessageBox.alert(`请先进行支付宝账号绑定及实名认证`).then(async () => {
-                this.$router.push({name:'accountSet'});
-            });
         }else {
             this.$toast(res.msg);
         }
@@ -58,6 +54,7 @@ export default {
     allWithdraw(){
         this.money = this.userInfo.balance;
         this.disabled = false;
+        this.thanBalance = false;
     },
     async gotoWithdraw(){
         if (Number(this.money) < 10 ) {
@@ -68,7 +65,7 @@ export default {
             this.$toast('超出本次可提现金额');
             return false;
         }
-        if (Number(this.money) > 50000.1 ) {
+        if (Number(this.money) >= 50000.01 ) {
             this.$toast('单笔提现到支付宝不能超过50000元');
             return false;
         }
@@ -76,15 +73,21 @@ export default {
         let payload = Object.assign({},{money:this.money});
         let res = await applyMoneySubmitFun(qs.stringify(payload));
         if (res.code ===0) {
-             this.disabled = false;
-            this.$router.push({name:'withdrawResult',query:{applyMoney:true,balanceLogId:res.data.id}});
+            if(res.data.code === 1004 || res.data.code === 1014) {
+                MessageBox.alert(`请先进行支付宝账号绑定及实名认证`,'').then(async () => {
+                    this.$router.push({name:'accountSet'});
+                });
+            }else {
+                this.disabled = false;
+                this.$router.push({name:'withdrawResult',query:{applyMoney:true,balanceLogId:res.data.id}});
+            }
         } else {
             this.disabled = false;
             this.$toast(res.msg);
         }
     },
     btndisabdisabled(){
-        if (this.money === ''|| this.money<10 || Number(this.money) > Number(this.userInfo.balance) || this.userInfo.balance > 50000.1) {
+        if (!this.money || Number(this.money) < 10 || (Number(this.money) > this.userInfo.balance)) {
             this.disabled = true;
         } else {
             this.disabled = false;

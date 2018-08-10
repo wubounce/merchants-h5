@@ -107,6 +107,9 @@ export default {
                         border-radius: 50%;
                     }
                 }
+                .info-content {
+                    width: 6.13rem;
+                }
                 .name{
                     font-size: .48rem;
                     line-height: .666667rem;

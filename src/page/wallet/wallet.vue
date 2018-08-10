@@ -29,11 +29,22 @@ export default {
         let res = await getApplyFinanceFun();
         if (res.code === 0) {
             this.data = res.data || {};
+            if(res.data.code === 1004 || res.data.code === 1014) {
+                MessageBox.alert(`请先进行支付宝账号绑定及实名认证`,'').then(async () => {
+                    this.$router.push({name:'accountSet'});
+                });
+            }
         }else {
             this.$toast(res.msg);
         }
     },
     gowithdraw(){
+        if(this.data.code === 1004 || this.data.code === 1014) {
+            MessageBox.alert(`请先进行支付宝账号绑定及实名认证`,'').then(async () => {
+                this.$router.push({name:'accountSet'});
+            });
+            return false;
+        }
         this.$router.push({name:'withdraw'});
     }
   },
@@ -81,8 +92,5 @@ export default {
                 line-height: .533333rem;
             }
         }
-        .btn{
-            margin-top: .666667rem;
-        }        
     }
 </style>

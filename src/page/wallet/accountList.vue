@@ -86,8 +86,11 @@ export default {
     async _getList(type){
         let payload = {page:this.page,pageSize: this.pageSize,type:this.type};
         let res = await getApplyListFun(qs.stringify(payload));
-        this.list = res.data.items?[...this.list,...res.data.items]:[];  //分页添加
-        this.total = res.data.total;
+        if (res.code ===0) {
+            this.list = res.data.items?[...this.list,...res.data.items]:[];  //分页添加
+            this.total = res.data.total;
+        }
+        
     }
   },
   filters: {

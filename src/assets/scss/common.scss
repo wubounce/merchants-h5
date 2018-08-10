@@ -13,18 +13,20 @@ $first-border:1px solid #e5e5e5;
 // public css
 
 //radius-btn
-.btn{
-    width: 9.066667rem;
-    margin: 0 auto;
+
+.btn {
+	display: block;
+    width: 9.2rem;
+    margin: 0.67rem auto 0;
     text-align: center;
-    height: 1.173333rem;
-    line-height: 1.173333rem;
+    height: 1.17rem;
+    line-height: 1.17rem;
     color: #fff;
     font-size: .426667rem;
     background-color: $highlight-color;
     border-radius: .133333rem;
+    padding:0;
 }
-
 .copyright{
     position: fixed;
     width: 100%;
