@@ -37,8 +37,8 @@
         </div>
       </div>
       <div class="page-top">
-        <div class="page-loadmore-wrapper" ref="wrapper">
-          <mt-loadmore :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" ref="loadmore">
+        <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
+          <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore">
             <div class="device-list" v-for="(item,index) in list" :key="index" @click="toDeviceDetail(item.machineId)">
               <section class="item-hd">
                 <span><b>{{item.machineName}}</b></span>
@@ -60,6 +60,7 @@
               </section>
             </div>
             <div class="noData" v-show="hasNoData">暂无设备</div>
+            <div v-if="allLoaded" class="nomore-data">没有更多了</div>
           </mt-loadmore>
         </div>
       </div>
@@ -92,15 +93,18 @@
         list: [],
         checkClass: false,
         name: '',
-        message: ''
+        hasNoData: ''
         
       };
     },
     mounted() {
-      this.wrapperHeight = document.documentElement.clientHeight-30;
+      this.wrapperHeight = document.documentElement.clientHeight-131;
     },
     methods: {
       titleClick(index) {
+        this.list = [];
+        this.page = 1; //从第一页起
+        this.allLoaded = false;//下拉刷新时解除上拉加载的禁用
         this.index = index;
         this._getList();
 
@@ -151,6 +155,8 @@
         let res = await deviceListFun(qs.stringify(payload));
         if(res.code === 0) {
           this.list = res.data.items;
+          this.total = res.data.total;
+          this.hasNoData = this.list.length<= 0 ? true: false;
           this.list.forEach(item=>{
             switch(item.machineState){
             case 1:
@@ -192,12 +198,7 @@
     created() {
       this.getCountDevice();
     },
-    computed: {
-      hasNoData () {
-        return !this.list.length;
-        this.message = "暂无设备";
-      }
-    },
+
     components: {
 
     }
@@ -297,13 +298,18 @@
     }
   }
   .page-top {
-    height: 100%;
     padding-top: 3.47rem;
     .noData {
       font-size: 0.43rem;
       text-align: center;
       padding: 0.5rem 0;
     }
+    .nomore-data {
+        text-align: center;
+        color: #999;
+        font-size: 12px;
+        margin-bottom: 0.266667rem;
+      }
     .device-list {
       margin-top: .27rem;
       padding: 0 .4rem;

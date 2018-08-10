@@ -142,7 +142,7 @@ import {delay } from "@/utils/tool";
             background-size: 0.53rem;
             padding: 0.29rem 0 0.29rem 1.07rem;
             border-radius: 0.13rem;
-            font-family: "PingFang SC", 'Avenir', Helvetica, Arial, sans-serif;
+            font-size: 16px;
 
           }
           span {
