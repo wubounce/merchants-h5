@@ -58,7 +58,7 @@ import moment from 'moment';
           }
           else {
             this.$router.push({name:'todolist'});
-            MessageBox.alert(resDel.msg);
+            MessageBox.alert(resDel.msg,'');
           }
 	      }
 	     );
@@ -87,7 +87,7 @@ import moment from 'moment';
           }
           else {
             this.$router.push({name:'todolist'});
-            MessageBox.alert(res.msg);
+            MessageBox.alert(res.msg,'');
           }
 	      },
 	      action => {

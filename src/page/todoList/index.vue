@@ -86,7 +86,7 @@ import { MessageBox } from 'mint-ui';
 					}
 				}
 				else {
-					MessageBox.alert(res.msg);
+					MessageBox.alert(res.msg,'');
 				}
       }
     },

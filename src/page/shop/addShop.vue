@@ -240,14 +240,14 @@ export default {
       }
       else {
         e.target.value = '';
-        MessageBox.alert("请输入2到20字符的店铺名称");
+        MessageBox.alert("请输入2到20字符的店铺名称",'');
       }
       //校验名字的特殊字符'-'和'_'
       let arr = e.target.value.split('');
       for (let i=0; i<e.target.value.length; i++) {
         if(arr[i] == '-' || arr[i] == '_' || arr[i] == '——') {
           if(arr[i+1] == '-' || arr[i+1] == '_' || arr[i] == '——') {
-            MessageBox.alert('店铺名称不符合规范，请重新输入');
+            MessageBox.alert('店铺名称不符合规范，请重新输入','');
           }
         }
       }
@@ -256,7 +256,7 @@ export default {
       for(let i=0; i<this.arrName.length; i++) {
         if(e.target.value == this.arrName[i]) {
           e.target.value = '';
-          MessageBox.alert("该店铺名称已存在，请换一个店铺名称输入哦");
+          MessageBox.alert("该店铺名称已存在，请换一个店铺名称输入哦",'');
         }
       }
     },
@@ -557,7 +557,7 @@ export default {
         }
       }
       else {
-        MessageBox.alert('店铺名称、店铺类型、所在地区、小区/大厦/学校、详细地址、设备类型为必填项');
+        MessageBox.alert('店铺名称、店铺类型、所在地区、小区/大厦/学校、详细地址、设备类型为必填项','');
       }
     },
     //省市区联动

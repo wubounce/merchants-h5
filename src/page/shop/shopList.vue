@@ -108,7 +108,7 @@ export default {
         }
       }
       else {
-        MessageBox.alert(res.msg);
+        MessageBox.alert(res.msg,'');
       }
     }
   },
