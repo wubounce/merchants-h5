@@ -57,7 +57,7 @@ import moment from 'moment';
       changemachineFunc() {
         this.popupVisible = true;
         this.index = 0;
-        this.slots[0].defaultIndex = 2;
+        
       },
       open(picker) {
         this.$refs[picker].open();
@@ -138,9 +138,11 @@ import moment from 'moment';
         };
         let res = await getBatchStartFun(qs.stringify(obj));
         if(res.code ===0 ) {
-          //参数异常，待后台确认
           this.item = res.data;
           this.pickerValue = res.data.beginTime;
+        }
+        else {
+          MessageBox.alert(res.msg,'');
         }
       },
       updateBatchStart() {
@@ -158,6 +160,9 @@ import moment from 'moment';
             return i.functionName;
           });
           this.slots[0].values = arr;
+        }
+        else {
+          MessageBox.alert(resFunList.msg,'');
         }
       }
     },
