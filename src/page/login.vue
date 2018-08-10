@@ -9,15 +9,13 @@
     <form ref="loginForm" :model="form">
       <div class="form-group input">
         <p class="userName">
-          <input type="text" v-model.trim="form.userName" v-on:input="userinputFunc" placeholder="请输入用户名/手机号" style="width:90%">
-          <span class="eyes iconfont icon-guanbi" v-if="isuser" @click="form.userName='';isuser=false;disabled=true"></span>
+          <input type="text" v-model.trim="form.userName" v-on:input="userinputFunc" placeholder="请输入用户名/手机号">
+          <span class="open-eyes eyes iconfont icon-guanbi" v-if="isuser" @click="form.userName='';isuser=false;disabled=true"></span>
         </p>
         <div class="passWord">
-          <div class="pwdshow">
-            <input type="text" v-model.trim="form.password" v-if="typepwd" v-on:input="pwdinputFunc" autocomplete="off">
-            <input type="password" v-model.trim="form.password" v-on:input="pwdinputFunc" placeholder="请输入密码" autocomplete="off" v-else>
-          </div>
-          <div @click="openpwd">
+          <input type="text" v-model.trim="form.password" v-if="typepwd" v-on:input="pwdinputFunc" autocomplete="off">
+          <input type="password" v-model.trim="form.password" v-on:input="pwdinputFunc" placeholder="请输入密码" autocomplete="off" v-else>
+          <div @click="openpwd" class="open-eyes">
             <span  class="eyes iconfont icon-yanjing" v-if="typepwd"></span>
             <span  class="eyes iconfont icon-biyanjing" v-else></span>
           </div>
@@ -133,7 +131,8 @@ export default {
     text-align: center;
   }
   .logo {
-    width: 3.61rem;
+    width: 4.32rem;
+    height: 1.2rem;
     display: inline-block;
     margin-top: 1.5rem;
     margin-bottom: 1rem;
@@ -148,22 +147,21 @@ export default {
     .form-group {
       background: #fff;
       .userName , .passWord {
-        height: 1.57rem;
+        height:1.55rem;
         border-bottom:1px solid rgba(229,229,229,1);
         input {
-          height: 1.57rem;
+          width: 90%;
+          padding-top: 0.49rem;
+          padding-bottom: 0.48rem;
           font-size: 16px;
           color: #1890FF;
         }
       }
-      .passWord, .userName {
-        display: flex;
-      }
-      .pwdshow {
-        width: 90%;
+      .open-eyes {
+        float: right;
       }
       .eyes {
-        line-height: 1.57rem;
+        line-height:1.55rem;
         color:#979797;
       }
       .reset {
@@ -183,6 +181,13 @@ export default {
   font-size:14px;
   color:#999;
   margin-top: 5.0rem;
+}
+.form-group button {
+  height: 1.17rem;
+  line-height: 1.17rem;
+  width: 8.13rem;
+  padding:0;
+  border-radius:0.13rem;
 }
 </style>
 <style lang="scss">

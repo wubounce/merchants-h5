@@ -79,7 +79,8 @@ input :-ms-input-placeholder {
   color: #999;
   font-size: 16px;
 }
-
+input:-webkit-autofill { box-shadow: 0 0 0px 1000px white inset;}
+input:-webkit-autofill { box-shadow: 0 0 0px 1000px white inset !important;}
 
 .mint-popup {
   width: 100%;
@@ -127,3 +128,7 @@ input :-ms-input-placeholder {
   overflow: scroll;
   -webkit-overflow-scrolling: touch;
 }
+
+.icon-xiangxiajiantou {
+    color: #BAC0D2;
+  }

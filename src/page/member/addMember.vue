@@ -438,6 +438,7 @@ export default {
       -webkit-transition: all .3s cubic-bezier(1.0, 0.5, 0.8, 1.0);
       transition: all .3s cubic-bezier(1.0, 0.5, 0.8, 1.0);
   }
+  
 </style>
 <style lang="scss">
   .addmember .mint-header {

@@ -17,7 +17,7 @@
     <div class="lineecharts-warp">
       <div>
         <div class="lineechart-title">
-          <span class="linetitle">收益数据 <span @click="machineVisible = true;" class="choose-select">{{machinecurrentTags?machinecurrentTags.name:'全部'}}<i class="iconfont icon-nextx select-back"></i></span></span>
+          <span class="linetitle">收益数据 <span @click="machineVisible = true;" :class="['choose-select',,{'choose-select-type': machinecurrentTags}]">{{machinecurrentTags?machinecurrentTags.name:'全部'}}<i class="iconfont icon-xiangxiajiantou select-back"></i></span></span>
           <span class="linedata">
           <span :class="['linedatachoose', {linecurrent: lineSearchIndex === index}]" v-for="(item,index) in lineSearchTime" @click="lineTimeSearch(index)">{{item.lable}}</span>
           </span>
@@ -28,7 +28,7 @@
     </div>
     <div class="pei-wrap">
       <div class="lineechart-title pie-title">
-        <span class="linetitle">收益分布 <span @click="distributionVisible = true;" class="choose-select">{{distributioncurrentTags?distributioncurrentTags.name:'洗衣机'}}<i class="iconfont icon-nextx select-back"></i></span></span>
+        <span class="linetitle">收益分布 <span @click="distributionVisible = true;" class="choose-select choose-select-type">{{distributioncurrentTags?distributioncurrentTags.name:'洗衣机'}}<i class="iconfont icon-xiangxiajiantou select-back"></i></span></span>
         <span class="linedata">
            <span :class="['linedatachoose', {linecurrent: pieSearchIndex === index}]" v-for="(item,index) in lineSearchTime" @click="pieTimeSearch(index)">{{item.lable}}</span>
         </span>
@@ -41,8 +41,8 @@
     </div>
     <div class="bar-wrap">
       <div class="">
-        <span class="linetitle">设备监控<span style="font-size: 14px;font-weight: 100;color: #3AA0FF;">(总设备{{allmMachine}})</span></span>
-        <span class="equipment" @click="equipmentVisible=true">{{equipmentcurrentTags?equipmentcurrentTags.name:'全部'}}<i class="iconfont icon-nextx select-back"></i></span>
+        <span class="linetitle">设备监控<span style="font-size: 14px;font-weight: 100;color: #1890FF;">(总设备{{allmMachine}})</span></span>
+        <span class="equipment" @click="equipmentVisible=true">{{equipmentcurrentTags?equipmentcurrentTags.name:'全部'}}<i class="iconfont icon-xiangxiajiantou select-back"></i></span>
         <selectpickr :visible="equipmentVisible" :slots="equipmentSlots" :valueKey="machinepickername" @selectpicker="equipmentselectpicker" @onpickstatus="equipmentselectpickertatus"> </selectpickr>
       </div>
       <div class="bar" id="bar" :style="{height:height,width:width}" ref="bar"></div>
@@ -657,8 +657,8 @@ export default {
     border-radius: 57px;
   }
   .linecurrent {
-    background:-webkit-gradient(linear,0 50%,100% 50%,from(#1597FF),to(#07B6FE));
-    background:-webkit-linear-gradient(left,#1597FF,#07B6FE);
+    background:linear-gradient(135deg,rgba(24,144,255,1),rgba(4,190,254,1));
+    box-shadow:0px 0.03rem 0.05rem 0px rgba(4,190,254,1);
      color: #fff;
   }
   .slectdata {
@@ -672,14 +672,18 @@ export default {
     display: inline-block;
     font-size: 14px;
     border-bottom:1px solid #e5e5e5;
+    width: 2.4rem;
     height: 0.746667rem;
     line-height: 0.746667rem;
     margin-left: 0.3rem;
     color: #666;
     font-weight: normal;
   }
+  .choose-select-type {
+    color: #1890FF;
+  }
   .select-back {
-    margin-left: 0.1rem;
+    float: right;
   }
   .pei-wrap {
     margin-top: 0.266667rem;
@@ -712,6 +716,7 @@ export default {
     display: inline-block;
     font-size: 14px;
     border-bottom:1px solid #e5e5e5;
+    width: 2.4rem;
     height: 0.746667rem;
     line-height: 0.746667rem;
     text-align: left;
@@ -743,11 +748,11 @@ export default {
   }
   .earning-type-size {
     font-size: 32px !important;
-    font-family:PingFangSC-Regular;
+    font-family:DINCond-Medium;
   }
   .today-earning-size {
     font-size: 50px !important;
-    font-family:PingFangSC-Regular;
+    font-family:DINCond-Medium;
   }
 </style>
 <style lang="scss"> 

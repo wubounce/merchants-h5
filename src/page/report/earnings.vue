@@ -74,7 +74,7 @@ export default {
       chart: null,
       searchStartDate: null,
       searchEndDate: null,
-      startDate:moment().subtract('days',7).format('YYYY-MM-DD'),
+      startDate:moment().subtract('days',6).format('YYYY-MM-DD'),
       endDate: moment().format('YYYY-MM-DD'),
       shopName:'shopName',
       shopSlots:[

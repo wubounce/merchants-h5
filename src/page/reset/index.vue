@@ -1,6 +1,6 @@
 <template>
   <div class="reset" v-title="title">
-    <form ref="resetForm" :model="reset">
+    <form ref="resetForm" :model="reset" class="rest-form">
     <div class="form-group">
       <input type="text" placeholder="请输入手机号码" v-model="reset.phone" @input="disabledBtn" require>
     </div>
@@ -12,7 +12,7 @@
       </div>
     </div>
     </form>
-    <p class="btn">
+    <p class="reset-pwd-btn">
        <mt-button type="primary" class="btn-blue" @click.prevent="gotonext" :disabled="disabled">下一步</mt-button>
     </p>
   </div>
@@ -100,24 +100,25 @@
   .reset {
     background: #fff;
     height: 100%;
+    .rest-form {
+      width: 8.13rem;
+      margin:0 auto;
+    }
     .form-group {
       position: relative;
-      margin: 0 0.92rem;
       height: 1.57rem;
       border-bottom:1px solid rgba(229,229,229,1);
       input {
-        height: 1.57rem;
+        padding-top: 0.49rem;
+        padding-bottom: 0.48rem;
         font-size: 16px;
         color: #1890FF;
       }
       .verificode {
         position: absolute;
-        right: 0.24rem;
-        top: .07rem;
-        p {
-          line-height: 1.57rem;
-          font-size: 16px;
-        }
+        right: 0;
+        top: 0.49rem;
+        font-size: 16px;
         .countdown {
           color: #999;
         }
@@ -126,10 +127,12 @@
         }
       }
     }
-    .btn button {
+    .reset-pwd-btn button {
       width: 8.13rem;
       height: 1.17rem;
       margin:1.47rem auto;
+      padding:0;
+      border-radius:0.13rem;
     }
   }
 </style>
