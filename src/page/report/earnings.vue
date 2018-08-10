@@ -1,25 +1,26 @@
 <template>
 <div class="earnings">
-  <div class="search">
-    <div class="slectdata timechoose">
-      <span @click="open('picker2')">{{startDate}}</span>至<span @click="open('picker3')">{{endDate}}<i class="iconfont icon-xiangxiajiantou select-back"></i></span>
+  <div class="scorll">  
+    <div class="search">
+      <div class="slectdata timechoose">
+        <span @click="open('picker2')">{{startDate}}</span>至<span @click="open('picker3')">{{endDate}}<i class="iconfont icon-xiangxiajiantou select-back"></i></span>
+      </div>
+      <div class="slectdata shopchoose">
+        <span @click="popupVisible=true">{{currentTags?currentTags.shopName:'全部店铺'}}<i class="iconfont icon-xiangxiajiantou select-back"></i></span>
+        <selectpickr :visible="popupVisible" :slots="shopSlots" :valueKey="shopName" @selectpicker="shopselectpicker" @onpickstatus="shopselectpickertatus"> </selectpickr>
+      </div>
     </div>
-    <div class="slectdata shopchoose">
-      <span @click="popupVisible=true">{{currentTags?currentTags.shopName:'全部店铺'}}<i class="iconfont icon-xiangxiajiantou select-back"></i></span>
-      <selectpickr :visible="popupVisible" :slots="shopSlots" :valueKey="shopName" @selectpicker="shopselectpicker" @onpickstatus="shopselectpickertatus"> </selectpickr>
+    <div class="echarts-warp">
+      <div :class="className" :id="id" :style="{height:height,width:width}" ref="myEchart"></div>
+      <div class="echart-title"><span style="background:#1890FF"></span>收益金额<span style="background:#FACC14"></span>订单数量</div>
+    </div>
+    <div class="listcon table-header">
+        <span class="report-table-date">日期</span>
+        <span class="report-table-order">订单数量</span>
+        <span class="report-table-order">订单金额</span>
     </div>
   </div>
-  <div class="echarts-warp">
-    <div :class="className" :id="id" :style="{height:height,width:width}" ref="myEchart"></div>
-    <div class="echart-title"><span style="background:#1890FF"></span>收益金额<span style="background:#FACC14"></span>订单数量</div>
-  </div>
-
   <div class="tabledata">
-    <div class="listcon">
-      <span class="report-table-date">日期</span>
-      <span class="report-table-order">订单数量</span>
-      <span class="report-table-order">订单金额</span>
-    </div>
     <div class="tableearn">
        <div class="nodata" v-if="lsitdata.length <= 0">暂无数据</div>
       <div class="listcon tableearn-list" v-for="(item,index) in  lsitdata" :key="index">
@@ -346,6 +347,17 @@ export default {
 <style lang="scss" scoped>
   .earnings {
     background: #fff;
+    height: 100%;
+    position: absolute;
+    width: 100%;
+    padding-top: 9.47rem;
+    box-sizing: border-box;
+  }
+  .scorll {
+    position: fixed;
+    top:1.33rem;;
+    background: #fff;
+    z-index: 99;
   }
   .echarts-warp {
     padding: 0.32rem 0.32rem 0 0.32rem;
@@ -381,9 +393,6 @@ export default {
   .report-table-order {
     text-align: right;
   }
-  .tabledata {
-    padding-top: 0.65rem;
-  }
   .listcon {
     display: flex;
     font-size: 14px;
@@ -394,6 +403,20 @@ export default {
       flex:1;
       font-weight: 600;
     }
+  }
+  .tabledata {
+    height: 100%;
+    overflow: hidden;
+    padding-bottom: 55px;
+    box-sizing: border-box;
+  }
+  .tableearn {
+        height: 100%;
+    overflow-y: auto;
+  }
+  .table-header {
+    padding-top: 0.65rem;
+    border-bottom: 1px solid #E5E5E5;
   }
   .detail {
     display: block;
@@ -411,7 +434,7 @@ export default {
     position: relative;
     text-align: center;
     white-space: nowrap;
-    border-top: 1px solid #E5E5E5;
+    border-bottom: 1px solid #E5E5E5;
     span {
       flex:1;
       font-weight: 600;
@@ -427,8 +450,8 @@ export default {
     }
   }
   .tableearn {
-    height: 4.3rem;
-    overflow-y: scroll;
+    // height: 4.3rem;
+    // overflow-y: scroll;
   }
   .tableearn .tableearn-list:nth-child(2n) {
     background: #fff !important;

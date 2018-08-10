@@ -44,6 +44,7 @@ export default {
 };
 </script>
 <style type="text/css" lang="scss" scoped>
+
   .tab-title {
     background: #fff;
     width: 100%;
@@ -54,7 +55,8 @@ export default {
     text-align: center;
     display: flex;
     z-index: 9999;
-    position: relative;
+    position: fixed;
+    top:0;
     border-bottom:1px solid #E5E5E5;
     >div {
       flex: 1;

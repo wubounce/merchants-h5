@@ -15,7 +15,7 @@
       <div class="add-card-header"></div>
       <div class="add-card">
         <p>卡售价<span>{{detail.yearCardPrice | tofixd}}元</span></p>
-        <p>VIP折扣<span>{{detail.yearCardDiscount?detail.yearCardDiscount *100:''}}%</span></p>
+        <p>VIP折扣<span>{{detail.yearCardDiscount?detail.yearCardDiscount:''}}%</span></p>
         <p>每日限用次数<span>{{detail.yearCardLimitTime}}次</span></p>
       </div>
       <div class="tips">
@@ -29,7 +29,7 @@
       <div class="add-card-header"></div>
       <div class="add-card">
         <p>卡售价<span>{{detail.halfYearCardPrice | tofixd}}元</span></p>
-        <p>VIP折扣<span>{{detail.halfYearCardDiscount?detail.halfYearCardDiscount *100:''}}%</span></p>
+        <p>VIP折扣<span>{{detail.halfYearCardDiscount?detail.halfYearCardDiscount:''}}%</span></p>
         <p>每日限用次数<span>{{detail.halfYearCardLimitTime}}次</span></p>
       </div>
       <div class="tips">
@@ -43,7 +43,7 @@
       <div class="add-card-header"></div>
       <div class="add-card">
         <p>卡售价<span>{{detail.seasonCardPrice | tofixd}}元</span></p>
-        <p>VIP折扣<span>{{detail.seasonCardDiscount?detail.seasonCardDiscount *100:''}}%</span></p>
+        <p>VIP折扣<span>{{detail.seasonCardDiscount?detail.seasonCardDiscount:''}}%</span></p>
         <p>每日限用次数<span>{{detail.seasonCardLimitTime}}次</span></p>
       </div>
       <div class="tips">

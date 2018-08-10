@@ -120,9 +120,9 @@ export default {
         this.vipform.halfYearCardPrice = res.data.halfYearCardPrice?Number(res.data.halfYearCardPrice).toFixed(0) : '';
         this.vipform.seasonCardPrice = res.data.seasonCardPrice?Number(res.data.seasonCardPrice).toFixed(0) : '';
 
-        this.vipform.yearCardDiscount = res.data.yearCardDiscount?res.data.yearCardDiscount *100:'';
-        this.vipform.halfYearCardDiscount = res.data.halfYearCardDiscount?res.data.halfYearCardDiscount *100 : '';
-        this.vipform.seasonCardDiscount = res.data.seasonCardDiscount?res.data.seasonCardDiscount *100 : '';
+        this.vipform.yearCardDiscount = res.data.yearCardDiscount?res.data.yearCardDiscount:'';
+        this.vipform.halfYearCardDiscount = res.data.halfYearCardDiscount?res.data.halfYearCardDiscount : '';
+        this.vipform.seasonCardDiscount = res.data.seasonCardDiscount?res.data.seasonCardDiscount : '';
         
         this.vipform.yearCardLimitTime = res.data.yearCardLimitTime? res.data.yearCardLimitTime :0;
         this.vipform.halfYearCardLimitTime= res.data.halfYearCardLimitTime? res.data.halfYearCardLimitTime: 0;
@@ -185,10 +185,6 @@ export default {
         return false;
       }
       let paylod = Object.assign({},this.vipform,{shopIds:this.shopIds.join(',')});
-      paylod.yearCardDiscount =  paylod.yearCardDiscount? paylod.yearCardDiscount/100:null;
-      paylod.halfYearCardDiscount =  paylod.halfYearCardDiscount? paylod.halfYearCardDiscount/100:null;
-      paylod.seasonCardDiscount =  paylod.seasonCardDiscount? paylod.seasonCardDiscount/100:null;
-
       paylod.yearCardLimitTime =  paylod.yearCardLimitTime ?  paylod.yearCardLimitTime:0;
       paylod.halfYearCardLimitTime =  paylod.halfYearCardLimitTime ?  paylod.halfYearCardLimitTime:0;
       paylod.seasonCardLimitTime =  paylod.seasonCardLimitTime ?  paylod.seasonCardLimitTime:0;

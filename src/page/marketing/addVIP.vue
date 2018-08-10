@@ -160,10 +160,6 @@ export default {
         return false;
       }
       let paylod = Object.assign({},this.vipform,{shopIds:this.shopIds.join(',')});
-      paylod.yearCardDiscount =  paylod.yearCardDiscount? paylod.yearCardDiscount / 100:null;
-      paylod.halfYearCardDiscount =  paylod.halfYearCardDiscount? paylod.halfYearCardDiscount / 100:null;
-      paylod.seasonCardDiscount =  paylod.seasonCardDiscount? paylod.seasonCardDiscount / 100:null;
-
       paylod.yearCardLimitTime =  paylod.yearCardLimitTime ?  paylod.yearCardLimitTime:0;
       paylod.halfYearCardLimitTime =  paylod.halfYearCardLimitTime ?  paylod.halfYearCardLimitTime:0;
       paylod.seasonCardLimitTime =  paylod.seasonCardLimitTime ?  paylod.seasonCardLimitTime:0;

@@ -15,7 +15,7 @@
                             <p class="price" v-if="item.yearCardPrice">{{item.yearCardPrice | tofixd}}<span>元</span></p>
                             <p class="price" v-else><span>未设置</span></p>
                             <p class="usenum">{{item.yearCardLimitTime === null ?'':item.yearCardLimitTime===0?'每日使用次数无限制':`每日仅限使用${item.yearCardLimitTime}次`}}</p>
-                            <p class="tag" v-if="item.yearCardDiscount">{{item.yearCardDiscount | replace}}<span>折</span></p> 
+                            <p class="tag" v-if="item.yearCardDiscount">{{item.yearCardDiscount}}<span>折</span></p> 
                           </div>
                          </router-link>                     
                       </swiper-slide>  
@@ -26,7 +26,7 @@
                             <p class="price" v-if="item.halfYearCardPrice">{{item.halfYearCardPrice | tofixd}}<span>元</span></p>
                             <p class="price" v-else><span>未设置</span></p>
                             <p class="usenum">{{item.halfYearCardLimitTime === null ?'':item.halfYearCardLimitTime===0?'每日使用次数无限制':`每日仅限使用${item.halfYearCardLimitTime}次`}}</p>
-                            <p class="tag"  v-if="item.halfYearCardDiscount">{{item.halfYearCardDiscount | replace}}<span>折</span></p> 
+                            <p class="tag"  v-if="item.halfYearCardDiscount">{{item.halfYearCardDiscount}}<span>折</span></p> 
                           </div>
                          </router-link>                     
                       </swiper-slide>  
@@ -37,7 +37,7 @@
                             <p class="price" v-if="item.seasonCardPrice">{{item.seasonCardPrice  | tofixd}}<span>元</span></p>
                             <p class="price" v-else><span>未设置</span></p>
                             <p class="usenum">{{item.seasonCardLimitTime === null ?'':item.seasonCardLimitTime===0?'每日使用次数无限制':`每日仅限使用${item.seasonCardLimitTime}次`}}</p>
-                            <p class="tag"  v-if="item.seasonCardDiscount">{{item.seasonCardDiscount | replace}}<span>折</span></p> 
+                            <p class="tag"  v-if="item.seasonCardDiscount">{{item.seasonCardDiscount}}<span>折</span></p> 
                           </div>
                          </router-link>                     
                       </swiper-slide>  
