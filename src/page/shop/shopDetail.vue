@@ -101,6 +101,14 @@ export default {
         this.shopdetail.shopType = res.data.shopTypeName;
         //店铺地址
         this.address = res.data.address;
+        //预约时长
+        
+        if(res.data.orderLimitMinutes) {
+          this.shopdetail.orderLimitMinutes = res.data.orderLimitMinutes;
+        }
+        else {
+          this.shopdetail.orderLimitMinutes = 0;
+        }
 
         //逆地理坐标
         let lnglatXY = [this.lng, this.lat]; //已知点坐标
