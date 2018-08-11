@@ -10,10 +10,17 @@
     </div>
 
     <div class="input-group2" @click="chooseArea">
-      <div class="form-title"><span>所在地区</span><span class="forward iconfont icon-nextx"></span>
+      <div class="form-title" v-if='row'><span>所在地区</span><span class="forward iconfont icon-nextx"></span>
         <span class="forward">
           {{item.address}}
         </span>
+      </div>
+      <div class="form-title" v-else>
+        <div class="key">
+          <div>所在地区</div>
+          <div class='key-color'>{{item.address}}</div>
+        </div>
+        <div class="forward iconfont icon-nextx value"></div>
       </div>
     </div>
   </div>
@@ -36,7 +43,7 @@ export default {
   data() {
     return {
       title: '个人信息',
-
+      row:true,
       item: {},
       noRealName:'',
       autoPlace:'',
@@ -79,10 +86,7 @@ export default {
       districtId:'',
       provinceName:'',
       cityName:'',
-      districtName:'',
-      proIndex:1,
-      cityIndex:2,
-      disIndex:3
+      districtName:''
     };
   },
   mounted() {
@@ -127,9 +131,6 @@ export default {
     },
     chooseArea() {
       this.placeVisible = true;
-      this.addressSlots[0].defaultIndex = this.proIndex;
-      this.addressSlots[2].defaultIndex = this.cityIndex;
-      this.addressSlots[4].defaultIndex = this.disIndex;
     },
     cancel() {
       //取消
@@ -146,9 +147,6 @@ export default {
       }
       //往后台传值
       let objUpdate = {
-        provinceId: this.provinceId,
-        cityId: this.cityId,
-        districtId: this.districtId,
         address: this.item.address
       };
       let res = await updateOperatorFun(qs.stringify(objUpdate));
@@ -161,7 +159,6 @@ export default {
           let city ={
             parentId: this.provinceArray[i].areaId
           };
-          this.provinceId = this.provinceArray[i].areaId;
           let resCity = await areaListFun(qs.stringify(city));
           if(resCity.code===0) {
             let chooseCity = resCity.data.map((c)=> {

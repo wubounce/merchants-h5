@@ -120,6 +120,7 @@ export default {
           });
           geocoder.getAddress(lnglatXY, function(status, result) {
               if (status === 'complete' && result.info === 'OK') {
+                console.log(result);
                   _this.geocoder_CallBack(result.regeocode.formattedAddress);
               }
               else {

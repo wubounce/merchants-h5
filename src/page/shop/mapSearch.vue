@@ -17,7 +17,8 @@ export default {
     return {
       title: '新增店铺',
       special:'',
-      isuser:false
+      isuser:false,
+      mapCity:''
     };
   },
   methods: {
@@ -45,6 +46,10 @@ export default {
     }
   },
   created() {
+    this.mapCity = this.$route.query.mapCity;
+    if(this.mapCity) {
+      this.mapCity = this.mapCity.slice(0,2);
+    }
   },  
   mounted() {
     let _this = this;
@@ -65,17 +70,20 @@ export default {
 
     AMap.plugin(['AMap.Autocomplete','AMap.PlaceSearch','AMap.Geocoder'],function(){
       var autoOptions = {
+        city:  _this.mapCity,
         input: "keyword"//使用联想输入的input的id
       };
       var autocomplete= new AMap.Autocomplete(autoOptions);
       var placeSearch = new AMap.PlaceSearch({
-            map:map
+        city: _this.mapCity,
+        map:map
       });
 
       AMap.event.addListener(autocomplete, "select", function(e){
         placeSearch.setCity(e.poi.adcode);
         placeSearch.search(e.poi.name);
         var geocoder = new AMap.Geocoder({
+          city:  _this.mapCity,
           radius: 1000 //范围，默认：500
         });
         geocoder.getLocation(e.poi.name, function(status, result) {

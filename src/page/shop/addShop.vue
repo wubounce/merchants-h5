@@ -1,7 +1,7 @@
 <template>
   <section class="personal" v-title="title">
     <ul class="personal-list">
-      <p class="shopname-p"><span>店铺名称</span><span><input @change="blur" type="text" class='addressInput' v-model="shopName" maxlength="40" placeholder="请填写店铺名称"></span></p>
+      <p class="shopname-p"><span>店铺名称</span><span><input @change="blur" type="text" class='addressInput' v-model="shopName" maxlength="40" placeholder="请填写店铺名称" style='width:125%;'></span></p>
       <li v-for="(item,index) in list" :key="index" class="personal-item" @click="toDetail(index)">
         {{item.title}}
         <span>{{item.value == ''|| item.value==null? '' : item.value}}</span>
@@ -228,7 +228,8 @@ export default {
       isTime:true,
       isReserve:true,
       lat:'',
-      lng:''
+      lng:'',
+      mapCity:''
     };
   },
   methods:{
@@ -314,16 +315,28 @@ export default {
           this.getArea();
           break;
         case 2:{
-          this.goMap("mapSearch");
-          this.mapVisible = true;
+          if(this.list[1].value) {
+            this.goMap("mapSearch",this.mapCity);
+            this.mapVisible = true;
+          }
+          else {
+            this.$toast({
+              message: '请您先选择所在地区，再选择小区/大厦/学校',
+              position: 'middle',
+              duration: 3000
+            });
+          }
           break;
         }
       }
     },
    //跳转传值
-    goMap(x) {
+    goMap(x,mapCity) {
       this.$router.push({
-        name:x
+        name:x,
+        query:{
+          mapCity: mapCity
+        }
       });
     },
     //确认按钮
@@ -336,6 +349,7 @@ export default {
           break;
         case 1:
           this.placeVisible = false;
+          this.mapCity = this.cityName;
           if( this.cityName != '' && this.cityName != null && this.cityName != undefined ) {
             if(this.provinceName == this.cityName.slice(0,2)) {
               this.list[1].value = this.cityName + this.districtName;

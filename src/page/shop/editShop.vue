@@ -236,7 +236,8 @@ export default {
       sort:[],
       proIndex:1,
       cityIndex:2,
-      disIndex:3
+      disIndex:3,
+      mapCity:''
     };
   },
   methods:{
@@ -326,18 +327,19 @@ export default {
           this.addressSlots[4].defaultIndex = this.disIndex;
           break;
         case 2:
-          this.goMap("editMap",this.shopId);
+          this.goMap("editMap",this.shopId,this.mapCity);
           this.mapVisible = true;
           break;
       }
     },
     
     //跳转传值
-    goMap(x,shopId) {
+    goMap(x,shopId,mapCity) {
       this.$router.push({
         name:x,
         query: {
-          shopId: shopId
+          shopId: shopId,
+          mapCity: mapCity
         }
       });
     },
@@ -351,6 +353,7 @@ export default {
           break;
         case 1:
           this.placeVisible = false;
+          this.mapCity = this.cityName;
           if(this.provinceName == this.cityName.slice(0,2)) {
             
             this.list[1].value = this.cityName + this.districtName;
@@ -602,6 +605,7 @@ export default {
       let res = await shopDetailFun(qs.stringify(obj));
       if(res.code===0) {
         this.shopId = res.data.shopId;
+        this.mapCity = res.data.cityName;  //初始的传到地图界面的城市的值
         this.shopName = res.data.shopName; //店铺名称
         this.oldName = res.data.shopName; //旧店铺名称
         this.slots[0].defaultIndex = res.data.shopTypeId-1;
