@@ -1,9 +1,9 @@
 <template>
   <div class="contant" v-title="title">
     <div class="erweima">
-      <img src="../../../static/image/user/Bitmap@2x.png">
+      <img  :src="imgShow">
     </div>
-    <p class="gaunzhu">关注公众号联系“在线客服”</p>
+    <p class="gaunzhu">{{msg}}</p>
     <div class="work-time">
       <p>服务时间：周一至周日 08:00-22:30</p>
       <p>我们会尽快回复您的问题</p>
@@ -12,20 +12,24 @@
 </template>
 
 <script>
-  import QHeader from '@/components/header';
+  import Web from '@/utils/Web';
   export default {
     data() {
       return {
-        title:'联系客服'
+        imgShow:'../../../static/image/user/wechat.png',
+        msg:'关注公众号联系“在线客服”',
       };
     },
-    created(){
+    created() {
+        if(Web.getUA() != 'wechat') {
+            this.imgShow = '../../../static/image/user/alipay.jpg';
+            this.msg = '关注生活号发送消息联系客服';
+        }
     },
     methods: {
      
     },
     components: {
-      QHeader
     }
   };
 </script>

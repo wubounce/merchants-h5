@@ -198,7 +198,7 @@ export default {
       if (res.code === 0) {
         res.data.forEach(item=>{
           this.lineseriesData.push(item.sum);
-          this.linexAxisData.push(item.time);
+          this.linexAxisData.push(`${item.time}:00`);
         });
         this.lineMax = this.calMax(this.lineseriesData);//Y轴最大值
         // 把配置和数据放这里
