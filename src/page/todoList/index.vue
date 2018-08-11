@@ -8,13 +8,15 @@
 		<ul>
 			<div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
 				<mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore">
-					<li class="list" v-for="(item,index) in list" :key="index" @click="toDetail(item.id)"> 
-						<p class="time"><span>时间</span><span class="time-blue">{{item.beginTime}}</span></p>
-						<p class="time"><span>店铺</span><span class="text">{{item.shopName.length>15 ? item.shopName.slice(0,15) + '...' : item.shopName }}</span></p>
-						<div class="time display-flex">
-							<div class='type'><span>类型</span><span class="text">{{item.machineTypeName}}</span></div>
-							<div class='type'><span>模式</span><span class="text">{{item.functionName}}</span></div>
-						</div>
+					<li class="list" v-for="(item,index) in list" :key="index"> 
+						<router-link :to="{ name: 'todoDetail', query:{id:item.id}}">
+							<p class="time"><span>时间</span><span class="time-blue">{{item.beginTime}}</span></p>
+							<p class="time"><span>店铺</span><span class="text">{{item.shopName.length>15 ? item.shopName.slice(0,15) + '...' : item.shopName }}</span></p>
+							<div class="time display-flex">
+								<div class='type'><span>类型</span><span class="text">{{item.machineTypeName}}</span></div>
+								<div class='type'><span>模式</span><span class="text">{{item.functionName}}</span></div>
+							</div>
+						</router-link>
 					</li>
 					<div v-if="allLoaded" class="nomore-data">没有更多了</div>
 				</mt-loadmore>
@@ -61,14 +63,6 @@ import { MessageBox } from 'mint-ui';
 				this.allLoaded = false;//下拉刷新时解除上拉加载的禁用
 				this.$refs.loadmore.onTopLoaded();
 			},
-      toDetail(i) {
-        this.$router.push({
-          name:'todoDetail',
-          query:{
-            id: i
-          }
-        });
-      },
       async getListBatchStart() {
        let obj = {
 					page: this.page,

@@ -5,34 +5,31 @@
       <ul v-if="hasNews">
         <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }" >
           <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore">
-              <li class="list" v-for="(item,index) in list" :key="index" @click="toShopDetail(item.shopId)">
-                <p class="top">
-                  <!-- <span class="shopName">{{item.shopName}}</span>
-                  <span>
-                    <span class="iconMark discount">惠</span><span class="iconMark reserve">预</span>
-                  </span> -->
-                  <span>{{item.shopName.length>15 ? item.shopName.slice(0,15) + '...' : item.shopName }}</span>
-                  <span><span v-if="item.isDiscount" class="iconMark discount">惠</span><span v-if="!item.isReserve" class="iconMark reserve">预</span></span>
-                </p>
-                <div class="bottom">
-                  <div class="kindof">
-                    <div class="text">分类</div>
-                    <div class="text-value">{{item.shopType}}</div>
+                <li class="list" v-for="(item,index) in list" :key="index">
+                   <router-link :to="{ name: 'shopDetail', query:{shopId:item.shopId}}">
+                  <p class="top">
+                    <span>{{item.shopName.length>15 ? item.shopName.slice(0,15) + '...' : item.shopName }}</span>
+                    <span><span v-if="item.isDiscount" class="iconMark discount">惠</span><span v-if="!item.isReserve" class="iconMark reserve">预</span></span>
+                  </p>
+                  <div class="bottom">
+                    <div class="kindof">
+                      <div class="text">分类</div>
+                      <div class="text-value">{{item.shopType}}</div>
+                    </div>
+                    <div class="kindof">
+                      <div class="text">设备</div>
+                      <div class="text-value">{{item.machineCount}}<span class="little-font">台</span></div>
+                    </div>
+                    <div class="kindof">
+                      <div class="text">收益</div>
+                      <div class="text-value">{{ item.profit == '0' ? item.profit + '.00' : item.profit }}<span class="little-font">元</span></div>
+                    </div>
                   </div>
-                  <div class="kindof">
-                    <div class="text">设备</div>
-                    <div class="text-value">{{item.machineCount}}<span class="little-font">台</span></div>
-                  </div>
-                  <div class="kindof">
-                    <div class="text">收益</div>
-                    <div class="text-value">{{ item.profit == '0' ? item.profit + '.00' : item.profit }}<span class="little-font">元</span></div>
-                  </div>
-                </div>
-              </li>
+                  </router-link>
+                </li>
             <div v-if="allLoaded" class="nomore-data">没有更多了</div>
           </mt-loadmore>
         </div>
-        
       </ul>
       <p v-else class="noShop">暂无店铺, 可点击右下角进行添加</p>
       <div class="circle" @click="toAddShop" v-has="'mer:shop:add'">
@@ -77,14 +74,6 @@ export default {
       this.getShopList();
       this.allLoaded = false;//下拉刷新时解除上拉加载的禁用
       this.$refs.loadmore.onTopLoaded();
-    },
-    toShopDetail(i) {
-      this.$router.push({
-        name:'shopDetail',
-        query:{
-          shopId: i
-        }
-      });
     },
     toAddShop() {
       this.$router.push({

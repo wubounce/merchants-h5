@@ -335,7 +335,7 @@ export default {
       this.$router.push({
         name:x,
         query:{
-          mapCity: mapCity
+          mapCity:mapCity
         }
       });
     },
