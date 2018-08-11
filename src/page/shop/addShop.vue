@@ -520,6 +520,13 @@ export default {
     async submit() {
       //判断信息是否完整
       if(this.shopName != undefined && this.shopType != undefined && this.provinceId != undefined && this.cityId != undefined && this.address != undefined && this.$route.query.lat != undefined && this.$route.query.lng != undefined && this.machineTypeIdsArray != "" ) {
+        
+        if(this.orderLimitMinutes) {
+          if(this.orderLimitMinutes<0 || this.orderLimitMinutes>9 ) {
+            MessageBox.alert('请填个位数的时长');
+            this.orderLimitMinutes = '';
+          }
+        }
         let changeisReserve = (this.isReserve==true)? 0 :1;
         let _this = this;
         //判断信息是否完整
