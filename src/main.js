@@ -4,6 +4,7 @@ import MintUI from 'mint-ui';
 import Vant from 'vant';
 import 'vant/lib/vant-css/index.css';
 import './assets/iconfont/iconfont.css';
+import './assets/iconfont/indexfont.css';
 import 'normalize.css';
 import 'mint-ui/lib/style.css';
 

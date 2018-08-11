@@ -626,9 +626,9 @@ export default {
                   color:function(data){
                       if (data.value>0) {
                         if(data.name === '其他'){
-                          return '#B58DEE';
+                          return '#A878EA';
                         } else {
-                          let color = ['#3BA1FF','#F3647C','#FBD438','#4ECC74','#37CCCC'];
+                          let color = ['#1890FF','#F04864','#FACC14','#2FC25B','#13C2C2'];
                           return color[data.dataIndex];
                         }
                       } else {
@@ -756,6 +756,7 @@ export default {
     background: url(../../../static/image/index/todayearnings@2x.png);
     background-size: cover;
     display: flex;
+    font-family: Regular;
     p {
       color: #fff;
       font-size: 12px;
@@ -766,7 +767,7 @@ export default {
     width:3.87rem;
     background:rgba(255,255,255,0.16);
     border-radius:0.27rem;
-    margin-top: 0.35rem;
+    margin-top: 0.33rem;
     height: 2.53rem;
   }
   .earning-type {
@@ -775,11 +776,12 @@ export default {
   }
   .earning-type-size {
     font-size: 32px !important;
-    font-family:DINCond-Medium;
+    font-family:Medium;
+    line-height: 0.97rem;
   }
   .today-earning-size {
     font-size: 50px !important;
-    font-family:DINCond-Medium;
+    font-family:Medium;
   }
 </style>
 <style lang="scss"> 

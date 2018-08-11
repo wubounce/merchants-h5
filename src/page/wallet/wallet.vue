@@ -83,7 +83,8 @@ export default {
                 font-size: 1.333333rem;
                 line-height: 1.533333rem;
                 font-weight: bold;
-                margin-bottom: .466667rem;               
+                margin-bottom: .466667rem; 
+                font-family:Medium;              
             }
             .total{
                 color: $third-color;

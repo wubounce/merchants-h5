@@ -1,0 +1,17 @@
+
+@font-face {font-family: Medium;
+  src: url('DINCond-Medium.otf'); /* IE9*/
+  src: url('DINCond-Medium.otf') format('embedded-opentype'), /* IE6-IE8 */
+  url('DINCond-Medium.otf') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
+  url('DINCond-Medium.otf') format('svg'); /* iOS 4.1- */
+}
+
+@font-face {font-family: Regular;
+  src: url('DINCond-Regular.otf'); /* IE9*/
+  src: url('DINCond-Regular.otf') format('embedded-opentype'), /* IE6-IE8 */
+  url('DINCond-Regular.otf') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
+  url('DINCond-Regular.otf') format('svg'); /* iOS 4.1- */
+}
+
+
+
