@@ -19,11 +19,7 @@
         <p>每日不可支付时间<span class="addvip-con">{{addmarket.noWorkTime}}<span class="order-action iconfont icon-nextx" @click="noWorkVisible = true"></span></span></p>
       </div>
     </div>
-    <section class="promiss-footer">
-      <span class="can" @click="cancalAdd">取消</span>
-      <span class="cifrm" @click="toaddMaket">确定</span>
-    </section> 
-    
+    <div class="confirm" @click="toaddMaket">确定</div>
     <!-- 不可支付日期开始 -->
     <mt-datetime-picker ref="picker4" type="date" @confirm="handleNoWorkTimeStartChange" :startDate="pickerstartDate"></mt-datetime-picker>
       <!-- 不可支付日期结束 -->
@@ -386,10 +382,6 @@ export default {
         this.$toast({message: "折扣优惠请输入1-100之间" });
         return false;
       }
-       if (this.addmarket.noWorkStart&&this.addmarket.noWorkEnd&&!this.addmarket.noWorkTime) {
-        this.$toast({message: "请填写每日不可支付时间"});
-        return false;
-      }
       let status = null;
       this.addmarket.addstatus === true ? status = 0  : status = 1;
       let payload = Object.assign({},this.addmarket,{week:this.weeklist.join(','),shopIds:this.shopIds.join(','),timeId:this.$route.query.id,status:status});
@@ -401,9 +393,6 @@ export default {
       } else {
         this.$toast({message: res.msg });
       }
-    },
-    cancalAdd(){
-      this.$router.push({name:'marketing'});
     }
   },
   components:{
@@ -442,29 +431,17 @@ export default {
       float: right;
     }
   }
-  .promiss-footer {
-    width: 100%;
-    display: flex;
-    height: 1.33rem;
+  .confirm {
+    width:100%;
+    height:1.33rem;
     line-height: 1.33rem;
+    background:rgba(24,144,255,1);
+    text-align: center;
+    font-size: 18px;
+    color: #fff;
     position: fixed;
     bottom: 0;
-    >span {
-      flex: 1;
-      text-align: center;
-    }
-    .can {
-      font-size:18px;
-      color:#1890FF;
-      background:rgba(246,248,255,1);
-    }
-    .cifrm {
-      background: #1890FF;
-      font-size:18px;
-      color: #fff;
-    }
   }
-
   .resp-shop {
     display: flex;
     height: 1.17rem;
