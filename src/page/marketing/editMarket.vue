@@ -216,7 +216,7 @@ export default {
         this.addmarket.endTime = detail.noDiscountEnd ? moment(detail.noDiscountEnd).format('YYYY-MM-DD'): '';
         this.addmarket.addstatus =  detail.status ===  0 ? this.addmarket.addstatus = true  : this.addmarket.addstatus = false;
         this.addmarket.time = detail.noTime;
-        this.addmarket.discount = Number(detail.discountVO).toFixed(0);
+        this.addmarket.discount = this.addmarket.discount ? Number(detail.discountVO).toFixed(0) : '';
         this.addmarket.noWorkStart = detail.noWorkStart ? moment(detail.noWorkStart).format('YYYY-MM-DD') : '';
         this.addmarket.noWorkEnd = detail.noWorkEnd ? moment(detail.noWorkEnd).format('YYYY-MM-DD') : '';
         this.addmarket.noWorkTime = detail.noWorkTime;
@@ -430,6 +430,9 @@ export default {
     .add-shop-overflow-icon {
       float: right;
     }
+  }
+  .order-action {
+    color: #ccc;
   }
   .confirm {
     width:100%;

@@ -1,5 +1,5 @@
 <template>
-<div class="login" v-title="'登录'">
+<div class="login" v-title="'企鹅共享商家端'">
   <div class="header">
     <h1 class="logo">
       <img src="../../static/logo.png"/>

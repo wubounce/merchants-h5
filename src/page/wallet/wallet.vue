@@ -30,7 +30,7 @@ export default {
         let res = await getApplyFinanceFun();
         if (res.code === 0) {
             this.data = res.data || {};
-            if(Number(res.data.code) === 1014 || Number(res.data.code === 1004)) {
+            if(Number(res.data.code) === 1014 || Number(res.data.code) === 1004 || Number(res.data.code) === 1017 || Number(res.data.code) === 1018) {
                 this.$toast(res.data.msg);
                 this.$router.push({name:'accountSet'});
             }
@@ -39,7 +39,7 @@ export default {
         }
     },
     gowithdraw(){
-        if(this.data.code === 1004 || this.data.code === 1014) {
+        if(this.data.code === 1014 || this.data.code === 1004 || Number(res.data.code) === 1017 || Number(res.data.code) === 1018) {
             this.$toast(res.data.msg);
             this.$router.push({name:'accountSet'});
             return false;

@@ -7,7 +7,7 @@
       <p>优惠期<span class="addvip-con">{{detail.noDiscountStart}}<span v-if="detail.noDiscountStart&&detail.noDiscountEnd">~</span>{{detail.noDiscountEnd}}</span></p>
       <p>活动日<span class="addvip-con">{{detail.noWeek | week}}</span></p>
       <p>每日活动时段<span class="addvip-con">{{detail.noTime}}</span></p>
-      <p>折扣优惠<span class="addvip-con">{{detail.discountVO | tofixd}}%</span></p>
+      <p>折扣优惠<span class="addvip-con">{{detail.discountVO ? detail.discountVO: '' | tofixd}}%</span></p>
       <p>活动状态<span class="addvip-con">{{detail.status === 0 ? '开放':'暂停'}}</span></p>
     </div>
     <div class="nopay-time">

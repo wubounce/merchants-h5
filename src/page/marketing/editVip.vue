@@ -276,6 +276,9 @@ export default {
   .add-shop-overflow-icon {
     float: right;
   }
+  .order-action {
+    color: #ccc;
+  }
   .confirm {
     width:100%;
     height:1.33rem;
