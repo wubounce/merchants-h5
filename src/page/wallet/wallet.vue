@@ -31,9 +31,8 @@ export default {
         if (res.code === 0) {
             this.data = res.data || {};
             if(Number(res.data.code) === 1014 || Number(res.data.code === 1004)) {
-                MessageBox.alert(res.data.msg,'').then(async () => {
-                    this.$router.push({name:'accountSet'});
-                });
+                this.$toast(res.data.msg);
+                this.$router.push({name:'accountSet'});
             }
         }else {
             this.$toast(res.msg);
@@ -41,9 +40,8 @@ export default {
     },
     gowithdraw(){
         if(this.data.code === 1004 || this.data.code === 1014) {
-            MessageBox.alert(res.data.msg,'').then(async () => {
-                this.$router.push({name:'accountSet'});
-            });
+            this.$toast(res.data.msg);
+            this.$router.push({name:'accountSet'});
             return false;
         }
         this.$router.push({name:'withdraw'});

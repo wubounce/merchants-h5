@@ -5,7 +5,7 @@
     </section>
     <div class="no-discount-list" v-if="list.length<=0">暂无相关明细</div>
     <!-- 记录为收益类，增加class：add -->
-    <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }"  v-else>
+    <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px'}"  v-else>
         <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore">
             <div class="apply--list-wrap">
                 <div class="all-list">
@@ -46,7 +46,6 @@
             </div>
         </mt-loadmore>
     </div>
-    
 </div>
 </template>
 <script>
@@ -117,7 +116,6 @@ export default {
             height: 1.173333rem;
             line-height: 1.173333rem;
             border-bottom:1px solid #E5E5E5;
-            margin-bottom: 0.27rem;
             div {
               flex: 1;
             }
@@ -129,7 +127,7 @@ export default {
               border-bottom: 0.08rem solid #1890FF;
               border-radius:0.04rem;
             }
-        }       
+        } 
         .list{
             padding-left:2.15rem;
             position: relative;
@@ -202,6 +200,9 @@ export default {
                 .accountList-content{
                     border: none;
                 }
+            } 
+            &:first-child{
+                margin-top: 0.27rem;
             }            
         }       
     }

@@ -48,7 +48,7 @@
                 <div><p>订单号</p><p>{{data.orderNo}}</p></div>
             </li>
             <li>
-                <div><p>店铺</p><p>{{data.shopName}}</p></div>
+                <div class="remarks"><p>店铺</p><p>{{data.shopName}}</p></div>
                 <div><p>类型</p><p>{{data.parentType}}</p></div>
                 <div><p>设备型号</p><p>{{data.subType}}-636U7</p></div>
                 <div><p>设备名称</p><p>{{data.machineName}}</p></div>

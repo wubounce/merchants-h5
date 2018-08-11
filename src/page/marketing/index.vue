@@ -34,11 +34,13 @@ export default {
     
   },
   created(){
-   
+    let query = this.$route.query ? this.$route.query : {};
+    this.tabindex = query.tabindex ? Number(query.tabindex) : 0;
   },
   methods: {
     tabclick(index){
     	this.tabindex = index;
+      this.$router.push({query: {tabindex:this.tabindex}});
     },
   },
 };

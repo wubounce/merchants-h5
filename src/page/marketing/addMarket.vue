@@ -320,6 +320,10 @@ export default {
         this.$toast({message: "折扣优惠请输入1-100之间" });
         return false;
       }
+      if (this.addmarket.noWorkStart&&this.addmarket.noWorkEnd&&!this.addmarket.noWorkTime) {
+        this.$toast({message: "请填写每日不可支付时间"});
+        return false;
+      }
 
       let status = null;
       this.addmarket.addstatus === true ? status = 0  : status = 1;
