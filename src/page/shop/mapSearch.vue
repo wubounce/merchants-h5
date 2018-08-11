@@ -75,30 +75,10 @@ export default {
         citylimit:true
       };
       var autocomplete= new AMap.Autocomplete(autoOptions);
-      // var placeSearch = new AMap.PlaceSearch({
-      //   city: _this.mapCity,
-      //   map:map
-      // });
 
       AMap.event.addListener(autocomplete, "select", function(e){
-        console.log(e);
+      //console.log(e);
         _this.getLatLng("addShop",e.poi.location.lat,e.poi.location.lng,e.poi.name);
-        // placeSearch.setCity(e.poi.adcode);
-        // placeSearch.search(e.poi.name);
-        // var geocoder = new AMap.Geocoder({
-        //   city:  _this.mapCity,
-        //   radius: 1000 //范围，默认：500
-        // });
-        // geocoder.getLocation(e.poi.name, function(status, result) {
-        //     if (status === 'complete' && result.info === 'OK') {
-        //         _this.lat  = result.geocodes[0].location.lat;
-        //         _this.lng  = result.geocodes[0].location.lng;
-        //         _this.getLatLng("addShop",_this.lat,_this.lng,e.poi.name);
-        //     }
-        //     else {
-        //       MessageBox.alert('输入的地点有误,再输一次试试哦');
-        //     }
-        // });
       });
     });
   }

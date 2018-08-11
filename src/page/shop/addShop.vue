@@ -113,8 +113,7 @@ export default {
           className: 'shop-type',
           textAlign: 'center',
           position:'bottom',
-          name:'店铺类型',
-          defaultIndex:2
+          name:'店铺类型'
         }
       ],
       addressSlots:[
@@ -240,14 +239,22 @@ export default {
       }
       else {
         e.target.value = '';
-        MessageBox.alert("请输入2到20字符的店铺名称",'');
+        this.$toast({
+            message: '请输入2到20字符的店铺名称',
+            position: 'top',
+            duration: 3000
+          });
       }
       //校验名字的特殊字符'-'和'_'
       let arr = e.target.value.split('');
       for (let i=0; i<e.target.value.length; i++) {
         if(arr[i] == '-' || arr[i] == '_' || arr[i] == '——') {
           if(arr[i+1] == '-' || arr[i+1] == '_' || arr[i] == '——') {
-            MessageBox.alert('店铺名称不符合规范，请重新输入','');
+            this.$toast({
+              message: '店铺名称不符合规范，请重新输入',
+              position: 'top',
+              duration: 3000
+            });
           }
         }
       }
@@ -255,7 +262,11 @@ export default {
       for(let i=0; i<this.arrName.length; i++) {
         if(e.target.value == this.arrName[i]) {
           e.target.value = '';
-          MessageBox.alert("该店铺名称已存在，请换一个店铺名称输入哦",'');
+          this.$toast({
+            message: '该店铺名称已存在，请您换一个店铺名称输入',
+            position: 'top',
+            duration: 3000
+          });
         }
       }
     },
@@ -533,11 +544,15 @@ export default {
     },
     async submit() {
       //判断信息是否完整
-      if(this.shopName != undefined && this.shopType != undefined && this.provinceId != undefined && this.cityId != undefined && this.address != undefined && this.$route.query.lat != undefined && this.$route.query.lng != undefined && this.machineTypeIdsArray != "" ) {
+      if(this.shopName != undefined && this.shopType != undefined && this.provinceId != undefined && this.cityId != undefined && this.districtId != undefined && this.address != undefined && this.$route.query.lat != undefined && this.$route.query.lng != undefined && this.machineTypeIdsArray != "" ) {
         
         if(this.orderLimitMinutes) {
           if(this.orderLimitMinutes<0 || this.orderLimitMinutes>9 ) {
-            MessageBox.alert('请填个位数的时长');
+            this.$toast({
+              message:'请填个位数的时长',
+              position:'middle',
+              duration:3000
+            });
             this.orderLimitMinutes = '';
           }
         }
@@ -579,7 +594,44 @@ export default {
         }
       }
       else {
-        MessageBox.alert('店铺名称、店铺类型、所在地区、小区/大厦/学校、详细地址、设备类型为必填项','');
+        if(!this.shopName) {
+          this.$toast({
+            message: '请填写店铺名称',
+            position: 'middle',
+            duration: 3000
+          });
+        }else if(!this.list[0].value) {
+          this.$toast({
+            message: '请填写店铺类型',
+            position: 'middle',
+            duration: 3000
+          });
+        }else if( !this.provinceId || !this.cityId || !this.districtId) {
+          this.$toast({
+            message: '请选择所在地区',
+            position: 'middle',
+            duration: 3000
+          });
+        }else if(!this.lat || !this.lng) {
+          this.$toast({
+            message: '请选择小区/大厦/学校',
+            position: 'middle',
+            duration: 3000
+          });
+        }
+        else if(!this.address) {
+          this.$toast({
+            message: '请填写详细地址',
+            position: 'middle',
+            duration: 3000
+          });
+        }else if(!this.machineTypeIdsArray) {
+          this.$toast({
+            message: '请选择设备功能',
+            position: 'middle',
+            duration: 3000
+          });
+        }
       }
     },
     //省市区联动
@@ -593,7 +645,11 @@ export default {
         }
       }
       else {
-        MessageBox.alert(res.msg);
+        this.$toast({
+          message:res.msg,
+          position:'middle',
+          duration:3000
+        });
       }
     },
     async getShoplist() {
