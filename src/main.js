@@ -1,6 +1,8 @@
 import Vue from 'vue';
 
 import MintUI from 'mint-ui';
+import Vant from 'vant';
+import 'vant/lib/vant-css/index.css';
 import './assets/iconfont/iconfont.css';
 import 'normalize.css';
 import 'mint-ui/lib/style.css';
@@ -21,6 +23,7 @@ Vue.use(VueAwesomeSwiper);
 import { Tree } from 'element-ui';
 Vue.use(Tree);
 Vue.use(MintUI);
+Vue.use(Vant);
 // 初始化vue-amap
 VueAMap.initAMapApiLoader({
 // 高德的key

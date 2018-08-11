@@ -124,9 +124,7 @@
   import { MessageBox } from 'mint-ui';
   import Button from "@/components/Button/Button";
   import QHeader from '@/components/header';
-  import {
-    Actionsheet
-  } from "mint-ui";
+  import { Actionsheet } from "mint-ui";
   import AddCount from "@/components/AddCount/AddCount";
   import { getWxconfigFun,getShopFun,getlistParentTypeFun,getlistSubTypeFun,deviceAddorEditFun,getFunctionSetListFun } from '@/service/device';
  
@@ -478,9 +476,10 @@
           }
           .select-2 {
             padding: 0 0.35rem;
+            height: 0.51rem;
             font-size: 90%;
             background: url("../../../../static/image/center/icon_scon.png") no-repeat right;
-            background-size: 0.3rem 0.3rem;
+            background-size: 0.51rem 0.51rem;
             .nqt {
               font-size: 80%;
             }

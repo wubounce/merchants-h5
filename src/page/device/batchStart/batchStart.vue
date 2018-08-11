@@ -20,21 +20,17 @@
     </div>
     <div class="ss-bd">
       <div class="search-res">
-        <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
-          <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore">
-            <ul>
-              <li v-for="(item,index) in shopList"  class="search-res-item" :class="{'selected':index==selectIndex}" @click="selectClick(index,item.shopName)"
-                :key="index">
-                <div>
-                  <p>{{item.shopName}}</p>
-                  <p>{{item.address}}</p>
-                </div>
-                <div><span class="iconfont" :class="{'icon-xuanze':index==selectIndex}"></span></div>
-              </li>
-              <li class="searchNoItem" v-if="shopList.length<=0">">没有找到匹配数据</li>
-            </ul>
-          </mt-loadmore>
-        </div>
+        <ul>
+          <li v-for="(item,index) in shopList"  class="search-res-item" :class="{'selected':index==selectIndex}" @click="selectClick(index,item.shopName)"
+            :key="index">
+            <div>
+              <p>{{item.shopName}}</p>
+              <p>{{item.address}}</p>
+            </div>
+            <div><span class="iconfont" :class="{'icon-xuanze':index==selectIndex}"></span></div>
+          </li>
+          <li class="searchNoItem" v-if="shopList.length<=0">">没有找到匹配数据</li>
+        </ul>
       </div>
     </div>
     <div style="width:100%;height:1.73rem;"></div>
@@ -45,9 +41,7 @@
 <script>
   /* eslint-disable */
   import qs from "qs";
-  import { MessageBox } from 'mint-ui';
   import {delay} from "@/utils/tool";
-  import PagerMixin from '@/mixins/pagerMixin';
   import { getShopFun,shopSearchFun } from '@/service/device';
   export default {
     mixins: [PagerMixin],

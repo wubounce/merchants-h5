@@ -241,7 +241,7 @@ import { getlistParentTypeFun } from '@/service/device';
       }
     }
     .sf-bd {
-      margin-top: 3.81rem;
+      padding-top: 3.81rem;
       ul {
         width:100%;
         li {

@@ -22,7 +22,7 @@
     </div>
     <div class="ss-bd">
       <div class="search-res">
-        <ul v-infinite-scroll="loadMore" infinite-scroll-disabled="loading" infinite-scroll-distance="10">
+        <ul>
           <li v-for="(item,index) in shopList"  class="search-res-item" :class="{'selected':index==selectIndex}" @click="selectClick(index,item.shopName)"
             :key="index">
             <div>
@@ -288,7 +288,7 @@
     }
 }
   .ss-bd {
-    margin-top: 5.78rem;
+    padding-top: 5.78rem;
     .search-res {
       .searchNoItem {
         font-size: 0.43rem;

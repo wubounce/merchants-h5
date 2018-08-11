@@ -61,8 +61,8 @@
     </section>
     <div style="width:100%;height:1.73rem;"></div>
     <section class="promiss-footer">
-      <span class="can" @click="goBack">上一步</span>
-      <span class="cifrm" @click="goNext">下一步</span>
+      <span class="can" @click="goBack">取消</span>
+      <span class="cifrm" @click="goNext">确定</span>
     </section>
     </div>
     <!-- 店铺-->

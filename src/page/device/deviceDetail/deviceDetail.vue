@@ -18,20 +18,19 @@
                 <span>{{deviceDetail.machineName}}</span>
               </p>
             </li>
-            <li @click="checkDeviceSelect">
+            <li>
               <span class="field-title">所属店铺</span>
               <p>{{deviceDetail.shopName}}</p>
             </li>
-
-            <router-link to="/addDevice" tag="li">
+            <li>
               <span class="field-title">设备类型</span>
               <p>{{deviceDetail.parentTypeName}}</p>
-            </router-link>
-            <li @click="checkSecondClass">
+            </li>
+            <li>
               <span class="field-title">设备型号</span>
               <p>{{deviceDetail.subTypeName}}</p>
             </li>
-            <li @click="getCompany">
+            <li>
               <span class="field-title">公司</span>
               <p>{{deviceDetail.company}}</p>
             </li>
@@ -48,31 +47,32 @@
                 {{deviceDetail.imei}}
               </p>
             </li>
-            <li @click="toFunctionSeting">
+            <li>
               <span class="field-title">功能设置</span>
               <p>已设置</p>
-              <span class="iconfont icon-xiangshangjiantou"></span>
+              <span class="iconfont icon-xiangshangjiantou" :class="{'rotate': !functionSetListShow}" @click="functionSetListShowClick"></span>
             </li>
           </ul>
         </li>
 
         <!-- 功能列表部分 -->
-        <section class="fun-item-hd">
-          <div>
-            <p v-for="(item,index) in functionListTitle " :key="index">
-              <span v-for="(it,idx) in item " :key="idx">{{it}}</span>
+        <div v-show="functionSetListShow">
+          <section class="fun-item-hd">
+            <div>
+              <p v-for="(item,index) in functionListTitle " :key="index">
+                <span v-for="(it,idx) in item " :key="idx">{{it}}</span>
+              </p>
+            </div>
+          </section>
+          <section class="fun-item-bd">
+            <p v-for="(item,index) in functionList " :key="index">
+              <span>{{item.functionName}}</span>
+              <span>{{item.needMinutes}}</span>
+              <span>{{item.functionPrice}}</span>
+              <span>{{item.ifOpen}}</span>
             </p>
-          </div>
-        </section>
-        <section class="fun-item-bd">
-          <p v-for="(item,index) in functionList " :key="index">
-            <span>{{item.functionName}}</span>
-            <span>{{item.needMinutes}}</span>
-            <span>{{item.functionPrice}}</span>
-            <span>{{item.ifOpen}}</span>
-          </p>
-        </section>
-
+          </section>
+        </div>
         <li class="device-detail-ft">
           <p>创建人：{{deviceDetail.createUser}}</p>
           <p>创建时间： {{deviceDetail.createTime}}</p>
@@ -81,21 +81,10 @@
       <div style="width:100%;height:1.73rem;"></div>
       <div class="about-button">
         <Button btn-type="small" btn-color="spe" class="ft-btn active" @click.native="deviceDele">删除</Button>
-        <Button btn-type="small" btn-color="spe" class="ft-btn" @click.native="deviceTZJ">桶自洁</Button>
+        <Button btn-type="small" btn-color="spe" class="ft-btn" @click.native="deviceTZJ" v-show="tzjShow">桶自洁</Button>
         <Button btn-type="small" btn-color="spe" class="ft-btn" @click.native="deviceRest">复位</Button>
         <Button btn-type="small" btn-color="spe" class="ft-btn" @click.native="deviceEdit">编辑</Button>
       </div>
-      <!-- 模块商 -->
-      <mt-popup v-model="companyVisible" position="bottom" class="select-popup">
-        <div class="select">
-          <ul class="select-list">
-            <li v-for="(item,index) in selectListA" :key="index" @click="getcompanyValue(item)">{{item.name}}</li>
-          </ul>
-          <div class="btn">
-            <Button btn-type="default" btn-color="blue" @confirm="companyVisible = false">取消</Button>
-          </div>
-        </div>
-      </mt-popup>
     </div>
   </section>
 </template>
@@ -109,7 +98,8 @@
     data() {
       return {
         deviceDetail: [],
-        companyVisible: false,
+        tzjShow: true,
+        functionSetListShow: true,
         title: '设备详情',
         fromdata: {
           machineName: "",
@@ -152,35 +142,30 @@
       };
     },
     methods: {
-      getcompanyValue(msg) {
-        this.fromdata.companyType.name = msg.name;
-        this.fromdata.companyType.value = msg.value;
-        this.companyVisible = false;
-      },
-      getCompany() {
-        this.companyVisible = true;
-      },
-      checkDeviceSelect() {
-
-      },
       async getDetailDevice() {  //获取数据
         let payload = { machineId: this.$route.query.machineId} ;     
         let res = await detailDeviceListFun(qs.stringify(payload));
          if(res.code === 0) {
           this.deviceDetail= res.data;
           this.functionList = res.data.functionList;
+          if(res.data.communicateType === 1){
+            this.tzjShow = true;
+          } else {
+            this.tzjShow = false;
+          }
           this.functionList.forEach(item=>{
             item.ifOpen=item.ifOpen === 0? "开启":"关闭";
           });
         }
         else {
-          MessageBox.alert(res.msg);
+          this.$toast(res.msg);
         }
       }, 
-      checkSecondClass() {},
-      toFunctionSeting() {},
+      functionSetListShowClick() {
+        this.functionSetListShow =!this.functionSetListShow;
+      },
       deviceDele() {  //删除
-        MessageBox.confirm('确定删除此设备?').then(async () => {
+        MessageBox.confirm('是否确认删除此设备?').then(async () => {
           let res = await deleteDeviceFun(qs.stringify({machineId: this.$route.query.machineId}));
           if(res.code === 0) {
             let instance = this.$toast({
@@ -199,7 +184,7 @@
         });   
         
       },
-      deviceTZJ() {
+      deviceTZJ() {  //桶自洁
         MessageBox.confirm('是否确认筒自洁此设备?').then(async () => {
           let res = await tzjDeviceFun(qs.stringify({machineId: this.$route.query.machineId}));
           if(res.code === 0) {
@@ -296,8 +281,12 @@
           .field-title {
             width: 50%;
             text-align: left;
-            color: rgba(153, 153, 153, 1);
+            color: rgba(153, 153, 153, 1); 
           }
+          .rotate:before {
+              display: inline-block;
+              transform: rotate(180deg);
+            }
          p {
             flex-grow: 1;
             overflow: hidden;

@@ -28,12 +28,8 @@
   } from "@/service/device";
   import Button from "@/components/Button/Button";
   import QHeader from '@/components/header';
-  import {
-    mapState
-  } from "vuex";
-  import {
-    MessageBox
-  } from "mint-ui";
+  import { mapState } from "vuex";
+  import { MessageBox } from "mint-ui";
 
   export default {
     data() {

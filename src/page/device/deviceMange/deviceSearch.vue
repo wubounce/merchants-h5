@@ -100,8 +100,7 @@ import {delay } from "@/utils/tool";
         if (newVal) {
           delay(() => {
             this.fetchData();
-          }, 300);
-          this.isResult = true
+          }, 200);
         }
       },
     }
@@ -201,8 +200,11 @@ import {delay } from "@/utils/tool";
       }
       .search-select-option {
         box-sizing: border-box;
-        padding: 6px 10px;
-        text-align: center;
+        background: url("../../../assets/img/device/devic_search_icon.png") no-repeat 0.27rem;
+        background-size: 0.43rem;
+        padding: 0.29rem 0 0.29rem 1.07rem;
+        border-radius: 0.13rem;
+        font-size: 16px;
       }
     }
 

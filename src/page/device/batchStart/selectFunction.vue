@@ -1,17 +1,19 @@
 <template>
   <section class="ss-wrappper" v-title="title">
-    <div class="bat-step">
-      <div class="line-bg">
-        <p v-for="(item,index) in stepArr " :key="index" :class="{active:currIndex==index}">{{item.text}}</p>
+    <div class="fixedPosition">
+      <div class="bat-step">
+        <div class="line-bg">
+          <p v-for="(item,index) in stepArr " :key="index" :class="{active:currIndex==index}">{{item.text}}</p>
+        </div>
       </div>
+      <ul>
+        <li class="bat-hd">
+          <span>{{hdTitleArr[currIndex]}}</span>
+          <span v-show="functionSetModel">{{selectedFunction}}</span>
+          <span @click="chooseTime" v-show="!functionSetModel">{{beginTime}}</span>
+        </li>
+      </ul>
     </div>
-    <ul>
-      <li class="bat-hd">
-        <span>{{hdTitleArr[currIndex]}}</span>
-        <span v-show="functionSetModel">{{selectedFunction}}</span>
-        <span @click="chooseTime" v-show="!functionSetModel">{{beginTime}}</span>
-      </li>
-    </ul>
     <div v-show="functionSetModel"> 
       <div class="sf-bd">
         <ul>
@@ -23,9 +25,17 @@
         </ul>
       </div>
     </div>
-    <div style="width:100%;height:1.73rem;"></div>
     <!-- 启动时间 -->
-    <mt-datetime-picker ref="pickerStarTime" type="datetime" v-model="pickerValue"  @confirm="handleConfirm"></mt-datetime-picker>
+    <van-datetime-picker
+      v-model="currentDate"
+      type="datetime"
+      :min-date="minDate" 
+      @change="changeItem"
+      :visible-item-count="3"
+      ref="checkoutTime"
+      v-show="!functionSetModel"
+    />
+    <div style="width:100%;height:1.73rem;"></div>
     <section class="promiss-footer" v-show="functionSetModel">
       <span class="can" @click="goBack">上一步</span>
       <span class="cifrm" @click="goNext">下一步</span>
@@ -46,6 +56,7 @@ export default {
       return {
         secondTypeList: [],
         aaa:[],
+        date: '',
         isCheck: 'weixuanzhong',
         title: "批量启动",
         isResult: false,
@@ -54,9 +65,14 @@ export default {
         isShow2: false,
         keyword: '',
         beginTime: '',
+        startTime: '',
         functionId: '',
         selectedFunction: '',
         selectIndex: -1,
+        minHour: 10,
+        maxHour: 20,
+        minDate: new Date(),
+        currentDate: new Date(),
         hdTitleArr: [
           "1.请选择相应店铺",
           "2.请选择设备类型",
@@ -98,6 +114,11 @@ export default {
       };
     },
     methods: {
+      changeItem(picker) {
+      let timeArr = picker.getValues();
+      this.beginTime = timeArr[0] + "年" + timeArr[1] + "月" + timeArr[2] + "日" + " " + timeArr[3] + ":" + timeArr[4];
+      this.startTime = timeArr[0] + "-" + timeArr[1] + "-" + timeArr[2] + " " + timeArr[3] + ":" + timeArr[4] + ":00";
+      },
       selectClick: function (index,name) {
         this.selectIndex = index;
         this.functionId = this.secondTypeList[index].functionId;
@@ -119,10 +140,10 @@ export default {
           this.$refs.pickerStarTime.open();
         }
       },
+      
       async submit() {
         let query = this.$route.query;
-        let time = this.beginTime + ":00";
-        let payload = {machineParentTypeId:query.parentTypeId,shopId:query.shopId,standardFunctionId:this.functionId,startTime:time};
+        let payload = {machineParentTypeId:query.parentTypeId,shopId:query.shopId,standardFunctionId:this.functionId,startTime:this.startTime};
         let res = await batchStartOnFun(qs.stringify(payload));
         if(res.code === 0) {
           let instance = this.$toast({
@@ -158,11 +179,10 @@ export default {
       },
       goNext() {
         if(this.selectedFunction){
-          this.$refs.pickerStarTime.open();
           this.currIndex = 3;
           this.functionSetModel = false;
         } else {
-          this.$toast("请先选择相应功能");
+          this.$toast("请先选择设备相应功能");
         }
       }
 
@@ -180,18 +200,25 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .bat-step {
+  .fixedPosition {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 999;
+    background-color: #efeff4;
+    .bat-step {
       display: flex;
       justify-content: space-between;
       height: 2.08rem;
       font-size: 0.37rem;
       color: #1890ff;
       background-color: #f9fcff;
-      padding: 0 0.83rem;
       background: url("../../../assets/img/device/devic_line_icon.png") no-repeat center;
       background-size: 6.03rem;
       .line-bg {
         width: 100%;
+        margin: 0 0.83rem;
         p {
           margin: 0.72rem 1.3rem 0.72rem 0;
           background-color: #ffffff;
@@ -214,24 +241,24 @@ export default {
         }
       }
     }
-  .bat-hd {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 0 0.4rem;
-    margin-bottom: 0.13rem;
-    font-size: 0.43rem;
-    height: 1.6rem;
-    color: rgba(51, 51, 51, 1);
-    background: #fff;
-    span {
-      &:nth-child(2) {
-        font-size: 0.37rem;
-        color: #1890ff;
+    .bat-hd {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 0.4rem;
+      margin-bottom: 0.13rem;
+      font-size: 0.43rem;
+      height: 1.6rem;
+      color: rgba(51, 51, 51, 1);
+      background: #fff;
+      span {
+        &:nth-child(2) {
+          font-size: 0.37rem;
+          color: #1890ff;
+        }
       }
     }
   }
-
   .fun-item-hd {
     padding: 0;
     background: #FAFCFF;
@@ -313,6 +340,7 @@ export default {
     }
   }
    .sf-bd {
+      padding-top: 3.81rem;
       ul {
         width:100%;
         li {
@@ -347,6 +375,10 @@ export default {
       }
       
     }
+  .van-picker {
+    padding-top: 3.81rem;
+    margin-top: -40px;
+  }
   .promiss-footer {
       display: flex;
       height: 1.33rem;
