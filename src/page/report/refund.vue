@@ -93,6 +93,8 @@ export default {
       reportCount:[],
       reportMoney:[],
       pickerEndDate:new Date(moment().format('YYYY-MM-DD')),
+      orderMax:null,
+      moneyMax:null
     };
   },
   mounted() {
@@ -134,12 +136,25 @@ export default {
           this.reportCount.push(item.count);
           this.reportMoney.push(item.money);
         });
+        this.orderMax = this.calMax(this.reportCount);//订单Y轴最大值
+        this.moneyMax = this.calMax(this.reportMoney);//金额Y轴最大值
         this.lsitdata = res.data;
         this.lsitdata.sort(this.ortId); //时间倒序
       }else {
         this.$toast({message: res.msg });
       }
       this.chart.setOption(this.chartOption);
+    },
+    calMax(arr) {
+      var max = arr[0];
+      for ( var i = 1; i < arr.length; i++) {// 求出一组数组中的最大值
+        if (max < arr[i]) {
+          max = arr[i];
+        }
+      }
+      var maxint = Math.ceil(max / 10);// 向上取整
+      var maxval = maxint * 10;// 最终设置的最大值
+      return maxval;// 输出最大值
     },
     ortId(a,b){ 
       let k = a.date.replace(/\-/g, '');   
@@ -223,11 +238,10 @@ export default {
         yAxis: [
           {   name: '退款金额',
               type: 'value',
-              min: 0,
-              max:function(data){
-                return data.max;
-              },
+              min:0,
+              max:this.moneyMax>0?this.moneyMax : 1,
               splitNumber:5,
+              interval:this.moneyMax>0? this.moneyMax/5: 1/5,
               axisLine:{
                 show:false,
                 lineStyle:{
@@ -253,11 +267,10 @@ export default {
           },
           {   name: '订单数量',
               type: 'value',
-              min: 0,
-              max:function(data){
-                return data.max;
-              },
+              min:0,
+              max:this.orderMax>0?this.orderMax : 1,
               splitNumber:5,
+              interval:this.orderMax>0? this.orderMax/5: 1/5,
               axisLine:{
                 show:false,
                 lineStyle:{
@@ -269,9 +282,6 @@ export default {
               },
               axisLabel: {
                 textStyle: {color: '#999'},
-                formatter: function (value) {           
-                  return value.toFixed(2);      
-                }  
               },
               splitLine:{  
                 show:true,

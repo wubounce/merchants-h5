@@ -3,15 +3,15 @@
     <div class="earnings-wrap">
       <div class="earning-type">
         <p>总收益 (元)</p>
-        <p class="earning-type-size">{{allMoney?allMoney:'0.00'}}</p>
+        <p class="earning-type-size">{{allMoney?allMoney:'0.00'|  tofixd}}</p>
       </div>
       <div class="today-earning">
         <p style="margin-top: 0.35rem;">今日收益 (元)</p>
-        <p class="today-earning-size">{{todayMoney?todayMoney:'0.00'}}</p>
+        <p class="today-earning-size">{{todayMoney?todayMoney:'0.00'|  tofixd}}</p>
       </div>
       <div class="earning-type">
         <p>当月收益 (元)</p>
-        <p class="earning-type-size">{{monthMoney?monthMoney:'0.00'}}</p>
+        <p class="earning-type-size">{{monthMoney?monthMoney:'0.00'|  tofixd}}</p>
       </div>
     </div>
     <div class="lineecharts-warp">
@@ -28,7 +28,7 @@
     </div>
     <div class="pei-wrap">
       <div class="lineechart-title pie-title">
-        <span class="linetitle">收益分布 <span @click="distributionVisible = true;" class="choose-select choose-select-type">{{distributioncurrentTags?distributioncurrentTags.name:'洗衣机'}}<i class="iconfont icon-xiangxiajiantou select-back"></i></span></span>
+        <span class="linetitle">收益分布 <span @click="distributionVisible = true;" class="choose-select choose-select-type" v-if="parentTypList.length>0">{{distributioncurrentTags?distributioncurrentTags.name:'洗衣机'}}<i class="iconfont icon-xiangxiajiantou select-back"></i></span></span>
         <span class="linedata">
            <span :class="['linedatachoose', {linecurrent: pieSearchIndex === index}]" v-for="(item,index) in lineSearchTime" @click="pieTimeSearch(index)">{{item.lable}}</span>
         </span>
@@ -131,7 +131,11 @@ export default {
         {value:2,lable:'30天'}
       ],
       lineSearchIndex:0,
-      pieSearchIndex:0
+      pieSearchIndex:0,
+
+      lineMax:null,
+      barMax:null,
+      parentTypList:[]
     };
   },
   mounted() {
@@ -147,13 +151,14 @@ export default {
     async ParentTypeFun(){ //获取设备类型
         let res = await ParentTypeFun(qs.stringify({onlyMine:true}));
         res.data = res.data ? res.data :[];
+        this.parentTypList = res.data;
         let pac = res.data.find(item=>item.name === '洗衣机');
         this.washingMachineId = pac ? pac.id : '';
         this.typeProfitData();
         this.equipmentSlots[0].values = [{name:'全部'},...res.data];
         this.distributionSlots[0].values = [...res.data];
     },
-    async countMachine(parentTypeId){ //初始化全部设备监控图表
+    async countMachine(parentTypeId){ //设备监控
       let res = null;
       if (parentTypeId) {
         let payload = Object.assign({},{parentTypeId:parentTypeId});
@@ -168,11 +173,12 @@ export default {
           this.barseriesData.push(res.data[i]);
           this.barxAxisData.push(MachineStatus(i));
         }
+        this.barMax = this.calMax(this.barseriesData);//Y轴最大值
         this.barchart.setOption(this.barOChartOPtion);
       }
       
     },
-    async totalProfitFun(){
+    async totalProfitFun(){ //总收益
       let res = await totalProfitFun();
       if (res.code === 0) {
         this.allMoney = res.data.allMoney; //总收益
@@ -194,6 +200,7 @@ export default {
           this.lineseriesData.push(item.sum);
           this.linexAxisData.push(item.time);
         });
+        this.lineMax = this.calMax(this.lineseriesData);//Y轴最大值
         // 把配置和数据放这里
         this.linechart.setOption(this.lineChartOption);
       }
@@ -217,28 +224,39 @@ export default {
         });
        
         let machineTypeData = res.data ? res.data.machineType :[];
-        machineTypeData = machineTypeData.sort(this.ortId).slice(0,3); //类型标题只显示最大的三个类型
-        machineTypeData.forEach(item=>{
+        if (machineTypeData.length>0) {
+          machineTypeData = machineTypeData.sort(this.ortId).slice(0,3); //类型标题只显示最大的三个类型
+          machineTypeData.forEach(item=>{
+            this.piefunDatatitle.push({
+              name:item.type,
+              icon : 'circle',
+              textStyle:{fontWeight:'normal', color:'#999',fontSize:12, padding:0},
+            });
+          });
+          res.data.machineType.forEach(item=>{
+            this.piefunData.push({
+              value: item.sum,
+              name: item.type
+            });
+          });
+        } else {
           this.piefunDatatitle.push({
-            name:item.type,
-            icon : 'circle',
-            textStyle:{fontWeight:'normal', color:'#999',fontSize:12, padding:0},
-          });
-        });
-        res.data.machineType.forEach(item=>{
+              name:'功能模式占比',
+              icon : 'circle',
+              textStyle:{fontWeight:'normal', color:'#999',fontSize:12, padding:0},
+            });
           this.piefunData.push({
-            value: item.sum,
-            name: item.type
-          });
-        });
-        console.log(this.piefunData);
+              value: 0,
+              name: '功能模式占比'
+            });
+        }
         // 把配置和数据放这里
         this.pietypechart.setOption(this.pietypeChartOPtion);
         this.piefunchart.setOption(this.piefunChartOption);
       }
      
     },
-    ortId(k,h){ 
+    ortId(k,h){ //最大值排序
       return h.sum-k.sum;
     },
     initChart() {
@@ -246,6 +264,17 @@ export default {
       this.barchart = echarts.init(document.getElementById('bar'));
       this.pietypechart = echarts.init(document.getElementById('pietype'));
       this.piefunchart = echarts.init(document.getElementById('piefun'));
+    },
+    calMax(arr) {
+      var max = arr[0];
+      for ( var i = 1; i < arr.length; i++) {// 求出一组数组中的最大值
+        if (max < arr[i]) {
+          max = arr[i];
+        }
+      }
+      var maxint = Math.ceil(max / 10);// 向上取整
+      var maxval = maxint * 10;// 最终设置的最大值
+      return maxval;// 输出最大值
     },
     machineselectpicker(data){ //收益收据选择设备类型搜索
       this.machinecurrentTags = data;
@@ -338,15 +367,15 @@ export default {
             }
           },
           axisTick: {length:5},
+
         }],
         yAxis : [{
           type : 'value',
           offset:10,
-          min: 0,
-          max:function(value) {
-           return (value.max *1.2);
-          },
+          min:0,
+          max:this.lineMax>0?this.lineMax : 1,
           splitNumber:5,
+          interval:this.lineMax>0? this.lineMax/5: 1/5,
           axisLine:{
             show:false,
             lineStyle:{
@@ -460,10 +489,9 @@ export default {
             textStyle: {color: '#999'}
           },
           min:0,
-          max:function(value) {
-           return (value.max *1);
-          },
-          splitNumber:5
+          max:this.barMax>0?this.barMax : 1,
+          splitNumber:5,
+          interval:this.barMax>0? this.barMax/5: 1/5,
         }],
         series: [{
           name: '设备监控',
@@ -593,43 +621,31 @@ export default {
                   }
               },
               data:this.piefunData,
-              color:['#3BA1FF','#F3647C','#FBD438','#4ECC74','#37CCCC']
-              // itemStyle: {
-              //   normal : { 
-              //     color:function(data){
-              //         if (data.name==='超净洗') {
-              //           if (data.value>0) {
-              //             return 'rgb(243,100,124)';
-              //           } else {
-              //             return '#ccc';
-              //           }
-              //         } else if(data.name === '单脱'){
-              //           if (data.value>0) {
-              //             return '#3BA1FF';
-              //           } else {
-              //             return '#ccc';
-              //           }
-              //         }else if(data.name.includes('普通混合')){
-              //           if (data.value>0) {
-              //             return '#4ECC74';
-              //           } else {
-              //             return '#ccc';
-              //           }
-              //         }else {
-              //           if (data.value>0) {
-              //             return '#FBD438';
-              //           } else {
-              //             return '#ccc';
-              //           }
-              //         }
-                      
-              //     }
-              //   }
-              // },
+              itemStyle: {
+                normal : { 
+                  color:function(data){
+                      if (data.value>0) {
+                        if(data.name === '其他'){
+                          return '#B58DEE';
+                        } else {
+                          let color = ['#3BA1FF','#F3647C','#FBD438','#4ECC74','#37CCCC'];
+                          return color[data.dataIndex];
+                        }
+                      } else {
+                        return '#ccc';
+                      }
+                  }
+                }
+              },
           }
         ]
       };
       return opt;
+    }
+  },
+  filters: {
+    tofixd(value){
+     return Number(value).toFixed(2);
     }
   },
   components:{
