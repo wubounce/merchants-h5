@@ -27,13 +27,13 @@
             <li>
               <span class="field-title">NQT</span>
               <p class="select-2" @click="wxScan">
-                <span>{{fromdata.nqt}}</span>
+                <span class="fontColor">{{fromdata.nqt}}</span>
               </p>
             </li>
             <li>
               <span class="field-title">IMEI</span>
               <p class="select-2" @click="wxScan">
-                <span>{{fromdata.imei}}</span>
+                <span class="fontColor">{{fromdata.imei}}</span>
               </p>
             </li>
             <li @click="toFunctionSeting">
@@ -181,8 +181,8 @@
             value: ""
           },
           ver: '',
-          nqt: '',
-          imei: '',
+          nqt: '请输入模块上二维码',
+          imei: '请输入模块上二维码',
           companyVisible: '',
           company: ''
         },
@@ -459,6 +459,7 @@
               overflow: hidden;
               text-overflow: ellipsis;
               white-space: nowrap;
+              padding-right: 0.1rem;
             }
           }
           .select,
@@ -473,11 +474,13 @@
             input {
               text-align: right;
             }
+            .fontColor {
+              color:rgba(153,153,153,1)
+            }
           }
           .select-2 {
             padding: 0 0.35rem;
             height: 0.51rem;
-            font-size: 90%;
             background: url("../../../../static/image/center/icon_scon.png") no-repeat right;
             background-size: 0.51rem 0.51rem;
             .nqt {

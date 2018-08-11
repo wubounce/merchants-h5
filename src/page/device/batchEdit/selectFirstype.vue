@@ -9,7 +9,7 @@
       <ul>
         <li class="bat-hd">
           <span>{{hdTitleArr[currIndex]}}</span>
-          <span>{{selectedFirstype}}</span>
+          <div>{{selectedFirstype}}</div>
         </li>
       </ul>
     </div>
@@ -166,10 +166,17 @@ import { getlistParentTypeFun } from '@/service/device';
         color: rgba(51, 51, 51, 1);
         background: #fff;
         span {
-          &:nth-child(2) {
-            font-size: 0.37rem;
-            color: #1890ff;
-          }
+          width: 50%;
+        }
+        div {
+          flex-grow: 1;
+          width: 50%;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          font-size: 0.37rem;
+          color: #1890ff;
+          text-align: right;
         }
       }
 
@@ -236,7 +243,7 @@ import { getlistParentTypeFun } from '@/service/device';
           border-radius: 0.13rem;
         }
         .result-right {
-          display: none
+          display: none;
         }
       }
     }

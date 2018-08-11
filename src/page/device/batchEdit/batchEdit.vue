@@ -62,20 +62,16 @@
         title: "批量编辑",
         stepArr: [
           {
-            text: "店铺",
-            name: "selectShop"
+            text: "店铺"
           },
           {
-            text: "类型",
-            name: "selectFirstype"
+            text: "类型"
           },
           {
-            text: "功能",
-            name: "selectFunction"
+            text: "型号"
           },
           {
-            text: "时间",
-            name: "selectStartTime"
+            text: "功能"
           }
         ],
         currIndex: 0,
@@ -206,11 +202,11 @@
         color: rgba(51, 51, 51, 1);
         background: #fff;
         span {
-          width: 5.2rem;
+          width: 50%;
         }
         div {
           flex-grow: 1;
-          width: auto;
+          width: 50%;
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;

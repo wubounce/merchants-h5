@@ -8,7 +8,7 @@
     <ul>
       <li class="bat-hd">
         <span>{{hdTitleArr[currIndex]}}</span>
-        <span>{{selectedFirstype}}</span>
+        <div>{{selectedFirstype}}</div>
       </li>
     </ul>
     <div class="sf-bd">
@@ -49,19 +49,15 @@ import { getlistParentTypeFun } from '@/service/device';
         stepArr: [
           {
             text: "店铺",
-            name: "selectShop"
           },
           {
             text: "类型",
-            name: "selectFirstype"
           },
           {
             text: "功能",
-            name: "selectFunction"
           },
           {
             text: "时间",
-            name: "selectStartTime"
           }
         ],
         currIndex: 1,
@@ -155,10 +151,17 @@ import { getlistParentTypeFun } from '@/service/device';
       color: rgba(51, 51, 51, 1);
       background: #fff;
       span {
-        &:nth-child(2) {
-          font-size: 0.37rem;
-          color: #1890ff;
-        }
+        width: 50%;
+      }
+      div {
+        flex-grow: 1;
+        width: 50%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-size: 0.37rem;
+        color: #1890ff;
+        text-align: right;
       }
     }
 

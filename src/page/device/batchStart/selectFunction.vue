@@ -9,8 +9,8 @@
       <ul>
         <li class="bat-hd">
           <span>{{hdTitleArr[currIndex]}}</span>
-          <span v-show="functionSetModel">{{selectedFunction}}</span>
-          <span @click="chooseTime" v-show="!functionSetModel">{{beginTime}}</span>
+          <div v-show="functionSetModel">{{selectedFunction}}</div>
+          <div @click="chooseTime" v-show="!functionSetModel">{{beginTime}}</div>
         </li>
       </ul>
     </div>
@@ -69,8 +69,6 @@ export default {
         functionId: '',
         selectedFunction: '',
         selectIndex: -1,
-        minHour: 10,
-        maxHour: 20,
         minDate: new Date(),
         currentDate: new Date(),
         hdTitleArr: [
@@ -82,19 +80,15 @@ export default {
         stepArr: [
           {
             text: "店铺",
-            name: "selectShop"
           },
           {
             text: "类型",
-            name: "selectFirstype"
           },
           {
             text: "功能",
-            name: "selectFunction"
           },
           {
             text: "时间",
-            name: "selectStartTime"
           }
         ],
         currIndex: 2,
@@ -252,10 +246,17 @@ export default {
       color: rgba(51, 51, 51, 1);
       background: #fff;
       span {
-        &:nth-child(2) {
-          font-size: 0.37rem;
-          color: #1890ff;
-        }
+        width: 50%;
+      }
+      div {
+        flex-grow: 1;
+        width: 50%;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-size: 0.37rem;
+        color: #1890ff;
+        text-align: right;
       }
     }
   }

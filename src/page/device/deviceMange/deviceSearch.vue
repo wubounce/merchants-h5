@@ -55,8 +55,6 @@ import {delay } from "@/utils/tool";
           if(res.code === 0) {
             this.message = "未找到相关结果"
             this.searchList = res.data;  
-          }else{
-            this.$toast(res.msg);
           }
       },
       selectClick: function (index) {

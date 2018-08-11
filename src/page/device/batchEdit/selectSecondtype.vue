@@ -170,11 +170,11 @@ import { getlistParentTypeFun, getlistSubTypeFun} from '@/service/device';
         color: rgba(51, 51, 51, 1);
         background: #fff;
         span {
-          width: 5.2rem;
+          width: 50%;
         }
         div {
           flex-grow: 1;
-          width: auto;
+          width: 50%;
           overflow: hidden;
           text-overflow: ellipsis;
           white-space: nowrap;

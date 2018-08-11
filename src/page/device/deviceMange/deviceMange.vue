@@ -39,7 +39,7 @@
       <div class="page-top">
         <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
           <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore">
-            <div class="device-list" v-for="(item,index) in list" :key="index" @click="toDeviceDetail(item.machineId)">
+            <router-link tag="div" :to="{ name: 'deviceDetail', query:{machineId:item.machineId}}" class="device-list" v-for="(item,index) in list" :key="index">
               <section class="item-hd">
                 <span><b>{{item.machineName}}</b></span>
                 <span class="state">{{item.machineState}}</span>
@@ -55,10 +55,10 @@
                 </p>
                 <p class="item-ft-right">
                   <span>收益</span>
-                  <span>{{item.profit.toFixed(2)}}</span>
+                  <span>{{item.profit | keepTwoNum}}</span>
                 </p>
               </section>
-            </div>
+            </router-link>
             <div class="noData" v-show="hasNoData">暂无设备</div>
             <div v-if="allLoaded" class="nomore-data">没有更多了</div>
           </mt-loadmore>
@@ -67,9 +67,9 @@
       <div class="openItem" @click="toAddItem" v-show="isShow">···</div>
       <div v-show="isShow2">
         <div class="closeItem" @click="toCloseItem">X</div>
-        <router-link to="/addDevice" v-has="'mer:machine:add'"><div class="addDev showItem">新增设备</div></router-link>
+        <router-link :to="{name:'addDevice'}" v-has="'mer:machine:add'"><div class="addDev showItem">新增设备</div></router-link>
         <router-link :to="{name:'batchStart'}" v-has="'mer:machine:reset'"><div class="betchStartup showItem">批量启动</div></router-link>
-        <router-link to="/batchEdit" v-has="'mer:machine:update'"><div class="betchModf showItem">批量修改</div></router-link>
+        <router-link :to="{name:'batchEdit'}" v-has="'mer:machine:update'"><div class="betchModf showItem">批量修改</div></router-link>
       </div>
     </div>
   </section>
@@ -97,6 +97,11 @@
         
       };
     },
+    filters: { //过滤器，过滤2位小数
+      keepTwoNum(value) {
+       return Number(value).toFixed(2);
+      }
+    },
     mounted() {
       this.wrapperHeight = document.documentElement.clientHeight-131;
     },
@@ -108,14 +113,6 @@
         this.index = index;
         this._getList();
 
-      },
-      toDeviceDetail(i) {       
-        this.$router.push({
-        name:'deviceDetail',
-        query:{
-          machineId: i
-        }
-      });
       },
       toAddItem() {
         this.isShow = !this.isShow;

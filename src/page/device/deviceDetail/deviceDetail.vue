@@ -5,7 +5,7 @@
       <ul class="device-detail">
         <li class="device-detail-hd">
           <p>累计收益</p>
-          <p>{{deviceDetail.profit}}</p>
+          <p>{{deviceDetail.profit | keepTwoNum}}</p>
         </li>
         <!-- 表单模块部分  -->
         <li class="device-detail-item">
@@ -140,6 +140,11 @@
           ['状态']
         ]
       };
+    },
+    filters: {
+      keepTwoNum(value) {
+       return Number(value).toFixed(2);
+      }
     },
     methods: {
       async getDetailDevice() {  //获取数据
