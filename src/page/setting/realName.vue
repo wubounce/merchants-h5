@@ -21,6 +21,17 @@
        <div class="confirmNews">
         <button  @click="submitRealName">提交审核</button>
        </div>
+       <hr>
+        <div>
+        <!-- <div class="album-img-list">
+            <ul>
+                <div><img  :src='img.src'> </div>
+            </ul>
+        </div> -->
+        <!-- <div>
+  
+        </div> -->
+    </div>
    </section>
 </template>
 <script>
@@ -71,7 +82,6 @@ export default {
       let res = await uploadFileFun(qs.stringify(obj));
       if(res.code ===0 ) {
         this.img.defaultPicture1 = res.data[0].url;
-        
       }
       else {
         MessageBox.alert(res.msg);

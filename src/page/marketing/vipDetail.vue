@@ -18,11 +18,6 @@
         <p>VIP折扣<span>{{detail.yearCardDiscount?detail.yearCardDiscount:''}}%</span></p>
         <p>每日限用次数<span>{{detail.yearCardLimitTime}}次</span></p>
       </div>
-      <div class="tips">
-        <p>提示：</p>
-        <p>1.建议VIP折扣价不超过特惠活动价。</p>
-        <p>2.每日限用次数不填写或填写0，则不限制次数。</p>
-      </div>
     </div>
     <div class="card-wrap">
       <p class="addvip-type"><span>VIP半年卡</span></p>
@@ -32,11 +27,6 @@
         <p>VIP折扣<span>{{detail.halfYearCardDiscount?detail.halfYearCardDiscount:''}}%</span></p>
         <p>每日限用次数<span>{{detail.halfYearCardLimitTime}}次</span></p>
       </div>
-      <div class="tips">
-        <p>提示：</p>
-        <p>1.建议VIP折扣价不超过特惠活动价。</p>
-        <p>2.每日限用次数不填写或填写0，则不限制次数。</p>
-      </div>
     </div>
     <div class="card-wrap">
       <p class="addvip-type"><span>VIP季卡</span></p>
@@ -45,11 +35,6 @@
         <p>卡售价<span>{{detail.seasonCardPrice | tofixd}}元</span></p>
         <p>VIP折扣<span>{{detail.seasonCardDiscount?detail.seasonCardDiscount:''}}%</span></p>
         <p>每日限用次数<span>{{detail.seasonCardLimitTime}}次</span></p>
-      </div>
-      <div class="tips">
-        <p>提示：</p>
-        <p>1.建议VIP折扣价不超过特惠活动价。</p>
-        <p>2.每日限用次数不填写或填写0，则不限制次数。</p>
       </div>
     </div>
 
@@ -97,10 +82,10 @@ export default {
           let res = await delVipFun(qs.stringify(payload));
           if (res.code === 0) {
             this.$toast({message: '删除成功'});
-            this.$router.push({name:'marketing'});
+            this.$router.push({name:'marketing',query:{tabindex:1}});
           } else {
             this.$toast({message: res.msg });
-            this.$router.push({name:'marketing'});
+            this.$router.push({name:'marketing',query:{tabindex:1}});
           }
       });
     }
@@ -153,6 +138,9 @@ export default {
         line-height: 1.47rem;
         border-bottom:1px solid rgba(223,230,255,1);
         color: #999;
+      }
+      & p:last-child {
+        border:none
       }
       span {
         float: right;

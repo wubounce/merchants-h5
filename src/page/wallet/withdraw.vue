@@ -74,9 +74,8 @@ export default {
         let res = await applyMoneySubmitFun(qs.stringify(payload));
         if (res.code ===0) {
             if(res.data.code === 1004 || res.data.code === 1014) {
-                MessageBox.alert(`请先进行支付宝账号绑定及实名认证`,'').then(async () => {
-                    this.$router.push({name:'accountSet'});
-                });
+                this.$toast(res.data.msg);
+                this.$router.push({name:'accountSet'});
             }else {
                 this.disabled = false;
                 this.$router.push({name:'withdrawResult',query:{applyMoney:true,balanceLogId:res.data.id}});
@@ -128,13 +127,11 @@ export default {
             }
             p{
                 font-size: .3733rem;
-                line-height: .5333rem;
                 color: $third-color;
                 &.name{
                     font-size: .48rem;
                     color: $first-color;
-                    line-height: .6667rem;
-                    margin-bottom: .16rem;
+                    margin-bottom: 0.16rem;
                 }
             }
         }
@@ -159,6 +156,8 @@ export default {
                 input{
                     font-size: .8533rem;
                     margin-left: .0533rem;
+                    padding-top: 0.05rem;
+                    height: 1.2rem;
                     line-height: 1.2rem;
                     background: #fff;
                 }

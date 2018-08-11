@@ -28,12 +28,7 @@
         <div class="add-card">
           <p>卡售价<span>元</span><input type="number" placeholder="请填写卡售价…" v-model="vipform.halfYearCardPrice"></p>
           <p>VIP折扣<span>%</span><input type="number" placeholder="请填写折扣数…" v-model="vipform.halfYearCardDiscount"></p>
-          <p>每日限用次数<span>次</span><input type="number" class="num" v-model="vipform.halfYearCardLimitTime"></p>
-        </div>
-        <div class="tips">
-          <p>提示：</p>
-          <p>1.建议VIP折扣价不超过特惠活动价。</p>
-          <p>2.每日限用次数不填写或填写0，则不限制次数。</p>
+          <p style="border:none">每日限用次数<span>次</span><input type="number" class="num" v-model="vipform.halfYearCardLimitTime"></p>
         </div>
       </div>
     </div>
@@ -44,12 +39,7 @@
         <div class="add-card">
           <p>卡售价<span>元</span><input type="number" placeholder="请填写卡售价…" v-model="vipform.seasonCardPrice"></p>
           <p>VIP折扣<span>%</span><input type="number" placeholder="请填写折扣数…" v-model="vipform.seasonCardDiscount"></p>
-          <p>每日限用次数<span>次</span><input type="number" v-model="vipform.seasonCardLimitTime" class="num"></p>
-        </div>
-        <div class="tips">
-          <p>提示：</p>
-          <p>1.建议VIP折扣价不超过特惠活动价。</p>
-          <p>2.每日限用次数不填写或填写0，则不限制次数。</p>
+          <p style="border:none">每日限用次数<span>次</span><input type="number" v-model="vipform.seasonCardLimitTime" class="num"></p>
         </div>
       </div>
     </div>
@@ -191,7 +181,7 @@ export default {
       let res = await addOrUpdateVipFun(qs.stringify(paylod));
       if (res.code === 0) {
          this.$toast({message: "修改成功" });
-         this.$router.push({name:'marketing'});
+         this.$router.push({name:'marketing',query:{tabindex:1}});
       }
     }
   },

@@ -541,6 +541,12 @@ export default {
     },
     //提交修改信息
     async submit() {
+      if(this.orderLimitMinutes) {
+        if(this.orderLimitMinutes<0 || this.orderLimitMinutes>9 ) {
+          MessageBox.alert('请填个位数的时长');
+          this.orderLimitMinutes = '';
+        }
+      }
       let changeisReserve = (this.isReserve==true)? 0 :1;
       let obj = {
         shopId: this.$route.query.shopId,
