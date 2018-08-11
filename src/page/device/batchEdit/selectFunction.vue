@@ -46,11 +46,12 @@ export default {
         title: "批量编辑",
         getJsonArr: [],
         selectedFunction: '',
+        functionTempletType: '',
         hdTitleArr: [
           "1.请选择相应店铺",
           "2.请选择设备类型",
-          "3.请选择设备相应功能",
-          "4.请选择启动时间"
+          "3.请选择设备型号",
+          "4.请选择设备相应功能"
         ],
         stepArr: [
           {
@@ -112,7 +113,8 @@ export default {
         let payload = {shopId: query.shopId,subTypeId: query.subTypeId};
         let res = await getFunctionSetListFun(qs.stringify(payload));
           if(res.code === 0) {
-             this.getJsonArr = res.data.list;        
+             this.getJsonArr = res.data.list;
+             this.functionTempletType = res.data.functionTempletType;        
              if(res.data.communicateType === 1){
                this.functionListTitle = this.functionListTitle2;
                this.isShow = false;            
@@ -133,6 +135,7 @@ export default {
         let obj ={
           subTypeId: query.subTypeId,
           shopId: query.shopId,
+          functionTempletType: this.functionTempletType,
           functionJson: JSON.stringify(arr)
         };
         let res = await batchEditFun(qs.stringify(obj));
