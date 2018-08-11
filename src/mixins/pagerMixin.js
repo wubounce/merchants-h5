@@ -10,6 +10,7 @@ export default {
       total:null,
       allLoaded: false,//数据是否加载完毕
       wrapperHeight: 0,//容器高度
+      scrollShow:'auto',  
     };
   },
   computed: {
@@ -29,6 +30,15 @@ export default {
         this.allLoaded = true;//模拟数据加载完毕 禁用上拉加载
       }
       this.$refs.loadmore.onBottomLoaded();
+    },
+    //针对有的安卓机上overflow：scroll会出现重叠现象
+    translateChange(translate) {              
+      if(translate > 0){
+        this.scrollShow = '';
+      }else{
+        this.scrollShow = 'auto';
+        
+      }       
     },
     loadTop() {
       this.page = 1;

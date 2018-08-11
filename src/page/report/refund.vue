@@ -11,6 +11,10 @@
       </div>
     </div>
     <div class="echarts-warp">
+      <div class="order-earchs-title">
+        <span>退款金额</span>
+        <span class="order-num">订单数</span>
+      </div>
       <div :class="className" :id="id" :style="{height:height,width:width}" ref="myEchart"></div>
       <div class="echart-title"><span style="background:#1890FF"></span>退款金额<span style="background:#FACC14"></span>订单数量</div>
     </div>
@@ -27,7 +31,7 @@
         <router-link class="detail" :to="{name:'reportdetail', query:{date:item.date,type:3}}" >
           <span class="listtime report-table-date">{{item.date}}</span>
           <span  class="report-table-order">{{item.count}}</span>
-          <span  class="report-table-order">{{item.money}}</span>
+          <span  class="report-table-order">{{item.money | tofixd}}</span>
         </router-link>
       </div>
     </div>
@@ -349,6 +353,11 @@ export default {
       return option;
     }
   },
+  filters: {
+    tofixd(value){
+     return Number(value).toFixed(2);
+    }
+  },
   components:{
     selectpickr
   }
@@ -371,6 +380,18 @@ export default {
   }
   .echarts-warp {
     padding: 0.32rem 0.32rem 0 0.32rem;
+  }
+  .order-earchs-title {
+    display: flex;
+    color: #999;
+    font-size: 12px;
+    span {
+      flex:1;
+
+    }
+    .order-num {
+      text-align: right;
+    }
   }
   .echart-title {
     font-size: 12px;

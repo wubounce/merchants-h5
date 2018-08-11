@@ -21,8 +21,8 @@
     <div class="no-order" v-if="nosearchList"><p>未找到符合的结果</p></div>
     <div class="no-order" v-if="noOrderList"><p>暂无订单</p></div> 
     <div class="page-top" :style="{ 'padding-top': hiddenPageHeight + 'rem' }">
-       <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
-         <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore">
+       <div class="page-loadmore-wrapper" ref="wrapper" :style="{overflowY:scrollShow}">
+         <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" @translate-change="translateChange"  :auto-fill="false" ref="loadmore">
             <div class="alllist" v-for="(item,index) in list" :key="index">
               <section class="ordermun">
                 <span class="odernmu-phone">{{item.phone}}<span style="padding:0 0.186667rem;color:#333333">|</span>{{item.createTime}}</span>
@@ -90,8 +90,6 @@ export default {
     };
   },
   mounted() {
-    // var html=document.getElementsByTagName("html")[0].style.fontSize;
-    this.wrapperHeight = document.documentElement.clientHeight;
   },
   created(){
   },
@@ -153,6 +151,7 @@ export default {
       this.orderStatus = '';//全部tab 显示数据
       this.list = [];
       this.page = 1;
+      this.allLoaded = false;//下拉刷新时解除上拉加载的禁用
       var keyCode = window.event? e.keyCode:e.which;
       if(keyCode =='13'){
         this._getList();

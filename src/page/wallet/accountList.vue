@@ -1,12 +1,12 @@
 <template>
-<div class="accountList-wrapper" v-title="'收支明细'">
+<div class="accountList-wrapper page-loadmore-height" v-title="'收支明细'">
     <section class="apply-status">
         <div v-for="(item,index) in titleArr" @click="titleClick(index)"><span :class="{current: titleIndex === index}">{{item.lable}}</span></div>
     </section>
     <div class="no-discount-list" v-if="list.length<=0">暂无相关明细</div>
     <!-- 记录为收益类，增加class：add -->
-    <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px'}"  v-else>
-        <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore">
+    <div class="page-loadmore-wrapper" ref="wrapper" :style="{overflowY:scrollShow}"  v-else>
+        <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" @translate-change="translateChange" :auto-fill="false" ref="loadmore">
             <div class="apply--list-wrap">
                 <div class="all-list">
                     <div class="all" v-for="(item,index) in list" :key="index" >
@@ -69,7 +69,6 @@ export default {
     };
   },
   mounted() {
-    this.wrapperHeight = document.documentElement.clientHeight-44;
   },
   created(){
     
@@ -107,7 +106,10 @@ export default {
     @import "../../assets/scss/common";
     
     .accountList-wrapper{
+        padding-top: 1.17rem;
+        box-sizing:border-box;
         .apply-status {
+            width: 100%;
             display: flex;
             font-size: 16px;
             color: #333;
@@ -116,6 +118,9 @@ export default {
             height: 1.173333rem;
             line-height: 1.173333rem;
             border-bottom:1px solid #E5E5E5;
+            position: fixed;
+            top: 0;
+            z-index: 99;
             div {
               flex: 1;
             }

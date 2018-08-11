@@ -13,7 +13,7 @@
             <span class="report-table-name">{{item.machineName}}</span>
             <span class="report-table-type">{{item.machineTypeName}}</span>
             <span class="report-table-order">{{item.count}}</span>
-            <span class="report-table-order">{{item.money}}</span>
+            <span class="report-table-order">{{item.money | tofixd}}</span>
           </div>
         </div>
     </div>
@@ -44,6 +44,11 @@ export default {
       let payload = Object.assign({},{date:date,type:type});
       let res = await machineReportFun(qs.stringify(payload));
       this.list = res.data;
+    }
+  },
+  filters: {
+    tofixd(value){
+     return Number(value).toFixed(2);
     }
   },
   components:{

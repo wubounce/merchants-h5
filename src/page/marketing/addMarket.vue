@@ -6,7 +6,7 @@
      <p>优惠期结束<span class="addvip-con">{{addmarket.endTime}}<span class="order-action iconfont icon-nextx" @click="open('picker3')"></span></span></p>
     <p>活动日<span class="order-action add-shop-overflow-icon iconfont icon-nextx" @click="activeVisible=true"></span><span class="addvip-con add-shop-overflow">{{activeCurrentTags?activeCurrentTags.label !== '自定义'?activeCurrentTags.label:checkWeeklisttxt:checkWeeklisttxt}}</span></p>
     <p>每日活动时段<span class="addvip-con">{{addmarket.time}}<span class="order-action iconfont icon-nextx" @click="activeTimeVisible = true"></span></span></p>
-    <p>折扣优惠<span class="addvip-con"><input type="number" placeholder="折扣优惠" class="discount-input" v-model="addmarket.discount">%</span></p>
+    <p>折扣优惠<span class="addvip-con"><input type="number" placeholder="请输入优惠折扣" class="discount-input" v-model="addmarket.discount">%</span></p>
     <p>是否开放<span class="addvip-con"><mt-switch v-model="addmarket.addstatus" class="check-switch"></mt-switch></span></p>
   </div>
   <div class="nopay-time">

@@ -3,11 +3,11 @@
   <div class="add-form">
     <div class="input-group">
       <div class="form-title"><span>手机号码</span></div>
-      <div class="form-input"><input type="number" v-model="phone" @blur="validatPhone" @input="disabledBtn" placeholder="账号密码自动发送此手机"></div>
+      <div class="form-input"><input type="number" v-model="phone" @blur="validatPhone" @input="disabledBtn" placeholder="请输入手机号"></div>
     </div>
     <div class="input-group">
       <div class="form-title"><span>姓名</span></div>
-      <div class="form-input"><input type="text" v-model="username" @blur="validatName" @input="disabledBtn" maxlength="20"></div>
+      <div class="form-input"><input type="text" v-model="username" @blur="validatName" @input="disabledBtn" maxlength="20" placeholder="请输入姓名"></div>
     </div>
     <div class="input-group">
       <div class="form-title"><span>负责店铺</span></div>
@@ -211,8 +211,6 @@ export default {
       this.permissionsVisible = false;
     },
     async addmember(){
-      console.log(this.operateShopIds);
-      console.log(this.checkpermissionslist);
       if (this.validate()) {
         let menshopids = [];
         this.operateShopIds.forEach(item=>menshopids.push(`'${item}'`));
@@ -224,7 +222,7 @@ export default {
         };
         let res = await addOperatorFun(qs.stringify(payload));
         if (res.code === 0) {
-          this.$toast({message: '新增成功' });
+          this.$toast({message: '新增成功,密码将发送至此手机' });
           this.$router.push({name:'member'});
         } else {
           this.$toast({message: res.msg });

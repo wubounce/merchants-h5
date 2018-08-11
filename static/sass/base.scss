@@ -106,8 +106,10 @@ input:-webkit-autofill { box-shadow: 0 0 0px 1000px white inset !important;}
     text-align: center;
     padding-top: 4rem;
 }
+
 .page-loadmore-wrapper {
-    overflow: scroll
+    height: 100%;
+    -webkit-overflow-scrolling: touch;
   }
 
 .mint-loadmore-top, .mint-loadmore-text {
@@ -124,12 +126,10 @@ input:-webkit-autofill { box-shadow: 0 0 0px 1000px white inset !important;}
   line-height: .53rem;
   color: #999999;
 }
-
-.page-loadmore-wrapper {
-  overflow: scroll;
-  -webkit-overflow-scrolling: touch;
-}
-
 .icon-xiangxiajiantou {
     color: #BAC0D2;
   }
+
+.page-loadmore-height {
+  height: 100%;
+}

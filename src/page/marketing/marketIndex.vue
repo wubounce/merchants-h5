@@ -1,10 +1,10 @@
 <template>
-<div class="marketing">
+<div class="marketing page-loadmore-height">
   <div class="permissions" v-if="$store.getters.has('mer:marketing:list')">暂无相关页面权限</div>
-  <div v-else>
+  <div class="page-loadmore-height" v-else>
     <div class="no-discount-list" v-if="list.length<=0">未设置限时优惠活动</div>
-    <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
-      <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore">
+    <div class="page-loadmore-wrapper" ref="wrapper" :style="{overflowY:scrollShow}">
+      <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" @translate-change="translateChange" :auto-fill="false" ref="loadmore">
     		<div class="discoun-list" v-for="(item,index) in list" :key="index">
           <router-link :to="{name:'detailMarket', query:{id:item.id}}">
               <span class="discountag" v-if="item.status === 2"><img src="../../../static/image/market/overdue@2x.png"></span>

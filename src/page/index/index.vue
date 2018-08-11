@@ -198,7 +198,12 @@ export default {
       if (res.code === 0) {
         res.data.forEach(item=>{
           this.lineseriesData.push(item.sum);
-          this.linexAxisData.push(`${item.time}:00`);
+          if (String(item.time).length <=2 ) {
+            this.linexAxisData.push(`${item.time}:00`);
+          } else {
+            this.linexAxisData.push(item.time);
+          }
+          
         });
         this.lineMax = this.calMax(this.lineseriesData);//Y轴最大值
         // 把配置和数据放这里
@@ -233,7 +238,18 @@ export default {
               textStyle:{fontWeight:'normal', color:'#999',fontSize:12, padding:0},
             });
           });
-          res.data.machineType.forEach(item=>{
+          let fristFour = res.data.machineType.sort(this.ortId).slice(0,5); //类型标题只显示最大的三个类型
+          let other = res.data.machineType.sort(this.ortId).slice(5);
+          let otherNum = null;
+          other.forEach(item=>{
+            otherNum += item.sum;
+          });
+          other = [{
+            sum: otherNum,
+            type: '其他'
+          }];
+          let machineType = [...fristFour,...other];
+          machineType.forEach(item=>{
             this.piefunData.push({
               value: item.sum,
               name: item.type
@@ -591,7 +607,7 @@ export default {
             orient: 'horizontal',
             y: 'bottom',
             x:'center',
-            bottom:'40%',
+            bottom:'10%',
             itemWidth:6, //图表大小
             itemHeight:6,
             data:this.piefunDatatitle,

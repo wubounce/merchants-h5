@@ -1,11 +1,10 @@
 <template>
-<div class="member" v-title="title">
+<div class="member page-loadmore-height" v-title="title">
   <div class="permissions" v-if="$store.getters.has('mer:person:list')">暂无相关页面权限</div>
-  <div v-else>
-
+  <div class="page-loadmore-height" v-else>
     <div class="no-discount-list" v-if="list.length<=0">暂无二级管理账号</div>
-    <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
-     <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore">
+    <div class="page-loadmore-wrapper" ref="wrapper" :style="{overflowY:scrollShow}">
+     <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" @translate-change="translateChange" :auto-fill="false" ref="loadmore">
        <div class="page-member-pull">
          <div class="meber-list" v-for="(item,index) in list" :key="index">
             <div class="momber-wrap">
@@ -47,7 +46,7 @@ export default {
     };
   },
   mounted() {
-    this.wrapperHeight = document.documentElement.clientHeight;
+    
   },
   created(){
   },
@@ -76,9 +75,6 @@ export default {
         }
       let payload = Object.assign({},{id:id,isLock:isLock});
       let res = await lockOperatorrFun(qs.stringify(payload));
-      if (res.code === 0) {
-         this.$toast({message: isLock===1 ? '禁用成功':'解除禁用成功'});
-      }
     },
     addmemeber(){
       this.$router.push({name:'addMember'});
@@ -158,9 +154,6 @@ export default {
     font-size: 14px;
     padding-top: 4rem;
     color: #999;
-  }
-  .page-loadmore-wrapper {
-    overflow: scroll
   }
   .nomore-data {
     text-align: center;

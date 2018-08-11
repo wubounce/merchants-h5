@@ -1,15 +1,15 @@
  <template>
-<div class="marketing" v-title="title">
+<div class="marketing-mang-wrap page-loadmore-height" v-title="title">
   <section class="tab-title">
   	<div v-for="(item,index) in tabtitle" @click="tabclick(index)"><span :class="{tabcurrent:tabindex === index}" >{{item}}</span></div>
   </section>
-  <section class="tab-contont">
+  <section class="tab-contont page-loadmore-height">
 
-  	<div class="discount-wrap" v-if="tabindex === 0">
+  	<div class="discount-wrap page-loadmore-height" v-if="tabindex === 0">
       <market></market>
   	</div>
 
-  	<div class="VIP-wrap"  v-if="tabindex === 1">
+  	<div class="VIP-wrap page-loadmore-height"  v-if="tabindex === 1">
       <vip></vip>
   	</div>
   </section>
@@ -46,6 +46,10 @@ export default {
 };
 </script>
 <style type="text/css" lang="scss" scoped>
+.marketing-mang-wrap {
+  padding-top:1.33rem; 
+  box-sizing: border-box;
+}
   .tab-title {
     background: #fff;
     width: 100%;
@@ -55,8 +59,10 @@ export default {
     color: #333333;
     text-align: center;
     display: flex;
+    border-bottom:1px solid rgba(220,224,230,1);
     z-index: 9999;
-    position: relative;
+    position: fixed;
+    top: 0;
     >div {
       flex: 1;
     }

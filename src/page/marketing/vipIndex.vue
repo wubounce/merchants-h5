@@ -1,10 +1,10 @@
  <template>
-<div class="marketing">
+<div class="marketing page-loadmore-height">
   <div class="permissions" v-if="$store.getters.has('mer:marketing:vip:list')">暂无相关页面权限</div>
-      <div v-else>
+      <div class="page-loadmore-height" v-else>
         <div class="no-discount-list" v-if="list.length<=0">未设置店铺VIP卡</div>
-        <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
-          <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore">
+        <div class="page-loadmore-wrapper" ref="wrapper" :style="{overflowY:scrollShow}">
+          <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded"  @translate-change="translateChange" :auto-fill="false" ref="loadmore">
               <div class="vip-list-wrap" v-for="(item,index) in list" :key="index">
                   <div class="card-banner">       
                     <swiper :options="swiperOption"  ref="mySwiper">
@@ -86,7 +86,7 @@ export default {
     };
   },
   mounted() {
-    this.wrapperHeight = document.documentElement.clientHeight-42;
+    
   },
   created(){
   },

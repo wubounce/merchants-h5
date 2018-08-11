@@ -1,8 +1,8 @@
 <template>
-<div class="withdrawList-wrapper" v-title="'提现记录'">
+<div class="withdrawList-wrapper page-loadmore-height" v-title="'提现记录'">
     <div class="no-discount-list" v-if="list.length<=0">暂无提现记录</div>
-    <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
-        <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore">
+    <div class="page-loadmore-wrapper" ref="wrapper" :style="{overflowY:scrollShow}">
+        <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" @translate-change="translateChange" :auto-fill="false" ref="loadmore">
             <div class="page-with-list">
                 <div  v-for="(item,index) in list" :key="index" :class="['list', {'fall':item.status === 2}]" >
                     <router-link :to="{name:'withdrawResult',query:{balanceLogId:item.id}}">
@@ -38,7 +38,6 @@ export default {
         };
   },
   mounted() {
-    this.wrapperHeight = document.documentElement.clientHeight;
   },
   created(){
   },
