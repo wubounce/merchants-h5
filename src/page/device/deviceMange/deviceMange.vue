@@ -55,7 +55,7 @@
                 </p>
                 <p class="item-ft-right">
                   <span>收益</span>
-                  <span>{{item.profit}}</span>
+                  <span>{{item.profit.toFixed(2)}}</span>
                 </p>
               </section>
             </div>

@@ -42,7 +42,6 @@
             </li>
           </ul>
         </li>
-
       </ul>
     <button class="submitBtn" @click="submit" :class="{'default':!fromdata.machineName}" :disabled="!fromdata.machineName">提交</button>
     </div>
@@ -66,6 +65,7 @@
         </p>
       </div>
     </section>
+    <div style="width:100%;height:1.73rem;"></div>
     <section class="promiss-footer">
       <span class="can" @click="goBack">上一步</span>
       <span class="cifrm" @click="goNext">下一步</span>

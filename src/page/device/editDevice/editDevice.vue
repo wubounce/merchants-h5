@@ -152,8 +152,8 @@
             name: "未设置",
             value: ""
           },
-          nqt: "84e5397409274f718ec52509f0be91f2",
-          imei: "865933031201524"
+          nqt: "",
+          imei: ""
         },
         selectListA: [],
         functionList: [],

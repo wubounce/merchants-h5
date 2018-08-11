@@ -65,7 +65,6 @@ const Web = {
         });
         return
       default:
-        cb("http://haiyaxiyi.cn/Wash/skip?NQT=84e5397409274f718ec52509f0be91f2&Company=youfang&CommunicateType=0&Ver=3")
         alert('暂不支持，请使用支付宝生活号或微信公众号')
     }
   }

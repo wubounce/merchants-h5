@@ -2,9 +2,9 @@
   <section class="sf-wrappper" v-title="title">
     <div class="fixedPosition">
       <div class="bat-step">
-        <p v-for="(item,index) in stepArr " :key="index" :class="{active:currIndex==index}">
-          <span>{{item.text}}</span>
-        </p>
+        <div class="line-bg">
+          <p v-for="(item,index) in stepArr " :key="index" :class="{active:currIndex==index}">{{item.text}}</p>
+        </div>
       </div>
       <ul>
         <li class="bat-hd">
@@ -131,13 +131,16 @@ import { getlistParentTypeFun, getlistSubTypeFun} from '@/service/device';
         height: 2.08rem;
         font-size: 0.37rem;
         color: #1890ff;
-        background: #f9fcff;
-        p {
-          flex: 1;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          span {
+        background-color: rgba(249,252,255,1);
+        background: url("../../../assets/img/device/devic_line_icon.png") no-repeat center;
+        background-size: 6.03rem;
+        .line-bg {
+          width: 100%;
+          margin: 0 0.83rem;
+          p {
+            margin: 0.72rem 1.3rem 0.72rem 0;
+            background-color: #ffffff;
+            display: inline-block;
             text-align: center;
             width: 1.11rem;
             height: 0.64rem;
@@ -145,10 +148,12 @@ import { getlistParentTypeFun, getlistSubTypeFun} from '@/service/device';
             box-shadow: 0rem 0.03rem 0.05rem 0rem rgba(179, 218, 255, 1);
             border-radius: 0.39rem;
             border: 0rem solid rgba(255, 255, 255, 1);
+            &:nth-child(4) {
+              margin-right: 0;
+            }
+
           }
-        }
-        .active {
-          span {
+          .active {
             color: #fff;
             background: #1890ff;
           }
