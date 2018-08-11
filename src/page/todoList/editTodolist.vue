@@ -17,7 +17,8 @@
     </mt-popup>
 
     <!-- 启动时间 -->
-    <mt-datetime-picker ref="pickerStarTime" type="datetime" v-model="pickerValue"  @confirm="handleConfirm"></mt-datetime-picker>
+        <mt-datetime-picker ref="pickerStarTime" type="datetime" v-model="pickerValue"  @confirm="handleConfirm"></mt-datetime-picker>
+    <!-- <mt-datetime-picker ref="pickerStarTime" type="datetime" v-model="pickerValue"   year-format="{value} 年"  month-format="{value} 月"  date-format="{value} 日" hour-format="{value} 时" minute-format="{value} 分"  @confirm="handleConfirm"></mt-datetime-picker> -->
   </section>
 </template>
 
