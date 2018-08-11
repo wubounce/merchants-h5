@@ -29,7 +29,7 @@
             </div>
             <div><span class="iconfont" :class="{'icon-xuanze':index==selectIndex}"></span></div>
           </li>
-          <li class="searchNoItem" v-if="shopList.length<=0">">没有找到匹配数据</li>
+          <li class="searchNoItem" v-show="shopList.length<=0">没有找到匹配数据</li>
         </ul>
       </div>
     </div>
@@ -44,7 +44,6 @@
   import {delay} from "@/utils/tool";
   import { getShopFun,shopSearchFun } from '@/service/device';
   export default {
-    mixins: [PagerMixin],
     data() {
       return {
         //分页

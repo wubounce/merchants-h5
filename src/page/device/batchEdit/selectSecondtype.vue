@@ -81,7 +81,7 @@ import { getlistParentTypeFun, getlistSubTypeFun} from '@/service/device';
       },
       async checkSecondClass() { //获取二级列表
         let query = this.$route.query;
-        let payload = {shopid:query.shopId,parentTypeId:query.parentTypeId};
+        let payload = {shopId:query.shopId,parentTypeId:query.parentTypeId};
            let res = await getlistSubTypeFun(qs.stringify(payload));
            if(res.code === 0) {
              this.secondTypeList = res.data; 
