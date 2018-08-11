@@ -224,12 +224,12 @@ export default {
     .input-group {
       height: 1.17rem;
       line-height: 1.17rem;
-      border-bottom:1px solid #E5E5E5;
+      border-bottom:1px solid rgba(229,229,229,1);
       font-size: 16px;
     }
     .input-group2 {
       line-height: 1.17rem;
-      border-bottom:1px solid #E5E5E5;
+      //border-bottom:1px solid #E5E5E5;
       font-size: 16px;
       .form-title {
         .key,.value {

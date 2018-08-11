@@ -6,7 +6,7 @@
       <router-link :to="{name:'setAlipay'}" v-has="'mer:me:aplipay'">
         <p class="user business">绑定支付宝<span>{{ user.alipayAccount ? user.alipayAccount : '未绑定' | replaceAliply}}</span></p>
       </router-link>
-      <p class="user business"  v-has="'mer:me:real'" @click="toRealName" >实名认证<span>{{user.status}}</span></p>
+      <p class="user business"  id="border-top" v-has="'mer:me:real'" @click="toRealName" >实名认证<span>{{user.status}}</span></p>
   </section>
 </template>
 <script>
@@ -90,9 +90,9 @@ export default {
 </script>
 <style  type="text/css" lang="scss" scoped>
 section {
+  padding: 0 0.4rem;
   background-color: #fff;
   .user {
-    margin-top: 0.3rem;
     display: flex;
     justify-content: space-between;
   }
@@ -102,7 +102,7 @@ section {
     font-size: 16px;
     padding: 0.3rem;
     background-color: #fff;
-    border-bottom: 1px solid #F8F8F8;
+    border-bottom: 1px solid rgba(229,229,229,1);
     background: url("../../../static/image/shop/right.png") no-repeat right
       0.3rem center;
     background-size: 0.16rem 0.27rem;
@@ -111,6 +111,9 @@ section {
       margin-right: 0.3rem;
       color:#999999;
     }
+  }
+  #border-top{
+    border-bottom:none;
   }
 }
 </style>
