@@ -765,6 +765,7 @@ export default {
         }
         input {
           height: 1rem;
+          line-height:1rem;
         }
         ::-webkit-input-placeholder {
           color: #999999;
@@ -857,6 +858,7 @@ export default {
         }
         input {
           height: 1rem;
+          line-height: 1rem;
           background-color: #fff;
         }
         ::-webkit-input-placeholder {
