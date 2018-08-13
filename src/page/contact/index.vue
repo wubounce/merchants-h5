@@ -16,6 +16,7 @@
   export default {
     data() {
       return {
+        title:'联系客服',
         imgShow:'../../../static/image/user/wechat.png',
         msg:'关注公众号联系“在线客服”',
       };

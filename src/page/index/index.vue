@@ -221,13 +221,23 @@ export default {
       let res = await typeProfitFun(qs.stringify(payload));
       if (res.code === 0) {
         let communicateTypeData = res.data ? res.data.communicateType :[];
-        communicateTypeData.forEach(item=>{
+        if (communicateTypeData.length>0) {
+          communicateTypeData.forEach(item=>{
             this.pietypeData.push({
               value: item.sum,
               name: communicateType(Number(item.type))
             });
-        });
-       
+          });
+        } else {
+          this.pietypeData.push({
+            value: 0,
+            name: '脉冲'
+          },
+          {
+            value: 0,
+            name: '串口'
+          });
+        }
         let machineTypeData = res.data ? res.data.machineType :[];
         if (machineTypeData.length>0) {
           machineTypeData = machineTypeData.sort(this.ortId).slice(0,3); //类型标题只显示最大的三个类型

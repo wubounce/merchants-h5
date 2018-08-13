@@ -9,13 +9,13 @@
       <div class="form-title"><span>姓名</span></div>
       <div class="form-input"><input type="text" v-model="username" @blur="validatName" @input="disabledBtn" maxlength="20" placeholder="请输入姓名"></div>
     </div>
-    <div class="input-group">
+    <div class="input-group"  @click="shopVisible=true">
       <div class="form-title"><span>负责店铺</span></div>
-      <div class="form-input"><span :class="['more',{'more-color':checkshoptxt === ''}]">{{checkshoptxt?checkshoptxt:'请选择店铺'}}</span><span class="forward iconfont icon-nextx" @click="shopVisible=true"></span></div>
+      <div class="form-input"><span :class="['more',{'more-color':checkshoptxt === ''}]">{{checkshoptxt?checkshoptxt:'请选择店铺'}}</span><span class="forward iconfont icon-nextx"></span></div>
     </div>
-    <div class="input-group" style="border:none">
+    <div class="input-group" style="border:none" @click="permissionsVisible=true">
       <div class="form-title"><span>权限</span></div>
-      <div class="form-input"><span :class="['more',{'more-color':permissionsMIdsTxt === ''}]">{{permissionsMIdsTxt?permissionsMIdsTxt:'请选择权限'}}</span><span class="forward iconfont icon-nextx"  @click="permissionsVisible=true"></span></div>
+      <div class="form-input"><span :class="['more',{'more-color':permissionsMIdsTxt === ''}]">{{permissionsMIdsTxt?permissionsMIdsTxt:'请选择权限'}}</span><span class="forward iconfont icon-nextx"></span></div>
     </div>
   </div>
   <mt-button class="confirm" @click="addmember" :disabled="disabled">提交</mt-button>
@@ -70,7 +70,7 @@
                         <input type="checkbox" class="mint-checkbox-input" v-model="checkpermissionslist" :value="sitem.menuId"> 
                         <span class="mint-checkbox-core"></span>
                       </span> 
-                      <span class="mint-checkbox-label shopname" style="padding-left:0.8rem;">{{sitem.name}}</span>
+                      <span class="mint-checkbox-label shopname">{{sitem.name}}</span>
                     </div>
                   </label>
                 </div>

@@ -1,7 +1,8 @@
 import axios from 'axios';
 import { Indicator, MessageBox } from 'mint-ui';
 import store from '../store';
-import { getToken } from '@/utils/tool';
+import { getToken, removeMenu } from '@/utils/tool';
+import { menuSelectFun } from '@/service/member';
 const baseUrl = process.env.NODE_ENV === 'production' ? 'http://192.168.5.10:8089/merchant/' : 'http://192.168.5.10:8089/merchant/'; 
 // 创建axios实例
 const http = axios.create({
@@ -56,9 +57,17 @@ http.interceptors.response.use(
 
       }
       return Promise.resolve(response.data);
+
     }else {
+      if(response.data.code === 7004){
+          removeMenu();
+          commit('setMenu', []);
+          store.dispatch('getMenu').then(() => {
+            location.reload();// 为了重新实例化vue-router对象 避免bug
+          });
+      }
       // 50008:非法的token; 50012:其他客户端登录了;  50014:Token 过期了;
-      if (response.data.code === 50008 || response.data.code === 50012 || response.data.code === 50014) {
+      if (response.data.code === 11 || response.data.code === 50012 || response.data.code === 50014) {
         MessageBox.confirm('你已被登出，可以取消继续留在该页面，或者重新登录', '确定登出', {
           confirmButtonText: '重新登录',
           cancelButtonText: '取消',

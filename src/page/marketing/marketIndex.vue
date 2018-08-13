@@ -2,7 +2,7 @@
 <div class="marketing page-loadmore-height">
   <div class="permissions" v-if="$store.getters.has('mer:marketing:list')">暂无相关页面权限</div>
   <div class="page-loadmore-height" v-else>
-    <div class="no-discount-list" v-if="list.length<=0">未设置限时优惠活动</div>
+    <div class="no-discount-list" v-if="noList">未设置限时优惠活动</div>
     <div class="page-loadmore-wrapper" ref="wrapper" :style="{overflowY:scrollShow}">
       <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" @translate-change="translateChange" :auto-fill="false" ref="loadmore">
     		<div class="discoun-list" v-for="(item,index) in list" :key="index">
@@ -45,6 +45,7 @@ export default {
   data() {
     return {
       list:[],
+      noList:false,
     };
   },
   mounted() {
@@ -58,6 +59,7 @@ export default {
       let res = await timeMarketListFun(qs.stringify(payload));
       if (res.code === 0) {
         this.list = res.data.items?[...this.list,...res.data.items]:[];  //分页添加
+        this.list.length <= 0 ? this.noList = true:this.noList = false;
         this.total = res.data.total;
         res.data.items.forEach((item)=>{
             item.noDiscountStart = item.noDiscountStart ? moment(item.noDiscountStart).format('YYYY-MM-DD') : '';

@@ -1,5 +1,5 @@
 import { getToken, setToken, removeToken, getUser, setUser, removeUser, setMenu, removeMenu, getMenu } from '@/utils/tool';
-
+import { menuSelectFun } from '@/service/member';
 const user = {
   state: {
     token: getToken(),
@@ -57,8 +57,10 @@ const user = {
       commit('SET_TOKEN', token);
     },
     getMenu({ commit }, menu){
-      setMenu(menu);
-      commit('setMenu', menu);
+      menuSelectFun().then((data) => {
+         commit('setMenu', data.data);
+        setMenu(data.data);
+      });
     },
     // 获取用户信息
     getUser ({ commit, state },userInfo) {

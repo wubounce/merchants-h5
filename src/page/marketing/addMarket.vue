@@ -1,20 +1,20 @@
 <template>
 <div class="addmarket" v-title="title">
   <div class="addvip-header">
-    <p>所属店铺<span class="order-action add-shop-overflow-icon iconfont icon-nextx" @click="shopVisible=true"></span><span class="addvip-con add-shop-overflow">{{checkshoptxt?checkshoptxt:''}}</span></p>
-    <p>优惠期开始<span class="addvip-con">{{addmarket.startTime}}<span class="order-action iconfont icon-nextx" @click="open('picker2')"></span></span></p>
-     <p>优惠期结束<span class="addvip-con">{{addmarket.endTime}}<span class="order-action iconfont icon-nextx" @click="open('picker3')"></span></span></p>
-    <p>活动日<span class="order-action add-shop-overflow-icon iconfont icon-nextx" @click="activeVisible=true"></span><span class="addvip-con add-shop-overflow">{{activeCurrentTags?activeCurrentTags.label !== '自定义'?activeCurrentTags.label:checkWeeklisttxt:checkWeeklisttxt}}</span></p>
-    <p>每日活动时段<span class="addvip-con">{{addmarket.time}}<span class="order-action iconfont icon-nextx" @click="activeTimeVisible = true"></span></span></p>
+    <p @click="shopVisible=true">所属店铺<span class="order-action add-shop-overflow-icon iconfont icon-nextx"></span><span class="addvip-con add-shop-overflow">{{checkshoptxt?checkshoptxt:''}}</span></p>
+    <p @click="open('picker2')">优惠期开始<span class="addvip-con">{{addmarket.startTime}}<span class="order-action iconfont icon-nextx"></span></span></p>
+     <p @click="open('picker3')">优惠期结束<span class="addvip-con">{{addmarket.endTime}}<span class="order-action iconfont icon-nextx"></span></span></p>
+    <p @click="activeVisible=true">活动日<span class="order-action add-shop-overflow-icon iconfont icon-nextx"></span><span class="addvip-con add-shop-overflow">{{activeCurrentTags?activeCurrentTags.label !== '自定义'?activeCurrentTags.label:checkWeeklisttxt:checkWeeklisttxt}}</span></p>
+    <p @click="activeTimeVisible = true">每日活动时段<span class="addvip-con">{{addmarket.time}}<span class="order-action iconfont icon-nextx"></span></span></p>
     <p>折扣优惠<span class="addvip-con"><input type="number" placeholder="请输入优惠折扣" class="discount-input" v-model="addmarket.discount">%</span></p>
     <p>是否开放<span class="addvip-con"><mt-switch v-model="addmarket.addstatus" class="check-switch"></mt-switch></span></p>
   </div>
   <div class="nopay-time">
     <h6>不可支付时段</h6>
     <div class="time-chose">
-      <p>不可支付日期开始<span class="addvip-con">{{addmarket.noWorkStart}}<span class="order-action iconfont icon-nextx" @click="open('picker4')"></span></span></p>
-       <p>不可支付日期结束<span class="addvip-con">{{addmarket.noWorkEnd}}<span class="order-action iconfont icon-nextx" @click="open('picker5')"></span></span></p>
-      <p>每日不可支付时间<span class="addvip-con">{{addmarket.noWorkTime}}<span class="order-action iconfont icon-nextx" @click="noWorkVisible = true"></span></span></p>
+      <p @click="open('picker4')">不可支付日期开始<span class="addvip-con">{{addmarket.noWorkStart}}<span class="order-action iconfont icon-nextx"></span></span></p>
+      <p @click="open('picker5')">不可支付日期结束<span class="addvip-con">{{addmarket.noWorkEnd}}<span class="order-action iconfont icon-nextx"></span></span></p>
+      <p @click="noWorkVisible = true">每日不可支付时间<span class="addvip-con">{{addmarket.noWorkTime}}<span class="order-action iconfont icon-nextx"></span></span></p>
     </div>
   </div>
    <div class="confirm" @click="toaddMaket">确定</div>

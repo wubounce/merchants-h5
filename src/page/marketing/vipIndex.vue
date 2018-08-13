@@ -2,7 +2,7 @@
 <div class="marketing page-loadmore-height">
   <div class="permissions" v-if="$store.getters.has('mer:marketing:vip:list')">暂无相关页面权限</div>
       <div class="page-loadmore-height" v-else>
-        <div class="no-discount-list" v-if="list.length<=0">未设置店铺VIP卡</div>
+        <div class="no-discount-list" v-if="noList">未设置店铺VIP卡</div>
         <div class="page-loadmore-wrapper" ref="wrapper" :style="{overflowY:scrollShow}">
           <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded"  @translate-change="translateChange" :auto-fill="false" ref="loadmore">
               <div class="vip-list-wrap" v-for="(item,index) in list" :key="index">
@@ -72,6 +72,7 @@ export default {
   data() {
     return {
       list:[],
+      noList:false,
       swiperOption: {                
         slidesPerView: 'auto',
         centeredSlides: true,
@@ -96,6 +97,7 @@ export default {
       let res = await vipListFun(qs.stringify(payload));
       if (res.code === 0) {
         this.list = res.data.items?[...this.list,...res.data.items]:[];  //分页添加
+        this.list.length <= 0 ? this.noList = true:this.noList = false;
         this.total = res.data.total;
       } 
     },

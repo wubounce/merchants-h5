@@ -2,7 +2,7 @@
 <div class="member page-loadmore-height" v-title="title">
   <div class="permissions" v-if="$store.getters.has('mer:person:list')">暂无相关页面权限</div>
   <div class="page-loadmore-height" v-else>
-    <div class="no-discount-list" v-if="list.length<=0">暂无二级管理账号</div>
+    <div class="no-discount-list" v-if="noList">暂无二级管理账号</div>
     <div class="page-loadmore-wrapper" ref="wrapper" :style="{overflowY:scrollShow}">
      <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" @translate-change="translateChange" :auto-fill="false" ref="loadmore">
        <div class="page-member-pull">
@@ -43,6 +43,7 @@ export default {
       title: '人员管理',
       value: false,
       list:[],
+      noList:false,
     };
   },
   mounted() {
@@ -56,6 +57,7 @@ export default {
       let res = await operatorListFun(qs.stringify(payload));
       if (res.code === 0) {
         this.list = res.data.items?[...this.list,...res.data.items]:[];  //分页添加
+        this.list.length <= 0 ? this.noList = true:this.noList = false;
         this.total = res.data.total;
         res.data.items.forEach((item)=>{
           if (item.isLock === 0) {

@@ -39,11 +39,6 @@ export default {
         }
     },
     gowithdraw(){
-        if(this.data.code === 1014 || this.data.code === 1004 || Number(res.data.code) === 1017 || Number(res.data.code) === 1018) {
-            this.$toast(res.data.msg);
-            this.$router.push({name:'accountSet'});
-            return false;
-        }
         this.$router.push({name:'withdraw'});
     }
   },

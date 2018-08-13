@@ -115,6 +115,7 @@ export default {
       res = await orderListFun(qs.stringify(payload));
       if (res.code === 0) {
         this.list = res.data.items?[...this.list,...res.data.items]:[];  //分页添加
+        this.list.length <= 0 ? this.noOrderList = true:this.noOrderList = false;
         this.total = res.data.total;
         // this.list.forEach(item => {
         //   var time = getDuration(item.activeTime);
