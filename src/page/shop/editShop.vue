@@ -248,7 +248,11 @@ export default {
       }
       else {
         this.shopName = this.oldName;
-        MessageBox.alert("请输入2到20字符的店铺名称",'');
+        this.$toast({
+            message: '请输入2到20字符的店铺名称',
+            position: 'top',
+            duration: 3000
+          });
       }
 
       //校验名字的特殊字符'-'和'_'
@@ -256,7 +260,11 @@ export default {
       for (let i=0; i<e.target.value.length; i++) {
         if(arr[i] == '-' || arr[i] == '_' || arr[i] == '——') {
           if(arr[i+1] == '-' || arr[i+1] == '_' || arr[i] == '——') {
-            MessageBox.alert('店铺名称不符合规范，请重新输入','');
+            this.$toast({
+              message: '店铺名称不符合规范，请重新输入',
+              position: 'top',
+              duration: 3000
+            });
           }
         }
       }
@@ -264,7 +272,11 @@ export default {
       for(let i=0; i<this.arrName.length; i++) {
         if(e.target.value == this.arrName[i]) {
           this.shopName = this.oldName;
-          MessageBox.alert("该店铺名称已存在，请换一个店铺名称输入哦",'');
+          this.$toast({
+            message: '该店铺名称已存在，请您换一个店铺名称输入',
+            position: 'top',
+            duration: 3000
+          });
         }
       }
     },
@@ -399,6 +411,7 @@ export default {
           break;
         }
         case 4:
+        //营业时间
           this.timeVisible = false;
           if(parseInt(this.shopTime.startTime.slice(0,2)) < parseInt(this.shopTime.endTime.slice(0,2))) {
             this.addBusinessTime = this.shopTime.startTime + '-' + this.shopTime.endTime;
@@ -523,7 +536,11 @@ export default {
         this.imageId = res.data[0].url;
       }
       else {
-        MessageBox.alert(res.msg,'');
+        this.$toast({
+            message: res.msg,
+            position: 'middle',
+            duration: 3000
+          });
       }
       this.imgId.defaultPicture = this.imageId;
     },
@@ -544,46 +561,105 @@ export default {
     },
     //提交修改信息
     async submit() {
-      if(this.orderLimitMinutes) {
-        if(this.orderLimitMinutes<0 || this.orderLimitMinutes>9 ) {
-          MessageBox.alert('请填个位数的时长');
-          this.orderLimitMinutes = '';
-        }
-      }
-      let changeisReserve = (this.isReserve==true)? 0 :1;
-      let obj = {
-        shopId: this.$route.query.shopId,
-        shopName: this.shopName,
-        shopType: this.shopType,
-        provinceId: this.provinceId,
-        cityId: this.cityId,
-        districtId: this.districtId,
-        address: this.address,
-        lat:this.lat,
-        lng:this.lng,
-        machineTypeIds: this.machineTypeIdsArray,
-        isReserve: changeisReserve,
-        orderLimitMinutes: this.orderLimitMinutes,
-        workTime: this.addBusinessTime,
-        imageId: this.imageId
-      };
+      if(!this.address) {
+        this.$toast({
+            message: '请填写详细地址',
+            position: 'middle',
+            duration: 3000
+          });
+      }else {
+        if(this.isReserve) {
+          if(this.orderLimitMinutes>0 && this.orderLimitMinutes<10) {
+            let changeisReserve = (this.isReserve==true)? 0 :1;
+            let obj = {
+              shopId: this.$route.query.shopId,
+              shopName: this.shopName,
+              shopType: this.shopType,
+              provinceId: this.provinceId,
+              cityId: this.cityId,
+              districtId: this.districtId,
+              address: this.address,
+              lat:this.lat,
+              lng:this.lng,
+              machineTypeIds: this.machineTypeIdsArray,
+              isReserve: changeisReserve,
+              orderLimitMinutes: this.orderLimitMinutes,
+              workTime: this.addBusinessTime,
+              imageId: this.imageId
+            };
 
-      let res = await addOrEditShopFun(qs.stringify(obj));
-      if(res.code===0) {
-        //成功后的操作
-        let instance = this.$toast({
-          message: '编辑成功',
-          iconClass: 'mint-toast-icon mintui mintui-success'
-        });
-        setTimeout(() => {
-          instance.close();
-        }, 1000);
-        this.$router.push({
-          name:'shopList'
-        });
-      }
-      else {
-        MessageBox.alert(res.msg,'');
+            let res = await addOrEditShopFun(qs.stringify(obj));
+            if(res.code===0) {
+              //成功后的操作
+              let instance = this.$toast({
+              message: '编辑成功',
+              iconClass: 'mint-toast-icon mintui mintui-success'
+              });
+              setTimeout(() => {
+              instance.close();
+              }, 1000);
+              this.$router.push({
+              name:'shopList'
+              });
+            }
+            else {
+              this.$toast({
+                message: res.msg,
+                position: 'middle',
+                duration: 3000
+              });
+            }
+          }
+          else {
+            this.$toast({
+              message:'请填个位数的时长',
+              position:'middle',
+              duration:3000
+            });
+            this.orderLimitMinutes = '';
+          }
+        }
+        else {
+          let changeisReserve = (this.isReserve==true)? 0 :1;
+          let obj = {
+            shopId: this.$route.query.shopId,
+            shopName: this.shopName,
+            shopType: this.shopType,
+            provinceId: this.provinceId,
+            cityId: this.cityId,
+            districtId: this.districtId,
+            address: this.address,
+            lat:this.lat,
+            lng:this.lng,
+            machineTypeIds: this.machineTypeIdsArray,
+            isReserve: changeisReserve,
+            orderLimitMinutes: this.orderLimitMinutes,
+            workTime: this.addBusinessTime,
+            imageId: this.imageId
+          };
+
+          let res = await addOrEditShopFun(qs.stringify(obj));
+          if(res.code===0) {
+            //成功后的操作
+            let instance = this.$toast({
+            message: '编辑成功',
+            iconClass: 'mint-toast-icon mintui mintui-success'
+            });
+            setTimeout(() => {
+            instance.close();
+            }, 1000);
+            this.$router.push({
+            name:'shopList'
+            });
+          }
+          else {
+            this.$toast({
+              message: res.msg,
+              position: 'middle',
+              duration: 3000
+            });
+          }
+        }
       }
     },
     //省市区联动
@@ -597,7 +673,11 @@ export default {
         }
       }
       else {
-        MessageBox.alert(res.msg,'');
+        this.$toast({
+            message: res.msg,
+            position: 'middle',
+            duration: 3000
+          });
       }
     },
     async getShopDetail() {
@@ -659,7 +739,11 @@ export default {
                   _this.geocoder_CallBack(result.regeocode.formattedAddress);
               }
               else {
-                MessageBox.alert('定位有问题','');
+                this.$toast({
+                  message: '定位有问题',
+                  position: 'middle',
+                  duration: 3000
+                });
               }
           });        
         });
