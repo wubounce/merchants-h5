@@ -774,7 +774,7 @@ export default {
         this.provinceId = res.data.provinceId;
         this.cityId = res.data.cityId;
         this.districtId = res.data.districtId;
-
+        console.log('created:',this.provinceId);
         //省
         let objPro = { parentId: 0 };
         let resPro = await areaListFun(qs.stringify(objPro));
@@ -836,7 +836,6 @@ export default {
   created() {
     this.getShopDetail();
     this.getShoplist();
-    this.getArea();
   },
   mounted() {
   },
@@ -1019,7 +1018,7 @@ export default {
     position: fixed;
     bottom: 0;
     border: none;
-    padding: 0.45rem 0;
+    height: 50px;
     background-color: #1890FF;
     color: #fff;
     font-size: 18px;
