@@ -1015,6 +1015,7 @@ export default {
   }
   .submit {
     width: 100%;
+    height: 50px;
     position: fixed;
     bottom: 0;
     border: none;
