@@ -8,7 +8,7 @@
           <span class="report-table-order">订单金额</span>
         </div>
         <div class="tableearn">
-          <div class="nodata" v-if="list.length <= 0">暂无数据</div>
+          <div class="nodata" v-if="noList">暂无数据</div>
           <div class="listcon tableearn-list" v-for="(item,index) in list" :key="index">
             <span class="report-table-name">{{item.machineName}}</span>
             <span class="report-table-type">{{item.machineTypeName}}</span>
@@ -27,7 +27,8 @@ export default {
   data() {
     return {
        title:'收益',
-       list:[]
+       list:[],
+       noList:false,
     };
   },
   created(){
@@ -43,7 +44,11 @@ export default {
     async getDetail(date,type){
       let payload = Object.assign({},{date:date,type:type});
       let res = await machineReportFun(qs.stringify(payload));
-      this.list = res.data;
+      if (res.code === 0) {
+        this.list = res.data;
+        this.list.length <= 0 ? this.noList = true:this.noList = false;
+      }
+      
     }
   },
   filters: {

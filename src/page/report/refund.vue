@@ -1,32 +1,30 @@
 <template>
 <div class="earnings">
-  <div class="scorll">
-    <div class="search">
-      <div class="slectdata timechoose">
-        <span @click="open('picker2')">{{startDate}}</span>至<span @click="open('picker3')">{{endDate}}<i class="iconfont icon-xiangxiajiantou select-back"></i></span>
-      </div>
-      <div class="slectdata shopchoose">
-        <span @click="popupVisible=true">{{currentTags?currentTags.shopName:'全部店铺'}}<i class="iconfont icon-xiangxiajiantou select-back"></i></span>
-        <selectpickr :visible="popupVisible" :slots="shopSlots" :valueKey="shopName" @selectpicker="shopselectpicker" @onpickstatus="shopselectpickertatus"> </selectpickr>
-      </div>
+  <div class="search">
+    <div class="slectdata timechoose">
+      <span @click="open('picker2')">{{startDate}}</span>至<span @click="open('picker3')">{{endDate}}<i class="iconfont icon-xiangxiajiantou select-back"></i></span>
     </div>
-    <div class="echarts-warp">
-      <div class="order-earchs-title">
-        <span>退款金额</span>
-        <span class="order-num">订单数</span>
-      </div>
-      <div :class="className" :id="id" :style="{height:height,width:width}" ref="myEchart"></div>
-      <div class="echart-title"><span style="background:#1890FF"></span>退款金额<span style="background:#FACC14"></span>订单数量</div>
+    <div class="slectdata shopchoose">
+      <span @click="popupVisible=true">{{currentTags?currentTags.shopName:'全部店铺'}}<i class="iconfont icon-xiangxiajiantou select-back"></i></span>
+      <selectpickr :visible="popupVisible" :slots="shopSlots" :valueKey="shopName" @selectpicker="shopselectpicker" @onpickstatus="shopselectpickertatus"> </selectpickr>
     </div>
-    <div class="listcon table-header">
-      <span class="report-table-date">日期</span>
-      <span class="report-table-order">订单数量</span>
-      <span class="report-table-order">退款金额</span>
+  </div>
+  <div class="echarts-warp">
+    <div class="order-earchs-title">
+      <span>退款金额</span>
+      <span class="order-num">订单数</span>
     </div>
+    <div :class="className" :id="id" :style="{height:height,width:width}" ref="myEchart"></div>
+    <div class="echart-title"><span style="background:#1890FF"></span>退款金额<span style="background:#FACC14"></span>订单数量</div>
   </div>
   <div class="tabledata">
     <div class="tableearn">
        <div class="nodata" v-if="lsitdata.length <= 0">暂无数据</div>
+       <div class="listcon table-header">
+        <span class="report-table-date">日期</span>
+        <span class="report-table-order">订单数量</span>
+        <span class="report-table-order">退款金额</span>
+       </div>
       <div class="listcon tableearn-list" v-for="(item,index) in  lsitdata" :key="index">
         <router-link class="detail" :to="{name:'reportdetail', query:{date:item.date,type:3}}" >
           <span class="listtime report-table-date">{{item.date}}</span>
@@ -71,7 +69,7 @@ export default {
     },
     height: {
       type: String,
-      default: '4.33rem'
+      default: '5.17rem'
     }
   },
   data() {
@@ -145,7 +143,7 @@ export default {
         this.orderMax = this.calMax(this.reportCount);//订单Y轴最大值
         this.moneyMax = this.calMax(this.reportMoney);//金额Y轴最大值
         this.lsitdata = res.data;
-        this.lsitdata.sort(this.ortId); //时间倒序
+        this.lsitdata.sort(this.ortId); //表格时间倒序
       }else {
         this.$toast({message: res.msg });
       }
@@ -162,7 +160,7 @@ export default {
       var maxval = maxint * 10;// 最终设置的最大值
       return maxval;// 输出最大值
     },
-    ortId(a,b){ 
+    ortId(a,b){ //数据排序
       let k = a.date.replace(/\-/g, '');   
       let h = b.date.replace(/\-/g, '');
       return h-k;
@@ -371,14 +369,6 @@ export default {
     height: 100%;
     position: absolute;
     width: 100%;
-    padding-top: 9.86rem;
-    box-sizing: border-box;
-  }
-  .scorll {
-    position: fixed;
-    top:1.33rem;;
-    background: #fff;
-    z-index: 99;
   }
   .echarts-warp {
     padding: 0.32rem 0.32rem 0 0.32rem;
@@ -438,15 +428,13 @@ export default {
     }
   }
   .tabledata {
-    height: 100%;
-    overflow: hidden;
     padding-bottom: 55px;
     box-sizing: border-box;
   }
   .tableearn {
     height: 100%;
     overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
+     -webkit-overflow-scrolling: touch;
   }
   .table-header {
     padding-top: 0.65rem;
@@ -483,10 +471,6 @@ export default {
       color: #1890FF;
     }
   }
-  .tableearn {
-    // height: 4.3rem;
-    // overflow-y: scroll;
-  }
   .tableearn .tableearn-list:nth-child(2n) {
     background: #fff !important;
   }
@@ -495,6 +479,7 @@ export default {
   }
   .search {
     display: flex;
+    margin-top: 1.19rem;
     padding: 0.4rem 0.2rem 0 0.2rem;
   }
   .slectdata {
@@ -543,4 +528,3 @@ export default {
     background: #fff;
   }
 </style>
-

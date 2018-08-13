@@ -1,7 +1,7 @@
 <template>
 <div class="user-wrapper" v-title="'我的'">
     <header>
-        <p class="guide"><span class="iconfont icon-zhinan"></span>平台指南</p>
+        <p class="guide"><a href="../../../static/B-user-guide.pdf"><span class="iconfont icon-zhinan"></span>平台指南</a></p>
         <div class="user-info">
             <div class="pic">
                 <img :src="userInfo.headImage" v-if="userInfo.headImage">
@@ -79,15 +79,19 @@ export default {
             background:url(../../../static/image/user/user@2x.png);
             background-size: cover;
             .guide{
-                font-size: .37rem;
-                color: #a8d5ff;
-                text-align: right;
-                line-height: .533333rem;
-                span{
-                    width: .36rem;
-                    height:.36rem;
-                    margin-right: .133333rem;
+                a {
+                    display: block;
+                    font-size: .37rem;
+                    color: #a8d5ff;
+                    text-align: right;
+                    line-height: .533333rem;
+                    span{
+                        width: .36rem;
+                        height:.36rem;
+                        margin-right: .133333rem;
+                    }
                 }
+                
             }
             .user-info{
                 display: flex;
