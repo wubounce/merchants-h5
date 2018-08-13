@@ -1,12 +1,12 @@
 <template>
   <section class="personal" v-title="title">
     <ul class="personal-list">
-      <p class="shopname-p"><span>店铺名称</span><span><input @change="blur" type="text" class='addressInput' v-model="shopName" maxlength="40" placeholder="请填写店铺名称" style='width:125%;'></span></p>
+      <p class="shopname-p"><span>店铺名称</span><span><input @change="blur" type="text" class='addressInput' v-model="shopName" maxlength="20" placeholder="请填写店铺名称"></span></p>
       <li v-for="(item,index) in list" :key="index" class="personal-item" @click="toDetail(index)">
         {{item.title}}
         <span>{{item.value == ''|| item.value==null? '' : item.value}}</span>
       </li>
-      <p class="shopname-p"><span>详细地址</span><span><input type="text" class='addressInput' v-model="address" maxlength="12" placeholder="请填写详细地址"></span></p>
+      <p class="shopname-p"><span>详细地址</span><span><input type="text" class='addressInput' v-model="address" placeholder="请填写详细地址"></span></p>
     </ul>
     <div class="second">
       <li class="device business" @click="addDevice">设备类型<span>{{machineName}}</span></li>
@@ -757,10 +757,13 @@ export default {
       span {
         display: inline-block;
         &:first-child {
-          margin-left: 0.3rem;
+          padding-left: 0.3rem;
+          width: 22%;
+        }
+        &:last-child {
+          width: 72%;
         }
         input {
-          margin-left:0.5rem;
           height: 1rem;
         }
         ::-webkit-input-placeholder {
@@ -847,9 +850,12 @@ export default {
         display: inline-block;
         &:first-child {
           margin-left: 0.3rem;
+          width: 35%;
+        }
+        &:last-child {
+          width: 55%;
         }
         input {
-          margin-left:0.5rem;
           height: 1rem;
           background-color: #fff;
         }
