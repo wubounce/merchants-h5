@@ -13,16 +13,18 @@
     </ul>
     <section class="fun-item-hd">
       <div>
-        <p v-for="(item,index) in functionListTitle " :key="index">
+        <p v-for="(item,index) in functionListTitle2 " :key="index">
           <span v-for="(it,idx) in item " :key="idx">{{it}}</span>
         </p>
       </div>
     </section>
     <section class="fun-item-bd funlist">
-      <div v-for="(item,index) in funTypeList " :key="index">
-        <input type="text" class="fun-list-item" v-model.lazy="item.functionName"/>
-        <span class="fun-list-item">{{item.needMinutes}}</span>
+      <div v-for="(item,index) in funTypeList" :key="index">
+        <span class="fun-list-item">{{item.functionName}}</span>
+        <span class="fun-list-item" v-if="!isShow2">{{item.needMinutes}}</span>
+        <input type="text" class="fun-list-item" v-model.lazy="item.needMinutes" v-if="isShow2"/>
         <input type="text" class="fun-list-item" v-model.lazy="item.functionPrice"/>
+        <input type="text" class="fun-list-item" v-model.lazy="item.functionCode" v-if="isShow2"/>
         <p class="fun-list-item">
           <mt-switch v-model="item.ifOpen"></mt-switch>
         </p>
@@ -43,6 +45,7 @@ export default {
     data() {
       return {
         funTypeList: [],
+        isShow2: false,
         title: "批量编辑",
         getJsonArr: [],
         selectedFunction: '',
@@ -72,6 +75,7 @@ export default {
           ['功能'],
           ['耗时', '/分'],
           ['原价', '/元'],
+          ['脉冲数'],
           ['状态']
         ],
         functionListTitle2: [
@@ -109,10 +113,10 @@ export default {
           if(res.code === 0) {
              this.getJsonArr = res.data.list;
              this.functionTempletType = res.data.functionTempletType;        
-             if(res.data.communicateType === 1){
-               this.functionListTitle = this.functionListTitle2;
-               this.isShow = false;            
-             } 
+             if(res.data.communicateType !== 1){
+             this.functionListTitle2 = this.functionListTitle;
+             this.isShow2 = true;
+            }
             res.data.list.forEach(item=>{
               item.ifOpen=item.ifOpen === "0"?(!!item.ifOpen) : (!item.ifOpen);
              });
@@ -332,10 +336,14 @@ export default {
     background: #fff;
     div {
       display: flex; // justify-content: space-between;
+      input {
+        text-decoration: underline;
+      }
       .fun-list-item {
         flex: 2.19;
         text-align: center;
         line-height: 1.6rem;
+
         &:nth-child(1) {
           flex: 3.32;
         }

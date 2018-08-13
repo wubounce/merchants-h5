@@ -207,9 +207,13 @@ import {delay } from "@/utils/tool";
             background-size: 0.53rem;
             padding: 0.29rem 0 0.29rem 1.07rem;
             border-radius: 0.13rem;
-            font-size: 16px;
-
+            line-height: normal;
           }
+
+          input::-webkit-input-placeholder {
+            font-size: 0.43rem;
+          }
+          
           span {
             white-space: nowrap;
             height: 0.51rem;
