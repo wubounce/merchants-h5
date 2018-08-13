@@ -12,7 +12,7 @@
 
         <!-- 第二模块 -->
         <div class="shop-machine">
-          <span>设备类型</span>
+          <span class='machine-type'>设备类型</span>
           <div class="shop-machine-bottom">
             <span class="one-machine" v-for="(item,index) in list" :key="index">{{item}}</span>
           </div>
@@ -28,7 +28,7 @@
 
         <!-- 第四模块 -->
         <p class="shop-info second-p"><span>创建人：</span><span>{{shopdetail.createUser}}</span></p>
-        <p class="shop-info"><span>创建时间：</span><span>{{shopdetail.createTime}}</span></p>
+        <p class="shop-info createTime"><span>创建时间：</span><span>{{shopdetail.createTime}}</span></p>
         <p class="blank"></p>
 
         <!-- 第五模块 -->
@@ -160,7 +160,7 @@ export default {
    }
    .shop-address {
      font-size: 16px;
-     padding: 0.3rem;
+     padding: 0.53rem;
      background-color: #fff; 
      border-bottom: 1px solid #f9f8ff;
      span {
@@ -169,7 +169,7 @@ export default {
         }
         &:last-child {
           color:rgba(51,51,51,1);
-          margin-top: 0.1rem;
+          margin-top: 0.3rem;
           display: inline-block;
         }
       }
@@ -181,23 +181,28 @@ export default {
      span {
        &:first-child {
           color:rgba(153,153,153,1);
-          padding-left: 0.3rem;
           display: inline-block;
           margin-top: 0.2rem;
+          margin-left: 0.53rem;
+          margin-bottom: 0.2rem;
         }
      }
      .shop-machine-bottom {
-       margin-left: 0.3rem;
        margin-bottom: 0.2rem;
+       margin-left: 0.33rem;
        .one-machine {
-          font-size: 0.38rem;
+          font-size: 14px;
           color: #333333;
-          background-color:rgba(24, 144, 255, 0.05);
+          background-color: rgba(24, 144, 255, 0.05);
           display: inline-block;
-          padding: 0.2rem 0.9rem;
-          margin-right: 0.25rem;
+          text-align: center;
+          margin-right: 0.24rem;
           margin-bottom: 0.2rem;
           border-radius: 4px;
+          width: 27%;
+          height: 1.2rem;
+          line-height: 1.2rem;
+          margin-left: 0.24rem;
         }
      }
    }
@@ -205,7 +210,7 @@ export default {
       display: flex;
       justify-content: space-between;
       font-size: 16px;
-      padding: 0.3rem;
+      padding: 0.53rem;
       border-bottom: 1px solid #f9f8ff;
       background-color: #fff; 
       span {
@@ -243,10 +248,14 @@ export default {
     font-size: 12px;
     background-color: #fff;
     color:rgba(153,153,153,1);
-    padding: 0.2rem 0;
+    padding-left: 0.2rem;
+    padding-top: 0.3rem;
     span {
       padding-left: 0.3rem;
     }
+  }
+  .createTime {
+    padding-bottom: 0.3rem;
   }
   .blank {
     height: 2.5rem;
