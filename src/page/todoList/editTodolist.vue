@@ -213,14 +213,12 @@ import moment from 'moment';
   }
   .mint-popup {
     width: 100%;
-    .prop-bd {
-      padding: 0.3rem;
-    }
   }
   .toolBar {
     display: flex;
     justify-content: center;
-    padding-top: 0.2rem;
+    line-height: 1rem;
+    background-color: #fbfbfc;
     #allDay {
       color: #fff;
       background-color: #1890FF;
@@ -231,16 +229,16 @@ import moment from 'moment';
     }
     span {
       &:nth-child(1) {
-        font-size: 0.45rem;
+        font-size: 15px;
         color: #999999;
       }
       &:nth-child(2) {
-        font-size: 0.5rem;
+        font-size: 16px;
         margin: 0 2.7rem;
         color: #666666;
       }
       &:nth-child(3) {
-        font-size: 0.45rem;
+        font-size: 15px;
         color: #1890FF;
       }
     }

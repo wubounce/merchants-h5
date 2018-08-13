@@ -36,6 +36,7 @@
           </div>
         </div>
       </div>
+      <div class="noData" v-show="hasNoData">暂无设备</div>
       <div class="page-top">
         <div class="page-loadmore-wrapper" ref="wrapper" :style="{overflowY:scrollShow}">
           <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" @translate-change="translateChange" :auto-fill="false" ref="loadmore">
@@ -58,8 +59,7 @@
                   <span>{{item.profit | keepTwoNum}}</span>
                 </p>
               </section>
-            </router-link>
-            <div class="noData" v-show="hasNoData">暂无设备</div>
+            </router-link>   
             <div v-if="allLoaded" class="nomore-data">没有更多了</div>
           </mt-loadmore>
         </div>
@@ -295,13 +295,16 @@
 
     }
   }
+  .noData {
+    font-size: 14px;
+    color: #999;
+    text-align: center;
+    height: 100%;
+    line-height: 100%;
+    padding-top: 4rem;
+    }
   .page-top {
     padding-top: 3.47rem;
-    .noData {
-      font-size: 0.43rem;
-      text-align: center;
-      padding: 0.5rem 0;
-    }
     .nomore-data {
         text-align: center;
         color: #999;
@@ -376,12 +379,6 @@
         }
       }
     }
-  }
-  .noData {
-    text-align: center;
-    padding: 0.6rem 0;
-    font-size: 0.43rem;
-    color: #333;
   }
   .openItem {
     width: 1.49rem;

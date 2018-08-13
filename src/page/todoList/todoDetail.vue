@@ -132,7 +132,7 @@ import moment from 'moment';
     display: flex;
     justify-content: space-between;
     font-size: 16px;
-    padding: 0.3rem;
+    padding: 0.53rem;
     border-bottom: 1px solid #F8F8F8;
     background-color: #fff; 
     span {

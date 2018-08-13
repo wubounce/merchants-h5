@@ -43,17 +43,18 @@
     <div v-show="setModelShow">
     <section class="fun-item-hd">
       <div>
-        <p v-for="(item,index) in functionListTitle " :key="index">
+        <p v-for="(item,index) in functionListTitle2 " :key="index">
           <span v-for="(it,idx) in item " :key="idx">{{it}}</span>
         </p>
       </div>
     </section>
     <section class="fun-item-bd funlist">
       <div v-for="(item,index) in functionList" :key="index">
-        <span class="fun-list-item" title="item.functionName">{{item.functionName}}</span>
-        <input type="text" class="fun-list-item" v-model.lazy="item.needMinutes"/>
+        <span class="fun-list-item">{{item.functionName}}</span>
+        <span class="fun-list-item" v-show="!isShow2">{{item.needMinutes}}</span>
+        <input type="text" class="fun-list-item" v-model.lazy="item.needMinutes" v-if="isShow2"/>
         <input type="text" class="fun-list-item" v-model.lazy="item.functionPrice"/>
-        <input type="text" class="fun-list-item" v-model.lazy="item.functionPrice" v-show="isShow2"/>
+        <input type="text" class="fun-list-item" v-model.lazy="item.functionCode" v-if="isShow2"/>
         <p class="fun-list-item">
           <mt-switch v-model="item.ifOpen"></mt-switch>
         </p>
@@ -118,6 +119,7 @@
           ['功能'],
           ['耗时', '/分'],
           ['原价', '/元'],
+          ['脉冲数'],
           ['状态']
         ],
         functionListTitle2: [
@@ -210,6 +212,10 @@
         let payload = { machineId: this.$route.query.machineId} ;     
         let res = await detailDeviceListFun(qs.stringify(payload));
          if(res.code === 0) {
+           if(res.data.communicateType !== 1){
+             this.functionListTitle2 = this.functionListTitle;
+             this.isShow2 = true;
+           }
           this.fromdata.machineName = res.data.machineName;
           this.fromdata.machineId = res.data.machineId;
           this.fromdata.shopType.name = res.data.shopName;
@@ -413,11 +419,15 @@
   }
   
   .fun-item-hd {
-    padding: 0;
     background: #FAFCFF;
     color: #1890FF;
     font-size: 0.37rem;
-    padding: .6rem .4rem;
+    padding: .6rem 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 999;
     div {
       display: flex;
       p {
@@ -430,6 +440,9 @@
           flex: 3.32;
         }
         &:nth-child(4) {
+          flex: 2.21;
+        }
+        &:last-child {
           flex: 2.21;
           border-right: none;
         }
@@ -448,7 +461,7 @@
     font-size: 0.37rem;
     color: #333333;
     background: #fff;
-    padding: 0 0.4rem;
+    padding-top: 1.6rem;
     div {
       display: flex; // justify-content: space-between;
       .fun-list-item {

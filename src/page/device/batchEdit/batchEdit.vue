@@ -108,7 +108,7 @@
             query: ({shopId: id})
           });
         }else{
-          this.$toast("请先选择店铺");
+          this.$toast("暂无设备，请至设备管理添加");
         }
       },
       clearInput: function () {
