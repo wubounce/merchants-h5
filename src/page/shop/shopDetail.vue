@@ -65,7 +65,7 @@ export default {
       this.completeAddress = data + this.address;
     },
     isDeleteOrNot(id) {
-      MessageBox.confirm(`确认删除店铺？`).then(async () => {
+      MessageBox.confirm('确认删除店铺？','').then(async () => {
         let payload = {shopId: id};
         let res = await deleteShopFun(qs.stringify(payload));
         if (res.code === 0) {
