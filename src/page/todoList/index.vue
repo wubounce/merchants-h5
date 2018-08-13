@@ -99,7 +99,7 @@ section {
 	.title {
 		font-size: 16px;
 		font-weight: bold;
-		line-height: 1rem;
+		line-height: 1.2rem;
 		border: 1px solid #F8F8F8;
 		background-color: #fff; 
 	}
@@ -117,7 +117,7 @@ section {
 				background-color: #fff;
 				margin-bottom: 0.3rem;
 				.time {
-					line-height: 1rem;
+					line-height: 1.2rem;
 					border-bottom: 1px solid #F8F8F8;
 					span {
 						&:first-child {
