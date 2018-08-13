@@ -557,7 +557,7 @@ export default {
           {
               name:'通信类型',
               type:'pie',
-              radius: ['50%', '70%'],
+              radius: ['40%', '60%'],
               avoidLabelOverlap: false,
               label: {
                   normal: {
@@ -627,7 +627,7 @@ export default {
             {
               name:'功能类型',
               type:'pie',
-              radius: ['50%', '70%'],
+              radius: ['40%', '60%'],
               avoidLabelOverlap: true,
               label: {
                   normal: {

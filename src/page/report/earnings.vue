@@ -442,8 +442,9 @@ export default {
     box-sizing: border-box;
   }
   .tableearn {
-        height: 100%;
+    height: 100%;
     overflow-y: auto;
+     -webkit-overflow-scrolling: touch;
   }
   .table-header {
     padding-top: 0.65rem;
