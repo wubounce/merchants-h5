@@ -57,13 +57,15 @@
     <section class="fun-item-bd funlist" style="-webkit-overflow-scrolling:touch;overflow-y:scroll;">
       <div v-for="(item,index) in functionSetList" :key="index">
         <span class="fun-list-item">{{item.functionName}}</span>
-        <input type="text" class="fun-list-item" v-model.lazy="item.needMinutes"/>
+        <span class="fun-list-item" v-show="!isShow2">{{item.needMinutes}}</span>
+        <input type="text" class="fun-list-item" v-model.lazy="item.needMinutes" v-if="isShow2"/>
         <input type="text" class="fun-list-item" v-model.lazy="item.functionPrice"/>
-        <input type="text" class="fun-list-item" v-model.lazy="item.functionCode" v-show="isShow2"/>
+        <input type="text" class="fun-list-item" v-model.lazy="item.functionCode" v-if="isShow2"/>
         <p class="fun-list-item">
           <mt-switch v-model="item.ifOpen"></mt-switch>
         </p>
       </div>
+      
     </section>
     <div style="width:100%;height:1.73rem;"></div>
     <section class="promiss-footer">
@@ -606,6 +608,9 @@
     padding-top: 1.6rem;
     div {
       display: flex; // justify-content: space-between;
+      input {
+        text-decoration: underline;
+      }
       .fun-list-item {
         flex: 2.19;
         text-align: center;
@@ -617,6 +622,7 @@
           flex: 2.21;
           box-sizing: border-box;
         }
+
       }
       p {
         display: flex;

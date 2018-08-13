@@ -1,12 +1,12 @@
 <template>
   <section class="personal" v-title="title">
     <ul class="personal-list">
-      <p class="shopname-p"><span>店铺名称</span><span><input @focus="disbaledBtn" @change="blur" type="text" class='addressInput' v-model="shopName"  placeholder="请填写店铺名称"></span></p>
+      <p class="shopname-p"><span>店铺名称</span><span><input  @change="blur" type="text" class='addressInput' v-model="shopName"  placeholder="请填写店铺名称"></span></p>
       <li v-for="(item,index) in list" :key="index" class="personal-item" @click="toDetail(index)">
         {{item.title}}
         <span>{{item.value == ''|| item.value==null? '' : item.value}}</span>
       </li>
-      <p class="shopname-p"><span>详细地址</span><span><input @focus="disbaledBtn" type="text" class='addressInput' v-model="address"  placeholder="请填写详细地址"></span></p>
+      <p class="shopname-p"><span>详细地址</span><span><input  type="text" class='addressInput' v-model="address"  placeholder="请填写详细地址"></span></p>
     </ul>
     <div class="second">
       <li class="device business" @click="addDevice">设备类型<span>{{machineName}}</span></li>
@@ -17,14 +17,14 @@
       <p class="reserveTime">
         <span>预约时长(分钟)</span>
         <span>
-          <input @focus="disbaledBtn" v-model="orderLimitMinutes" :disabled="noEdit" :placeholder="placeholdercontent" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" maxlength='1'>
+          <input  v-model="orderLimitMinutes" :disabled="noEdit" :placeholder="placeholdercontent" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" maxlength='1'>
         </span>
       </p>
       <!-- 先注释掉，下个版本做营业时间 -->
       <!-- <li class="business" @click="chooseTime">营业时间<span>{{addBusinessTime}}</span></li> -->
     </div>
     <p class="blank"></p>
-    <button v-show='buttonHide' class="submit" @click="submit">提交</button>
+    <button class="submit" @click="submit">提交</button>
 
     <!-- 店铺类型 -->
     <mt-popup v-model="popupVisible" position="bottom" class="mint-popup">
@@ -235,6 +235,9 @@ export default {
   methods:{
     disbaledBtn() {
       this.buttonHide = false;
+    },
+    showBtn() {
+      this.buttonHide = true;
     },
     blur(e) {
       //校验字符长度

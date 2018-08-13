@@ -103,6 +103,7 @@ section {
 		border: 1px solid #F8F8F8;
 		background-color: #fff; 
 		color: #333333;
+		padding-left: 0.3rem;
 	}
 	.noTodoList {
 	text-align: center;
