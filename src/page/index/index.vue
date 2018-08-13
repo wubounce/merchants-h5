@@ -370,6 +370,11 @@ export default {
             }
           },
           formatter:function(data){
+            let reg = /^(\d{1,2})(:)?(\d{1,2})$/;
+            if(reg.test(data[0].name)){
+               let time = data[0].name.replace(':00',':59')
+            　　data[0].name = `${data[0].name}-${time}`
+            }
            return `${data[0].name}<br/>${data[0].marker}${data[0].seriesName}：${data[0].value.toFixed(2)}元`;
           },
         },

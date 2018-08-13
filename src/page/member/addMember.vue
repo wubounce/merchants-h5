@@ -387,7 +387,7 @@ export default {
     padding-left:0.4rem;
   }
   .check-prem-list{
-    padding:0.27rem 0;
+    padding:0  0.4rem;
   }
   .child-slit {
     background:rgba(248,248,248,1);

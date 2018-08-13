@@ -373,7 +373,7 @@ export default {
     }
   }
   .check-prem{
-    padding-left:0.4rem;
+     padding:0  0.4rem;
   }
   .check-prem-list{
     padding:0.27rem 0;
