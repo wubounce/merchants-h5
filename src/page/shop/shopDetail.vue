@@ -96,7 +96,14 @@ export default {
         this.list = res.data.machineTypeNames.split(',');
         this.lng = res.data.lng;
         this.lat = res.data.lat;
-
+        //累计收益
+        if(res.data.profit == 0) {
+          this.shopdetail.profit = res.data.profit + '.00';
+        }
+        else {
+          this.shopdetail.profit = res.data.profit;
+        }
+        
         //店铺类型
         this.shopdetail.shopType = res.data.shopTypeName;
         //店铺地址
