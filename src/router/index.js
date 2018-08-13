@@ -204,8 +204,7 @@ export default new Router({
       name: 'addShop',
       component: () => import ('@/page/shop/addShop'),
       meta: {
-        title: '店铺新增',
-        keepAlive: true
+        title: '店铺新增'
       }
     },
     {
@@ -219,8 +218,7 @@ export default new Router({
       name: 'editMap',
       component: () => import ('@/page/shop/editMap'),
       meta: {
-        title: '地图搜索',
-        keepAlive: true
+        title: '地图搜索'
       },
     },
     {
@@ -233,7 +231,7 @@ export default new Router({
       path: '/editShop',
       name: 'editShop',
       component: () => import ('@/page/shop/editShop'),
-      meta: {title: '店铺修改',keepAlive: true},
+      meta: {title: '店铺修改',},
     },
 
     //待办事项
