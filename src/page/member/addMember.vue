@@ -56,14 +56,16 @@
                   <input type="checkbox" class="mint-checkbox-input" v-model="checkpermissionslist" :value="item.menuId"> 
                   <span class="mint-checkbox-core"></span>
                 </span>
-                <span class="mint-checkbox is-right" v-else>
-                  <span class="iconfont icon-xiangxiajiantou"></span>
+                <span class="mint-checkbox is-right" v-else @click="toggle(item)">
+                  <span :class="['iconfont',{ 'icon-xiangshangjiantou':item.show,'icon-xiangxiajiantou':!item.show }]"></span>
                 </span>
                 <span class="mint-checkbox-label shopname">{{item.name}}</span>
               </div>
-            </label>
-            <transition-group name="collapse">
-              <div class="promisss-child"  v-for="(sitem,index) in item.children" :key="index" style="background:#fff;">
+            </label> 
+            
+            <transition-group name="fade">
+              <div :class="['animate',{hiddren:item.show}]" :key="index">
+                <div class="promisss-child"  v-for="(sitem,index) in item.children" :key="index" style="background:#fff;" >
                   <label class="mint-checklist-label prom">
                     <div class="check-prem-list">
                       <span class="mint-checkbox is-right">
@@ -74,7 +76,8 @@
                     </div>
                   </label>
                 </div>
-              </transition-group>
+              </div>
+            </transition-group>
           </div>
         </div>
       </div>
@@ -113,7 +116,7 @@ export default {
       phone:'',
      
       checkshoptxt:'',
-      
+      show:null,
     };
   },
   mounted() {
@@ -179,14 +182,8 @@ export default {
       let res = await shopListFun();
       this.shoplist = res.data;
     },
-    toggle:function(index){
-      if(this.show === index){
-        this.show = 0;
-        this.detail = !this.detail;
-      }else{
-        this.show=index;
-        this.detail = !this.detail;
-      }
+    toggle:function(item){
+      this.$set(item,'show',this.show=!this.show);
     },
     getcheckshop(){
       let checklist = this.shoplist.filter(v=>this.operateShopIds.some(k=>k==v.shopId));
@@ -436,7 +433,29 @@ export default {
       -webkit-transition: all .3s cubic-bezier(1.0, 0.5, 0.8, 1.0);
       transition: all .3s cubic-bezier(1.0, 0.5, 0.8, 1.0);
   }
-  
+  .animate {
+    display: none;
+  }
+  .hiddren {
+    display:block;
+  }
+  .icon-xiangshangjiantou {
+    color: #BAC0D2;
+  }
+  .expand-enter-active {
+ transition: all 3s ease;
+ height: 50px;
+ overflow: hidden;
+}
+.expand-leave-active{
+ transition: all 3s ease;
+ height: 0px;
+ overflow: hidden;
+}
+.expand-enter, .expand-leave {
+ height: 0;
+ opacity: 0;
+}
 </style>
 <style lang="scss">
   .addmember .mint-header {

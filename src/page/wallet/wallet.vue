@@ -17,7 +17,7 @@ import { getApplyFinanceFun } from '@/service/user';
 export default {
   data() {
     return {
-      data:{}
+      data:{},
     };
   },
   mounted() {
@@ -30,15 +30,21 @@ export default {
         let res = await getApplyFinanceFun();
         if (res.code === 0) {
             this.data = res.data || {};
-            if(Number(res.data.code) === 1014 || Number(res.data.code) === 1004 || Number(res.data.code) === 1017 || Number(res.data.code) === 1018) {
+            if(Number(res.data.code) === 1014 || Number(res.data.code) === 1004 || Number(res.data.code) === 1018) {
                 this.$toast(res.data.msg);
                 this.$router.push({name:'accountSet'});
+            }else if(Number(res.data.code) === 1017){
+                this.$toast(res.data.msg);
             }
         }else {
             this.$toast(res.msg);
         }
     },
     gowithdraw(){
+        if(Number(this.data.code) === 1017){
+            this.$toast(this.data.msg);
+            return false;
+        }
         this.$router.push({name:'withdraw'});
     }
   },
