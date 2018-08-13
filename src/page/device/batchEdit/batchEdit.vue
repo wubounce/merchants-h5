@@ -36,7 +36,7 @@
       </div>
     </div>
     <div style="width:100%;height:1.73rem;"></div>
-    <button class="submitBtn" @click="goNext" >下一步</button>
+    <button class="submitBtn" @click="goNext">下一步</button>
   </section>
 </template>
 

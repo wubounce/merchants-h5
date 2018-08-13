@@ -37,8 +37,8 @@
         </div>
       </div>
       <div class="page-top">
-        <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
-          <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore">
+        <div class="page-loadmore-wrapper" ref="wrapper" :style="{overflowY:scrollShow}">
+          <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" @translate-change="translateChange" :auto-fill="false" ref="loadmore">
             <router-link tag="div" :to="{ name: 'deviceDetail', query:{machineId:item.machineId}}" class="device-list" v-for="(item,index) in list" :key="index">
               <section class="item-hd">
                 <span><b>{{item.machineName}}</b></span>
@@ -59,17 +59,31 @@
                 </p>
               </section>
             </router-link>
+            <div data-v-4232b3f3="" class="device-list"><section data-v-4232b3f3="" class="item-hd"><span data-v-4232b3f3=""><b data-v-4232b3f3="">F4403</b></span> <span data-v-4232b3f3="" class="state">空闲</span></section> <section data-v-4232b3f3="" class="item-bd"><span data-v-4232b3f3="">店铺</span> <div data-v-4232b3f3="">测试店铺-A2</div></section> <section data-v-4232b3f3="" class="item-ft"><p data-v-4232b3f3="" class="item-ft-right"><span data-v-4232b3f3="">类型</span> <span data-v-4232b3f3="">洗衣机</span></p> <p data-v-4232b3f3="" class="item-ft-right"><span data-v-4232b3f3="">收益</span> <span data-v-4232b3f3="">359.60</span></p></section></div>
+            <div data-v-4232b3f3="" class="device-list"><section data-v-4232b3f3="" class="item-hd"><span data-v-4232b3f3=""><b data-v-4232b3f3="">F4403</b></span> <span data-v-4232b3f3="" class="state">空闲</span></section> <section data-v-4232b3f3="" class="item-bd"><span data-v-4232b3f3="">店铺</span> <div data-v-4232b3f3="">测试店铺-A2</div></section> <section data-v-4232b3f3="" class="item-ft"><p data-v-4232b3f3="" class="item-ft-right"><span data-v-4232b3f3="">类型</span> <span data-v-4232b3f3="">洗衣机</span></p> <p data-v-4232b3f3="" class="item-ft-right"><span data-v-4232b3f3="">收益</span> <span data-v-4232b3f3="">359.60</span></p></section></div>
+            <div data-v-4232b3f3="" class="device-list"><section data-v-4232b3f3="" class="item-hd"><span data-v-4232b3f3=""><b data-v-4232b3f3="">F4403</b></span> <span data-v-4232b3f3="" class="state">空闲</span></section> <section data-v-4232b3f3="" class="item-bd"><span data-v-4232b3f3="">店铺</span> <div data-v-4232b3f3="">测试店铺-A2</div></section> <section data-v-4232b3f3="" class="item-ft"><p data-v-4232b3f3="" class="item-ft-right"><span data-v-4232b3f3="">类型</span> <span data-v-4232b3f3="">洗衣机</span></p> <p data-v-4232b3f3="" class="item-ft-right"><span data-v-4232b3f3="">收益</span> <span data-v-4232b3f3="">359.60</span></p></section></div>
+            <div data-v-4232b3f3="" class="device-list"><section data-v-4232b3f3="" class="item-hd"><span data-v-4232b3f3=""><b data-v-4232b3f3="">F4403</b></span> <span data-v-4232b3f3="" class="state">空闲</span></section> <section data-v-4232b3f3="" class="item-bd"><span data-v-4232b3f3="">店铺</span> <div data-v-4232b3f3="">测试店铺-A2</div></section> <section data-v-4232b3f3="" class="item-ft"><p data-v-4232b3f3="" class="item-ft-right"><span data-v-4232b3f3="">类型</span> <span data-v-4232b3f3="">洗衣机</span></p> <p data-v-4232b3f3="" class="item-ft-right"><span data-v-4232b3f3="">收益</span> <span data-v-4232b3f3="">359.60</span></p></section></div>
+            <div data-v-4232b3f3="" class="device-list"><section data-v-4232b3f3="" class="item-hd"><span data-v-4232b3f3=""><b data-v-4232b3f3="">F4403</b></span> <span data-v-4232b3f3="" class="state">空闲</span></section> <section data-v-4232b3f3="" class="item-bd"><span data-v-4232b3f3="">店铺</span> <div data-v-4232b3f3="">测试店铺-A2</div></section> <section data-v-4232b3f3="" class="item-ft"><p data-v-4232b3f3="" class="item-ft-right"><span data-v-4232b3f3="">类型</span> <span data-v-4232b3f3="">洗衣机</span></p> <p data-v-4232b3f3="" class="item-ft-right"><span data-v-4232b3f3="">收益</span> <span data-v-4232b3f3="">359.60</span></p></section></div>
+            <div data-v-4232b3f3="" class="device-list"><section data-v-4232b3f3="" class="item-hd"><span data-v-4232b3f3=""><b data-v-4232b3f3="">F4403</b></span> <span data-v-4232b3f3="" class="state">空闲</span></section> <section data-v-4232b3f3="" class="item-bd"><span data-v-4232b3f3="">店铺</span> <div data-v-4232b3f3="">测试店铺-A2</div></section> <section data-v-4232b3f3="" class="item-ft"><p data-v-4232b3f3="" class="item-ft-right"><span data-v-4232b3f3="">类型</span> <span data-v-4232b3f3="">洗衣机</span></p> <p data-v-4232b3f3="" class="item-ft-right"><span data-v-4232b3f3="">收益</span> <span data-v-4232b3f3="">359.60</span></p></section></div>
+            <div data-v-4232b3f3="" class="device-list"><section data-v-4232b3f3="" class="item-hd"><span data-v-4232b3f3=""><b data-v-4232b3f3="">F4403</b></span> <span data-v-4232b3f3="" class="state">空闲</span></section> <section data-v-4232b3f3="" class="item-bd"><span data-v-4232b3f3="">店铺</span> <div data-v-4232b3f3="">测试店铺-A2</div></section> <section data-v-4232b3f3="" class="item-ft"><p data-v-4232b3f3="" class="item-ft-right"><span data-v-4232b3f3="">类型</span> <span data-v-4232b3f3="">洗衣机</span></p> <p data-v-4232b3f3="" class="item-ft-right"><span data-v-4232b3f3="">收益</span> <span data-v-4232b3f3="">359.60</span></p></section></div>
+            <div data-v-4232b3f3="" class="device-list"><section data-v-4232b3f3="" class="item-hd"><span data-v-4232b3f3=""><b data-v-4232b3f3="">F4403</b></span> <span data-v-4232b3f3="" class="state">空闲</span></section> <section data-v-4232b3f3="" class="item-bd"><span data-v-4232b3f3="">店铺</span> <div data-v-4232b3f3="">测试店铺-A2</div></section> <section data-v-4232b3f3="" class="item-ft"><p data-v-4232b3f3="" class="item-ft-right"><span data-v-4232b3f3="">类型</span> <span data-v-4232b3f3="">洗衣机</span></p> <p data-v-4232b3f3="" class="item-ft-right"><span data-v-4232b3f3="">收益</span> <span data-v-4232b3f3="">359.60</span></p></section></div>
+            <div data-v-4232b3f3="" class="device-list"><section data-v-4232b3f3="" class="item-hd"><span data-v-4232b3f3=""><b data-v-4232b3f3="">F4403</b></span> <span data-v-4232b3f3="" class="state">空闲</span></section> <section data-v-4232b3f3="" class="item-bd"><span data-v-4232b3f3="">店铺</span> <div data-v-4232b3f3="">测试店铺-A2</div></section> <section data-v-4232b3f3="" class="item-ft"><p data-v-4232b3f3="" class="item-ft-right"><span data-v-4232b3f3="">类型</span> <span data-v-4232b3f3="">洗衣机</span></p> <p data-v-4232b3f3="" class="item-ft-right"><span data-v-4232b3f3="">收益</span> <span data-v-4232b3f3="">359.60</span></p></section></div>
+            <div data-v-4232b3f3="" class="device-list"><section data-v-4232b3f3="" class="item-hd"><span data-v-4232b3f3=""><b data-v-4232b3f3="">F4403</b></span> <span data-v-4232b3f3="" class="state">空闲</span></section> <section data-v-4232b3f3="" class="item-bd"><span data-v-4232b3f3="">店铺</span> <div data-v-4232b3f3="">测试店铺-A2</div></section> <section data-v-4232b3f3="" class="item-ft"><p data-v-4232b3f3="" class="item-ft-right"><span data-v-4232b3f3="">类型</span> <span data-v-4232b3f3="">洗衣机</span></p> <p data-v-4232b3f3="" class="item-ft-right"><span data-v-4232b3f3="">收益</span> <span data-v-4232b3f3="">359.60</span></p></section></div>
+            <div data-v-4232b3f3="" class="device-list"><section data-v-4232b3f3="" class="item-hd"><span data-v-4232b3f3=""><b data-v-4232b3f3="">F4403</b></span> <span data-v-4232b3f3="" class="state">空闲</span></section> <section data-v-4232b3f3="" class="item-bd"><span data-v-4232b3f3="">店铺</span> <div data-v-4232b3f3="">测试店铺-A2</div></section> <section data-v-4232b3f3="" class="item-ft"><p data-v-4232b3f3="" class="item-ft-right"><span data-v-4232b3f3="">类型</span> <span data-v-4232b3f3="">洗衣机</span></p> <p data-v-4232b3f3="" class="item-ft-right"><span data-v-4232b3f3="">收益</span> <span data-v-4232b3f3="">359.60</span></p></section></div>
+            <div data-v-4232b3f3="" class="device-list"><section data-v-4232b3f3="" class="item-hd"><span data-v-4232b3f3=""><b data-v-4232b3f3="">F4403</b></span> <span data-v-4232b3f3="" class="state">空闲</span></section> <section data-v-4232b3f3="" class="item-bd"><span data-v-4232b3f3="">店铺</span> <div data-v-4232b3f3="">测试店铺-A2</div></section> <section data-v-4232b3f3="" class="item-ft"><p data-v-4232b3f3="" class="item-ft-right"><span data-v-4232b3f3="">类型</span> <span data-v-4232b3f3="">洗衣机</span></p> <p data-v-4232b3f3="" class="item-ft-right"><span data-v-4232b3f3="">收益</span> <span data-v-4232b3f3="">359.60</span></p></section></div>
+            <div data-v-4232b3f3="" class="device-list"><section data-v-4232b3f3="" class="item-hd"><span data-v-4232b3f3=""><b data-v-4232b3f3="">F4403</b></span> <span data-v-4232b3f3="" class="state">空闲</span></section> <section data-v-4232b3f3="" class="item-bd"><span data-v-4232b3f3="">店铺</span> <div data-v-4232b3f3="">测试店铺-A2</div></section> <section data-v-4232b3f3="" class="item-ft"><p data-v-4232b3f3="" class="item-ft-right"><span data-v-4232b3f3="">类型</span> <span data-v-4232b3f3="">洗衣机</span></p> <p data-v-4232b3f3="" class="item-ft-right"><span data-v-4232b3f3="">收益</span> <span data-v-4232b3f3="">359.60</span></p></section></div>
+            <div data-v-4232b3f3="" class="device-list"><section data-v-4232b3f3="" class="item-hd"><span data-v-4232b3f3=""><b data-v-4232b3f3="">F4403</b></span> <span data-v-4232b3f3="" class="state">空闲</span></section> <section data-v-4232b3f3="" class="item-bd"><span data-v-4232b3f3="">店铺</span> <div data-v-4232b3f3="">测试店铺-A2</div></section> <section data-v-4232b3f3="" class="item-ft"><p data-v-4232b3f3="" class="item-ft-right"><span data-v-4232b3f3="">类型</span> <span data-v-4232b3f3="">洗衣机</span></p> <p data-v-4232b3f3="" class="item-ft-right"><span data-v-4232b3f3="">收益</span> <span data-v-4232b3f3="">359.60</span></p></section></div>
             <div class="noData" v-show="hasNoData">暂无设备</div>
             <div v-if="allLoaded" class="nomore-data">没有更多了</div>
           </mt-loadmore>
         </div>
       </div>
-      <div class="openItem" @click="toAddItem" v-show="isShow">···</div>
+      <div class="openItem" @click="toAddItem" v-show="isShow"><span class="iconfont icon-gengduo-tianchong"></span></div>
       <div v-show="isShow2">
-        <div class="closeItem" @click="toCloseItem">X</div>
-        <router-link :to="{name:'addDevice'}" v-has="'mer:machine:add'"><div class="addDev showItem">新增设备</div></router-link>
-        <router-link :to="{name:'batchStart'}" v-has="'mer:machine:reset'"><div class="betchStartup showItem">批量启动</div></router-link>
-        <router-link :to="{name:'batchEdit'}" v-has="'mer:machine:update'"><div class="betchModf showItem">批量修改</div></router-link>
+        <div class="closeItem" @click="toCloseItem"><span class="iconfont icon-guanbi"></span></div>
+        <router-link :to="{name:'addDevice'}" v-has="'mer:machine:add'"><div class="addDev showItem"><span v-html="funNameArr[0]"></span></div></router-link>
+        <router-link :to="{name:'batchStart'}" v-has="'mer:machine:reset'"><div class="betchStartup showItem"><span v-html="funNameArr[1]"></span></div></router-link>
+        <router-link :to="{name:'batchEdit'}" v-has="'mer:machine:update'"><div class="betchModf showItem"><span v-html="funNameArr[2]"></span></div></router-link>
       </div>
     </div>
   </section>
@@ -93,7 +107,8 @@
         list: [],
         checkClass: false,
         name: '',
-        hasNoData: ''
+        hasNoData: '',
+        funNameArr: ['新增<br/>设备','批量<br/>启动','批量<br/>修改']
         
       };
     },
@@ -103,7 +118,7 @@
       }
     },
     mounted() {
-      this.wrapperHeight = document.documentElement.clientHeight-131;
+
     },
     methods: {
       titleClick(index) {
@@ -128,7 +143,7 @@
           let url = res;
           let parameter = url.substring(0,4);
           if(parameter == "http"){           
-            this.$toast("请扫描IMEI码");
+            this.$toast("请扫描I模块上的IMEI码");
           }else{
             this.$router.push({
               name: "deviceSearch",
@@ -382,7 +397,7 @@
     font-size: 0.43rem;
     color: #333;
   }
-  .openItem{
+  .openItem {
     width: 1.49rem;
     height: 1.49rem;
     text-align: center;
@@ -394,9 +409,11 @@
     right: 0.54rem;
     line-height: 1.49rem;
     color: rgba(255,255,255,1);
-    font-size: 34px;
+    .icon-gengduo-tianchong {
+      font-size: 20px;
+    }
   }
-  .closeItem{
+  .closeItem {
     width: 1.49rem;
     height: 1.49rem;
     text-align: center;
@@ -408,7 +425,9 @@
     right: 0.54rem;
     line-height: 1.49rem;
     color: rgba(255,255,255,1);
-    font-size: 24px;
+    .icon-guanbi {
+      font-size: 20px;
+    }
   }
   .showItem{
     width: 1.49rem;
@@ -419,9 +438,14 @@
     border-radius: 50%;
     position: fixed;
     right: 0.54rem;
-    line-height: 1.49rem;
+    line-height: 16px;
+    display: table;
     font-size: 12px;
     color: rgba(255,255,255,1);
+    span {
+      display: table-cell;
+      vertical-align: middle;
+    }
   }
   .addDev{
     bottom: 2.52rem;

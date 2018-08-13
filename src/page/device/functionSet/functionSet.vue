@@ -73,7 +73,7 @@
             this.functionSetList = res.data.list;
         }
         else {
-          MessageBox.alert(res.msg);
+          this.$toast(res.msg);
         }
       },
       changeItem(item,index,flag){       

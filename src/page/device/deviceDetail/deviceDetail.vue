@@ -69,6 +69,7 @@
               <span>{{item.functionName}}</span>
               <span>{{item.needMinutes}}</span>
               <span>{{item.functionPrice}}</span>
+              <span v-show="functionCodeShow">{{item.functionCode}}</span>
               <span>{{item.ifOpen}}</span>
             </p>
           </section>
@@ -100,6 +101,7 @@
         deviceDetail: [],
         tzjShow: true,
         functionSetListShow: true,
+        functionCodeShow: false,
         title: '设备详情',
         fromdata: {
           machineName: "",
@@ -138,10 +140,17 @@
           ['耗时', '/分'],
           ['原价', '/元'],
           ['状态']
+        ],
+        functionListTitle2: [
+          ['功能'],
+          ['耗时', '/分'],
+          ['原价', '/元'],
+          ['脉冲数'],
+          ['状态']
         ]
       };
     },
-    filters: {
+    filters: { //过滤器，过滤2位小数
       keepTwoNum(value) {
        return Number(value).toFixed(2);
       }
@@ -157,6 +166,8 @@
             this.tzjShow = true;
           } else {
             this.tzjShow = false;
+            this.functionCodeShow = true;
+            this.functionListTitle = this.functionListTitle2;
           }
           this.functionList.forEach(item=>{
             item.ifOpen=item.ifOpen === 0? "开启":"关闭";
@@ -359,6 +370,9 @@
           }
           &:nth-child(4) {
             flex: 2.21;
+          }
+          &:last-child {
+            flex: 2.21;
             border-right: none;
           }
           span {
@@ -372,7 +386,6 @@
     }
     .fun-item-bd {
       line-height: 1.2rem;
-      padding: 0 .4rem;
       font-size: 0.37rem;
       color: #333333;
       background: #fff;

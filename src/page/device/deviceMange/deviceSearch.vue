@@ -12,13 +12,37 @@
         </p>
       </div>
     </div>
+
     <div class="search-select">
-        <ul>
-          <li v-for="(item,index) in searchList" :class="{selectback:index==now}" class="search-select-option search-select-list" @click="selectClick(index)"
-          :key="index">{{item.nameOrImei}}
-          </li>
-          <li class="noData" v-show="hasNoData">{{message}}</li>
-        </ul>
+      <ul>
+        <li v-for="(item,index) in searchList" :class="{selectback:index==now}" class="search-select-option search-select-list" @click="selectClick(index)"
+        :key="index">{{item.nameOrImei}}
+        </li>
+        <li class="noData" v-show="hasNoData">{{message}}</li>
+      </ul>
+    </div>
+
+    <div class="selectedItem">
+      <router-link tag="div" :to="{ name: 'deviceDetail', query:{machineId:item.machineId}}" class="device-list" v-for="(item,index) in list" :key="index">
+        <section class="item-hd">
+          <span><b>{{item.machineName}}</b></span>
+          <span class="state">{{item.machineState}}</span>
+        </section>
+        <section class="item-bd">
+          <span>店铺</span>
+          <div>{{item.shopName}}</div>
+        </section>
+        <section class="item-ft">
+          <p class="item-ft-right">
+            <span>类型</span>
+            <span>{{item.machineTypeName}}</span>
+          </p>
+          <p class="item-ft-right">
+            <span>收益</span>
+            <span>{{item.profit | keepTwoNum}}</span>
+          </p>
+        </section>
+      </router-link>
     </div>
   </section>
 </template>
@@ -27,7 +51,7 @@
 import qs from "qs";
 import Api from '@/utils/Api';
 import Web from '@/utils/Web';
-import { listByNameOrlmeiFun } from '@/service/device';
+import { listByNameOrlmeiFun,deviceListFun } from '@/service/device';
   /* eslint-disable */
 import {delay } from "@/utils/tool";
   export default {
@@ -38,10 +62,54 @@ import {delay } from "@/utils/tool";
         isResult: true,
         keyword: '',
         searchList:[],
-        message: ''
+        message: '',
+        list: []
       };
     },
     methods: {
+      async _getList(id)  {
+        let machineState = null;
+        let payload = {machineState:machineState ,machineId: id};
+        let res = await deviceListFun(qs.stringify(payload));
+        if(res.code === 0) {
+          this.list = res.data.items;
+          this.list.forEach(item=>{
+            switch(item.machineState){
+            case 1:
+            item.machineState = "空闲";
+            break;
+            case 2:
+            item.machineState = "运行";
+            break;
+            case 3:
+            item.machineState = "预约";
+            break;
+            case 4:
+            item.machineState = "故障";
+            break;
+            case 5:
+            item.machineState = "参数设置";
+            break;
+            case 6:
+            item.machineState = "自检";
+            break;
+            case 7:
+            item.machineState = "预约";
+            break;
+            case 8:
+            item.machineState = "离线";
+            break;
+            case 16:
+            item.machineState = "超时未工作";
+            break;
+
+            }
+          });
+        }
+        else {
+          this.$toast(res.msg);
+        }
+      },
       goBack() {
         this.$router.go(-1);
       },
@@ -55,14 +123,14 @@ import {delay } from "@/utils/tool";
           if(res.code === 0) {
             this.message = "未找到相关结果"
             this.searchList = res.data;  
+          }else{
+            this.$toast(res.msg);
           }
       },
       selectClick: function (index) {
         let machineId = this.searchList[index].machineId;
-        this.$router.push({
-          name: 'deviceDetail',
-          query: ({machineId: machineId})
-        })
+        console.log(machineId)
+        this._getList(machineId);
       },
       clearInput: function () {
         this.keyword = "";
@@ -204,8 +272,78 @@ import {delay } from "@/utils/tool";
         border-radius: 0.13rem;
         font-size: 16px;
       }
+      
     }
+    .selecedItem{
+      .device-list {
+      margin-top: .27rem;
+      padding: 0 .4rem;
+      background: #FFFFFF;
+      color: rgba(153, 153, 153, 1);
+      font-size: .37rem;
+      section {
+        padding: .1rem 0;
+        height: 1rem;
+        line-height: 1rem;
+        border-bottom: 0.01rem solid rgba(223, 230, 255, 1);
+        &:nth-child(3) {
+          border: none;
+        }
+      }
+      .item-hd {
+        font-size: 0.43rem;
+        color: rgba(51, 51, 51, 1);
+        span {
+          &:nth-child(2) {
+            float: right;
+            color: #1890FF
+          }
+        }
+        .state{
+          font-size: 0.37rem;
+        }
+      } 
 
+      .item-bd {
+        display: flex;
+        span {
+          width: 1.2rem;
+        }
+        div {
+          flex-grow: 1;
+          width: auto;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+      }
+      .item-ft {
+        display: flex;
+        p {
+          flex: 1;
+          &:nth-child(2) {
+            flex: 1;
+            text-align: center;
+            justify-content: flex-end;
+            border-left: 0.01rem solid rgba(223, 230, 255, 1);
+          }
+          span {
+            display: inline-block;
+            &:nth-child(1) {
+              width: 1.125rem;
+          }
+          }
+
+        }
+        span {
+          &:nth-child(2) {
+            color: #1890FF;
+            font-size: 0.43rem;
+          }
+        }
+      }
+    }
+    }
     input::-ms-clear {
       display: none;
     }
