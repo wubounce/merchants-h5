@@ -47,7 +47,7 @@
     
     <!-- 设备类型 -->
     <mt-popup v-model='deviceDetail' position="bottom" class="mint-popup">
-      <p class="toolBar"><span @click="cancel">取消</span><span>设备类型</span><span @click="confirmNews">确定</span></p>
+      <p class="toolBarMachine"><span @click="cancel">取消</span><span>设备类型</span><span @click="confirmNews">确定</span></p>
       <div class='resp-shop-wrap'>
         <mt-checklist align="right" :options="options" v-model="machine"></mt-checklist>
       </div>
@@ -911,7 +911,7 @@ export default {
   .toolBar {
     display: flex;
     justify-content: center;
-    padding-top: 0.2rem;
+    background-color: #fbfbfc;
     line-height: 1rem;
     #allDay {
       color: #fff;
@@ -939,8 +939,26 @@ export default {
   }
   .mint-popup {
     width: 100%;
-    .prop-bd {
-      padding: 0.3rem;
+    .toolBarMachine {
+      display: flex;
+      justify-content: center;
+      line-height: 1rem;
+      background-color: #fbfbfc;
+      span {
+        &:nth-child(1) {
+          font-size: 15px;
+          color: #999999;
+        }
+        &:nth-child(2) {
+          font-size: 16px;
+          margin: 0 2.7rem;
+          color: #666666;
+        }
+        &:nth-child(3) {
+          font-size: 15px;
+          color: #1890FF;
+        }
+      }
     }
     .resp-shop-wrap {
       height: 10.67rem;
@@ -972,5 +990,8 @@ export default {
 .mint-switch-input:checked + .mint-switch-core {
   border-color: #4DD865;
   background-color: #4DD865;
+}
+.mint-checklist-title {
+  margin: 0;
 }
 </style>

@@ -146,7 +146,7 @@ export default {
 <style lang="scss" scoped>
 .personal {
    title {
-      border-top: 1px solid #F8F8F8;
+      border-top: 1px solid #f9f8ff;
    }
    .second-p {
      margin-top: 0.3rem;
@@ -155,7 +155,7 @@ export default {
      font-size: 16px;
      padding: 0.3rem;
      background-color: #fff; 
-     border-bottom: 1px solid #F8F8F8;
+     border-bottom: 1px solid #f9f8ff;
      span {
         &:first-child {
           color:rgba(153,153,153,1);
@@ -170,7 +170,7 @@ export default {
    .shop-machine {
      font-size: 16px;
      background-color: #fff;
-     border-bottom: 1px solid #F8F8F8;
+     border-bottom: 1px solid #f9f8ff;
      span {
        &:first-child {
           color:rgba(153,153,153,1);
@@ -199,7 +199,7 @@ export default {
       justify-content: space-between;
       font-size: 16px;
       padding: 0.3rem;
-      border-bottom: 1px solid #F8F8F8;
+      border-bottom: 1px solid #f9f8ff;
       background-color: #fff; 
       span {
         &:first-child {
@@ -215,7 +215,7 @@ export default {
       padding-top: 0.2rem;
       justify-content: space-between;
       background-color: #fff;
-      border-bottom: 1px solid #F8F8F8;
+      border-bottom: 1px solid #f9f8ff;
       span {
         &:first-child {
           font-size: 16px;
