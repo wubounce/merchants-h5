@@ -372,8 +372,7 @@ export default {
           formatter:function(data){
             let reg = /^(\d{1,2})(:)?(\d{1,2})$/;
             if(reg.test(data[0].name)){
-               let time = data[0].name.replace(':00',':59')
-            　　data[0].name = `${data[0].name}-${time}`
+              let time = data[0].name.replace(':00',':59');data[0].name = `${data[0].name}-${time}`;
             }
            return `${data[0].name}<br/>${data[0].marker}${data[0].seriesName}：${data[0].value.toFixed(2)}元`;
           },
@@ -411,8 +410,8 @@ export default {
           offset:10,
           min:0,
           max:this.lineMax>0?this.lineMax : 1,
-          splitNumber:5,
-          interval:this.lineMax>0? this.lineMax/5: 1/5,
+          splitNumber:4,
+          interval:this.lineMax>0? this.lineMax/4: 1/4,
           axisLine:{
             show:false,
             lineStyle:{
@@ -528,7 +527,7 @@ export default {
           min:0,
           max:this.barMax>0?this.barMax : 1,
           splitNumber:5,
-          interval:this.barMax>0? this.barMax/5: 1/5,
+          interval:this.barMax>0? this.barMax/4: 1/4,
         }],
         series: [{
           name: '设备监控',
@@ -568,7 +567,7 @@ export default {
           {
               name:'通信类型',
               type:'pie',
-              radius: ['40%', '60%'],
+              radius: ['50%', '70%'],
               avoidLabelOverlap: false,
               label: {
                   normal: {

@@ -44,6 +44,7 @@ module.exports = {
     'no-useless-escape':0,
     'no-unreachable':0,
     'no-undef':0,
-    'no-unused-vars':0
+    'no-unused-vars':0,
+    'no-irregular-whitespace':0
   }
 }
