@@ -121,7 +121,9 @@ export default {
     },
     async shopListFun(){
       let res = await shopListFun();
-      this.shopSlots[0].values = [{shopName:'全部店铺'},...res.data];
+      if (res.code === 0) {
+        this.shopSlots[0].values = [{shopName:'全部店铺'},...res.data];
+      }
     },
     async dayReportFun(shopId){
       let payload = null;

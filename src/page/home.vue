@@ -35,8 +35,9 @@ import { setNavTabIndex, getNavTabIndex} from '@/utils/tool';
 			};
 		},
 		 created: function(){
+		 	let currentPath = this.$route.path;
           	let localData = getNavTabIndex();
-          	this.selected = localData?localData:'/index';
+          	this.selected = localData?localData:currentPath;
 	    },
 		components:{
 		},

@@ -34,7 +34,7 @@
 <script>
 import qs from "qs";
 import { mapActions } from 'vuex';
-import { getToken, removeToken, removeUser, removeMenu, removeNavTabIndex } from '@/utils/tool';
+import { getToken, removeToken, removeUser, removeMenu, removeNavTabIndex, getNavTabIndex } from '@/utils/tool';
 import { login } from '@/service/login';
 import Button from "@/components/Button/Button";
 export default {
@@ -42,8 +42,9 @@ export default {
     beforeRouteEnter(to, from, next) {
       // 已登录直接返回首页
       if (getToken()) {
-        removeNavTabIndex();
-        next('/index');
+        let localData = getNavTabIndex();
+        localData = localData?localData:'/index';
+        next(localData);
         return;
       }
       // 测试环境不验证
