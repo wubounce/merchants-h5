@@ -68,8 +68,8 @@
       <div v-show="isShow2">
         <div class="closeItem" @click="toCloseItem"><span class="iconfont icon-guanbi"></span></div>
         <router-link :to="{name:'addDevice'}" v-has="'mer:machine:add'"><div class="addDev showItem"><span v-html="funNameArr[0]"></span></div></router-link>
-        <router-link :to="{name:'batchStart'}" v-has="'mer:machine:reset'"><div class="betchStartup showItem"><span v-html="funNameArr[1]"></span></div></router-link>
-        <router-link :to="{name:'batchEdit'}" v-has="'mer:machine:update'"><div class="betchModf showItem"><span v-html="funNameArr[2]"></span></div></router-link>
+        <router-link :to="{name:'batchStart'}" v-has="'mer:machine:batchStart'"><div class="betchStartup showItem"><span v-html="funNameArr[1]"></span></div></router-link>
+        <router-link :to="{name:'batchEdit'}" v-has="'mer:machine:batchUpdate'"><div class="betchModf showItem"><span v-html="funNameArr[2]"></span></div></router-link>
       </div>
     </div>
   </section>

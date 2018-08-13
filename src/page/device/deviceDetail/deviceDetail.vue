@@ -81,10 +81,10 @@
       </ul>
       <div style="width:100%;height:1.73rem;"></div>
       <div class="about-button">
-        <Button btn-type="small" btn-color="spe" class="ft-btn active" @click.native="deviceDele">删除</Button>
-        <Button btn-type="small" btn-color="spe" class="ft-btn" @click.native="deviceTZJ" v-show="tzjShow">桶自洁</Button>
-        <Button btn-type="small" btn-color="spe" class="ft-btn" @click.native="deviceRest">复位</Button>
-        <Button btn-type="small" btn-color="spe" class="ft-btn" @click.native="deviceEdit">编辑</Button>
+        <Button btn-type="small" btn-color="spe" class="ft-btn active" @click.native="deviceDele" v-has="'mer:machine:delete'">删除</Button>
+        <Button btn-type="small" btn-color="spe" class="ft-btn" @click.native="deviceTZJ" v-show="tzjShow" v-has="'mer:machine:clean'">桶自洁</Button>
+        <Button btn-type="small" btn-color="spe" class="ft-btn" @click.native="deviceRest" v-has="'mer:machine:reset'">复位</Button>
+        <Button btn-type="small" btn-color="spe" class="ft-btn" @click.native="deviceEdit" v-has="'mer:machine:update'">编辑</Button>
       </div>
     </div>
   </section>

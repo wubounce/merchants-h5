@@ -166,6 +166,7 @@ export default {
           width: 90%;
           padding-top: 0.49rem;
           padding-bottom: 0.48rem;
+          height:1.55rem;
           font-size: 16px;
           color: #1890FF;
         }

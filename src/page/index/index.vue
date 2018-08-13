@@ -167,6 +167,8 @@ export default {
         res = await countMachineFun();
       }
       if (res.code === 0) {
+         this.barseriesData = [];
+         this.barxAxisData = [];
         this.allmMachine = res.data.all; //设备总数
         delete res.data.all; //图表删除总数
         for(var i in res.data){
@@ -196,6 +198,8 @@ export default {
       }
       let res = await timeProfitFun(qs.stringify(payload));
       if (res.code === 0) {
+        this.lineseriesData = [];
+        this.linexAxisData = [];
         res.data.forEach(item=>{
           this.lineseriesData.push(item.sum);
           if (String(item.time).length <=2 ) {
@@ -241,6 +245,7 @@ export default {
         let machineTypeData = res.data ? res.data.machineType :[];
         if (machineTypeData.length>0) {
           machineTypeData = machineTypeData.sort(this.ortId).slice(0,3); //类型标题只显示最大的三个类型
+          this.piefunDatatitle = [];
           machineTypeData.forEach(item=>{
             this.piefunDatatitle.push({
               name:item.type,
@@ -248,7 +253,7 @@ export default {
               textStyle:{fontWeight:'normal', color:'#999',fontSize:12, padding:0},
             });
           });
-          let fristFour = res.data.machineType.sort(this.ortId).slice(0,5); //类型标题只显示最大的三个类型
+          let fristFour = res.data.machineType.sort(this.ortId).slice(0,5); //取出最大五个类型，多余的平成其他类型
           let other = res.data.machineType.sort(this.ortId).slice(5);
           let otherNum = null;
           other.forEach(item=>{
@@ -258,6 +263,7 @@ export default {
             sum: otherNum,
             type: '其他'
           }];
+          this.piefunData = [];
           let machineType = [...fristFour,...other];
           machineType.forEach(item=>{
             this.piefunData.push({
@@ -613,11 +619,16 @@ export default {
               return `${data.marker}${data.name}：${data.percent}%`;
             },
         },
+        grid:{
+          top:'60%',//距离下边距
+        },
         legend: {
             orient: 'horizontal',
             y: 'bottom',
             x:'center',
             bottom:'10%',
+            padding:0,
+            itemGap:2,
             itemWidth:6, //图表大小
             itemHeight:6,
             data:this.piefunDatatitle,
@@ -627,7 +638,7 @@ export default {
             {
               name:'功能类型',
               type:'pie',
-              radius: ['40%', '60%'],
+              radius: ['50%', '70%'],
               avoidLabelOverlap: true,
               label: {
                   normal: {
