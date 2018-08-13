@@ -66,7 +66,7 @@
             <transition-group name="fade">
               <div :class="['animate',{hiddren:item.show}]" :key="index">
                 <div class="promisss-child"  v-for="(sitem,index) in item.children" :key="index" style="background:#fff;" >
-                  <label class="mint-checklist-label prom">
+                  <label class="mint-checklist-label" style="border-bottom: 1px #f9f8ff solid;background:#F8F8F8;">
                     <div class="check-prem-list">
                       <span class="mint-checkbox is-right">
                         <input type="checkbox" class="mint-checkbox-input" v-model="checkpermissionslist" :value="sitem.menuId"> 
@@ -116,7 +116,6 @@ export default {
       phone:'',
      
       checkshoptxt:'',
-      show:null,
     };
   },
   mounted() {
@@ -239,7 +238,7 @@ export default {
       display: flex;
       height: 1.6rem;
       line-height: 1.6rem;
-      border-bottom:1px solid rgba(223,230,255,1);
+      border-bottom:1px solid #f9f8ff;
       .form-title {
         width: 2rem;
         font-size: 16px;
@@ -316,7 +315,7 @@ export default {
   }
   .resp-shop-wrap {
     padding: 0 0.4rem;
-    height: 10.67rem;
+    height: 8.43rem;
     overflow-y: scroll;
   }
   .check-shop {
@@ -389,13 +388,12 @@ export default {
   }
   .check-prem-list{
     padding:0.27rem 0;
-    border-bottom:1px solid rgba(223,230,255,1);
   }
   .child-slit {
     background:rgba(248,248,248,1);
   }
   .child-prom {
-    border-bottom:1px solid rgba(223,230,255,1);
+    border-bottom:1px solid #f9f8ff;
     padding: 0 !important;
   }
   .promiss-footer {
@@ -430,11 +428,11 @@ export default {
 <style lang="scss">
   .addmember .mint-header {
     background: #fff !important;
-    border-bottom: 1px solid #DCE0E6;
+    border-bottom: 1px solid #f9f8ff;
   }
   .addmember .mint-checklist-label {
     padding: 0.27rem 0;
-    border-bottom:1px solid rgba(223,230,255,1);
+    border-bottom:1px solid #f9f8ff;
   }
   .addmember .prom {
     padding: 0 0.4rem;
@@ -446,5 +444,7 @@ export default {
     width: 0.45rem;
     height: 0.45rem;
   }
- 
+ .addmember .mint-checkbox-core::after {
+    left: 7px;
+  }
 </style>

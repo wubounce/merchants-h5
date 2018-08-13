@@ -166,7 +166,7 @@ export default {
 <style>
   .member .mint-header {
     background: #fff !important;
-    border-bottom: 1px solid #DCE0E6;
+    border-bottom: 1px solid #f9f8ff;
   }
   .member .mint-switch-input:checked + .mint-switch-core {
     border-color: #4DD865;
@@ -174,7 +174,7 @@ export default {
   }
   .member .mint-header {
     background: #fff !important;
-    border-bottom:1px solid #DCE0E6;
+    border-bottom:1px solid #f9f8ff;
   }
   .member .mint-loadmore-top, .mint-loadmore-text {
     font-size: 14px;
