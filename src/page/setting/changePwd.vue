@@ -23,7 +23,7 @@
   import { updatePwdFun } from '@/service/resetPwd';
   import qs from 'qs';
   import { validatPwd } from '@/utils/validate';
-  import { removeToken } from '@/utils/tool';
+  import { removeToken, removeNavTabIndex } from '@/utils/tool';
   export default {
     data() {
       return {
@@ -80,6 +80,7 @@
           delete payload.checkpassword;
           let res = await updatePwdFun(qs.stringify(payload));
           if (res.code===0) {
+            removeNavTabIndex();
             removeToken();
             this.$router.push({name:'login'});
           }else {
