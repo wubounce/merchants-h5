@@ -17,8 +17,8 @@
     </mt-popup>
 
     <!-- 启动时间 -->
-        <mt-datetime-picker ref="pickerStarTime" type="datetime" v-model="pickerValue"  @confirm="handleConfirm"></mt-datetime-picker>
-    <!-- <mt-datetime-picker ref="pickerStarTime" type="datetime" v-model="pickerValue"   year-format="{value} 年"  month-format="{value} 月"  date-format="{value} 日" hour-format="{value} 时" minute-format="{value} 分"  @confirm="handleConfirm"></mt-datetime-picker> -->
+        <!-- <mt-datetime-picker ref="pickerStarTime" type="datetime" v-model="pickerValue"  @confirm="handleConfirm"></mt-datetime-picker> -->
+    <mt-datetime-picker ref="pickerStarTime" type="datetime" v-model="pickerValue" month-format="{value} 月"  date-format="{value} 日" hour-format="{value} 时" minute-format="{value} 分"  @confirm="handleConfirm"></mt-datetime-picker>
   </section>
 </template>
 
@@ -185,7 +185,7 @@ import moment from 'moment';
       display: flex;
       justify-content: space-between;
       padding: 0.3rem;
-      border-bottom: 1px solid #F8F8F8;
+      border-bottom: 1px solid #f9f8ff;
       background: url("../../../static/image/shop/right.png") no-repeat right
         0.3rem center;
       background-size: 0.16rem 0.27rem;
