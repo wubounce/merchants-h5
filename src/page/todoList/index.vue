@@ -99,12 +99,12 @@ section {
 	.title {
 		font-size: 16px;
 		font-weight: bold;
-		padding: 0.3rem;
+		line-height: 1.2rem;
 		border: 1px solid #F8F8F8;
 		background-color: #fff; 
 	}
 	.noTodoList {
-		text-align: center;
+	text-align: center;
     color: #999;
     font-size: 16px;
     padding-top: 4rem;
@@ -117,7 +117,7 @@ section {
 				background-color: #fff;
 				margin-bottom: 0.3rem;
 				.time {
-					padding: 0.2rem;
+					line-height: 1.2rem;
 					border-bottom: 1px solid #F8F8F8;
 					span {
 						&:first-child {
