@@ -93,23 +93,22 @@ export default {
     margin-bottom: 0.21rem;
   }
   .momber-wrap {
-    display: flex;
     font-size: 16px;
     color: #333;
     background: #fff;
     margin-bottom: 0.21rem;
-    .name , .phone {
-      flex: 1;
-    }
+    overflow: hidden;
   }
-  .name a {
-    color: #333;
-    display: block;
+  .name{
+    width: 75%;
+    float: left;
+     a {
+      color: #333;
+      display: block;
+    }
   }
   .phone {
-    .right {
-      float: right;
-    }
+    float: right;
   }
   .phonenum {
     font-size: 16px;
