@@ -99,7 +99,6 @@ export default {
   },
   created(){
     if(Web.getAppUA) {
-      console.log(123123)
         this.iosHeight = '2.67rem';
     }
   },
