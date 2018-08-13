@@ -22,8 +22,9 @@
     <div class="no-order" v-if="noOrderList"><p>暂无订单</p></div> 
     <div class="page-top" :style="{ 'padding-top': hiddenPageHeight + 'rem' }">
        <div class="page-loadmore-wrapper" ref="wrapper" :style="{overflowY:scrollShow}">
-         <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" @translate-change="translateChange"  :auto-fill="false" ref="loadmore">
-            <div class="alllist" v-for="(item,index) in list" :key="index">
+         <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore">
+         <div class="ios"  :style="{'margin-bottom:':iosHeight}">
+           <div class="alllist" v-for="(item,index) in list" :key="index">
               <section class="ordermun">
                 <span class="odernmu-phone">{{item.phone}}<span style="padding:0 0.186667rem;color:#333333">|</span>{{item.createTime}}</span>
                 <span class="ordernum-status">{{item.orderStatus | orserStatus}}</span>
@@ -49,6 +50,8 @@
                   <mt-button @click="machineReset(item.orderNo,item.machineId,item.machineName)" v-has="'mer:order:reset,mer:order:info'">复位</mt-button>
               </section>
             </div>
+         </div>
+            
             <div v-if="allLoaded" class="nomore-data">没有更多了</div>
           </mt-loadmore>
         </div>
@@ -66,6 +69,7 @@ import QCountDown from '@/components/CountDown';
 import { getDuration } from '@/utils/tool';
 import { validatSearch } from '@/utils/validate';
 import PagerMixin from '@/mixins/pagerMixin';
+import Web from '@/utils/Web';
 export default {
   mixins: [PagerMixin],
   data() {
@@ -87,11 +91,17 @@ export default {
       hiddenTab:true,
       hiddenPageHeight:2.88,
       refundDisabled:false,
+      iosHeight:0,
     };
   },
   mounted() {
+    
   },
   created(){
+    if(Web.getAppUA) {
+      console.log(123123)
+        this.iosHeight = '2.67rem';
+    }
   },
   methods: {
     titleClick: function(index) {
@@ -227,7 +237,7 @@ export default {
     },
   },
   components:{
-    QCountDown
+    QCountDown,
   }
 };
 </script>
@@ -319,6 +329,7 @@ export default {
 .alllist {
    margin-bottom: 0.266667rem;
 }
+
 .order-list {
   padding:0.426667rem 0.4rem;
   background:rgba(248,252,255,1);
@@ -424,5 +435,3 @@ export default {
     border-bottom:1px solid #DCE0E6;
   }
 </style>
-
-

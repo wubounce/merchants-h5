@@ -18,7 +18,13 @@ const Web = {
       return false;
     }
   },
-
+  getAppUA(){
+    if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) {  //判断iPhone|iPad|iPod|iOS
+        return true;
+    } else if (/(Android)/i.test(navigator.userAgent)) {   
+        return false;
+    }
+  },
   // 初始化wechat
   initWechat() {
     // alert("调用接口的url:" + this.getSignUrl())

@@ -14,6 +14,11 @@
     data() {
       return {};
     },
+    mounted(){
+      document.body.addEventListener('touchmove', function (e) {
+          e.preventDefault() // 阻止默认的处理方式(阻止下拉滑动的效果)
+      }, {passive: false}) // passive 参数不能省略，用来兼容ios和android
+    },
     methods: {
       // 如果是微信，在每次路由改变的时候，重新获取config
       initWechat() {
