@@ -6,7 +6,7 @@
         {{item.title}}
         <span>{{item.value == ''|| item.value==null? '' : item.value}}</span>
       </li>
-      <p class="shopname-p"><span>详细地址</span><span><input type="text" class='addressInput' v-model="address" maxlength="12" placeholder="请填写详细地址"></span></p>
+      <p class="shopname-p"><span>详细地址</span><span><input type="text" class='addressInput' v-model="address"  placeholder="请填写详细地址"></span></p>
     </ul>
     <div class="second">
       <li class="device business" @click="addDevice">设备类型<span>{{machineName}}</span></li>
@@ -570,6 +570,68 @@ export default {
       }else {
         if(this.isReserve) {
           if(this.orderLimitMinutes>0 && this.orderLimitMinutes<10) {
+            //传值位置
+            if(this.machineTypeIdsArray) {
+              let changeisReserve = (this.isReserve==true)? 0 :1;
+              let obj = {
+                shopId: this.$route.query.shopId,
+                shopName: this.shopName,
+                shopType: this.shopType,
+                provinceId: this.provinceId,
+                cityId: this.cityId,
+                districtId: this.districtId,
+                address: this.address,
+                lat:this.lat,
+                lng:this.lng,
+                machineTypeIds: this.machineTypeIdsArray,
+                isReserve: changeisReserve,
+                orderLimitMinutes: this.orderLimitMinutes,
+                workTime: this.addBusinessTime,
+                imageId: this.imageId
+              };
+
+              let res = await addOrEditShopFun(qs.stringify(obj));
+              if(res.code===0) {
+                //成功后的操作
+                let instance = this.$toast({
+                message: '编辑成功',
+                iconClass: 'mint-toast-icon mintui mintui-success'
+                });
+                setTimeout(() => {
+                instance.close();
+                }, 1000);
+                this.$router.push({
+                name:'shopList'
+                });
+              }
+              else {
+                this.$toast({
+                  message: res.msg,
+                  position: 'middle',
+                  duration: 3000
+                });
+              }
+            }
+            else {
+              this.$toast({
+                message:'请选择设备类型',
+                position:'middle',
+                duration:3000
+              });
+            }
+          }
+          else {
+            this.$toast({
+              message:'请填个位数的时长',
+              position:'middle',
+              duration:3000
+            });
+            this.orderLimitMinutes = '';
+          }
+        }
+        else {
+          //传值位置
+          if(this.machineTypeIdsArray) {
             let changeisReserve = (this.isReserve==true)? 0 :1;
             let obj = {
               shopId: this.$route.query.shopId,
@@ -612,51 +674,9 @@ export default {
           }
           else {
             this.$toast({
-              message:'请填个位数的时长',
+              message:'请选择设备类型',
               position:'middle',
               duration:3000
-            });
-            this.orderLimitMinutes = '';
-          }
-        }
-        else {
-          let changeisReserve = (this.isReserve==true)? 0 :1;
-          let obj = {
-            shopId: this.$route.query.shopId,
-            shopName: this.shopName,
-            shopType: this.shopType,
-            provinceId: this.provinceId,
-            cityId: this.cityId,
-            districtId: this.districtId,
-            address: this.address,
-            lat:this.lat,
-            lng:this.lng,
-            machineTypeIds: this.machineTypeIdsArray,
-            isReserve: changeisReserve,
-            orderLimitMinutes: this.orderLimitMinutes,
-            workTime: this.addBusinessTime,
-            imageId: this.imageId
-          };
-
-          let res = await addOrEditShopFun(qs.stringify(obj));
-          if(res.code===0) {
-            //成功后的操作
-            let instance = this.$toast({
-            message: '编辑成功',
-            iconClass: 'mint-toast-icon mintui mintui-success'
-            });
-            setTimeout(() => {
-            instance.close();
-            }, 1000);
-            this.$router.push({
-            name:'shopList'
-            });
-          }
-          else {
-            this.$toast({
-              message: res.msg,
-              position: 'middle',
-              duration: 3000
             });
           }
         }
@@ -855,10 +875,13 @@ export default {
       span {
         display: inline-block;
         &:first-child {
-          margin-left: 0.3rem;
+          padding-left: 0.3rem;
+          width: 22%;
+        }
+        &:last-child {
+          width: 72%;
         }
         input {
-          margin-left:0.5rem;
           height: 1rem;
         }
         ::-webkit-input-placeholder {
@@ -944,9 +967,12 @@ export default {
         display: inline-block;
         &:first-child {
           margin-left: 0.3rem;
+          width: 35%;
+        }
+        &:last-child {
+          width: 55%;
         }
         input {
-          margin-left:0.5rem;
           height: 1rem;
           background-color: #fff;
         }
