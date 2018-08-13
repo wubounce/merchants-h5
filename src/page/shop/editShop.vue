@@ -961,6 +961,11 @@ export default {
           padding-left:0.23rem;
           line-height:1rem;
         }
+        &:last-child {
+          .check-switch {
+            margin-top: 0.08rem;
+          }
+        }
       }
     }
     .reserveTime {
