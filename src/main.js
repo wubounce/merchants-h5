@@ -1,6 +1,7 @@
 import Vue from 'vue';
 
 import MintUI from 'mint-ui';
+import { MessageBox } from 'mint-ui';
 import Vant from 'vant';
 import 'vant/lib/vant-css/index.css';
 import './assets/iconfont/iconfont.css';
@@ -40,6 +41,8 @@ Vue.config.devtools = true;
 
 const whiteList = ['/login','/reset','/confimPwd']; // 不重定向白名单
 router.beforeEach((to, from, next) => {
+  // 切换之前，把弹出框都关掉
+  MessageBox.close();
   if (getToken()) {
       next();
   } else {

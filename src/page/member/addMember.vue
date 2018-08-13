@@ -161,12 +161,12 @@ export default {
       return true;
     },
     validatName(){
-      if (!validatName(this.username)) {
+      if (this.username && !validatName(this.username)) {
         this.$toast({message: '用户名2-20个字符，支持中文和英文' });
       } 
     },
     validatPhone(){
-      if (!validatPhone(this.phone)) {
+      if (this.phone && !validatPhone(this.phone)) {
         this.$toast({message: '请输入正确的手机号码' });
       } 
     },

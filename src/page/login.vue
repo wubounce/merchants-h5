@@ -34,18 +34,24 @@
 <script>
 import qs from "qs";
 import { mapActions } from 'vuex';
-import {removeToken, removeUser, removeMenu, removeNavTabIndex } from '@/utils/tool';
+import { getToken, removeToken, removeUser, removeMenu, removeNavTabIndex } from '@/utils/tool';
 import { login } from '@/service/login';
 import Button from "@/components/Button/Button";
 export default {
     name: 'page-login',
-    // beforeRouteEnter(to, from, next) {
-    //   // // 已登录直接返回首页
-    //   // if (getToken()) {
-    //   //   next('/index');
-    //   //   return;
-    //   // }
-    // },
+    beforeRouteEnter(to, from, next) {
+      // 已登录直接返回首页
+      if (getToken()) {
+        next('/index');
+        return;
+      }
+      // 测试环境不验证
+      if (process.env.NODE_ENV === 'development') { 
+        next();
+        return;
+      }
+      next();
+    },
     data () {
       return {
         form: {
