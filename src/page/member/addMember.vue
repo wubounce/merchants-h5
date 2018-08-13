@@ -417,22 +417,6 @@ export default {
       color: #fff;
     }
   }
-  .collapse-enter{
-    max-height: 0;
-  }
-  .collapse-enter-active {
-      max-height: 10rem;
-      -webkit-transition: all .3s cubic-bezier(1.0, 0.5, 0.8, 1.0);
-      transition: all .3s cubic-bezier(1.0, 0.5, 0.8, 1.0);
-  }
-  .collapse-leave {
-      max-height: 10rem;
-  }
-  .collapse-leave-active {
-      max-height: 0;
-      -webkit-transition: all .3s cubic-bezier(1.0, 0.5, 0.8, 1.0);
-      transition: all .3s cubic-bezier(1.0, 0.5, 0.8, 1.0);
-  }
   .animate {
     display: none;
   }
@@ -442,20 +426,6 @@ export default {
   .icon-xiangshangjiantou {
     color: #BAC0D2;
   }
-  .expand-enter-active {
- transition: all 3s ease;
- height: 50px;
- overflow: hidden;
-}
-.expand-leave-active{
- transition: all 3s ease;
- height: 0px;
- overflow: hidden;
-}
-.expand-enter, .expand-leave {
- height: 0;
- opacity: 0;
-}
 </style>
 <style lang="scss">
   .addmember .mint-header {
