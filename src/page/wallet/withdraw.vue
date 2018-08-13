@@ -11,7 +11,7 @@
         <p class="title">提现金额</p>
         <label><span>￥</span><input v-model="money" @input="btndisabdisabled" :disabled="inputDisabled" type="number" v-focus></label>
         <div class="total">
-            <p class="fullbalance" v-if="thanBalance">输入金额超过账户余额</p>
+            <p class="fullbalance" v-if="thanBalance">{{thanBalanceTip}}</p>
             <p class="balance" v-else>账户余额 ￥{{userInfo.balance}}，最低提现10元</p>
             <p class="withdraw-all" @click="allWithdraw">全部提现</p>
         </div>
@@ -33,6 +33,7 @@ export default {
       balanceErrTxt:'',
       disabled:true,
       inputDisabled:true,
+      thanBalanceTip:''
     };
   },
   mounted() {
@@ -86,12 +87,24 @@ export default {
         }
     },
     btndisabdisabled(){
-        if (!this.money || Number(this.money) < 10 || (Number(this.money) > this.userInfo.balance)) {
+        if (!this.money) {
             this.disabled = true;
-        } else {
+        } else if (this.money && Number(this.money) < 10 ) {
+            this.thanBalanceTip = '最低提现10元';
+            this.thanBalance = true;
+            this.disabled = true;
+        }else if (this.money && Number(this.money) > this.userInfo.balance ) {
+           this.thanBalanceTip = '输入金额超过账户余额';
+            this.thanBalance = true;
+            this.disabled = true;
+        }else if (this.money && Number(this.money) >= 50000.01 ) {
+            this.thanBalanceTip = '单笔提现到支付宝不能超过50000元';
+            this.thanBalance = true;
+            this.disabled = true;
+        }else {
+            this.thanBalance = false;
             this.disabled = false;
         }
-        Number(this.money) > this.userInfo.balance ? this.thanBalance = true: this.thanBalance = false;
     }
   },
   filters:{

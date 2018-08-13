@@ -50,7 +50,7 @@
   <mt-datetime-picker ref="picker5" type="date" @confirm="handleNoWorkTimeEndChange" :startDate="pickerstartDate"></mt-datetime-picker>
   <!-- 每日不可支付时间 -->
   <mt-popup v-model="noWorkVisible" position="bottom" class="mint-popup">
-     <mt-picker class="pickerNoWork"  :slots="activeTimeslots" @change="changeNoWorkTime" :showToolbar="true"><p class="toolBar"><span class="timequx" @click="noWorkVisible = false;">取消</span><span @click="chooseDay" class="tiem-picker-title">全天</span><span @click="confirmNews('pickerNoWork')" class="queding">确定</span></p></mt-picker>
+     <mt-picker class="pickerNoWork"  :slots="activeTimeslots" @change="changeNoWorkTime" :showToolbar="true"><p class="toolBar"><span class="timequx" @click="noWorkVisible = false;">取消</span><span class="tiem-picker-title">全天</span><span @click="confirmNews('pickerNoWork')" class="queding">确定</span></p></mt-picker>
   </mt-popup>
 
   <!-- 优惠期开始 -->

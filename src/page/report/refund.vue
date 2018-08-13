@@ -244,8 +244,8 @@ export default {
               type: 'value',
               min:0,
               max:this.moneyMax>0?this.moneyMax : 1,
-              splitNumber:5,
-              interval:this.moneyMax>0? this.moneyMax/5: 1/5,
+              splitNumber:4,
+              interval:this.moneyMax>0? this.moneyMax/4: 1/4,
               axisLine:{
                 show:false,
                 lineStyle:{
@@ -273,8 +273,8 @@ export default {
               type: 'value',
               min:0,
               max:this.orderMax>0?this.orderMax : 1,
-              splitNumber:5,
-              interval:this.orderMax>0? this.orderMax/5: 1/5,
+              splitNumber:4,
+              interval:this.orderMax>0? this.orderMax/4: 1/4,
               axisLine:{
                 show:false,
                 lineStyle:{
@@ -512,9 +512,6 @@ export default {
       display: inline-block;
       color: #666;
     }
-  }
-  .mint-popup {
-    width: 100%;
   }
   .select-back {
     float: right;
