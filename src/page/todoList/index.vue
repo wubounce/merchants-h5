@@ -102,6 +102,7 @@ section {
 		line-height: 1.2rem;
 		border: 1px solid #F8F8F8;
 		background-color: #fff; 
+		color: #333333;
 	}
 	.noTodoList {
 	text-align: center;
