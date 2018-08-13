@@ -24,7 +24,7 @@
       <!-- <li class="business" @click="chooseTime">营业时间<span>{{addBusinessTime}}</span></li> -->
     </div>
     <p class="blank"></p>
-    <button class="submit" @click="submit">确定</button>
+    <button class="submit" @click="submit">提交</button>
 
     <!-- 店铺类型 -->
     <mt-popup v-model="popupVisible" position="bottom" class="mint-popup">
@@ -884,10 +884,12 @@ export default {
   }
   .submit {
     width: 100%;
+    height: 50px;
+    //line-height: 50px;
     position: fixed;
     bottom: 0;
     border: none;
-    padding: 0.45rem 0;
+    //padding: 0.45rem 0;
     background-color: #1890FF;
     color: #fff;
     font-size: 18px;

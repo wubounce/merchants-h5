@@ -97,8 +97,6 @@ export default {
             }else {
               this.getFunctionSetList();
             }
-           // MessageBox.alert(res.mes);
-            //this.$router.push({name:'deviceMange'});
           }else{
             this.$toast(res.msg);
           }

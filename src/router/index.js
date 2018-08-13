@@ -128,12 +128,6 @@ export default new Router({
       component: () => import ('@/page/device/batchStart/selectFunction'),
       meta: {title: '批量启动'} //3-选择功能
     },
-    {
-      path: '/selectStartTime',
-      name: 'selectStartTime',
-      component: () => import ('@/page/device/batchStart/selectStartTime'),
-      meta: {title: '批量启动'} //4-选择时间
-    },
 
     {
       path: '/batchEdit',

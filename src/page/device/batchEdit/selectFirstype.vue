@@ -44,25 +44,21 @@ import { getlistParentTypeFun } from '@/service/device';
         hdTitleArr: [
           "1.请选择相应店铺",
           "2.请选择设备类型",
-          "3.请选择设备相应功能",
-          "4.请选择启动时间"
+          "3.请选择设备型号",
+          "4.请选择设备相应功能"
         ],
         stepArr: [
           {
-            text: "店铺",
-            name: "selectShop"
+            text: "店铺"
           },
           {
-            text: "类型",
-            name: "selectFirstype"
+            text: "类型"
           },
           {
-            text: "功能",
-            name: "selectFunction"
+            text: "型号"
           },
           {
-            text: "时间",
-            name: "selectStartTime"
+            text: "功能"
           }
         ],
         currIndex: 1,

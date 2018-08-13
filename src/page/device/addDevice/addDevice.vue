@@ -54,7 +54,7 @@
         </p>
       </div>
     </section>
-    <section class="fun-item-bd funlist">
+    <section class="fun-item-bd funlist" style="-webkit-overflow-scrolling:touch;overflow-y:scroll;">
       <div v-for="(item,index) in functionSetList" :key="index">
         <span class="fun-list-item">{{item.functionName}}</span>
         <input type="text" class="fun-list-item" v-model.lazy="item.needMinutes"/>
@@ -67,8 +67,8 @@
     </section>
     <div style="width:100%;height:1.73rem;"></div>
     <section class="promiss-footer">
-      <span class="can" @click="goBack">上一步</span>
-      <span class="cifrm" @click="goNext">下一步</span>
+      <span class="can" @click="goBack">取消</span>
+      <span class="cifrm" @click="goNext">确认</span>
     </section>
     </div>
     <!-- 店铺-->
@@ -181,8 +181,8 @@
             value: ""
           },
           ver: '',
-          nqt: '请输入模块上二维码',
-          imei: '请输入模块上二维码',
+          nqt: '点击扫描设备上二维码',
+          imei: '点击扫描模块上二维码',
           companyVisible: '',
           company: ''
         },
@@ -264,7 +264,8 @@
           this.move();
           this.parentType = true;
         }else{
-          MessageBox.alert("请先选择店铺");
+          this.$toast("请先选择店铺"); //MessageBox.alert
+          return false;
         }
       },
       async checkSecondClass() { //获取二级列表
@@ -276,7 +277,8 @@
             }
           this.subType = true;
         }else{
-          MessageBox.alert("请先选择店铺或者类型");
+          this.$toast("请先选择店铺或者类型");
+          return false;
         }
       },
       async getFunctionSetList() {  //获取功能列表数据
@@ -296,36 +298,71 @@
             
         }
         else {
-          MessageBox.alert(res.msg);
+          this.$toast(res.msg);
         }
       },
       async submit() {  //提交
         if(!this.fromdata.machineName) {
-          this.$toast("请填写机器名称");
+          let instance = this.$toast({
+            message: '请填写机器名称'
+          });
+          setTimeout(() => {
+            instance.close();
+            }, 2000);
           return false;
         }
         if(!this.fromdata.shopType.id) {
-          this.$toast("请选择所属店铺");
+          let instance = this.$toast({
+            message: '请选择所属店铺'
+          });
+          setTimeout(() => {
+            instance.close();
+            }, 2000);
           return false;
         }
         if(!this.fromdata.firstType.id) {
-          this.$toast("请选择设备类型");
+          let instance = this.$toast({
+            message: '请选择设备类型'
+          });
+          setTimeout(() => {
+            instance.close();
+            }, 2000);
           return false;
         }
         if(!this.fromdata.secondType.id) {
-          this.$toast("请选择设备型号");
+           let instance = this.$toast({
+            message: '请选择设备型号'
+          });
+          setTimeout(() => {
+            instance.close();
+            }, 2000);
           return false;
         }
         if(!this.fromdata.nqt) {
-          this.$toast("请扫NQT码");
+          let instance = this.$toast({
+            message: '请扫描设备上的NQT码'
+          });
+          setTimeout(() => {
+            instance.close();
+            }, 2000);
           return false;
         }
         if(!this.fromdata.imei) {
-          this.$toast("请IMEI码");
+          let instance = this.$toast({
+            message: '请扫描模块上的IMEI码'
+          });
+          setTimeout(() => {
+            instance.close();
+            }, 2000);
           return false;
         }
         if(!this.functionSetList) {
-          this.$toast("请设置功能列表");
+          let instance = this.$toast({
+            message: '请设置功能列表'
+          });
+          setTimeout(() => {
+            instance.close();
+            }, 2000);
           return false;
         }
         let arr= [].concat(JSON.parse(JSON.stringify(this.functionSetList))); 
@@ -367,7 +404,7 @@
           this.modelShow = false;
           this.title = "功能列表";
         }else{
-          MessageBox.alert("请先选择上级列表");
+          this.$toast("请先选择设备型号");
         }
        
       },
@@ -524,11 +561,15 @@
   }
   
   .fun-item-hd {
-    padding: 0;
     background: #FAFCFF;
     color: #1890FF;
     font-size: 0.37rem;
-    padding: .6rem .4rem;
+    padding: .6rem 0;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 999;
     div {
       display: flex;
       p {
@@ -562,7 +603,7 @@
     font-size: 0.37rem;
     color: #333333;
     background: #fff;
-    padding: 0 .4rem;
+    padding-top: 1.6rem;
     div {
       display: flex; // justify-content: space-between;
       .fun-list-item {
