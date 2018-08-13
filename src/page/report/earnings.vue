@@ -371,7 +371,7 @@ export default {
     height: 100%;
     position: absolute;
     width: 100%;
-    padding-top: 9.47rem;
+    padding-top: 10.72rem;
     box-sizing: border-box;
   }
   .scorll {

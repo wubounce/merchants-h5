@@ -108,7 +108,8 @@ export default {
                 .icon-wrapper{
                   width: .6933rem;    
                   display: flex;
-                  justify-content: center;                                         
+                  justify-content: center;    
+                  background-color: #fff;                                     
                 }                    
                 .icon{
                   display: inline-block;
