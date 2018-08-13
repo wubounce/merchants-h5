@@ -42,6 +42,7 @@ export default {
     beforeRouteEnter(to, from, next) {
       // 已登录直接返回首页
       if (getToken()) {
+        removeNavTabIndex();
         next('/index');
         return;
       }
