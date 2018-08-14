@@ -20,7 +20,7 @@
       <p class="reserveTime">
         <span>预约时长(分钟)</span>
         <span>
-          <input  v-model="orderLimitMinutes" :disabled="noEdit" :placeholder="placeholdercontent" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" maxlength='1'>
+          <input  v-model="orderLimitMinutes" :disabled="noEdit" :placeholder="placeholdercontent"  onafterpaste="this.value=this.value.replace(/\D/g,'')" type='number'>
         </span>
       </p>
     </div>
@@ -616,44 +616,101 @@ export default {
     async submit() {
       
       if(this.shopName!=false && this.shopType!=false && this.provinceId != false && this.cityId !=false && this.provinceId != false && this.address != false && this.lat !=false && this.lng != false && this.machineTypeIdsArray !=false ) {
-        let changeisReserve = (this.isReserve==true)? 0 :1;
-        let obj = {
-          shopId: this.$route.query.shopId,
-          shopName: this.shopName,
-          shopType: this.shopType,
-          provinceId: this.provinceId,
-          cityId: this.cityId,
-          districtId: this.districtId,
-          address: this.address,
-          lat:this.lat,
-          lng:this.lng,
-          machineTypeIds: this.machineTypeIdsArray,
-          isReserve: changeisReserve,
-          orderLimitMinutes: this.orderLimitMinutes,
-          workTime: this.addBusinessTime,
-          organization: this.organization
-        };
-        let res = await addOrEditShopFun(qs.stringify(obj));
-        if(res.code===0) {
-        //成功后的操作
-        let instance = this.$toast({
-          message: '编辑成功',
-          iconClass: 'mint-toast-icon mintui mintui-success'
-        });
-        setTimeout(() => {
-          instance.close();
-          }, 1000);
-          this.$router.push({
-            name:'shopList'
-          });
+        if(this.orderLimitMinutes) {
+          //在判断
+          if(parseInt(this.orderLimitMinutes) >0 && parseInt(this.orderLimitMinutes) <10) {
+            //传值
+            let changeisReserve = (this.isReserve==true)? 0 :1;
+            let obj = {
+              shopId: this.$route.query.shopId,
+              shopName: this.shopName,
+              shopType: this.shopType,
+              provinceId: this.provinceId,
+              cityId: this.cityId,
+              districtId: this.districtId,
+              address: this.address,
+              lat:this.lat,
+              lng:this.lng,
+              machineTypeIds: this.machineTypeIdsArray,
+              isReserve: changeisReserve,
+              orderLimitMinutes: this.orderLimitMinutes,
+              workTime: this.addBusinessTime,
+              organization: this.organization
+            };
+            let res = await addOrEditShopFun(qs.stringify(obj));
+            if(res.code===0) {
+            //成功后的操作
+            let instance = this.$toast({
+              message: '编辑成功',
+              iconClass: 'mint-toast-icon mintui mintui-success'
+            });
+            setTimeout(() => {
+              instance.close();
+              }, 1000);
+              this.$router.push({
+                name:'shopList'
+              });
+            }
+            else {
+              this.$toast({
+                message: res.msg,
+                position: 'middle',
+                duration: 3000
+              });
+            }
+            //上面是传值
+          }
+          else {
+            //提示
+            this.$toast({
+              message:'请输入个位数的时长',
+              position:'middle',
+              duration:3000
+            });
+          }
         }
         else {
-          this.$toast({
-            message: res.msg,
-            position: 'middle',
-            duration: 3000
+          //直接传值
+          let changeisReserve = (this.isReserve==true)? 0 :1;
+          let obj = {
+            shopId: this.$route.query.shopId,
+            shopName: this.shopName,
+            shopType: this.shopType,
+            provinceId: this.provinceId,
+            cityId: this.cityId,
+            districtId: this.districtId,
+            address: this.address,
+            lat:this.lat,
+            lng:this.lng,
+            machineTypeIds: this.machineTypeIdsArray,
+            isReserve: changeisReserve,
+            orderLimitMinutes: this.orderLimitMinutes,
+            workTime: this.addBusinessTime,
+            organization: this.organization
+          };
+          let res = await addOrEditShopFun(qs.stringify(obj));
+          if(res.code===0) {
+          //成功后的操作
+          let instance = this.$toast({
+            message: '编辑成功',
+            iconClass: 'mint-toast-icon mintui mintui-success'
           });
+          setTimeout(() => {
+            instance.close();
+            }, 1000);
+            this.$router.push({
+              name:'shopList'
+            });
+          }
+          else {
+            this.$toast({
+              message: res.msg,
+              position: 'middle',
+              duration: 3000
+            });
+          }
         }
+        
       }else if(!this.list[0].value) {
         this.$toast({
             message: '请填写店铺类型',

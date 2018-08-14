@@ -121,12 +121,11 @@ export default {
           this.completeAddress = this.provinceName + this.cityName + this.districtName + this.organization + this.address;
         }
         //预约时长
-        
         if(res.data.orderLimitMinutes) {
           this.shopdetail.orderLimitMinutes = res.data.orderLimitMinutes;
         }
         else {
-          this.shopdetail.orderLimitMinutes = 0;
+          this.shopdetail.orderLimitMinutes = '';
         }
       }
     }
