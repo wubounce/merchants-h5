@@ -10,12 +10,15 @@
         <div class="tableearn">
           <div class="nodata" v-if="noList">暂无数据</div>
           <div class="listcon tableearn-list" v-for="(item,index) in list" :key="index">
-            <span class="report-table-name">{{item.machineName}}</span>
+            <span class="report-table-name" @click="showTooltip(item.machineName,$event)" >{{item.machineName}}</span>
             <span class="report-table-type">{{item.machineTypeName}}</span>
             <span class="report-table-order">{{item.count}}</span>
             <span class="report-table-order">{{item.money | tofixd}}</span>
           </div>
         </div>
+    </div>
+    <div class="tooltip" v-show="tooltip" :style="{top:positiontop+'px'}"> 
+      <div class="ivu-tooltip-inner">{{tooltip}}</div>
     </div>
   </div>
 </div>
@@ -29,6 +32,8 @@ export default {
        title:'收益',
        list:[],
        noList:false,
+       tooltip:'',
+       positiontop:null,
     };
   },
   created(){
@@ -49,7 +54,14 @@ export default {
         this.list.length <= 0 ? this.noList = true:this.noList = false;
       }
       
-    }
+    },
+    showTooltip(name,event){
+        this.positiontop = event.clientY;
+        this.tooltip = name;
+        setTimeout(()=>{
+          this.tooltip = '';
+        },3000);
+    },
   },
   beforeRouteLeave(to, from, next) {
      // 设置下一个路由的 meta
@@ -67,6 +79,7 @@ export default {
 </script>
 <style lang="scss">
 .report-detail {
+  height: 100%;
   .mint-header {
       background: #F2F2F2 !important;
   }
@@ -95,6 +108,9 @@ export default {
   .report-table-name {
     text-align: left;
     width: 4.08rem;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
   .report-table-type {
     text-align: left;
@@ -123,6 +139,22 @@ export default {
   }
   .tableearn .tableearn-list:nth-child(2n-1) {
     background: #FAFCFE !important;
+  }
+  .tooltip {
+    position: absolute;
+    left:50%;
+    transform: translate(-50%,0);
+  }
+  .ivu-tooltip-inner {
+      padding:0.2rem 0.4rem;
+      color: #fff;
+      text-align: left;
+      text-decoration: none;
+      background:rgba(0,0,0,0.65);
+      border-radius: 0.08rem;
+      word-wrap:break-word;
+      word-break:break-all;
+      font-size: 12px;
   }
 }
 </style>

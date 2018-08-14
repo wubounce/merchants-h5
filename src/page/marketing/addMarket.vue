@@ -120,7 +120,7 @@ export default {
         {value:'4',label:'周四'},
         {value:'5',label:'周五'},
         {value:'6',label:'周六'},
-        {value:'7',label:'周日'}
+        {value:'0',label:'周日'}
       ],
       weekVisible:false,
       weeklist:[],

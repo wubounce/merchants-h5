@@ -19,12 +19,11 @@
   </div>
   <div class="tabledata">
     <div class="tableearn">
-       <div class="nodata" v-if="lsitdata.length <= 0">暂无数据</div>
-       <div class="listcon table-header">
+      <div class="listcon table-header">
         <span class="report-table-date">日期</span>
         <span class="report-table-order">订单数量</span>
         <span class="report-table-order">退款金额</span>
-       </div>
+      </div>
       <div class="listcon tableearn-list" v-for="(item,index) in  lsitdata" :key="index">
          <router-link class="detail" :to="{name:'reportdetail', query:{date:item.date,type:3}}" >
           <span class="listtime report-table-date">{{item.date}}</span>
@@ -32,6 +31,7 @@
           <span  class="report-table-order">{{item.money | tofixd}}</span>
         </router-link>
       </div>
+       <div class="nodata" v-if="lsitdata.length <= 0">暂无数据</div>
     </div>
   </div>
   <mt-datetime-picker ref="picker2" type="date" v-model="searchStartDate" @confirm="handleStartDateChange" :endDate="pickerEndDate"></mt-datetime-picker>
@@ -529,5 +529,11 @@ export default {
     text-align: center;
     padding: 2rem 0;
     background: #fff;
+  }
+
+</style>
+<style lang="scss">
+  .earnings .v-modal {
+    z-index: 1000000 !important;
   }
 </style>

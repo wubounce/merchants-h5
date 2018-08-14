@@ -96,7 +96,7 @@ export default {
             weeklsit.push('周五');
           } else if(item == '6') {
             weeklsit.push('周六');
-          } else if(item == '7') {
+          } else if(item == '0') {
             weeklsit.push('周日');
           }
         });

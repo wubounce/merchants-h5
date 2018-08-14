@@ -19,7 +19,7 @@
           <p>1.建议VIP折扣价不超过特惠活动价。</p>
           <p>2.每日限用次数不填写或填写0，则不限制次数。</p>
         </div>
-        <div class="crrow"></div>
+        <!-- <div class="crrow"></div> -->
       </div>
     </div>
     <div class="add-vip-list-wrap">
@@ -31,7 +31,7 @@
           <p>VIP折扣<span>%</span><input type="number" placeholder="请填写折扣数…" v-model="vipform.halfYearCardDiscount"></p>
           <p style="border:none">每日限用次数<span>次</span><input type="number" class="num" v-model="vipform.halfYearCardLimitTime"></p>
         </div>
-        <div class="crrow"></div>
+        <!-- <div class="crrow"></div> -->
       </div>
     </div>
     <div class="add-vip-list-wrap">
@@ -43,7 +43,7 @@
           <p>VIP折扣<span>%</span><input type="number" placeholder="请填写折扣数…" v-model="vipform.seasonCardDiscount"></p>
           <p style="border:none">每日限用次数<span>次</span><input type="number" v-model="vipform.seasonCardLimitTime" class="num"></p>
         </div>
-        <div class="crrow"></div>
+        <!-- <div class="crrow"></div> -->
       </div>
     </div>
   </form>
@@ -238,6 +238,8 @@ export default {
       font-size: 16px;
       color: #333;
       padding: 0 0.37rem;
+      position: relative;
+      z-index: 2;
       p {
         height: 1.47rem;
         line-height: 1.47rem;
@@ -304,6 +306,7 @@ export default {
     color: #fff;
     position: fixed;
     bottom: 0;
+    z-index: 3;
   }
   .resp-shop {
     display: flex;
