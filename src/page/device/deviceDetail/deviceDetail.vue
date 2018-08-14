@@ -35,7 +35,14 @@
                 <span class="field-title">公司</span>
                 <p>{{deviceDetail.company}}</p>
               </li>
-
+              <li>
+                <span class="field-title">通信类型</span>
+                <p>{{tongxin}}</p>
+              </li>
+              <li>
+                <span class="field-title">状态</span>
+                <p>{{machineState}}</p>
+              </li>
               <li>
                 <span class="field-title">NQT</span>
                 <p>
@@ -74,7 +81,7 @@
                 <span>{{item.ifOpen}}</span>
               </p>
             </section>
-          </div>s
+          </div>
         <li class="device-detail-ft">
           <p>创建人：{{deviceDetail.createUser}}</p>
           <p>创建时间： {{deviceDetail.createTime}}</p>
@@ -83,9 +90,9 @@
       <div style="width:100%;height:1.73rem;"></div>
       <div class="about-button">
         <Button btn-type="small" btn-color="spe" class="ft-btn active" @click.native="deviceDele" v-has="'mer:machine:delete'">删除</Button>
-        <Button btn-type="small" btn-color="spe" class="ft-btn" @click.native="deviceTZJ" v-show="tzjShow" v-has="'mer:machine:clean'">桶自洁</Button>
-        <Button btn-type="small" btn-color="spe" class="ft-btn" @click.native="deviceRest" v-has="'mer:machine:reset'">复位</Button>
-        <Button btn-type="small" btn-color="spe" class="ft-btn" @click.native="deviceEdit" v-has="'mer:machine:update'">编辑</Button>
+        <Button btn-type="small" btn-color="spe" class="ft-btn active" @click.native="deviceTZJ" v-show="tzjShow" v-has="'mer:machine:clean'">桶自洁</Button>
+        <Button btn-type="small" btn-color="spe" class="ft-btn active" @click.native="deviceRest" v-has="'mer:machine:reset'">复位</Button>
+        <Button btn-type="small" btn-color="spe" class="ft-btn active" @click.native="deviceEdit" v-has="'mer:machine:update'">编辑</Button>
       </div>
       </section>
 
@@ -106,6 +113,8 @@
         functionSetListShow: true,
         functionCodeShow: false,
         title: '设备详情',
+        machineState:"",
+        tongxin: '',
         fromdata: {
           machineName: "",
           firstClass: "",
@@ -167,14 +176,46 @@
           this.functionList = res.data.functionList;
           if(res.data.communicateType === 1){
             this.tzjShow = true;
+            this.tongxin = "串口";
           } else {
             this.tzjShow = false;
+            this.tongxin = "脉冲";
             this.functionCodeShow = true;
             this.functionListTitle = this.functionListTitle2;
           }
           this.functionList.forEach(item=>{
             item.ifOpen=item.ifOpen === 0? "开启":"关闭";
           });
+           switch(res.data.machineState){
+            case 1:
+            this.machineState = "空闲";
+            break;
+            case 2:
+            this.machineState = "运行";
+            break;
+            case 3:
+            this.machineState = "预约";
+            break;
+            case 4:
+            this.machineState = "故障";
+            break;
+            case 5:
+            this.machineState = "参数设置";
+            break;
+            case 6:
+            this.machineState = "自检";
+            break;
+            case 7:
+            this.machineState = "预约";
+            break;
+            case 8:
+            this.machineState = "离线";
+            break;
+            case 16:
+            this.machineState = "超时未工作";
+            break;
+
+          }
         }
         else {
           this.$toast(res.msg);

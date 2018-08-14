@@ -35,8 +35,9 @@
         </ul>
       </div>
     </div>
+    <div class="searchNoItem" v-show="!shopList.length">暂无店铺</div>
     <div style="width:100%;height:1.73rem;"></div>
-    <button class="submitBtn" @click="goNext">下一步</button>
+    <button class="submitBtn" @click="goNext" :class="{'default':shopList.length<=0}" :disabled="shopList.length<=0">下一步</button>
   </section>
 </template>
 
@@ -349,7 +350,14 @@
   .itemfade-leave-active {
     position: absolute;
   }
-
+  .searchNoItem {
+    font-size: 14px;
+    color: #999;
+    text-align: center;
+    height: 100%;
+    line-height: 100%;
+    padding-top: 4rem;
+  }
   .submitBtn {
     width: 100%;
     position: fixed;
@@ -359,6 +367,9 @@
     background-color: #1890FF;
     color: #fff;
     font-size: 18px;
+  }
+  .default {
+    opacity: 0.6;
   }
 
 </style>

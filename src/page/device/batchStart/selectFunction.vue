@@ -23,6 +23,7 @@
             <div class="select"><span class="iconfont" :class="{'icon-xuanze':index==selectIndex}"></span></div>
           </li>
         </ul>
+        <div class="searchNoItem" v-show="secondTypeList.length<=0">暂无功能列表</div>
       </div>
     </div>
     <!-- 启动时间 -->
@@ -37,7 +38,7 @@
     <div style="width:100%;height:1.73rem;"></div>
     <section class="promiss-footer" v-show="functionSetModel">
       <span class="can" @click="goBack">上一步</span>
-      <span class="cifrm" @click="goNext">下一步</span>
+      <span class="cifrm" @click="goNext" :class="{'default':secondTypeList.length<=0}" :disabled="secondTypeListlength<=0">下一步</span>
     </section> 
     <section v-show="!functionSetModel">
       <button class="submitBtn" @click="submit">确定</button>
@@ -123,8 +124,8 @@ export default {
         let res = await batchFunctionSetListFun(qs.stringify(payload));
           if(res.code === 0) {
             res.data.forEach(item=>{
-              item.ifOpen=item.ifOpen === "0"?(!!item.ifOpen) : (!item.ifOpen);
-            });
+              item.ifOpen=item.ifOpen === 0? "开启":"关闭";
+            });        
             this.secondTypeList = res.data; 
           }
       },
@@ -135,21 +136,25 @@ export default {
       },
       
       async submit() {
-        let query = this.$route.query;
-        let payload = {machineParentTypeId:query.parentTypeId,shopId:query.shopId,standardFunctionId:this.functionId,startTime:this.startTime};
-        let res = await batchStartOnFun(qs.stringify(payload));
-        if(res.code === 0) {
-          let instance = this.$toast({
-              message: '批量启动成功',
-              iconClass: 'mint-toast-icon mintui mintui-success'
-            });
-            setTimeout(() => {
-              instance.close();
-              this.$router.push({name:'todolist'});
-              }, 2000);
-        }else {
-          this.$toast(res.msg);
-        }
+        if(startTime){
+          let query = this.$route.query;
+          let payload = {machineParentTypeId:query.parentTypeId,shopId:query.shopId,standardFunctionId:this.functionId,startTime:this.startTime};
+          let res = await batchStartOnFun(qs.stringify(payload));
+          if(res.code === 0) {
+            let instance = this.$toast({
+                message: '设置成功。现在是批量启动成功',
+                iconClass: 'mint-toast-icon mintui mintui-success'
+              });
+              setTimeout(() => {
+                instance.close();
+                this.$router.push({name:'todolist'});
+                }, 2000);
+          }else {
+            this.$toast(res.msg);
+          }
+       }else{
+         this.$toast("请设置启动时间");
+       }
       },
       handleConfirm(data) {
         //判断启动时间是否小于当前时间
@@ -341,6 +346,14 @@ export default {
   }
    .sf-bd {
       padding-top: 3.81rem;
+      .searchNoItem {
+        font-size: 14px;
+        color: #999;
+        text-align: center;
+        height: 100%;
+        line-height: 100%;
+        padding-top: 4rem;
+      }
       ul {
         width:100%;
         li {
@@ -378,6 +391,9 @@ export default {
   .van-picker {
     padding-top: 3.81rem;
     margin-top: -40px;
+    .van-picker-column__item--selected{
+      font-size: 20px;
+    }
   }
   .promiss-footer {
       display: flex;
@@ -402,6 +418,9 @@ export default {
       font-size: 18px;
       color: #fff;
     }
+    .promiss-footer .default {
+      opacity: 0.6;
+    }
 
     .submitBtn {
       width: 100%;
@@ -412,6 +431,9 @@ export default {
       background-color: #1890FF;
       color: #fff;
       font-size: 18px;
+    }
+    .default {
+      opacity: 0.6;
     }
 
 </style>

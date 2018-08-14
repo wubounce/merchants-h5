@@ -26,7 +26,7 @@
       <router-link tag="div" :to="{ name: 'deviceDetail', query:{machineId:item.machineId}}" class="device-list" v-for="(item,index) in list" :key="index">
         <div class="line"></div>
         <section class="item-hd">
-          <span><b>{{item.machineName}}</b></span>
+          <span class="item-title"><b>{{item.machineName}}</b></span>
           <span class="state">{{item.machineState}}</span>
         </section>
         <section class="item-bd">
@@ -146,7 +146,7 @@ import {delay } from "@/utils/tool";
           let url = res;
           let parameter = url.substring(0,4);
           if(parameter == "http"){           
-            this.$toast("二维码有误，请换个试试");
+            this.$toast("未找到符合条件的设备");
           }else{
             this.search(url);
           } 
@@ -299,6 +299,13 @@ import {delay } from "@/utils/tool";
       .item-hd {
         font-size: 0.43rem;
         color: rgba(51, 51, 51, 1);
+        .item-title {
+          width: 80%;
+          display: inline-block;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
         span {
           &:nth-child(2) {
             float: right;

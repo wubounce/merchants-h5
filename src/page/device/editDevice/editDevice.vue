@@ -154,8 +154,8 @@
             name: "未设置",
             value: ""
           },
-          nqt: "",
-          imei: ""
+          nqt: '点击扫描设备上二维码',
+          imei: '点击扫描模块上二维码'
         },
         selectListA: [],
         functionList: [],
@@ -264,8 +264,8 @@
           this.fromdata.company = res.data.company;
           this.fromdata.ver = res.data.ver;
           this.fromdata.communicateType = res.data.communicateType;
-          this.fromdata.nqt = res.data.nqt;
-          this.fromdata.imei = res.data.imei;
+          this.fromdata.nqt = res.data.nqt?res.data.nqt:"点击扫描设备上二维码";
+          this.fromdata.imei = res.data.imei?res.data.imei:"点击扫描模块上二维码";
           this.functionList = res.data.functionList;
           this.functionList.forEach(item=>{
             item.ifOpen=item.ifOpen === "0"?(!!item.ifOpen) : (!item.ifOpen);
@@ -284,6 +284,42 @@
       },
 
       async submit() {  //提交
+        if(!this.fromdata.machineName) {
+          let instance = this.$toast({
+            message: '请填写机器名称'
+            });
+          setTimeout(() => {
+            instance.close();
+            }, 2000);
+          return false;
+        }
+        if(!this.fromdata.shopType.id) {
+          let instance = this.$toast({
+            message: '请选择所属店铺'
+          });
+          setTimeout(() => {
+            instance.close();
+            }, 2000);
+          return false;
+        }
+        if(this.fromdata.nqt== "点击扫描设备上二维码") {
+          let instance = this.$toast({
+            message: '请扫描设备上的NQT码'
+          });
+          setTimeout(() => {
+            instance.close();
+            }, 2000);
+          return false;
+        }
+        if(this.fromdata.imei== "点击扫描模块上二维码") {
+          let instance = this.$toast({
+            message: '请扫描模块上的IMEI码'
+          });
+          setTimeout(() => {
+            instance.close();
+            }, 2000);
+          return false;
+        }
           let arr= [].concat(JSON.parse(JSON.stringify(this.functionList))); 
           arr.forEach(item=>{
             return item.ifOpen=item.ifOpen?0:1;
@@ -420,9 +456,9 @@
           }
           .select-2 {
             padding: 0 0.35rem;
-            font-size: 90%;
+            height: 0.51rem;
             background: url("../../../../static/image/center/icon_scon.png") no-repeat right;
-            background-size: 0.3rem 0.3rem;
+            background-size: 0.51rem 0.51rem;
             .nqt {
               font-size: 80%;
             }
@@ -506,6 +542,9 @@
     padding-top: 1.6rem;
     div {
       display: flex; // justify-content: space-between;
+      input {
+        text-decoration: underline;
+      }
       .fun-list-item {
         flex: 2.19;
         text-align: center;

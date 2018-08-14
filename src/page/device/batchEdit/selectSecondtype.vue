@@ -22,10 +22,11 @@
         </li>
       </ul>
     </div>
+    <div class="searchNoItem" v-show="secondTypeList.length<=0">暂无型号</div>
     <div style="width:100%;height:1.73rem;"></div>
     <section class="promiss-footer">
       <span class="can" @click="goBack">上一步</span>
-      <span class="cifrm" @click="goNext" :disabled="hasNoData" :class="{'noClick':hasNoData}">下一步</span>
+      <span class="cifrm" @click="goNext" :class="{'default':secondTypeList.length<=0}" :disabled="secondTypeList.length<=0">下一步</span>
     </section> 
   </section>
 </template>
@@ -283,7 +284,14 @@ import { getlistParentTypeFun, getlistSubTypeFun} from '@/service/device';
       }
       
     }
-    
+    .searchNoItem {
+      font-size: 14px;
+      color: #999;
+      text-align: center;
+      height: 100%;
+      line-height: 100%;
+      padding-top: 4rem;
+    }
     .promiss-footer {
       display: flex;
       height: 1.33rem;
@@ -310,6 +318,9 @@ import { getlistParentTypeFun, getlistSubTypeFun} from '@/service/device';
     
     .promiss-footer .noClick {
       background-color: #cccccc;
+    }
+     .promiss-footer .default {
+      opacity: 0.6;
     }
   }
 

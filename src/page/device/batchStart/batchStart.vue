@@ -31,12 +31,12 @@
             </div>
             <div><span class="iconfont" :class="{'icon-xuanze':index==selectIndex}"></span></div>
           </li>
-          <li class="searchNoItem" v-show="shopList.length<=0">没有找到匹配数据</li>
         </ul>
       </div>
     </div>
+    <div class="searchNoItem" v-show="!shopList.length">暂无店铺</div>
     <div style="width:100%;height:1.73rem;"></div>
-    <button class="submitBtn" @click="goNext" >下一步</button>
+    <button class="submitBtn" @click="goNext" :class="{'default':shopList.length<=0}" :disabled="shopList.length<=0">下一步</button>
   </section>
 </template>
 
@@ -305,12 +305,6 @@
   .ss-bd {
     padding-top: 5.78rem;
     .search-res {
-      .searchNoItem {
-        font-size: 0.43rem;
-        text-align: center;
-        height: 2rem;
-        line-height: 2rem;
-      }
       .search-res-item {
         height: 1.71rem;
         background: rgba(255, 255, 255, 1);
@@ -368,6 +362,14 @@
   .itemfade-leave-active {
     position: absolute;
   }
+  .searchNoItem {
+      font-size: 14px;
+      color: #999;
+      text-align: center;
+      height: 100%;
+      line-height: 100%;
+      padding-top: 4rem;
+    }
 
   .submitBtn {
     width: 100%;
@@ -378,6 +380,10 @@
     background-color: #1890FF;
     color: #fff;
     font-size: 18px;
+  }
+
+  .default {
+    opacity: 0.6;
   }
 
 </style>
