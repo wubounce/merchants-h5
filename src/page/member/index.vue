@@ -66,8 +66,9 @@ export default {
             item.isLock = false;
           }
         });
+      }else {
+        this.noList = true;
       }
-      
     },
     async lockOperator(id,isLock){
       if (isLock === true) {
