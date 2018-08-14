@@ -172,35 +172,45 @@
       checkItem(index) {
         this.selectedIndex = index;
       },
-      checkData(val,index,name,flag) {
+       checkData(val,index,name,flag) {
         let reg = /^\+?[1-9][0-9]*$/;  //验证非0整数
-        let reg1 = /^[0-9]+([.]{1}[0-9]{1,2})?$/;  //验证非0正整数h和带二r位小数字非0正整数
-        if(!val){
-          this.$toast("输入内容不能为空");
-          this.nullDisable = true;
-        }else{
-          this.nullDisable = false;
-        }
+        let reg1 = /^[0-9]+([.]{1}[0-9]{1,2})?$/;  //验证非0正整数和带一位小数字非0正整数
         if(flag ===0 && !reg.test(val)) {
+          if(!val){
+            this.$toast("输入内容不能为空");
+            this.nullDisable = true;
+          }else{
           this.$toast("耗时格式有误");
           this.timeIsDisable= true;
+          }
         }else{
           this.timeIsDisable= false;
         }
         if(flag ===1 && !reg1.test(val)) {
+          if(!val){
+            this.$toast("输入内容不能为空");
+            this.nullDisable = true;
+          }else{
           this.$toast("价格格式有误");
           this.priceIsDisable = true;
+          }
         }else{
           this.priceIsDisable = false;
         }
         if(flag ===2 && !reg.test(val)) {
+          if(!val){
+            this.$toast("输入内容不能为空");
+            this.nullDisable = true;
+          }else{
           this.$toast("脉冲格式有误");
           this.codeIsDisable = true;
+          }
         }else{
           this.codeIsDisable= false;
         }
         if(this.nullDisable || this.timeIsDisable || this.priceIsDisable || this.codeIsDisable){
           this.isDisable = true;
+          return false;
         }else{
           this.isDisable = false;
         }

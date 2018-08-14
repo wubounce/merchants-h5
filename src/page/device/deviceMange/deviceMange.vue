@@ -128,12 +128,17 @@
           let parameter = url.substring(0,4);
           if(url){
             if(parameter == "http"){
+              if(!url.split("?")[1]){
+                this.$toast("无效的二维码");
+                return false;
+              }else{
               let object = url.split("?")[1];
               let nqt = this.getUrlParam(object,"NQT"); 
               this.$router.push({
                 name: "deviceSearch",
                 query: ({imei:nqt})
-              });        
+              }); 
+              }       
             }else{
               this.$router.push({
                 name: "deviceSearch",
