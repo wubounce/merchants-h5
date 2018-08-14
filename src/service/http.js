@@ -79,13 +79,6 @@ http.interceptors.response.use(
   },
   error => {
     Indicator.close();
-    console.log(error)
-    //11:Token 过期了;
-    if (error.data.code === 11) {
-      store.dispatch('LogOut').then(() => {
-        location.reload();
-      });
-    }
     MessageBox.alert('服务器开小差了');
     return Promise.reject(error);
   }
