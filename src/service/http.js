@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Indicator, MessageBox } from 'mint-ui';
+import { Indicator, MessageBox, Toast } from 'mint-ui';
 import store from '../store';
 import { getToken, removeMenu } from '@/utils/tool';
 import { menuSelectFun } from '@/service/member';
@@ -12,7 +12,7 @@ const http = axios.create({
 
 // request拦截器
 http.interceptors.request.use(config => {
-  //console.log(config.url);
+  console.log(config);
   //由于省市区三级联动调用三次接口，避免闪屏现象，如下操作
   if(config.url != 'area/list' && config.url != '/common/uploadFile' && config.url !='operator/updateOperator') {
     Indicator.open({
@@ -43,8 +43,10 @@ http.interceptors.request.use(config => {
 // respone拦截器
 http.interceptors.response.use(
   response => {
+    Indicator.close();
+     console.log(response);
     if (response.status === 200) {
-      Indicator.close();
+      
       // 时间验证 & 把时间放到vuex中
       if (response.data.t > 0) {
         let offset = response.data.t - new Date().getTime();
@@ -56,9 +58,6 @@ http.interceptors.response.use(
         store.commit('setServerTimeOffset', parseInt(offset / 1000));
 
       }
-      return Promise.resolve(response.data);
-
-    }else {
       if(response.data.code === 7004){
           removeMenu();
           commit('setMenu', []);
@@ -66,12 +65,16 @@ http.interceptors.response.use(
             location.reload();// 为了重新实例化vue-router对象 避免bug
           });
       }
-      // 50008:非法的token; 50012:其他客户端登录了;  50014:Token 过期了;
+      //11:Token 过期了;
       if (response.data.code === 11) {
-        store.dispatch('FedLogOut').then(() => {
-          location.reload();// 为了重新实例化vue-router对象 避免bug
+        store.dispatch('LogOut').then(() => {
+          location.reload();
         });
       }
+      return Promise.resolve(response.data);
+
+    }else {
+      Toast(response.data.msg);
       return Promise.reject(response.data);
     }
   },
