@@ -58,9 +58,9 @@
       <div v-for="(item,index) in functionSetList" :key="index">
         <span class="fun-list-item">{{item.functionName}}</span>
         <span class="fun-list-item" v-show="!isShow2">{{item.needMinutes}}</span>
-        <input type="text" class="fun-list-item" v-model.lazy="item.needMinutes" v-if="isShow2"/>
-        <input type="text" class="fun-list-item" v-model.lazy="item.functionPrice"/>
-        <input type="text" class="fun-list-item" v-model.lazy="item.functionCode" v-if="isShow2"/>
+        <input type="number" class="fun-list-item" v-model="item.needMinutes" v-if="isShow2" @change="checkData(item.needMinutes,index,'needMinutes',0)" min=0/>
+        <input type="number" class="fun-list-item" v-model="item.functionPrice" @change="checkData(item.functionPrice,index,'functionPrice',1)" min=0/>
+        <input type="number" class="fun-list-item" v-model="item.functionCode" v-if="isShow2" @change="checkData(item.functionCode,index,'functionCode',2)" min=0/>
         <p class="fun-list-item">
           <mt-switch v-model="item.ifOpen"></mt-switch>
         </p>
@@ -70,7 +70,7 @@
     <div style="width:100%;height:1.73rem;"></div>
     <section class="promiss-footer">
       <span class="can" @click="goBack">取消</span>
-      <span class="cifrm" @click="goNext">确认</span>
+      <span class="cifrm" @click="goNext" :class="{'default':isDisable}" :disabled="isDisable">确认</span>
     </section>
     </div>
     <!-- 店铺-->
@@ -148,6 +148,11 @@
         jsonArr:[],
         getJsonArr:[],
         ok: true,
+        isDisable: false,
+        nullDisable: false,
+        timeIsDisable: false,
+        priceIsDisable: false,
+        codeIsDisable: false,
         functionListTitle: [
           ['功能'],
           ['耗时', '/分'],
@@ -196,6 +201,39 @@
     methods: {
       checkItem(index) {
         this.selectedIndex = index;
+      },
+      checkData(val,index,name,flag) {
+        let reg = /^\+?[1-9][0-9]*$/;  //验证非0整数
+        let reg1 = /^[1-9][0-9]?(\.\d)?$/;  //验证非0正整数h和带一位小数字非0正整数
+        if(!val){
+          this.$toast("输入框不能为空");
+          this.nullDisable = true;
+        }else{
+          this.nullDisable = false;
+        }
+        if(flag ===0 && !reg.test(val)) {
+          this.$toast("请输入非0正整数");
+          this.timeIsDisable= true;
+        }else{
+          this.timeIsDisable= false;
+        }
+        if(flag ===1 && !reg1.test(val)) {
+          this.$toast("请输入一位小数正整数");
+          this.priceIsDisable = true;
+        }else{
+          this.priceIsDisable = false;
+        }
+        if(flag ===2 && !reg1.test(val)) {
+          this.$toast("请输入一位小数正整数");
+          this.codeIsDisable = true;
+        }else{
+          this.codeIsDisable= false;
+        }
+        if(this.nullDisable || this.timeIsDisable || this.priceIsDisable || this.codeIsDisable){
+          this.isDisable = true;
+        }else{
+          this.isDisable = false;
+        }
       },
       getCheckShop() {
         this.fromdata.shopType.name = this.selectListA[this.selectedIndex].shopName;
@@ -279,28 +317,30 @@
             }
           this.subType = true;
         }else{
-          this.$toast("请先选择店铺或者类型");
+          this.$toast("请先选择类型");
           return false;
         }
       },
       async getFunctionSetList() {  //获取功能列表数据
-        let payload = {subTypeId: this.fromdata.secondType.id,shopId: this.fromdata.shopType.id} ;     
-        let res = await getFunctionSetListFun(qs.stringify(payload));
-         if(res.code === 0) {
-           this.functionTempletType = res.data.functionTempletType;
-           this.functionSetList = res.data.list;
-           this.fromdata.functionType.name = "已设置";
-           if(res.data.communicateType !== 1){
-             this.functionListTitle2 = this.functionListTitle;
-             this.isShow2 = true;
-           }
-          this.functionSetList.forEach(item=>{
-            item.ifOpen=item.ifOpen === 0?(!item.ifOpen) : (!!item.ifOpen);
-          });
-            
-        }
-        else {
-          this.$toast(res.msg);
+        if(!this.functionSetList.length){
+          let payload = {subTypeId: this.fromdata.secondType.id,shopId: this.fromdata.shopType.id} ;     
+          let res = await getFunctionSetListFun(qs.stringify(payload));
+          if(res.code === 0) {
+            this.functionTempletType = res.data.functionTempletType;
+            this.functionSetList = res.data.list;
+            this.fromdata.functionType.name = "已设置";
+            if(res.data.communicateType !== 1){
+              this.functionListTitle2 = this.functionListTitle;
+              this.isShow2 = true;
+            }
+            this.functionSetList.forEach(item=>{
+              item.ifOpen=item.ifOpen === 0?(!item.ifOpen) : (!!item.ifOpen);
+            });
+              
+          }
+          else {
+            this.$toast(res.msg);
+          }
         }
       },
       async submit() {  //提交
@@ -340,7 +380,7 @@
             }, 2000);
           return false;
         }
-        if(!this.fromdata.nqt) {
+        if(this.fromdata.nqt== "点击扫描设备上二维码") {
           let instance = this.$toast({
             message: '请扫描设备上的NQT码'
           });
@@ -349,7 +389,7 @@
             }, 2000);
           return false;
         }
-        if(!this.fromdata.imei) {
+        if(this.fromdata.imei== "点击扫描模块上二维码") {
           let instance = this.$toast({
             message: '请扫描模块上的IMEI码'
           });
@@ -411,11 +451,15 @@
        
       },
       goNext(){ //功能列表确认
-        MessageBox.confirm('您确定要更改吗？').then(action => {       
-          this.setModelShow= false;
-          this.modelShow = true;
-          this.title = "新增设备";
-        });
+        if(!this.isDisable) {
+          MessageBox.confirm('您确定要更改吗？').then(action => {       
+            this.setModelShow= false;
+            this.modelShow = true;
+            this.title = "新增设备";
+          });
+        }else{
+          return false;
+        }
       },
       goBack(){ //功能列表返回
        this.setModelShow= false;
@@ -559,7 +603,7 @@
     font-size: 18px;
   }
   .default {
-    background-color:rgba(24,144,255,0.5);
+    opacity: 0.6;
   }
   
   .fun-item-hd {

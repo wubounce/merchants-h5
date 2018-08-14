@@ -38,7 +38,7 @@
       </div>
       <div class="noData" v-show="hasNoData">暂无设备</div>
       <div class="page-top">
-        <div class="page-loadmore-wrapper" ref="wrapper" :style="{overflowY:scrollShow}">
+        <div class="page-loadmore-wrapper" ref="wrapper" style="height: 514px;overflow:scroll;">
           <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" @translate-change="translateChange" :auto-fill="false" ref="loadmore">
             <router-link tag="div" :to="{ name: 'deviceDetail', query:{machineId:item.machineId}}" class="device-list" v-for="(item,index) in list" :key="index">
               <section class="item-hd">
@@ -60,7 +60,7 @@
                 </p>
               </section>
             </router-link>   
-            <div v-if="allLoaded" class="nomore-data">没有更多了</div>
+            <div v-if="page > 1" class="nomore-data">没有更多了</div>
           </mt-loadmore>
         </div>
       </div>
@@ -94,17 +94,15 @@
         checkClass: false,
         name: '',
         hasNoData: '',
-        funNameArr: ['新增<br/>设备','批量<br/>启动','批量<br/>修改']
-        
+        funNameArr: ['新增<br/>设备','批量<br/>启动','批量<br/>修改'],
+        noMore: false,
+        screenWidth: document.body.clientWidth     
       };
     },
     filters: { //过滤器，过滤2位小数
       keepTwoNum(value) {
        return Number(value).toFixed(2);
       }
-    },
-    mounted() {
-
     },
     methods: {
       titleClick(index) {
@@ -128,17 +126,32 @@
         Web.scanQRCode(res => {
           let url = res;
           let parameter = url.substring(0,4);
-          if(parameter == "http"){           
-            this.$toast("请扫描I模块上的IMEI码");
+          if(url){
+            if(parameter == "http"){
+              let object = url.split("?")[1];
+              alert(object);
+              let nqt = this.getUrlParam(object,"NQT"); 
+              alert(nqt);
+              this.$router.push({
+                name: "deviceSearch",
+                query: ({imei:nqt})
+              });        
+            }else{
+              this.$router.push({
+                name: "deviceSearch",
+                query: ({imei: url})
+              });
+            }
           }else{
-            this.$router.push({
-              name: "deviceSearch",
-              query: ({imei: url})
-          });
-          } 
+            his.$toast("请扫描正确的二维码");
+          }
 				});
       }, 
-
+      getUrlParam(url,name) {
+        let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+        let r = url.match(reg);  //匹配目标参数
+        if (r != null) return unescape(r[2]); return null; //返回参数值
+      },
       async getCountDevice(){      
         let res = await countDeviceFun();
          if(res.code === 0) {
@@ -155,6 +168,7 @@
           this.list = res.data.items;
           this.total = res.data.total;
           this.hasNoData = this.list.length<= 0 ? true: false;
+          this.noMore = this.page>1?true: false;
           this.list.forEach(item=>{
             switch(item.machineState){
             case 1:
@@ -196,7 +210,7 @@
     created() {
       this.getCountDevice();
     },
-
+    
     components: {
 
     }
@@ -205,11 +219,6 @@
 </script>
 <style lang="scss" scoped>
   .search-header{
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 999;
     .search {
       .search-input {
         display: flex;
@@ -304,7 +313,6 @@
     padding-top: 4rem;
     }
   .page-top {
-    padding-top: 3.47rem;
     .nomore-data {
         text-align: center;
         color: #999;
@@ -384,7 +392,6 @@
     width: 1.49rem;
     height: 1.49rem;
     text-align: center;
-    overflow: auto;
     background: rgba(24,144,255,1);
     border-radius: 50%;
     position: fixed;
@@ -392,15 +399,18 @@
     right: 0.54rem;
     line-height: 1.49rem;
     color: rgba(255,255,255,1);
+    box-shadow: 0px 0.03rem 0.4rem rgba(24,144,255,0.75);
+    z-index: 1001;
     .icon-gengduo-tianchong {
       font-size: 20px;
+      display: inline-block;
+      width: 20px;
     }
   }
   .closeItem {
     width: 1.49rem;
     height: 1.49rem;
     text-align: center;
-    overflow: auto;
     background: rgba(24,144,255,1);
     border-radius: 50%;
     position: fixed;
@@ -408,8 +418,11 @@
     right: 0.54rem;
     line-height: 1.49rem;
     color: rgba(255,255,255,1);
+    box-shadow: 0px 0.03rem 0.4rem rgba(24,144,255,0.75);
     .icon-guanbi {
       font-size: 20px;
+      display: inline-block;
+      width: 20px;
     }
   }
   .showItem{

@@ -31,7 +31,6 @@
       type="datetime"
       :min-date="minDate" 
       @change="changeItem"
-      :visible-item-count="3"
       ref="checkoutTime"
       v-show="!functionSetModel"
     />

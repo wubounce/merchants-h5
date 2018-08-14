@@ -74,7 +74,7 @@
                 <span>{{item.ifOpen}}</span>
               </p>
             </section>
-          </div>
+          </div>s
         <li class="device-detail-ft">
           <p>创建人：{{deviceDetail.createUser}}</p>
           <p>创建时间： {{deviceDetail.createTime}}</p>

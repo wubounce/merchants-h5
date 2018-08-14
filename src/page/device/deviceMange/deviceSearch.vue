@@ -13,7 +13,7 @@
       </div>
     </div>
 
-    <div class="search-select">
+    <div class="search-select" v-show="isSelectItem">
       <ul>
         <li v-for="(item,index) in searchList" :class="{selectback:index==now}" class="search-select-option search-select-list" @click="selectClick(index)"
         :key="index">{{item.nameOrImei}}
@@ -22,8 +22,9 @@
       </ul>
     </div>
 
-    <div class="selectedItem">
+    <div class="selectedItem">     
       <router-link tag="div" :to="{ name: 'deviceDetail', query:{machineId:item.machineId}}" class="device-list" v-for="(item,index) in list" :key="index">
+        <div class="line"></div>
         <section class="item-hd">
           <span><b>{{item.machineName}}</b></span>
           <span class="state">{{item.machineState}}</span>
@@ -42,7 +43,8 @@
             <span>{{item.profit | keepTwoNum}}</span>
           </p>
         </section>
-      </router-link>
+        <div class="line"></div>
+      </router-link>    
     </div>
   </section>
 </template>
@@ -63,8 +65,14 @@ import {delay } from "@/utils/tool";
         keyword: '',
         searchList:[],
         message: '',
-        list: []
+        list: [],
+        isSelectItem: true
       };
+    },
+    filters: { //过滤器，过滤2位小数
+      keepTwoNum(value) {
+       return Number(value).toFixed(2);
+      }
     },
     methods: {
       async _getList(id)  {
@@ -106,9 +114,6 @@ import {delay } from "@/utils/tool";
             }
           });
         }
-        else {
-          this.$toast(res.msg);
-        }
       },
       goBack() {
         this.$router.go(-1);
@@ -123,13 +128,11 @@ import {delay } from "@/utils/tool";
           if(res.code === 0) {
             this.message = "未找到相关结果"
             this.searchList = res.data;  
-          }else{
-            this.$toast(res.msg);
           }
       },
       selectClick: function (index) {
         let machineId = this.searchList[index].machineId;
-        console.log(machineId)
+        this.isSelectItem = false;
         this._getList(machineId);
       },
       clearInput: function () {
@@ -278,8 +281,7 @@ import {delay } from "@/utils/tool";
       }
       
     }
-    .selecedItem{
-      .device-list {
+    .device-list {
       margin-top: .27rem;
       padding: 0 .4rem;
       background: #FFFFFF;
@@ -347,33 +349,10 @@ import {delay } from "@/utils/tool";
         }
       }
     }
-    }
-    input::-ms-clear {
-      display: none;
-    }
-
-    .search-select-list {
-      transition: all 0.5s;
-    }
-
-    .itemfade-enter,
-    .itemfade-leave-active {
-      opacity: 0;
-    }
-
-    .itemfade-leave-active {
-      position: absolute;
-    }
-
-    .selectback {
-      background-color: #eee !important;
-      cursor: pointer;
-    }
-
-    .search-select ul {
-      margin: 0;
-      text-align: left;
-      padding: 10px 10px;
+    .line {
+      width: 100%;
+      height: 0.1rem;
+      background: #efeff4;
     }
   }
   
