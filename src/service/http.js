@@ -7,11 +7,12 @@ const baseUrl = process.env.NODE_ENV === 'production' ? 'http://192.168.5.10:808
 // 创建axios实例
 const http = axios.create({
   baseURL: baseUrl, // api的base_url
-  timeout: 50000 // 请求超时时间
+  // timeout: 50000 // 请求超时时间
 });
 
 // request拦截器
 http.interceptors.request.use(config => {
+  console.log(config)
   //由于省市区三级联动调用三次接口，避免闪屏现象，如下操作
   if(config.url != 'area/list' && config.url != '/common/uploadFile' && config.url !='operator/updateOperator') {
     Indicator.open({
@@ -35,6 +36,7 @@ http.interceptors.request.use(config => {
     }
   return config;
 }, error => {
+      console.log(error)
   MessageBox.alert('加载超时');
   Promise.reject(error);
 });
@@ -44,7 +46,6 @@ http.interceptors.response.use(
   response => {
     Indicator.close();
     if (response.status === 200) {
-      
       // 时间验证 & 把时间放到vuex中
       if (response.data.t > 0) {
         let offset = response.data.t - new Date().getTime();
@@ -78,6 +79,13 @@ http.interceptors.response.use(
   },
   error => {
     Indicator.close();
+    console.log(error)
+    //11:Token 过期了;
+    if (error.data.code === 11) {
+      store.dispatch('LogOut').then(() => {
+        location.reload();
+      });
+    }
     MessageBox.alert('服务器开小差了');
     return Promise.reject(error);
   }

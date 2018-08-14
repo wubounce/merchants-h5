@@ -148,7 +148,8 @@ export default {
           values: ['00','01', '02', '03', '04', '05', '06','07','08', '09', '10', '11', '12', '13','14','15','16','17','18','19','20','21','22','23'],
           className: 'slot1',
           textAlign: 'right',
-          defaultIndex:5
+          defaultIndex:5,
+          value: '00',
         },
         {
           divider: true,
@@ -161,7 +162,8 @@ export default {
           '30','31', '32', '33', '34', '35', '36','37','38', '39', '40', '41', '42', '43','44','45','46','47','48','49','50','51','52','53','54','55','56','57','58','59'],
           className: 'slot3',
           textAlign: 'left',
-          defaultIndex:0
+          defaultIndex:0,
+          value: '00',
         },
         {
           divider: true,
@@ -173,7 +175,8 @@ export default {
           values: ['00','01', '02', '03', '04', '05', '06','07','08', '09', '10', '11', '12', '13','14','15','16','17','18','19','20','21','22','23'],
           className: 'slot1',
           textAlign: 'right',
-          defaultIndex:23
+          defaultIndex:23,
+          value: '23',
         },
         {
           divider: true,
@@ -186,13 +189,13 @@ export default {
           '30','31', '32', '33', '34', '35', '36','37','38', '39', '40', '41', '42', '43','44','45','46','47','48','49','50','51','52','53','54','55','56','57','58','59'],
           className: 'slot3',
           textAlign: 'left',
-          defaultIndex:0
+          defaultIndex:0,
+          value: '00',
         }
       ],
     };
   },
-  mounted() {
-    
+  mounted () {
   },
   created(){
     this.shopListFun();
@@ -235,10 +238,16 @@ export default {
       this.weeklist = this.weeklist.filter(id => Number(id) !== 8&&Number(id) !== 9); //自动活动日去掉每天和周一至周五
     },
     chooseDay() {
+      console.log(123)
+      // this.$set(this.activeTimeslots[0],'defaultIndex',0);
+      // this.$set(this.activeTimeslots[2],'defaultIndex',0);
+      // this.$set(this.activeTimeslots[4],'defaultIndex',23);
+      // this.$set(this.activeTimeslots[6],'defaultIndex',59);
       this.activeTimeslots[0].defaultIndex = 0;
       this.activeTimeslots[2].defaultIndex = 0;
       this.activeTimeslots[4].defaultIndex = 23;
       this.activeTimeslots[6].defaultIndex = 59;
+      
     },
     changeTime(picker, values) {
       this.activeTimeCurrentTags = values[0]+':'+values[1]+'-'+ values[2]+':'+values[3];
