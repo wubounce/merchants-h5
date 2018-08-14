@@ -17,7 +17,7 @@
       <p class="reserveTime">
         <span>预约时长(分钟)</span>
         <span>
-          <input  v-model="orderLimitMinutes" :disabled="noEdit" :placeholder="placeholdercontent" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')" maxlength='1'>
+          <input  v-model="orderLimitMinutes" :disabled="noEdit" :placeholder="placeholdercontent"  maxlength='1'>
         </span>
       </p>
       <!-- 先注释掉，下个版本做营业时间 -->
@@ -653,7 +653,9 @@ export default {
       if(this.shopName!=false && this.shopType!=false && this.provinceId != false && this.cityId !=false && this.provinceId != false && this.address != false && this.lat !=false && this.lng != false && this.machineTypeIdsArray !=false ) {
         if(this.orderLimitMinutes) {
           //在判断
-          if(parseInt(this.orderLimitMinutes) >0 && parseInt(this.orderLimitMinutes) <10) {
+          let reg=/^[1-9]+\d*$/;
+          console.log(reg.test(this.orderLimitMinutes));
+          if(reg.test(this.orderLimitMinutes) &&parseInt(this.orderLimitMinutes) >0 && parseInt(this.orderLimitMinutes) <10 && text1.test(this.orderLimitMinutes)) {
             //传值
             let changeisReserve = (this.isReserve==true)? 0 :1;
             let obj = {
