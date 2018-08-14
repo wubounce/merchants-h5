@@ -53,7 +53,7 @@ export default {
     color: #666666;
     text-align: center;
     display: flex;
-    z-index: 2;
+    z-index: 10000000;
     position: fixed;
     top:0;
     border-bottom:1px solid #E5E5E5;
