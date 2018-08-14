@@ -534,6 +534,6 @@ export default {
 </style>
 <style lang="scss">
   .earnings .v-modal {
-    z-index: 1000000 !important;
+    z-index: 10000000 !important;
   }
 </style>
