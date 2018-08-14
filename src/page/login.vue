@@ -1,5 +1,5 @@
 <template>
-<div class="login" v-title="'企鹅共享商家端'">
+<div class="login" v-title="'企鹅商家管理平台'">
   <div class="header">
     <h1 class="logo">
       <img src="../../static/logo.png"/>
@@ -42,7 +42,6 @@ export default {
     beforeRouteEnter(to, from, next) {
       // 已登录直接返回首页
       if (getToken()) {
-        // removeNavTabIndex();
         let localData = getNavTabIndex();
         localData = localData?localData:'/index';
         next(localData);
