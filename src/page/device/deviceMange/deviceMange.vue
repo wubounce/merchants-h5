@@ -129,9 +129,7 @@
           if(url){
             if(parameter == "http"){
               let object = url.split("?")[1];
-              alert(object);
               let nqt = this.getUrlParam(object,"NQT"); 
-              alert(nqt);
               this.$router.push({
                 name: "deviceSearch",
                 query: ({imei:nqt})
@@ -143,7 +141,7 @@
               });
             }
           }else{
-            his.$toast("请扫描正确的二维码");
+            this.$toast("请扫描正确的二维码");
           }
 				});
       }, 

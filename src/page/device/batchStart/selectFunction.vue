@@ -26,6 +26,13 @@
         <div class="searchNoItem" v-show="secondTypeList.length<=0">暂无功能列表</div>
       </div>
     </div>
+    <div class="itemBar" v-show="!functionSetModel">
+      <span>年</span>
+      <span>月</span>
+      <span>日</span>
+      <span>小时</span>
+      <span>分钟</span>
+    </div>
     <!-- 启动时间 -->
     <van-datetime-picker
       v-model="currentDate"
@@ -38,7 +45,7 @@
     <div style="width:100%;height:1.73rem;"></div>
     <section class="promiss-footer" v-show="functionSetModel">
       <span class="can" @click="goBack">上一步</span>
-      <span class="cifrm" @click="goNext" :class="{'default':secondTypeList.length<=0}" :disabled="secondTypeListlength<=0">下一步</span>
+      <span class="cifrm" @click="goNext" :class="{'default':secondTypeList.length<=0}" :disabled="secondTypeList.length<=0">下一步</span>
     </section> 
     <section v-show="!functionSetModel">
       <button class="submitBtn" @click="submit">确定</button>
@@ -136,7 +143,7 @@ export default {
       },
       
       async submit() {
-        if(startTime){
+        if(this.startTime){
           let query = this.$route.query;
           let payload = {machineParentTypeId:query.parentTypeId,shopId:query.shopId,standardFunctionId:this.functionId,startTime:this.startTime};
           let res = await batchStartOnFun(qs.stringify(payload));
@@ -388,8 +395,30 @@ export default {
       }
       
     }
+  .itemBar {
+    display: flex;  
+    z-index: 999;
+    position: fixed;
+    width: 100%;
+    top: 3.81rem;
+    height: 40px;
+    line-height: 40px;
+    background: #ffffff;
+    margin-bottom: 0.13rem;
+    padding: .2rem 0;
+    font-size: 16px;
+    span {
+      flex: 1;
+      text-align: center;
+      border-right: 1px solid #ffffff;
+      &:last-child {
+      border-right: none;
+    }
+    }
+    
+  }
   .van-picker {
-    padding-top: 3.81rem;
+    padding-top: 5.13rem;
     margin-top: -40px;
     .van-picker-column__item--selected{
       font-size: 20px;
