@@ -19,6 +19,7 @@
           <p>1.建议VIP折扣价不超过特惠活动价。</p>
           <p>2.每日限用次数不填写或填写0，则不限制次数。</p>
         </div>
+        <div class="crrow"></div>
       </div>
     </div>
     <div class="add-vip-list-wrap">
@@ -30,6 +31,7 @@
           <p>VIP折扣<span>%</span><input type="number" placeholder="请填写折扣数…" v-model="vipform.halfYearCardDiscount"></p>
           <p style="border:none">每日限用次数<span>次</span><input type="number" class="num" v-model="vipform.halfYearCardLimitTime"></p>
         </div>
+        <div class="crrow"></div>
       </div>
     </div>
     <div class="add-vip-list-wrap">
@@ -41,6 +43,7 @@
           <p>VIP折扣<span>%</span><input type="number" placeholder="请填写折扣数…" v-model="vipform.seasonCardDiscount"></p>
           <p style="border:none">每日限用次数<span>次</span><input type="number" v-model="vipform.seasonCardLimitTime" class="num"></p>
         </div>
+        <div class="crrow"></div>
       </div>
     </div>
   </form>
@@ -212,7 +215,19 @@ export default {
     }
   }
   .card-wrap {
-    padding:0.4rem;
+    margin:0.4rem;
+    position: relative;
+    box-shadow:0px 0.03rem 0.17rem 0px rgba(24,144,255,0.1);
+    .crrow {
+      width: 2.09rem;
+      height: 1.16rem;
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      background: url('../../../static/image/management/crown@2x.png');
+      background-size: contain;
+      background-repeat: no-repeat;
+    }
     .add-card-header {
       height:0.13rem;
       background:linear-gradient(-90deg,rgba(53,195,255,1),rgba(24,144,255,1));

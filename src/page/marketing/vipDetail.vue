@@ -9,7 +9,6 @@
       </p>
     </div>
 
-
     <div class="card-wrap">
       <p class="addvip-type"><span>VIP年卡</span></p>
       <div class="add-card-header"></div>
@@ -18,6 +17,7 @@
         <p>VIP折扣<span>{{detail.yearCardDiscount?detail.yearCardDiscount:''}}%</span></p>
         <p>每日限用次数<span>{{detail.yearCardLimitTime}}次</span></p>
       </div>
+      <div class="crrow"></div>
     </div>
     <div class="card-wrap">
       <p class="addvip-type"><span>VIP半年卡</span></p>
@@ -27,6 +27,7 @@
         <p>VIP折扣<span>{{detail.halfYearCardDiscount?detail.halfYearCardDiscount:''}}%</span></p>
         <p>每日限用次数<span>{{detail.halfYearCardLimitTime}}次</span></p>
       </div>
+      <div class="crrow"></div>
     </div>
     <div class="card-wrap">
       <p class="addvip-type"><span>VIP季卡</span></p>
@@ -36,8 +37,8 @@
         <p>VIP折扣<span>{{detail.seasonCardDiscount?detail.seasonCardDiscount:''}}%</span></p>
         <p>每日限用次数<span>{{detail.seasonCardLimitTime}}次</span></p>
       </div>
+      <div class="crrow"></div>
     </div>
-
 
     <div class="create-wrap">
       <p>创建人：{{detail.createUserName}}</p>
@@ -122,7 +123,19 @@ export default {
     }
   }
   .card-wrap {
-    padding:0.4rem;
+    margin:0.4rem;
+    position: relative;
+    box-shadow:0px 0.03rem 0.17rem 0px rgba(24,144,255,0.1);
+    .crrow {
+      width: 2.09rem;
+      height: 1.16rem;
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      background: url('../../../static/image/management/crown@2x.png');
+      background-size: contain;
+      background-repeat: no-repeat;
+    }
     .add-card-header {
       height:0.13rem;
       background:linear-gradient(-90deg,rgba(53,195,255,1),rgba(24,144,255,1));

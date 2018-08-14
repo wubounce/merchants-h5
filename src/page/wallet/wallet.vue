@@ -41,8 +41,9 @@ export default {
         }else if(Number(this.data.code) === 1017){
             this.$toast(this.data.msg);
             return false;
+        }else {
+            this.$router.push({name:'withdraw'});
         }
-        this.$router.push({name:'withdraw'});
     }
   },
   components:{
