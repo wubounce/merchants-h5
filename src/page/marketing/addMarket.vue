@@ -238,7 +238,6 @@ export default {
       this.weeklist = this.weeklist.filter(id => Number(id) !== 8&&Number(id) !== 9); //自动活动日去掉每天和周一至周五
     },
     chooseDay() {
-      console.log(123)
       // this.$set(this.activeTimeslots[0],'defaultIndex',0);
       // this.$set(this.activeTimeslots[2],'defaultIndex',0);
       // this.$set(this.activeTimeslots[4],'defaultIndex',23);

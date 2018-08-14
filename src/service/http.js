@@ -7,12 +7,11 @@ const baseUrl = process.env.NODE_ENV === 'production' ? 'http://192.168.5.10:808
 // 创建axios实例
 const http = axios.create({
   baseURL: baseUrl, // api的base_url
-  // timeout: 50000 // 请求超时时间
+  timeout: 50000 // 请求超时时间
 });
 
 // request拦截器
 http.interceptors.request.use(config => {
-  console.log(config)
   //由于省市区三级联动调用三次接口，避免闪屏现象，如下操作
   if(config.url != 'area/list' && config.url != '/common/uploadFile' && config.url !='operator/updateOperator') {
     Indicator.open({
@@ -36,7 +35,6 @@ http.interceptors.request.use(config => {
     }
   return config;
 }, error => {
-      console.log(error)
   MessageBox.alert('加载超时');
   Promise.reject(error);
 });
@@ -53,9 +51,7 @@ http.interceptors.response.use(
           console.log(offset);
           MessageBox.alert('客户端时间不合法，会影响正常业务使用[t: ' + offset + ']', '注意');
         }
-
         store.commit('setServerTimeOffset', parseInt(offset / 1000));
-
       }
       if(response.data.code === 7004){
           removeMenu();
