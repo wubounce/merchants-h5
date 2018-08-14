@@ -82,12 +82,16 @@ import moment from 'moment';
           };
           let res = await batchStartNowFun(qs.stringify(obj));
           if(res.code===0) {
-           this.$toast({message: '启动成功' });
+           this.$toast({
+                message: res.msg,
+                position: "middle",
+                duration: 3000
+              });
            this.$router.push({name:'todolist'});
           }
           else {
             this.$router.push({name:'todolist'});
-            MessageBox.alert(res.msg,'');
+            this.$toast(res.msg);
           }
 	      },
 	      action => {
