@@ -379,6 +379,10 @@ export default {
           if(this.list[1].value) {
             this.list[1].value = this.list[1].value.length>10? this.list[1].value.slice(0,10)+'...' : this.list[1].value;
           }
+          this.lat = '';
+          this.lng = '';
+          this.list[2].value = '';
+          this.address = '';
           break;
         //经纬度 
         case 2:

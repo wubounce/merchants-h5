@@ -47,8 +47,10 @@ export default {
   },
   created() {
     this.mapCity = this.$route.query.mapCity;
+    console.log(this.$route.query.mapCity);
     if(this.mapCity) {
-      this.mapCity = this.mapCity.slice(0,2);
+      this.mapCity = this.mapCity.slice(0,this.mapCity.length-1);
+      console.log(this.mapCity);
     }
   },  
   mounted() {

@@ -51,7 +51,7 @@ export default {
     this.shopId = this.$route.query.shopId;
     this.mapCity = this.$route.query.mapCity;
     if(this.mapCity) {
-      this.mapCity = this.mapCity.slice(0,2);
+      this.mapCity = this.mapCity.slice(0,this.mapCity.length-1);
     }
   },
   mounted() {
