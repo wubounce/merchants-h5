@@ -737,11 +737,11 @@ export default {
     $route(to,from) {
       if(from.name == 'mapSearch') {
         if(this.$route.query.special) {
-          this.list[2].value = this.$route.query.special.length>6 ? this.$route.query.special.slice(0,6) + '...': this.$route.query.special;
+          this.list[2].value = this.$route.query.special.length >9 ? this.$route.query.special.slice(0,10) +'...' : this.$route.query.special;
+          this.organization = this.$route.query.special;
+          this.lng = this.$route.query.lng;
+          this.lat = this.$route.query.lat;
         }
-        this.lng = this.$route.query.lng;
-        this.lat = this.$route.query.lat;
-        this.organization = this.$route.query.special;
       }
       else if(from.name == 'shopList'){
         location.reload();

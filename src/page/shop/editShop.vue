@@ -342,7 +342,7 @@ export default {
             // //获取的省市区
             console.log(this.provinceName,this.cityName,this.districtName);
             console.log(this.provinceId,this.cityId,this.districtId); 
-            this.addressSlots[0].defaultIndex = 2;
+            this.addressSlots[0].defaultIndex = this.proIndex;
             // let objP = { parentId : 0 };
             // let pro = await areaListFun(qs.stringify(objP));
             // console.log(pro);
@@ -729,6 +729,7 @@ export default {
         //经纬度
         this.lng = res.data.lng;
         this.lat = res.data.lat;
+        this.organization = res.data.organization;
         //详细地址
         this.address = res.data.address;
         //设备类型
@@ -773,15 +774,16 @@ export default {
 
 
         this.addressSlots[0].defaultIndex = 2;
-        // //省
-        // let objPro = { parentId: 0 };
-        // let resPro = await areaListFun(qs.stringify(objPro));
-        // console.log('省：',resPro.data.length);
-        // for(let x=0;x<resPro.data.length;x++) {
-        //   if(res.data.provinceName == resPro.data[x].areaName) {
-        //     this.proIndex = x;
-        //   }
-        // }
+        // 省
+        let objPro = { parentId: 0 };
+        let resPro = await areaListFun(qs.stringify(objPro));
+        console.log('省：',resPro.data.length);
+        for(let x=0;x<resPro.data.length;x++) {
+          if(res.data.provinceName == resPro.data[x].areaName) {
+            this.proIndex = x;
+            console.log(x);
+          }
+        }
         // //市
         // let objCity = { parentId: this.provinceId };
         // let resCity = await areaListFun(qs.stringify(objCity));
@@ -827,10 +829,12 @@ export default {
   watch: {
     $route(to,from) {
       if(from.name == 'editMap') {
-        this.list[2].value = this.$route.query.special.length >9 ? this.$route.query.special.slice(0,10) +'...' : this.$route.query.special;
-        this.lng = this.$route.query.lng;
-        this.lat = this.$route.query.lat;
-        this.organization = this.$route.query.special;
+        if(this.$route.query.special) {
+          this.list[2].value = this.$route.query.special.length >9 ? this.$route.query.special.slice(0,10) +'...' : this.$route.query.special;
+          this.organization = this.$route.query.special;
+          this.lng = this.$route.query.lng;
+          this.lat = this.$route.query.lat;
+        }
       }
       else if(from.name == 'shopDetail'){
         location.reload();
