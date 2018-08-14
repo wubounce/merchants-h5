@@ -27,7 +27,7 @@
       </div>
     </form>
   </div>
-  <footer class="company">企鹅商家管理后台</footer>
+  <footer class="company">企鹅商家管理平台</footer>
 </div>
 </template>
 
@@ -42,6 +42,7 @@ export default {
     beforeRouteEnter(to, from, next) {
       // 已登录直接返回首页
       if (getToken()) {
+        // removeNavTabIndex();
         let localData = getNavTabIndex();
         localData = localData?localData:'/index';
         next(localData);

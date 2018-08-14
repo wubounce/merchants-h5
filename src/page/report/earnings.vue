@@ -2,7 +2,7 @@
 <div class="earnings">
   <div class="search">
     <div class="slectdata timechoose">
-      <span @click="open('picker2')">{{startDate}}</span>至<span @click="open('picker3')">{{endDate}}<i class="iconfont icon-xiangxiajiantou select-back"></i></span>
+      <span @click="open('picker2')">{{startDate}}<i class="iconfont icon-xiangxiajiantou select-back"></i></span>至<span @click="open('picker3')">{{endDate}}<i class="iconfont icon-xiangxiajiantou select-back"></i></span>
     </div>
     <div class="slectdata shopchoose">
       <span @click="popupVisible=true">{{currentTags?currentTags.shopName:'全部店铺'}}<i class="iconfont icon-xiangxiajiantou select-back"></i></span>
@@ -26,7 +26,7 @@
         <span class="report-table-order">订单金额</span>
        </div>
       <div class="listcon tableearn-list" v-for="(item,index) in  lsitdata" :key="index">
-        <router-link class="detail" :to="{name:'reportdetail', query:{date:item.date,type:1}}" >
+         <router-link class="detail" :to="{name:'reportdetail', query:{date:item.date,type:1}}" >
           <span class="listtime report-table-date">{{item.date}}</span>
           <span  class="report-table-order">{{item.count}}</span>
           <span  class="report-table-order">{{item.money | tofixd}}</span>
@@ -75,8 +75,8 @@ export default {
   data() {
     return {
       chart: null,
-      searchStartDate: null,
-      searchEndDate: null,
+      searchStartDate:new Date(moment().subtract('days',6).format('YYYY-MM-DD')),
+      searchEndDate:new Date(moment().format('YYYY-MM-DD')),
       startDate:moment().subtract('days',6).format('YYYY-MM-DD'),
       endDate: moment().format('YYYY-MM-DD'),
       shopName:'shopName',
@@ -169,6 +169,7 @@ export default {
       this.$refs[picker].open();
     },
     handleStartDateChange(value) {
+      this.searchStartDate = value;
       this.startDate = moment(value).format('YYYY-MM-DD');
       let startDate = new Date(this.startDate.replace(/\-/g, "\/"));  
       let endDate = new Date(this.endDate.replace(/\-/g, "\/"));  
@@ -178,6 +179,7 @@ export default {
       this.dayReportFun();
     },
     handleEndDateChange(value) {
+      this.searchEndDate = value;
       this.endDate = moment(value).format('YYYY-MM-DD');
       let startDate = new Date(this.startDate.replace(/\-/g, "\/"));  
       let endDate = new Date(this.endDate.replace(/\-/g, "\/"));  
@@ -456,7 +458,6 @@ export default {
     position: relative;
     text-align: center;
     white-space: nowrap;
-    border-bottom: 1px solid #E5E5E5;
     span {
       flex:1;
       font-weight: 600;
@@ -472,9 +473,11 @@ export default {
     }
   }
   .tableearn .tableearn-list:nth-child(2n) {
+    border-bottom: 1px solid #E5E5E5; 
     background: #fff !important;
   }
   .tableearn .tableearn-list:nth-child(2n-1) {
+    border-bottom: 1px solid #E5E5E5; 
     background: #FAFCFE !important;
   }
   .search {

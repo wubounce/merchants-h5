@@ -42,9 +42,9 @@ import { setNavTabIndex, getNavTabIndex} from '@/utils/tool';
 		components:{
 		},
 		watch: {
-		$route () {
-	      this.selected = this.$route.path;
-	    },
+		// $route () {
+	 //      this.selected = this.$route.path;
+	 //    },
 		selected: function (val) {
 		      this.$router.push({path: val});
 		       setNavTabIndex(val);

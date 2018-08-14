@@ -28,7 +28,7 @@ export default new Router({
           path: '/report',
           name: 'report',
           component: () => import ('@/page/report/index'),
-          meta: {title: '报表'},
+          meta: {title: '报表',keepAlive:false},
         },
         {
           path: '/management',

@@ -16,7 +16,7 @@
             <p :class="['icon-wrapper','iconfont',{'icon-shijian':data.status === 0}]"><span class="icon"></span></p>   
             <div>
               <p class="status">处理中</p>
-              <p class="time" v-if="data.status === 0">预计{{data.forecastTime}}前到账</p>
+              <p class="time" v-cloak v-if="data.status === 0">预计{{data.forecastTime}}前到账</p>
               <p class="time" v-else>{{data.buildTime}}</p>
             </div>
             
@@ -27,8 +27,8 @@
             <div>
               <!-- 若提现失败则给下status增加class：fall -->
               <p :class="['status',{'fall':data.status === 2}]">{{data.status === 2? '提现失败': '提现成功'}}</p>
-              <p class="time" v-if="data.status === 2">{{data.content}}</p>  
-              <p class="time" v-if="data.status !== 0">{{data.completeTime}}</p>                          
+              <p class="time" v-cloak v-if="data.status === 2">{{data.content}}</p>  
+              <p class="time" v-cloak v-if="data.status !== 0">{{data.completeTime}}</p>                          
             </div>            
           </li>
         </ul>
@@ -48,7 +48,7 @@
       </li>	       
 		</ul>
     <!-- 提现进入才会显示按钮，详情进入不显示 -->
-    <div class="btn" v-if="ishow" @click="$router.push({name:'withdraw'})">完成</div>
+    <div class="btn" v-cloak v-if="ishow" @click="$router.push({name:'withdraw'})">完成</div>
     
   </div>
 </template>

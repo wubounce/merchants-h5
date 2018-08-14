@@ -1,5 +1,5 @@
 <template>
-  <div class="main" v-title="'首页'">
+  <div class="main" v-title="'企鹅商家管理平台'">
     <div class="earnings-wrap">
       <div class="earning-type">
         <p>总收益 (元)</p>

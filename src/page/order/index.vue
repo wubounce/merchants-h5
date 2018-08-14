@@ -126,14 +126,17 @@ export default {
         this.total = res.data.total;
         if (this.searchData) {
           this.hiddenPageHeight = 1.71;
+          
           this.nosearchList = this.list.length<= 0 ? true: false;
         } else {
+          this.hiddenTab = true;
           this.noOrderList = this.list.length<= 0 ? true: false;
         }
       }else {
         if (this.searchData) {
           this.nosearchList = true;
           this.hiddenPageHeight = 1.71;
+           this.hiddenTab = false;
         } else {
           this.noOrderList = this.list.length<= 0 ? true: false;
         }
@@ -148,7 +151,6 @@ export default {
       this.list = [];
       this.page = 1;
       this.allLoaded = false;//下拉刷新时解除上拉加载的禁用
-      this.hiddenPageHeight = 1.71;
       var keyCode = window.event? e.keyCode:e.which;
       if(keyCode =='13'){
         this._getList();
