@@ -339,11 +339,52 @@ export default {
           {
             this.placeVisible = true;
             this.getArea();
+            // //获取的省市区
             console.log(this.provinceName,this.cityName,this.districtName);
-            console.log(this.provinceId,this.cityId,this.districtId);
-            let objP = { provinceId : this.provinceId };
-            let pro = await areaListFun(qs.stringify(objP));
-            console.log(pro);
+            console.log(this.provinceId,this.cityId,this.districtId); 
+            this.addressSlots[0].defaultIndex = 2;
+            // let objP = { parentId : 0 };
+            // let pro = await areaListFun(qs.stringify(objP));
+            // console.log(pro);
+            // if(pro.code === 0) {
+            //   for(let i=0; i<pro.data.length;i++) {
+            //     if(this.provinceId == pro.data[i].areaId) {
+            //       this.addressSlots[0].defaultIndex = i;
+            //       console.log('省',i);
+            //     }
+            //   }
+            // }
+            // else {
+            //   this.$toast({message:res.msg});
+            // }
+
+            // let objC = { parentId : this.provinceId };
+            // let city = await areaListFun(qs.stringify(objC));
+            // if(city.code ===0 ) {
+            //   for(let j=0; j<city.data.length;j++) {
+            //     if(this.cityName == city.data[j].areaName) {
+            //       this.addressSlots[2].defaultIndex = j;
+            //       console.log('市',j);
+            //     }
+            //   }
+            // }
+            // else {
+            //   this.$toast({message:res.msg});
+            // }
+
+            // let objDis = { parentId : this.cityId };
+            // let dis = await areaListFun(qs.stringify(objDis));
+            // if(city.code ===0 ) {
+            //   for(let x=0; x<city.data.length;x++) {
+            //     if(this.districtName == city.data[x].areaName) {
+            //       this.addressSlots[4].defaultIndex = x;
+            //       console.log('区',x);
+            //     }
+            //   }
+            // }
+            // else {
+            //   this.$toast({message:res.msg});
+            // }
           }
           break;
         case 2:
@@ -512,7 +553,7 @@ export default {
           this.districtId = this.districtArray[j].areaId;
         }
       }
-
+      
       this.provinceName = values[0];
       this.cityName = values[1];
       this.districtName = values[2];
@@ -573,94 +614,7 @@ export default {
     },
     //提交修改信息
     async submit() {
-      // if(this.shopName != undefined && this.shopType != undefined && this.provinceId != undefined && this.cityId != undefined && this.districtId != undefined && this.address != undefined && this.lat != undefined && this.lng != undefined && this.machineTypeIdsArray != "" ) {
-      //   if(this.orderLimitMinutes) {
-      //     if(this.orderLimitMinutes<0 || this.orderLimitMinutes>9 ) {
-      //       this.$toast({
-      //         message:'请填个位数的时长',
-      //         position:'middle',
-      //         duration:3000
-      //       });
-      //       this.orderLimitMinutes = '';
-      //     }
-      //   }
-      //   let changeisReserve = (this.isReserve==true)? 0 :1;
-      //   let _this = this;
-      //   //判断信息是否完整
-      //   let obj = {
-      //     shopId: '  ',
-      //     shopName: this.shopName,
-      //     shopType: this.shopType,
-      //     provinceId: this.provinceId,
-      //     cityId: this.cityId,
-      //     districtId: this.districtId,
-      //     address: this.address,
-      //     lat:this.lat,
-      //     lng:this.lng,
-      //     machineTypeIds: this.machineTypeIdsArray,
-      //     isReserve: changeisReserve,
-      //     orderLimitMinutes: this.orderLimitMinutes,
-      //     // workTime: this.addBusinessTime,   下个版本有营业时间
-      //     imageId: this.imageId
-      //   };
-      //   let res = await addOrEditShopFun(qs.stringify(obj));
-      //   if(res.code===0) {
-      //     //成功后的操作
-      //     let instance = this.$toast({
-      //       message: '添加成功',
-      //       iconClass: 'mint-toast-icon mintui mintui-success'
-      //     });
-      //     setTimeout(() => {
-      //       instance.close();
-      //     }, 1000);
-      //     this.$router.push({
-      //       name:'shopList'
-      //     });
-      //   }
-      //   else {
-      //     this.$toast(res.msg);
-      //   }
-      // }
-      // else {
-      //   if(!this.shopName) {
-      //     this.$toast({
-      //       message: '请填写店铺名称',
-      //       position: 'middle',
-      //       duration: 3000
-      //     });
-      //   }else if(!this.list[0].value) {
-      //     this.$toast({
-      //       message: '请填写店铺类型',
-      //       position: 'middle',
-      //       duration: 3000
-      //     });
-      //   }else if( !this.provinceId || !this.cityId || !this.districtId) {
-      //     this.$toast({
-      //       message: '请选择所在地区',
-      //       position: 'middle',
-      //       duration: 3000
-      //     });
-      //   }else if(!this.lat || !this.lng) {
-      //     this.$toast({
-      //       message: '请选择小区/大厦/学校',
-      //       position: 'middle',
-      //       duration: 3000
-      //     });
-      //   }
-      //   else if(!this.address) {
-      //     this.$toast({
-      //       message: '请填写详细地址',
-      //       position: 'middle',
-      //       duration: 3000
-      //     });
-      //   }else if(!this.machineTypeIdsArray) {
-      //     this.$toast({
-      //       message: '请选择设备功能',
-      //       position: 'middle',
-      //       duration: 3000
-      //     });
-      //   }
-      // }
+      
       if(this.shopName!=false && this.shopType!=false && this.provinceId != false && this.cityId !=false && this.provinceId != false && this.address != false && this.lat !=false && this.lng != false && this.machineTypeIdsArray !=false ) {
         let changeisReserve = (this.isReserve==true)? 0 :1;
         let obj = {
@@ -677,7 +631,7 @@ export default {
           isReserve: changeisReserve,
           orderLimitMinutes: this.orderLimitMinutes,
           workTime: this.addBusinessTime,
-          imageId: this.imageId
+          organization: this.organization
         };
         let res = await addOrEditShopFun(qs.stringify(obj));
         if(res.code===0) {
@@ -731,135 +685,6 @@ export default {
             duration: 3000
           });
       }
-      // if(!this.address) {
-      //   this.$toast({
-      //       message: '请填写详细地址',
-      //       position: 'middle',
-      //       duration: 3000
-      //     });
-      // }else {
-      //   if(this.isReserve) {
-      //     if(this.orderLimitMinutes>0 && this.orderLimitMinutes<10) {
-      //       //传值位置
-      //       if(this.machineTypeIdsArray) {
-      //         if(this.lng && this.lat) {
-      //           let changeisReserve = (this.isReserve==true)? 0 :1;
-      //           let obj = {
-      //             shopId: this.$route.query.shopId,
-      //             shopName: this.shopName,
-      //             shopType: this.shopType,
-      //             provinceId: this.provinceId,
-      //             cityId: this.cityId,
-      //             districtId: this.districtId,
-      //             address: this.address,
-      //             lat:this.lat,
-      //             lng:this.lng,
-      //             machineTypeIds: this.machineTypeIdsArray,
-      //             isReserve: changeisReserve,
-      //             orderLimitMinutes: this.orderLimitMinutes,
-      //             workTime: this.addBusinessTime,
-      //             imageId: this.imageId
-      //           };
-      //           let res = await addOrEditShopFun(qs.stringify(obj));
-      //           if(res.code===0) {
-      //             //成功后的操作
-      //             let instance = this.$toast({
-      //             message: '编辑成功',
-      //             iconClass: 'mint-toast-icon mintui mintui-success'
-      //             });
-      //             setTimeout(() => {
-      //             instance.close();
-      //             }, 1000);
-      //             this.$router.push({
-      //             name:'shopList'
-      //             });
-      //           }
-      //           else {
-      //             this.$toast({
-      //               message: res.msg,
-      //               position: 'middle',
-      //               duration: 3000
-      //             });
-      //           }
-      //         }
-      //         else {
-      //           this.$toast({
-      //             message: '请选择小区/大厦/学校',
-      //             position: 'middle',
-      //             duration: 3000
-      //           });
-      //         }
-      //       }
-      //       else {
-      //         this.$toast({
-      //           message:'请选择设备类型',
-      //           position:'middle',
-      //           duration:3000
-      //         });
-      //       }
-      //     }
-      //     else {
-      //       this.$toast({
-      //         message:'请填个位数的时长',
-      //         position:'middle',
-      //         duration:3000
-      //       });
-      //       this.orderLimitMinutes = '';
-      //     }
-      //   }
-      //   else {
-      //     //传值位置
-      //     if(this.machineTypeIdsArray) {
-      //       console.log(this.list[2].value,this.lat,this.lng);
-      //       let changeisReserve = (this.isReserve==true)? 0 :1;
-      //       let obj = {
-      //         shopId: this.$route.query.shopId,
-      //         shopName: this.shopName,
-      //         shopType: this.shopType,
-      //         provinceId: this.provinceId,
-      //         cityId: this.cityId,
-      //         districtId: this.districtId,
-      //         address: this.address,
-      //         lat:this.lat,
-      //         lng:this.lng,
-      //         machineTypeIds: this.machineTypeIdsArray,
-      //         isReserve: changeisReserve,
-      //         orderLimitMinutes: this.orderLimitMinutes,
-      //         workTime: this.addBusinessTime,
-      //         imageId: this.imageId
-      //       };
-
-      //       let res = await addOrEditShopFun(qs.stringify(obj));
-      //       if(res.code===0) {
-      //         //成功后的操作
-      //         let instance = this.$toast({
-      //         message: '编辑成功',
-      //         iconClass: 'mint-toast-icon mintui mintui-success'
-      //         });
-      //         setTimeout(() => {
-      //         instance.close();
-      //         }, 1000);
-      //         this.$router.push({
-      //         name:'shopList'
-      //         });
-      //       }
-      //       else {
-      //         this.$toast({
-      //           message: res.msg,
-      //           position: 'middle',
-      //           duration: 3000
-      //         });
-      //       }
-      //     }
-      //     else {
-      //       this.$toast({
-      //         message:'请选择设备类型',
-      //         position:'middle',
-      //         duration:3000
-      //       });
-      //     }
-      //   }
-      // }
     },
     //省市区联动
     async getArea() {
@@ -926,28 +751,16 @@ export default {
         this.orderLimitMinutes = res.data.orderLimitMinutes;
         //营业时间
         this.addBusinessTime = res.data.workTime;      
-        //逆地理坐标
-        let lnglatXY = [this.lng, this.lat]; //已知点坐标
-        let _this = this;
-        AMap.plugin('AMap.Geocoder',function() {
-          var geocoder = new AMap.Geocoder({
-            extensions: "all"
-          });
-          geocoder.getAddress(lnglatXY, function(status, result) {
-              if(status === 'complete' && result.info === 'OK') {
-                  _this.geocoder_CallBack(result.regeocode.formattedAddress);
-              }
-              else {
-                this.$toast({
-                  message: '定位有问题',
-                  position: 'middle',
-                  duration: 3000
-                });
-              }
-          });        
-        });
 
-        this.geocoder_CallBack();
+        
+        if(res.data.organization) {
+          if(res.data.organization.length>5) {
+            this.list[2].value = res.data.organization.slice(0,5) + '...';
+          }
+          else {
+            this.list[2].value = res.data.organization;
+          }
+        }
 
         //省、市、区
         this.provinceId = res.data.provinceId;
@@ -957,6 +770,9 @@ export default {
         this.cityName = res.data.cityName;
         this.districtName = res.data.districtName;
         console.log('created:',this.provinceId);
+
+
+        this.addressSlots[0].defaultIndex = 2;
         // //省
         // let objPro = { parentId: 0 };
         // let resPro = await areaListFun(qs.stringify(objPro));
@@ -1000,20 +816,7 @@ export default {
     },
     async getShoplist() {
       let res = await manageListFun();
-    },
-    geocoder_CallBack(data) {
-      this.list[2].value = data;
-      if(this.list[1].value) {
-        if(this.list[2].value) {
-          if(this.list[2].value.slice(this.list[1].value.length).length >9 ) {
-            this.list[2].value = this.list[2].value.slice(this.list[1].value.length).slice(0,10) + '...';
-          }
-          else {
-            this.list[2].value = this.list[2].value.slice(this.list[1].value.length);
-          }
-        }
-      }
-     }
+    }
   },
   created() {
     this.getShopDetail();
@@ -1027,6 +830,7 @@ export default {
         this.list[2].value = this.$route.query.special.length >9 ? this.$route.query.special.slice(0,10) +'...' : this.$route.query.special;
         this.lng = this.$route.query.lng;
         this.lat = this.$route.query.lat;
+        this.organization = this.$route.query.special;
       }
       else if(from.name == 'shopDetail'){
         location.reload();

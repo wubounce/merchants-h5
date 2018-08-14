@@ -53,17 +53,18 @@ export default {
       list:[],
       shopdetail:{},
       completeAddress:'',
-      address:'',
       what:'',
       lng:'',
       lat:'',
-      formattedAddress:''
+      formattedAddress:'',
+      provinceName:'',
+      cityName:'',
+      districtName:'',
+      organization:'',
+      address:''
     };
   },
   methods:{
-    geocoder_CallBack(data) {
-      this.completeAddress = data + this.address;
-    },
     isDeleteOrNot(id) {
       MessageBox.confirm('确认删除店铺？','').then(async () => {
         let payload = {shopId: id};
@@ -107,7 +108,13 @@ export default {
         //店铺类型
         this.shopdetail.shopType = res.data.shopTypeName;
         //店铺地址
+        this.provinceName = res.data.provinceName;
+        this.cityName = res.data.cityName;
+        this.districtName = res.data.districtName;
+        this.organization = res.data.organization;
         this.address = res.data.address;
+
+        this.completeAddress = this.provinceName + this.cityName + this.districtName + this.organization + this.address;
         //预约时长
         
         if(res.data.orderLimitMinutes) {
@@ -116,27 +123,6 @@ export default {
         else {
           this.shopdetail.orderLimitMinutes = 0;
         }
-
-        //逆地理坐标
-        let lnglatXY = [this.lng, this.lat]; //已知点坐标
-        let _this = this;
-        AMap.plugin('AMap.Geocoder',function() {
-          var geocoder = new AMap.Geocoder({
-            //radius: 1000,
-            extensions: "all"
-          });
-          geocoder.getAddress(lnglatXY, function(status, result) {
-              if (status === 'complete' && result.info === 'OK') {
-                console.log(result);
-                  _this.geocoder_CallBack(result.regeocode.formattedAddress);
-              }
-              else {
-                MessageBox.alert('地点出bug啦');
-              }
-          });        
-        });
-
-        this.geocoder_CallBack();
       }
     }
   },

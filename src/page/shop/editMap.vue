@@ -52,6 +52,7 @@ export default {
     this.mapCity = this.$route.query.mapCity;
     if(this.mapCity) {
       this.mapCity = this.mapCity.slice(0,this.mapCity.length-1);
+      console.log(this.mapCity);
     }
   },
   mounted() {
@@ -79,6 +80,7 @@ export default {
       var autocomplete= new AMap.Autocomplete(autoOptions);
 
       AMap.event.addListener(autocomplete, "select", function(e){
+        console.log(e);
         _this.getLatLng("editShop",_this.shopId,e.poi.location.lat,e.poi.location.lng,e.poi.name);
       });
     });

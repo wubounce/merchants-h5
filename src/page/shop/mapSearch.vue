@@ -79,7 +79,7 @@ export default {
       var autocomplete= new AMap.Autocomplete(autoOptions);
 
       AMap.event.addListener(autocomplete, "select", function(e){
-      //console.log(e);
+      console.log(e);
         _this.getLatLng("addShop",e.poi.location.lat,e.poi.location.lng,e.poi.name);
       });
     });

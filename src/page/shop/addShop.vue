@@ -229,7 +229,8 @@ export default {
       isReserve:true,
       lat:'',
       lng:'',
-      mapCity:''
+      mapCity:'',
+      organization:''
     };
   },
   methods:{
@@ -584,7 +585,8 @@ export default {
           isReserve: changeisReserve,
           orderLimitMinutes: this.orderLimitMinutes,
           // workTime: this.addBusinessTime,   下个版本有营业时间
-          imageId: this.imageId
+          imageId: this.imageId,
+          organization:this.organization
         };
         let res = await addOrEditShopFun(qs.stringify(obj));
         if(res.code===0) {
@@ -739,6 +741,7 @@ export default {
         }
         this.lng = this.$route.query.lng;
         this.lat = this.$route.query.lat;
+        this.organization = this.$route.query.special;
       }
       else if(from.name == 'shopList'){
         location.reload();
