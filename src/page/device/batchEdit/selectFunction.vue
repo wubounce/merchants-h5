@@ -95,7 +95,7 @@ export default {
     methods: {
        checkData(val,index,name,flag) {
         let reg = /^\+?[1-9][0-9]*$/;  //验证非0整数
-        let reg1 = /(^[0-9]{1,}[0-9,]{0,}[0-9]{1,}$)|(^[0-9]{1}$)/;  //验证非0正整数h和带二r位小数字非0正整数
+        let reg1 = /^[0-9]+([.]{1}[0-9]{1,2})?$/;  //验证非0正整数h和带二r位小数字非0正整数
         if(!val){
           this.$toast("输入内容不能为空");
           this.nullDisable = true;
@@ -159,30 +159,43 @@ export default {
       },  
      
       async goNext() {
-        let query = this.$route.query;
-        let arr= [].concat(JSON.parse(JSON.stringify(this.funTypeList))); 
-        arr.forEach(item=>{
-          return item.ifOpen=item.ifOpen?0:1;
-        });
-        let obj ={
-          subTypeId: query.subTypeId,
-          shopId: query.shopId,
-          functionTempletType: this.functionTempletType,
-          functionJson: JSON.stringify(arr)
-        };
-        let res = await batchEditFun(qs.stringify(obj));
-          if(res.code === 0) {
-            let instance = this.$toast({
-              message: '批量修改成功',
-              iconClass: 'mint-toast-icon mintui mintui-success'
-            });
-            setTimeout(() => {
-              instance.close();
-              this.$router.push({name:'deviceMange'});
-              }, 2000);
-          }else {
-            this.$toast(res.msg);
+        let count = 0;
+        let len = this.funTypeList.length;
+        this.funTypeList.forEach(item=>{
+          if(item.ifOpen === false){
+            count++;
           }
+        });
+        if(count !== len){
+          let query = this.$route.query;
+          let arr= [].concat(JSON.parse(JSON.stringify(this.funTypeList))); 
+          arr.forEach(item=>{
+            return item.ifOpen=item.ifOpen?0:1;
+          });
+          let obj ={
+            subTypeId: query.subTypeId,
+            shopId: query.shopId,
+            functionTempletType: this.functionTempletType,
+            functionJson: JSON.stringify(arr)
+          };
+          let res = await batchEditFun(qs.stringify(obj));
+            if(res.code === 0) {
+              let instance = this.$toast({
+                message: '批量修改成功',
+                iconClass: 'mint-toast-icon mintui mintui-success'
+              });
+              setTimeout(() => {
+                instance.close();
+                this.$router.push({name:'deviceMange'});
+                }, 2000);
+            }else {
+              this.$toast(res.msg);
+            }
+        }else{
+          this.$toast("状态列表不能全部关闭");
+          return false;
+        }
+        
       }
 
     },

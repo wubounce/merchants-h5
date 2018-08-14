@@ -174,27 +174,27 @@
       },
       checkData(val,index,name,flag) {
         let reg = /^\+?[1-9][0-9]*$/;  //验证非0整数
-        let reg1 = /^[1-9][0-9]?(\.\d)?$/;  //验证非0正整数h和带一位小数字非0正整数
+        let reg1 = /^[0-9]+([.]{1}[0-9]{1,2})?$/;  //验证非0正整数h和带二r位小数字非0正整数
         if(!val){
-          this.$toast("输入框不能为空");
+          this.$toast("输入内容不能为空");
           this.nullDisable = true;
         }else{
           this.nullDisable = false;
         }
         if(flag ===0 && !reg.test(val)) {
-          this.$toast("请输入非0正整数");
+          this.$toast("耗时格式有误");
           this.timeIsDisable= true;
         }else{
           this.timeIsDisable= false;
         }
         if(flag ===1 && !reg1.test(val)) {
-          this.$toast("请输入一位小数正整数");
+          this.$toast("价格格式有误");
           this.priceIsDisable = true;
         }else{
           this.priceIsDisable = false;
         }
-        if(flag ===2 && !reg1.test(val)) {
-          this.$toast("请输入一位小数正整数");
+        if(flag ===2 && !reg.test(val)) {
+          this.$toast("脉冲格式有误");
           this.codeIsDisable = true;
         }else{
           this.codeIsDisable= false;
@@ -272,7 +272,7 @@
           });
         }
         else {
-          MessageBox.alert(res.msg);
+           this.$toast(res.msg);
         }
       }, 
       async checkDeviceSelect() { //获取店铺
@@ -359,13 +359,25 @@
           this.title = "功能列表";
       },
       goNext(){ //功能列表确认
-      if(!this.isDisable) {
-        MessageBox.confirm('您确定要更改吗？').then(action => {       
-          this.setModelShow= false;
-          this.modelShow = true;
-          this.title = "编辑设备";
+        let count = 0;
+        let len = this.functionList.length;
+        this.functionList.forEach(item=>{
+          if(item.ifOpen === false){
+            count++;
+          }
         });
-      }else{
+        if(count !== len){
+          if(!this.isDisable) {
+            MessageBox.confirm('您确定要更改吗？').then(action => {       
+              this.setModelShow= false;
+              this.modelShow = true;
+              this.title = "编辑设备";
+            });
+          }else{
+            return false;
+          }
+        }else{
+          this.$toast("状态列表不能全部关闭");
           return false;
         }
       },

@@ -62,6 +62,9 @@ const Web = {
           needResult: 1, // 默认为0，扫描结果由微信处理，1则直接返回扫描结果，
           success: function (res) {
             cb(res.resultStr)
+          },
+          error: function(){
+            console.log("11");
           }
         });
         return

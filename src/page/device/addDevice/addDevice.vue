@@ -145,7 +145,6 @@
         selectedIndex: -1,
         itemName:["functionName","needMinutes","functionPrice","ifOpen"],
         functionSetList: [],
-        jsonArr:[],
         getJsonArr:[],
         ok: true,
         isDisable: false,
@@ -204,7 +203,7 @@
       },
       checkData(val,index,name,flag) {
         let reg = /^\+?[1-9][0-9]*$/;  //验证非0整数
-        let reg1 = /(^[0-9]{1,}[0-9,]{0,}[0-9]{1,}$)|(^[0-9]{1}$)/;  //验证非0正整数h和带二r位小数字非0正整数
+        let reg1 = /^[0-9]+([.]{1}[0-9]{1,2})?$/;  //验证非0正整数和带一位小数字非0正整数
         if(!val){
           this.$toast("输入内容不能为空");
           this.nullDisable = true;
@@ -451,13 +450,25 @@
        
       },
       goNext(){ //功能列表确认
-        if(!this.isDisable) {
-          MessageBox.confirm('您确定要更改吗？').then(action => {       
-            this.setModelShow= false;
-            this.modelShow = true;
-            this.title = "新增设备";
-          });
+        let count = 0;
+        let len = this.functionSetList.length;
+        this.functionSetList.forEach(item=>{
+          if(item.ifOpen === false){
+            count++;
+          }
+        });
+        if(count !== len){
+          if(!this.isDisable) {
+            MessageBox.confirm('您确定要更改吗？').then(action => {       
+              this.setModelShow= false;
+              this.modelShow = true;
+              this.title = "新增设备";
+            });
+          }else{
+            return false;
+          }
         }else{
+          this.$toast("状态列表不能全部关闭");
           return false;
         }
       },

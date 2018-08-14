@@ -6,7 +6,7 @@
         <ul class="device-detail">
           <li class="device-detail-hd">
             <p>累计收益</p>
-            <p>{{deviceDetail.profit | keepTwoNum}}</p>
+            <p>{{deviceDetail.profit?deviceDetail.profit :'' | keepTwoNum}}</p>
           </li>
           <!-- 表单模块部分  -->
           <li class="device-detail-item">
@@ -164,7 +164,11 @@
     },
     filters: { //过滤器，过滤2位小数
       keepTwoNum(value) {
-       return Number(value).toFixed(2);
+       if(value){
+         return Number(value).toFixed(2);
+       }else{
+         return value;
+       }
       }
     },
     methods: {
@@ -477,6 +481,7 @@
       .active {
         color: #1890FF;
         border-color: #1890FF;
+        font-size: 14px;
       }
     }
   }
