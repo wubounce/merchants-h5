@@ -114,7 +114,12 @@ export default {
         this.organization = res.data.organization;
         this.address = res.data.address;
 
-        this.completeAddress = this.provinceName + this.cityName + this.districtName + this.organization + this.address;
+        if(this.provinceName == this.cityName.slice(0,this.cityName.length-1)) {
+          this.completeAddress = this.cityName + this.districtName + this.organization + this.address;
+        }
+        else {
+          this.completeAddress = this.provinceName + this.cityName + this.districtName + this.organization + this.address;
+        }
         //预约时长
         
         if(res.data.orderLimitMinutes) {
