@@ -14,6 +14,7 @@ export default {
       bottomStatus: null,//底部上拉加载状态
       translate: 0,//
       moveTranslate: 0,
+      accountOnlySix:true //收支明细六个月记录
     };
   },
   computed: {
@@ -26,11 +27,13 @@ export default {
   methods: {
     loadBottom() {
       // this.handleBottomChange("loading");//上拉时 改变状态码
+      this.accountOnlySix = false;
       this.page += 1;
       let allpage = Math.ceil(this.total/this.pageSize);
       if(this.page <= allpage){
         this._getList();
       }else{
+         this.accountOnlySix = true;
         this.allLoaded = true;//模拟数据加载完毕 禁用上拉加载
       }
       // this.handleBottomChange("loadingEnd");//数据加载完毕 修改状态码

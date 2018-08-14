@@ -42,7 +42,7 @@
                         </div> 
                     </div>   
                 </div>
-                <p class="info">只展示近6个月记录</p>  
+                <p class="info" v-if="accountOnlySix">只展示近6个月记录</p>  
             </div>
         </mt-loadmore>
     </div>
@@ -65,7 +65,8 @@ export default {
         {value:1,lable:'收入'},
         {value:3,lable:'支出'},
       ],
-      list:[]
+      list:[],
+
     };
   },
   mounted() {

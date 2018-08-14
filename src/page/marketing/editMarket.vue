@@ -98,8 +98,6 @@ export default {
       pickerEndDate: new Date(),
       title: '编辑限时优惠',
 
-
-
       shopVisible:false,
       checkshoptxt:'',
       shoplist:[],
@@ -155,7 +153,8 @@ export default {
           values: ['00','01', '02', '03', '04', '05', '06','07','08', '09', '10', '11', '12', '13','14','15','16','17','18','19','20','21','22','23'],
           className: 'slot1',
           textAlign: 'right',
-          defaultIndex:5
+          defaultIndex:0,
+          value: '00',
         },
         {
           divider: true,
@@ -168,7 +167,8 @@ export default {
           '30','31', '32', '33', '34', '35', '36','37','38', '39', '40', '41', '42', '43','44','45','46','47','48','49','50','51','52','53','54','55','56','57','58','59'],
           className: 'slot3',
           textAlign: 'left',
-          defaultIndex:0
+          defaultIndex:0,
+          value: '00',
         },
         {
           divider: true,
@@ -180,7 +180,8 @@ export default {
           values: ['00','01', '02', '03', '04', '05', '06','07','08', '09', '10', '11', '12', '13','14','15','16','17','18','19','20','21','22','23'],
           className: 'slot1',
           textAlign: 'right',
-          defaultIndex:23
+          defaultIndex:23,
+          value: '23',
         },
         {
           divider: true,
@@ -193,7 +194,8 @@ export default {
           '30','31', '32', '33', '34', '35', '36','37','38', '39', '40', '41', '42', '43','44','45','46','47','48','49','50','51','52','53','54','55','56','57','58','59'],
           className: 'slot3',
           textAlign: 'left',
-          defaultIndex:0
+          defaultIndex:59,
+          value: '59',
         }
       ],
     };
@@ -300,10 +302,10 @@ export default {
       this.weeklist = this.weeklist.filter(id => Number(id) !== 8&&Number(id) !== 9); //自动活动日去掉每天和周一至周五
     },
     chooseDay() {
-      this.activeTimeslots[0].defaultIndex = 0;
-      this.activeTimeslots[2].defaultIndex = 0;
-      this.activeTimeslots[4].defaultIndex = 23;
-      this.activeTimeslots[6].defaultIndex = 59;
+      this.$set(this.activeTimeslots[0],'defaultIndex',0);
+      this.$set(this.activeTimeslots[2],'defaultIndex',0);
+      this.$set(this.activeTimeslots[4],'defaultIndex',23);
+      this.$set(this.activeTimeslots[6],'defaultIndex',59);
     },
     changeTime(picker, values) {
       this.activeTimeCurrentTags = values[0]+':'+values[1]+'-'+ values[2]+':'+values[3];
@@ -397,7 +399,29 @@ export default {
   },
   components:{
     selectpickr
-  }
+  },
+  // watch:{
+  //   activeTimeslots: {
+  //     handler(val) {
+  //       if (val) {
+  //         setTimeout(() => {//这个是一个初始化默认值的一个技巧
+  //           this.$set(this.activeTimeslots[0],'defaultIndex',0);
+  //           this.$set(this.activeTimeslots[2],'defaultIndex',0);
+  //           this.$set(this.activeTimeslots[4],'defaultIndex',23);
+  //           this.$set(this.activeTimeslots[6],'defaultIndex',59);
+  //         }, 100);
+  //       } else {
+  //         this.$set(this.activeTimeslots[0],'defaultIndex',0);
+  //         this.$set(this.activeTimeslots[2],'defaultIndex',0);
+  //         this.$set(this.activeTimeslots[4],'defaultIndex',23);
+  //         this.$set(this.activeTimeslots[6],'defaultIndex',59);
+  //       }
+        
+  //     },
+  //     deep: true
+  //   }
+
+  // }
 };
 </script>
 <style type="text/css" lang="scss" scoped>
