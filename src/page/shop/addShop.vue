@@ -760,7 +760,7 @@ export default {
     .shopname-p {
       font-size: 16px;
       border-bottom: 1px solid #F8F8F8;
-      padding: 0.06rem;
+      padding: 0.26rem;
       span {
         display: inline-block;
         &:first-child {
@@ -801,7 +801,7 @@ export default {
       display: flex;
       justify-content: space-between;
       font-size: 16px;
-      padding: 0.3rem;
+      padding: 0.53rem;
       border-bottom: 1px solid #F8F8F8;
       background: url("../../../static/image/shop/right.png") no-repeat right
         0.3rem center;
@@ -824,7 +824,7 @@ export default {
       display: flex;
       justify-content: space-between;
       font-size: 16px;
-      padding: 0.3rem;
+      padding: 0.53rem;
       background-color: #fff;
       border-bottom: 1px solid #F8F8F8;
       background: url("../../../static/image/shop/right.png") no-repeat right
@@ -842,7 +842,7 @@ export default {
       justify-content: space-between;
       font-size: 16px;
       border-bottom: 1px solid #F8F8F8;
-      padding: 0.1rem;
+      padding: 0.24rem;
       span {
         &:first-child {
           padding-left:0.23rem;
@@ -858,7 +858,7 @@ export default {
     .reserveTime {
       font-size: 16px;
       border-bottom: 1px solid #F8F8F8;
-      padding: 0.06rem;
+      padding: 0.26rem;
       span {
         display: inline-block;
         &:first-child {
