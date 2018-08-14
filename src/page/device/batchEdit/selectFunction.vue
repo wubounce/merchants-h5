@@ -22,17 +22,18 @@
       <div v-for="(item,index) in funTypeList" :key="index">
         <span class="fun-list-item">{{item.functionName}}</span>
         <span class="fun-list-item" v-if="!isShow2">{{item.needMinutes}}</span>
-        <input type="text" class="fun-list-item" v-model.lazy="item.needMinutes" v-if="isShow2"/>
-        <input type="text" class="fun-list-item" v-model.lazy="item.functionPrice"/>
-        <input type="text" class="fun-list-item" v-model.lazy="item.functionCode" v-if="isShow2"/>
+        <input type="number" class="fun-list-item" v-model="item.needMinutes" v-if="isShow2" @change="checkData(item.needMinutes,index,'needMinutes',0)" min=0/>
+        <input type="number" class="fun-list-item" v-model="item.functionPrice" @change="checkData(item.functionPrice,index,'functionPrice',1)" min=0/>
+        <input type="number" class="fun-list-item" v-model="item.functionCode" v-if="isShow2" @change="checkData(item.functionCode,index,'functionCode',2)" min=0/>
         <p class="fun-list-item">
           <mt-switch v-model="item.ifOpen"></mt-switch>
         </p>
       </div>
     </section>
+    <div class="searchNoItem" v-show="funTypeList.length<=0">暂无功能列表</div>
     <div style="width:100%;height:1.73rem;"></div>
     <section>
-      <button class="submitBtn" @click="goNext" :disabled="hasNoData" :class="{'noClick':hasNoData}">确定</button>
+      <button class="submitBtn" @click="goNext" :class="{'default':isDisable}" :disabled="isDisable">确定</button>
     </section> 
   </section>
 </template>
@@ -50,6 +51,11 @@ export default {
         getJsonArr: [],
         selectedFunction: '',
         functionTempletType: '',
+        isDisable: false,
+        nullDisable: false,
+        timeIsDisable: false,
+        priceIsDisable: false,
+        codeIsDisable: false,
         hdTitleArr: [
           "1.请选择相应店铺",
           "2.请选择设备类型",
@@ -87,6 +93,39 @@ export default {
       };
     },
     methods: {
+       checkData(val,index,name,flag) {
+        let reg = /^\+?[1-9][0-9]*$/;  //验证非0整数
+        let reg1 = /(^[0-9]{1,}[0-9,]{0,}[0-9]{1,}$)|(^[0-9]{1}$)/;  //验证非0正整数h和带二r位小数字非0正整数
+        if(!val){
+          this.$toast("输入内容不能为空");
+          this.nullDisable = true;
+        }else{
+          this.nullDisable = false;
+        }
+        if(flag ===0 && !reg.test(val)) {
+          this.$toast("耗时格式有误");
+          this.timeIsDisable= true;
+        }else{
+          this.timeIsDisable= false;
+        }
+        if(flag ===1 && !reg1.test(val)) {
+          this.$toast("价格格式有误");
+          this.priceIsDisable = true;
+        }else{
+          this.priceIsDisable = false;
+        }
+        if(flag ===2 && !reg.test(val)) {
+          this.$toast("脉冲格式有误");
+          this.codeIsDisable = true;
+        }else{
+          this.codeIsDisable= false;
+        }
+        if(this.nullDisable || this.timeIsDisable || this.priceIsDisable || this.codeIsDisable){
+          this.isDisable = true;
+        }else{
+          this.isDisable = false;
+        }
+      },
       async checkFunctionSetClass() { //获取功能列表
         let query = this.$route.query;
         let obj ={
@@ -94,13 +133,8 @@ export default {
           shopId: query.shopId,
         };
         let res = await batchEditMachineListFun(qs.stringify(obj));
-          if(res.code === 0) {
-            if(!res.data.machineCount){
-              this.$toast("没有功能列表，不能批量编辑");
-              return false;
-            }else {
-              this.getFunctionSetList();
-            }
+          if(res.code === 0) {   
+            this.getFunctionSetList();
           }else{
             this.$toast(res.msg);
           }
@@ -139,7 +173,7 @@ export default {
         let res = await batchEditFun(qs.stringify(obj));
           if(res.code === 0) {
             let instance = this.$toast({
-              message: '批量编辑成功',
+              message: '批量修改成功',
               iconClass: 'mint-toast-icon mintui mintui-success'
             });
             setTimeout(() => {
@@ -363,6 +397,14 @@ export default {
       }
     }
   }
+  .searchNoItem {
+    font-size: 14px;
+    color: #999;
+    text-align: center;
+    height: 100%;
+    line-height: 100%;
+    padding-top: 4rem;
+   }
 
   .submitBtn {
     width: 100%;
@@ -376,5 +418,8 @@ export default {
   }
   .noClick {
     background-color: #cccccc;
+  }
+  .default {
+    opacity: 0.6;
   }
 </style>

@@ -42,7 +42,7 @@
           <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" @translate-change="translateChange" :auto-fill="false" ref="loadmore">
             <router-link tag="div" :to="{ name: 'deviceDetail', query:{machineId:item.machineId}}" class="device-list" v-for="(item,index) in list" :key="index">
               <section class="item-hd">
-                <span><b>{{item.machineName}}</b></span>
+                <span class="item-title "><b>{{item.machineName}}</b></span>
                 <span class="state">{{item.machineState}}</span>
               </section>
               <section class="item-bd">
@@ -337,6 +337,13 @@
       .item-hd {
         font-size: 0.43rem;
         color: rgba(51, 51, 51, 1);
+        .item-title {
+          width: 80%;
+          display: inline-block;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
         span {
           &:nth-child(2) {
             float: right;
