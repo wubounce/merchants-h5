@@ -655,7 +655,7 @@ export default {
           //在判断
           let reg=/^[1-9]+\d*$/;
           console.log(reg.test(this.orderLimitMinutes));
-          if(reg.test(this.orderLimitMinutes) &&parseInt(this.orderLimitMinutes) >0 && parseInt(this.orderLimitMinutes) <10 && text1.test(this.orderLimitMinutes)) {
+          if(reg.test(this.orderLimitMinutes) &&parseInt(this.orderLimitMinutes) >0 && parseInt(this.orderLimitMinutes) <10) {
             //传值
             let changeisReserve = (this.isReserve==true)? 0 :1;
             let obj = {
