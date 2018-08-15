@@ -330,7 +330,7 @@ export default {
       color: #333;
     }
     .all-list {
-      height: 11.96rem;
+      height: 9.29rem;
       overflow-y: scroll;
     }
   }
