@@ -202,7 +202,7 @@
       checkItem(index) {
         this.selectedIndex = index;
       },
-      checkData(val,index,name,flag) { //功能列表输入验证
+      checkData(val,index,name,flag) {
         let reg = /^\+?[1-9][0-9]*$/;  //验证非0整数
         let reg1 = /^[0-9]+([.]{1}[0-9]{1,2})?$/;  //验证非0正整数和带一位小数字非0正整数
         if(flag ===0 && !reg.test(val)) {
@@ -215,6 +215,7 @@
           }
         }else{
           this.timeIsDisable= false;
+          this.nullDisable = false;
         }
         if(flag ===1 && !reg1.test(val)) {
           if(!val){
@@ -226,6 +227,7 @@
           }
         }else{
           this.priceIsDisable = false;
+          this.nullDisable = false;
         }
         if(flag ===2 && !reg.test(val)) {
           if(!val){
@@ -237,6 +239,7 @@
           }
         }else{
           this.codeIsDisable= false;
+          this.nullDisable = false;
         }
         if(this.nullDisable || this.timeIsDisable || this.priceIsDisable || this.codeIsDisable){
           this.isDisable = true;
@@ -246,23 +249,45 @@
         }
       },
       getCheckShop() {
-        this.fromdata.shopType.name = this.selectListA[this.selectedIndex].shopName;
-        this.fromdata.shopType.id = this.selectListA[this.selectedIndex].shopId;
+        if(this.fromdata.shopType.name !== this.selectListA[this.selectedIndex].shopName){
+          this.fromdata.shopType.name = this.selectListA[this.selectedIndex].shopName;
+          this.fromdata.shopType.id = this.selectListA[this.selectedIndex].shopId;
+          this.fromdata.secondType.name = "";
+          this.fromdata.secondType.id = "";
+          this.functionSetList = [];
+          this.fromdata.functionType.name = "未设置";
+        }else{
+          this.fromdata.shopType.name = this.selectListA[this.selectedIndex].shopName;
+          this.fromdata.shopType.id = this.selectListA[this.selectedIndex].shopId;
+        }
         this.companyVisible = false;
-        
-
       },
       getFirstValue() {
-        this.fromdata.firstType.name = this.functionList[this.selectedIndex].name;
-        this.fromdata.firstType.id = this.functionList[this.selectedIndex].id;
+        if(this.fromdata.firstType.name !== this.functionList[this.selectedIndex].name){
+          this.fromdata.firstType.name = this.functionList[this.selectedIndex].name;
+          this.fromdata.firstType.id = this.functionList[this.selectedIndex].id;
+          this.fromdata.secondType.name = "";
+          this.fromdata.secondType.id = "";
+          this.functionSetList = [];
+          this.fromdata.functionType.name = "未设置";
+        }else{
+          this.fromdata.firstType.name = this.functionList[this.selectedIndex].name;
+          this.fromdata.firstType.id = this.functionList[this.selectedIndex].id;
+        }
         this.parentType = false;
-        this.modifiedMarkup = true;
       },
       getSecondValue() {
-        this.fromdata.secondType.name = this.funList[this.selectedIndex].name;
-        this.fromdata.secondType.id = this.funList[this.selectedIndex].id;
+        if(this.fromdata.secondType.name !== this.funList[this.selectedIndex].name){
+          this.fromdata.secondType.name = this.funList[this.selectedIndex].name;
+          this.fromdata.secondType.id = this.funList[this.selectedIndex].id;
+          this.functionSetList = [];
+          this.fromdata.functionType.name = "未设置";
+          
+        }else{
+          this.fromdata.secondType.name = this.funList[this.selectedIndex].name;
+          this.fromdata.secondType.id = this.funList[this.selectedIndex].id;
+        }
         this.subType = false;
-        this.modifiedMarkup = true;
       },
       wxScan(name) { //微信扫码
         Web.scanQRCode(res => {
@@ -324,7 +349,7 @@
         }
       },
       async getFunctionSetList() {  //获取功能列表数据
-        if(!this.functionSetList.length || this.modifiedMarkup){
+        if(!this.functionSetList.length){
           let payload = {subTypeId: this.fromdata.secondType.id,shopId: this.fromdata.shopType.id} ;     
           let res = await getFunctionSetListFun(qs.stringify(payload));
           if(res.code === 0) {
