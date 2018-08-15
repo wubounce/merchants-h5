@@ -112,13 +112,6 @@ export default {
         return String(value).replace(/^(\d{4})\d{4}(\d+)/,"$1****$2");
     }
   },
-  directives: {
-      focus: {
-        inserted: function (el) {
-          el.focus();
-        }
-      }
-    }
 };
 </script>
 <style lang="scss" scoped>

@@ -87,6 +87,12 @@ Vue.directive('has', {
     }
   }
 });
+/**权限指令**/
+Vue.directive('focus', {
+  inserted: function (el, {value}) {
+    el.focus();
+  }
+});
 import { getMenu } from '@/utils/tool';
 //权限检查方法
 Vue.prototype.$_has = function(value) {
