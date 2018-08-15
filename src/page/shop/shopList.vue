@@ -22,7 +22,7 @@
                     </div>
                     <div class="kindof">
                       <div class="text">收益</div>
-                      <div class="text-value">{{ item.profit == '0' ? item.profit + '.00' : item.profit }}<span class="little-font">元</span></div>
+                      <div class="text-value">{{ item.profit }}<span class="little-font">元</span></div>
                     </div>
                   </div>
                   </router-link>
@@ -94,6 +94,27 @@ export default {
         else {
           this.list = res.data.items?[...this.list,...res.data.items]:[];  //分页添加
           this.total = res.data.total;
+          //格式化收益
+          for(let i=0;i<this.list.length; i++) {
+            //判断是否为0 
+            if(this.list[i].profit) {
+              //将number类型的数据转化成string
+              this.list[i].profit = this.list[i].profit+'';
+              //判断是不是'5'
+              if(this.list[i].profit.split('.').length == 1) {
+                this.list[i].profit = this.list[i].profit + '.00';
+              }
+              else {
+                //判断是不是'5.0'
+                if(this.list[i].profit.split('.')[1].length ==1) {
+                  this.list[i].profit = this.list[i].profit + '0';
+                }
+              }
+            }
+            else {
+              this.list[i].profit = '0.00';
+            }
+          }
         }
       }
       else {

@@ -98,11 +98,23 @@ export default {
         this.lng = res.data.lng;
         this.lat = res.data.lat;
         //累计收益
-        if(res.data.profit == 0) {
-          this.shopdetail.profit = res.data.profit + '.00';
+        this.shopdetail.profit = res.data.profit;
+        if(this.shopdetail.profit) {
+          //将number类型的数据转化成string
+          this.shopdetail.profit = this.shopdetail.profit+'';
+          //判断是不是'5'
+          if(this.shopdetail.profit.split('.').length == 1) {
+            this.shopdetail.profit = this.shopdetail.profit + '.00';
+          }
+          else {
+            //判断是不是'5.0'
+            if(this.shopdetail.profit.split('.')[1].length ==1) {
+              this.shopdetail.profit = this.shopdetail.profit + '0';
+            }
+          }
         }
         else {
-          this.shopdetail.profit = res.data.profit;
+          this.shopdetail.profit = '0.00';
         }
         
         //店铺类型
