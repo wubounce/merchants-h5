@@ -259,19 +259,6 @@ export default {
           });
       }
 
-      //校验名字的特殊字符'-'和'_'
-      let arr = e.target.value.split('');
-      for (let i=0; i<e.target.value.length; i++) {
-        if(arr[i] == '-' || arr[i] == '_' || arr[i] == '——') {
-          if(arr[i+1] == '-' || arr[i+1] == '_' || arr[i] == '——') {
-            this.$toast({
-              message: '店铺名称不符合规范，请重新输入',
-              position: 'top',
-              duration: 3000
-            });
-          }
-        }
-      }
       //校验重名
       for(let i=0; i<this.arrName.length; i++) {
         if(e.target.value == this.arrName[i]) {
