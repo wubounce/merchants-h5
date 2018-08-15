@@ -5,7 +5,7 @@
       <span @click="open('picker2')">{{startDate}}<i class="iconfont icon-xiangxiajiantou select-back"></i></span>至<span @click="open('picker3')">{{endDate}}<i class="iconfont icon-xiangxiajiantou select-back"></i></span>
     </div>
     <div class="slectdata shopchoose">
-      <span @click="popupVisible=true">{{currentTags?currentTags.shopName:'全部店铺'}}<i class="iconfont icon-xiangxiajiantou select-back"></i></span>
+      <span @click="popupVisible=true">{{currentTags?currentTags.shopName:'全部店铺'}}</span><i class="iconfont icon-xiangxiajiantou select-back"></i>
       <selectpickr :visible="popupVisible" :slots="shopSlots" :valueKey="shopName" @selectpicker="shopselectpicker" @onpickstatus="shopselectpickertatus"> </selectpickr>
     </div>
   </div>
@@ -508,12 +508,15 @@ export default {
     }
   }
   .shopchoose {
-    width: 40%;
+    width: 30%;
     margin-left: .2rem;
     span {
-      width: 100% !important;
+      width: 4.67rem !important;
       display: inline-block;
       color: #666;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
     }
   }
   .mint-popup {
