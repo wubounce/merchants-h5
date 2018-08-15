@@ -375,17 +375,15 @@
           }
         });
         if(count !== len){
-          if(!this.isDisable) {
-            MessageBox.confirm('您确定要更改吗？').then(action => {       
-              this.setModelShow= false;
-              this.modelShow = true;
-              this.title = "编辑设备";
-            });
+          if(!this.isDisable) {             
+            this.setModelShow= false;
+            this.modelShow = true;
+            this.title = "编辑设备";
           }else{
             return false;
           }
         }else{
-          this.$toast("状态列表不能全部关闭");
+          this.$toast("请至少开启1个设备功能");
           return false;
         }
       },

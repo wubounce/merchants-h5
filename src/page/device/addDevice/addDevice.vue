@@ -204,7 +204,7 @@
       },
       checkData(val,index,name,flag) {
         let reg = /^\+?[1-9][0-9]*$/;  //验证非0整数
-        let reg1 = /^[0-9]+([.]{1}[0-9]{1,2})?$/;  //验证非0正整数和带一位小数字非0正整数
+        let reg1 = /^[0-9]+([.]{1}[0-9]{1,2})?$/;  //验证非0正整数和二位小数字
         if(flag ===0 && !reg.test(val)) {
           if(!val){
             this.$toast("输入内容不能为空");
@@ -487,18 +487,16 @@
           }
         });
         if(count !== len){
-          if(!this.isDisable) {
-            MessageBox.confirm('您确定要更改吗？').then(action => {       
-              this.setModelShow= false;
-              this.modelShow = true;
-              this.modifiedMarkup = false;
-              this.title = "新增设备";
-            });
+          if(!this.isDisable) {     
+            this.setModelShow= false;
+            this.modelShow = true;
+            this.modifiedMarkup = false;
+            this.title = "新增设备";
           }else{
             return false;
           }
         }else{
-          this.$toast("状态列表不能全部关闭");
+          this.$toast("请至少开启1个设备功能");
           return false;
         }
       },

@@ -93,10 +93,29 @@
       },
       async fetchData(e) {
         let keywords = this.keyword;
+        let _this = this;
         let payload = {shopName: keywords,hasMachine: true};
         let res = await shopSearchFun(qs.stringify(payload));
           if(res.code === 0) {
-            this.shopList = res.data;  
+            this.shopList= res.data; 
+            this.shopList.forEach(item=>{
+              let lat = item.lat;
+              let lng = item.lng;
+              let lnglatXY = [lng,lat]; //已知点坐标
+              this.address = item.address;
+              AMap.plugin('AMap.Geocoder',function() {
+                var geocoder = new AMap.Geocoder({
+                  //radius: 1000,
+                  extensions: "all"
+                });
+                geocoder.getAddress(lnglatXY, function(status, result) {
+                    if (status === 'complete' && result.info === 'OK') {
+                      item.address = _this.geocoder_CallBack(result.regeocode.formattedAddress);                   
+                    }
+                }); 
+                
+              });
+          });    
           }
       },
       selectClick: function (index,name) {
@@ -112,7 +131,7 @@
             query: ({shopId: id})
           });
         }else{
-          this.$toast("请先选择店铺");
+          this.$toast("请选择一个店铺");
         }
       },
       clearInput: function () {

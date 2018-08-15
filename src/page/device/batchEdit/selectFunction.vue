@@ -205,7 +205,7 @@ export default {
               this.$toast(res.msg);
             }
         }else{
-          this.$toast("状态列表不能全部关闭");
+          this.$toast("请至少开启1个设备功能");
           return false;
         }
         
