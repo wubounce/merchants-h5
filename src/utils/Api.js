@@ -5,7 +5,7 @@
 
 const Api = {
   // 获取config 接口
-  WECHAT_SIGN: 'faker' //TODO
+  WECHAT_SIGN: '/common/getWxConfig' //TODO
 };
 
 export default Api;

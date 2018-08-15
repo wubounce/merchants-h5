@@ -87,7 +87,7 @@
     methods: {
       async fetchData(e) {
         let keywords = this.keyword;
-        let payload = {shopName: keywords};
+        let payload = {shopName: keywords,hasMachine:true};
         let res = await shopSearchFun(qs.stringify(payload));
           if(res.code === 0) {
             this.shopList = res.data;  
