@@ -27,7 +27,7 @@
                   </div>
                   </router-link>
                 </li>
-            <div v-if="allLoaded" class="nomore-data">没有更多了</div>
+            <div v-if="moreOrthen()" class="nomore-data">没有更多了</div>
           </mt-loadmore>
         </div>
       </ul>
@@ -54,10 +54,14 @@ export default {
        page: 1,//页码
        pageSize:10,
        total:null,
-       allLoaded: false//数据是否加载完毕
+       allLoaded: false,//数据是否加载完毕
+       lessTen:true
     };
   },
   methods: {
+    moreOrthen() {
+      return (this.allLoaded && this.lessTen);
+    },
     loadBottom() {
       this.page += 1;
       let allpage = Math.ceil(this.total/this.pageSize);
@@ -93,7 +97,13 @@ export default {
         }
         else {
           this.list = res.data.items?[...this.list,...res.data.items]:[];  //分页添加
+          //判断是否超过10条
           this.total = res.data.total;
+          if(this.total<10) {
+            this.lessTen = false;
+          }else {
+            this.lessTen = true;
+          }
           //格式化收益
           for(let i=0;i<this.list.length; i++) {
             //判断是否为0 
