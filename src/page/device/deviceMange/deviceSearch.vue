@@ -3,7 +3,7 @@
     <div class="search">
       <div class="search-input">
         <p class="left" :class="{ 'result-left': isResult }">
-          <input type="text" v-model.trim="keyword" placeholder="请输入设备名称/IMEI 号" @input="inputHandle">
+          <input type="text" v-model.trim="keyword" placeholder="请输入设备名称/IMEI 号" @input="inputHandle" ref="inputText">
           <span>
             <span @click="wxScan"><img src="../../../assets/img/device/devic_scan_icon.jpeg"></span>
             <span class="gap-border"></span>
@@ -162,6 +162,10 @@ import {delay } from "@/utils/tool";
     created() {
       let query = this.$route.query;
       if(query.imei)this.search(query.imei);
+    },
+
+    mounted() {
+      this.$refs.inputText.focus();
     },
 
     watch: {
