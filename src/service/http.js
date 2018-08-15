@@ -58,6 +58,11 @@ http.interceptors.response.use(
           location.reload();
         });
       }
+      if (response.data.code === 7004) {
+        store.dispatch('LogOut').then(() => {
+          location.reload();
+        });
+      }
       return Promise.resolve(response.data);
 
     }else {
