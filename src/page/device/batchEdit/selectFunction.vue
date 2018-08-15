@@ -93,7 +93,7 @@ export default {
       };
     },
     methods: {
-        checkData(val,index,name,flag) {
+      checkData(val,index,name,flag) {
         let reg = /^\+?[1-9][0-9]*$/;  //验证非0整数
         let reg1 = /^[0-9]+([.]{1}[0-9]{1,2})?$/;  //验证非0正整数和带一位小数字非0正整数
         if(flag ===0 && !reg.test(val)) {
@@ -106,6 +106,7 @@ export default {
           }
         }else{
           this.timeIsDisable= false;
+          this.nullDisable = false;
         }
         if(flag ===1 && !reg1.test(val)) {
           if(!val){
@@ -117,6 +118,7 @@ export default {
           }
         }else{
           this.priceIsDisable = false;
+          this.nullDisable = false;
         }
         if(flag ===2 && !reg.test(val)) {
           if(!val){
@@ -128,6 +130,7 @@ export default {
           }
         }else{
           this.codeIsDisable= false;
+          this.nullDisable = false;
         }
         if(this.nullDisable || this.timeIsDisable || this.priceIsDisable || this.codeIsDisable){
           this.isDisable = true;

@@ -185,6 +185,7 @@
           }
         }else{
           this.timeIsDisable= false;
+          this.nullDisable = false;
         }
         if(flag ===1 && !reg1.test(val)) {
           if(!val){
@@ -196,6 +197,7 @@
           }
         }else{
           this.priceIsDisable = false;
+          this.nullDisable = false;
         }
         if(flag ===2 && !reg.test(val)) {
           if(!val){
@@ -207,6 +209,7 @@
           }
         }else{
           this.codeIsDisable= false;
+          this.nullDisable = false;
         }
         if(this.nullDisable || this.timeIsDisable || this.priceIsDisable || this.codeIsDisable){
           this.isDisable = true;
@@ -216,8 +219,15 @@
         }
       },
       getCheckShop() {
-        this.fromdata.shopType.name = this.selectListA[this.selectedIndex].shopName;
-        this.fromdata.shopType.id = this.selectListA[this.selectedIndex].shopId;
+        if(this.fromdata.shopType.name !== this.selectListA[this.selectedIndex].shopName){
+          this.fromdata.shopType.name = this.selectListA[this.selectedIndex].shopName;
+          this.fromdata.shopType.id = this.selectListA[this.selectedIndex].shopId;
+          this.functionSetList = [];
+          this.fromdata.functionType.name = "未设置";
+        }else{
+          this.fromdata.shopType.name = this.selectListA[this.selectedIndex].shopName;
+          this.fromdata.shopType.id = this.selectListA[this.selectedIndex].shopId;
+        }
         this.companyVisible = false;
       },
       wxScan() { //微信扫码
