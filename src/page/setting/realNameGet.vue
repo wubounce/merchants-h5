@@ -9,8 +9,8 @@
        <p class="imgShow">{{item.status}}</p>
        <div class="bgc">
           <img :src="item.idcardFont" alt="身份证正面照">
-          <img :src="item.idcardImg" alt="身份证反面照">
-          <img :src="item.idcardReverse" alt="身份证手持照">
+          <img :src="item.idcardReverse" alt="身份证反面照">
+          <img :src="item.idcardImg" alt="身份证手持照">
        </div>
    </section>
 </template>
