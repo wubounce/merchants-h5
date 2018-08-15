@@ -28,7 +28,7 @@
     </div>
     <div class="pei-wrap">
       <div class="lineechart-title pie-title">
-        <span class="linetitle">收益分布 <span @click="distributionVisible = true;" class="choose-select choose-select-type" v-if="parentTypList.length>0">{{distributioncurrentTags?distributioncurrentTags.name:'洗衣机'}}<i class="iconfont icon-xiangxiajiantou select-back"></i></span></span>
+        <span class="linetitle">收益分布 <span @click="distributionVisible = true;" class="choose-select choose-select-type" v-if="parentTypList.length>0">{{distributioncurrentTags?distributioncurrentTags.name:hasWashingMachine}}<i class="iconfont icon-xiangxiajiantou select-back"></i></span></span>
         <span class="linedata">
            <span :class="['linedatachoose', {linecurrent: pieSearchIndex === index}]" v-for="(item,index) in lineSearchTime" @click="pieTimeSearch(index)">{{item.lable}}</span>
         </span>
@@ -91,6 +91,7 @@ export default {
       pietypechart: null,
       piefunchart: null,
       washingMachineId:null,
+      hasWashingMachine:'',
       machinecurrentTags:null,
       machineVisible:false,
       equipmentVisible:false,
@@ -150,10 +151,12 @@ export default {
   methods: { 
     async ParentTypeFun(){ //获取设备类型
         let res = await ParentTypeFun(qs.stringify({onlyMine:true}));
-        res.data = res.data ? res.data :[];
+        res.data = res.data.length>0 ? res.data :[];
         this.parentTypList = res.data;
-        let pac = res.data.find(item=>item.name === '洗衣机');
-        this.washingMachineId = pac ? pac.id : '';
+        let fristType = res.data.length>0 ? res.data[0] : [{id:'',name:''}]; //如果有洗衣机优先展示洗衣机,没有洗衣机优先展示第一个类型
+        let pac = this.parentTypList.find(item=>item.name === '洗衣机');
+        this.washingMachineId = pac ? pac.id : fristType[0].id;
+        this.hasWashingMachine = pac ? '洗衣机' : fristType[0].name; 
         this.typeProfitData();
         this.equipmentSlots[0].values = [{name:'全部'},...res.data];
         this.distributionSlots[0].values = [...res.data];
