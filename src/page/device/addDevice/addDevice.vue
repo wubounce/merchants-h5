@@ -9,7 +9,7 @@
             <li>
               <span class="field-title">设备名称</span>
               <p class="select-1">
-                <input type="text" v-model="fromdata.machineName">
+                <input type="text" v-model="fromdata.machineName" ref="machineNameInput">
               </p>
             </li>
             <li @click="checkDeviceSelect">
@@ -314,11 +314,12 @@
         if (r != null) return unescape(r[2]); return null; //返回参数值
       },
       async checkDeviceSelect() { //获取店铺
+        this.$refs.machineNameInput.blur();
         let res = await getShopFun();
-         if(res.code === 0) {
+        if(res.code === 0) {
           this.selectListA = res.data; 
-         }
-         this.companyVisible = true;
+        }
+        this.companyVisible = true;
       },
       async checkFirstClass() { //获取一级列表
         if(this.fromdata.shopType.id){

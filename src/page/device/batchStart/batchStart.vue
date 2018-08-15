@@ -93,7 +93,7 @@
       },
       async fetchData(e) {
         let keywords = this.keyword;
-        let payload = {shopName: keywords,hasMachine:true};
+        let payload = {shopName: keywords,hasMachine: true};
         let res = await shopSearchFun(qs.stringify(payload));
           if(res.code === 0) {
             this.shopList = res.data;  
@@ -120,7 +120,8 @@
         this.isResult = false
       },
       async checkShopSelect() { //获取店铺
-        let res = await getShopFun();
+        let payload = {hasMachine: true};
+        let res = await getShopFun(qs.stringify(payload));
           //逆地理坐标
         let _this = this;
          if(res.code === 0) {
