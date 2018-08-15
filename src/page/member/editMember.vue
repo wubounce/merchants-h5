@@ -116,10 +116,10 @@ export default {
     
   },
   created(){
-    let query = this.$route.query;
+
     this.shopListFun();
     this.menuSelect();
-    this.getOperatorInfo(query.id);
+   
   },
   methods: {
     validate() {
@@ -144,7 +144,7 @@ export default {
         let updateOperateShopIds = res.data.operateShopNames ? res.data.operateShopNames.split(',') :[];
         updateOperateShopIds = this.shoplist.filter(v=>updateOperateShopIds.some(k=>k==v.shopName));
         this.operateShopIds = updateOperateShopIds.map(item=>item.shopId);
-
+        console.log(this.operateShopIds);
         this.checkpermissionslist = res.data.list.map(item=>item.menuId);
         this.permissionsMIdsTxt = res.data.list.map(item=>item.name).join(',');
       }
@@ -157,6 +157,8 @@ export default {
     async shopListFun(){
       let res = await shopListFun();
       this.shoplist = res.data;
+      let id = this.$route.query ? this.$route.query.id:'';
+      this.getOperatorInfo(id);
     },
     toggle:function(item){
       this.$set(item,'show',this.show=!this.show);
@@ -176,6 +178,7 @@ export default {
       this.permissionsVisible=false;
       let checklist = this.allmenu.filter(v=>this.checkpermissionslist.some(k=>k==v.menuId));
       this.permissionsMIdsTxt = checklist.map(item=>item.name).join(',');
+      console.log(this.operateShopIds);
     },
     cancelPermissions(){
       let canceIds = this.permissionsMIdsTxt ?  this.permissionsMIdsTxt.split(',') :[];
@@ -184,6 +187,7 @@ export default {
       this.permissionsVisible = false;
     },
     async updateMember(){
+      console.log(this.operateShopIds);
       if (this.validate()) {
         let menshopids = [];
         this.operateShopIds.forEach(item=>menshopids.push(`'${item}'`));
