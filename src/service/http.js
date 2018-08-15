@@ -43,6 +43,7 @@ http.interceptors.request.use(config => {
 http.interceptors.response.use(
   response => {
     Indicator.close();
+     console.log(response);
     if (response.status === 200) {
       // 时间验证 & 把时间放到vuex中
       if (response.data.t > 0) {
@@ -54,11 +55,15 @@ http.interceptors.response.use(
         store.commit('setServerTimeOffset', parseInt(offset / 1000));
       }
       if(response.data.code === 7004){
-          removeMenu();
-          store.commit('setMenu', []);
-          store.dispatch('getMenu').then(() => {
-            location.reload();// 为了重新实例化vue-router对象 避免bug
-          });
+        console.log(123123123);
+          // removeMenu();
+          // store.commit('setMenu', []);
+          // store.dispatch('getMenu');
+          // store.dispatch('LogOut').then(() => {
+          //   location.reload();
+          // });
+          // location.reload();
+
       }
       //11:Token 过期了;
       if (response.data.code === 11) {

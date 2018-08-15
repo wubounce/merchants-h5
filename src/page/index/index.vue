@@ -154,9 +154,9 @@ export default {
         res.data = res.data.length>0 ? res.data :[];
         this.parentTypList = res.data;
         let fristType = res.data.length>0 ? res.data[0] : [{id:'',name:''}]; //如果有洗衣机优先展示洗衣机,没有洗衣机优先展示第一个类型
-        let pac = this.parentTypList.find(item=>item.name === '洗衣机');
-        this.washingMachineId = pac ? pac.id : fristType[0].id;
-        this.hasWashingMachine = pac ? '洗衣机' : fristType[0].name; 
+        let pac = res.data.find(item=>item.name === '洗衣机');
+        this.washingMachineId = pac ? pac.id : fristType.id;
+        this.hasWashingMachine = pac ? '洗衣机' : fristType.name; 
         this.typeProfitData();
         this.equipmentSlots[0].values = [{name:'全部'},...res.data];
         this.distributionSlots[0].values = [...res.data];

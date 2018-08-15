@@ -1,6 +1,6 @@
 <template>
 <div class="mang" v-title="title">
-  <div class="permissions" v-if="$store.getters.has('mer:shop:list')&&$store.getters.has('mer:machine:list')&&$store.getters.has('mer:order:list')&&$store.getters.has('mer:schedule:list')&&$store.getters.has('mer:marketing:list')&&$store.getters.has('mer:person:list')">暂无相关页面权限</div>
+  <div class="permissions" v-if="$store.getters.has('mer:shop:list')&&$store.getters.has('mer:machine:list')&&$store.getters.has('mer:order:list')&&$store.getters.has('mer:schedule:list')&&$store.getters.has('mer:marketing:list')&&$store.getters.has('mer:marketing:vip:list')&&$store.getters.has('mer:person:list')">暂无相关页面权限</div>
   <div v-else>
       <div class="alllist" v-has="'mer:shop:list'">
         <router-link :to="{ name: 'shopList'}">

@@ -34,7 +34,7 @@
                 <div><p>IMEI号</p><p>{{data.imei}}</p></div>
             </li>
             <li>
-                <div class="remarks"><p>备注</p><p>{{data.reason}}</p></div>    
+                <div class="remarks"><p>备注</p><p>{{data.content.replace(',null','')}}</p></div>    
             </li>
 		</ul>
         <ul class="record" v-if="data.type===3">
@@ -55,7 +55,7 @@
                 <div><p>IMEI号</p><p>{{data.imei}}</p></div>
             </li>
             <li>
-                <div class="remarks"><p>备注</p><p>{{data.reason}}</p></div>    
+                <div class="remarks"><p>备注</p><p>{{data.content.replace(',null','')}}</p></div>    
             </li>
         </ul>
 	</div>
