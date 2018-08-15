@@ -17,7 +17,7 @@
     <div class="lineecharts-warp">
       <div>
         <div class="lineechart-title">
-          <span class="linetitle">收益数据 <span @click="machineVisible = true;" :class="['choose-select',,{'choose-select-type': machinecurrentTags}]">{{machinecurrentTags?machinecurrentTags.name:'全部'}}<i class="iconfont icon-xiangxiajiantou select-back"></i></span></span>
+          <span class="linetitle">收益数据 <span @click="machineVisible = true;" :class="['choose-select',,{'choose-select-type': machinecurrentTags}]" v-if="parentTypList.length>0">{{machinecurrentTags?machinecurrentTags.name:'全部'}}<i class="iconfont icon-xiangxiajiantou select-back"></i></span></span>
           <span class="linedata">
           <span :class="['linedatachoose', {linecurrent: lineSearchIndex === index}]" v-for="(item,index) in lineSearchTime" @click="lineTimeSearch(index)">{{item.lable}}</span>
           </span>
@@ -42,7 +42,7 @@
     <div class="bar-wrap">
       <div class="">
         <span class="linetitle">设备监控<span style="font-size: 14px;font-weight:normal;color: #1890FF;">(总设备{{allmMachine}})</span></span>
-        <span class="equipment" @click="equipmentVisible=true">{{equipmentcurrentTags?equipmentcurrentTags.name:'全部'}}<i class="iconfont icon-xiangxiajiantou select-back"></i></span>
+        <span class="equipment" @click="equipmentVisible=true" v-if="parentTypList.length>0">{{equipmentcurrentTags?equipmentcurrentTags.name:'全部'}}<i class="iconfont icon-xiangxiajiantou select-back"></i></span>
         <selectpickr :visible="equipmentVisible" :slots="equipmentSlots" :valueKey="machinepickername" @selectpicker="equipmentselectpicker" @onpickstatus="equipmentselectpickertatus"> </selectpickr>
       </div>
       <div class="bar" id="bar" :style="{height:height,width:width}" ref="bar"></div>
