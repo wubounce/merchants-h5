@@ -7,7 +7,13 @@
     <style>
       /* 这是新增店铺页面地图样式,暂时只能放这样式才能显示,别吐槽啊T^T */
       .amap-sug-result {
-        margin-right: 10%;
+        position: fixed;
+        top:0;
+        margin: 0 auto;
+        overflow-y: scroll;
+        width:3.5rem;
+        height: 7rem;
+        -webkit-overflow-scrolling: touch;   /*这句是为了滑动更顺畅*/
       }
       .auto-item {
         font-size: 14px;
