@@ -46,13 +46,13 @@
       <div class="all-list">
         <div class="promisss-child" >
           <div class="child-slit" v-for="(item,index) in permissionsData">
-            <label class="mint-checklist-label child-prom" style="background:#fff">
+            <label class="mint-checklist-label child-prom" style="background:#fff" @click="toggle(item)">
               <div class="check-prem-list" style="border:none;padding:0.27rem 0.4rem;">
                 <span class="mint-checkbox is-right" v-if="item.name==='首页' || item.name==='报表'">
                   <input type="checkbox" class="mint-checkbox-input" v-model="checkpermissionslist" :value="item.menuId"> 
                   <span class="mint-checkbox-core"></span>
                 </span>
-                <span class="mint-checkbox is-right" v-else @click="toggle(item)">
+                <span class="mint-checkbox is-right" v-else>
                   <span class="iconfont icon-xiangxiajiantou"></span>
                 </span>
                 <span class="mint-checkbox-label shopname">{{item.name}}</span>
