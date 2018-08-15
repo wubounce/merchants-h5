@@ -502,13 +502,15 @@ export default {
     }
   }
 .discount-input {
+  height: 1.6rem;
+  line-height: 1.6rem;
   padding-top: 0.51rem;
   padding-bottom: 0.49rem;
   text-align: right;
-  width: 90%;
+  width:4.27rem;
 }
   .check-switch {
-    margin-top: 0.4rem;
+    margin-top: 0.35rem;
   }
   .toolBar {
     padding: 0 0.4rem;

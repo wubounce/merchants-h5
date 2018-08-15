@@ -17,7 +17,7 @@
         <p>VIP折扣<span>{{detail.yearCardDiscount?detail.yearCardDiscount:''}}%</span></p>
         <p>每日限用次数<span>{{detail.yearCardLimitTime}}次</span></p>
       </div>
-      <!-- <div class="crrow"></div> -->
+      <div class="crrow"></div>
     </div>
     <div class="card-wrap">
       <p class="addvip-type"><span>VIP半年卡</span></p>
@@ -27,7 +27,7 @@
         <p>VIP折扣<span>{{detail.halfYearCardDiscount?detail.halfYearCardDiscount:''}}%</span></p>
         <p>每日限用次数<span>{{detail.halfYearCardLimitTime}}次</span></p>
       </div>
-      <!-- <div class="crrow"></div> -->
+      <div class="crrow"></div>
     </div>
     <div class="card-wrap">
       <p class="addvip-type"><span>VIP季卡</span></p>
@@ -37,7 +37,7 @@
         <p>VIP折扣<span>{{detail.seasonCardDiscount?detail.seasonCardDiscount:''}}%</span></p>
         <p>每日限用次数<span>{{detail.seasonCardLimitTime}}次</span></p>
       </div>
-      <!-- <div class="crrow"></div> -->
+      <div class="crrow"></div>
     </div>
 
     <div class="create-wrap">

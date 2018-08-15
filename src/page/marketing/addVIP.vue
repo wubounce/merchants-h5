@@ -1,7 +1,7 @@
 <template>
 <div class="addvip" v-title="title">
   <div class="addvip-header">
-    <p>所属店铺<span class="order-action add-shop-overflow-icon iconfont icon-nextx" @click="shopVisible = true;"></span><span class="addvip-con add-shop-overflow">{{checkshoptxt?checkshoptxt:''}}</span></p>
+    <p  @click="shopVisible = true;" style="cursor: pointer;">所属店铺<span class="order-action add-shop-overflow-icon iconfont icon-nextx"></span><span class="addvip-con add-shop-overflow">{{checkshoptxt?checkshoptxt:''}}</span></p>
   </div>
   
   <form class="addvip-from" ref="vipForm" :model="vipform">
@@ -19,7 +19,7 @@
           <p>1.建议VIP折扣价不超过特惠活动价。</p>
           <p>2.每日限用次数不填写或填写0，则不限制次数。</p>
         </div>
-        <!-- <div class="crrow"></div> -->
+        <div class="crrow"></div>
       </div>
     </div>
     <div class="add-vip-list-wrap">
@@ -29,9 +29,9 @@
         <div class="add-card">
           <p>卡售价<span>元</span><input type="number" placeholder="请填写卡售价…" v-model="vipform.halfYearCardPrice"></p>
           <p>VIP折扣<span>%</span><input type="number" placeholder="请填写折扣数…" v-model="vipform.halfYearCardDiscount"></p>
-          <p style="border:none">每日限用次数<span>次</span><input type="number" class="num" v-model="vipform.halfYearCardLimitTime"></p>
+          <p class="por-border">每日限用次数<span>次</span><input type="number" class="num" v-model="vipform.halfYearCardLimitTime"></p>
         </div>
-        <!-- <div class="crrow"></div> -->
+        <div class="crrow"></div>
       </div>
     </div>
     <div class="add-vip-list-wrap">
@@ -41,9 +41,9 @@
         <div class="add-card">
           <p>卡售价<span>元</span><input type="number" placeholder="请填写卡售价…" v-model="vipform.seasonCardPrice"></p>
           <p>VIP折扣<span>%</span><input type="number" placeholder="请填写折扣数…" v-model="vipform.seasonCardDiscount"></p>
-          <p style="border:none">每日限用次数<span>次</span><input type="number" v-model="vipform.seasonCardLimitTime" class="num"></p>
+          <p class="por-border">每日限用次数<span>次</span><input type="number" v-model="vipform.seasonCardLimitTime" class="num"></p>
         </div>
-        <!-- <div class="crrow"></div> -->
+        <div class="crrow"></div>
       </div>
     </div>
   </form>
@@ -202,6 +202,7 @@ export default {
       background: url('../../../static/image/management/crown@2x.png');
       background-size: contain;
       background-repeat: no-repeat;
+      z-index: 2;
     }
     .add-card-header {
       height:0.13rem;
@@ -213,8 +214,6 @@ export default {
       font-size: 16px;
       color: #333;
       padding: 0 0.37rem;
-      position: relative;
-      z-index: 2;
       p {
         height: 1.47rem;
         line-height: 1.47rem;
@@ -233,8 +232,14 @@ export default {
       span {
         float: right;
       }
+      .por-border {
+        position: relative;
+        z-index: 3;
+        border: none;
+      }
       .num {
         color: #1890FF;
+        background: rgba(0,0,0,0);
       }
     }
     .tips {
