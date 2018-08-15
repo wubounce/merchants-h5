@@ -111,9 +111,14 @@ export default {
         this.provinceName = res.data.provinceName;
         this.cityName = res.data.cityName;
         this.districtName = res.data.districtName;
-        this.organization = res.data.organization;
+        
         this.address = res.data.address;
-
+        if(res.data.organization) {
+          this.organization = res.data.organization;
+        }
+        else {
+          this.organization = '';
+        }
         if(this.provinceName == this.cityName.slice(0,this.cityName.length-1)) {
           this.completeAddress = this.cityName + this.districtName + this.organization + this.address;
         }
