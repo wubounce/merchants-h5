@@ -343,48 +343,6 @@ export default {
             console.log(this.provinceName,this.cityName,this.districtName);
             console.log(this.provinceId,this.cityId,this.districtId); 
             this.addressSlots[0].defaultIndex = this.proIndex;
-            // let objP = { parentId : 0 };
-            // let pro = await areaListFun(qs.stringify(objP));
-            // console.log(pro);
-            // if(pro.code === 0) {
-            //   for(let i=0; i<pro.data.length;i++) {
-            //     if(this.provinceId == pro.data[i].areaId) {
-            //       this.addressSlots[0].defaultIndex = i;
-            //       console.log('省',i);
-            //     }
-            //   }
-            // }
-            // else {
-            //   this.$toast({message:res.msg});
-            // }
-
-            // let objC = { parentId : this.provinceId };
-            // let city = await areaListFun(qs.stringify(objC));
-            // if(city.code ===0 ) {
-            //   for(let j=0; j<city.data.length;j++) {
-            //     if(this.cityName == city.data[j].areaName) {
-            //       this.addressSlots[2].defaultIndex = j;
-            //       console.log('市',j);
-            //     }
-            //   }
-            // }
-            // else {
-            //   this.$toast({message:res.msg});
-            // }
-
-            // let objDis = { parentId : this.cityId };
-            // let dis = await areaListFun(qs.stringify(objDis));
-            // if(city.code ===0 ) {
-            //   for(let x=0; x<city.data.length;x++) {
-            //     if(this.districtName == city.data[x].areaName) {
-            //       this.addressSlots[4].defaultIndex = x;
-            //       console.log('区',x);
-            //     }
-            //   }
-            // }
-            // else {
-            //   this.$toast({message:res.msg});
-            // }
           }
           break;
         case 2:
@@ -615,7 +573,7 @@ export default {
     //提交修改信息
     async submit() {
       
-      if(this.shopName!=false && this.shopType!=false && this.provinceId != false && this.cityId !=false && this.provinceId != false && this.address != false && this.lat !=false && this.lng != false && this.machineTypeIdsArray !=false ) {
+      if(this.shopName!=false && this.shopType!=false && this.provinceId != false && this.cityId !=false && this.provinceId != false && this.address != false && this.lat !=false && this.lng != false && this.organization!=false && this.machineTypeIdsArray !=false ) {
         if(this.orderLimitMinutes) {
           //在判断
           let reg=/^[1-9]+\d*$/;
@@ -724,7 +682,7 @@ export default {
             position: 'middle',
             duration: 3000
           });
-      }else if(!this.lat || !this.lng) {
+      }else if(!this.lat || !this.lng || !this.organization) {
         this.$toast({
             message: '请选择小区/大厦/学校',
             position: 'middle',
