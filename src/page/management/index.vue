@@ -112,6 +112,9 @@ export default {
 </script>
 <style type="text/css" lang="less" scoped>
   .alllist{
+      a {
+        display: block;
+      }
        padding:0.53rem 0.4rem 0 0.4rem;
        background: #fff;
   }
