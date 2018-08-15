@@ -47,7 +47,7 @@ export default {
       return {
         funTypeList: [],
         isShow2: false,
-        title: "批量编辑",
+        title: "批量修改",
         getJsonArr: [],
         selectedFunction: '',
         functionTempletType: '',

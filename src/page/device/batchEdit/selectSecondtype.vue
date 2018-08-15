@@ -37,7 +37,7 @@ import { getlistParentTypeFun, getlistSubTypeFun} from '@/service/device';
   export default {
     data() {
       return {
-        title: "批量编辑",
+        title: "批量修改",
         isResult: false,
         keyword: '',
         secondTypeList: [],

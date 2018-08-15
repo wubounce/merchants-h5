@@ -60,7 +60,7 @@
         selectedShop: '',
         keyword: '',
         shopId:'',
-        title: "批量编辑",
+        title: "批量修改",
         stepArr: [
           {
             text: "店铺"
@@ -85,6 +85,10 @@
       }
     },
     methods: {
+      geocoder_CallBack(data) {
+       let completeAddress = data + this.address;  
+       return completeAddress;
+      },
       async fetchData(e) {
         let keywords = this.keyword;
         let payload = {shopName: keywords,hasMachine:true};
@@ -118,9 +122,29 @@
       },
       async checkShopSelect() { //获取店铺
         let res = await getShopFun();
+          //逆地理坐标
+        let _this = this;
          if(res.code === 0) {
           this.shopList= res.data; 
-         }
+          this.shopList.forEach(item=>{
+            let lat = item.lat;
+            let lng = item.lng;
+            let lnglatXY = [lng,lat]; //已知点坐标
+            this.address = item.address;
+            AMap.plugin('AMap.Geocoder',function() {
+              var geocoder = new AMap.Geocoder({
+                //radius: 1000,
+                extensions: "all"
+              });
+              geocoder.getAddress(lnglatXY, function(status, result) {
+                  if (status === 'complete' && result.info === 'OK') {
+                    item.address = _this.geocoder_CallBack(result.regeocode.formattedAddress);                   
+                  }
+              });              
+            });
+          });         
+        }
+               
       }
     },
     computed: {
@@ -243,6 +267,10 @@
             background-size: 0.53rem;
             padding: 0.29rem 0 0.29rem 1.07rem;
             border-radius: 0.13rem;
+            line-height: normal;
+          }
+          input::-webkit-input-placeholder {
+            font-size: 0.43rem;
           }
           span {
             display: inline-block;
