@@ -34,7 +34,7 @@
 <script>
 import qs from "qs";
 import { mapActions } from 'vuex';
-import { getToken, removeToken, removeUser, removeMenu, removeNavTabIndex, getNavTabIndex } from '@/utils/tool';
+import { getToken, removeToken, removeUser, removeMenu, removeNavTabIndex, getNavTabIndex, setPhone, getPhone } from '@/utils/tool';
 import { login } from '@/service/login';
 import Button from "@/components/Button/Button";
 export default {
@@ -57,7 +57,7 @@ export default {
     data () {
       return {
         form: {
-          userName: '',
+          userName: getPhone()? getPhone():'',
           password: ''
         },
         isuser:false,
@@ -97,6 +97,7 @@ export default {
           if (res.code===0) {
               this.login(res.data.token);
               this.getMenu();
+              setPhone(this.form.userName);
               if(res.data.code === 8002){
                 this.$router.push({name:'bindPhone'});
               }else {

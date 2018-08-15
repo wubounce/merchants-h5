@@ -1,6 +1,6 @@
 <template>
 <div class="order-detail" v-title="title">
-<div class="permissions" v-if="$store.getters.has('mer:order:info')">暂无相关页面权限</div>
+<div class="permissions" v-cloak v-if="$store.getters.has('mer:order:info')">暂无相关页面权限</div>
   <div v-else>
     <div class="order-status">{{detail.orderStatus | orserStatus}}</div>
     <div class="order-title">{{detail.shopName}}</div>
@@ -11,23 +11,23 @@
           <div class="content">
               <p class="con-title">{{detail.machineName}}</p>
               <p class="con-type">{{detail.machineFunctionName}}<span style="padding:0 0.346667rem">|</span>时长{{detail.markMinutes}}分钟</p>
-              <p class="con-price" v-if="detail.orderType !== 2 && detail.orderStatus !==1 || detail.orderType !==2 && detail.orderStatus !==0">¥{{detail.markPrice?detail.markPrice:''}}</p>
+              <p class="con-price" v-cloak v-if="detail.orderType !== 2 && detail.orderStatus !==1 || detail.orderType !==2 && detail.orderStatus !==0">{{'¥'+ detail.markPrice}}</p>
           </div>
-          <div class="order-action" v-if="detail.isReserve === 1">预约</div>
+          <div class="order-action" v-cloak v-if="detail.isReserve === 1">预约</div>
         </div>
       </section>
     </div>
     <section class="total-wrap">
-      <div class="total-border" v-if="detail.discountType===1 && detail.discountPrice>0">
+      <div class="total-border" v-cloak v-if="detail.discountType===1 && detail.discountPrice>0">
         <div class="vip"><span class="viptag">vip</span>VIP会员卡</div>
         <div class="discount">-¥{{detail.discountPrice}}</div>
       </div>
-       <div class="total-border" v-if="detail.discountType===2&&detail.discountPrice>0 || detail.discountType===null&&detail.discountPrice>0">
+       <div class="total-border" v-cloak v-if="detail.discountType===2&&detail.discountPrice>0 || detail.discountType===null&&detail.discountPrice>0">
         <div class="vip">限时优惠</div>
         <div class="discount">-¥{{detail.discountPrice}}</div>
       </div>
     </section>
-    <section class="money-wrap"  v-if="detail.orderType !== 2 && detail.orderStatus !==1 || detail.orderType !==2 && detail.orderStatus !==0">
+    <section class="money-wrap"  v-cloak v-if="detail.orderType !== 2 && detail.orderStatus !==1 || detail.orderType !==2 && detail.orderStatus !==0">
       <span class="heji">合计：</span>
       <span class="money">¥{{detail.payPrice}}</span>
     </section>
@@ -41,7 +41,7 @@
         <div class="vip">订单编号：{{detail.orderNo}}</div>
       </div>
     </section>
-    <section class="total-wrap" v-if="detail.orderStatus === 2|| detail.orderStatus === 5">
+    <section class="total-wrap" v-cloak v-if="detail.orderStatus === 2|| detail.orderStatus === 5">
       <div class="total-border">
         <div class="vip">支付方式：{{detail.payType | PayType}}</div>
       </div>
@@ -49,7 +49,7 @@
     <section class="oder-time" style="margin-bottom:1.3rem;">
       <span>下单时间：{{detail.createTime}}</span>
     </section>
-     <section class="listaction" v-if="detail.orderStatus === 2"> 
+     <section class="listaction" v-cloak v-if="detail.orderStatus === 2"> 
       <mt-button @click="orderRefund(detail.orderNo,detail.payPrice)" v-has="'mer:order:refund,mer:order:info'" :disabled="refundDisabled">退款</mt-button>
       <mt-button @click="machineBoot(detail.id)" v-has="'mer:order:start,mer:order:info'">启动</mt-button>
       <mt-button @click="machineReset(detail.orderNo,detail.machineId)" v-has="'mer:order:reset,mer:order:info'">复位</mt-button>
@@ -66,7 +66,7 @@ export default {
   data() {
     return {
       title: '订单详情',
-      detail:{},
+      detail:{markPrice:''},
       refundDisabled:false,
     };
   },
@@ -80,7 +80,9 @@ export default {
   methods: {
     async getDetail(orderNo){
       let res = await orderDetailFun(qs.stringify({orderNo:orderNo}));
-      this.detail = res.data;
+      if (res.code === 0) {
+          this.detail = res.data;
+      }
     },
     machineReset(orderNo,machineId){ //设备复位
       MessageBox.confirm(`您确定要复位${this.detail.machineName}？`,'').then(async () => {

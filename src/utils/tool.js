@@ -21,6 +21,11 @@ const navTabKey = 'navTabIndex';
 export const setNavTabIndex = (navTab) => sessionStorage.setItem(navTabKey,navTab);
 export const getNavTabIndex = () => sessionStorage.getItem(navTabKey);
 export const removeNavTabIndex = () => sessionStorage.removeItem(navTabKey);
+
+const PhoneKey = 'phone';
+export const setPhone = (navTab) => sessionStorage.setItem(PhoneKey,navTab);
+export const getPhone = () => sessionStorage.getItem(PhoneKey);
+export const removePhone = () => sessionStorage.removeItem(PhoneKey);
 /**
  * 截流函数
  */
