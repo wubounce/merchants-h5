@@ -93,30 +93,29 @@
       },
       async fetchData(e) {
         let keywords = this.keyword;
-        let _this = this;
         let payload = {shopName: keywords,hasMachine: true};
         let res = await shopSearchFun(qs.stringify(payload));
-          if(res.code === 0) {
-            this.shopList= res.data; 
-            this.shopList.forEach(item=>{
-              let lat = item.lat;
-              let lng = item.lng;
-              let lnglatXY = [lng,lat]; //已知点坐标
-              this.address = item.address;
-              AMap.plugin('AMap.Geocoder',function() {
-                var geocoder = new AMap.Geocoder({
-                  //radius: 1000,
-                  extensions: "all"
-                });
-                geocoder.getAddress(lnglatXY, function(status, result) {
-                    if (status === 'complete' && result.info === 'OK') {
-                      item.address = _this.geocoder_CallBack(result.regeocode.formattedAddress);                   
-                    }
-                }); 
-                
-              });
-          });    
+        if(res.code === 0) {
+          this.shopList= res.data; 
+          this.shopList.forEach(item=>{
+          this.provinceName = item.province;
+          this.cityName = item.city;
+          this.districtName = item.district;
+          this.address = item.address;
+          if(item.organization) {
+            this.organization = item.organization;
           }
+          else {
+            this.organization = '';
+          }
+          if(this.provinceName == this.cityName.slice(0,this.cityName.length-1)) {
+            item.address = this.cityName + this.districtName + this.organization + this.address;
+          }
+          else {
+            item.address = this.provinceName + this.cityName + this.districtName + this.organization + this.address;
+            }
+          });   
+        }
       },
       selectClick: function (index,name) {
         this.selectIndex = index
@@ -141,32 +140,27 @@
       async checkShopSelect() { //获取店铺
         let payload = {hasMachine: true};
         let res = await getShopFun(qs.stringify(payload));
-          //逆地理坐标
-        let _this = this;
          if(res.code === 0) {
           this.shopList= res.data; 
           this.shopList.forEach(item=>{
-            let lat = item.lat;
-            let lng = item.lng;
-            let lnglatXY = [lng,lat]; //已知点坐标
-            this.address = item.address;
-            AMap.plugin('AMap.Geocoder',function() {
-              var geocoder = new AMap.Geocoder({
-                //radius: 1000,
-                extensions: "all"
-              });
-              geocoder.getAddress(lnglatXY, function(status, result) {
-                  if (status === 'complete' && result.info === 'OK') {
-                    item.address = _this.geocoder_CallBack(result.regeocode.formattedAddress);                   
-                  }
-              }); 
-              
-            });
-          });         
+          this.provinceName = item.province;
+          this.cityName = item.city;
+          this.districtName = item.district;
+          this.address = item.address;
+          if(item.organization) {
+            this.organization = item.organization;
+          }
+          else {
+            this.organization = '';
+          }
+          if(this.provinceName == this.cityName.slice(0,this.cityName.length-1)) {
+            item.address = this.cityName + this.districtName + this.organization + this.address;
+          }
+          else {
+            item.address = this.provinceName + this.cityName + this.districtName + this.organization + this.address;
+            }
+          });   
         }
-        
-
-        
       }
     },
 
