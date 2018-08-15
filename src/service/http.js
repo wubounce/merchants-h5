@@ -43,13 +43,11 @@ http.interceptors.request.use(config => {
 http.interceptors.response.use(
   response => {
     Indicator.close();
-     console.log(response);
     if (response.status === 200) {
       // 时间验证 & 把时间放到vuex中
       if (response.data.t > 0) {
         let offset = response.data.t - new Date().getTime();
         if (Math.abs(offset) > 10 * 60 * 1000) {
-          console.log(offset);
           MessageBox.alert('客户端时间不合法，会影响正常业务使用[t: ' + offset + ']', '注意');
         }
         store.commit('setServerTimeOffset', parseInt(offset / 1000));
