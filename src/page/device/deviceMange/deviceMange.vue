@@ -464,6 +464,7 @@
       span {
         display: table-cell;
         vertical-align: middle;
+        font-weight: bold;
       }
     }
     .addDev{

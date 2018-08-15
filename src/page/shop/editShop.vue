@@ -683,7 +683,7 @@ export default {
           });
       }else if(!this.machineTypeIdsArray) {
         this.$toast({
-            message: '请选择设备功能',
+            message: '请选择设备类型',
             position: 'middle',
             duration: 3000
           });

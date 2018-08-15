@@ -9,7 +9,7 @@
             <li>
               <span class="field-title">设备名称</span>
               <p class="select-1">
-                <input type="text" v-model="fromdata.machineName">
+                <input type="text" v-model="fromdata.machineName" ref="machineNameInput">
               </p>
             </li>
             <li @click="checkDeviceSelect">
@@ -204,7 +204,7 @@
       },
       checkData(val,index,name,flag) {
         let reg = /^\+?[1-9][0-9]*$/;  //验证非0整数
-        let reg1 = /^[0-9]+([.]{1}[0-9]{1,2})?$/;  //验证非0正整数和带一位小数字非0正整数
+        let reg1 = /^[0-9]+([.]{1}[0-9]{1,2})?$/;  //验证非0正整数和二位小数字
         if(flag ===0 && !reg.test(val)) {
           if(!val){
             this.$toast("输入内容不能为空");
@@ -314,11 +314,12 @@
         if (r != null) return unescape(r[2]); return null; //返回参数值
       },
       async checkDeviceSelect() { //获取店铺
+        this.$refs.machineNameInput.blur();
         let res = await getShopFun();
-         if(res.code === 0) {
+        if(res.code === 0) {
           this.selectListA = res.data; 
-         }
-         this.companyVisible = true;
+        }
+        this.companyVisible = true;
       },
       async checkFirstClass() { //获取一级列表
         if(this.fromdata.shopType.id){
@@ -486,18 +487,16 @@
           }
         });
         if(count !== len){
-          if(!this.isDisable) {
-            MessageBox.confirm('您确定要更改吗？').then(action => {       
-              this.setModelShow= false;
-              this.modelShow = true;
-              this.modifiedMarkup = false;
-              this.title = "新增设备";
-            });
+          if(!this.isDisable) {     
+            this.setModelShow= false;
+            this.modelShow = true;
+            this.modifiedMarkup = false;
+            this.title = "新增设备";
           }else{
             return false;
           }
         }else{
-          this.$toast("状态列表不能全部关闭");
+          this.$toast("请至少开启1个设备功能");
           return false;
         }
       },

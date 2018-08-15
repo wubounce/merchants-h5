@@ -25,17 +25,19 @@
         <ul>
           <li v-for="(item,index) in shopList"  class="search-res-item" :class="{'selected':index==selectIndex}" @click="selectClick(index,item.shopName)"
             :key="index">
-            <div>
-              <p>{{item.shopName}}</p>
-              <p>{{item.address}}</p>
+            <div class="boxItem">
+              <div class="content">
+                <p>{{item.shopName}}</p>
+                <p>{{item.address}}</p>
+              </div>
+              <div class="icon"><span class="iconfont" :class="{'icon-xuanze':index==selectIndex}"></span></div>
             </div>
-            <div><span class="iconfont" :class="{'icon-xuanze':index==selectIndex}"></span></div>
           </li>
           <li class="searchNoItem" v-show="hasNoData">没有找到匹配数据</li>
         </ul>
       </div>
     </div>
-    <div class="searchNoItem" v-show="!shopList.length">暂无店铺</div>
+    <div class="searchNoItem" v-show="!shopList.length && !hasNoData">暂无店铺</div>
     <div style="width:100%;height:1.73rem;"></div>
     <button class="submitBtn" @click="goNext" :class="{'default':shopList.length<=0}" :disabled="shopList.length<=0">下一步</button>
   </section>
@@ -91,10 +93,29 @@
       },
       async fetchData(e) {
         let keywords = this.keyword;
-        let payload = {shopName: keywords,hasMachine:true};
-        let res = await shopSearchFun(qs.stringify(payload));
+        let _this = this;
+        let payload = {shopName: keywords,hasMachine: true};
+        let res = await shopSearchFun(qs.stringify(payload));      
           if(res.code === 0) {
-            this.shopList = res.data;  
+            this.shopList= res.data; 
+            this.shopList.forEach(item=>{
+              let lat = item.lat;
+              let lng = item.lng;
+              let lnglatXY = [lng,lat]; //已知点坐标
+              this.address = item.address;
+              AMap.plugin('AMap.Geocoder',function() {
+                var geocoder = new AMap.Geocoder({
+                  //radius: 1000,
+                  extensions: "all"
+                });
+                geocoder.getAddress(lnglatXY, function(status, result) {
+                    if (status === 'complete' && result.info === 'OK') {
+                      item.address = _this.geocoder_CallBack(result.regeocode.formattedAddress);                   
+                    }
+                }); 
+                
+              });
+            });   
           }
       },
       selectClick: function (index,name) {
@@ -113,7 +134,7 @@
             query: ({shopId: id})
           });
         }else{
-          this.$toast("暂无设备，请至设备管理添加");
+          this.$toast("请选择一个店铺");
         }
       },
       clearInput: function () {
@@ -121,7 +142,8 @@
         this.isResult = false
       },
       async checkShopSelect() { //获取店铺
-        let res = await getShopFun();
+        let payload = {hasMachine: true};
+        let res = await getShopFun(qs.stringify(payload));
           //逆地理坐标
         let _this = this;
          if(res.code === 0) {
@@ -324,34 +346,41 @@
       .search-res-item {
         height: 1.71rem;
         background: rgba(255, 255, 255, 1);
-        padding: 0.27rem .4rem 0;
+        padding: 0.27rem .4rem 0 .4rem;
         font-size: 0.43rem;
         color: rgba(51, 51, 51, 1);
         box-sizing: border-box;
         display: flex;
-        div {
-          &:nth-child(1) {
-            width: 90%;
+        position: relative;
+        .boxItem {
+          width: 100%;
+          .content {
+            width: 90%;      
             p {
-              height: .6rem;
-              line-height: .6rem;
-              overflow: hidden;
-              text-overflow: ellipsis;
-              white-space: nowrap;
+              &:nth-child(1) {
+                height: .6rem;
+                line-height: .6rem;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+              }
               &:nth-child(2) {
-              height: 0.44rem;
-              line-height: 0.44rem;
-              font-size: 0.32rem;
-              margin-top: .1rem;
-              color: rgba(153, 153, 153, 1);
+                height: 0.44rem;
+                line-height: 0.44rem;
+                font-size: 0.32rem;
+                margin-top: .1rem;
+                color: #999999;
               }
             }
           }
-          &:nth-child(2) {
-            width: 10%;
-            color: rgba(24, 144, 255, 1);
+          .icon {
+            width: .45rem;
+            color: #1890ff;
             text-align: center;
             line-height: 1.4rem;
+            position: absolute;
+            right: 0.4rem;
+            top: 0.23rem;
           }
         }
       }
