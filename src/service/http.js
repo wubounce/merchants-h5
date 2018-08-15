@@ -54,15 +54,15 @@ http.interceptors.response.use(
         }
         store.commit('setServerTimeOffset', parseInt(offset / 1000));
       }
-      if(response.data.code === 7004){
-        console.log(123123123);
-          removeMenu();
-          store.commit('setMenu', []);
-          store.dispatch('getMenu');
-          store.dispatch('LogOut').then(() => {
-            location.reload();
-          });
-      }
+      // if(response.data.code === 7004){
+      //   console.log(123123123);
+      //     removeMenu();
+      //     store.commit('setMenu', []);
+      //     store.dispatch('getMenu');
+      //     store.dispatch('LogOut').then(() => {
+      //       location.reload();
+      //     });
+      // }
       //11:Token 过期了;
       if (response.data.code === 11) {
         store.dispatch('LogOut').then(() => {
