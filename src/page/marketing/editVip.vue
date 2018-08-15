@@ -12,7 +12,7 @@
         <div class="add-card">
           <p>卡售价<span>元</span><input type="number" placeholder="请填写卡售价…" v-model="vipform.yearCardPrice"></p>
           <p>VIP折扣<span>%</span><input type="number" placeholder="请填写折扣数…" v-model="vipform.yearCardDiscount"></p>
-          <p>每日限用次数<span>次</span><input type="number" class="num"  v-model="vipform.yearCardLimitTime"></p>
+          <p>每日限用次数<span>次</span><input type="text" class="num"  v-model.number="vipform.yearCardLimitTime"></p>
         </div>
         <div class="tips">
           <p>提示：</p>
@@ -29,7 +29,7 @@
         <div class="add-card">
           <p>卡售价<span>元</span><input type="number" placeholder="请填写卡售价…" v-model="vipform.halfYearCardPrice"></p>
           <p>VIP折扣<span>%</span><input type="number" placeholder="请填写折扣数…" v-model="vipform.halfYearCardDiscount"></p>
-          <p class="por-border">每日限用次数<span>次</span><input type="number" class="num" v-model="vipform.halfYearCardLimitTime"></p>
+          <p class="por-border">每日限用次数<span>次</span><input type="text" class="num" v-model.number="vipform.halfYearCardLimitTime"></p>
         </div>
         <div class="crrow"></div>
       </div>
@@ -41,7 +41,7 @@
         <div class="add-card">
           <p>卡售价<span>元</span><input type="number" placeholder="请填写卡售价…" v-model="vipform.seasonCardPrice"></p>
           <p>VIP折扣<span>%</span><input type="number" placeholder="请填写折扣数…" v-model="vipform.seasonCardDiscount"></p>
-          <p class="por-border">每日限用次数<span>次</span><input type="number" v-model="vipform.seasonCardLimitTime" class="num"></p>
+          <p class="por-border">每日限用次数<span>次</span><input type="text" v-model.number="vipform.seasonCardLimitTime" class="num"></p>
         </div>
         <div class="crrow"></div>
       </div>

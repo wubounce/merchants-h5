@@ -65,6 +65,6 @@ export const validatName = (str) => {
 
 /*vip卡次数*/
 export const validatVipLimit = (str) => {
-  const reg = /^[0-9]\d*$/;
+  const reg = /^[0-9]+$/;
   return reg.test(str);
 };

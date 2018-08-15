@@ -55,7 +55,7 @@ http.interceptors.response.use(
       }
       if(response.data.code === 7004){
           removeMenu();
-          commit('setMenu', []);
+          store.commit('setMenu', []);
           store.dispatch('getMenu').then(() => {
             location.reload();// 为了重新实例化vue-router对象 避免bug
           });
