@@ -6,7 +6,7 @@
       <section class="sarch-wrap">
         <div class="search">
             <form action="" target="frameFile" v-on:submit.prevent="">
-              <input type="text" value='搜索' v-model.trim="searchData" @keyup.enter="searchOrder" @input="clearSearch" placeholder="请输入用户手机号/订单号查询" class="serch">
+              <span class="iconfont icon-IconSearch"></span><input type="text" value='搜索' v-model.trim="searchData" @keyup.enter="searchOrder" @input="clearSearch" placeholder="请输入用户手机号/订单号查询" class="serch">
               <iframe name='frameFile' style="display: none;"></iframe>
               <span class="select-back" @click="searchOrder">搜索</span>
             </form>
@@ -26,7 +26,7 @@
          <div class="ios"  :style="{'margin-bottom:':iosHeight}">
            <div class="alllist" v-for="(item,index) in list" :key="index">
               <section class="ordermun">
-                <span class="odernmu-phone">{{item.phone}}<span style="padding:0 0.186667rem;color:#333333">|</span>{{item.createTime}}</span>
+                <span class="odernmu-phone">{{item.phone}}<span style="padding:0 0.186667rem;color:#999999">|</span>{{item.createTime}}</span>
                 <span class="ordernum-status">{{item.orderStatus | orserStatus}}</span>
               </section>
               <router-link :to="{ name: 'orderdetail', query:{orderNo:item.orderNo,orderType:item.orderType}}"> 
@@ -36,7 +36,7 @@
                     <div class="orderpic"><img :src="item.imageId" alt=""></div>
                     <div class="content">
                         <p class="con-title">{{item.machineName}}</p>
-                        <p class="con-type">{{item.machineFunctionName}}<span style="padding:0 0.346667rem">|</span>时长{{item.markMinutes}}分钟</p>
+                        <p class="con-type">{{item.machineFunctionName}}<span style="padding-left:0.35rem;padding-right:0.27rem">|</span>时长{{item.markMinutes}}分钟</p>
                         <p class="con-price" v-if="item.orderType !== 2 && item.orderStatus !==1 || item.orderType !==2 && item.orderStatus !==0">{{'¥'+item.payPrice}}</p>
                     </div>
                     <div class="order-action" v-if="item.isReserve === 1">预约</div>
@@ -250,20 +250,24 @@ export default {
     box-shadow: 0px 0.053333rem 0.133333rem 0px rgba(186, 192, 210, 0.3);
     border-radius: 0.133333rem;
     font-size: 16px;
-    height: 1.173333rem;
+    height: 1.17rem;
     display: flex;
     form {
       display: inline-block;
       width: 100%;
-      padding-left: 0.33rem;
     }
     input {
-      width: 80%;
+      width: 6.8rem;
       font-size: 16px;
-      height:1.173333rem;
+      height:1.17rem;
+    }
+    .icon-IconSearch {
+      color: #999999;
+      padding-left: 0.4rem;
+      padding-right: 0.27rem;
     }
     .select-back {
-      line-height: 1.173333rem;
+      line-height: 1.17rem;
       padding-right: 0.27rem;
       padding-left: 0.27rem;
       color: #1890FF;
@@ -278,9 +282,9 @@ export default {
   color: #333;
   text-align: center;
   background: #fff;
-  height: 1.173333rem;
-  line-height: 1.173333rem;
-  border-bottom:1px solid rgba(220,224,230,1);
+  height: 1.17rem;
+  line-height: 1.17rem;
+  border-bottom:1px solid #DCE0E6;
   div {
     flex: 1;
   }
@@ -295,8 +299,8 @@ export default {
 }
 .ordermun {
   padding: 0 0.4rem;
-  height: 1.173333rem;
-  line-height: 1.173333rem;
+  height: 1.17rem;
+  line-height: 1.17rem;
   font-size:14px;
   background: #fff;
   .odernmu-phone {
@@ -318,7 +322,7 @@ export default {
 }
 
 .order-list {
-  padding:0.426667rem 0.4rem;
+  padding:0.43rem 0.4rem 0.48rem;
   background:rgba(248,252,255,1);
   .title {
     font-size: 16px;
@@ -341,7 +345,7 @@ export default {
   }
   .orderpic {
     width:1.84rem;
-    height:1.786667rem;
+    height:1.79rem;
     border-radius:0.133333rem;
     background: #ccc;
     img {
@@ -353,10 +357,10 @@ export default {
   }
   .content {
     width: 6.293333rem;
-    height: 2.653333rem;
+    height:1.79rem;
     padding-left: 0.266667rem; 
     .con-title {
-        font-size: 14px;
+      font-size: 14px;
     }
     .con-type{
         font-size: 12px;
@@ -410,6 +414,7 @@ export default {
 }
 .page-top {
   height: 100%;
+  box-sizing: border-box;
 }
 .page-loadmore-wrapper {
   overflow: scroll;

@@ -117,7 +117,7 @@ export default {
   }
   .order-list {
     background:#fff;
-    border-bottom:0.01rem solid rgba(223,230,255,1);
+    border-bottom:0.01rem solid #f9f8ff;
     padding-bottom: 0.53rem;
     .detail {
       display: flex;

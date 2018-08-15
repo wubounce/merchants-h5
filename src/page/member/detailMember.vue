@@ -83,7 +83,7 @@ export default {
   }
   .input-group {
     display: flex;
-    border-bottom:1px solid rgba(223,230,255,1);
+    border-bottom:1px solid #f9f8ff;
     font-size: 16px;
     padding: 0.53rem 0;
   }

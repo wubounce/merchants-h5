@@ -45,8 +45,8 @@
       <p>创建时间： {{detail.createTime}}</p>
     </div>
      <div class="footer">
-      <span class="edit" v-has="'mer:marketing:vip:update,mer:marketing:vip:info'"><router-link :to="{name:'editVip',query:{shopVipId:detail.shopVipId}}">编辑</router-link></span>
-      <span class="del" @click="delShopVip">删除</span>
+      <span class="edit" v-has="'mer:marketing:vip:update'"><router-link :to="{name:'editVip',query:{shopVipId:detail.shopVipId}}">编辑</router-link></span>
+      <span class="del" @click="delShopVip" v-has="'mer:marketing:vip:delete'">删除</span>
     </div>
   </div>
 </div>

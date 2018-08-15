@@ -75,7 +75,7 @@
 import qs from 'qs';
 import selectpickr from '@/components/selectPicker';
 import { vipShopsFun, addOrUpdateVipFun} from '@/service/market';
-import { validatDiscount, validatCradPrice } from '@/utils/validate';
+import { validatDiscount, validatCradPrice, validatVipLimit } from '@/utils/validate';
 export default {
   data() {
     return {
@@ -152,6 +152,20 @@ export default {
         this.$toast({message: "季卡折扣优惠请输入1-100之间" });
         return false;
       }
+      if ((this.vipform.yearCardLimitTime&& !validatVipLimit(this.vipform.yearCardLimitTime))) {
+        this.$toast({message: "年卡每日限用次数请输入整数" });
+        return false;
+      }
+      if ((this.vipform.halfYearCardLimitTime && !validatVipLimit(this.vipform.halfYearCardLimitTime))) {
+        this.$toast({message: "半年卡每日限用次数请输入整数" });
+        return false;
+      }
+      if ((this.vipform.seasonCardLimitTime && !validatVipLimit(this.vipform.seasonCardLimitTime))) {
+        this.$toast({message: "季卡每日限用次数请输入整数" });
+        return false;
+      }
+
+
       let paylod = Object.assign({},this.vipform,{shopIds:this.shopIds.join(',')});
       paylod.yearCardLimitTime =  paylod.yearCardLimitTime ?  paylod.yearCardLimitTime:0;
       paylod.halfYearCardLimitTime =  paylod.halfYearCardLimitTime ?  paylod.halfYearCardLimitTime:0;

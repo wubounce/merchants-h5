@@ -3,8 +3,8 @@
 <div class="permissions" v-cloak v-if="$store.getters.has('mer:order:info')">暂无相关页面权限</div>
   <div v-else>
     <div class="order-status">{{detail.orderStatus | orserStatus}}</div>
-    <div class="order-title">{{detail.shopName}}</div>
-    <div class="alllist">
+    <div class="order-detil-info">
+      <div class="order-title">{{detail.shopName}}</div>
       <section class="order-list">  
         <div class="detail">  
           <div class="orderpic"><img :src="detail.imageId" alt=""></div>
@@ -19,7 +19,7 @@
     </div>
     <section class="total-wrap">
       <div class="total-border" v-cloak v-if="detail.discountType===1 && detail.discountPrice>0">
-        <div class="vip"><span class="viptag">vip</span>VIP会员卡</div>
+        <div class="vip"><span class="viptag"><img src="../../../static/image/vip/icon-VIP@2x.png" alt=""></span>VIP会员卡</div>
         <div class="discount">-¥{{detail.discountPrice}}</div>
       </div>
        <div class="total-border" v-cloak v-if="detail.discountType===2&&detail.discountPrice>0 || detail.discountType===null&&detail.discountPrice>0">
@@ -46,7 +46,7 @@
         <div class="vip">支付方式：{{detail.payType | PayType}}</div>
       </div>
     </section>
-    <section class="oder-time" style="margin-bottom:1.3rem;">
+    <section class="oder-time">
       <span>下单时间：{{detail.createTime}}</span>
     </section>
      <section class="listaction" v-cloak v-if="detail.orderStatus === 2"> 
@@ -161,24 +161,44 @@ export default {
     padding-left: 0.4rem;
   }
   .alllist {
-     margin-bottom: 0.266667rem;
+    
+  }
+  .order-detil-info {
+    background: #fff;
+    padding-bottom: 0.4rem;
+    margin-bottom: 0.266667rem;
   }
   .order-title {
     font-size: 16px;
     color: #333;
-    background: #fff;
-    padding: 0.35rem 0.4rem;
+     padding: 0 0.4rem;
+    height: 1.31rem;
+    line-height: 1.31rem;
   }
   .order-list {
     padding:0.4rem;
     background:rgba(248,252,255,1);
+    .title {
+      font-size: 16px;
+      display: flex;
+    }
+    .ovh-shop {
+      display: inline-block;
+      width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .go {
+      float: right;
+      color: #D1D1D6;
+    }
     .detail {
       display: flex;
-      padding-top:0.373333rem; 
     }
     .orderpic {
       width:1.84rem;
-      height:1.786667rem;
+      height:1.79rem;
       border-radius:0.133333rem;
       background: #ccc;
       img {
@@ -190,16 +210,16 @@ export default {
     }
     .content {
       width: 6.293333rem;
-      height: 2.653333rem;
+      height:1.79rem;
       padding-left: 0.266667rem; 
       .con-title {
-          font-size: 16px;
+        font-size: 14px;
       }
       .con-type{
           font-size: 12px;
           color: #999999;
           padding-top: 0.106667rem;
-          padding-bottom:0.1rem;
+          padding-bottom: 0.266667rem;
       }
       .con-price{
         font-size: 18px;
@@ -215,9 +235,15 @@ export default {
   }
   .total-border {
     display: flex;
-    border-bottom:1px solid rgba(223,230,255,1);
+    border-bottom:1px solid #f9f8ff;
+    height: 0.53rem;
+    line-height: 0.53rem;
+    padding-top: 0.41rem;
+    padding-bottom: 0.4rem;
+    font-size: 14px;
     > div {
       flex: 1;
+
     }
     .vip {
       color: #333;
@@ -227,16 +253,16 @@ export default {
       color: #FF5F5F;
     }
     .viptag {
-      display: inline-block;
-      width:0.53rem;
-      height:0.41rem;
-      line-height: 0.41rem;
-      text-align: center;
-      background:linear-gradient(-138.4deg,rgba(251,154,73,1),rgba(245,88,35,1));
-      border-radius:0.05rem;
-      font-size: 10px;
-      color: #fff;
+      display: block;
+      width: 0.41rem;
+      height: 0.41rem;
       margin-right: 0.27rem;
+      float: left;
+      margin-top: 0.03rem;
+      img {
+        display: block;
+        width: 100%;
+      }
     }
   }
     
@@ -262,8 +288,9 @@ export default {
     line-height: 1.35rem;
     padding:0 0.4rem;
     font-family:PingFangSC-Medium;
-    margin-bottom: 0.266667rem;
+    margin-bottom:1.3rem;
     font-size: 14px;
+    color: #333;
   }
   .order-action {
     width:1.066667rem;

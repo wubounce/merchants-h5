@@ -66,7 +66,6 @@ export default {
         {value:3,lable:'支出'},
       ],
       list:[],
-
     };
   },
   mounted() {
@@ -88,6 +87,7 @@ export default {
         if (res.code ===0) {
             this.list = res.data.items?[...this.list,...res.data.items]:[];  //分页添加
             this.total = res.data.total;
+            this.total > 10 ? this.accountOnlySix = false : this.accountOnlySix = true;
         }
         
     }

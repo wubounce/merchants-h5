@@ -5,7 +5,7 @@
           <span class="report-table-name">设备名称</span>
           <span class="report-table-type">设备类型</span>
           <span class="report-table-order">订单数量</span>
-          <span class="report-table-order">订单金额</span>
+          <span class="report-table-order">{{tableTitleType}}金额</span>
         </div>
         <div class="tableearn">
           <div class="nodata" v-if="noList">暂无数据</div>
@@ -30,6 +30,7 @@ export default {
   data() {
     return {
        title:'收益',
+       tableTitleType:'',
        list:[],
        noList:false,
        tooltip:'',
@@ -40,8 +41,10 @@ export default {
     let query = this.$route.query;
     if (query.type === 1) {
       this.title = '收益';
+      this.tableTitleType = '订单';
     } else {
       this.title = '退款';
+      this.tableTitleType = '退款';
     }
     this.getDetail(query.date,query.type);
   },

@@ -89,7 +89,7 @@ export default {
 </script>
 <style type="text/css" lang="less" scoped>
   .meber-list {
-    padding:0.21rem 0.4rem;
+    padding:0 0.4rem;
     background: #fff;
     margin-bottom: 0.21rem;
   }
@@ -97,8 +97,13 @@ export default {
     font-size: 16px;
     color: #333;
     background: #fff;
-    margin-bottom: 0.21rem;
+    padding-top: 0.21rem;
+    padding-bottom: 0.19rem;
     overflow: hidden;
+    p{
+      height: 0.6rem;
+      line-height: 0.6rem
+    }
   }
   .name{
     width: 75%;
@@ -114,13 +119,14 @@ export default {
   .phonenum {
     font-size: 16px;
     color: #999;
-    margin-top: 0.11rem;
+    margin-top: 0.08rem;
   }
   .memberdesc {
-    border-top:1px solid #DFE6FF;
-    font-size: 14px;
+    border-top:1px solid #f9f8ff;
+    font-size: 12px;
     color: #999;
-    padding-top: 0.17rem;
+    height: 0.8rem;
+    line-height: 0.8rem;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -138,9 +144,9 @@ export default {
     font-family:PingFangSC-Regular;
     color:rgba(255,255,255,1);
     text-align: center;
-    -moz-box-shadow:0px 0.03rem 0.4rem rgba(24,144,255,0.75); 
-    -webkit-box-shadow:0px 0.03rem 0.4rem rgba(24,144,255,0.75);
-    box-shadow: 0px 0.03rem 0.4rem rgba(24,144,255,0.75);
+    -moz-box-shadow: 0 0.05rem 0.23rem 0 rgba(24, 144, 255, 0.7);
+    -webkit-box-shadow: 0 0.05rem 0.23rem 0 rgba(24, 144, 255, 0.7);
+    box-shadow: 0 0.05rem 0.23rem 0 rgba(24, 144, 255, 0.7);
     position: fixed;
     bottom:0.55rem;
     right: 0.64rem;
