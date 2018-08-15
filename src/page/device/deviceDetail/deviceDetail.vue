@@ -178,7 +178,11 @@
          if(res.code === 0) {
           this.deviceDetail= res.data;
           this.functionList = res.data.functionList;
-          if(!res.data.hasTzj) this.tzjShow = true;
+          if(res.data.hasTzj) { //判断是否有筒自洁功能
+            this.tzjShow = true;
+          }else {
+            this.tzjShow = false;
+          }
           if(res.data.communicateType === 1){
             this.tongxin = "串口";
           } else {
