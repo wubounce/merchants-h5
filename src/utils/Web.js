@@ -1,8 +1,10 @@
 /* eslint-disable */
 import Vue from 'vue';
+import qs from "qs";
 import Api from '@/utils/Api';
 import store from '@/store';
 import axios from 'axios';
+import { getWxconfigFun } from '@/service/device';
 
 // 页面相关工具类
 const Web = {
@@ -41,9 +43,10 @@ const Web = {
   // 初始化wechat
   initWechat() {
     // alert("调用接口的url:" + this.getSignUrl())
-    return axios.post(Api.WECHAT_SIGN, {
+    let payload = {
       url: this.getSignUrl()
-    }).then(config => {
+    };
+    getWxconfigFun(qs.stringify(payload)).then(config => {
       wx.config({
         debug: process.env.NODE_ENV === 'development', // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
         appId: config.appId, // 必填，公众号的唯一标识
