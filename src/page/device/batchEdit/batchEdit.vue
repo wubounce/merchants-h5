@@ -35,7 +35,7 @@
         </ul>
       </div>
     </div>
-    <div class="searchNoItem" v-show="!shopList.length">暂无店铺</div>
+    <div class="searchNoItem" v-show="!shopList.length && !hasNoData">暂无店铺</div>
     <div style="width:100%;height:1.73rem;"></div>
     <button class="submitBtn" @click="goNext" :class="{'default':shopList.length<=0}" :disabled="shopList.length<=0">下一步</button>
   </section>

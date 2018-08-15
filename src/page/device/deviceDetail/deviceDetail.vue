@@ -178,11 +178,10 @@
          if(res.code === 0) {
           this.deviceDetail= res.data;
           this.functionList = res.data.functionList;
+          if(!res.data.hasTzj) this.tzjShow = true;
           if(res.data.communicateType === 1){
-            this.tzjShow = true;
             this.tongxin = "串口";
           } else {
-            this.tzjShow = false;
             this.tongxin = "脉冲";
             this.functionCodeShow = true;
             this.functionListTitle = this.functionListTitle2;
