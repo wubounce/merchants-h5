@@ -2,6 +2,7 @@
 import Vue from 'vue';
 import Api from '@/utils/Api';
 import store from '@/store';
+import axios from 'axios';
 
 // 页面相关工具类
 const Web = {
@@ -40,7 +41,7 @@ const Web = {
   // 初始化wechat
   initWechat() {
     // alert("调用接口的url:" + this.getSignUrl())
-    return Vue.axios.post(Api.WECHAT_SIGN, {
+    return axios.post(Api.WECHAT_SIGN, {
       url: this.getSignUrl()
     }).then(config => {
       wx.config({
@@ -65,7 +66,7 @@ const Web = {
     // alert(window.__wxjs_is_wkwebview === true ? "是IOS微信" : "不是IOS微信")
     let url = window.location.href.split('#')[0]
     if (!store.state.url) {
-      store.commit('updataUrl', url)
+      store.commit('setUrl', url)
     }
     return window.__wxjs_is_wkwebview === true ? store.state.url : url
   },

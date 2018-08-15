@@ -11,6 +11,11 @@ const store = new Vuex.Store({
     user,
     web
   },
+  mutations: {
+    setUrl (state, data) {
+      state.url = data;
+    }
+  },
   getters,
  
 });

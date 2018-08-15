@@ -651,6 +651,9 @@
         height: 1.17rem;
         line-height: 1.17rem;
         font-size: 0.4rem;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
       }
       .selected {
         background-color: rgba(14, 14, 255, 0.05);
