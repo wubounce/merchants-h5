@@ -119,7 +119,7 @@ export default {
   .car-shop {
     font-size: 14px;
     color: #999;
-    padding: 0.29rem 0.44rem 0;
+    padding: .29rem .44rem .29rem;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
