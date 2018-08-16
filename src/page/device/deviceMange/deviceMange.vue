@@ -1,7 +1,7 @@
 <template>
-  <section v-title="title">
+  <section v-title="title" class="page-loadmore-height ">
     <div class="permissions" v-if="$store.getters.has('mer:machine:list')">暂无相关页面权限</div>
-    <div v-else>
+    <div v-else class="page-loadmore-height ">
       <div class="search-header">
         <div class="search"> 
           <div class="search-input">
@@ -40,26 +40,28 @@
       <div class="page-top">
         <div class="page-loadmore-wrapper" ref="wrapper" :style="{overflowY:scrollShow}">
           <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" @translate-change="translateChange" :auto-fill="false" ref="loadmore">
-            <router-link tag="div" :to="{ name: 'deviceDetail', query:{machineId:item.machineId}}" class="device-list" v-for="(item,index) in list" :key="index">
-              <section class="item-hd">
-                <span class="item-title "><b>{{item.machineName}}</b></span>
-                <span class="state">{{item.machineState}}</span>
-              </section>
-              <section class="item-bd">
-                <span>店铺</span>
-                <div>{{item.shopName}}</div>
-              </section>
-              <section class="item-ft">
-                <p class="item-ft-right">
-                  <span>类型</span>
-                  <span>{{item.machineTypeName}}</span>
-                </p>
-                <p class="item-ft-right">
-                  <span>收益</span>
-                  <span>{{item.profit | keepTwoNum}}</span>
-                </p>
-              </section>
-            </router-link> 
+            <div>
+              <router-link tag="div" :to="{ name: 'deviceDetail', query:{machineId:item.machineId}}" class="device-list" v-for="(item,index) in list" :key="index">
+                <section class="item-hd">
+                  <span class="item-title "><b>{{item.machineName}}</b></span>
+                  <span class="state">{{item.machineState}}</span>
+                </section>
+                <section class="item-bd">
+                  <span>店铺</span>
+                  <div>{{item.shopName}}</div>
+                </section>
+                <section class="item-ft">
+                  <p class="item-ft-right">
+                    <span>类型</span>
+                    <span>{{item.machineTypeName}}</span>
+                  </p>
+                  <p class="item-ft-right">
+                    <span>收益</span>
+                    <span>{{item.profit | keepTwoNum}}</span>
+                  </p>
+                </section>
+              </router-link>
+            </div>
             <div v-if="allLoaded" class="nomore-data">没有更多了</div>
           </mt-loadmore>
         </div>
