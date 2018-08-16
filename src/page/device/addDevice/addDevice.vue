@@ -379,7 +379,7 @@
       },
       async getFunctionSetList() {  //获取功能列表数据
         if(!this.functionSetList.length){
-          let payload = {subTypeId: this.fromdata.secondType.id,shopId: this.fromdata.shopType.id} ;     
+          let payload = {subTypeId: this.fromdata.secondType.id,shopId: this.fromdata.shopType.id,company: this.fromdata.company,communicateType: this.fromdata.communicateType } ;     
           let res = await getFunctionSetListFun(qs.stringify(payload));
           if(res.code === 0) {
             this.functionTempletType = res.data.functionTempletType;
@@ -496,15 +496,18 @@
 
       },
       toFunctionSeting() { //切换到功能列表
-        if(this.fromdata.shopType.id && this.fromdata.firstType.id && this.fromdata.secondType.id) {
-          this.getFunctionSetList();
-          this.setModelShow= true;
-          this.modelShow = false;
-          this.title = "功能列表";
-        }else{
+        if(!this.fromdata.company && !this.fromdata.communicateType) {
+          this.$toast("请扫描NQT码");
+          return false;
+        }       
+        if(!this.fromdata.shopType.id && !this.fromdata.firstType.id && !this.fromdata.secondType.id ) {
           this.$toast("请先选择设备型号");
+          return false;
         }
-       
+        this.getFunctionSetList();
+        this.setModelShow= true;
+        this.modelShow = false;
+        this.title = "功能列表";       
       },
       goNext(){ //功能列表确认
         let count = 0;
