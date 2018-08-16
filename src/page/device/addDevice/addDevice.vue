@@ -73,7 +73,7 @@
     </section>
     </div>
     <!-- 店铺-->
-    <mt-popup v-model="companyVisible" position="bottom">
+    <!-- <mt-popup v-model="companyVisible" position="bottom">
       <div class="resp-shop">
         <span class="quxi" @click="companyVisible= false">取消</span>
         <span class="shop">店铺</span>
@@ -84,33 +84,10 @@
           <li class="mint-checklist-label" :class="{'selected':index==selectedIndex}" v-for="(item,index) in selectListA" :key="index" @click="checkItem(index)">{{item.shopName}}</li>
         </ul>
       </section>
-    </mt-popup>
-    <!-- 类型 -->
-    <mt-popup v-model="parentType" position="bottom">
-      <div class="resp-shop">
-        <span class="quxi" @click="companyVisible= false">取消</span>
-        <span class="shop">类型</span>
-        <span class="qued" @click="getFirstValue">确定</span>
-      </div>
-      <section class="resp-shop-wrap">
-        <ul class="all-list">
-          <li class="mint-checklist-label" :class="{'selected':index==selectedIndex}" v-for="(item,index) in functionList" :key="index" @click="checkItem(index)">{{item.name}}</li>
-        </ul>
-      </section>
-    </mt-popup>
-     <!-- 型号 -->
-    <mt-popup v-model="subType" position="bottom">
-      <div class="resp-shop">
-        <span class="quxi" @click="companyVisible= false">取消</span>
-        <span class="shop">型号</span>
-        <span class="qued" @click="getSecondValue">确定</span>
-      </div>
-      <section class="resp-shop-wrap">
-        <ul class="all-list">
-          <li class="mint-checklist-label" :class="{'selected':index==selectedIndex}" v-for="(item,index) in funList" :key="index" @click="checkItem(index)">{{item.name}}</li>
-        </ul>
-      </section>
-    </mt-popup>
+    </mt-popup> -->
+    <selectpickr :visible="companyVisible" :slots="slotsShop" :valueKey="shopname" @selectpicker="machineselectpickerShop" @onpickstatus="machineselectpickertatusShop"> </selectpickr>
+    <selectpickr :visible="parentType" :slots="slotsFirst" :valueKey="firstname" @selectpicker="machineselectpickerFirst" @onpickstatus="machineselectpickertatusFirst"> </selectpickr>
+    <selectpickr :visible="subType" :slots="slotsFun" :valueKey="firstname" @selectpicker="machineselectpickerFun" @onpickstatus="machineselectpickertatusFun"> </selectpickr>
   </section>
 </template>
 
@@ -127,6 +104,7 @@
   import QHeader from '@/components/header';
   import { Actionsheet } from "mint-ui";
   import AddCount from "@/components/AddCount/AddCount";
+  import selectpickr from '@/components/selectPicker';
   import { getWxconfigFun,getShopFun,getlistParentTypeFun,getlistSubTypeFun,deviceAddorEditFun,getFunctionSetListFun } from '@/service/device';
  
 
@@ -151,6 +129,38 @@
         timeIsDisable: false,
         priceIsDisable: false,
         codeIsDisable: false,
+        slotsShop: [
+        {
+          flex: 1,
+          values: [],
+          className: 'shop-type',
+          textAlign: 'center',
+          position:'bottom',
+          name:'店铺类型'
+        }
+        ],
+         slotsFirst: [
+        {
+          flex: 1,
+          values: [],
+          className: 'shop-type',
+          textAlign: 'center',
+          position:'bottom',
+          name:'店铺类型'
+        }
+        ],
+         slotsFun: [
+        {
+          flex: 1,
+          values: [],
+          className: 'shop-type',
+          textAlign: 'center',
+          position:'bottom',
+          name:'店铺类型'
+        }
+        ],
+        shopname: "shopName",
+        firstname: 'name',
         functionListTitle: [
           ['功能'],
           ['耗时', '/分'],
@@ -198,11 +208,32 @@
       };
     },
     methods: {
+      machineselectpickerShop(data){ //获取店铺
+        this.fromdata.shopType.id = data.shopId;
+        this.fromdata.shopType.name = data.shopName;
+      },
+      machineselectpickertatusShop(data){
+        this.companyVisible = data;
+      },
+      machineselectpickerFirst(data){ //获取一级类型
+        this.fromdata.firstType.id = data.id;
+        this.fromdata.firstType.name = data.name;
+      },
+      machineselectpickertatusFirst(data){
+        this.parentType = data;
+      },
+      machineselectpickerFun(data){ //获取二级类型
+        this.fromdata.secondType.id = data.id;
+        this.fromdata.secondType.name = data.name;
+      },
+      machineselectpickertatusFun(data){
+        this.subType = data;
+      },
       checkItem(index) {
         this.selectedIndex = index;
       },
       checkData(val,index,name,flag) {
-        let reg = /^\+?[1-9][0-9]*$/;  //验证非0整数
+        let reg = /^\+?[0-9][0-9]*$/;  //验证非0整数
         let reg1 = /^[0-9]+([.]{1}[0-9]{1,2})?$/;  //验证非0正整数和二位小数字
         if(flag ===0 && !reg.test(val)) {
           if(!val){
@@ -313,10 +344,9 @@
         if (r != null) return unescape(r[2]); return null; //返回参数值
       },
       async checkDeviceSelect() { //获取店铺
-        this.$refs.machineNameInput.blur();
         let res = await getShopFun();
         if(res.code === 0) {
-          this.selectListA = res.data; 
+          this.slotsShop[0].values = res.data;
         }
         this.companyVisible = true;
       },
@@ -325,11 +355,10 @@
            let payload = {shopid:this.fromdata.shopType.id};
            let res = await getlistParentTypeFun(qs.stringify(payload));
            if(res.code === 0) {
-             this.functionList = res.data; 
+             this.slotsFirst[0].values = res.data;
             }
-          this.stop();
-          this.move();
-          this.parentType = true;
+            this.parentType = true;
+            
         }else{
           this.$toast("请先选择店铺"); //MessageBox.alert
           return false;
@@ -340,9 +369,9 @@
            let payload = {shopid:this.fromdata.shopType.id,parentTypeId:this.fromdata.firstType.id};
            let res = await getlistSubTypeFun(qs.stringify(payload));
            if(res.code === 0) {
-             this.funList = res.data; 
+             this.slotsFun[0].values = res.data;
             }
-          this.subType = true;
+           this.subType = true;
         }else{
           this.$toast("请先选择类型");
           return false;
@@ -525,6 +554,7 @@
       Actionsheet,
       AddCount,
       Button,
+      selectpickr
     }
   };
 

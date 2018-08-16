@@ -66,18 +66,7 @@
     </section>
     </div>
     <!-- 店铺-->
-    <mt-popup v-model="companyVisible" position="bottom">
-      <div class="resp-shop">
-        <span class="quxi" @click="companyVisible= false">取消</span>
-        <span class="shop">店铺</span>
-        <span class="qued" @click="getCheckShop">确定</span>
-      </div>
-      <section class="resp-shop-wrap">
-        <ul class="all-list">
-          <li class="mint-checklist-label" :class="{'selected':index==selectedIndex}" v-for="(item,index) in selectListA" :key="index" @click="checkItem(index)">{{item.shopName}}</li>
-        </ul>
-      </section>
-    </mt-popup>
+    <selectpickr :visible="companyVisible" :slots="slotsShop" :valueKey="shopname" @selectpicker="machineselectpickerShop" @onpickstatus="machineselectpickertatusShop"> </selectpickr>
   </section>
 </template>
 
@@ -95,10 +84,8 @@
     Actionsheet
   } from "mint-ui";
   import AddCount from "@/components/AddCount/AddCount";
+  import selectpickr from '@/components/selectPicker';
   import {getWxconfigFun,detailDeviceListFun,getShopFun,deviceAddorEditFun } from '@/service/device';
- 
-
-
   export default {
     data() {
       return {
@@ -114,6 +101,17 @@
         functionSetList: [],
         jsonArr:[],
         getJsonArr:[],
+        slotsShop: [
+        {
+          flex: 1,
+          values: [],
+          className: 'shop-type',
+          textAlign: 'center',
+          position:'bottom',
+          name:'店铺类型'
+        }
+        ],
+        shopname: "shopName",
         functionListTitle: [
           ['功能'],
           ['耗时', '/分'],
@@ -168,11 +166,18 @@
       };
     },
     methods: {
+      machineselectpickerShop(data){ //获取店铺
+        this.fromdata.shopType.id = data.shopId;
+        this.fromdata.shopType.name = data.shopName;
+      },
+      machineselectpickertatusShop(data){
+        this.companyVisible = data;
+      },
       checkItem(index) {
         this.selectedIndex = index;
       },
        checkData(val,index,name,flag) {
-        let reg = /^\+?[1-9][0-9]*$/;  //验证非0整数
+        let reg = /^\+?[0-9][0-9]*$/;  //验证非0整数
         let reg1 = /^[0-9]+([.]{1}[0-9]{1,2})?$/;  //验证非0正整数和带一位小数字非0正整数
         if(flag ===0 && !reg.test(val)) {
           if(!val){
@@ -285,7 +290,7 @@
       async checkDeviceSelect() { //获取店铺
         let res = await getShopFun();
          if(res.code === 0) {
-          this.selectListA = res.data; 
+          this.slotsShop[0].values = res.data;
          }
          this.companyVisible = true;
       },
@@ -401,6 +406,7 @@
       Actionsheet,
       AddCount,
       Button,
+      selectpickr
     }
   };
 
