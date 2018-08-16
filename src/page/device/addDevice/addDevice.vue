@@ -513,7 +513,7 @@
       },
       goNext(){ //功能列表确认
         let count = 0;
-        let len = this.functionList.length;
+        let len = this.functionSetList.length;
         this.functionList.forEach(item=>{
           if(item.ifOpen === false){
             count++;
