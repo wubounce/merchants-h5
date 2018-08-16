@@ -57,8 +57,7 @@
     <section class="fun-item-bd funlist" style="-webkit-overflow-scrolling:touch;overflow-y:scroll;">
       <div v-for="(item,index) in functionSetList" :key="index">
         <span class="fun-list-item">{{item.functionName}}</span>
-        <span class="fun-list-item" v-show="!isShow2">{{item.needMinutes}}</span>
-        <input type="number" class="fun-list-item" v-model="item.needMinutes" v-if="isShow2" @change="checkData(item.needMinutes,index,'needMinutes',0)" min=0/>
+        <input type="number" class="fun-list-item" v-model="item.needMinutes"  @change="checkData(item.needMinutes,index,'needMinutes',0)" min=0/>
         <input type="number" class="fun-list-item" v-model="item.functionPrice" @change="checkData(item.functionPrice,index,'functionPrice',1)" min=0/>
         <input type="number" class="fun-list-item" v-model="item.functionCode" v-if="isShow2" @change="checkData(item.functionCode,index,'functionCode',2)" min=0/>
         <p class="fun-list-item">
