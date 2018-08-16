@@ -3,8 +3,8 @@
     <div class="permissions" v-if="$store.getters.has('mer:shop:list')">暂无相关页面权限</div>
     <div v-else>
       <ul v-if="hasNews">
-        <div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }" >
-          <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore">
+        <div class="page-loadmore-wrapper" ref="wrapper" :style="{overflowY:scrollShow}" >
+          <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" @translate-change="translateChange" :auto-fill="false" ref="loadmore">
                 <li class="list" v-for="(item,index) in list" :key="index">
                    <router-link :to="{ name: 'shopDetail', query:{shopId:item.shopId}}">
                   <p class="top">
@@ -43,7 +43,9 @@
 import qs from "qs";
 import { MessageBox } from 'mint-ui';
 import { manageListFun } from '@/service/shop';
+import PagerMixin from '@/mixins/pagerMixin';
 export default {
+  mixins: [PagerMixin],
   data() {
     return {
        title:'店铺管理',
@@ -62,29 +64,29 @@ export default {
     moreOrthen() {
       return (this.allLoaded && this.lessTen);
     },
-    loadBottom() {
-      this.page += 1;
-      let allpage = Math.ceil(this.total/this.pageSize);
-      if(this.page <= allpage){
-        this.getShopList();
-      }else{
-        this.allLoaded = true;//模拟数据加载完毕 禁用上拉加载
-      }
-      this.$refs.loadmore.onBottomLoaded();
-    },
-    loadTop() {
-      this.page = 1;
-      this.list = [];
-      this.getShopList();
-      this.allLoaded = false;//下拉刷新时解除上拉加载的禁用
-      this.$refs.loadmore.onTopLoaded();
-    },
+    // loadBottom() {
+    //   this.page += 1;
+    //   let allpage = Math.ceil(this.total/this.pageSize);
+    //   if(this.page <= allpage){
+    //     this.getShopList();
+    //   }else{
+    //     this.allLoaded = true;//模拟数据加载完毕 禁用上拉加载
+    //   }
+    //   this.$refs.loadmore.onBottomLoaded();
+    // },
+    // loadTop() {
+    //   this.page = 1;
+    //   this.list = [];
+    //   this.getShopList();
+    //   this.allLoaded = false;//下拉刷新时解除上拉加载的禁用
+    //   this.$refs.loadmore.onTopLoaded();
+    // },
     toAddShop() {
       this.$router.push({
         name:'addShop'
       });
     },
-    async getShopList() {
+    async _getList() {
       let obj = {
         page: this.page,
         pageSize: this.pageSize
@@ -133,7 +135,6 @@ export default {
     }
   },
   created() {
-    this.getShopList();
   },
   mounted() {
     let windowWidth = document.documentElement.clientWidth;//获取屏幕高度
@@ -142,7 +143,7 @@ export default {
   watch: {
     $route(to,from) {
       if(to.name === 'shopList') {
-        this.getShopList();
+        this._getList();
       }
     }
   }
