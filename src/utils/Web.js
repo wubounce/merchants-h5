@@ -49,7 +49,7 @@ const Web = {
     };
     
     getWxconfigFun(qs.stringify(payload)).then(config => {
-      console.log(config)
+      // console.log(config)
       wx.config({
         debug: process.env.NODE_ENV === 'development', // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
         appId: config.data.appId, // 必填，公众号的唯一标识
@@ -62,7 +62,7 @@ const Web = {
         // alert(payload.url)
 				 // window.location.reload() 
         // alert(url)
-				 alert(JSON.stringify(err))
+				 // alert(JSON.stringify(err))
 			})
     })
   },
