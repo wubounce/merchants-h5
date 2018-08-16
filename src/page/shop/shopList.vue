@@ -137,8 +137,7 @@ export default {
   created() {
   },
   mounted() {
-    let windowWidth = document.documentElement.clientWidth;//获取屏幕高度
-    this.wrapperHeight = document.documentElement.clientHeight;
+    
   },
   watch: {
     $route(to,from) {

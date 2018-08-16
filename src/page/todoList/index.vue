@@ -6,8 +6,8 @@
 		<p class="shop-item title">批量定时启动设备</p>
 		<p v-show="noData" class="noTodoList">暂无待办事项</p>
 		<ul>
-			<div class="page-loadmore-wrapper" ref="wrapper" :style="{ height: wrapperHeight + 'px' }">
-				<mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore">
+			<div class="page-loadmore-wrapper" ref="wrapper" :style="{overflowY:scrollShow}">
+				<mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" @translate-change="translateChange" :auto-fill="false" ref="loadmore">
 					<li class="list" v-for="(item,index) in list" :key="index"> 
 						<router-link :to="{ name: 'todoDetail', query:{id:item.id}}">
 							<p class="time"><span>时间</span><span class="time-blue">{{item.beginTime}}</span></p>
@@ -31,7 +31,9 @@ import qs from "qs";
 import { listBatchStartFun } from '@/service/todoList';
 import {Loadmore} from 'mint-ui';
 import { MessageBox } from 'mint-ui';
+import PagerMixin from '@/mixins/pagerMixin';
   export default {
+	mixins: [PagerMixin],
     data() {
       return {
 				title:'待办事项',
@@ -46,24 +48,7 @@ import { MessageBox } from 'mint-ui';
       };
     },
     methods: {
-			loadBottom() {
-				this.page += 1;
-				let allpage = Math.ceil(this.total/this.pageSize);
-				if(this.page <= allpage){
-					this.getListBatchStart();
-				}else{
-					this.allLoaded = true;//模拟数据加载完毕 禁用上拉加载
-				}
-				this.$refs.loadmore.onBottomLoaded();
-			},
-			loadTop() {
-				this.page = 1;
-				this.list = [];
-				this.getListBatchStart();
-				this.allLoaded = false;//下拉刷新时解除上拉加载的禁用
-				this.$refs.loadmore.onTopLoaded();
-			},
-      async getListBatchStart() {
+      async _getList() {
        let obj = {
 					page: this.page,
 					pageSize: this.pageSize
@@ -85,12 +70,11 @@ import { MessageBox } from 'mint-ui';
       }
     },
     created() {
-      this.getListBatchStart();
-		},
-		mounted() {
-			let windowWidth = document.documentElement.clientWidth;//获取屏幕高度
-			this.wrapperHeight = document.documentElement.clientHeight;
-		}
+      
+	},
+	mounted() {
+
+	}
   };
 </script>
 
