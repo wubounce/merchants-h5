@@ -168,7 +168,7 @@
         let payload = {machineState: this.index,page:this.page,pageSize: this.pageSize};
         let res = await deviceListFun(qs.stringify(payload));
         if(res.code === 0) {
-          this.list = res.data.items;
+          this.list = res.data.items?[...this.list,...res.data.items]:[];
           this.total = res.data.total;
           this.hasNoData = this.list.length<= 0 ? true: false;
           this.noMore = this.page>1?true: false;
