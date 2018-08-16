@@ -162,8 +162,8 @@ export default {
         this.cardName = res.data.cardName;
         this.IDCardNo = res.data.idcardNo;
         this.img.defaultPicture1 = res.data.idcardFont;
-        this.img.defaultPicture2 = res.data.idcardImg;
-        this.img.defaultPicture3 = res.data.idcardReverse;
+        this.img.defaultPicture2 = res.data.idcardReverse;
+        this.img.defaultPicture3 = res.data.idcardImg;   
         this.imgChange.a = this.img.defaultPicture1;
         this.imgChange.b = this.img.defaultPicture2;
         this.imgChange.c = this.img.defaultPicture3;
