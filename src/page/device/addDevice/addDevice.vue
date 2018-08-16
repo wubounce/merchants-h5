@@ -57,9 +57,9 @@
     <section class="fun-item-bd funlist" style="-webkit-overflow-scrolling:touch;overflow-y:scroll;">
       <div v-for="(item,index) in functionSetList" :key="index">
         <span class="fun-list-item">{{item.functionName}}</span>
-        <input type="number" class="fun-list-item" v-model="item.needMinutes"  @change="checkData(item.needMinutes,index,'needMinutes',0)" min=0/>
-        <input type="number" class="fun-list-item" v-model="item.functionPrice" @change="checkData(item.functionPrice,index,'functionPrice',1)" min=0/>
-        <input type="number" class="fun-list-item" v-model="item.functionCode" v-if="isShow2" @change="checkData(item.functionCode,index,'functionCode',2)" min=0/>
+        <input type="number" class="fun-list-item" v-model="item.needMinutes"   min=0/>
+        <input type="number" class="fun-list-item" v-model="item.functionPrice"  min=0/>
+        <input type="number" class="fun-list-item" v-model="item.functionCode" v-if="isShow2"  min=0/>
         <p class="fun-list-item">
           <mt-switch v-model="item.ifOpen"></mt-switch>
         </p>
@@ -179,6 +179,7 @@
           machineName: "",
           firstClass: "",
           secondClass: "",
+          communicateType: "",
           shopType: {
             name:"",
             id:""
@@ -233,7 +234,7 @@
         this.selectedIndex = index;
       },
       checkData(val,index,name,flag) {
-        let reg = /^\+?[0-9][0-9]*$/;  //验证非0整数
+        let reg = /^\+?[1-9][0-9]*$/;  //验证非0整数
         let reg1 = /^[0-9]+([.]{1}[0-9]{1,2})?$/;  //验证非0正整数和二位小数字
         if(flag ===0 && !reg.test(val)) {
           if(!val){
@@ -385,6 +386,7 @@
             this.functionTempletType = res.data.functionTempletType;
             this.functionSetList = res.data.list;
             this.fromdata.functionType.name = "已设置";
+            this.fromdata.communicateType = res.data.communicateType;
             if(res.data.communicateType !== 1){
               this.functionListTitle2 = this.functionListTitle;
               this.isShow2 = true;
@@ -511,17 +513,16 @@
       },
       goNext(){ //功能列表确认
         let count = 0;
-        let len = this.functionSetList.length;
-        this.functionSetList.forEach(item=>{
+        let len = this.functionList.length;
+        this.functionList.forEach(item=>{
           if(item.ifOpen === false){
             count++;
           }
         });
         if(count !== len){
-          if(!this.isDisable) {     
+          if(!this.isDisable) {             
             this.setModelShow= false;
             this.modelShow = true;
-            this.modifiedMarkup = false;
             this.title = "新增设备";
           }else{
             return false;
@@ -530,6 +531,48 @@
           this.$toast("请至少开启1个设备功能");
           return false;
         }
+        /* let flag1 = true;
+        let flag2 = true;
+        let flag3 = true;
+        this.functionSetList.forEach(item=>{ */
+          /* if(item.ifOpen === false){
+            count++;
+          } */
+         /* if(!item.needMinutes || Number(item.needMinutes) === 0 ){
+            this.$toast("耗时不能为0或者空");
+            flag1 =  false;
+
+          }
+          if(item.functionPrice === ''){
+            this.$toast("价格不能为空");
+            flag2 = false;
+          }
+          if(Nubmer(this.fromdata.communicateType)=== 1 && !item.functionCode || Nubmer(this.fromdata.communicateType)=== 1 && !Number(tem.functionCode) === 0){
+            this.$toast("脉冲不能为0或者空");
+            flag3 = false;
+          }
+        });
+        alert(Nubmer(this.fromdata.communicateType));
+        alert(flag1);
+        alert(flag2);
+        alert(flag3);  */
+
+
+          /*if(item.functionPrice === ''){
+            this.$toast("价格不能为空");
+            return false;
+          }
+          if(Nubmer(this.fromdata.communicateType)=== 1 && !item.functionCode){
+            this.$toast("脉冲不能为0或者空");
+            return false;
+          }
+        });
+        if(flag1){
+            this.setModelShow= false;
+            this.modelShow = true;
+            this.modifiedMarkup = false;
+            this.title = "新增设备";
+        }*/
       },
       goBack(){ //功能列表返回
        this.setModelShow= false;

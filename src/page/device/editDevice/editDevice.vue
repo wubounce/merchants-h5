@@ -51,9 +51,9 @@
     <section class="fun-item-bd funlist">
       <div v-for="(item,index) in functionList" :key="index">
         <span class="fun-list-item">{{item.functionName}}</span>
-        <input type="number" class="fun-list-item" v-model="item.needMinutes" @change="checkData(item.needMinutes,index,'needMinutes',0)" min=0/>
-        <input type="number" class="fun-list-item" v-model="item.functionPrice" @change="checkData(item.functionPrice,index,'functionPrice',1)" min=0/>
-        <input type="number" class="fun-list-item" v-model="item.functionCode" v-if="isShow2" @change="checkData(item.functionCode,index,'functionCode',2)" min=0/>
+        <input type="number" class="fun-list-item" v-model="item.needMinutes"  min=0/>
+        <input type="number" class="fun-list-item" v-model="item.functionPrice"  min=0/>
+        <input type="number" class="fun-list-item" v-model="item.functionCode" v-if="isShow2"  min=0/>
         <p class="fun-list-item">
           <mt-switch v-model="item.ifOpen"></mt-switch>
         </p>
@@ -177,7 +177,7 @@
         this.selectedIndex = index;
       },
        checkData(val,index,name,flag) {
-        let reg = /^\+?[0-9][0-9]*$/;  //验证非0整数
+        let reg = /^\+?[1-9][0-9]*$/;  //验证非0整数
         let reg1 = /^[0-9]+([.]{1}[0-9]{1,2})?$/;  //验证非0正整数和带一位小数字非0正整数
         if(flag ===0 && !reg.test(val)) {
           if(!val){
@@ -366,6 +366,10 @@
       },
 
       toFunctionSeting() { //切换到功能列表
+        if(!this.fromdata.company && !this.fromdata.communicateType) {
+          this.$toast("请扫描NQT码");
+          return false;
+        }       
           this.setModelShow= true;
           this.modelShow = false;
           this.title = "功能列表";
