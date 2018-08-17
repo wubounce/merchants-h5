@@ -46,11 +46,16 @@ export default {
       this.title = '退款';
       this.tableTitleType = '退款';
     }
-    this.getDetail(query.date,query.type);
+    this.getDetail(query.date,query.type,query.shopId);
   },
   methods: {
-    async getDetail(date,type){
-      let payload = Object.assign({},{date:date,type:type});
+    async getDetail(date,type,shopId){
+      let payload = null;
+      if (shopId) {
+        payload = Object.assign({},{date:date,type:type,shopId:shopId});
+      } else {
+        payload = Object.assign({},{date:date,type:type});
+      }
       let res = await machineReportFun(qs.stringify(payload));
       if (res.code === 0) {
         this.list = res.data;

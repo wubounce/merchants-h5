@@ -6,7 +6,7 @@
     </div>
     <div class="slectdata shopchoose">
       <span @click="popupVisible=true">{{currentTags?currentTags.shopName:'全部店铺'}}</span><i class="iconfont icon-xiangxiajiantou select-back"></i>
-      <selectpickr :visible="popupVisible" :slots="shopSlots" :valueKey="shopName" @selectpicker="shopselectpicker" @onpickstatus="shopselectpickertatus"> </selectpickr>
+      <selectpickr :visible="popupVisible" :slots="shopSlots" :valueKey="shopName" :title="'店铺'" @selectpicker="shopselectpicker" @onpickstatus="shopselectpickertatus"> </selectpickr>
     </div>
   </div>
   <div class="echarts-warp">
@@ -24,17 +24,23 @@
         <span class="report-table-order">订单数量</span>
         <span class="report-table-order">订单金额</span>
        </div>
-      <div class="listcon tableearn-list" v-for="(item,index) in  lsitdata" :key="index">
-         <router-link class="detail" :to="{name:'reportdetail', query:{date:item.date,type:1}}" >
+      <div class="listcon tableearn-list" v-for="(item,index) in  lsitdata" :key="index" @click="goDetail(item.date)">
+         <div class="detail">
           <span class="listtime report-table-date">{{item.date}}</span>
           <span  class="report-table-order">{{item.count}}</span>
           <span  class="report-table-order">{{item.money | tofixd}}</span>
-        </router-link>
+        </div>
       </div>
       <div class="nodata" v-if="lsitdata.length <= 0">暂无数据</div>
     </div>
   </div>
-  <mt-datetime-picker ref="picker2" type="date" v-model="searchStartDate" @confirm="handleStartDateChange" :endDate="pickerEndDate"></mt-datetime-picker>
+  <mt-datetime-picker ref="picker2" type="date" v-model="searchStartDate" @confirm="handleStartDateChange" :endDate="pickerEndDate">
+    <div class="picker-toolbar">
+          <span class="quxi">取消</span> 
+          <span class="shop">qwewqeqwee</span> 
+          <span class="qued">确定</span>
+       </div>
+  </mt-datetime-picker>
   <mt-datetime-picker ref="picker3" type="date" v-model="searchEndDate" @confirm="handleEndDateChange"></mt-datetime-picker>
 </div>
 </template>
@@ -195,6 +201,10 @@ export default {
     shopselectpickertatus(data){
       this.popupVisible = data;
     },
+    goDetail(date){
+      let shopId = this.currentTags?this.currentTags.shopId:'';
+      this.$router.push({name:'reportdetail', query:{date:date,type:1,shopId:shopId}});
+    }
   },
   computed:{
     chartOption(){
