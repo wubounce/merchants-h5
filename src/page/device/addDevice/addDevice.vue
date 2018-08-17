@@ -72,30 +72,13 @@
       <span class="cifrm" @click="goNext" :class="{'default':isDisable}" :disabled="isDisable">确认</span>
     </section>
     </div>
-    <!-- 店铺-->
-    <!-- <mt-popup v-model="companyVisible" position="bottom">
-      <div class="resp-shop">
-        <span class="quxi" @click="companyVisible= false">取消</span>
-        <span class="shop">店铺</span>
-        <span class="qued" @click="getCheckShop">确定</span>
-      </div>
-      <section class="resp-shop-wrap">
-        <ul class="all-list">
-          <li class="mint-checklist-label" :class="{'selected':index==selectedIndex}" v-for="(item,index) in selectListA" :key="index" @click="checkItem(index)">{{item.shopName}}</li>
-        </ul>
-      </section>
-    </mt-popup> -->
-    <selectpickr :visible="companyVisible" :slots="slotsShop" :valueKey="shopname" @selectpicker="machineselectpickerShop" @onpickstatus="machineselectpickertatusShop"> </selectpickr>
-    <selectpickr :visible="parentType" :slots="slotsFirst" :valueKey="firstname" @selectpicker="machineselectpickerFirst" @onpickstatus="machineselectpickertatusFirst"> </selectpickr>
-    <selectpickr :visible="subType" :slots="slotsFun" :valueKey="firstname" @selectpicker="machineselectpickerFun" @onpickstatus="machineselectpickertatusFun"> </selectpickr>
+    <selectpickr :visible="companyVisible" :slots="slotsShop" :valueKey="shopname" @selectpicker="machineselectpickerShop" @onpickstatus="machineselectpickertatusShop" :title="'选店铺'"> </selectpickr>
+    <selectpickr :visible="parentType" :slots="slotsFirst" :valueKey="firstname" @selectpicker="machineselectpickerFirst" @onpickstatus="machineselectpickertatusFirst" :title="'设备类型'"> </selectpickr>
+    <selectpickr :visible="subType" :slots="slotsFun" :valueKey="firstname" @selectpicker="machineselectpickerFun" @onpickstatus="machineselectpickertatusFun" :title="'设备型号'"> </selectpickr>
   </section>
 </template>
 
 <script>
-  // import wx from 'weixin-js-sdk';
-  // import {
-  //   device
-  // } from "@/service/device";
   import qs from "qs";
   import Api from '@/utils/Api';
   import Web from '@/utils/Web';
@@ -205,7 +188,6 @@
         selectListA: [],
         functionList: [],
         funList: [],
-        modifiedMarkup: false
       };
     },
     methods: {
@@ -326,14 +308,14 @@
           let parameter = url.substring(0,4);
           if(parameter == "http"){           
             let object = url.split("?")[1];
-            let nqt = this.getUrlParam(object,"NQT");
-            let company = this.getUrlParam(object,"Company");
-            let communicateType= this.getUrlParam(object,"CommunicateType");
-            let ver = this.getUrlParam(object,"Ver")?this.getUrlParam(object,"Ver"):0;
-            this.fromdata.nqt = nqt;
-            this.fromdata.company = company;
-            this.fromdata.communicateType = communicateType;
-            this.fromdata.ver = ver;
+            this.fromdata.nqt = this.getUrlParam(object,"NQT");
+            this.fromdata.company = this.getUrlParam(object,"Company");
+            this.fromdata.communicateType = this.getUrlParam(object,"CommunicateType");
+            this.fromdata.ver = this.getUrlParam(object,"Ver")?this.getUrlParam(object,"Ver"):0;
+            if(Number(this.fromdata.communicateType) === 0){
+              this.functionListTitle2 = this.functionListTitle;
+              this.isShow2 = true;
+            }
           }else{
             this.fromdata.imei= res;
           } 
@@ -387,10 +369,6 @@
             this.functionSetList = res.data.list;
             this.fromdata.functionType.name = "已设置";
             this.fromdata.communicateType = res.data.communicateType;
-            if(res.data.communicateType !== 1){
-              this.functionListTitle2 = this.functionListTitle;
-              this.isShow2 = true;
-            }
             this.functionSetList.forEach(item=>{
               item.ifOpen=item.ifOpen === 0?(!item.ifOpen) : (!!item.ifOpen);
             });
@@ -512,67 +490,47 @@
         this.title = "功能列表";       
       },
       goNext(){ //功能列表确认
-        let count = 0;
-        let len = this.functionSetList.length;
-        this.functionList.forEach(item=>{
-          if(item.ifOpen === false){
-            count++;
-          }
-        });
-        if(count !== len){
-          if(!this.isDisable) {             
-            this.setModelShow= false;
-            this.modelShow = true;
-            this.title = "新增设备";
-          }else{
-            return false;
-          }
-        }else{
-          this.$toast("请至少开启1个设备功能");
-          return false;
-        }
-        /* let flag1 = true;
+        let flag1 = true;
         let flag2 = true;
         let flag3 = true;
-        this.functionSetList.forEach(item=>{ */
-          /* if(item.ifOpen === false){
+        let flag4 = true;
+        let count = 0;
+        let len = this.functionSetList.length;
+        let reg = /^\+?[1-9][0-9]*$/; //非0正整数
+        let reg1 = /^[0-9]+([.]{1}[0-9]{1,2})?$/; //可以0带二位小数的正整数
+        let reg2 = /^[1-9]+([.]{1}[0-9]{1,2})?$/; //不可以0带二位小数的正整数
+        for(let i = 0;i < len;i++){
+          let item = this.functionSetList[i];
+          if(item.ifOpen === false){
             count++;
-          } */
-         /* if(!item.needMinutes || Number(item.needMinutes) === 0 ){
-            this.$toast("耗时不能为0或者空");
-            flag1 =  false;
-
+          } 
+          if(!reg.test(Number(item.needMinutes))){
+            this.$toast("耗时填写格式错误，请填写非0的非空正整数");
+            flag1 = false;
+            break;
           }
-          if(item.functionPrice === ''){
-            this.$toast("价格不能为空");
-            flag2 = false;
+          if(!item.functionPrice || !reg1.test(Number(item.functionPrice))){
+            this.$toast("原价填写格式错误，请输入非空正整数，最多2位小数");
+             flag2 = false;
+            break;
           }
-          if(Nubmer(this.fromdata.communicateType)=== 1 && !item.functionCode || Nubmer(this.fromdata.communicateType)=== 1 && !Number(tem.functionCode) === 0){
-            this.$toast("脉冲不能为0或者空");
+          if(Number(this.fromdata.communicateType)=== 0 && !reg.test(Number(item.functionCode))){
             flag3 = false;
+            this.$toast("脉冲填写格式错误，请填写非0非空正整数");
+            break;
           }
-        });
-        alert(Nubmer(this.fromdata.communicateType));
-        alert(flag1);
-        alert(flag2);
-        alert(flag3);  */
-
-
-          /*if(item.functionPrice === ''){
-            this.$toast("价格不能为空");
-            return false;
-          }
-          if(Nubmer(this.fromdata.communicateType)=== 1 && !item.functionCode){
-            this.$toast("脉冲不能为0或者空");
-            return false;
-          }
-        });
-        if(flag1){
-            this.setModelShow= false;
-            this.modelShow = true;
-            this.modifiedMarkup = false;
-            this.title = "新增设备";
-        }*/
+          if(count == len){
+            flag4 = false;
+            this.$toast("请至少开启1个设备功能");
+            break;
+          }                   
+               
+        }
+        if(flag1 && flag2 && flag3 && flag4){
+          this.setModelShow= false;
+          this.modelShow = true;
+          this.title = "新增设备";
+        }
       },
       goBack(){ //功能列表返回
        this.setModelShow= false;

@@ -246,8 +246,9 @@
             let ver = this.getUrlParam(object,"Ver")?this.getUrlParam(object,"Ver"):0;
             this.fromdata.nqt = nqt;
             this.fromdata.company = company;
-            this.fromdata.communicateType = communicateType;
+            this.fromdata.smCommunicateType = communicateType;
             this.fromdata.ver = ver;
+
           }else{
             this.fromdata.imei= res;
           } 
@@ -262,7 +263,7 @@
         let payload = { machineId: this.$route.query.machineId} ;     
         let res = await detailDeviceListFun(qs.stringify(payload));
          if(res.code === 0) {
-           if(res.data.communicateType !== 1){
+           if(Number(res.data.communicateType) !== 1){
              this.functionListTitle2 = this.functionListTitle;
              this.isShow2 = true;
            }
@@ -372,27 +373,48 @@
         }       
           this.setModelShow= true;
           this.modelShow = false;
-          this.title = "功能列表";
       },
       goNext(){ //功能列表确认
+        let flag1 = true;
+        let flag2 = true;
+        let flag3 = true;
+        let flag4 = true;
         let count = 0;
         let len = this.functionList.length;
-        this.functionList.forEach(item=>{
+        let reg = /^\+?[1-9][0-9]*$/; //非0正整数
+        let reg1 = /^[0-9]+([.]{1}[0-9]{1,2})?$/; //可以0带二位小数的正整数
+        let reg2 = /^[1-9]+([.]{1}[0-9]{1,2})?$/; //不可以0带二位小数的正整数
+        for(let i = 0;i < len;i++){
+          let item = this.functionList[i];
           if(item.ifOpen === false){
             count++;
+          } 
+          if(!reg.test(Number(item.needMinutes))){
+            this.$toast("耗时填写格式错误，请填写非0的非空正整数");
+            flag1 = false;
+            break;
           }
-        });
-        if(count !== len){
-          if(!this.isDisable) {             
-            this.setModelShow= false;
-            this.modelShow = true;
-            this.title = "编辑设备";
-          }else{
-            return false;
+          if(!item.functionPrice || !reg1.test(Number(item.functionPrice))){
+            this.$toast("原价填写格式错误，请输入非空正整数，最多2位小数");
+             flag2 = false;
+            break;
           }
-        }else{
-          this.$toast("请至少开启1个设备功能");
-          return false;
+          if(Number(this.fromdata.communicateType)=== 0 && !reg.test(Number(item.functionCode))){
+            flag3 = false;
+            this.$toast("脉冲填写格式错误，请填写非0非空正整数");
+            break;
+          }
+          if(count == len){
+            flag4 = false;
+            this.$toast("请至少开启1个设备功能");
+            break;
+          }                   
+               
+        }
+        if(flag1 && flag2 && flag3 && flag4){
+          this.setModelShow= false;
+          this.modelShow = true;
+          this.title = "编辑设备";
         }
       },
       goBack(){ //功能列表返回

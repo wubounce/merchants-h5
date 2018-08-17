@@ -171,14 +171,43 @@ export default {
       },  
      
       async goNext() {
+        let flag1 = true;
+        let flag2 = true;
+        let flag3 = true;
+        let flag4 = true;
         let count = 0;
         let len = this.funTypeList.length;
-        this.funTypeList.forEach(item=>{
+        let reg = /^\+?[1-9][0-9]*$/; //非0正整数
+        let reg1 = /^[0-9]+([.]{1}[0-9]{1,2})?$/; //可以0带二位小数的正整数
+        let reg2 = /^[1-9]+([.]{1}[0-9]{1,2})?$/; //不可以0带二位小数的正整数
+        for(let i = 0;i < len;i++){
+          let item = this.funTypeList[i];
           if(item.ifOpen === false){
             count++;
+          } 
+          if(!reg.test(Number(item.needMinutes))){
+            this.$toast("耗时填写格式错误，请填写非0的非空正整数");
+            flag1 = false;
+            break;
           }
-        });
-        if(count !== len){
+          if(!item.functionPrice || !reg1.test(Number(item.functionPrice))){
+            this.$toast("原价填写格式错误，请输入非空正整数，最多2位小数");
+             flag2 = false;
+            break;
+          }
+          if(Number(this.fromdata.communicateType)=== 0 && !reg.test(Number(item.functionCode))){
+            flag3 = false;
+            this.$toast("脉冲填写格式错误，请填写非0非空正整数");
+            break;
+          }
+          if(count == len){
+            flag4 = false;
+            this.$toast("请至少开启1个设备功能");
+            break;
+          } 
+        }                  
+               
+        if(flag1 && flag2 && flag3 && flag4){
           let query = this.$route.query;
           let arr= [].concat(JSON.parse(JSON.stringify(this.funTypeList))); 
           arr.forEach(item=>{
@@ -203,13 +232,9 @@ export default {
             }else {
               this.$toast(res.msg);
             }
-        }else{
-          this.$toast("请至少开启1个设备功能");
-          return false;
-        }
-        
+        } 
       }
-
+        
     },
 
     computed: {

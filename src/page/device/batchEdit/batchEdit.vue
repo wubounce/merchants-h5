@@ -115,11 +115,9 @@
             }
             if(this.provinceName == this.cityName.slice(0,this.cityName.length-1)) {
               item.address = this.cityName + this.districtName + this.organization + this.address;
-              console.log(item.address);
             }
             else {
               item.address = this.provinceName + this.cityName + this.districtName + this.organization + this.address;
-              console.log(item.address);
               }
           });   
         }
