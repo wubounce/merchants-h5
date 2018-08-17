@@ -57,9 +57,9 @@
     <section class="fun-item-bd funlist" style="-webkit-overflow-scrolling:touch;overflow-y:scroll;">
       <div v-for="(item,index) in functionSetList" :key="index">
         <span class="fun-list-item">{{item.functionName}}</span>
-        <input type="number" class="fun-list-item" v-model="item.needMinutes"   min=0/>
+        <input type="tel" class="fun-list-item" v-model="item.needMinutes"   min=0/>
         <input type="number" class="fun-list-item" v-model="item.functionPrice"  min=0/>
-        <input type="number" class="fun-list-item" v-model="item.functionCode" v-if="isShow2"  min=0/>
+        <input type="tel" class="fun-list-item" v-model="item.functionCode" v-if="isShow2"  min=0/>
         <p class="fun-list-item">
           <mt-switch v-model="item.ifOpen"></mt-switch>
         </p>
@@ -163,6 +163,7 @@
           firstClass: "",
           secondClass: "",
           communicateType: "",
+          smCommunicateType: "",
           shopType: {
             name:"",
             id:""
@@ -211,55 +212,6 @@
       },
       machineselectpickertatusFun(data){
         this.subType = data;
-      },
-      checkItem(index) {
-        this.selectedIndex = index;
-      },
-      checkData(val,index,name,flag) {
-        let reg = /^\+?[1-9][0-9]*$/;  //验证非0整数
-        let reg1 = /^[0-9]+([.]{1}[0-9]{1,2})?$/;  //验证非0正整数和二位小数字
-        if(flag ===0 && !reg.test(val)) {
-          if(!val){
-            this.$toast("输入内容不能为空");
-            this.nullDisable = true;
-          }else{
-          this.$toast("耗时格式有误");
-          this.timeIsDisable= true;
-          }
-        }else{
-          this.timeIsDisable= false;
-          this.nullDisable = false;
-        }
-        if(flag ===1 && !reg1.test(val)) {
-          if(!val){
-            this.$toast("输入内容不能为空");
-            this.nullDisable = true;
-          }else{
-          this.$toast("价格格式有误");
-          this.priceIsDisable = true;
-          }
-        }else{
-          this.priceIsDisable = false;
-          this.nullDisable = false;
-        }
-        if(flag ===2 && !reg.test(val)) {
-          if(!val){
-            this.$toast("输入内容不能为空");
-            this.nullDisable = true;
-          }else{
-          this.$toast("脉冲格式有误");
-          this.codeIsDisable = true;
-          }
-        }else{
-          this.codeIsDisable= false;
-          this.nullDisable = false;
-        }
-        if(this.nullDisable || this.timeIsDisable || this.priceIsDisable || this.codeIsDisable){
-          this.isDisable = true;
-          return false;
-        }else{
-          this.isDisable = false;
-        }
       },
       getCheckShop() {
         if(this.fromdata.shopType.name !== this.selectListA[this.selectedIndex].shopName){
@@ -310,9 +262,9 @@
             let object = url.split("?")[1];
             this.fromdata.nqt = this.getUrlParam(object,"NQT");
             this.fromdata.company = this.getUrlParam(object,"Company");
-            this.fromdata.communicateType = this.getUrlParam(object,"CommunicateType");
+            this.fromdata.smCommunicateType = this.getUrlParam(object,"CommunicateType");
             this.fromdata.ver = this.getUrlParam(object,"Ver")?this.getUrlParam(object,"Ver"):0;
-            if(Number(this.fromdata.communicateType) === 0){
+            if(Number(this.fromdata.smCommunicateType) === 0){
               this.functionListTitle2 = this.functionListTitle;
               this.isShow2 = true;
             }
@@ -330,8 +282,9 @@
         let res = await getShopFun();
         if(res.code === 0) {
           this.slotsShop[0].values = res.data;
+          this.companyVisible = true;
         }
-        this.companyVisible = true;
+        
       },
       async checkFirstClass() { //获取一级列表
         if(this.fromdata.shopType.id){
@@ -362,7 +315,7 @@
       },
       async getFunctionSetList() {  //获取功能列表数据
         if(!this.functionSetList.length){
-          let payload = {subTypeId: this.fromdata.secondType.id,shopId: this.fromdata.shopType.id,company: this.fromdata.company,communicateType: this.fromdata.communicateType } ;     
+          let payload = {subTypeId: this.fromdata.secondType.id,shopId: this.fromdata.shopType.id} ;     
           let res = await getFunctionSetListFun(qs.stringify(payload));
           if(res.code === 0) {
             this.functionTempletType = res.data.functionTempletType;
@@ -372,7 +325,14 @@
             this.functionSetList.forEach(item=>{
               item.ifOpen=item.ifOpen === 0?(!item.ifOpen) : (!!item.ifOpen);
             });
-              
+            if(Number(this.fromdata.communicateType)=== Number(this.fromdata.smCommunicateType)){
+               this.setModelShow= true;
+               this.modelShow = false;
+               this.title = "功能列表";
+            }else{
+               this.$toast("您扫描的二维码和您选择的设备型号不一致");
+               return false;
+            }             
           }
           else {
             this.$toast(res.msg);
@@ -479,15 +439,12 @@
         if(!this.fromdata.company && !this.fromdata.communicateType) {
           this.$toast("请扫描NQT码");
           return false;
-        }       
+        } 
         if(!this.fromdata.shopType.id && !this.fromdata.firstType.id && !this.fromdata.secondType.id ) {
           this.$toast("请先选择设备型号");
           return false;
         }
-        this.getFunctionSetList();
-        this.setModelShow= true;
-        this.modelShow = false;
-        this.title = "功能列表";       
+        this.getFunctionSetList();      
       },
       goNext(){ //功能列表确认
         let flag1 = true;
@@ -509,7 +466,7 @@
             flag1 = false;
             break;
           }
-          if(!item.functionPrice || !reg1.test(Number(item.functionPrice))){
+          if(item.functionPrice==='' || !reg1.test(Number(item.functionPrice))){          
             this.$toast("原价填写格式错误，请输入非空正整数，最多2位小数");
              flag2 = false;
             break;
@@ -665,7 +622,7 @@
 
   .submitBtn {
     width: 100%;
-    position: fixed;
+    position: absolute;
     bottom: 0;
     border: none;
     padding: 0.45rem 0;

@@ -33,11 +33,11 @@
               <div class="icon"><span class="iconfont" :class="{'icon-xuanze':index==selectIndex}"></span></div>
             </div>
           </li>
-          <li class="searchNoItem" v-show="hasNoData">没有找到匹配数据</li>
         </ul>
       </div>
     </div>
-    <div class="searchNoItem" v-show="!shopList.length && !hasNoData">暂无店铺</div>
+    <div class="searchNoItem" v-show="!shopList.length && !keyword">暂无店铺</div>
+    <div class="searchNoItem" v-show="!shopList.length && keyword">找不到符合条件的店铺</div>
     <div style="width:100%;height:1.73rem;"></div>
     <button class="submitBtn" @click="goNext" :class="{'default':shopList.length<=0}" :disabled="shopList.length<=0">下一步</button>
   </section>
@@ -92,10 +92,6 @@
       }
     },
     methods: {
-      geocoder_CallBack(data) {
-       let completeAddress = data + this.address;  
-       return completeAddress;
-      },
       async fetchData(e) {
         let keywords = this.keyword;
         let payload = {shopName: keywords,hasMachine: true};
@@ -127,9 +123,6 @@
         this.selectIndex = index
         this.shopId = this.shopList[index].shopId;
         this.selectedShop = name;
-
-        // this.keyword = this.resData[index];
-        // this.search();
       },
       goNext(){
         let id = this.shopId;
@@ -172,11 +165,6 @@
           }
                
         }
-    },
-    computed: {
-      hasNoData () {
-        return !this.shopList.length;
-      }
     },
 
     watch: {

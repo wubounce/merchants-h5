@@ -21,9 +21,9 @@
     <section class="fun-item-bd funlist">
       <div v-for="(item,index) in funTypeList" :key="index">
         <span class="fun-list-item">{{item.functionName}}</span>
-        <input type="number" class="fun-list-item" v-model="item.needMinutes"  min=0/>
+        <input type="tel" class="fun-list-item" v-model="item.needMinutes"  min=0/>
         <input type="number" class="fun-list-item" v-model="item.functionPrice"  min=0/>
-        <input type="number" class="fun-list-item" v-model="item.functionCode" v-if="isShow2"  min=0/>
+        <input type="tel" class="fun-list-item" v-model="item.functionCode" v-if="isShow2"  min=0/>
         <p class="fun-list-item">
           <mt-switch v-model="item.ifOpen"></mt-switch>
         </p>
@@ -177,7 +177,7 @@ export default {
         let flag4 = true;
         let count = 0;
         let len = this.funTypeList.length;
-        let reg = /^\+?[1-9][0-9]*$/; //非0正整数
+        let reg = /^(?!0)\d{1,3}$/; //非0正整数
         let reg1 = /^[0-9]+([.]{1}[0-9]{1,2})?$/; //可以0带二位小数的正整数
         let reg2 = /^[1-9]+([.]{1}[0-9]{1,2})?$/; //不可以0带二位小数的正整数
         for(let i = 0;i < len;i++){
@@ -190,7 +190,7 @@ export default {
             flag1 = false;
             break;
           }
-          if(!item.functionPrice || !reg1.test(Number(item.functionPrice))){
+          if(item.functionPrice==='' || !reg1.test(Number(item.functionPrice))){
             this.$toast("原价填写格式错误，请输入非空正整数，最多2位小数");
              flag2 = false;
             break;

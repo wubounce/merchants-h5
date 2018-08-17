@@ -51,9 +51,9 @@
     <section class="fun-item-bd funlist">
       <div v-for="(item,index) in functionList" :key="index">
         <span class="fun-list-item">{{item.functionName}}</span>
-        <input type="number" class="fun-list-item" v-model="item.needMinutes"  min=0/>
+        <input type="tel" class="fun-list-item" v-model="item.needMinutes"  min=0/>
         <input type="number" class="fun-list-item" v-model="item.functionPrice"  min=0/>
-        <input type="number" class="fun-list-item" v-model="item.functionCode" v-if="isShow2"  min=0/>
+        <input type="tel" class="fun-list-item" v-model="item.functionCode" v-if="isShow2"  min=0/>
         <p class="fun-list-item">
           <mt-switch v-model="item.ifOpen"></mt-switch>
         </p>
@@ -394,7 +394,7 @@
             flag1 = false;
             break;
           }
-          if(!item.functionPrice || !reg1.test(Number(item.functionPrice))){
+          if(item.functionPrice==='' || !reg1.test(Number(item.functionPrice))){
             this.$toast("原价填写格式错误，请输入非空正整数，最多2位小数");
              flag2 = false;
             break;

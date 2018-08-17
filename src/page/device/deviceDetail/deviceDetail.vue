@@ -6,7 +6,7 @@
         <ul class="device-detail">
           <li class="device-detail-hd">
             <p>累计收益</p>
-            <p>{{deviceDetail.profit?deviceDetail.profit :'' | keepTwoNum}}</p>
+            <p>{{deviceDetail.profit?deviceDetail.profit :'0.00' | keepTwoNum}}</p>
           </li>
           <!-- 表单模块部分  -->
           <li class="device-detail-item">

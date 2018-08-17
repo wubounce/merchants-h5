@@ -34,7 +34,8 @@
         </ul>
       </div>
     </div>
-    <div class="searchNoItem" v-show="!shopList.length">暂无店铺</div>
+    <div class="searchNoItem" v-show="!shopList.length && !keyword">暂无店铺</div>
+    <div class="searchNoItem" v-show="!shopList.length && keyword">找不到符合条件的店铺</div>
     <div style="width:100%;height:1.73rem;"></div>
     <button class="submitBtn" @click="goNext" :class="{'default':shopList.length<=0}" :disabled="shopList.length<=0">下一步</button>
   </section>
@@ -87,10 +88,6 @@
     },
 
     methods: {
-      geocoder_CallBack(data) {
-       let completeAddress = data + this.address;  
-       return completeAddress;
-      },
       async fetchData(e) {
         let keywords = this.keyword;
         let payload = {shopName: keywords,hasMachine: true};
@@ -132,10 +129,6 @@
         }else{
           this.$toast("请选择一个店铺");
         }
-      },
-      clearInput: function () {
-        this.keyword = "";
-        this.isResult = false
       },
       async checkShopSelect() { //获取店铺
         let payload = {hasMachine: true};
