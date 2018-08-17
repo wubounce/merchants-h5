@@ -21,7 +21,7 @@
           <span class="linedata">
           <span :class="['linedatachoose', {linecurrent: lineSearchIndex === index}]" v-for="(item,index) in lineSearchTime" @click="lineTimeSearch(index)">{{item.lable}}</span>
           </span>
-          <selectpickr :visible="machineVisible" :slots="equipmentSlots" :valueKey="machinepickername" @selectpicker="machineselectpicker" @onpickstatus="machineselectpickertatus"> </selectpickr>
+          <selectpickr :visible="machineVisible" :slots="equipmentSlots" :title="'设备类型'" :valueKey="machinepickername" @selectpicker="machineselectpicker" @onpickstatus="machineselectpickertatus"> </selectpickr>
         </div>
         <div class="line" id="line" :style="{height:lineheight,width:width}" ref="line"></div>
       </div>
@@ -32,7 +32,7 @@
         <span class="linedata">
            <span :class="['linedatachoose', {linecurrent: pieSearchIndex === index}]" v-for="(item,index) in lineSearchTime" @click="pieTimeSearch(index)">{{item.lable}}</span>
         </span>
-         <selectpickr :visible="distributionVisible" :slots="distributionSlots" :valueKey="machinepickername" @selectpicker="distributionselectpicker" @onpickstatus="distributionselectpickertatus"> </selectpickr>
+         <selectpickr :visible="distributionVisible" :slots="distributionSlots" :title="'设备类型'" :valueKey="machinepickername" @selectpicker="distributionselectpicker" @onpickstatus="distributionselectpickertatus"> </selectpickr>
       </div>
       <div class="piebox">
        <div class="pietype" id="pietype" :style="{height:pieheight,width:width}" ref="pietype"></div>
@@ -43,7 +43,7 @@
       <div class="">
         <span class="linetitle">设备监控<span style="font-size: 14px;font-weight:normal;color: #1890FF;">(总设备{{allmMachine}})</span></span>
         <span class="equipment" @click="equipmentVisible=true" v-if="parentTypList.length>0">{{equipmentcurrentTags?equipmentcurrentTags.name:'全部'}}<i class="iconfont icon-xiangxiajiantou select-back"></i></span>
-        <selectpickr :visible="equipmentVisible" :slots="equipmentSlots" :valueKey="machinepickername" @selectpicker="equipmentselectpicker" @onpickstatus="equipmentselectpickertatus"> </selectpickr>
+        <selectpickr :visible="equipmentVisible" :slots="equipmentSlots" :title="'设备类型'" :valueKey="machinepickername" @selectpicker="equipmentselectpicker" @onpickstatus="equipmentselectpickertatus"> </selectpickr>
       </div>
       <div class="bar" id="bar" :style="{height:height,width:width}" ref="bar"></div>
     </div>

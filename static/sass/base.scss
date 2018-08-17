@@ -147,3 +147,33 @@ input:-webkit-autofill { box-shadow: 0 0 0px 1000px white inset !important;}
 [v-cloak] {
     display: none !important;
 }
+
+.shoppicker .picker-toolbar {
+  display: flex;
+  height: 1.17rem;
+  line-height: 1.17rem;
+  background:rgba(251,251,252,1);
+  padding: 0 0.4rem;
+ 
+}
+.shoppicker .picker {
+  height: 6rem;
+}
+.shoppicker .picker-slot-wrapper {
+  font-size: 15px !important;
+}
+.shoppicker .picker-toolbar>span {
+  flex: 1;
+  font-size: 15px;
+}
+.shoppicker .picker-toolbar .quxi {
+  color: #999;
+}
+.shoppicker .picker-toolbar .shop {
+  text-align: center;
+  font-size: 16px;
+}
+.shoppicker .picker-toolbar .qued {
+  text-align:right;
+  color: #1890FF;
+}

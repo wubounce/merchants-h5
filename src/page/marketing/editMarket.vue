@@ -26,10 +26,10 @@
     <mt-datetime-picker ref="picker5" type="date" @confirm="handleNoWorkTimeEndChange" :startDate="pickerstartDate"></mt-datetime-picker>
      <!-- 每日不可支付时间 -->
     <mt-popup v-model="noWorkVisible" position="bottom" class="mint-popup">
-       <mt-picker class="pickerNoWork"  :slots="activeTimeslots" @change="changeNoWorkTime" :showToolbar="true"><p class="toolBar"><span class="timequx" @click="noWorkVisible = false;">取消</span><span @click="chooseDay" class="tiem-picker-title">每日活动时段</span><span @click="confirmNews('pickerNoWork')" class="queding">确定</span></p></mt-picker>
+       <mt-picker class="pickerNoWork"  :slots="activeTimeslots" @change="changeNoWorkTime" :showToolbar="true"><p class="toolBar"><span class="timequx" @click="noWorkVisible = false;">取消</span><span @click="chooseDay" class="tiem-picker-title">不可支付时间</span><span @click="confirmNews('pickerNoWork')" class="queding">确定</span></p></mt-picker>
     </mt-popup> 
     <!-- 活动日 -->
-    <selectpickr :visible="activeVisible" :slots="activeSlots" :valueKey="label" @selectpicker="activeselectpicker" @onpickstatus="activeselectpickertatus"> </selectpickr>
+    <selectpickr :visible="activeVisible" :slots="activeSlots" :valueKey="label" :title="'活动日'" @selectpicker="activeselectpicker" @onpickstatus="activeselectpickertatus"> </selectpickr>
     <!-- 选择自定义星期-->
     <mt-popup v-model="weekVisible" position="bottom" :closeOnClickModal="false">
       <div class="resp-shop">

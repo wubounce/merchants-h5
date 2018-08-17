@@ -3,8 +3,9 @@
   <mt-popup v-model="ishow" position="bottom" >
     <section class="shoppicker">
       <div class="picker-toolbar">
-        <span class="mint-datetime-action mint-datetime-cancel" @click="ishow=false">取消</span>
-        <span class="mint-datetime-action mint-datetime-confirm" @click="onDateChange">确定</span>
+          <span class="quxi"  @click="ishow=false">取消</span> 
+          <span class="shop">{{pickerTitle}}</span> 
+          <span class="qued" @click="onDateChange">确定</span>
        </div>
       <mt-picker :slots="datalist" ref="picker" :valueKey="param"></mt-picker>
     </section>
@@ -28,6 +29,10 @@ export default {
     visible: {
       type: Boolean,
       default: true
+    },
+    title: {
+      type: String,
+      default: ''
     }
   },
   data() {
@@ -35,7 +40,8 @@ export default {
       currentTags:null,
       datalist:this.slots,
       param:this.valueKey,
-      ishow:this.visible
+      ishow:this.visible,
+      pickerTitle:this.title
     };
   },
   methods: {
