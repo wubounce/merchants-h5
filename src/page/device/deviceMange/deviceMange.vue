@@ -35,6 +35,7 @@
             <span :class="{current:index===16}">{{titleArr.timeout}}</span>
           </div>
         </div>
+        <div class="offline-tip">离线：连续30分钟未在线的设备数量。可能由于断电，信号不稳定，模块、设备损坏等原因引起，请自行检查或联系客服报备。</div>
       </div>
       <div class="noData" v-show="hasNoData">暂无设备</div>
       <div class="page-top">
@@ -325,7 +326,7 @@
       padding-top: 4rem;
       }
     .page-top {
-      padding-top: 3.42rem;
+      padding-top: 4.1rem;
       height: 100%;
       box-sizing: border-box;
       .page-loadmore-wrapper {
@@ -483,6 +484,11 @@
       bottom: 6.12rem;
       transition:all 0.4s 
     }
+  }
+  .offline-tip {
+    font-size: 12px;
+    color: red;
+    padding: .1rem .3rem;
   }
 
 

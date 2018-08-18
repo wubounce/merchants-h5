@@ -40,12 +40,15 @@
       </div>
     </div>
     <div class="bar-wrap">
-      <div class="">
-        <span class="linetitle">设备监控<span style="font-size: 14px;font-weight:normal;color: #1890FF;">(总设备{{allmMachine}})</span></span>
+      <div class="" style="height: .8rem;">
+        <span class="linetitle" style="float: left;">设备监控<span style="font-size: 14px;font-weight:normal;color: #1890FF;">(总设备{{allmMachine}})</span></span>
         <span class="equipment" @click="equipmentVisible=true" v-if="parentTypList.length>0">{{equipmentcurrentTags?equipmentcurrentTags.name:'全部'}}<i class="iconfont icon-xiangxiajiantou select-back"></i></span>
         <selectpickr :visible="equipmentVisible" :slots="equipmentSlots" :title="'设备类型'" :valueKey="machinepickername" @selectpicker="equipmentselectpicker" @onpickstatus="equipmentselectpickertatus"> </selectpickr>
       </div>
-      <div class="bar" id="bar" :style="{height:height,width:width}" ref="bar"></div>
+      <div style="height: 4.45rem;" >
+        <div class="bar" id="bar" :style="{height:height,width:width}" ref="bar"></div>
+      </div>
+      <div class="offline-tip">离线：连续30分钟未在线的设备数量。可能由于断电，信号不稳定，模块、设备损坏等原因引起，请自行检查或联系客服报备。</div>
     </div>
   </div>
 </template>
@@ -826,6 +829,10 @@ export default {
   .today-earning-size {
     font-size: 50px !important;
     font-family:Medium;
+  }
+  .offline-tip {
+    font-size: 12px;
+    color: red;
   }
 </style>
 <style lang="scss"> 
