@@ -326,7 +326,7 @@
       padding-top: 4rem;
       }
     .page-top {
-      padding-top: 4.1rem;
+      padding-top: 4.2rem;
       height: 100%;
       box-sizing: border-box;
       .page-loadmore-wrapper {

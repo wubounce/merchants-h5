@@ -50,6 +50,7 @@ export default {
         getJsonArr: [],
         selectedFunction: '',
         functionTempletType: '',
+        communicateType: null,
         isDisable: false,
         nullDisable: false,
         timeIsDisable: false,
@@ -157,15 +158,16 @@ export default {
         let payload = {shopId: query.shopId,subTypeId: query.subTypeId};
         let res = await getFunctionSetListFun(qs.stringify(payload));
           if(res.code === 0) {
-             this.getJsonArr = res.data.list;
-             this.functionTempletType = res.data.functionTempletType;        
-             if(res.data.communicateType !== 1){
-             this.functionListTitle2 = this.functionListTitle;
-             this.isShow2 = true;
+            this.getJsonArr = res.data.list;
+            this.functionTempletType = res.data.functionTempletType;
+            this.communicateType = res.data.communicateType;
+            if(this.communicateType !== 1){
+              this.functionListTitle2 = this.functionListTitle;
+              this.isShow2 = true;
             }
             res.data.list.forEach(item=>{
               item.ifOpen=item.ifOpen === "0"?(!!item.ifOpen) : (!item.ifOpen);
-             });
+            });
             this.funTypeList = res.data.list;         
           }
       },  
@@ -195,7 +197,7 @@ export default {
              flag2 = false;
             break;
           }
-          if(Number(this.fromdata.communicateType)=== 0 && !reg.test(Number(item.functionCode))){
+          if(Number(this.communicateType) === 0 && !reg.test(Number(item.functionCode))){
             flag3 = false;
             this.$toast("脉冲填写格式错误，请填写非0非空正整数");
             break;
