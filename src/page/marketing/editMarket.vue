@@ -365,17 +365,6 @@ export default {
         this.$toast({message: "请选择每日活动时段" });
         return false;
       }
-      let timearry = this.addmarket.time.split('-');
-      let timearrystart = timearry[0].replace(/\:/g, '');  
-      let timearrystartend = timearry[1].replace(/\:/g, '');  
-      if(timearrystart > timearrystartend){  
-        this.$toast({message: "每日活动时段开始时间不能大于结束时间"});
-        return false;
-      }
-      if(timearrystart === timearrystartend){  
-        this.$toast({message: "每日活动时段开始时间不能结束时间相同"});
-        return false;
-      }
       if (!this.addmarket.discount) {
         this.$toast({message: "请填写折扣优惠" });
         return false;
