@@ -7,6 +7,11 @@ export const getToken = () => Cookies.get(TokenKey);
 export const setToken = (token) => Cookies.set(TokenKey, token);
 export const removeToken = () => Cookies.remove(TokenKey);
 
+const NoticeTypeKey = 'NoticeType';
+export const getNoticeType = () => Cookies.get(NoticeTypeKey);
+export const setNoticeType = (NoticeType) => Cookies.set(NoticeTypeKey, NoticeType);
+export const removeNoticeType = () => Cookies.remove(NoticeTypeKey);
+
 const storeKey = 'user';
 export const setUser = (user) => localStorage.setItem(storeKey, JSON.stringify(user));
 export const getUser = () => JSON.parse(localStorage.getItem(storeKey));
