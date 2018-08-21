@@ -3,8 +3,8 @@
  */
 import { fetch } from './baseService';
 
-const dayReportApi = 'order/dayReport';                                            // 报表-按天统计 method 'post'
-const machineReportApi = 'order/machineReport';                                    // 每天报表-按机器统计 method 'post'
+const dayReportApi = 'operatorBalanceLog/dayReport';                                            // 报表-按天统计 method 'post'
+const machineReportApi = 'operatorBalanceLog/machineReport';                                    // 每天报表-按机器统计 method 'post'
 const shopListApi = 'shop/listShop';                                                           // 店铺列表 method 'post'
 
 // 按天统计

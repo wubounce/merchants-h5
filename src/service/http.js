@@ -3,7 +3,7 @@ import { Indicator, MessageBox, Toast } from 'mint-ui';
 import store from '../store';
 import { getToken, removeMenu } from '@/utils/tool';
 import { menuSelectFun } from '@/service/member';
-const baseUrl = process.env.NODE_ENV === 'production' ? 'https://api.qiekj.com/merchant/' : 'https://api.qiekj.com/merchant/'; 
+const baseUrl = process.env.NODE_ENV === 'production' ? 'https://api.qiekj.com/merchant/' : 'http://192.168.5.10:8089/merchant/'; 
 // 创建axios实例
 const http = axios.create({
   baseURL: baseUrl, // api的base_url

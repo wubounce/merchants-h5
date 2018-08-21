@@ -5,7 +5,7 @@
           <span class="report-table-name">设备名称</span>
           <span class="report-table-type">设备类型</span>
           <span class="report-table-order">订单数量</span>
-          <span class="report-table-order">{{tableTitleType}}金额</span>
+          <span class="report-table-order no-mright">{{tableTitleType}}金额</span>
         </div>
         <div class="tableearn">
           <div class="nodata" v-if="noList">暂无数据</div>
@@ -13,7 +13,7 @@
             <span class="report-table-name" @click="showTooltip(item.machineName,$event)" >{{item.machineName}}</span>
             <span class="report-table-type">{{item.machineTypeName}}</span>
             <span class="report-table-order">{{item.count}}</span>
-            <span class="report-table-order">{{item.money | tofixd}}</span>
+            <span class="report-table-order no-mright">{{item.money | tofixd}}</span>
           </div>
         </div>
     </div>
@@ -92,30 +92,21 @@ export default {
       background: #F2F2F2 !important;
   }
   .listcon {
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    align-items: center;
     background-color: #fff;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
     color: #333333;
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    font-size: 14px;
+    font-size:0.37rem;
     height: 1.04rem;
     line-height: 1.04rem;
     padding: 0 0.4rem;
-    position: relative;
-    white-space: nowrap;
-    border-bottom:1px solid rgba(229,229,229,1);
+    display: flex;
+    border-bottom:1px solid #f9f8ff;
     span {
       font-weight: 600;
     }
   }
   .report-table-name {
     text-align: left;
-    width: 4.08rem;
+    width:3.35rem;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -123,14 +114,18 @@ export default {
   .report-table-type {
     text-align: left;
     width: 1.49rem;
+    margin-right: 0.52rem;
   }
   .report-table-order {
-    margin-left: 0.52rem;
     text-align: right;
     width: 1.49rem;
+    margin-right: 0.52rem;
+  }
+  .no-mright {
+    margin:0;
   }
   .nodata {
-    font-size: 14px;
+    font-size: 0.37rem;
     color: #999;
     text-align: center;
     padding: 2rem 0;
@@ -162,7 +157,7 @@ export default {
       border-radius: 0.08rem;
       word-wrap:break-word;
       word-break:break-all;
-      font-size: 12px;
+      font-size: 0.16rem
   }
 }
 </style>

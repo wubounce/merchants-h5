@@ -1,8 +1,12 @@
 <template>
 <div class="earnings">
   <div class="search">
+    <div class="slectdata monthchoose"  @click="dateVisible=true;">
+      <span>{{dateCurrentTag.label}}</span><i class="iconfont icon-xiangxiajiantou select-back"></i>
+      <selectpickr :visible="dateVisible" :slots="dateSlots"  :title="'时间'" :valueKey="keyname" @selectpicker="dateselectpicker" @onpickstatus="dateselectpickertatus"> </selectpickr>
+    </div>
     <div class="slectdata timechoose">
-      <span @click="open('picker2')">{{startDate}}<i class="iconfont icon-xiangxiajiantou select-back"></i></span>至<span @click="open('picker3')">{{endDate}}<i class="iconfont icon-xiangxiajiantou select-back"></i></span>
+      <span @click="openByDialog">{{calendar.display}}</span><i class="iconfont icon-xiangxiajiantou select-back"></i>
     </div>
     <div class="slectdata shopchoose">
       <span @click="popupVisible=true">{{currentTags?currentTags.shopName:'全部店铺'}}</span><i class="iconfont icon-xiangxiajiantou select-back"></i>
@@ -15,7 +19,10 @@
       <span class="order-num">订单数</span>
     </div>
     <div :class="className" :id="id" :style="{height:height,width:width}" ref="myEchart"></div>
-    <div class="echart-title"><span style="background:#1890FF"></span>收益金额<span style="background:#FACC14"></span>订单数量</div>
+    <div class="echart-title">
+      <i style="background:#1890FF"></i>总收益金额<span class="totalMoney">({{totalMoney}}元)</span>
+      <i style="background:#FACC14"></i>总订单数量<span class="totalOrder">({{totalCount}})</span>
+    </div>
   </div>
   <div class="tabledata">
     <div class="tableearn">
@@ -34,14 +41,16 @@
       <div class="nodata" v-if="lsitdata.length <= 0">暂无数据</div>
     </div>
   </div>
-  <mt-datetime-picker ref="picker2" type="date" v-model="searchStartDate" @confirm="handleStartDateChange" :endDate="pickerEndDate">
-    <div class="picker-toolbar">
-          <span class="quxi">取消</span> 
-          <span class="shop">qwewqeqwee</span> 
-          <span class="qued">确定</span>
-       </div>
-  </mt-datetime-picker>
-  <mt-datetime-picker ref="picker3" type="date" v-model="searchEndDate" @confirm="handleEndDateChange"></mt-datetime-picker>
+
+  <div class="calendar-dialog" v-if="calendar.show">
+        <div class="calendar-dialog-mask" @click="calendar.show=false;"></div>
+        <div class="calendar-dialog-body">
+            <calendar :range="calendar.range" :zero="calendar.zero" :lunar="calendar.lunar" :begin="calendar.begin" :end="calendar.end" :type="calendar.type" :value="calendar.value"  @select="calendar.select">
+              
+            </calendar>
+            <div class="calendar-btn" @click="selectDateCom">确定</div>
+        </div>
+    </div>
 </div>
 </template>
 <script>
@@ -57,6 +66,7 @@ import 'echarts/lib/component/tooltip';
 import 'echarts/lib/component/legendScroll';
 import selectpickr from '@/components/selectPicker';
 import { dayReportFun, shopListFun } from '@/service/report';
+import calendar from '@/components/vue-calendar/calendar.vue';
 
 export default {
   name:'report-eaning',
@@ -81,10 +91,8 @@ export default {
   data() {
     return {
       chart: null,
-      searchStartDate:new Date(moment().subtract('days',6).format('YYYY-MM-DD')),
-      searchEndDate:new Date(moment().format('YYYY-MM-DD')),
-      startDate:moment().subtract('days',6).format('YYYY-MM-DD'),
-      endDate: moment().format('YYYY-MM-DD'),
+      startDate:moment().subtract('days',6).format('YYYY-MM-DD').split('-'),
+      endDate: moment().format('YYYY-MM-DD').split('-'),
       shopName:'shopName',
       shopSlots:[
         {
@@ -94,6 +102,23 @@ export default {
             textAlign: 'center'
           }
       ],
+      dateSlots:[
+        {
+            flex: 1,
+            values: [
+              {label: '日期',value:1},
+              {label: '月份',value:2}
+            ],
+            className: 'slot1',
+            textAlign: 'center',
+            defaultIndex:0
+          }
+      ],
+      keyname:'label',
+      dateVisible:false,
+      dateCurrentTag:null,
+      dateLevel:null,
+
       lsitdata:[],
       popupVisible:false,
       currentTags:null,
@@ -102,15 +127,38 @@ export default {
       reportMoney:[],
       pickerEndDate:new Date(moment().format('YYYY-MM-DD')),
       orderMax:null,
-      moneyMax:null
+      moneyMax:null,
+      totalCount:null,
+      totalMoney:null,
+
+      calendar:{
+        range:true,
+        lunar:false, //显示农历
+        display:'',
+        show:false,
+        zero:true,
+        type:'datetime',
+        value:[], //默认日期
+        select:(begin,end)=>{
+            this.calendar.display=begin.join("-")+"至"+end.join("-");
+            this.startDate = begin;
+            this.endDate = end;
+            // this.calendar.value=[begin,end];
+        }
+    },
+
     };
   },
   mounted() {
     this.initChart();
   },
   created(){
-     this.dayReportFun();
-     this.shopListFun();
+    this.dateCurrentTag = this.dateSlots[0].values[0];
+    this.dateLevel = this.dateCurrentTag.value;
+    this.calendar.value = [[...this.startDate],[...this.endDate]];
+    this.calendar.display = this.startDate.join('-')+'至'+this.endDate.join('-');
+    this.dayReportFun();
+    this.shopListFun();
   },
   beforeDestroy() {
     if (!this.chart) {
@@ -132,24 +180,26 @@ export default {
     async dayReportFun(shopId){
       let payload = null;
       if (shopId) {
-        payload = Object.assign({},{startDate:this.startDate,endDate:this.endDate,type:1,shopId:shopId});
+        payload = Object.assign({},{startDate:this.startDate.join('-'),endDate:this.endDate.join('-'),type:1,shopId:shopId,dateLevel:this.dateLevel});
       } else {
-        payload = Object.assign({},{startDate:this.startDate,endDate:this.endDate,type:1});
+        payload = Object.assign({},{startDate:this.startDate.join('-'),endDate:this.endDate.join('-'),type:1,dateLevel:this.dateLevel});
       }
       let res = await dayReportFun(qs.stringify(payload));
       if (res.code === 0) {
         this.reportDate = [];
         this.reportCount = [];
         this.reportMoney = [];
-        res.data.forEach(item=>{
+        res.data.list.forEach(item=>{
           this.reportDate.push(moment(item.date).format('MM-DD'));
           this.reportCount.push(item.count);
           this.reportMoney.push(item.money);
         });
         this.orderMax = this.calMax(this.reportCount);//订单Y轴最大值
         this.moneyMax = this.calMax(this.reportMoney);//金额Y轴最大值
-        this.lsitdata = res.data;
+        this.lsitdata = res.data.list;
         this.lsitdata.sort(this.ortId); //表格时间倒序
+        this.totalMoney = res.data.totalMoney;
+        this.totalCount = res.data.totalCount;
       }else {
         this.$toast({message: res.msg });
       }
@@ -174,26 +224,6 @@ export default {
     open(picker) {
       this.$refs[picker].open();
     },
-    handleStartDateChange(value) {
-      this.searchStartDate = value;
-      this.startDate = moment(value).format('YYYY-MM-DD');
-      let startDate = new Date(this.startDate.replace(/\-/g, "\/"));  
-      let endDate = new Date(this.endDate.replace(/\-/g, "\/"));  
-      if(startDate > endDate){ 
-        [this.endDate,this.startDate] = [this.startDate,this.endDate]; 
-      }
-      this.dayReportFun();
-    },
-    handleEndDateChange(value) {
-      this.searchEndDate = value;
-      this.endDate = moment(value).format('YYYY-MM-DD');
-      let startDate = new Date(this.startDate.replace(/\-/g, "\/"));  
-      let endDate = new Date(this.endDate.replace(/\-/g, "\/"));  
-      if(startDate > endDate){ 
-        [this.endDate,this.startDate] = [this.startDate,this.endDate]; 
-      }
-      this.dayReportFun();
-    },
     shopselectpicker(data){
       this.currentTags = data;
       this.dayReportFun(this.currentTags.shopId);
@@ -201,9 +231,35 @@ export default {
     shopselectpickertatus(data){
       this.popupVisible = data;
     },
+    dateselectpicker(data){
+      this.dateCurrentTag = data;
+      if (data.label === '日期') {
+        this.dateLevel = 1;
+        this.calendar.type = 'datetime';
+      } else {
+        this.calendar.type = 'month';
+        this.dateLevel = 2;
+      }
+    },
+    dateselectpickertatus(data){
+      this.dateVisible = data;
+    },
+    openByDialog(){
+      this.calendar.show=true;
+      this.calendar.value = [[...this.startDate],[...this.endDate]];
+    },
+    selectDateCom(){
+      this.calendar.show=false;
+      this.dayReportFun();
+    },
     goDetail(date){
       let shopId = this.currentTags?this.currentTags.shopId:'';
-      this.$router.push({name:'reportdetail', query:{date:date,type:1,shopId:shopId}});
+      if (shopId) {
+        this.$router.push({name:'reportdetail', query:{date:date,type:1,shopId:shopId,dateLevel:this.dateLevel}});
+      } else {
+        this.$router.push({name:'reportShopDetail', query:{date:date,type:1,shopId:shopId,dateLevel:this.dateLevel}});
+      }
+      
     }
   },
   computed:{
@@ -371,7 +427,8 @@ export default {
     }
   },
   components:{
-    selectpickr
+    selectpickr,
+    calendar
   }
 };
 </script>
@@ -400,9 +457,8 @@ export default {
   .echart-title {
     font-size: 12px;
     color:rgba(153,153,153,1);
-    text-align: center;
-    margin-top: 0.4rem;
-    span {
+    margin: 0.4rem 0 0 1.33rem;
+    i {
       width: 0.19rem;
       height: 0.19rem;
       display: inline-block;;
@@ -410,6 +466,17 @@ export default {
       border-radius: 50%;
       margin-right: 0.133333rem;
       margin-left: 0.133333rem;
+    }
+    .totalMoney {
+      font-size: 0.29rem;
+      color: #1890FF;
+      font-weight: 600;
+      margin-right: 0.8rem;
+    }
+    .totalOrder {
+      font-size: 0.29rem;
+      color: #FACC14;
+      font-weight: 600;
     }
   }
   .tabletit {
@@ -502,7 +569,7 @@ export default {
     height: 0.746667rem;
     line-height: 0.746667rem;
     background: #fff;
-    font-size: 14px;
+    font-size: 0.37rem;
     span {
       width: 100%;
       height: 0.746667rem;
@@ -510,15 +577,19 @@ export default {
       display: inline-block;
     }
   }
+  .monthchoose {
+    width: 1.3rem;
+    margin-right: 0.37rem;
+  }
   .timechoose {
-    width: 75%;
+    width: 5.19rem;
+    margin-right: 0.37rem;
     span {
-      width: 45%;
       text-align: center;
     }
   }
   .shopchoose {
-    width: 30%;
+    width: 2.28rem;
     margin-left: .2rem;
     span {
       width: 4.67rem !important;
@@ -529,6 +600,7 @@ export default {
       white-space: nowrap;
     }
   }
+
   .mint-popup {
     width: 100%;
   }
@@ -543,6 +615,42 @@ export default {
     padding: 2rem 0;
     background: #fff;
   }
+  /*弹出框*/
+.calendar-dialog{
+    position: absolute;
+    left:0;
+    top:0;
+    right:0;
+    bottom:0;
+    background:rgba(255,255,255,.5);
+    z-index: 10000000;
+}
+.calendar-dialog-mask{
+    background:rgba(0,0,0,0.5);
+    height: 100%;
+    width: 100%;
+}
+.calendar-dialog-body{
+    width: 100%;
+    background: #fff;
+    position: absolute;
+    bottom:0;
+    box-sizing: border-box;
+}
+.calendar {
+  border-bottom: 1px solid #E7EDF5;
+}
+.calendar-btn {
+  width:2.13rem;
+  height:0.8rem;
+  background:rgba(24,144,255,1);
+  border-radius:0.11rem;
+  font-size: 14px;
+  color: #fff;
+  text-align: center;
+  line-height: 0.8rem;
+  margin: 0.4rem auto;
+}
 </style>
 <style lang="scss">
   .earnings .v-modal {

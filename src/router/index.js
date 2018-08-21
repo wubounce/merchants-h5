@@ -63,7 +63,12 @@ export default new Router({
       component: () => import ('@/page/reset/confimPwd'),
       meta: {title: '确认重置密码'},
     },
-      
+    {
+      path: '/reportShopDetail',
+      name: 'reportShopDetail',
+      component: () => import ('@/page/report/shopDetail'),
+      meta: {title: '报表详情'},
+    },
     {
       path: '/reportdetail',
       name: 'reportdetail',
