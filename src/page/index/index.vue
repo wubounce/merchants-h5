@@ -55,23 +55,23 @@
       <div class="offline-tip">离线：连续30分钟未在线的设备数量。可能由于断电，信号不稳定，模块、设备损坏等原因引起，请自行检查或联系客服报备。</div>
     </div>
     <div class="notice-wrapper" v-if="noticeShow">
-        <div class="notice">
-            <div class="notice-body">
-                <img src="../../assets/img/notice/notice.png" class="noticePic" />
-                <img src="../../assets/img/notice/feather.png" class="feather" />
-                <img src="../../assets/img/notice/handLeft.png" class="handLeft" />
-                <img src="../../assets/img/notice/handRight.png" class="handRight" />
-                <div class="notice-content">                     
-                    <p>大家好，马上就要迎来开学季，为了让学生可以如期使用洗衣机，<span>希望运营商伙伴们提前检测一下设备是否正常</span><p>
-                    <p><span>检测步骤：</span>1、重新通电 2、查看信号是否正常 3、扫码支付或后台桶自洁查看设备是否正常启动</p>
-                    <p><span>反馈机制：</span>如果信号，模块，设备正常，设备无法正常启动，请联系客服，提供设备二维码清晰照片/设备名称、账号、问题现象，以便更好解决问题。（联系方式：商家后台-我的-联系客服）</p>                    
-                    <p class="time">2018-08-14</p>
-                </div>         
-            </div>
+      <div class="notice">
+        <div class="notice-body">
+          <img src="../../assets/img/notice/notice.png" class="noticePic" />
+          <img src="../../assets/img/notice/feather.png" class="feather" />
+          <img src="../../assets/img/notice/handLeft.png" class="handLeft" />
+          <img src="../../assets/img/notice/handRight.png" class="handRight" />
+          <div class="notice-content">                     
+            <p>大家好，马上就要迎来开学季，为了让学生可以如期使用洗衣机，<span>希望运营商伙伴们提前检测一下设备是否正常</span><p>
+            <p><span>检测步骤：</span>1、重新通电 2、查看信号是否正常 3、扫码支付或后台桶自洁查看设备是否正常启动</p>
+            <p><span>反馈机制：</span>如果信号，模块，设备正常，设备无法正常启动，请联系客服，提供设备二维码清晰照片/设备名称、账号、问题现象，以便更好解决问题。（联系方式：商家后台-我的-联系客服）</p>                    
+            <p class="time">2018-08-14</p>
+          </div>         
         </div>
-        <div class="icon-wrapper" @click="closeNotice">
-            <img src="../../assets/img/notice/del.png" />
-        </div>       
+      </div>
+      <div class="icon-wrapper" @click="closeNotice">
+        <img src="../../assets/img/notice/del.png" />
+      </div>       
     </div>
   </div>
   
@@ -764,20 +764,20 @@ export default {
     height: 100%;
     background-color: rgba(0,0,0,.5);
     z-index: 19999999;
-    padding-top: 1.2133rem;
+    padding-top: .7467rem;
     .notice{
       width: 8.6667rem;
       margin: 0 auto;
       background-image: linear-gradient(-225deg, #786AF0 0%, #3C74F7 50%, #006CFF 100%);
       border-radius: .08rem;
-      padding: 1.04rem .4933rem .6267rem;
+      padding: .9867rem .48rem .48rem;
       box-sizing: border-box;
       overflow: hidden;
       .notice-body{
         width: 100%;
         background-color: #fff;
         border-radius: .08rem;
-        padding: 1.6533rem .48rem .8rem;
+        padding: 1.7067rem .5067rem .5333rem;
         position: relative; 
         box-sizing: border-box;     
         img{
@@ -823,6 +823,9 @@ export default {
               }
             
               &.time{
+                  position: absolute;
+                  right: .5067rem;
+                  bottom: .4rem;
                   color: #112250;
                   font-size: .4rem;
                   text-align: right;
