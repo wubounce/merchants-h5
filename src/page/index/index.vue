@@ -823,9 +823,6 @@ export default {
               }
             
               &.time{
-                  position: absolute;
-                  right: .5067rem;
-                  bottom: .4rem;
                   color: #112250;
                   font-size: .4rem;
                   text-align: right;
