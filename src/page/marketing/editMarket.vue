@@ -6,7 +6,7 @@
       <p @click="shopVisible=true">所属店铺<span class="order-action add-shop-overflow-icon iconfont icon-nextx"></span><span class="addvip-con add-shop-overflow">{{checkshoptxt?checkshoptxt:''}}</span></p>
       <p @click="open('picker2')">优惠期开始<span class="addvip-con">{{addmarket.startTime}}<span class="order-action iconfont icon-nextx"></span></span></p>
       <p @click="open('picker3')">优惠期结束<span class="addvip-con">{{addmarket.endTime}}<span class="order-action iconfont icon-nextx"></span></span></p>
-      <p @click="activeVisible=true">活动日<span class="order-action add-shop-overflow-icon iconfont icon-nextx"></span><span class="addvip-con add-shop-overflow">{{weeklist.join(',') | week}}</span></p>
+      <p @click="activeVisible=true">活动日<span class="order-action add-shop-overflow-icon iconfont icon-nextx"></span><span class="addvip-con add-shop-overflow">{{checkWeeklisttxt.join(',') | week}}</span></p>
       <p @click="activeTimeVisible = true">每日活动时段<span class="addvip-con">{{addmarket.time}}<span class="order-action iconfont icon-nextx"></span></span></p>
       <p>折扣优惠<span class="addvip-con"><input type="number" placeholder="请输入优惠折扣" class="discount-input" v-model="addmarket.discount">%</span></p>
       <p>是否开放<span class="addvip-con"><mt-switch v-model="addmarket.addstatus" class="check-switch"></mt-switch></span></p>
@@ -128,7 +128,7 @@ export default {
       ],
       weekVisible:false,
       weeklist:[],
-      checkWeeklisttxt:'',
+      checkWeeklisttxt:[],
       
       addmarket:{
         status:true,
@@ -229,6 +229,7 @@ export default {
         });
         this.checkshoptxt = beshop.join(',');
         this.weeklist = detail.noWeek ?detail.noWeek.split(',') :[];
+        this.checkWeeklisttxt = [...this.weeklist];
       }
       
     },
@@ -256,7 +257,9 @@ export default {
         this.weeklist = weeklist.length >0 ? [...weeklist] : this.weeklist; //如果选了自定义活动日重新赋值
       }else {
         this.weekVisible = true;
+        this.weeklist = this.checkWeeklisttxt;
       }
+      this.checkWeeklisttxt = [...this.weeklist];
     },
     activeselectpickertatus(data){
       this.activeVisible = data;
@@ -264,6 +267,7 @@ export default {
     checkeWeekList(){ //选择自定星期
       this.weekVisible = false;
       this.weeklist = this.weeklist.filter(id => Number(id) !== 8&&Number(id) !== 9); //自动活动日去掉每天和周一至周五
+      this.checkWeeklisttxt = [...this.weeklist];
     },
     changeTime(picker, values) {
       this.activeTimeCurrentTags = values[0]+':'+values[1]+'-'+ values[2]+':'+values[3];
