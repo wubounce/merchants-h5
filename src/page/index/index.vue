@@ -66,7 +66,7 @@ import 'echarts/lib/component/legendScroll';
 import selectpickr from '@/components/selectPicker';
 import { ParentTypeFun, countMachineFun, totalProfitFun, timeProfitFun, typeProfitFun } from '@/service/index';
 import { MachineStatus, communicateType } from '@/utils/mapping';
-
+//操作分支
 export default {
   props: {
     width: {
