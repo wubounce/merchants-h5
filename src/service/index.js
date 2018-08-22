@@ -5,7 +5,8 @@ import { fetch } from './baseService';
 
 const listParentTypeApi = 'machine/listParentType';                          // 设备监控 method 'post'
 const countMachineApi = 'machine/countMachine';                              // 设备监控 method 'post'
-const totalProfitApi = 'order/totalProfit';                                  // 总收益 method 'post'
+const totalProfitApi = '/operatorBalanceLog/totalProfit';                    // 总收益 method 'post'
+const balanceLogProfitListApi = 'operatorBalanceLog/balanceLogProfitList';   // 收益明细（总收益、月收益、日收益）method 'post'
 const timeProfitApi = 'order/timeProfit';                                    // 收益数据 method 'post'
 const typeProfitApi = 'order/typeProfit';                                    // 收益分布 method 'post'
 
@@ -17,6 +18,9 @@ export const countMachineFun = (payload) => fetch.post(countMachineApi, payload)
 
 // 总收益
 export const totalProfitFun = (payload) => fetch.post(totalProfitApi, payload);
+
+//收益明细（总收益、月收益、日收益）
+export const balanceLogProfitListFun = (payload) => fetch.post(balanceLogProfitListApi, payload);
 
 // 收益数据
 export const timeProfitFun = (payload) => fetch.post(timeProfitApi, payload);

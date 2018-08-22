@@ -44,6 +44,25 @@ export default new Router({
         },
       ]
     },
+    //首页头部首页相关
+    {
+      path: '/index/totalincome',
+      name: 'totalincome',
+      component: () => import ('@/page/index/totalincome'),
+      meta: {title: '总收益'},
+    },
+    {
+      path: '/index/monthincome',
+      name: 'monthincome',
+      component: () => import ('@/page/index/monthincome'),
+      meta: {title: '当月收益'},
+    },
+    {
+      path: '/index/todayincome',
+      name: 'todayincome',
+      component: () => import ('@/page/index/todayincome'),
+      meta: {title: '今日收益'},
+    },
     // 绑定手机号
     {
       path: '/bindPhone',

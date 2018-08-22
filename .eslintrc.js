@@ -46,5 +46,6 @@ module.exports = {
     'no-undef':0,
     'no-unused-vars':0,
     'no-irregular-whitespace':'off',
+    'no-redeclare':0,
   }
 }

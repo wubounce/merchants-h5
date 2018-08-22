@@ -1,18 +1,24 @@
 <template>
   <div class="main" v-title="'企鹅商家管理平台'">
     <div class="earnings-wrap">
-      <div class="earning-type">
-        <p>总收益 (元)</p>
-        <p class="earning-type-size">{{allMoney?allMoney:'0.00'|  tofixd}}</p>
-      </div>
-      <div class="today-earning">
-        <p style="margin-top: 0.35rem;">今日收益 (元)</p>
-        <p class="today-earning-size">{{todayMoney?todayMoney:'0.00'|  tofixd}}</p>
-      </div>
-      <div class="earning-type">
-        <p>当月收益 (元)</p>
-        <p class="earning-type-size">{{monthMoney?monthMoney:'0.00'|  tofixd}}</p>
-      </div>
+      <router-link to='/index/totalincome'>
+        <div class="earning-type">
+          <p style='padding-top:0.12rem;'>总收益 (元)</p>
+          <p class="earning-type-size">{{allMoney?allMoney:'0.00'|  tofixd}}</p>
+        </div>
+      </router-link>
+      <router-link :to="{ name: 'todayincome', query:{dateName:thisDay , fromMonth: fromMonth } }">
+        <div class="today-earning">
+          <p style="margin-top: 0.35rem;padding-top: 0.4rem;">今日收益 (元)</p>
+          <p class="today-earning-size">{{todayMoney?todayMoney:'0.00'|  tofixd}}</p>
+        </div>
+      </router-link>
+      <router-link :to="{ name: 'monthincome', query:{dateName:thisMonth} }">
+        <div class="earning-type">
+          <p style='padding-top:0.12rem;'>当月收益 (元)</p>
+          <p class="earning-type-size">{{monthMoney?monthMoney:'0.00'|  tofixd}}</p>
+        </div>
+      </router-link>
     </div>
     <div class="lineecharts-warp">
       <div>
@@ -66,7 +72,7 @@ import 'echarts/lib/component/legendScroll';
 import selectpickr from '@/components/selectPicker';
 import { ParentTypeFun, countMachineFun, totalProfitFun, timeProfitFun, typeProfitFun } from '@/service/index';
 import { MachineStatus, communicateType } from '@/utils/mapping';
-//操作分支
+import moment from 'moment';
 export default {
   props: {
     width: {
@@ -139,7 +145,9 @@ export default {
 
       lineMax:null,
       barMax:null,
-      parentTypList:[]
+      parentTypList:[],
+      thisMonth:'', //本月
+      thisDay:'' //今日
     };
   },
   mounted() {
@@ -150,8 +158,21 @@ export default {
     this.countMachine();
     this.totalProfitFun();
     this.ProfitDate();
+    this.getThisMonth();
+    this.getThisDay();
   },
   methods: { 
+    //获取本月
+    getThisMonth() {
+      let date = new Date();
+      this.thisMonth = moment(date).format('YYYY-MM');
+    },
+    //获取今天
+    getThisDay() {
+      let date = new Date();
+      this.thisDay = moment(date).format('YYYY-MM-DD');
+      this.fromMonth = false;
+    },
     async ParentTypeFun(){ //获取设备类型
         let res = await ParentTypeFun(qs.stringify({onlyMine:true}));
         res.data = res.data.length>0 ? res.data :[];
@@ -551,6 +572,9 @@ export default {
             formatter:function(data){
               return `${data.marker}${data.name}：${data.percent}%`;
             },
+            position:function(p){   //其中p为当前鼠标的位置
+                return [p[0] + 10, p[1] - 10];
+            }
         },
         legend: {
             orient: 'horizontal',
@@ -745,7 +769,7 @@ export default {
   .choose-select {
     display: inline-block;
     font-size: 14px;
-    border-bottom:1px solid #e5e5e5;
+    border-bottom:1px solid #f9f8ff;
     width: 2.4rem;
     height: 0.746667rem;
     line-height: 0.746667rem;
@@ -789,7 +813,7 @@ export default {
     text-align: right;
     display: inline-block;
     font-size: 14px;
-    border-bottom:1px solid #e5e5e5;
+    border-bottom:1px solid #f9f8ff;
     width: 2.4rem;
     height: 0.746667rem;
     line-height: 0.746667rem;
