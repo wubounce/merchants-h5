@@ -102,7 +102,7 @@ section {
     font-size: 16px;
     padding: 0.3rem;
     background-color: #fff;
-    border-bottom: 1px solid rgba(229,229,229,1);
+    border-bottom: 1px solid #f9f8ff;
     background: url("../../../static/image/shop/right.png") no-repeat right
       0.3rem center;
     background-size: 0.16rem 0.27rem;

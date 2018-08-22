@@ -42,7 +42,7 @@
     </div>
   </div>
   
-  <mt-popup v-model="calendar.show" position="top" class="mint-popup">
+  <mt-popup v-model="calendar.show" position="bottom" class="mint-popup">
      <div class="calendar-dialog-body">
         <calendar :range="calendar.range" :zero="calendar.zero" :lunar="calendar.lunar" :begin="calendar.begin" :end="calendar.end" :type="calendar.type" :value="calendar.value"  @select="calendar.select">
           

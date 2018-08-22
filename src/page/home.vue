@@ -63,7 +63,7 @@ import { setNavTabIndex, getNavTabIndex} from '@/utils/tool';
 }
 .home .mint-tabbar{
 	background: #fff;
-	border-top: 1px solid #D8D8D8;
+	border-top: 1px solid #f9f8ff;
 	z-index: 9999999;
 }
 </style>

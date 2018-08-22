@@ -164,8 +164,18 @@ input:-webkit-autofill { box-shadow: 0 0 0px 1000px white inset !important;}
 .shoppicker .picker {
   height: 6rem;
 }
-.shoppicker .picker-slot-wrapper {
+.picker-slot-wrapper {
   font-size: 16px !important;
+  color: #999 !important;
+}
+.picker-slot-wrapper .picker-selected{
+  font-size: 18px !important;
+  color: #333;
+  line-height: 1.07rem  !important;
+  height: 1.07rem  !important
+}
+.picker-center-highlight {
+  height: 1.07rem  !important;
 }
 .shoppicker .picker-toolbar>span {
   flex: 1;

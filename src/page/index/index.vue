@@ -861,9 +861,6 @@ export default {
 </style>
 <style lang="scss"> 
 .main {
-  .mint-header {
-    background: #F2F2F2 !important;
-  }
   .mint-popup {
     width: 100%;
   }

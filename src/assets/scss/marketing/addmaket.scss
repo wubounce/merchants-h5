@@ -1,0 +1,142 @@
+  .addmarket {
+      padding-bottom: 2rem;
+    }
+  .addvip-header, .time-chose{
+    padding: 0 0.4rem;
+    background: #fff;
+    p {
+      height: 1.6rem;
+      line-height: 1.6rem;
+      font-size: 16px;
+      color: #333;
+      border-bottom:1px solid #f9f8ff;
+    }
+    p:last-child{
+      border:none;
+    }
+    .addvip-con {
+      float: right;
+    }
+    .add-shop-overflow {
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      width: 65%;
+      text-align: right;
+    }
+    .add-shop-overflow-icon {
+      float: right;
+    }
+  }
+  .order-action {
+    color: #ccc;
+  }
+  .confirm {
+    width:100%;
+    height:1.33rem;
+    line-height: 1.33rem;
+    background:rgba(24,144,255,1);
+    text-align: center;
+    font-size: 18px;
+    color: #fff;
+    position: fixed;
+    bottom: 0;
+  }
+  .resp-shop {
+    display: flex;
+    height: 1.17rem;
+    line-height: 1.17rem;
+    background:rgba(251,251,252,1);
+    padding: 0 0.4rem;
+    >span {
+      flex: 1;
+      font-size: 15px;
+    }
+    .quxi {
+      color: #999;
+    }
+    .shop {
+      text-align: center;
+      font-size: 16px;
+    }
+    .qued {
+      text-align:right;
+      color: #1890FF;
+    }
+  }
+  .resp-shop-wrap {
+    .shopname {
+      font-size: 15px;
+      color: #333;
+    }
+    .all-list {
+      height: 9.29rem;
+      overflow-y: scroll;
+      -webkit-overflow-scrolling: touch;
+    }
+  }
+.discount-input {
+  height: 1.6rem;
+  line-height: 1.6rem;
+  padding-top: 0.51rem;
+  padding-bottom: 0.49rem;
+  text-align: right;
+  width:4.27rem;
+}
+  .check-switch {
+    margin-top: 0.35rem;
+  }
+  .toolBar {
+    padding: 0 0.4rem;
+    height: 1.07rem;
+    line-height: 1.07rem;
+    display: flex;
+    background:rgba(251,251,252,1);
+    >span {
+      flex:1;
+    }
+    .timequx {
+      font-size: 15px;
+      color: #999;
+      float: left;
+      display: block;
+    }
+    .queding {
+      color: #1890FF;
+      font-size: 15px;
+      float: right;
+      text-align: right;
+    }
+    .tiem-picker-title {
+      font-size: 16px;
+      text-align: center;
+    }
+  }
+  .day-time {
+    display: flex;
+    >div {
+      flex:1;
+      width: 50%;
+      height: 8.0rem;
+    }
+    .mint-popup {
+      width: 5.0rem;
+    }
+    .start .mint-popup{
+      left: 25%;
+      z-index: 2004 !important;
+    }
+    .end .mint-popup{
+      left: 75%;
+      z-index: 2004 !important;
+    }
+  }
+  .nopay-time {
+    h6 {
+      color:rgba(153,153,153,1);
+      line-height:0.44rem;
+      font-size: 12px;
+      font-weight: normal;
+      padding: 0.4rem 0 0.13rem 0.4rem;
+    }
+  }

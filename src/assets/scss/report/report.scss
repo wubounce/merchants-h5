@@ -11,7 +11,7 @@
     z-index: 10000000;
     position: fixed;
     top:0;
-    border-bottom:1px solid #E5E5E5;
+    border-bottom:1px solid #f9f8ff;
     >div {
       flex: 1;
     }
@@ -111,7 +111,7 @@
   }
   .table-header {
     padding-top: 0.65rem;
-    border-bottom: 1px solid #E5E5E5;
+    border-bottom: 1px solid #f9f8ff;
   }
   .detail {
     display: block;
@@ -144,11 +144,11 @@
     }
   }
   .tableearn .tableearn-list:nth-child(2n) {
-    border-bottom: 1px solid #E5E5E5; 
+    border-bottom: 1px solid #f9f8ff; 
     background: #fff !important;
   }
   .tableearn .tableearn-list:nth-child(2n-1) {
-    border-bottom: 1px solid #E5E5E5; 
+    border-bottom: 1px solid #f9f8ff; 
     background: #FAFCFE !important;
   }
   .search {
@@ -157,7 +157,7 @@
     padding: 0.53rem 0.2rem 0 0.2rem;
   }
   .slectdata {
-    border-bottom: 1px solid #e5e5e5;
+    border-bottom: 1px solid #f9f8ff;
     border-radius: 0.053333rem;
     height: 0.746667rem;
     line-height: 0.746667rem;

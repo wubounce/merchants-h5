@@ -212,5 +212,6 @@ export default {
   .login .mint-button--primary {
     display: block;
     width: 100%;
+    height: 1.17rem;
   }
 </style>

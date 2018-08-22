@@ -23,7 +23,7 @@
     </ul>
     <ul class="user-list">
         <li>
-            <router-link to="contact" class="item" style="border-bottom: 1px solid #e5e5e5;">
+            <router-link to="contact" class="item" style="border-bottom: 1px solid #f9f8ff;">
                 <div class="item-left"><span class="usericon iconfont icon-lianxi"></span><span>联系客服</span></div>
                 <div class="item-right"><span class="go iconfont icon-nextx"></span></div>
             </router-link>

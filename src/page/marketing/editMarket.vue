@@ -6,7 +6,7 @@
       <p @click="shopVisible=true">所属店铺<span class="order-action add-shop-overflow-icon iconfont icon-nextx"></span><span class="addvip-con add-shop-overflow">{{checkshoptxt?checkshoptxt:''}}</span></p>
       <p @click="open('picker2')">优惠期开始<span class="addvip-con">{{addmarket.startTime}}<span class="order-action iconfont icon-nextx"></span></span></p>
       <p @click="open('picker3')">优惠期结束<span class="addvip-con">{{addmarket.endTime}}<span class="order-action iconfont icon-nextx"></span></span></p>
-      <p @click="activeVisible=true">活动日<span class="order-action add-shop-overflow-icon iconfont icon-nextx"></span><span class="addvip-con add-shop-overflow">{{activeCurrentTags?activeCurrentTags.label !== '自定义'?activeCurrentTags.label:checkWeeklisttxt:checkWeeklisttxt}}</span></p>
+      <p @click="activeVisible=true">活动日<span class="order-action add-shop-overflow-icon iconfont icon-nextx"></span><span class="addvip-con add-shop-overflow">{{weeklist.join(',') | week}}</span></p>
       <p @click="activeTimeVisible = true">每日活动时段<span class="addvip-con">{{addmarket.time}}<span class="order-action iconfont icon-nextx"></span></span></p>
       <p>折扣优惠<span class="addvip-con"><input type="number" placeholder="请输入优惠折扣" class="discount-input" v-model="addmarket.discount">%</span></p>
       <p>是否开放<span class="addvip-con"><mt-switch v-model="addmarket.addstatus" class="check-switch"></mt-switch></span></p>
@@ -26,7 +26,7 @@
     <mt-datetime-picker ref="picker5" type="date" @confirm="handleNoWorkTimeEndChange" :startDate="pickerstartDate"></mt-datetime-picker>
      <!-- 每日不可支付时间 -->
     <mt-popup v-model="noWorkVisible" position="bottom" class="mint-popup">
-       <mt-picker class="pickerNoWork"  :slots="activeTimeslots" @change="changeNoWorkTime" :showToolbar="true"><p class="toolBar"><span class="timequx" @click="noWorkVisible = false;">取消</span><span @click="chooseDay" class="tiem-picker-title">不可支付时间</span><span @click="confirmNews('pickerNoWork')" class="queding">确定</span></p></mt-picker>
+       <mt-picker class="pickerNoWork"  :slots="activeTimeslots" @change="changeNoWorkTime" :showToolbar="true"><p class="toolBar"><span class="timequx" @click="noWorkVisible = false;">取消</span><span class="tiem-picker-title">不可支付时间</span><span @click="confirmNews('pickerNoWork')" class="queding">确定</span></p></mt-picker>
     </mt-popup> 
     <!-- 活动日 -->
     <selectpickr :visible="activeVisible" :slots="activeSlots" :valueKey="label" :title="'活动日'" @selectpicker="activeselectpicker" @onpickstatus="activeselectpickertatus"> </selectpickr>
@@ -34,7 +34,7 @@
     <mt-popup v-model="weekVisible" position="bottom" :closeOnClickModal="false">
       <div class="resp-shop">
         <span class="quxi" @click="weekVisible = false">取消</span>
-        <span class="shop">活动日</span>
+        <span class="shop">店铺</span>
         <span class="qued" @click="checkeWeekList">确定</span>
       </div>
       <section class="resp-shop-wrap">
@@ -44,15 +44,14 @@
               <input type="checkbox" class="mint-checkbox-input" v-model="weeklist" :value="item.value"> 
               <span class="mint-checkbox-core"></span>
             </span> 
-            <span class="mint-checkbox-label shopname">{{item.label}}</span>
+            <p class="mint-checkbox-label shopname">{{item.label}}</p>
           </label>
         </div>
       </section>
     </mt-popup>
-
     <!-- 优惠时段 -->
     <mt-popup v-model="activeTimeVisible" position="bottom" class="mint-popup">
-       <mt-picker class="pickerActiveTimes"  :slots="activeTimeslots" @change="changeTime" :showToolbar="true"><p class="toolBar"><span class="timequx" @click="activeTimeVisible = false;">取消</span><span @click="chooseDay" class="tiem-picker-title">每日活动时段</span><span @click="confirmNews('pickerActiveTimes')" class="queding">确定</span></p></mt-picker>
+       <mt-picker class="pickerActiveTimes"  :slots="activeTimeslots" @change="changeTime" :showToolbar="true"><p class="toolBar"><span class="timequx" @click="activeTimeVisible = false;">取消</span><span class="tiem-picker-title">每日活动时段</span><span @click="confirmNews('pickerActiveTimes')" class="queding">确定</span></p></mt-picker>
     </mt-popup>
 
     <!-- 优惠期开始 -->
@@ -229,40 +228,9 @@ export default {
           this.shopIds.push(item.id);
         });
         this.checkshoptxt = beshop.join(',');
-        
-        this.filterweek(detail.noWeek); //活动日期
         this.weeklist = detail.noWeek ?detail.noWeek.split(',') :[];
       }
       
-    },
-    filterweek(value){
-      if (value === '9') {
-        this.activeCurrentTags = {label:'每天'};
-      } else if(value === '8'){
-        this.activeCurrentTags = {label:'周一至周五'};
-      }else {
-        let arr = [];
-        let weeklsit = [];
-        arr = value? value.split(',') :[];
-        arr.forEach(item=>{
-          if (item == '1') {
-            weeklsit.push('周一');
-          } else if(item == '2') {
-            weeklsit.push('周二');
-          } else if(item == '3') {
-            weeklsit.push('周三');
-          } else if(item == '4') {
-            weeklsit.push('周四');
-          } else if(item == '5') {
-            weeklsit.push('周五');
-          } else if(item == '6') {
-            weeklsit.push('周六');
-          } else if(item == '0') {
-            weeklsit.push('周日');
-          }
-        });
-        this.checkWeeklisttxt = weeklsit.join(',');
-      }
     },
     async shopListFun(timeid){
       let payload = {timeId:timeid};
@@ -283,29 +251,19 @@ export default {
     activeselectpicker(data){ //打开自定义星期
       let weeklist = [];
       this.activeCurrentTags = data;
-      if (data.value!=='') {
+      if (data.label !=='自定义') {
         weeklist.push(data.value);
+        this.weeklist = weeklist.length >0 ? [...weeklist] : this.weeklist; //如果选了自定义活动日重新赋值
+      }else {
+        this.weekVisible = true;
       }
-      if (this.activeCurrentTags.label === '自定义') {
-          this.weekVisible = true;
-      }
-      this.weeklist = [...weeklist]; //如果选了自定义活动日重新赋值
     },
     activeselectpickertatus(data){
       this.activeVisible = data;
     },
     checkeWeekList(){ //选择自定星期
-      console.log(this.weeklist);
-      let checklist = this.weekTitle.filter(v=>this.weeklist.some(k=>k==v.value));
-      this.checkWeeklisttxt = checklist.map(item=>item.label).join(',');
       this.weekVisible = false;
       this.weeklist = this.weeklist.filter(id => Number(id) !== 8&&Number(id) !== 9); //自动活动日去掉每天和周一至周五
-    },
-    chooseDay() {
-      this.$set(this.activeTimeslots[0],'defaultIndex',0);
-      this.$set(this.activeTimeslots[2],'defaultIndex',0);
-      this.$set(this.activeTimeslots[4],'defaultIndex',23);
-      this.$set(this.activeTimeslots[6],'defaultIndex',59);
     },
     changeTime(picker, values) {
       this.activeTimeCurrentTags = values[0]+':'+values[1]+'-'+ values[2]+':'+values[3];
@@ -386,6 +344,37 @@ export default {
       }
     }
   },
+  filters:{
+    week: function (value) {
+      if (value === '9') {
+        return '每天';
+      } else if(value === '8'){
+        return '周一至周五';
+      }else {
+        let arr = [];
+        let weeklsit = [];
+        arr = value? value.split(',') :[] ;
+        arr.forEach(item=>{
+          if (item == '1') {
+            weeklsit.push('周一');
+          } else if(item == '2') {
+            weeklsit.push('周二');
+          } else if(item == '3') {
+            weeklsit.push('周三');
+          } else if(item == '4') {
+            weeklsit.push('周四');
+          } else if(item == '5') {
+            weeklsit.push('周五');
+          } else if(item == '6') {
+            weeklsit.push('周六');
+          } else if(item == '0') {
+            weeklsit.push('周日');
+          }
+        });
+        return weeklsit.join(',');
+      }
+    },
+  },
   components:{
     selectpickr
   },
@@ -414,147 +403,7 @@ export default {
 };
 </script>
 <style type="text/css" lang="scss" scoped>
-    .addmarket {
-      padding-bottom: 2rem;
-    }
-  .addvip-header, .time-chose {
-    padding: 0 0.4rem;
-    background: #fff;
-    p {
-      height: 1.6rem;
-      line-height: 1.6rem;
-      font-size: 16px;
-      color: #333;
-      border-bottom:1px solid rgba(223,230,255,1);
-    }
-    p:last-child{
-      border:none;
-    }
-    .addvip-con {
-      float: right;
-    }
-    .add-shop-overflow {
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      width: 65%;
-      text-align: right;
-    }
-    .add-shop-overflow-icon {
-      float: right;
-    }
-  }
-  .order-action {
-    color: #ccc;
-  }
-  .confirm {
-    width:100%;
-    height:1.33rem;
-    line-height: 1.33rem;
-    background:rgba(24,144,255,1);
-    text-align: center;
-    font-size: 18px;
-    color: #fff;
-    position: fixed;
-    bottom: 0;
-  }
-  .resp-shop {
-    display: flex;
-    height: 1.17rem;
-    line-height: 1.17rem;
-    background:rgba(251,251,252,1);
-    padding: 0 0.4rem;
-    >span {
-      flex: 1;
-      font-size: 15px;
-    }
-    .quxi {
-      color: #999;
-    }
-    .shop {
-      text-align: center;
-      font-size: 16px;
-    }
-    .qued {
-      text-align:right;
-      color: #1890FF;
-    }
-  }
-  .resp-shop-wrap {
-    .shopname {
-      font-size: 15px;
-      color: #333;
-    }
-    .all-list {
-      height: 9.29rem;
-      overflow-y: scroll;
-    }
-  }
-.discount-input {
-  height: 1.6rem;
-  line-height: 1.6rem;
-  padding-top: 0.51rem;
-  padding-bottom: 0.49rem;
-  text-align: right;
-  width:4.27rem;
-}
-  .check-switch {
-    margin-top: 0.35rem;
-  }
-  .toolBar {
-    padding: 0 0.4rem;
-    height: 1.07rem;
-    line-height: 1.07rem;
-    display: flex;
-    background:rgba(251,251,252,1);
-    >span {
-      flex:1;
-    }
-    .timequx {
-      font-size: 15px;
-      color: #999;
-      float: left;
-      display: block;
-    }
-    .queding {
-      color: #1890FF;
-      font-size: 15px;
-      float: right;
-      text-align: right;
-    }
-    .tiem-picker-title {
-      font-size: 16px;
-      text-align: center;
-    }
-  }
-  .day-time {
-    display: flex;
-    >div {
-      flex:1;
-      width: 50%;
-      height: 8.0rem;
-    }
-    .mint-popup {
-      width: 5.0rem;
-    }
-    .start .mint-popup{
-      left: 25%;
-      z-index: 2004 !important;
-    }
-    .end .mint-popup{
-      left: 75%;
-      z-index: 2004 !important;
-    }
-  }
-  .nopay-time {
-    h6 {
-      color:rgba(153,153,153,1);
-      line-height:0.44rem;
-      font-size: 12px;
-      font-weight: normal;
-      padding: 0.4rem 0 0.13rem 0.4rem;
-    }
-  }
+   @import '../../assets/scss/marketing/addmaket';
 </style>
 <style>
   .addmarket .mint-checklist-label {

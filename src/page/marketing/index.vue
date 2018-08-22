@@ -59,7 +59,7 @@ export default {
     color: #333333;
     text-align: center;
     display: flex;
-    border-bottom:1px solid rgba(220,224,230,1);
+    border-bottom:1px solid #f9f8ff;
     z-index: 9999;
     position: fixed;
     top: 0;
