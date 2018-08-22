@@ -152,14 +152,15 @@
         font-size: 16px;
     }
 }
-.calendar-months span{
-    margin:1px 5px;
-    display: inline-block;
-    width:60px;
-    line-height: 30px;
+.calendar-months div{
+    width:1.87rem;
+    line-height: 0.8rem;
     text-align:center;
     color:#999;
     font-size: 16px;
+    span {
+        margin:0 0.07rem;
+    }
 }
 .calendar-months .selected{
     background-color: #E4F2FD;

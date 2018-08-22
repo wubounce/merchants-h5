@@ -1,0 +1,225 @@
+.report {
+  .tab-title {
+    background: #fff;
+    width: 100%;
+    height: 1.33rem;
+    line-height: 1.33rem;
+    font-size: 16px;
+    color: #666666;
+    text-align: center;
+    display: flex;
+    z-index: 10000000;
+    position: fixed;
+    top:0;
+    border-bottom:1px solid #E5E5E5;
+    >div {
+      flex: 1;
+    }
+    .tabcurrent{
+      color:#1890FF;
+      border-bottom: 0.08rem solid #1890FF;
+      border-radius:0.04rem;
+      display: inline-block;
+      padding:0 0.85rem;
+      font-weight: 600;
+    }
+  }
+}
+
+.earnings {
+    background: #fff;
+    height: 100%;
+    position: absolute;
+    width: 100%;
+  }
+  .echarts-warp {
+    padding: 0.32rem 0.32rem 0 0.32rem;
+  }
+  .order-earchs-title {
+    display: flex;
+    color: #999;
+    font-size: 12px;
+    span {
+      flex:1;
+
+    }
+    .order-num {
+      text-align: right;
+    }
+  }
+  .echart-title {
+    width: 8rem;
+    font-size: 12px;
+    color:rgba(153,153,153,1);
+    margin: 0.4rem auto 0;
+    i {
+      width: 0.19rem;
+      height: 0.19rem;
+      display: inline-block;;
+      background: #f60;
+      border-radius: 50%;
+      margin-right: 0.133333rem;
+      margin-left: 0.133333rem;
+    }
+    .totalMoney {
+      font-size: 12px;
+      color: #1890FF;
+      font-weight: 600;
+      margin-right: 0.8rem;
+    }
+    .totalOrder {
+      font-size: 12px;
+      color: #FACC14;
+      font-weight: 600;
+    }
+  }
+  .tabletit {
+    background: #fff !important;
+  }
+  .mint-navbar{
+    height: 1.066667rem;
+    border:1px solid rgba(229,229,229,1);
+  }
+  .mint-tab-item-label {
+    font-size: 16px;
+  }
+  .report-table-date {
+    text-align: left;
+  }
+  .report-table-order {
+    text-align: right;
+  }
+  .listcon {
+    display: flex;
+    font-size: 14px;
+    height: 1.04rem;
+    line-height: 1.04rem;
+    padding: 0 0.4rem;
+    span {
+      flex:1;
+      font-weight: 600;
+    }
+  }
+  .tabledata {
+    padding-bottom: 55px;
+    box-sizing: border-box;
+  }
+  .tableearn {
+    height: 100%;
+    overflow-y: auto;
+     -webkit-overflow-scrolling: touch;
+  }
+  .table-header {
+    padding-top: 0.65rem;
+    border-bottom: 1px solid #E5E5E5;
+  }
+  .detail {
+    display: block;
+    width: 100%;
+    -webkit-box-align: center;
+    -ms-flex-align: center;
+    align-items: center;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    color: #333333;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    font-size: 14px;
+    position: relative;
+    text-align: center;
+    white-space: nowrap;
+    span {
+      flex:1;
+      font-weight: 600;
+    }
+  }
+  .detail {
+    span {
+      font-weight: normal;
+      color: #666666;
+    }
+    .listtime {
+      color: #1890FF;
+    }
+  }
+  .tableearn .tableearn-list:nth-child(2n) {
+    border-bottom: 1px solid #E5E5E5; 
+    background: #fff !important;
+  }
+  .tableearn .tableearn-list:nth-child(2n-1) {
+    border-bottom: 1px solid #E5E5E5; 
+    background: #FAFCFE !important;
+  }
+  .search {
+    display: flex;
+    margin-top: 1.19rem;
+    padding: 0.53rem 0.2rem 0 0.2rem;
+  }
+  .slectdata {
+    border-bottom: 1px solid #e5e5e5;
+    border-radius: 0.053333rem;
+    height: 0.746667rem;
+    line-height: 0.746667rem;
+    background: #fff;
+    font-size: 14px;
+    display: flex;
+    position: relative;
+    span {
+      height: 0.746667rem;
+      line-height: 0.746667rem;
+      display: inline-block;
+    }
+    i {
+      position: absolute;
+      right: 0;
+    }
+  }
+  .monthchoose {
+    width: 1.13rem;
+    margin-right: 0.37rem;
+    span {
+      color: #1890FF;
+    }
+  }
+  .timechoose {
+    width: 5.19rem;
+    margin-right: 0.37rem;
+    .time {
+       color: #1890FF;
+    }
+    .zhi {
+      font-size: 12px;
+      margin:0 0.07rem;
+    }
+  }
+  .shopchoose {
+    width: 2.28rem;
+    span {
+      width: 1.87rem !important;
+      display: inline-block;
+      color: #666;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
+  .mint-popup {
+    width: 100%;
+  }
+  .select-back {
+    float: right;
+    color: #999;
+  }
+  .nodata {
+    font-size: 14px;
+    color: #999;
+    text-align: center;
+    padding: 2rem 0;
+    background: #fff;
+  }
+
+  .earnings .v-modal {
+    z-index: 10000000 !important;
+  }

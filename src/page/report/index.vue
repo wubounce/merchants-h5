@@ -42,32 +42,7 @@ export default {
   },
 };
 </script>
-<style type="text/css" lang="scss" scoped>
-
-  .tab-title {
-    background: #fff;
-    width: 100%;
-    height: 1.33rem;
-    line-height: 1.33rem;
-    font-size: 16px;
-    color: #666666;
-    text-align: center;
-    display: flex;
-    z-index: 10000000;
-    position: fixed;
-    top:0;
-    border-bottom:1px solid #E5E5E5;
-    >div {
-      flex: 1;
-    }
-    .tabcurrent{
-      color:#1890FF;
-      border-bottom: 0.08rem solid #1890FF;
-      border-radius:0.04rem;
-      display: inline-block;
-      padding:0 0.85rem;
-      font-weight: 600;
-    }
-  }
+<style lang="scss" scoped>
+  @import "../../assets/scss/report/report";
 </style>
 

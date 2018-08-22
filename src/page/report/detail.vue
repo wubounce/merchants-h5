@@ -1,5 +1,6 @@
 <template>
 <div class="report-detail" v-title="title">
+    <div class="shop-title">{{shopName}}<span>{{date}}</span></div>
     <div class="tabledata">
         <div class="listcon">
           <span class="report-table-name">设备名称</span>
@@ -35,6 +36,8 @@ export default {
        noList:false,
        tooltip:'',
        positiontop:null,
+       shopName:null,
+       date:null
     };
   },
   created(){
@@ -46,19 +49,16 @@ export default {
       this.title = '退款';
       this.tableTitleType = '退款';
     }
-    this.getDetail(query.date,query.type,query.shopId);
+    this.getDetail(query.date,query.type,query.shopId,query.dateLevel);
   },
   methods: {
-    async getDetail(date,type,shopId){
-      let payload = null;
-      if (shopId) {
-        payload = Object.assign({},{date:date,type:type,shopId:shopId});
-      } else {
-        payload = Object.assign({},{date:date,type:type});
-      }
+    async getDetail(date,type,shopId,dateLevel){
+      let payload = Object.assign({},{date:date,type:type,shopId:shopId,dateLevel:dateLevel});
       let res = await machineReportFun(qs.stringify(payload));
       if (res.code === 0) {
-        this.list = res.data;
+        this.list = res.data.list;
+        this.shopName = res.data.shopName;
+        this.date = res.data.date;
         this.list.length <= 0 ? this.noList = true:this.noList = false;
       }
       
@@ -72,8 +72,9 @@ export default {
     },
   },
   beforeRouteLeave(to, from, next) {
-     // 设置下一个路由的 meta
-    to.meta.keepAlive = true;
+    if (to.name === 'report') {
+      to.meta.keepAlive = true;
+    } 
     next();
   },
   filters: {
@@ -85,79 +86,6 @@ export default {
   }
 };
 </script>
-<style lang="scss">
-.report-detail {
-  height: 100%;
-  .mint-header {
-      background: #F2F2F2 !important;
-  }
-  .listcon {
-    background-color: #fff;
-    color: #333333;
-    font-size:0.37rem;
-    height: 1.04rem;
-    line-height: 1.04rem;
-    padding: 0 0.4rem;
-    display: flex;
-    border-bottom:1px solid #f9f8ff;
-    span {
-      font-weight: 600;
-    }
-  }
-  .report-table-name {
-    text-align: left;
-    width:3.35rem;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-  .report-table-type {
-    text-align: left;
-    width: 1.49rem;
-    margin-right: 0.52rem;
-  }
-  .report-table-order {
-    text-align: right;
-    width: 1.49rem;
-    margin-right: 0.52rem;
-  }
-  .no-mright {
-    margin:0;
-  }
-  .nodata {
-    font-size: 0.37rem;
-    color: #999;
-    text-align: center;
-    padding: 2rem 0;
-    background: #efeff4;
-  }
-  .tableearn-list {
-    span {
-      font-weight: normal;
-      color: #666666;
-    }
-  }
-  .tableearn .tableearn-list:nth-child(2n) {
-    background: #fff !important;
-  }
-  .tableearn .tableearn-list:nth-child(2n-1) {
-    background: #FAFCFE !important;
-  }
-  .tooltip {
-    position: absolute;
-    left:50%;
-    transform: translate(-50%,0);
-  }
-  .ivu-tooltip-inner {
-      padding:0.2rem 0.4rem;
-      color: #fff;
-      text-align: left;
-      text-decoration: none;
-      background:rgba(0,0,0,0.65);
-      border-radius: 0.08rem;
-      word-wrap:break-word;
-      word-break:break-all;
-      font-size: 0.16rem
-  }
-}
+<style lang="scss" scoped>
+  @import "../../assets/scss/report/detail";
 </style>

@@ -1,0 +1,179 @@
+  .order-detail {
+    padding-bottom: 2rem;
+  }
+  .order-status {
+    width:1005;
+    height:1.33rem;
+    line-height: 1.33rem;
+    background:rgba(24,144,255,1);
+    font-size: 16px;
+    color: #fff;
+    font-weight: 600;
+    font-family:PingFangSC-Medium;
+    padding-left: 0.4rem;
+  }
+  .alllist {
+    
+  }
+  .order-detil-info {
+    background: #fff;
+    padding-bottom: 0.4rem;
+    margin-bottom: 0.266667rem;
+  }
+  .order-title {
+    font-size: 16px;
+    color: #333;
+     padding: 0 0.4rem;
+    height: 1.31rem;
+    line-height: 1.31rem;
+  }
+  .order-list {
+    padding:0.4rem;
+    background:rgba(248,252,255,1);
+    .title {
+      font-size: 16px;
+      display: flex;
+    }
+    .ovh-shop {
+      display: inline-block;
+      width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .go {
+      float: right;
+      color: #D1D1D6;
+    }
+    .detail {
+      display: flex;
+    }
+    .orderpic {
+      width:1.84rem;
+      height:1.79rem;
+      border-radius:0.133333rem;
+      background: #ccc;
+      img {
+        display: block;
+        width: 100%;
+        height: 100%;
+        border-radius: 0.133333rem;
+      }
+    }
+    .content {
+      width: 6.293333rem;
+      height:1.79rem;
+      padding-left: 0.266667rem; 
+      .con-title {
+        font-size: 14px;
+      }
+      .con-type{
+          font-size: 12px;
+          color: #999999;
+          padding-top: 0.106667rem;
+          padding-bottom: 0.266667rem;
+      }
+      .con-price{
+        font-size: 18px;
+        color: #FF5F5F
+      }
+    }
+  }
+  .total-wrap {
+    background: #fff;
+    line-height: 1.35rem;
+    padding:0 0.4rem;
+    font-size: 14px;
+  }
+  .total-border {
+    display: flex;
+    border-bottom:1px solid #f9f8ff;
+    height: 0.53rem;
+    line-height: 0.53rem;
+    padding-top: 0.41rem;
+    padding-bottom: 0.4rem;
+    font-size: 14px;
+    > div {
+      flex: 1;
+
+    }
+    .vip {
+      color: #333;
+    }
+    .discount {
+      text-align: right;
+      color: #FF5F5F;
+    }
+    .viptag {
+      display: block;
+      width: 0.41rem;
+      height: 0.41rem;
+      margin-right: 0.27rem;
+      float: left;
+      margin-top: 0.03rem;
+      img {
+        display: block;
+        width: 100%;
+      }
+    }
+  }
+    
+  .money-wrap {
+    text-align: right;
+    background: #fff;
+    line-height: 1.35rem;
+    padding:0 0.4rem;
+    font-family:PingFangSC-Medium;
+    margin-bottom: 0.266667rem;
+    .heji {
+      color: #25265E;
+      font-size: 17px;
+      font-weight: 600;;
+    }
+    .money {
+      font-size: 18px;
+      color: #FF5F5F;
+    }
+  }
+  .oder-time {
+    background: #fff;
+    line-height: 1.35rem;
+    padding:0 0.4rem;
+    font-family:PingFangSC-Medium;
+    margin-bottom:1.3rem;
+    font-size: 14px;
+    color: #333;
+  }
+  .order-action {
+    width:1.066667rem;
+    height:0.453333rem;
+    line-height:0.453333rem;
+    background:rgba(236,245,255,1);
+    border-radius:0.053333rem;
+    border:1px solid rgba(179,217,255,1);
+    font-size: 12px;
+    color: #3F9EFF;
+    text-align: center;
+  }
+  .listaction {
+    background: #fff;
+    overflow: hidden;
+    padding: 0.266667rem;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    box-sizing: border-box;
+    button {
+      float: right;
+      width:2.133333rem;
+      height:0.8rem;
+      border-radius:0.106667rem;
+      border:0.026667rem solid rgba(216,216,216,1);
+      font-size: 14px;
+      color: #333;
+      text-align: center;
+      margin:0 0.133333rem;
+      background: #fff;
+      box-shadow: none;
+    }
+  }

@@ -7,7 +7,7 @@ const baseUrl = process.env.NODE_ENV === 'production' ? 'https://api.qiekj.com/m
 // 创建axios实例
 const http = axios.create({
   baseURL: baseUrl, // api的base_url
-  timeout: 50000 // 请求超时时间
+  timeout: 30000 // 请求超时时间
 });
 
 // request拦截器
@@ -72,7 +72,11 @@ http.interceptors.response.use(
   },
   error => {
     Indicator.close();
-    MessageBox.alert('服务器开小差了');
+    if (error.message.includes('timeout')) {
+      MessageBox.alert('请求超时，请重新操作', '提示', {type: 'warning'});
+    }else {
+      MessageBox.alert("服务器开小差了", '错误', {type: 'error'});
+    }
     return Promise.reject(error);
   }
 );

@@ -5,11 +5,11 @@
       <span>{{dateCurrentTag.label}}</span><i class="iconfont icon-xiangxiajiantou select-back"></i>
       <selectpickr :visible="dateVisible" :slots="dateSlots"  :title="'时间'" :valueKey="keyname" @selectpicker="dateselectpicker" @onpickstatus="dateselectpickertatus"> </selectpickr>
     </div>
-    <div class="slectdata timechoose">
-      <span @click="openByDialog">{{calendar.display}}</span><i class="iconfont icon-xiangxiajiantou select-back"></i>
+    <div class="slectdata timechoose"  @click="openByDialog">
+      <span class="time">{{startDate.join('-')}}</span><span class="zhi">至</span><span class="time">{{endDate.join('-')}}</span><i class="iconfont icon-xiangxiajiantou select-back"></i>
     </div>
-    <div class="slectdata shopchoose">
-      <span @click="popupVisible=true">{{currentTags?currentTags.shopName:'全部店铺'}}</span><i class="iconfont icon-xiangxiajiantou select-back"></i>
+    <div class="slectdata shopchoose"  @click="popupVisible=true">
+      <span>{{currentTags?currentTags.shopName:'全部店铺'}}</span><i class="iconfont icon-xiangxiajiantou select-back"></i>
       <selectpickr :visible="popupVisible" :slots="shopSlots" :valueKey="shopName" :title="'店铺'" @selectpicker="shopselectpicker" @onpickstatus="shopselectpickertatus"> </selectpickr>
     </div>
   </div>
@@ -20,7 +20,7 @@
     </div>
     <div :class="className" :id="id" :style="{height:height,width:width}" ref="myEchart"></div>
     <div class="echart-title">
-      <i style="background:#1890FF"></i>总收益金额<span class="totalMoney">({{totalMoney}}元)</span>
+      <i style="background:#1890FF"></i>总收益金额<span class="totalMoney">({{totalMoney | tofixd}}元)</span>
       <i style="background:#FACC14"></i>总订单数量<span class="totalOrder">({{totalCount}})</span>
     </div>
   </div>
@@ -42,15 +42,14 @@
     </div>
   </div>
 
-  <div class="calendar-dialog" v-if="calendar.show">
-        <div class="calendar-dialog-mask" @click="calendar.show=false;"></div>
-        <div class="calendar-dialog-body">
-            <calendar :range="calendar.range" :zero="calendar.zero" :lunar="calendar.lunar" :begin="calendar.begin" :end="calendar.end" :type="calendar.type" :value="calendar.value"  @select="calendar.select">
-              
-            </calendar>
-            <div class="calendar-btn" @click="selectDateCom">确定</div>
-        </div>
+  <mt-popup v-model="calendar.show" position="top" class="mint-popup">
+     <div class="calendar-dialog-body">
+        <calendar :range="calendar.range" :zero="calendar.zero" :lunar="calendar.lunar" :begin="calendar.begin" :end="calendar.end" :type="calendar.type" :value="calendar.value"  @select="calendar.select">
+          
+        </calendar>
+        <div class="calendar-btn" @click="selectDateCom">确定</div>
     </div>
+  </mt-popup>
 </div>
 </template>
 <script>
@@ -134,16 +133,14 @@ export default {
       calendar:{
         range:true,
         lunar:false, //显示农历
-        display:'',
+        begin:[2017,9,15], //可选开始日期
         show:false,
         zero:true,
         type:'datetime',
         value:[], //默认日期
         select:(begin,end)=>{
-            this.calendar.display=begin.join("-")+"至"+end.join("-");
             this.startDate = begin;
             this.endDate = end;
-            // this.calendar.value=[begin,end];
         }
     },
 
@@ -177,20 +174,20 @@ export default {
         this.shopSlots[0].values = [{shopName:'全部店铺'},...res.data];
       }
     },
-    async dayReportFun(shopId){
-      let payload = null;
-      if (shopId) {
-        payload = Object.assign({},{startDate:this.startDate.join('-'),endDate:this.endDate.join('-'),type:1,shopId:shopId,dateLevel:this.dateLevel});
-      } else {
-        payload = Object.assign({},{startDate:this.startDate.join('-'),endDate:this.endDate.join('-'),type:1,dateLevel:this.dateLevel});
-      }
+    async dayReportFun(){
+      let shopId = this.currentTags?this.currentTags.shopId:null;
+      let payload = Object.assign({},{startDate:this.startDate.join('-'),endDate:this.endDate.join('-'),type:1,shopId:shopId,dateLevel:this.dateLevel});
       let res = await dayReportFun(qs.stringify(payload));
       if (res.code === 0) {
         this.reportDate = [];
         this.reportCount = [];
         this.reportMoney = [];
         res.data.list.forEach(item=>{
-          this.reportDate.push(moment(item.date).format('MM-DD'));
+          if (this.dateLevel === 1) {
+            this.reportDate.push(moment(item.date).format('MM-DD'));
+          } else {
+            this.reportDate.push(item.date);
+          }
           this.reportCount.push(item.count);
           this.reportMoney.push(item.money);
         });
@@ -226,7 +223,7 @@ export default {
     },
     shopselectpicker(data){
       this.currentTags = data;
-      this.dayReportFun(this.currentTags.shopId);
+      this.dayReportFun();
     },
     shopselectpickertatus(data){
       this.popupVisible = data;
@@ -257,7 +254,7 @@ export default {
       if (shopId) {
         this.$router.push({name:'reportdetail', query:{date:date,type:1,shopId:shopId,dateLevel:this.dateLevel}});
       } else {
-        this.$router.push({name:'reportShopDetail', query:{date:date,type:1,shopId:shopId,dateLevel:this.dateLevel}});
+        this.$router.push({name:'reportShopDetail', query:{date:date,type:1,dateLevel:this.dateLevel}});
       }
       
     }
@@ -433,227 +430,5 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-  .earnings {
-    background: #fff;
-    height: 100%;
-    position: absolute;
-    width: 100%;
-  }
-  .echarts-warp {
-    padding: 0.32rem 0.32rem 0 0.32rem;
-  }
-  .order-earchs-title {
-    display: flex;
-    color: #999;
-    font-size: 12px;
-    span {
-      flex:1;
-
-    }
-    .order-num {
-      text-align: right;
-    }
-  }
-  .echart-title {
-    font-size: 12px;
-    color:rgba(153,153,153,1);
-    margin: 0.4rem 0 0 1.33rem;
-    i {
-      width: 0.19rem;
-      height: 0.19rem;
-      display: inline-block;;
-      background: #f60;
-      border-radius: 50%;
-      margin-right: 0.133333rem;
-      margin-left: 0.133333rem;
-    }
-    .totalMoney {
-      font-size: 0.29rem;
-      color: #1890FF;
-      font-weight: 600;
-      margin-right: 0.8rem;
-    }
-    .totalOrder {
-      font-size: 0.29rem;
-      color: #FACC14;
-      font-weight: 600;
-    }
-  }
-  .tabletit {
-    background: #fff !important;
-  }
-  .mint-navbar{
-    height: 1.066667rem;
-    border:1px solid rgba(229,229,229,1);
-  }
-  .mint-tab-item-label {
-    font-size: 16px;
-  }
-  .report-table-date {
-    text-align: left;
-  }
-  .report-table-order {
-    text-align: right;
-  }
-  .listcon {
-    display: flex;
-    font-size: 14px;
-    height: 1.04rem;
-    line-height: 1.04rem;
-    padding: 0 0.4rem;
-    span {
-      flex:1;
-      font-weight: 600;
-    }
-  }
-  .tabledata {
-    padding-bottom: 55px;
-    box-sizing: border-box;
-  }
-  .tableearn {
-    height: 100%;
-    overflow-y: auto;
-     -webkit-overflow-scrolling: touch;
-  }
-  .table-header {
-    padding-top: 0.65rem;
-    border-bottom: 1px solid #E5E5E5;
-  }
-  .detail {
-    display: block;
-    width: 100%;
-    -webkit-box-align: center;
-    -ms-flex-align: center;
-    align-items: center;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-    color: #333333;
-    display: -webkit-box;
-    display: -ms-flexbox;
-    display: flex;
-    font-size: 14px;
-    position: relative;
-    text-align: center;
-    white-space: nowrap;
-    span {
-      flex:1;
-      font-weight: 600;
-    }
-  }
-  .detail {
-    span {
-      font-weight: normal;
-      color: #666666;
-    }
-    .listtime {
-      color: #1890FF;
-    }
-  }
-  .tableearn .tableearn-list:nth-child(2n) {
-    border-bottom: 1px solid #E5E5E5; 
-    background: #fff !important;
-  }
-  .tableearn .tableearn-list:nth-child(2n-1) {
-    border-bottom: 1px solid #E5E5E5; 
-    background: #FAFCFE !important;
-  }
-  .search {
-    display: flex;
-    margin-top: 1.19rem;
-    padding: 0.4rem 0.2rem 0 0.2rem;
-  }
-  .slectdata {
-    display: flex;
-    border-bottom: 1px solid #e5e5e5;
-    border-radius: 0.053333rem;
-    height: 0.746667rem;
-    line-height: 0.746667rem;
-    background: #fff;
-    font-size: 0.37rem;
-    span {
-      width: 100%;
-      height: 0.746667rem;
-      line-height: 0.746667rem;
-      display: inline-block;
-    }
-  }
-  .monthchoose {
-    width: 1.3rem;
-    margin-right: 0.37rem;
-  }
-  .timechoose {
-    width: 5.19rem;
-    margin-right: 0.37rem;
-    span {
-      text-align: center;
-    }
-  }
-  .shopchoose {
-    width: 2.28rem;
-    margin-left: .2rem;
-    span {
-      width: 4.67rem !important;
-      display: inline-block;
-      color: #666;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-  }
-
-  .mint-popup {
-    width: 100%;
-  }
-  .select-back {
-    float: right;
-    color: #999;
-  }
-  .nodata {
-    font-size: 14px;
-    color: #999;
-    text-align: center;
-    padding: 2rem 0;
-    background: #fff;
-  }
-  /*弹出框*/
-.calendar-dialog{
-    position: absolute;
-    left:0;
-    top:0;
-    right:0;
-    bottom:0;
-    background:rgba(255,255,255,.5);
-    z-index: 10000000;
-}
-.calendar-dialog-mask{
-    background:rgba(0,0,0,0.5);
-    height: 100%;
-    width: 100%;
-}
-.calendar-dialog-body{
-    width: 100%;
-    background: #fff;
-    position: absolute;
-    bottom:0;
-    box-sizing: border-box;
-}
-.calendar {
-  border-bottom: 1px solid #E7EDF5;
-}
-.calendar-btn {
-  width:2.13rem;
-  height:0.8rem;
-  background:rgba(24,144,255,1);
-  border-radius:0.11rem;
-  font-size: 14px;
-  color: #fff;
-  text-align: center;
-  line-height: 0.8rem;
-  margin: 0.4rem auto;
-}
-</style>
-<style lang="scss">
-  .earnings .v-modal {
-    z-index: 10000000 !important;
-  }
+  @import "../../assets/scss/report/report";
 </style>
