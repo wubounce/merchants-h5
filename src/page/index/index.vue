@@ -1,5 +1,9 @@
 <template>
   <div class="main" v-title="'企鹅商家管理平台'">
+    <div class="notice-head" @click="openNotice">
+      <p>公告：请各运营商提前检测设备是否正常</p>
+      <p>更多<i class="iconfont icon-nextx"></i></p>
+    </div>
     <div class="earnings-wrap">
       <router-link to='/index/totalincome'>
         <div class="earning-type">
@@ -56,10 +60,31 @@
       </div>
       <div class="offline-tip">离线：连续30分钟未在线的设备数量。可能由于断电，信号不稳定，模块、设备损坏等原因引起，请自行检查或联系客服报备。</div>
     </div>
+    <div class="notice-wrapper" v-if="noticeShow">
+      <div class="notice">
+        <div class="notice-body">
+          <img src="../../assets/img/notice/notice.png" class="noticePic" />
+          <img src="../../assets/img/notice/feather.png" class="feather" />
+          <img src="../../assets/img/notice/handLeft.png" class="handLeft" />
+          <img src="../../assets/img/notice/handRight.png" class="handRight" />
+          <div class="notice-content">                     
+            <p>大家好，马上就要迎来开学季，为了让学生可以如期使用洗衣机，<span>希望运营商伙伴们提前检测一下设备是否正常。</span><p>
+            <p><span>检测步骤：</span>1、重新通电 2、查看信号是否正常 3、扫码支付或后台桶自洁查看设备是否正常启动。</p>
+            <p><span>反馈机制：</span>如果信号，模块，设备正常，设备无法正常启动，请联系客服，提供设备二维码清晰照片/设备名称、账号、问题现象，以便更好解决问题。（联系方式：我的-联系客服）</p>                    
+            <p class="time">2018-08-21</p>
+          </div>         
+        </div>
+      </div>
+      <div class="icon-wrapper" @click="closeNotice">
+        <img src="../../assets/img/notice/del.png" />
+      </div>       
+    </div>
   </div>
+  
 </template>
 <script>
 import qs from 'qs';
+import { getNoticeType, setNoticeType, removeNoticeType } from '@/utils/tool';
 // 引入 ECharts 主模块
 import echarts from 'echarts/lib/echarts';
 // 引入折线图
@@ -107,6 +132,7 @@ export default {
       equipmentcurrentTags:null,
       distributioncurrentTags:null,
       distributionVisible:false,
+      noticeShow:false,
       equipmentSlots:[ //设备类型
         {
             flex: 1,
@@ -162,6 +188,13 @@ export default {
     this.getThisDay();
   },
   methods: { 
+    async openNotice(){
+      this.noticeShow = true;
+    },
+    async closeNotice(){
+      this.noticeShow = false;
+      setNoticeType(1);
+    },
     //获取本月
     getThisMonth() {
       let date = new Date();
@@ -172,7 +205,12 @@ export default {
       let date = new Date();
       this.thisDay = moment(date).format('YYYY-MM-DD');
       this.fromMonth = false;
-    },
+      if(getNoticeType() != 1) {
+          this.noticeShow = true;
+      }else{
+          this.noticeShow = false;       
+      }
+    }, 
     async ParentTypeFun(){ //获取设备类型
         let res = await ParentTypeFun(qs.stringify({onlyMine:true}));
         res.data = res.data.length>0 ? res.data :[];
@@ -728,6 +766,107 @@ export default {
  .main {
   height: 100%;
  }
+  .notice-head{
+
+    height: 1.1733rem;
+    background-image: linear-gradient(-225deg, #EEFCFF 0%, #CAE7F3 100%);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: .4rem;
+    color: #112250;
+    padding: 0 .3333rem;
+    .iconfont{
+      opacity: .2;
+    }
+  }
+  .notice-wrapper{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,.5);
+    z-index: 19999999;
+    padding-top: .7467rem;
+    .notice{
+      width: 8.6667rem;
+      margin: 0 auto;
+      background-image: linear-gradient(-225deg, #786AF0 0%, #3C74F7 50%, #006CFF 100%);
+      border-radius: .08rem;
+      padding: .9867rem .48rem .48rem;
+      box-sizing: border-box;
+      overflow: hidden;
+      .notice-body{
+        width: 100%;
+        background-color: #fff;
+        border-radius: .08rem;
+        padding: 1.7067rem .5067rem .5333rem;
+        position: relative; 
+        box-sizing: border-box;     
+        img{
+          position: absolute;
+          &.noticePic{
+              width: 2.1333rem;
+              height: auto;
+              top: .48rem;
+              left: 50%;
+              transform: translate(-50%);
+          }  
+          &.feather{
+              width: 1.7333rem;
+              height: auto;
+              right: .5333rem;
+              top: -.82rem;
+          }
+          &.handLeft{
+              width: 1.64rem;
+              height: auto;
+              left: -0.4933rem;
+              bottom: -.6267rem;
+          }
+          &.handRight{
+              width: 1.64rem;
+              height: auto;
+              right: -0.4933rem;
+              bottom: -.6267rem;
+          }
+        }            
+        .notice-content{
+          p{
+              font-size: .4rem;
+              color: #666;
+              line-height: .64rem;
+              text-align: left; 
+              text-align:justify;
+              
+              
+              span{
+                  color: #001020;
+                  background-color: rgba(255,232,190,1);
+              }
+            
+              &.time{
+                  color: #112250;
+                  font-size: .4rem;
+                  text-align: right;
+              }
+          }           
+        }     
+      }
+        
+    }
+    .icon-wrapper{
+      width: .8533rem;
+      height: .8533rem;
+      margin: .4133rem auto 0;
+      text-align: center;
+      img{
+          width: 100%;
+          height: 100%;
+      }
+    }
+}
   .lineecharts-warp {
       padding: 0.32rem;
       background: #fff;
