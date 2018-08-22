@@ -203,18 +203,18 @@ section {
             width: 35%;
             text-align: center;
             &:nth-child(2) {
-              border-left: 1px solid #DFE6FF;
-              border-right: 1px solid #DFE6FF;
+              border-left: 1px solid #F8F8F8;
+              border-right: 1px solid #F8F8F8;
             }
             .text {
               margin-top: 0.4rem;
               color: #999999;
               font-size: 14px;
             }
-            .text-value {
-              color:#1890FF;
+            .text-value { 
+              color:#1890FF;     
               font-size: 16px;
-              margin-top: 0.2rem;
+              margin-top: 0.2rem; 
               .little-font {
                 font-size: 8px;
               }

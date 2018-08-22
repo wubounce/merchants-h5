@@ -67,7 +67,7 @@ export default {
         padding: 0 .4rem;
         position: relative;
         white-space: nowrap;
-        border-bottom: 1px solid #e5e5e5;
+        border-bottom: 1px solid #f9f8ff;
         .detail {
             align-items: center;
             box-sizing: border-box;
@@ -113,7 +113,7 @@ export default {
         padding: 0 .4rem;
         position: relative;
         white-space: nowrap;
-        border-bottom: 1px solid #e5e5e5;
+        border-bottom: 1px solid #f9f8ff;
         span {
             font-weight: 600;
         }

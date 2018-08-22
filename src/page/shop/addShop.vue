@@ -357,6 +357,12 @@ export default {
         case 1:
           this.placeVisible = false;
           this.mapCity = this.cityName;
+          console.log(this.provinceId,this.cityId,this.districtId);
+          if(!this.districtName) {
+            this.districtName = '';
+            this.districtId = this.cityId;
+          }
+          console.log(this.provinceId,this.cityId,this.districtId);
           if( this.cityName != '' && this.cityName != null && this.cityName != undefined ) {
             if(this.provinceName == this.cityName.slice(0,2)) {
               this.list[1].value = this.cityName + this.districtName;
@@ -543,8 +549,8 @@ export default {
       this.isClass = true;
     },
     async submit() {
-      
-      if(this.shopName!=false && this.shopType!=false && this.provinceId != false && this.cityId !=false && this.provinceId != false && this.address != false && this.lat !=false && this.lng != false && this.machineTypeIdsArray !=false ) {
+      console.log(this.lng);
+      if(this.shopName!=false && this.shopType!=false && this.provinceId != false && this.cityId !=false && this.provinceId != false && this.address != false && this.lat !=false && this.lng != false && this.lat !=undefined && this.lng != undefined && this.machineTypeIdsArray !=false ) {
         if(this.orderLimitMinutes) {
           //在判断
           let reg=/^[1-9]+\d*$/;
@@ -656,7 +662,7 @@ export default {
           });
       }else if(!this.lat || !this.lng) {
         this.$toast({
-            message: '请选择小区/大厦/学校',
+            message: '请选择小区/大厦/学校等具体地点',
             position: 'middle',
             duration: 3000
           });

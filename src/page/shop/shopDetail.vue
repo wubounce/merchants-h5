@@ -131,6 +131,9 @@ export default {
         else {
           this.organization = '';
         }
+        if(this.districtName == this.cityName) {
+          this.districtName = '';
+        }
         if(this.provinceName == this.cityName.slice(0,this.cityName.length-1)) {
           this.completeAddress = this.cityName + this.districtName + this.organization + this.address;
         }
