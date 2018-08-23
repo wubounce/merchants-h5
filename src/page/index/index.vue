@@ -283,7 +283,7 @@ export default {
     },
     async typeProfitData(parentTypeId,type){ //收益分布
       let payload = null;
-      if (parentTypeId !== undefined && type !== undefined) {
+      if (parentTypeId !== undefined || parentTypeId !== null && type !== undefined) {
         payload = Object.assign({},{parentTypeId:parentTypeId,type:type});
       } else {
         payload = Object.assign({},{parentTypeId:this.washingMachineId,type:0});
