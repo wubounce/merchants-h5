@@ -278,7 +278,6 @@ export default {
         this.lineMax = this.calMax(this.lineseriesData);//Y轴最大值
         // 把配置和数据放这里
         this.linechart.setOption(this.lineChartOption);
-        console.log(this.lineseriesData);
       }
       
     },

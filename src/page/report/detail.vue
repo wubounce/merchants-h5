@@ -42,10 +42,10 @@ export default {
   },
   created(){
     let query = this.$route.query;
-    if (query.type === 1) {
+    if (Number(query.type) === 1) {
       this.title = '收益';
       this.tableTitleType = '订单';
-    } else {
+    } else{
       this.title = '退款';
       this.tableTitleType = '退款';
     }
