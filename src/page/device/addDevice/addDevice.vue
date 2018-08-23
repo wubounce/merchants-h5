@@ -381,7 +381,7 @@
                if(count > 0) {
                  this.subType2 = true;
                }else{
-                 secondTypeList = res.data;
+                 this.slotsFun[0].values = res.data;
                  this.subType = true;
                }
              }else{
