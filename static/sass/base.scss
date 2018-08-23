@@ -203,6 +203,8 @@ input:-webkit-autofill { box-shadow: 0 0 0px 1000px white inset !important;}
   border-bottom: 1px solid #E7EDF5;
 }
 .calendar-btn {
+  display: block;
+  padding: 0;
   width:2.13rem;
   height:0.8rem;
   background:rgba(24,144,255,1);
@@ -212,4 +214,5 @@ input:-webkit-autofill { box-shadow: 0 0 0px 1000px white inset !important;}
   text-align: center;
   line-height: 0.8rem;
   margin: 0.4rem auto;
+
 }

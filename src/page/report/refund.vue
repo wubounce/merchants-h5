@@ -41,13 +41,13 @@
       <div class="nodata" v-if="lsitdata.length <= 0">暂无数据</div>
     </div>
   </div>
-  
+
   <mt-popup v-model="calendar.show" position="bottom" class="mint-popup">
      <div class="calendar-dialog-body">
         <calendar :range="calendar.range" :zero="calendar.zero" :lunar="calendar.lunar" :begin="calendar.begin" :end="calendar.end" :type="calendar.type" :value="calendar.value"  @select="calendar.select">
           
         </calendar>
-        <div class="calendar-btn" @click="selectDateCom">确定</div>
+        <mt-button class="calendar-btn" :disabled="disabled" @click="selectDateCom">确定</mt-button>
     </div>
   </mt-popup>
 </div>
@@ -130,6 +130,7 @@ export default {
       totalCount:null,
       totalMoney:null,
 
+      disabled:false,
       calendar:{
         range:true,
         lunar:false, //显示农历
@@ -139,8 +140,13 @@ export default {
         type:'datetime',
         value:[], //默认日期
         select:(begin,end)=>{
-            this.startDate = begin;
-            this.endDate = end;
+            if (begin.length>0&&end.length>0) {
+              this.startDate = begin;
+              this.endDate = end;
+              this.disabled = false;
+            }else{
+              this.disabled = true;
+            }
         }
     },
 
@@ -183,7 +189,11 @@ export default {
         this.reportCount = [];
         this.reportMoney = [];
         res.data.list.forEach(item=>{
-          this.reportDate.push(moment(item.date).format('MM-DD'));
+          if (this.dateLevel === 1) {
+            this.reportDate.push(moment(item.date).format('MM-DD'));
+          } else {
+            this.reportDate.push(item.date);
+          }
           this.reportCount.push(item.count);
           this.reportMoney.push(item.money);
         });
@@ -239,7 +249,10 @@ export default {
     },
     openByDialog(){
       this.calendar.show=true;
-      this.calendar.value = [[...this.startDate],[...this.endDate]];
+      if (this.calendar.type === 'datetime') {
+         this.calendar.value = [[...this.startDate],[...this.endDate]];
+      }
+     
     },
     selectDateCom(){
       this.calendar.show=false;
@@ -292,7 +305,6 @@ export default {
           axisLabel: {
             textStyle: {color: '#999'},
           },
-          splitNumber:8,
           axisLine:{
             show:false,
             lineStyle:{

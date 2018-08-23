@@ -266,6 +266,7 @@ export default {
         this.lineseriesData = [];
         this.linexAxisData = [];
         res.data.forEach(item=>{
+          item.sum =  item.sum<0 ? 0 :  item.sum; //如果收益是负数等于0;
           this.lineseriesData.push(item.sum);
           if (String(item.time).length <=2 ) {
             this.linexAxisData.push(`${item.time}:00`);
@@ -277,6 +278,7 @@ export default {
         this.lineMax = this.calMax(this.lineseriesData);//Y轴最大值
         // 把配置和数据放这里
         this.linechart.setOption(this.lineChartOption);
+        console.log(this.lineseriesData);
       }
       
     },
@@ -292,6 +294,7 @@ export default {
         let communicateTypeData = res.data ? res.data.communicateType :[];
         if (communicateTypeData.length>0) {
           communicateTypeData.forEach(item=>{
+            item.sum =  item.sum<0 ? 0 :  item.sum; //如果收益是负数等于0;
             this.pietypeData.push({
               value: item.sum,
               name: communicateType(Number(item.type))
@@ -309,6 +312,7 @@ export default {
         }
         let machineTypeData = res.data ? res.data.machineType :[];
         if (machineTypeData.length>0) {
+
           machineTypeData = machineTypeData.sort(this.ortId).slice(0,3); //类型标题只显示最大的三个类型
           this.piefunDatatitle = [];
           machineTypeData.forEach(item=>{
@@ -318,7 +322,8 @@ export default {
               textStyle:{fontWeight:'normal', color:'#999',fontSize:12, padding:0},
             });
           });
-          let fristFour = res.data.machineType.sort(this.ortId).slice(0,5); //取出最大五个类型，多余的平成其他类型
+
+          let fristFour = res.data.machineType.sort(this.ortId).slice(0,5); //饼图取出最大五个类型，多余的合并成其他类型
           let other = res.data.machineType.sort(this.ortId).slice(5);
           let otherNum = null;
           other.forEach(item=>{
@@ -331,6 +336,7 @@ export default {
           this.piefunData = [];
           let machineType = [...fristFour,...other];
           machineType.forEach(item=>{
+            item.sum =  item.sum<0 ? 0 :  item.sum; //如果收益是负数等于0;
             this.piefunData.push({
               value: item.sum,
               name: item.type

@@ -403,10 +403,20 @@ export default {
         },
         value(){
             this.init();
+        },
+        type(val,oldval){
+            console.log(val,oldval);
+            if (val==='month') {
+                console.log(123456);
+                this.multiMonths.forEach(i=>{
+                    i.selected = false;
+                });
+            }
         }
     },
     mounted() {
         this.init();
+        
     },
     methods: {
         init(){
@@ -450,7 +460,7 @@ export default {
                 }
             }
             this.render(this.year, this.month);
-            this.renderMonth(this.year, this.month);
+            this.renderMonth();
         },
         renderMonth(){
             this.multiMonths.forEach(i=>{
