@@ -73,9 +73,6 @@ import { getlistParentTypeFun } from '@/service/device';
         this.selectIndex = index;
         this.parentTypeId= this.parentTypeList[index].id;
         this.selectedFirstype= name;
-
-        // this.keyword = this.resData[index];
-        // this.search();
       },
       async checkFirstClass() { //获取一级列表
         let query = this.$route.query;

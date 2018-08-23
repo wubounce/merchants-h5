@@ -75,7 +75,8 @@ export default new Router({
     {
       path: '/deviceMange',
       name: 'deviceMange',
-      component: () => import ('@/page/device/deviceMange/deviceMange')
+      component: () => import ('@/page/device/deviceMange/deviceMange'),
+      meta: {title: '设备管理'},
     },
     {
       path: '/deviceSearch',

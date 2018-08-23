@@ -192,12 +192,22 @@ export default {
             flag1 = false;
             break;
           }
+          if(String(item.needMinutes).indexOf('.')>-1){
+            this.$toast("耗时填写格式错误，请填写非0的非空正整数");
+            flag1 = false;
+            break;
+          } 
           if(item.functionPrice==='' || !reg1.test(Number(item.functionPrice))){
             this.$toast("原价填写格式错误，请输入非空正整数，最多2位小数");
              flag2 = false;
             break;
           }
           if(Number(this.communicateType) === 0 && !reg.test(Number(item.functionCode))){
+            flag3 = false;
+            this.$toast("脉冲填写格式错误，请填写非0非空正整数");
+            break;
+          }
+          if(Number(this.communicateType)=== 0 && String(item.functionCode).indexOf('.')>-1){
             flag3 = false;
             this.$toast("脉冲填写格式错误，请填写非0非空正整数");
             break;

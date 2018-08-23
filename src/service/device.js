@@ -26,6 +26,8 @@ const batchEditMachineList = '/machine/batchEditMachineList';
 const listByNameOrlmei = '/machine/listByNameOrImei'; //设备搜索
 const batchStartOn = '/batchExecutePlan/add'; //批量启动
 const shopSearch = '/shop/listShop'; //店铺模糊查询 
+const typeList = '/machine/typeList'; //通信类型（串口或者脉冲）
+const listSubTypeBy = '/machine/listSubTypeBy';
 
 
 export const device = (payload) => fetch.get(deviceApi, {params: payload}); //登录
@@ -47,6 +49,8 @@ export const batchEditMachineListFun = (payload) => fetch.post(batchEditMachineL
 export const listByNameOrlmeiFun = (payload) => fetch.post(listByNameOrlmei,payload); //设备搜索
 export const batchStartOnFun = (payload) => fetch.post(batchStartOn,payload); //批量启动
 export const shopSearchFun= (payload) => fetch.post(shopSearch,payload); //店铺模糊查询
+export const typeListFun= (payload) => fetch.post(typeList,payload); //通信类型（串口或者脉冲）
+export const listSubTypeByFun= (payload) => fetch.post(listSubTypeBy,payload); 
 
 
 

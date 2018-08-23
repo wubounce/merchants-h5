@@ -57,9 +57,9 @@
     <section class="fun-item-bd funlist" style="-webkit-overflow-scrolling:touch;overflow-y:scroll;">
       <div v-for="(item,index) in functionSetList" :key="index">
         <span class="fun-list-item">{{item.functionName}}</span>
-        <input type="tel" class="fun-list-item" v-model="item.needMinutes"   min=0/>
+        <input type="number" class="fun-list-item" v-model="item.needMinutes"   min=0/>
         <input type="number" class="fun-list-item" v-model="item.functionPrice"  min=0/>
-        <input type="tel" class="fun-list-item" v-model="item.functionCode" v-if="isShow2"  min=0/>
+        <input type="number" class="fun-list-item" v-model="item.functionCode" v-if="isShow2"  min=0/>
         <p class="fun-list-item">
           <mt-switch v-model="item.ifOpen"></mt-switch>
         </p>
@@ -75,6 +75,40 @@
     <selectpickr :visible="companyVisible" :slots="slotsShop" :valueKey="shopname" @selectpicker="machineselectpickerShop" @onpickstatus="machineselectpickertatusShop" :title="'选店铺'"> </selectpickr>
     <selectpickr :visible="parentType" :slots="slotsFirst" :valueKey="firstname" @selectpicker="machineselectpickerFirst" @onpickstatus="machineselectpickertatusFirst" :title="'设备类型'"> </selectpickr>
     <selectpickr :visible="subType" :slots="slotsFun" :valueKey="firstname" @selectpicker="machineselectpickerFun" @onpickstatus="machineselectpickertatusFun" :title="'设备型号'"> </selectpickr>
+    <!--型号-->
+    <mt-popup v-model="subType2" position="bottom" :closeOnClickModal="false">
+      <div class="resp-shop">
+        <span class="quxi" @click="cancle">取消</span>
+        <span class="shop">店铺</span>
+        <span class="qued" @click="sure">确定</span>
+      </div>
+      <section class="resp-shop-wrap">
+        <div class="all-list">
+          <div class="often">
+           <p class="left-border"></p>
+           <p class="title">常用</p>
+          </div>
+          <ul>
+            <li class="mint-checklist-label" :class="{selected:index==selectIndex}" v-for="(item,index) in secondOnTypeList" :key="index" @click="selectOftenClick(index,item.name)">
+              <p></p>
+              <p class="mint-checkbox-label shopname">{{item.name}}</p>
+              <p class="select"><span class="iconfont" :class="{'icon-xuanze':index==selectIndex}"></span></p>
+            </li>
+          </ul>
+          <div class="often">
+           <p class="left-border"></p>
+           <p class="title">其他</p>
+          </div>
+          <ul>
+            <li class="mint-checklist-label" :class="{selected:index==selectIndex2}" v-for="(item,index) in secondOffTypeList" :key="index" @click="selectNoOftenClick(index,item.name)">
+              <p></p>
+              <p class="mint-checkbox-label shopname">{{item.name}}</p>
+              <p class="select"><span class="iconfont" :class="{'icon-xuanze':index==selectIndex2}"></span></p>
+            </li>
+          </ul>
+        </div>
+      </section>
+    </mt-popup>
   </section>
 </template>
 
@@ -88,7 +122,7 @@
   import { Actionsheet } from "mint-ui";
   import AddCount from "@/components/AddCount/AddCount";
   import selectpickr from '@/components/selectPicker';
-  import { getWxconfigFun,getShopFun,getlistParentTypeFun,getlistSubTypeFun,deviceAddorEditFun,getFunctionSetListFun } from '@/service/device';
+  import { getWxconfigFun,getShopFun,getlistParentTypeFun,listSubTypeByFun,deviceAddorEditFun,getFunctionSetListFun } from '@/service/device';
  
 
 
@@ -101,17 +135,24 @@
         companyVisible: false,
         parentType: false,    
         subType: false,
+        subType2: false,
         functionTempletType: null,
         selectedIndex: -1,
+        selectIndex: -1,
+        selectIndex2: -1,
         itemName:["functionName","needMinutes","functionPrice","ifOpen"],
         functionSetList: [],
-        getJsonArr:[],
+        getJsonArr: [],
+        secondTypeList: [],
+        secondOnTypeList: [],
+        secondOffTypeList: [],
         ok: true,
         isDisable: false,
         nullDisable: false,
         timeIsDisable: false,
         priceIsDisable: false,
         codeIsDisable: false,
+        subTypeName: '',
         slotsShop: [
         {
           flex: 1,
@@ -213,6 +254,23 @@
       machineselectpickertatusFun(data){
         this.subType = data;
       },
+      selectOftenClick: function (index,name) { //常用选中
+        this.selectIndex = index;
+        this.fromdata.secondType.id = this.secondOnTypeList[index].id;
+        this.subTypeName = this.secondOnTypeList[index].name;
+      },
+      selectNoOftenClick: function (index,name) { //不常用选中
+        this.selectIndex2 = index;
+        this.fromdata.secondType.id = this.secondOffTypeList[index].id;
+        this.subTypeName = this.secondOffTypeList[index].name;
+      },
+      cancle() {
+        this.subType2 = false;
+      },
+      sure() {
+        this.fromdata.secondType.name = this.subTypeName;
+        this.subType2 = false;
+      },
       getCheckShop() {
         if(this.fromdata.shopType.name !== this.selectListA[this.selectedIndex].shopName){
           this.fromdata.shopType.name = this.selectListA[this.selectedIndex].shopName;
@@ -283,8 +341,7 @@
         if(res.code === 0) {
           this.slotsShop[0].values = res.data;
           this.companyVisible = true;
-        }
-        
+        }       
       },
       async checkFirstClass() { //获取一级列表
         if(this.fromdata.shopType.id){
@@ -293,21 +350,38 @@
            if(res.code === 0) {
              this.slotsFirst[0].values = res.data;
             }
-            this.parentType = true;
-            
+            this.parentType = true;        
         }else{
           this.$toast("请先选择店铺"); //MessageBox.alert
           return false;
         }
       },
-      async checkSecondClass() { //获取二级列表
+      async checkSecondClass() { 
+         this.secondOnTypeList = [];
+         this.econdOffTypeList = [];
+         let count = 0;
          if(this.fromdata.shopType.id && this.fromdata.firstType.id) {
            let payload = {shopid:this.fromdata.shopType.id,parentTypeId:this.fromdata.firstType.id};
-           let res = await getlistSubTypeFun(qs.stringify(payload));
+           let res = await listSubTypeByFun(qs.stringify(payload));
            if(res.code === 0) {
-             this.slotsFun[0].values = res.data;
+             if(res.data.length>0){
+               res.data.forEach(item=>{
+                 if(item.machineCount>0){
+                   this.secondOnTypeList.push(item);
+                   count++;
+                 }else{
+                   this.secondOffTypeList.push(item);
+                 }
+               });
+               if(count > 0) {
+                 this.subType2 = true;
+               }else{
+                 secondTypeList = res.data;
+                 this.subType = true;
+               }
+             }
             }
-           this.subType = true;
+           
         }else{
           this.$toast("请先选择类型");
           return false;
@@ -466,12 +540,23 @@
             flag1 = false;
             break;
           }
+          if(String(item.needMinutes).indexOf('.')>-1){
+            this.$toast("耗时填写格式错误，请填写非0的非空正整数");
+            flag1 = false;
+            break;
+          } 
+          
           if(item.functionPrice==='' || !reg1.test(Number(item.functionPrice))){          
             this.$toast("原价填写格式错误，请输入非空正整数，最多2位小数");
              flag2 = false;
             break;
           }
           if(Number(this.fromdata.communicateType)=== 0 && !reg.test(Number(item.functionCode))){
+            flag3 = false;
+            this.$toast("脉冲填写格式错误，请填写非0非空正整数");
+            break;
+          }
+          if(Number(this.fromdata.communicateType)=== 0 && String(item.functionCode).indexOf('.')>-1){
             flag3 = false;
             this.$toast("脉冲填写格式错误，请填写非0非空正整数");
             break;
@@ -756,19 +841,51 @@
   }
 
   .resp-shop-wrap {
-    padding: 0.4rem 0.2rem;
+    padding: 0 0 0.4rem 0;
+    .often {
+      vertical-align: middle;
+      height: 0.8rem;
+      line-height: 0.8rem;
+      font-size: 15px;
+      display: inline-block;
+      .left-border {
+        display: inline-block;
+        width: 0.15rem;
+        height: 0.4rem;
+        border-left: 0.11rem solid rgba(24,144,255,1);
+        vertical-align: middle;
+      }
+      .title {
+        display: inline-block;
+        vertical-align: middle;
+        color: #999;
+      }   
+    }    
     .all-list {
       height: 6rem;
       overflow-y: scroll;
       .mint-checklist-label {
-        padding: 0 0.4rem;
         text-align: center;
-        height: 1.17rem;
-        line-height: 1.17rem;
+        height: 1.33rem;
+        line-height: 1.33rem;
         font-size: 0.4rem;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
+        display: flex;
+        p {
+          &:nth-child(1) {
+            width: 10%;
+          }
+          &:nth-child(2) {
+            width: 80%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+          }
+          &:nth-child(3) {
+            width: 10%;
+            color: #1890ff;
+            text-align: center;
+          }           
+        }
       }
       .selected {
         background-color: rgba(14, 14, 255, 0.05);

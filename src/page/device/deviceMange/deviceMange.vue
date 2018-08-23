@@ -9,30 +9,32 @@
             <p class="right" @click="wxScan"><img src="../../../assets/img/device/devic_scan_icon.jpeg"></p>
           </div>   
         </div>
-        <div class="device-status">
-          <div @click="titleClick(null)">
-            <p :class="{current:!index}">全部</p>
-            <span :class="{current:!index}">{{titleArr.all}}</span>
+        <div class="navigation">
+          <div class="device-status">
+            <div @click="titleClick(null)">
+              <p :class="{current:!index}">全部</p>
+              <span :class="{current:!index}">{{titleArr.all}}</span>
+            </div>
+            <div @click="titleClick(2)">
+              <p :class="{current:index===2}">运行</p>
+              <span :class="{current:index===2}">{{titleArr.run}}</span>
+            </div>
+            <div @click="titleClick(1)"> 
+              <p :class="{current:index===1}">空闲</p>
+              <span :class="{current:index===1}">{{titleArr.idle}}</span>
+            </div>
+            <div @click="titleClick(4)">
+              <p :class="{current:index===4}">故障</p>
+              <span :class="{current:index===4}">{{titleArr.hitch}}</span>
+            </div>
+            <div @click="titleClick(8)">
+              <p :class="{current:index===8}">离线</p>
+              <span :class="{current:index===8}">{{titleArr.offline}}</span>
+            </div>
           </div>
-          <div @click="titleClick(2)">
-            <p :class="{current:index===2}">运行</p>
-            <span :class="{current:index===2}">{{titleArr.run}}</span>
-          </div>
-          <div @click="titleClick(1)"> 
-            <p :class="{current:index===1}">空闲</p>
-            <span :class="{current:index===1}">{{titleArr.idle}}</span>
-          </div>
-          <div @click="titleClick(4)">
-            <p :class="{current:index===4}">故障</p>
-            <span :class="{current:index===4}">{{titleArr.hitch}}</span>
-          </div>
-          <div @click="titleClick(8)">
-            <p :class="{current:index===8}">离线</p>
-            <span :class="{current:index===8}">{{titleArr.offline}}</span>
-          </div>
-          <div @click="titleClick(16)">
-            <p :class="{current:index===16}">超时</p>
-            <span :class="{current:index===16}">{{titleArr.timeout}}</span>
+          <div class="filter-button" @click="rightPopup">
+            <p>筛选</p>
+            <span class="iconfont icon-shaixuan"></span>
           </div>
         </div>
         <div class="offline-tip">离线：连续30分钟未在线的设备数量。可能由于断电，信号不稳定，模块、设备损坏等原因引起，请自行检查或联系客服报备。</div>
@@ -75,6 +77,56 @@
         <router-link :to="{name:'batchEdit'}" v-has="'mer:machine:batchUpdate'"><div class="betchModf showItem"><span v-html="funNameArr[2]"></span></div></router-link>
       </div>
     </div>
+    <mt-popup v-model="popupVisible" position="right" class="rightPopup">
+      <div class="shop-type">
+        <div class="header">
+          <span class="header-title">所属店铺</span>
+          <p>全部</p>
+          <span class="iconfont icon-xiangshangjiantou" @click="allShopList"></span>
+        </div>
+        <ul class="list">
+          <li class="shop-item" :class="{'select':index==selectIndex}" @click="selectShopClick(index)" v-for="(item,index) in popupShop" :key="index">
+            <span>{{item.shopName}}</span>
+            <span class="pop-select"></span>
+          </li>
+        </ul>
+      </div>
+      <div class="device-type">
+        <p>设备类型</p>
+        <ul>
+          <li class="deviceType-item" v-for="(item,index) in deviceTypeArr" :key="index" :class="{'select':index==selectDeviceTypeIndex}" @click="selectDeviceTypeClick(index)">
+            <span>{{item.name}}</span>
+            <span class="pop-select"></span>
+          </li>
+        </ul>
+      </div>
+      <div class="shop-type">
+        <div class="header">
+          <span class="header-title">设备型号</span>
+          <p>全部</p>
+          <span class="iconfont icon-xiangshangjiantou" @click="allShopList"></span>
+        </div>
+        <ul class="list">
+          <li class="shop-item" :class="{'select':index==selectModelIndex}" @click="selectModelClick(index)" v-for="(item,index) in deviceModelArr" :key="index">
+            <span>{{item.name}}</span>
+            <span class="pop-select"></span>
+          </li>
+        </ul>
+      </div>
+      <div class="communication-type">
+        <P>通信类型</p>
+        <ul>
+          <li :class="{'select':index==selectCommunicationIndex}" @click="selectCommunicationClick(index)" v-for="(item,index) in communicationArr" :key="index">
+            <span>{{item.type}}</span>
+            <span class="pop-select"></span>
+          </li>
+        </ul>
+      </div>
+      <section class="promiss-footer">
+        <span class="popCancal" @click="popCancal">重置</span>
+        <span class="popSure" @click="popSure">确认</span>
+     </section>
+    </mt-popup>
   </section>
 
 </template>
@@ -83,14 +135,23 @@
   import Api from '@/utils/Api';
   import Web from '@/utils/Web';
   import PagerMixin from '@/mixins/pagerMixin';
-  import { deviceListFun , countDeviceFun } from '@/service/device';
+  import { deviceListFun , countDeviceFun , getShopFun , getlistParentTypeFun , getlistSubTypeFun , typeListFun} from '@/service/device';
   export default {
     mixins: [PagerMixin],
     data() {
       return {
         isShow: true,
         isShow2: false,
+        selectIndex: -1,
+        selectDeviceTypeIndex: -1,
+        selectModelIndex: -1,
+        selectCommunicationIndex: -1,
         title: '设备管理',
+        popupShop: '',
+        initialParentTypeId: '',
+        popupVisible: false,
+        popShopId: '',
+        popCommunicationType: '',
         titleArr: [],
         index: null,
         list: [],
@@ -99,7 +160,11 @@
         hasNoData: '',
         funNameArr: ['新增<br/>设备','批量<br/>启动','批量<br/>修改'],
         noMore: false,
-        screenWidth: document.body.clientWidth     
+        deviceTypeArr: [],
+        deviceModelArr: [], 
+        communicationArr: [],
+        flag: true
+
       };
     },
     filters: { //过滤器，过滤2位小数
@@ -108,9 +173,50 @@
       }
     },
     methods: {
+      selectShopClick(index) {
+        this.selectIndex = index;
+        this.popShopId = this.popupShop[index].shopId;
+        let payload = {shopId: this.popShopId};
+        this.getlistParentType(payload);
+        this.deviceModelArr = [];
+        this.selectDeviceTypeIndex = -1;
+        this.selectModelIndex = -1;
+      },
+      selectDeviceTypeClick(index) {
+        this.selectDeviceTypeIndex = index;
+        this.popDeviceTypeId = this.deviceTypeArr[index].id;
+        let payload = this.popShopId?{shopId: this.popShopId,parentTypeId: this.popDeviceTypeId}:{parentTypeId: this.popDeviceTypeId,onlyMine: true};
+        this.getlistSubType(payload);
+      },
+      selectModelClick(index) {
+         this.selectModelIndex = index;
+         this.popDeviceModelId = this.deviceModelArr[index].id;
+         if(this.popShopId && this.popDeviceTypeId && this.popDeviceModelId){
+           let payload = {shopId:this.popShopId,parentTypeId:this.popDeviceTypeId,subTypeId:this.popDeviceModelId};
+           this.typeList(payload);
+         }else{
+           return false;
+         }
+      },
+      selectCommunicationClick(index) {
+        this.selectCommunicationIndex = index;
+        let arr= [].concat(JSON.parse(JSON.stringify(this.communicationArr))); 
+        arr.forEach(item=>{
+          return item.type=item.type === "脉冲"?0:1;
+        });
+        this.popCommunicationType = arr[index].type;      
+      },
+      popCancal() {
+        this.popupVisible = false;
+      },
+      popSure() {
+        let payload = {shopId:this.popShopId,parentTypeId:this.popDeviceTypeId,subTypeId:this.popDeviceModelId,communicateType:this.popCommunicationType,page:this.page,pageSize: this.pageSize};
+        this.list = [];
+        this._getList(payload);
+      },
       titleClick(index) {
         this.list = [];
-        this.page = 1; //从第一页起
+        this.page = 1; //从第一页起 
         this.allLoaded = false;//下拉刷新时解除上拉加载的禁用
         this.index = index;
         this._getList();
@@ -124,7 +230,13 @@
         this.isShow2 = !this.isShow2;
         this.isShow = !this.isShow;
       },
-
+      rightPopup() {
+        this.getPopupShop(this.flag);
+        let payload = {onlyMine: true};
+        this.getlistParentType(payload);
+        this.typeList();
+        this.popupVisible = true;
+      },
       wxScan() { //微信扫码
         Web.scanQRCode(res => {
           let url = res;
@@ -167,8 +279,43 @@
           this.$toast(res.msg);
         }
       }, 
-      async _getList()  {
-        let payload = {machineState: this.index,page:this.page,pageSize: this.pageSize};
+      async getPopupShop(flag) {  //获取店铺
+        let res = await getShopFun();
+        if(res.code === 0) {
+          this.popupShop = flag?res.data.slice(0,4):res.data;
+        }
+      },
+      allShopList() { //展示全部店铺
+        this.flag = !this.flag;
+        this.getPopupShop(this.flag);
+      },
+      async getlistParentType(payload) {  //获取设备类型     
+        let res = await getlistParentTypeFun(qs.stringify(payload));
+        if(res.code === 0) {
+          this.deviceTypeArr = res.data;
+          this.initialParentTypeId = res.data[0]?res.data[0].id:"";
+
+        }
+      },
+      async getlistSubType(payload) {
+        let res= await getlistSubTypeFun(qs.stringify(payload));
+        if(res.code === 0) {
+          this.deviceModelArr = res.data;
+        }
+      },
+      async typeList(payload) {
+        let res= await typeListFun(qs.stringify(payload));
+        if(res.code === 0) {
+          if(res.data.length>0){
+              res.data.forEach(item =>{
+                item.type=Number(item.type)=== 1? "串口":"脉冲";
+              });
+              this.communicationArr = res.data;
+          }
+        }
+      },   
+      async _getList(object)  { //获取设备
+        let payload = object?object:{machineState: this.index,page:this.page,pageSize: this.pageSize};
         let res = await deviceListFun(qs.stringify(payload));
         if(res.code === 0) {
           this.list = res.data.items?[...this.list,...res.data.items]:[];
@@ -204,7 +351,9 @@
             case 16:
             item.machineState = "超时未工作";
             break;
-
+          }
+          if(this.popupVisible){
+            this.popupVisible = false;
           }
         });
         }
@@ -273,49 +422,67 @@
           }
         }
       }
-      .device-status {
+      .navigation{
         display: flex;
-        font-size: 0.35rem;
-        color: #333;
-        text-align: center;
-        background: #fff;
-        height: 1.5rem;
         border-bottom: 1px solid rgba(220, 224, 230, 1);
-        div {
-          flex: 1;
-          span {
-            display: inline-block;
-            width: 0.73rem;
-            line-height: 0.45rem;
-            height: 0.43rem;
-            margin-top: 0.1rem;
-            color: rgba(24, 144, 255, 1);
-            border-radius: 0.2rem;
-          }
-          p {
-            margin-top: .25rem;
-          }
-          p.current {
-            font-weight: bolder;
-          }
-          span.current {
-            display: inline-block;
-            position: relative;
-            color: #fff;
-            background: rgba(24, 144, 255, 1);
-            &::after {
-              content: '';
-              display: block;
-              width: 100%;
-              position: absolute;
-              bottom: -0.24rem;
-              border-bottom: 0.08rem solid #1890FF;
+        background-color: #ffffff;
+        .device-status {
+          display: flex;
+          font-size: 0.35rem;
+          width: 8.51rem;
+          color: #333;
+          text-align: center;
+          background: #fff;
+          height: 1.5rem;          
+          div {
+            flex: 1;
+            span {
+              display: inline-block;
+              width: 0.73rem;
+              line-height: 0.45rem;
+              height: 0.43rem;
+              margin-top: 0.1rem;
+              color: rgba(24, 144, 255, 1);
+              border-radius: 0.2rem;
             }
+            p {
+              margin-top: .25rem;
+            }
+            p.current {
+              font-weight: bolder;
+            }
+            span.current {
+              display: inline-block;
+              position: relative;
+              color: #fff;
+              background: rgba(24, 144, 255, 1);
+              &::after {
+                content: '';
+                display: block;
+                width: 100%;
+                position: absolute;
+                bottom: -0.24rem;
+                border-bottom: 0.08rem solid #1890FF;
+              }
 
+            }
           }
-        }
 
-      }
+        }
+        .filter-button {
+           flex: 1;
+           text-align: center;
+           font-size: 0.37rem;
+           color: RGBA(24, 144, 255, 1);
+           box-shadow: -0.05rem 0 0 rgba(186, 192, 210, 0.3);
+           margin: 0.25rem 0;
+           span {
+             margin-top: 0.18rem;
+             display: inline-block;
+             font-size: .27rem;
+           }
+        }
+     }
     }
     .noData {
       font-size: 14px;
@@ -484,7 +651,148 @@
       bottom: 6.12rem;
       transition:all 0.4s 
     }
+    
+    .rightPopup {
+      padding: 0 0.26rem;
+      width: 8.93rem;
+      height: 100%;
+      .header {
+        display: flex;
+        padding-top: 0.93rem;
+        .header-title {
+          width: 50%;
+          font-size: .43rem;
+        }
+        p{
+          flex-grow: 1;
+          text-align: right;
+          font-size: 12px;
+          line-height: 18px;
+          color: RGBA(153, 153, 153, 1)
+        }
+        .iconfont {
+          color:rgba(176,176,176,1);
+          transform: rotate(180deg);
+        }
+      }
+      .list {
+        padding-top: .2rem;
+        max-height: 8rem;
+        overflow-y: scroll;
+        .select {
+          background:rgba(231,243,255,1); 
+        }
+        li {
+          font-size: 0.37rem;
+          padding: 0.2rem 0.75rem 0.2rem 0.4rem;
+          color: rgba(51, 51, 51, 1);
+          background-color:rgba(247,247,247,1);
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+          margin-top: .2rem;
+          position: relative;
+          border-radius: 6px;
+          
+        }
+      }
+      .device-type {
+        padding-top: 0.93rem;  
+        p {
+          font-size: 0.43rem;
+        }
+        ul {
+          display: flex;
+          flex-wrap: wrap;
+          .select {
+            background:rgba(231,243,255,1); 
+          }
+          li {
+            margin-right: 0.27rem;
+            margin-top: 0.4rem;
+            font-size: 0.37rem;
+            width: 31%;
+            height: 0.93rem;
+            line-height: 0.93rem;
+            color: rgba(51, 51, 51, 1);
+            background-color:rgba(247,247,247,1); 
+            position: relative;
+            text-align: center;
+            &:nth-child(3n) {
+              margin-right: 0;
+            }
+          }
+        }
+      }
+      .communication-type {
+        padding-top: 0.93rem;
+        p {
+          font-size: 0.43rem;
+        }
+        ul {
+          padding-top: 0.4rem;
+          display: flex;
+          .select {
+            background:rgba(231,243,255,1); 
+          }
+          li {
+            font-size: 0.37rem;;
+            color: rgba(51, 51, 51, 1);
+            background-color:rgba(247,247,247,1);
+            flex: 1;
+            margin-right: 0.27rem;
+            height: 0.93rem;
+            line-height: 0.93rem;
+            text-align: center;
+            position: relative;
+          }
+          &:nth-child(2n) {
+            margin-right: 0;
+            
+          }
+        }
+        
+      }
+      
+      .promiss-footer {
+        display: flex;
+        height: 1.33rem;
+        line-height: 1.33rem;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+      }
+      .promiss-footer > span {
+        flex: 1;
+        text-align: center;
+      }
+      .promiss-footer .popCancel {
+        font-size: 18px;
+        color: #1890FF;
+        background: #f6f8ff;
+      }
+      .promiss-footer .popSure {
+        background: #1890FF;
+        font-size: 18px;
+        color: #fff;
+      }
+    }
   }
+
+  .select {
+        background-color: rgba(231, 243, 255, 1);
+        .pop-select {
+          width: 0.45rem;
+          height: 0.45rem;
+          position: absolute;
+          right: 0;
+          bottom: 0;
+          background: url("../../../assets/img/device/pop-select.png") no-repeat bottom;
+          background-size: 0.45rem;
+        }
+      }
+    
   .offline-tip {
     font-size: 12px;
     color: red;
