@@ -236,6 +236,8 @@
       machineselectpickerShop(data){ //获取店铺
         this.fromdata.shopType.id = data.shopId;
         this.fromdata.shopType.name = data.shopName;
+        this.fromdata.firstType.name = '';
+        this.fromdata.secondType.name = data.name;
       },
       machineselectpickertatusShop(data){
         this.companyVisible = data;
@@ -243,6 +245,7 @@
       machineselectpickerFirst(data){ //获取一级类型
         this.fromdata.firstType.id = data.id;
         this.fromdata.firstType.name = data.name;
+        this.fromdata.secondType.name = '';
       },
       machineselectpickertatusFirst(data){
         this.parentType = data;
@@ -358,7 +361,9 @@
       },
       async checkSecondClass() { 
          this.secondOnTypeList = [];
-         this.econdOffTypeList = [];
+         this.secondOffTypeList = [];
+         this.selectIndex = -1;
+         this.selectIndex2 = -2;
          let count = 0;
          if(this.fromdata.shopType.id && this.fromdata.firstType.id) {
            let payload = {shopid:this.fromdata.shopType.id,parentTypeId:this.fromdata.firstType.id};
@@ -379,6 +384,8 @@
                  secondTypeList = res.data;
                  this.subType = true;
                }
+             }else{
+               this.$toast("设备型号为空"); 
              }
             }
            

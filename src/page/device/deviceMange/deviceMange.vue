@@ -104,7 +104,7 @@
         <div class="header">
           <span class="header-title">设备型号</span>
           <p>全部</p>
-          <span class="iconfont icon-xiangshangjiantou" @click="allShopList"></span>
+          <span class="iconfont icon-xiangshangjiantou" @click="allModelList"></span>
         </div>
         <ul class="list">
           <li class="shop-item" :class="{'select':index==selectModelIndex}" @click="selectModelClick(index)" v-for="(item,index) in deviceModelArr" :key="index">
@@ -135,7 +135,7 @@
   import Api from '@/utils/Api';
   import Web from '@/utils/Web';
   import PagerMixin from '@/mixins/pagerMixin';
-  import { deviceListFun , countDeviceFun , getShopFun , getlistParentTypeFun , getlistSubTypeFun , typeListFun} from '@/service/device';
+  import { deviceListFun , countDeviceFun , getShopFun , getlistParentTypeFun , getlistSubTypeFun , typeListFun , stateMachineFun } from '@/service/device';
   export default {
     mixins: [PagerMixin],
     data() {
@@ -163,7 +163,8 @@
         deviceTypeArr: [],
         deviceModelArr: [], 
         communicationArr: [],
-        flag: true
+        shopFlag: true,
+        modelFlag: true
 
       };
     },
@@ -181,12 +182,13 @@
         this.deviceModelArr = [];
         this.selectDeviceTypeIndex = -1;
         this.selectModelIndex = -1;
+        this.selectCommunicationIndex = -1;
       },
       selectDeviceTypeClick(index) {
         this.selectDeviceTypeIndex = index;
         this.popDeviceTypeId = this.deviceTypeArr[index].id;
         let payload = this.popShopId?{shopId: this.popShopId,parentTypeId: this.popDeviceTypeId}:{parentTypeId: this.popDeviceTypeId,onlyMine: true};
-        this.getlistSubType(payload);
+        this.getlistSubType(payload,this.modelFlag);
       },
       selectModelClick(index) {
          this.selectModelIndex = index;
@@ -213,6 +215,7 @@
         let payload = {shopId:this.popShopId,parentTypeId:this.popDeviceTypeId,subTypeId:this.popDeviceModelId,communicateType:this.popCommunicationType,page:this.page,pageSize: this.pageSize};
         this.list = [];
         this._getList(payload);
+        this.getStateDevice(payload);
       },
       titleClick(index) {
         this.list = [];
@@ -231,7 +234,7 @@
         this.isShow = !this.isShow;
       },
       rightPopup() {
-        this.getPopupShop(this.flag);
+        this.getPopupShop(this.shopFlag);
         let payload = {onlyMine: true};
         this.getlistParentType(payload);
         this.typeList();
@@ -278,6 +281,15 @@
         else {
           this.$toast(res.msg);
         }
+      },
+      async getStateDevice(payload){      
+        let res = await stateMachineFun(qs.stringify(payload));
+         if(res.code === 0) {
+          this.titleArr= res.data; 
+        }
+        else {
+          this.$toast(res.msg);
+        }
       }, 
       async getPopupShop(flag) {  //获取店铺
         let res = await getShopFun();
@@ -286,8 +298,8 @@
         }
       },
       allShopList() { //展示全部店铺
-        this.flag = !this.flag;
-        this.getPopupShop(this.flag);
+        this.shopFlag = !this.shopFlag;
+        this.getPopupShop(this.shopFlag);
       },
       async getlistParentType(payload) {  //获取设备类型     
         let res = await getlistParentTypeFun(qs.stringify(payload));
@@ -297,11 +309,16 @@
 
         }
       },
-      async getlistSubType(payload) {
+      async getlistSubType(payload,flag) {
         let res= await getlistSubTypeFun(qs.stringify(payload));
         if(res.code === 0) {
-          this.deviceModelArr = res.data;
+          this.deviceModelArrAll = res.data;
+          this.deviceModelArr = flag?res.data.slice(0,4):res.data;
         }
+      },
+      allModelList() { //展示全部店铺
+        this.modelFlag = !this.modelFlag;
+        this.deviceModelArr = this.modelFlag?this.deviceModelArrAll.slice(0,4):this.deviceModelArrAll;
       },
       async typeList(payload) {
         let res= await typeListFun(qs.stringify(payload));
@@ -318,6 +335,9 @@
         let payload = object?object:{machineState: this.index,page:this.page,pageSize: this.pageSize};
         let res = await deviceListFun(qs.stringify(payload));
         if(res.code === 0) {
+          if(this.popupVisible){
+            this.popupVisible = false;
+          }
           this.list = res.data.items?[...this.list,...res.data.items]:[];
           this.total = res.data.total;
           this.hasNoData = this.list.length<= 0 ? true: false;
@@ -351,9 +371,6 @@
             case 16:
             item.machineState = "超时未工作";
             break;
-          }
-          if(this.popupVisible){
-            this.popupVisible = false;
           }
         });
         }
@@ -490,7 +507,7 @@
       text-align: center;
       height: 100%;
       line-height: 100%;
-      padding-top: 4rem;
+      padding-top: 6rem;
       }
     .page-top {
       padding-top: 4.2rem;
@@ -677,7 +694,7 @@
       }
       .list {
         padding-top: .2rem;
-        max-height: 8rem;
+        max-height: 6rem;
         overflow-y: scroll;
         .select {
           background:rgba(231,243,255,1); 
@@ -692,7 +709,7 @@
           white-space: nowrap;
           margin-top: .2rem;
           position: relative;
-          border-radius: 6px;
+          border-radius: 4px;
           
         }
       }
@@ -718,6 +735,7 @@
             background-color:rgba(247,247,247,1); 
             position: relative;
             text-align: center;
+            border-radius: 4px;
             &:nth-child(3n) {
               margin-right: 0;
             }
@@ -740,16 +758,17 @@
             color: rgba(51, 51, 51, 1);
             background-color:rgba(247,247,247,1);
             flex: 1;
-            margin-right: 0.27rem;
+            margin-left: 0.27rem;
             height: 0.93rem;
             line-height: 0.93rem;
             text-align: center;
             position: relative;
+            border-radius: 4px;  
+            &:nth-child(1) {
+             margin-left: 0;          
+            }        
           }
-          &:nth-child(2n) {
-            margin-right: 0;
-            
-          }
+          
         }
         
       }
