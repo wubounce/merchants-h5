@@ -78,49 +78,51 @@
       </div>
     </div>
     <mt-popup v-model="popupVisible" position="right" class="rightPopup">
-      <div class="shop-type">
-        <div class="header">
-          <span class="header-title">所属店铺</span>
-          <p>全部</p>
-          <span class="iconfont icon-xiangshangjiantou" @click="allShopList"></span>
+      <div class="content">
+        <div class="shop-type">
+          <div class="header">
+            <span class="header-title">所属店铺</span>
+            <p>全部</p>
+            <span class="iconfont icon-xiangshangjiantou" @click="allShopList" :class="{'rotate': !shopFlag}"></span>
+          </div>
+          <ul class="list">
+            <li class="shop-item" :class="{'select':index==selectIndex}" @click="selectShopClick(index)" v-for="(item,index) in popupShop" :key="index">
+              <span>{{item.shopName}}</span>
+              <span class="pop-select"></span>
+            </li>
+          </ul>
         </div>
-        <ul class="list">
-          <li class="shop-item" :class="{'select':index==selectIndex}" @click="selectShopClick(index)" v-for="(item,index) in popupShop" :key="index">
-            <span>{{item.shopName}}</span>
-            <span class="pop-select"></span>
-          </li>
-        </ul>
-      </div>
-      <div class="device-type">
-        <p>设备类型</p>
-        <ul>
-          <li class="deviceType-item" v-for="(item,index) in deviceTypeArr" :key="index" :class="{'select':index==selectDeviceTypeIndex}" @click="selectDeviceTypeClick(index)">
-            <span>{{item.name}}</span>
-            <span class="pop-select"></span>
-          </li>
-        </ul>
-      </div>
-      <div class="shop-type">
-        <div class="header">
-          <span class="header-title">设备型号</span>
-          <p>全部</p>
-          <span class="iconfont icon-xiangshangjiantou" @click="allModelList"></span>
+        <div class="device-type">
+          <p>设备类型</p>
+          <ul>
+            <li class="deviceType-item" v-for="(item,index) in deviceTypeArr" :key="index" :class="{'select':index==selectDeviceTypeIndex}" @click="selectDeviceTypeClick(index)">
+              <span>{{item.name}}</span>
+              <span class="pop-select"></span>
+            </li>
+          </ul>
         </div>
-        <ul class="list">
-          <li class="shop-item" :class="{'select':index==selectModelIndex}" @click="selectModelClick(index)" v-for="(item,index) in deviceModelArr" :key="index">
-            <span>{{item.name}}</span>
-            <span class="pop-select"></span>
-          </li>
-        </ul>
-      </div>
-      <div class="communication-type">
-        <P>通信类型</p>
-        <ul>
-          <li :class="{'select':index==selectCommunicationIndex}" @click="selectCommunicationClick(index)" v-for="(item,index) in communicationArr" :key="index">
-            <span>{{item.type}}</span>
-            <span class="pop-select"></span>
-          </li>
-        </ul>
+        <div class="shop-type">
+          <div class="header">
+            <span class="header-title">设备型号</span>
+            <p>全部</p>
+            <span class="iconfont icon-xiangshangjiantou" @click="allModelList" :class="{'rotate': !modelFlag}"></span>
+          </div>
+          <ul class="list">
+            <li class="shop-item" :class="{'select':index==selectModelIndex}" @click="selectModelClick(index)" v-for="(item,index) in deviceModelArr" :key="index">
+              <span>{{item.name}}</span>
+              <span class="pop-select"></span>
+            </li>
+          </ul>
+        </div>
+        <div class="communication-type">
+          <P>通信类型</p>
+          <ul>
+            <li :class="{'select':index==selectCommunicationIndex}" @click="selectCommunicationClick(index)" v-for="(item,index) in communicationArr" :key="index">
+              <span>{{item.type}}</span>
+              <span class="pop-select"></span>
+            </li>
+          </ul>
+        </div>
       </div>
       <section class="promiss-footer">
         <span class="popCancal" @click="popCancal">重置</span>
@@ -161,6 +163,7 @@
         funNameArr: ['新增<br/>设备','批量<br/>启动','批量<br/>修改'],
         noMore: false,
         deviceTypeArr: [],
+        deviceModelArrAll: [],
         deviceModelArr: [], 
         communicationArr: [],
         shopFlag: true,
@@ -183,16 +186,20 @@
         this.selectDeviceTypeIndex = -1;
         this.selectModelIndex = -1;
         this.selectCommunicationIndex = -1;
+        this.typeList();
       },
       selectDeviceTypeClick(index) {
         this.selectDeviceTypeIndex = index;
         this.popDeviceTypeId = this.deviceTypeArr[index].id;
         let payload = this.popShopId?{shopId: this.popShopId,parentTypeId: this.popDeviceTypeId}:{parentTypeId: this.popDeviceTypeId,onlyMine: true};
         this.getlistSubType(payload,this.modelFlag);
+        this.selectModelIndex = -1;
+        this.selectCommunicationIndex = -1;
       },
       selectModelClick(index) {
          this.selectModelIndex = index;
          this.popDeviceModelId = this.deviceModelArr[index].id;
+         this.selectCommunicationIndex = -1;
          if(this.popShopId && this.popDeviceTypeId && this.popDeviceModelId){
            let payload = {shopId:this.popShopId,parentTypeId:this.popDeviceTypeId,subTypeId:this.popDeviceModelId};
            this.typeList(payload);
@@ -318,7 +325,7 @@
       },
       allModelList() { //展示全部店铺
         this.modelFlag = !this.modelFlag;
-        this.deviceModelArr = this.modelFlag?this.deviceModelArrAll.slice(0,4):this.deviceModelArrAll;
+        this.deviceModelArr = (this.modelFlag && this.deviceModelArrAll.length>0)?this.deviceModelArrAll.slice(0,4):this.deviceModelArrAll;
       },
       async typeList(payload) {
         let res= await typeListFun(qs.stringify(payload));
@@ -673,106 +680,112 @@
       padding: 0 0.26rem;
       width: 8.93rem;
       height: 100%;
-      .header {
-        display: flex;
-        padding-top: 0.93rem;
-        .header-title {
-          width: 50%;
-          font-size: .43rem;
-        }
-        p{
-          flex-grow: 1;
-          text-align: right;
-          font-size: 12px;
-          line-height: 18px;
-          color: RGBA(153, 153, 153, 1)
-        }
-        .iconfont {
-          color:rgba(176,176,176,1);
-          transform: rotate(180deg);
-        }
-      }
-      .list {
-        padding-top: .2rem;
-        max-height: 6rem;
-        overflow-y: scroll;
-        .select {
-          background:rgba(231,243,255,1); 
-        }
-        li {
-          font-size: 0.37rem;
-          padding: 0.2rem 0.75rem 0.2rem 0.4rem;
-          color: rgba(51, 51, 51, 1);
-          background-color:rgba(247,247,247,1);
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap;
-          margin-top: .2rem;
-          position: relative;
-          border-radius: 4px;
-          
-        }
-      }
-      .device-type {
-        padding-top: 0.93rem;  
-        p {
-          font-size: 0.43rem;
-        }
-        ul {
+      .content {
+        padding-bottom: 1.5rem;overflow: hidden;overflow-y: auto;box-sizing: border-box;height: 100%;
+        .header {
           display: flex;
-          flex-wrap: wrap;
+          padding-top: 0.93rem;
+          .header-title {
+            width: 50%;
+            font-size: .43rem;
+          }
+          p{
+            flex-grow: 1;
+            text-align: right;
+            font-size: 12px;
+            line-height: 18px;
+            color: RGBA(153, 153, 153, 1)
+          }
+          .iconfont {
+            color:rgba(176,176,176,1);
+            transform: rotate(180deg);
+          }
+          .rotate:before {
+            display: inline-block;
+            transform: rotate(180deg);
+          }
+        }
+        .list {
+          padding-top: .2rem;
+          max-height: 6rem;
+          overflow-y: scroll;
           .select {
             background:rgba(231,243,255,1); 
           }
           li {
-            margin-right: 0.27rem;
-            margin-top: 0.4rem;
             font-size: 0.37rem;
-            width: 31%;
-            height: 0.93rem;
-            line-height: 0.93rem;
+            padding: 0.2rem 0.75rem 0.2rem 0.4rem;
             color: rgba(51, 51, 51, 1);
-            background-color:rgba(247,247,247,1); 
+            background-color:rgba(247,247,247,1);
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            margin-top: .2rem;
             position: relative;
-            text-align: center;
             border-radius: 4px;
-            &:nth-child(3n) {
-              margin-right: 0;
+            
+          }
+        }
+        .device-type {
+          padding-top: 0.93rem;  
+          p {
+            font-size: 0.43rem;
+          }
+          ul {
+            display: flex;
+            flex-wrap: wrap;
+            .select {
+              background:rgba(231,243,255,1); 
+            }
+            li {
+              margin-right: 0.27rem;
+              margin-top: 0.4rem;
+              font-size: 0.37rem;
+              width: 31%;
+              height: 0.93rem;
+              line-height: 0.93rem;
+              color: rgba(51, 51, 51, 1);
+              background-color:rgba(247,247,247,1); 
+              position: relative;
+              text-align: center;
+              border-radius: 4px;
+              &:nth-child(3n) {
+                margin-right: 0;
+              }
             }
           }
         }
-      }
-      .communication-type {
-        padding-top: 0.93rem;
-        p {
-          font-size: 0.43rem;
-        }
-        ul {
-          padding-top: 0.4rem;
-          display: flex;
-          .select {
-            background:rgba(231,243,255,1); 
+        .communication-type {
+          padding-top: 0.93rem;
+          p {
+            font-size: 0.43rem;
           }
-          li {
-            font-size: 0.37rem;;
-            color: rgba(51, 51, 51, 1);
-            background-color:rgba(247,247,247,1);
-            flex: 1;
-            margin-left: 0.27rem;
-            height: 0.93rem;
-            line-height: 0.93rem;
-            text-align: center;
-            position: relative;
-            border-radius: 4px;  
-            &:nth-child(1) {
-             margin-left: 0;          
-            }        
+          ul {
+            padding-top: 0.4rem;
+            display: flex;
+            .select {
+              background:rgba(231,243,255,1); 
+            }
+            li {
+              font-size: 0.37rem;;
+              color: rgba(51, 51, 51, 1);
+              background-color:rgba(247,247,247,1);
+              flex: 1;
+              margin-left: 0.27rem;
+              height: 0.93rem;
+              line-height: 0.93rem;
+              text-align: center;
+              position: relative;
+              border-radius: 4px;  
+              &:nth-child(1) {
+              margin-left: 0;          
+              }        
+            }
+            
           }
           
         }
-        
-      }
-      
+      }   
       .promiss-footer {
         display: flex;
         height: 1.33rem;

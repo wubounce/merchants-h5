@@ -354,9 +354,9 @@
               color: rgba(153, 153, 153, 1); 
             }
             .rotate:before {
-                display: inline-block;
-                transform: rotate(180deg);
-              }
+              display: inline-block;
+              transform: rotate(180deg);
+            }
           p {
               flex-grow: 1;
               overflow: hidden;
