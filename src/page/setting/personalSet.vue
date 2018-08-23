@@ -115,11 +115,14 @@ export default {
         this.item.realName = arr.join('');
       }
       //默认地址
-      // if(res.data.address != '' && res.data.address != null) {
-      //   this.autoPlace = res.data.address;
-      //   this.item.address = res.data.address.length >10 ? res.data.address.slice(0,10) + '...' : res.data.address;
-      // }
       this.item.address = res.data.address;
+      //兼容老数据
+      if(this.item.address) {
+        if(this.item.address.split('u').length ==2 ) {
+          this.item.address = this.item.address.split('u')[0];
+        }
+      }
+      //console.log(this.item.address.split('u')[0]);
       if(res.data.address) {
         if( res.data.address.length>12) {
           this.row = false;
@@ -137,6 +140,10 @@ export default {
       this.placeVisible = false;
     },
     async confirmNews() {
+      //判断区是否存在
+      if(!this.districtName) {
+        this.districtName = '';
+      }
       //确定
       this.placeVisible = false;
       if(this.provinceName == this.cityName.slice(0,2)) {     
@@ -224,12 +231,11 @@ export default {
     .input-group {
       height: 1.17rem;
       line-height: 1.17rem;
-      border-bottom:1px solid rgba(229,229,229,1);
+      border-bottom:1px solid #f9f8ff;
       font-size: 16px;
     }
     .input-group2 {
       line-height: 1.17rem;
-      //border-bottom:1px solid #E5E5E5;
       font-size: 16px;
       .form-title {
         .key,.value {

@@ -111,7 +111,7 @@
       position: relative;
       height:1.17rem;
       line-height: 1.17rem;
-      border-bottom:1px solid #E5E5E5;
+      border-bottom:1px solid #f9f8ff;
       font-size: 16px;
       display: flex;
       .title {

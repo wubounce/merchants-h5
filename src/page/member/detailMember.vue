@@ -76,63 +76,7 @@ export default {
   }
 };
 </script>
-<style type="text/css" lang="less" scoped>
-  .add-form {
-    padding-left: 0.4rem;
-    background: #fff;
-  }
-  .input-group {
-    display: flex;
-    border-bottom:1px solid #f9f8ff;
-    font-size: 16px;
-    padding: 0.53rem 0;
-  }
-  .form-title {
-    width: 30%;
-    color:#999;
-  }
-  .form-input {
-    width: 66%;
-    text-align: right;
-    color: #333;
-  }
-  .createtime {
-    padding-left: 0.4rem;
-    border:none;
-    margin-top:0.4rem;
-    background:#fff
-  }
-  .footer {
-    width: 100%;
-    background: #fff;
-    position: fixed;
-    bottom: 0;
-    font-size: 14px;
-    padding: 0.28rem 0;
-    > span {
-      float: right;
-      width: 2.4rem;
-      height: 0.8rem;
-      line-height: 0.8rem;
-      border-radius: 0.11rem;
-      text-align: center;
-      margin-right: 0.4rem;
-    }
-    .del {
-      border: 1px solid rgba(216,216,216,1);
-    }
-    .edit {
-      border: 1px solid  #1890FF;
-      a {
-      color: #1890FF;
+<style type="text/css" lang="scss" scoped>
+@import '../../assets/scss/member/detailmember';
+</style>
 
-      }
-    }
-  }
-</style>
-<style lang="scss">
-  .addmember .mint-header {
-    background: #fff !important;
-    border-bottom: 1px solid #DCE0E6;
-  }
-</style>

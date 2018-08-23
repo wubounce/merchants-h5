@@ -327,8 +327,8 @@ export default {
             this.placeVisible = true;
             this.getArea();
             // //获取的省市区
-            console.log(this.provinceName,this.cityName,this.districtName);
-            console.log(this.provinceId,this.cityId,this.districtId); 
+            //console.log(this.provinceName,this.cityName,this.districtName);
+            //console.log(this.provinceId,this.cityId,this.districtId); 
             this.addressSlots[0].defaultIndex = this.proIndex;
           }
           break;
@@ -360,6 +360,10 @@ export default {
         case 1:
           this.placeVisible = false;
           this.mapCity = this.cityName;
+          if(!this.districtName) {
+            this.districtName = '';
+            this.districtId = this.cityId;
+          }
           if(this.provinceName == this.cityName.slice(0,2)) {
             
             this.list[1].value = this.cityName + this.districtName;
@@ -559,8 +563,8 @@ export default {
     },
     //提交修改信息
     async submit() {
-      
-      if(this.shopName!=false && this.shopType!=false && this.provinceId != false && this.cityId !=false && this.provinceId != false && this.address != false && this.lat !=false && this.lng != false && this.organization!=false && this.machineTypeIdsArray !=false ) {
+      console.log(this.lng);
+      if(this.shopName!=false && this.shopType!=false && this.provinceId != false && this.cityId !=false && this.provinceId != false && this.address != false && this.lat !=undefined &&this.lat != false && this.lng != false&& this.lng != undefined && this.organization!=false && this.machineTypeIdsArray !=false ) {
         if(this.orderLimitMinutes) {
           //在判断
           let reg=/^[1-9]+\d*$/;
@@ -671,7 +675,7 @@ export default {
           });
       }else if(!this.lat || !this.lng || !this.organization) {
         this.$toast({
-            message: '请选择小区/大厦/学校',
+            message: '请选择小区/大厦/学校等具体地点',
             position: 'middle',
             duration: 3000
           });
@@ -717,6 +721,10 @@ export default {
         this.oldName = res.data.shopName; //旧店铺名称
         this.slots[0].defaultIndex = res.data.shopTypeId-1;
         this.list[0].value = res.data.shopTypeName;
+        //判断区是否存在
+        if(res.data.cityName == res.data.districtName) {
+          res.data.districtName = '';
+        }
         //所在地区
         if(res.data.cityName) {
           if(res.data.provinceName == res.data.cityName.slice(0,2)) {
@@ -773,18 +781,18 @@ export default {
         this.provinceName = res.data.provinceName;
         this.cityName = res.data.cityName;
         this.districtName = res.data.districtName;
-        console.log('created:',this.provinceId);
+        //console.log('created:',this.provinceId);
 
 
         this.addressSlots[0].defaultIndex = 2;
         // 省
         let objPro = { parentId: 0 };
         let resPro = await areaListFun(qs.stringify(objPro));
-        console.log('省：',resPro.data.length);
+        //console.log('省：',resPro.data.length);
         for(let x=0;x<resPro.data.length;x++) {
           if(res.data.provinceName == resPro.data[x].areaName) {
             this.proIndex = x;
-            console.log(x);
+            //console.log(x);
           }
         }
         // //市

@@ -143,7 +143,12 @@ input:-webkit-autofill { box-shadow: 0 0 0px 1000px white inset !important;}
 .mint-indicator-wrapper {
   z-index: 999;
 }
-
+.mint-msgbox-wrapper {
+  z-index: 20000000 !important;
+}
+.v-modal {
+  z-index: 10000000 !important;
+}
 [v-cloak] {
     display: none !important;
 }
@@ -159,12 +164,22 @@ input:-webkit-autofill { box-shadow: 0 0 0px 1000px white inset !important;}
 .shoppicker .picker {
   height: 6rem;
 }
-.shoppicker .picker-slot-wrapper {
-  font-size: 15px !important;
+.picker-slot-wrapper {
+  font-size: 16px !important;
+  color: #999 !important;
+}
+.picker-slot-wrapper .picker-selected{
+  font-size: 18px !important;
+  color: #333;
+  line-height: 1.07rem  !important;
+  height: 1.07rem  !important
+}
+.picker-center-highlight {
+  height: 1.07rem  !important;
 }
 .shoppicker .picker-toolbar>span {
   flex: 1;
-  font-size: 15px;
+  font-size: 16px;
 }
 .shoppicker .picker-toolbar .quxi {
   color: #999;
@@ -176,4 +191,25 @@ input:-webkit-autofill { box-shadow: 0 0 0px 1000px white inset !important;}
 .shoppicker .picker-toolbar .qued {
   text-align:right;
   color: #1890FF;
+}
+
+
+/*日历弹框*/
+.calendar-dialog-body{
+    width: 100%;
+    box-sizing: border-box;
+}
+.calendar {
+  border-bottom: 1px solid #E7EDF5;
+}
+.calendar-btn {
+  width:2.13rem;
+  height:0.8rem;
+  background:rgba(24,144,255,1);
+  border-radius:0.11rem;
+  font-size: 14px;
+  color: #fff;
+  text-align: center;
+  line-height: 0.8rem;
+  margin: 0.4rem auto;
 }

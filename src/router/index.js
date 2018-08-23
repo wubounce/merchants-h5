@@ -44,6 +44,25 @@ export default new Router({
         },
       ]
     },
+    //首页头部首页相关
+    {
+      path: '/index/totalincome',
+      name: 'totalincome',
+      component: () => import ('@/page/index/totalincome'),
+      meta: {title: '总收益'},
+    },
+    {
+      path: '/index/monthincome',
+      name: 'monthincome',
+      component: () => import ('@/page/index/monthincome'),
+      meta: {title: '当月收益'},
+    },
+    {
+      path: '/index/todayincome',
+      name: 'todayincome',
+      component: () => import ('@/page/index/todayincome'),
+      meta: {title: '今日收益'},
+    },
     // 绑定手机号
     {
       path: '/bindPhone',
@@ -63,7 +82,12 @@ export default new Router({
       component: () => import ('@/page/reset/confimPwd'),
       meta: {title: '确认重置密码'},
     },
-      
+    {
+      path: '/reportShopDetail',
+      name: 'reportShopDetail',
+      component: () => import ('@/page/report/shopDetail'),
+      meta: {title: '报表详情'},
+    },
     {
       path: '/reportdetail',
       name: 'reportdetail',
