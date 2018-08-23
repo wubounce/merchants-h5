@@ -135,12 +135,12 @@ export default {
         this.$toast({message: "半年卡售价请输入1-999之间" });
         return false;
       }
-      if ((this.vipform.seasonCardPrice && !validatDiscount(this.vipform.seasonCardPrice))) {
+      if ((this.vipform.seasonCardPrice && !validatCradPrice(this.vipform.seasonCardPrice))) {
         this.$toast({message: "季卡售价请输入1-999之间" });
         return false;
       }
 
-      if ((this.vipform.yearCardDiscount&& !validatCradPrice(this.vipform.yearCardDiscount))) {
+      if ((this.vipform.yearCardDiscount&& !validatDiscount(this.vipform.yearCardDiscount))) {
         this.$toast({message: "年卡折扣优惠请输入1-100之间" });
         return false;
       }
