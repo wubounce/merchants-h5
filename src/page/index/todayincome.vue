@@ -13,7 +13,7 @@
                         <div class="detail">
                             <span class="listtime report-table-date">{{item.createTime | momentTime}}</span>
                             <span  class="report-table-count">{{item.orderNo}}</span>
-                            <span  class="report-table-money">{{item.money}}</span>
+                            <span  class="report-table-money">{{ item.type | showNegative }}{{item.money}}</span>
                         </div>
                     </div>
                     <div v-if="allLoaded" class="nomore-data">没有更多了</div>
@@ -69,6 +69,9 @@ export default {
         momentTime: function (value) {
             return moment(value).format('HH:mm:ss');
         },
+        showNegative: function(val) {
+            return val == 3 ? '-' : '';
+        }
     },
     created() {
         this.showTime();
