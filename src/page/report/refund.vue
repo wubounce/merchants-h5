@@ -287,6 +287,7 @@ export default {
         xAxis : [{
           type : 'category',
           offset:8,
+          boundaryGap : false,
           data :this.reportDate,
           axisLabel: {
             textStyle: {color: '#999'},
@@ -299,6 +300,7 @@ export default {
               type:'solid'
             }
           },
+          axisTick: {length:5},
         }],
         yAxis: [
           {   name: '退款金额',

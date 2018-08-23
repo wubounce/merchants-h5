@@ -291,11 +291,11 @@ export default {
         xAxis : [{
           type : 'category',
           offset:8,
+          boundaryGap : false,
           data :this.reportDate,
           axisLabel: {
             textStyle: {color: '#999'},
           },
-          splitNumber:8,
           axisLine:{
             show:false,
             lineStyle:{
@@ -303,6 +303,7 @@ export default {
               type:'solid'
             }
           },
+          axisTick: {length:5},
         }],
         yAxis: [
           {   name: '收益金额',
