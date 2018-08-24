@@ -58,7 +58,7 @@
       <div style="height: 4.45rem;" >
         <div class="bar" id="bar" :style="{height:height,width:width}" ref="bar"></div>
       </div>
-      <div class="offline-tip" v-if="offlineTip"><span class="iconfont icon-guanbi" @click="offlineTip=false;"></span>  离线：连续30分钟未在线的设备数量。可能由于断电，信号不稳定，模块、设备损坏等原因引起，请自行检查或联系客服报备。</div>
+      <div class="offline-tip" v-if="offlineTip"><span class="iconfont icon-guanbi1" @click="offlineTip=false;"></span>  离线：连续30分钟未在线的设备数量。可能由于断电，信号不稳定，模块、设备损坏等原因引起，请自行检查或联系客服报备。</div>
     </div>
     <div class="notice-wrapper" v-if="noticeShow">
       <div class="notice">
