@@ -380,15 +380,15 @@ export default {
       return maxval;// 输出最大值
     },
     calMin(arr) {
-      var max = arr[0];
+      var min = arr[0];
       for ( var i = 1; i < arr.length; i++) {// 求出一组数组中的最大值
-        if (max > arr[i]) {
-          max = arr[i];
+        if (min > arr[i]) {
+          min = arr[i];
         }
       }
-      var maxint = Math.ceil(max / 10);// 向上取整
-      var maxval = maxint * 10;// 最终设置的最大值
-      return maxval;// 输出最大值
+      var minint = Math.floor(min / 5);// 向上取整
+      var minval = minint * 5;// 最终设置的最大值
+      return minval;// 输出最大值
     },
     machineselectpicker(data){ //收益收据选择设备类型搜索
       this.machinecurrentTags = data;
