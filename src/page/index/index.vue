@@ -58,7 +58,7 @@
       <div style="height: 4.45rem;" >
         <div class="bar" id="bar" :style="{height:height,width:width}" ref="bar"></div>
       </div>
-      <div class="offline-tip">离线：连续30分钟未在线的设备数量。可能由于断电，信号不稳定，模块、设备损坏等原因引起，请自行检查或联系客服报备。</div>
+      <div class="offline-tip" v-if="offlineTip"><span class="iconfont icon-guanbi" @click="offlineTip=false;"></span>  离线：连续30分钟未在线的设备数量。可能由于断电，信号不稳定，模块、设备损坏等原因引起，请自行检查或联系客服报备。</div>
     </div>
     <div class="notice-wrapper" v-if="noticeShow">
       <div class="notice">
@@ -120,6 +120,7 @@ export default {
   data() {
     return {
       title:'首页',
+      offlineTip:true,
       barchart: null,
       linechart: null,
       pietypechart: null,
@@ -539,11 +540,11 @@ export default {
           },
         },
         grid: {
-          y:10,
-          x:10,
-          x2:15,
-          y2:10,
-          containLabel: true
+          y:5,
+          x:0,
+          x2:20,
+          y2:5,
+          containLabel: true,
         },
         xAxis: [{
           type: 'category',
@@ -759,11 +760,4 @@ export default {
 </script>
 <style type="text/css" lang="scss" scoped>
  @import '../../assets/scss/index/index';
-</style>
-<style lang="scss"> 
-.main {
-  .mint-popup {
-    width: 100%;
-  }
-}
 </style>

@@ -103,7 +103,7 @@
       }
   }
     .lineecharts-warp {
-        padding: 0.32rem;
+        padding: 0.4rem 0.32rem;
         background: #fff;
     }
     .lineechart-title {
@@ -160,9 +160,7 @@
     .pei-wrap {
       margin-top: 0.266667rem;
       background: #fff;
-      .pie-title {
-        padding: 0.32rem 0.32rem 0 0.32rem;
-      }
+      padding: 0.4rem 0.32rem;
     }
     .bar-wrap {
       margin-bottom: 55px;
@@ -171,7 +169,6 @@
       display: flex;
       text-align: left;
       background: #fff;
-      padding-bottom: 0.32rem
     }
     .piebox>div {
       flex: 1;
@@ -180,7 +177,7 @@
       background: #fff;
       margin-top: 0.266667rem;
       margin-bottom: 1.73rem;
-      padding: 0.32rem;
+      padding: 0.4rem 0.32rem;
     }
     .equipment {
       font-size: 14px;
@@ -228,7 +225,4 @@
       font-size: 50px !important;
       font-family:Medium;
     }
-    .offline-tip {
-      font-size: 12px;
-      color: red;
-    }
+    

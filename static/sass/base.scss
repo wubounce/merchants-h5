@@ -216,3 +216,23 @@ input:-webkit-autofill { box-shadow: 0 0 0px 1000px white inset !important;}
   margin: 0.4rem auto;
 
 }
+/* 设备离线提示*/
+.offline-tip {
+  position: relative;
+  background:#FDFCEC;
+  border-radius:0.13rem;
+  margin-top: 0.4rem;
+  padding: 0.19rem 0.73rem 0.19rem  0.32rem;
+  font-size:0.29rem;
+  font-family:PingFangSC-Regular;
+  color:rgba(255,95,95,1);
+  line-height:0.4rem;
+  
+}
+.offline-tip .icon-guanbi {
+  position: absolute;
+  top:0.19rem;
+  right: 0.19rem;
+  color: #999999; 
+  font-size: 18px;
+}
