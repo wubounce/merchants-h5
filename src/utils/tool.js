@@ -90,3 +90,27 @@ export const  getDuration = (dateStr) => {
   console.log(now.diff(date, 'seconds'));
   return now.diff(date, 'seconds');
 };
+
+
+export const  calMax = (arr) =>{
+	var max = arr[0];
+	for ( var i = 1; i < arr.length; i++) {// 求出一组数组中的最大值
+	if (max < arr[i]) {
+	  max = arr[i];
+	}
+	}
+	var maxint = Math.ceil(max / 10);// 向上取整
+	var maxval = maxint * 10;// 最终设置的最大值
+	return maxval;// 输出最大值
+};
+export const calMin = (arr) => {
+	var min = arr[0];
+	for ( var i = 1; i < arr.length; i++) {// 求出一组数组中的最大值
+	if (min > arr[i]) {
+	  min = arr[i];
+	}
+	}
+	var minint = Math.floor(min / 5);// 向上取整
+	var minval = minint * 5;// 最终设置的最大值
+	return minval;// 输出最大值
+};

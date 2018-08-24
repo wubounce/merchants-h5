@@ -4,7 +4,7 @@
         <div class="listcon">
           <span class="detail-name title-name">店铺名称</span>
           <span class="detail-type">订单数量</span>
-          <span class="detail-order no-mright">订单金额</span>
+          <span class="detail-order no-mright">{{tableTitleType}}金额</span>
         </div>
         <div class="tableearn">
           <div class="nodata" v-if="noList">暂无数据</div>
@@ -34,8 +34,10 @@ export default {
     let query = this.$route.query;
     if (Number(query.type) === 1) {
       this.title = '收益';
+      this.tableTitleType = '订单';
     } else{
       this.title = '退款';
+      this.tableTitleType = '退款';
     }
     this.getDetail(query.date,query.type,query.dateLevel);
   },

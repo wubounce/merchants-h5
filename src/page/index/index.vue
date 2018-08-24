@@ -84,7 +84,7 @@
 </template>
 <script>
 import qs from 'qs';
-import { getNoticeType, setNoticeType, removeNoticeType } from '@/utils/tool';
+import { getNoticeType, setNoticeType, removeNoticeType, calMax, calMin } from '@/utils/tool';
 // 引入 ECharts 主模块
 import echarts from 'echarts/lib/echarts';
 // 引入折线图
@@ -275,9 +275,8 @@ export default {
           }
           
         });
-        this.lineMax = this.calMax(this.lineseriesData);//Y轴最大值
-        this.lineMin = this.calMin(this.lineseriesData);
-        
+        this.lineMax = calMax(this.lineseriesData);//Y轴最大值
+        this.lineMin = calMin(this.lineseriesData);
         // 把配置和数据放这里
         this.linechart.setOption(this.lineChartOption);
       }
@@ -368,28 +367,7 @@ export default {
       this.pietypechart = echarts.init(document.getElementById('pietype'));
       this.piefunchart = echarts.init(document.getElementById('piefun'));
     },
-    calMax(arr) {
-      var max = arr[0];
-      for ( var i = 1; i < arr.length; i++) {// 求出一组数组中的最大值
-        if (max < arr[i]) {
-          max = arr[i];
-        }
-      }
-      var maxint = Math.ceil(max / 10);// 向上取整
-      var maxval = maxint * 10;// 最终设置的最大值
-      return maxval;// 输出最大值
-    },
-    calMin(arr) {
-      var min = arr[0];
-      for ( var i = 1; i < arr.length; i++) {// 求出一组数组中的最大值
-        if (min > arr[i]) {
-          min = arr[i];
-        }
-      }
-      var minint = Math.floor(min / 5);// 向上取整
-      var minval = minint * 5;// 最终设置的最大值
-      return minval;// 输出最大值
-    },
+    
     machineselectpicker(data){ //收益收据选择设备类型搜索
       this.machinecurrentTags = data;
       this.linexAxisData=[];
