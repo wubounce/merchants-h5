@@ -234,7 +234,7 @@
             </div>
             <div class="date-list" v-for="(day,k1) in days" style="{'animation-delay',(k1*30)+'ms'}">
                 <div v-for="(child,k2) in day" :class="{'selected':child.selected,'disabled':child.disabled}" @click="select(k1,k2,$event)">
-                    <span>{{child.day}}</span>
+                    <span>{{!child.disabled?child.day:''}}</span><!-- 其他补充的隐藏 -->
                     <div class="text" v-if="child.eventName!=undefined">{{child.eventName}}</div>
                     <div class="text" :class="{'isLunarFestival':child.isLunarFestival,'isGregorianFestival':child.isGregorianFestival}" v-if="lunar">{{child.lunar}}</div>
                 </div>
@@ -324,7 +324,7 @@ export default {
             default:function(){
                 return window.navigator.language.toLowerCase() == "zh-cn"?['一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月']:['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
             }
-        },
+        },  
         
         // 自定义事件
         events:  {
