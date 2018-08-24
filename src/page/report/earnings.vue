@@ -105,8 +105,8 @@ export default {
         {
             flex: 1,
             values: [
-              {label: '日期',value:1},
-              {label: '月份',value:2}
+              {label: '按日',value:1},
+              {label: '按月',value:2}
             ],
             className: 'slot1',
             textAlign: 'center',
@@ -229,12 +229,18 @@ export default {
     },
     dateselectpicker(data){
       this.dateCurrentTag = data;
-      if (data.label === '日期') {
+      if (data.label === '按日') {
         this.dateLevel = 1;
         this.calendar.type = 'datetime';
-      } else {
+        this.startDate = moment().subtract('days',6).format('YYYY-MM-DD').split('-');
+        this.endDate = moment().format('YYYY-MM-DD').split('-');
+        this.dayReportFun();
+      } else if(data.label === '按月'){
         this.calendar.type = 'month';
         this.dateLevel = 2;
+        this.startDate = moment().subtract('months',5).format('YYYY-MM').split('-');
+        this.endDate = moment().format('YYYY-MM').split('-');
+        this.dayReportFun();
       }
     },
     dateselectpickertatus(data){
@@ -242,18 +248,7 @@ export default {
     },
     openByDialog(){
       this.calendar.show=true;
-      if (this.calendar.type === 'datetime') {
-        if (this.startDate.length<=2) { //如果之前是月份，切换过来，默认显示一个星期
-            this.startDate = moment().subtract('days',6).format('YYYY-MM-DD').split('-');
-            this.endDate = moment().format('YYYY-MM-DD').split('-');
-        }
-        this.calendar.value = [[...this.startDate],[...this.endDate]];
-      }else if(this.calendar.type === 'month'){//如果之前是日期，切换过来，默认显示月份
-        this.startDate = [this.startDate[0],this.startDate[1]];
-        this.endDate = [this.endDate[0],this.endDate[1]];
-        this.calendar.value = [this.startDate,this.endDate];
-      }
-     
+      this.calendar.value = [this.startDate,this.endDate];
     },
     selectDateCom(){
       this.calendar.show=false;

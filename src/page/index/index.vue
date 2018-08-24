@@ -170,6 +170,7 @@ export default {
       pieSearchIndex:0,
 
       lineMax:null,
+      lineMin:null,
       barMax:null,
       parentTypList:[],
       thisMonth:'', //本月
@@ -266,7 +267,6 @@ export default {
         this.lineseriesData = [];
         this.linexAxisData = [];
         res.data.forEach(item=>{
-          item.sum =  item.sum<0 ? 0 :  item.sum; //如果收益是负数等于0;
           this.lineseriesData.push(item.sum);
           if (String(item.time).length <=2 ) {
             this.linexAxisData.push(`${item.time}:00`);
@@ -276,6 +276,8 @@ export default {
           
         });
         this.lineMax = this.calMax(this.lineseriesData);//Y轴最大值
+        this.lineMin = this.calMin(this.lineseriesData);
+        
         // 把配置和数据放这里
         this.linechart.setOption(this.lineChartOption);
       }
@@ -293,7 +295,6 @@ export default {
         let communicateTypeData = res.data ? res.data.communicateType :[];
         if (communicateTypeData.length>0) {
           communicateTypeData.forEach(item=>{
-            item.sum =  item.sum<0 ? 0 :  item.sum; //如果收益是负数等于0;
             this.pietypeData.push({
               value: item.sum,
               name: communicateType(Number(item.type))
@@ -371,6 +372,17 @@ export default {
       var max = arr[0];
       for ( var i = 1; i < arr.length; i++) {// 求出一组数组中的最大值
         if (max < arr[i]) {
+          max = arr[i];
+        }
+      }
+      var maxint = Math.ceil(max / 10);// 向上取整
+      var maxval = maxint * 10;// 最终设置的最大值
+      return maxval;// 输出最大值
+    },
+    calMin(arr) {
+      var max = arr[0];
+      for ( var i = 1; i < arr.length; i++) {// 求出一组数组中的最大值
+        if (max > arr[i]) {
           max = arr[i];
         }
       }
@@ -478,10 +490,10 @@ export default {
         yAxis : [{
           type : 'value',
           offset:10,
-          min:0,
+          min:this.lineMin,
           max:this.lineMax>0?this.lineMax : 1,
           splitNumber:4,
-          interval:this.lineMax>0? this.lineMax/4: 1/4,
+          interval:this.lineMax>0? (this.lineMax-this.lineMin)/4: 1/4,
           axisLine:{
             show:false,
             lineStyle:{
@@ -759,7 +771,7 @@ export default {
   },
   filters: {
     tofixd(value){
-     return value<0 ? '0.00' : Number(value).toFixed(2);
+     return Number(value).toFixed(2);
     }
   },
   components:{
