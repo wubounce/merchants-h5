@@ -241,7 +241,7 @@ export default {
           this.barseriesData.push(res.data[i]);
           this.barxAxisData.push(MachineStatus(i));
         }
-        this.barMax = this.calMax(this.barseriesData);//Y轴最大值
+        this.barMax = calMax(this.barseriesData);//Y轴最大值
         this.barchart.setOption(this.barOChartOPtion);
       }
       
