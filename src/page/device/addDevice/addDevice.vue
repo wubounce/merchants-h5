@@ -98,8 +98,9 @@
           <div class="often">
            <p class="left-border"></p>
            <p class="title">其他</p>
+           <span class="iconfont icon-xiangshangjiantou" @click="otherShowClick" :class="{'rotate': otherShow}"></span>
           </div>
-          <ul>
+          <ul v-show="otherShow">
             <li class="mint-checklist-label" :class="{selected:index==selectIndex2}" v-for="(item,index) in secondOffTypeList" :key="index" @click="selectNoOftenClick(index,item.name)">
               <p></p>
               <p class="mint-checkbox-label shopname">{{item.name}}</p>
@@ -140,6 +141,7 @@
         selectedIndex: -1,
         selectIndex: -1,
         selectIndex2: -1,
+        otherShow: false,
         itemName:["functionName","needMinutes","functionPrice","ifOpen"],
         functionSetList: [],
         getJsonArr: [],
@@ -258,11 +260,13 @@
         this.subType = data;
       },
       selectOftenClick: function (index,name) { //常用选中
+        this.selectIndex2 = -1;
         this.selectIndex = index;
         this.fromdata.secondType.id = this.secondOnTypeList[index].id;
         this.subTypeName = this.secondOnTypeList[index].name;
       },
       selectNoOftenClick: function (index,name) { //不常用选中
+        this.selectIndex = -1;
         this.selectIndex2 = index;
         this.fromdata.secondType.id = this.secondOffTypeList[index].id;
         this.subTypeName = this.secondOffTypeList[index].name;
@@ -273,6 +277,9 @@
       sure() {
         this.fromdata.secondType.name = this.subTypeName;
         this.subType2 = false;
+      },
+      otherShowClick() {
+        this.otherShow = !this.otherShow;
       },
       getCheckShop() {
         if(this.fromdata.shopType.name !== this.selectListA[this.selectedIndex].shopName){
@@ -854,7 +861,18 @@
       height: 0.8rem;
       line-height: 0.8rem;
       font-size: 15px;
-      display: inline-block;
+      width: 100%;
+      background: rgba(248,251,254,1);
+      .icon-xiangshangjiantou {
+        color: #b0b0b0;
+        transform: rotate(180deg);
+        margin-right: 0.5rem;
+        float: right;
+      }
+      .rotate:before {
+        display: inline-block;
+        transform: rotate(180deg);
+      }
       .left-border {
         display: inline-block;
         width: 0.15rem;

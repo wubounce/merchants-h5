@@ -171,7 +171,7 @@
         deviceTypeArr: [],
         deviceModelArrAll: [],
         deviceModelArr: [], 
-        communicationArr: [],
+        communicationArr: [{type:"脉冲"},{type:"串口"}],
         shopFlag: true,
         modelFlag: true,
         subFlag: true
@@ -199,7 +199,6 @@
           this.selectModelIndex = -1;
           this.selectCommunicationIndex = -1;
           this.getlistSubTypeAll(this.subFlag,payload);
-          this.typeList();
         }
       },
       selectDeviceTypeClick(index) {
@@ -212,7 +211,6 @@
           this.selectCommunicationIndex = -1;
           this.popDeviceModelId = '';
           this.popCommunicationType = '';
-          this.typeList();
        }
       },
       selectModelClick(index) {
@@ -221,12 +219,6 @@
           this.popDeviceModelId = this.deviceModelArr[index].id;
           this.selectCommunicationIndex = -1;
           this.popCommunicationType = '';
-          if(this.popShopId && this.popDeviceTypeId && this.popDeviceModelId){
-            let payload = {shopId:this.popShopId,parentTypeId:this.popDeviceTypeId,subTypeId:this.popDeviceModelId};
-            this.typeList(payload);
-          }else{
-            return false;
-          }
         }
       },
       selectCommunicationClick(index) {
@@ -274,9 +266,8 @@
       rightPopup() {
         this.getPopupShop(this.shopFlag);
         let payload = {onlyMine: true};
-        if(!this.popDeviceTypeId) this.getlistParentType(payload);
-        if(!this.popDeviceModelId) this.getlistSubTypeAll(this.subFlag);
-        if(!this.popCommunicationType) this.typeList();
+        if(!this.popDeviceTypeId && !this.popShopId) this.getlistParentType(payload);
+        if(!this.popDeviceModelId && !this.popDeviceTypeId && !this.popShopId) this.getlistSubTypeAll(this.subFlag);
         this.popupVisible = true;
       },
       wxScan() { //微信扫码
@@ -331,8 +322,7 @@
         }
       }, 
       async getPopupShop(flag) {  //获取店铺
-        let payload = {hasMachine: true};
-        let res = await getShopFun(qs.stringify(payload));
+        let res = await getShopFun();
         if(res.code === 0) {
           this.popupShop = flag?res.data.slice(0,4):res.data;
         }
@@ -366,18 +356,7 @@
       allModelList() { //展示全部店铺
         this.modelFlag = !this.modelFlag;
         this.deviceModelArr = (this.modelFlag && this.deviceModelArrAll.length>0)?this.deviceModelArrAll.slice(0,4):this.deviceModelArrAll;
-      },
-      async typeList(payload) {
-        let res= await typeListFun(qs.stringify(payload));
-        if(res.code === 0) {
-          if(res.data.length>0){
-              res.data.forEach(item =>{
-                item.type=Number(item.type)=== 1? "串口":"脉冲";
-              });
-              this.communicationArr = res.data;
-          }
-        }
-      },   
+      },  
       async _getList(object)  { //获取设备
         let payload = object?object:{machineState: this.index,page:this.page,pageSize: this.pageSize};
         let res = await deviceListFun(qs.stringify(payload));
@@ -497,11 +476,13 @@
           color: #333;
           text-align: center;
           background: #fff;
-          height: 1.5rem;          
+          height: 1.5rem;
+          overflow-x: auto;          
           div {
-            flex: 1;
+            flex: none;
+            width: 1.6rem;
             &:nth-child(6) {
-              flex: 1.5
+              width: 2rem;
             }
             span {
               display: inline-block;
