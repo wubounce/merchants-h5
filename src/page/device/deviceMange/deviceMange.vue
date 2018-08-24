@@ -35,10 +35,16 @@
               <p :class="{current:index===16}">超时未工作</p>
               <span :class="{current:index===16}">{{titleArr.timeout}}</span>
             </div>
+            <div>
+              <p></p>
+              <span></span>
+            </div>
           </div>
           <div class="filter-button" @click="rightPopup">
-            <p>筛选</p>
-            <span class="iconfont icon-shaixuan"></span>
+            <div>
+              <p>筛选</p>
+              <span class="iconfont icon-shaixuan"></span>
+            </div>
           </div>
         </div>
         <div class="offline-tip">离线：连续30分钟未在线的设备数量。可能由于断电，信号不稳定，模块、设备损坏等原因引起，请自行检查或联系客服报备。</div>
@@ -77,9 +83,9 @@
       <div v-show="isShow2">
         <div class="closeItem" @click="toCloseItem"><span class="iconfont icon-guanbi"></span></div>
         <div class="moreItem">
-          <router-link :to="{name:'batchEdit'}" v-has="'mer:machine:batchUpdate'"><div class="showItem"><span v-html="funNameArr[2]"></span></div></router-link>
-          <router-link :to="{name:'batchStart'}" v-has="'mer:machine:batchStart'"><div class="showItem"><span v-html="funNameArr[1]"></span></div></router-link>    
-          <router-link :to="{name:'addDevice'}" v-has="'mer:machine:add'"><div class="showItem mb0"><span v-html="funNameArr[0]"></span></div></router-link>
+          <router-link :to="{name:'batchEdit'}" v-has="'mer:machine:batchUpdate'" tag="div" class="showItem"><span v-html="funNameArr[2]"></span></router-link>
+          <router-link :to="{name:'batchStart'}" v-has="'mer:machine:batchStart'" tag="div" class="showItem"><span v-html="funNameArr[1]"></span></router-link>    
+          <router-link :to="{name:'addDevice'}" v-has="'mer:machine:add'" tag="div" class="showItem"><span v-html="funNameArr[0]"></span></router-link>
         </div>
       </div>
     </div>
@@ -239,6 +245,8 @@
         this.popDeviceTypeId = '';
         this.popDeviceModelId = '';
         this.popCommunicationType = '';
+        this.shopFlag = true,
+        this.modelFlag = true,
         this._getList();
       },
       popSure() {
@@ -466,13 +474,13 @@
         }
       }
       .navigation{
-        display: flex;
         border-bottom: 1px solid rgba(220, 224, 230, 1);
         background-color: #ffffff;
+        position: relative;
         .device-status {
           display: flex;
           font-size: 0.35rem;
-          width: 8.51rem;
+          width: 8.73rem;
           color: #333;
           text-align: center;
           background: #fff;
@@ -483,6 +491,9 @@
             width: 1.6rem;
             &:nth-child(6) {
               width: 2rem;
+            }
+            &:last-child {
+              width: 0.5rem;
             }
             span {
               display: inline-block;
@@ -518,16 +529,23 @@
 
         }
         .filter-button {
-           flex: 1;
+           position: absolute;
+           width: 1.72rem;
            text-align: center;
            font-size: 0.37rem;
-           color: RGBA(24, 144, 255, 1);
-           box-shadow: -0.05rem 0 0 rgba(186, 192, 210, 0.3);
+           top: 0;
+           right: 0;
+           background: rgba(255,255,255,0.6);
+           color: rgba(24, 144, 255, 1);
            margin: 0.25rem 0;
-           span {
-             margin-top: 0.18rem;
-             display: inline-block;
-             font-size: .27rem;
+           div{
+            margin-left: 0.25rem;
+            width: 1.47rem;
+            span {
+              margin-top: 0.18rem;
+              display: inline-block;
+              font-size: .27rem;
+           }
            }
         }
      }
@@ -671,6 +689,11 @@
       right: 0.54rem;
       width: 1.49rem;
       bottom: 2.64rem;
+      div {
+        &:last-child {
+          margin-bottom: 0;
+        }
+      }
     }
     .showItem{
       width: 1.49rem;
@@ -689,9 +712,6 @@
         vertical-align: middle;
         font-weight: bold;
       }
-    }
-    .mb0 {
-      margin-bottom: 0;
     }
     .rightPopup {
       padding: 0 0.26rem;
