@@ -491,8 +491,7 @@
         border-bottom: 1px solid rgba(220, 224, 230, 1);
         background-color: #ffffff;
         .device-status {
-          display: -webkit-box;
-          display: -ms-flexbox;
+          display: flex;
           font-size: 0.35rem;
           width: 8.51rem;
           color: #333;
@@ -501,6 +500,9 @@
           height: 1.5rem;          
           div {
             flex: 1;
+            &:nth-child(6) {
+              flex: 1.5
+            }
             span {
               display: inline-block;
               width: 0.73rem;
