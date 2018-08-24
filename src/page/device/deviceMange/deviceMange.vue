@@ -47,10 +47,10 @@
             </div>
           </div>
         </div>
-        <div class="offline-tip" v-if="offlineTip"><span class="iconfont icon-guanbi" @click="offlineTip=false;"></span>  离线：连续30分钟未在线的设备数量。可能由于断电，信号不稳定，模块、设备损坏等原因引起，请自行检查或联系客服报备。</div>
+        <div class="offline-tip" v-if="offlineTip"><div><span class="iconfont icon-guanbi" @click="offlineTipClick"></span>离线：连续30分钟未在线的设备数量。可能由于断电，信号不稳定，模块、设备损坏等原因引起，请自行检查或联系客服报备。</div></div>
       </div>
       <div class="noData" v-show="hasNoData">暂无设备</div>
-      <div class="page-top">
+      <div :style="{ 'padding-top': hiddenPageHeight + 'rem' }" class="page-top" >
         <div class="page-loadmore-wrapper" ref="wrapper" :style="{overflowY:scrollShow}">
           <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" @translate-change="translateChange" :auto-fill="false" ref="loadmore">
             <div>
@@ -182,6 +182,7 @@
         modelFlag: true,
         subFlag: true,
         offlineTip:true,
+        hiddenPageHeight: 4.67,
       };
     },
     filters: { //过滤器，过滤2位小数
@@ -277,6 +278,10 @@
         if(!this.popDeviceTypeId && !this.popShopId) this.getlistParentType(payload);
         if(!this.popDeviceModelId && !this.popDeviceTypeId && !this.popShopId) this.getlistSubTypeAll(this.subFlag);
         this.popupVisible = true;
+      },
+      offlineTipClick() {
+        this.offlineTip = false;
+        this.hiddenPageHeight = 3.5;
       },
       wxScan() { //微信扫码
         Web.scanQRCode(res => {
@@ -559,7 +564,6 @@
       padding-top: 6rem;
       }
     .page-top {
-      padding-top: 5.07rem;
       height: 100%;
       box-sizing: border-box;
       .page-loadmore-wrapper {
@@ -866,6 +870,18 @@
     height: 1.17rem;
     margin-top: 0;
     border-radius: 0;
+    padding: 0;
+    position: relative;
+    div {
+      padding: 0rem 0.73rem 0rem 0.32rem;
+      position: absolute;
+      top: 50%;
+      transform: translate(0, -50%);
+    }
+  }
+
+  .paddingTop {
+    padding-top: 3.5rem;
   }
 
 
