@@ -3,14 +3,12 @@
   <div class="search">
     <div class="slectdata monthchoose"  @click="dateVisible=true;">
       <span>{{dateCurrentTag.label}}</span><i class="iconfont icon-xiangxiajiantou select-back"></i>
-      <selectpickr :visible="dateVisible" :slots="dateSlots"  :title="'时间'" :valueKey="keyname" @selectpicker="dateselectpicker" @onpickstatus="dateselectpickertatus"> </selectpickr>
     </div>
     <div class="slectdata timechoose"  @click="openByDialog">
       <span class="time">{{startDate.join('-')}}</span><span class="zhi">至</span><span class="time">{{endDate.join('-')}}</span><i class="iconfont icon-xiangxiajiantou select-back"></i>
     </div>
     <div class="slectdata shopchoose"  @click="popupVisible=true">
       <span>{{currentTags?currentTags.shopName:'全部店铺'}}</span><i class="iconfont icon-xiangxiajiantou select-back"></i>
-      <selectpickr :visible="popupVisible" :slots="shopSlots" :valueKey="shopName" :title="'店铺'" @selectpicker="shopselectpicker" @onpickstatus="shopselectpickertatus"> </selectpickr>
     </div>
   </div>
   <div class="echarts-warp">
@@ -41,15 +39,18 @@
       <div class="nodata" v-if="lsitdata.length <= 0">暂无数据</div>
     </div>
   </div>
-
+  
   <mt-popup v-model="calendar.show" position="bottom" class="mint-popup">
      <div class="calendar-dialog-body">
-        <calendar :range="calendar.range" :zero="calendar.zero" :lunar="calendar.lunar" :begin="calendar.begin" :end="calendar.end" :type="calendar.type" :value="calendar.value"  @select="calendar.select">
-          
-        </calendar>
+        <calendar :range="calendar.range" :zero="calendar.zero" :lunar="calendar.lunar" :begin="calendar.begin" :end="calendar.end" :type="calendar.type" :value="calendar.value"  @select="calendar.select"></calendar>
         <mt-button class="calendar-btn" @click="selectDateCom">确定</mt-button>
     </div>
   </mt-popup>
+  <!-- 按日按月 -->
+  <selectpickr :visible="dateVisible" :slots="dateSlots"  :title="'时间'" :valueKey="keyname" @selectpicker="dateselectpicker" @onpickstatus="dateselectpickertatus"> </selectpickr>
+  <!-- 选择店铺 -->
+  <selectpickr :visible="popupVisible" :slots="shopSlots" :valueKey="shopName" :title="'店铺'" @selectpicker="shopselectpicker" @onpickstatus="shopselectpickertatus"> </selectpickr>
+    
 </div>
 </template>
 <script>
