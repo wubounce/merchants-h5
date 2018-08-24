@@ -1,0 +1,53 @@
+section {
+    .prompt {
+      font-size: 14px;
+      background-color: #FDFCEC;
+      padding: 0.3rem 0;
+      text-align: center;
+      span {
+        color: #FF5F5F;
+      }
+    }
+    .shopname-p {
+      background-color: #fff;
+      font-size: 16px;
+      border-bottom: 1px solid #F8F8F8;
+      padding: 0.3rem;
+      span {
+        display: inline-block;
+        &:first-child {
+          margin-left: 0.3rem;
+          width: 2.5rem;
+        }
+        &:last-child {
+          color: #999999;
+       }
+      }
+      &:last-child {
+        border-bottom: 1px solid #fff;
+        color: #999999;
+      }
+      .nameInput {
+        margin-left: 0.5rem;
+      }
+      .statusInput {
+        margin-left: 0.5rem;
+      }
+    }
+    .imgShow {
+      font-size: 14px;
+      text-align: center;
+      padding: 0.4rem 0;
+      background-color: #fff;
+      color: #1890FF;
+    }
+    .bgc {
+      background-color: #fff;
+      text-align: center;
+      img {
+        width: 9rem;
+        height: 6rem;
+        margin-bottom: 0.3rem;
+      }
+    }
+  }

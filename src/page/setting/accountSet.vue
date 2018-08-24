@@ -89,33 +89,7 @@ export default {
 };
 </script>
 <style  type="text/css" lang="scss" scoped>
-section {
-  padding: 0 0.4rem;
-  background-color: #fff;
-  .user {
-    display: flex;
-    justify-content: space-between;
-  }
-  .business {
-    display: flex;
-    justify-content: space-between;
-    font-size: 16px;
-    padding: 0.3rem;
-    background-color: #fff;
-    border-bottom: 1px solid #f9f8ff;
-    background: url("../../../static/image/shop/right.png") no-repeat right
-      0.3rem center;
-    background-size: 0.16rem 0.27rem;
-    span {
-      font-size: 16px;
-      margin-right: 0.3rem;
-      color:#999999;
-    }
-  }
-  #border-top{
-    border-bottom:none;
-  }
-}
+@import '../../assets/scss/setting/accountSet';
 </style>
 
 

@@ -311,9 +311,7 @@ export default new Router({
     { path: '/realNameGet', name: 'realNameGet', component: () => import('@/page/setting/realNameGet') },
     { path: '/contact', name: 'contact', component: () => import('@/page/contact/index') },
     { path: '/cooperation', name: 'cooperation', component: () => import('@/page/cooperation/index') },
-    //sha1加密demo
-    { path: '/getSignDemo', name: 'getSignDemo', component: () => import('@/page/setting/getSignDemo') },  
-
+    
     //钱包
     {
       path: '/wallet',

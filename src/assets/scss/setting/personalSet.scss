@@ -1,0 +1,58 @@
+.add-form {
+    padding: 0 0.4rem;
+    background: #fff;
+    .input-group {
+      height: 1.17rem;
+      line-height: 1.17rem;
+      border-bottom:1px solid #f9f8ff;
+      font-size: 16px;
+    }
+    .input-group2 {
+      line-height: 1.17rem;
+      font-size: 16px;
+      .form-title {
+        .key,.value {
+          display: inline-block;
+          .key-color {
+            color:#999;
+          }
+        }
+        .value {
+          line-height: 2.34rem;
+        }
+      }
+    }
+    .input-group:last-child {
+      border:none;
+    }
+    .forward {
+      float: right;
+      color: #999;
+    }
+  }
+  .toolBar {
+    display: flex;
+    justify-content: center;
+    padding-top: 0.2rem;
+    span {
+      &:nth-child(1) {
+        font-size: 15px;
+        color: #999999;
+      }
+      &:nth-child(2) {
+        font-size: 16px;
+        margin: 0 2.7rem;
+        color: #666666;
+      }
+      &:nth-child(3) {
+        font-size: 15px;
+        color: #1890FF;
+      }
+    }
+  }
+  .mint-popup {
+    width: 100%;
+    .prop-bd {
+      padding: 0.3rem;
+    }
+  }

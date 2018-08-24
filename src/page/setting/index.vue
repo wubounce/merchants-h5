@@ -42,34 +42,5 @@ export default {
 };
 </script>
 <style type="text/css" lang="scss" scoped>
- .add-form {
-    padding: 0 0.4rem;
-    background: #fff;
-    .input-group {
-      height: 1.17rem;
-      line-height: 1.17rem;
-      border-bottom:1px solid #f9f8ff;
-      font-size: 16px;
-    }
-    .input-group:last-child {
-      border:none;
-    }
-    .forward {
-      float: right;
-      color: #999;
-    }
-  }
-  .deleteShop {
-      button {
-        display: block;
-        margin: 0.7rem auto;
-        width: 92%;
-        background-color:#1890FF;
-        border: none;
-        border-radius: 5px;
-        color:#fff;
-        font-size:16px;
-        padding: 0.35rem 0;
-      }
-    }
+ @import '../../assets/scss/setting/index';
 </style>

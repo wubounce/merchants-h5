@@ -100,41 +100,5 @@
 </script>
 
 <style lang="scss" scoped>
-  .change-pwd {
-    height: 100%;
-    .resetForm {
-      padding-left: 0.4rem;
-      background: #fff;
-      margin-top: 0.27rem;
-    }
-    .form-group {
-      position: relative;
-      height:1.17rem;
-      line-height: 1.17rem;
-      border-bottom:1px solid #f9f8ff;
-      font-size: 16px;
-      display: flex;
-      .title {
-        width: 3.6rem;
-      }
-      input {
-        height:1.17rem;
-        font-size: 16px;
-      }
-    }
-    .form-group:last-child {
-      border: none;
-    }
-    .change-pwd-btn button {
-      display: block;
-      width: 9.2rem;
-      height: 1.17rem;
-      line-height: 1.17rem;
-      margin:0.67rem auto;
-      padding: 0;
-    }
-  }
-</style>
-<style lang="scss">
-
+ @import '../../assets/scss/setting/changePwd';
 </style>

@@ -1,0 +1,241 @@
+.personal {
+    .showHide {
+      position: fixed;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0.5;
+      background: #000;
+      z-index:2008;
+    }
+    .personal-list {
+      background-color: #fff;
+      .shopname-p {
+        font-size: 16px;
+        border-bottom: 1px solid #F8F8F8;
+        padding: 0.26rem;
+        span {
+          display: inline-block;
+          &:first-child {
+            padding-left: 0.3rem;
+            width: 22%;
+          }
+          &:last-child {
+            width: 72%;
+          }
+          input {
+            height: 1rem;
+            line-height:1rem;
+          }
+          ::-webkit-input-placeholder {
+            color: #999999;
+            font-size: 16px;
+          }
+          :-moz-placeholder {
+            /* Firefox 18- */
+            color: #999999;
+            font-size: 16px;
+          }
+          ::-moz-placeholder {
+            /* Firefox 19+ */
+            color: #999999;
+            font-size: 16px;
+          }
+          :-ms-input-placeholder {
+            color: #999999;
+            font-size: 16px;
+          }
+        }
+        &:last-child {
+          border-bottom: 1px solid #fff;
+        }
+      }
+      .personal-item {
+        display: flex;
+        justify-content: space-between;
+        font-size: 16px;
+        padding: 0.53rem;
+        border-bottom: 1px solid #F8F8F8;
+        background: url("../../../static/image/shop/right.png") no-repeat right
+          0.3rem center;
+        background-size: 0.16rem 0.27rem;
+        span {
+          color: #7f7f7f;
+          font-size: 16px;
+          margin-right: 0.3rem;
+        }
+      }
+    }
+    .second {
+      background-color: #fff;
+      .device {
+        margin-top: 0.3rem;
+        display: flex;
+        justify-content: space-between;
+      }
+      .business {
+        display: flex;
+        justify-content: space-between;
+        font-size: 16px;
+        padding: 0.53rem;
+        background-color: #fff;
+        border-bottom: 1px solid #F8F8F8;
+        background: url("../../../static/image/shop/right.png") no-repeat right
+          0.3rem center;
+        background-size: 0.16rem 0.27rem;
+        span {
+          
+          color: #7f7f7f;
+          font-size: 16px;
+          margin-right: 0.3rem;
+        }
+      }
+      .isReserve {
+        display: flex;
+        justify-content: space-between;
+        font-size: 16px;
+        border-bottom: 1px solid #F8F8F8;
+        padding: 0.24rem;
+        span {
+          &:first-child {
+            padding-left:0.23rem;
+            line-height:1rem;
+          }
+          &:last-child {
+            .check-switch {
+              margin-top: 0.08rem;
+            }
+          }
+        }
+      }
+      .reserveTime {
+        font-size: 16px;
+        border-bottom: 1px solid #F8F8F8;
+        padding: 0.26rem;
+        span {
+          display: inline-block;
+          &:first-child {
+            margin-left: 0.3rem;
+            width: 35%;
+          }
+          &:last-child {
+            width: 55%;
+          }
+          input {
+            height: 1rem;
+            line-height: 1rem;
+            background-color: #fff;
+          }
+          ::-webkit-input-placeholder {
+            color: #999999;
+            font-size: 16px;
+          }
+          :-moz-placeholder {
+            /* Firefox 18- */
+            color: #999999;
+            font-size: 16px;
+          }
+          ::-moz-placeholder {
+            /* Firefox 19+ */
+            color: #999999;
+            font-size: 16px;
+          }
+          :-ms-input-placeholder {
+            color: #999999;
+            font-size: 16px;
+          }
+        }
+      }
+    }
+    .submit {
+      width: 100%;
+      height: 50px;
+      position: fixed;
+      bottom: 0;
+      border: none;
+      //padding: 0.45rem 0;
+      background-color: #1890FF;
+      color: #fff;
+      font-size: 18px;
+    }
+    .blank {
+      height:2rem;
+    }
+    .toolBar {
+      display: flex;
+      justify-content: center;
+      background-color: #fbfbfc;
+      line-height: 1rem;
+      #allDay {
+        color: #fff;
+        background-color: #1890FF;
+        font-size: 0.45rem;
+        padding: 0.05rem 0.2rem;
+        padding-top: -1rem;
+        border-radius: 5px;
+      }
+      span {
+        &:nth-child(1) {
+          font-size: 15px;
+          color: #999999;
+        }
+        &:nth-child(2) {
+          font-size: 16px;
+          margin: 0 2.7rem;
+          color: #666666;
+        }
+        &:nth-child(3) {
+          font-size: 15px;
+          color: #1890FF;
+        }
+      }
+    }
+    .mint-popup {
+      width: 100%;
+      .toolBarMachine {
+        display: flex;
+        justify-content: center;
+        line-height: 1rem;
+        background-color: #fbfbfc;
+        span {
+          &:nth-child(1) {
+            font-size: 15px;
+            color: #999999;
+          }
+          &:nth-child(2) {
+            font-size: 16px;
+            margin: 0 2.7rem;
+            color: #666666;
+          }
+          &:nth-child(3) {
+            font-size: 15px;
+            color: #1890FF;
+          }
+        }
+      }
+      .resp-shop-wrap {
+        height: 10.67rem;
+        overflow-y: scroll;
+        margin-bottom: 0.5rem;
+      }
+    }
+    
+    .machine-background{
+      width: 100%;
+      height: 100%;
+      opacity: 0.5;
+      background: #000;
+      position: fixed;
+      left: 0;
+      top: 0;
+      z-index: 2018;
+    }
+    .machine-hiden {
+      position: absolute;
+      top: 10rem;
+      background-color: rgb(255, 255, 255);
+      width: 100%;
+      z-index: 2020;
+    }
+  }

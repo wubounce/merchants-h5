@@ -1,0 +1,66 @@
+.editTodolist {
+    .ul-list {
+      background-color: #fff;
+      .personal-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.3rem;
+        border-bottom: 1px solid #f9f8ff;
+        background: url("../../../static/image/shop/right.png") no-repeat right
+          0.3rem center;
+        background-size: 0.16rem 0.27rem;
+        span {
+          &:first-child {
+            color: #7f7f7f;
+          }
+          &:last-child {
+            color: #333333;
+          }
+          font-size: 16px;
+          margin-right: 0.3rem;
+        }
+      }
+    }
+    .submit {
+      width: 100%;
+      position: fixed;
+      bottom: 0;
+      border: none;
+      padding: 0.45rem 0;
+      background-color: #1890FF;
+      color: #fff;
+      font-size: 18px;
+    }
+    .mint-popup {
+      width: 100%;
+    }
+    .toolBar {
+      display: flex;
+      justify-content: center;
+      line-height: 1rem;
+      background-color: #fbfbfc;
+      #allDay {
+        color: #fff;
+        background-color: #1890FF;
+        font-size: 0.45rem;
+        padding: 0.05rem 0.2rem;
+        padding-top: -1rem;
+        border-radius: 5px;
+      }
+      span {
+        &:nth-child(1) {
+          font-size: 15px;
+          color: #999999;
+        }
+        &:nth-child(2) {
+          font-size: 16px;
+          margin: 0 2.7rem;
+          color: #666666;
+        }
+        &:nth-child(3) {
+          font-size: 15px;
+          color: #1890FF;
+        }
+      }
+    }
+  }
