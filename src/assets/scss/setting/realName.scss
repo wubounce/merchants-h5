@@ -1,0 +1,90 @@
+section {
+    .prompt {
+      font-size: 14px;
+      background-color: #FDFCEC;
+      padding: 0.3rem 0;
+      text-align: center;
+      span {
+        color: #FF5F5F;
+      }
+    }
+    .margin {
+      margin-top: 0.3rem;
+    }
+    .shopname-p {
+      background-color: #fff;
+      font-size: 16px;
+      border-bottom: 1px solid #F8F8F8;
+      padding: 0.06rem;
+      span {
+        display: inline-block;
+        &:first-child {
+          margin-left: 0.3rem;
+          width: 2rem;
+        }
+        input {
+          height: 1rem;
+        }
+        ::-webkit-input-placeholder {
+          color: #999999;
+          font-size: 16px;
+        }
+        :-moz-placeholder {
+          /* Firefox 18- */
+          color: #999999;
+          font-size: 16px;
+        }
+        ::-moz-placeholder {
+          /* Firefox 19+ */
+          color: #999999;
+          font-size: 16px;
+        }
+        :-ms-input-placeholder {
+          color: #999999;
+          font-size: 16px;
+        }
+      }
+      &:last-child {
+        border-bottom: 1px solid #fff;
+      }
+      .nameInput {
+        margin-left: 0.5rem;
+      }
+      .statusInput {
+        margin-left: 0.5rem;
+      }
+    }
+    .imgShow {
+      font-size: 14px;
+      text-align: center;
+      padding: 0.4rem 0;
+      background-color: #fff;
+    }
+    .bgc {
+      background-color: #fff;
+    }
+    .showFont {
+      font-size: 14px;
+      color: #FF5F5F;
+      background: #fff;
+      padding-bottom: 0.5rem;
+      padding-left: 0.5rem;
+    }
+    .confirmNews {
+      background-color: #fff;
+      text-align: center;
+      .isDis {
+        opacity: 0.6;
+      }
+      button {
+        width: 92%;
+        background-color: #1890FF;
+        border: none;
+        border-radius: 5px;
+        color: #fff;
+        font-size: 16px;
+        padding: 0.35rem 0;
+        margin-bottom: 0.5rem;
+      }
+    }
+  }

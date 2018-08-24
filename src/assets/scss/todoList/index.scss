@@ -1,0 +1,70 @@
+section {
+	.title {
+		font-size: 16px;
+		font-weight: bold;
+		padding-top: 0.53rem;
+        padding-bottom: 0.53rem;
+		border: 1px solid #F8F8F8;
+		background-color: #fff; 
+		color: #333333;
+		padding-left: 0.25rem;
+	}
+	.noTodoList {
+	text-align: center;
+    color: #999;
+    font-size: 16px;
+    padding-top: 4rem;
+	}
+	ul {
+		margin-top: 0.3rem;
+		.page-loadmore-wrapper {
+      overflow: scroll;
+			.list {
+				background-color: #fff;
+				margin-bottom: 0.3rem;
+				.time {
+					padding-top: 0.53rem;
+					padding-bottom: 0.53rem;
+					border-bottom: 1px solid #F8F8F8;
+					span {
+						&:first-child {
+							font-size: 14px;
+							padding: 0 0.3rem;
+							vertical-align: middle;
+							color: rgba(153,153,153,1);
+						}
+					}
+					.time-blue {
+						font-size: 18px;
+						color: #1890FF;
+						vertical-align: middle;
+					}
+					.text {
+						font-size: 16px;
+						vertical-align: middle;
+					}
+					div {
+						&:first-child {
+							border-right: 1px solid #DFE6FF;
+						}
+						&:last-child {
+							//margin-left: 1rem;
+						}
+					}
+				}
+				.display-flex {
+					display: flex;
+					.type {
+						width: 50%;
+					}
+				}
+			}
+			.nomore-data {
+        text-align: center;
+        color: #999;
+        font-size: 12px;
+        margin-bottom: 0.266667rem;
+      }
+		}
+	}
+}
