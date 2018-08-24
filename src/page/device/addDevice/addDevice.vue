@@ -119,9 +119,6 @@
   import Web from '@/utils/Web';
   import { MessageBox } from 'mint-ui';
   import Button from "@/components/Button/Button";
-  import QHeader from '@/components/header';
-  import { Actionsheet } from "mint-ui";
-  import AddCount from "@/components/AddCount/AddCount";
   import selectpickr from '@/components/selectPicker';
   import { getWxconfigFun,getShopFun,getShopListParentTypeFun,listSubTypeByFun,deviceAddorEditFun,getFunctionSetListFun } from '@/service/device';
  
@@ -611,8 +608,6 @@
 
     },
     components: {
-      Actionsheet,
-      AddCount,
       Button,
       selectpickr
     }

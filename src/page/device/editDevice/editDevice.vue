@@ -80,10 +80,6 @@
   import Web from '@/utils/Web';
   import { MessageBox } from 'mint-ui';
   import Button from "@/components/Button/Button";
-  import {
-    Actionsheet
-  } from "mint-ui";
-  import AddCount from "@/components/AddCount/AddCount";
   import selectpickr from '@/components/selectPicker';
   import {getWxconfigFun,detailDeviceListFun,getShopFun,deviceAddorEditFun } from '@/service/device';
   export default {
@@ -439,8 +435,6 @@
       this.getDetailDevice();
     },
     components: {
-      Actionsheet,
-      AddCount,
       Button,
       selectpickr
     }
