@@ -16,6 +16,7 @@ const tzjDevice = '/machine/tzj'; //桶自洁
 // const getWxConfig = '/common/getWxConfig'; //获取微信接口配置信息
 const getWxConfig = 'https://api.qiekj.com/user-api/wechat/sign'; //获取微信接口配置信息
 const getShop = '/shop/listShop'; // 店铺管理 method 'post'
+const getShopListParentType = '/shop/listParentType'; //一级类型 method 'post'
 const getlistParentType = '/machine/listParentType'; //一级类型 method 'post'
 const getlistSubType = '/machine/listSubType'; //二级类型 method 'post'
 const getFunctionSetList = '/machine/functionList'; //功能设置列表 method 'post'
@@ -29,6 +30,7 @@ const shopSearch = '/shop/listShop'; //店铺模糊查询
 const typeList = '/machine/typeList'; //通信类型（串口或者脉冲）
 const listSubTypeBy = '/machine/listSubTypeBy';
 const stateMachine = '/machine/statisticsMachine';
+const listSubTypeAll = '/machine/listSubTypeAll';
 
 
 export const device = (payload) => fetch.get(deviceApi, {params: payload}); //登录
@@ -40,6 +42,7 @@ export const manageResetDeviceFun = (payload) => fetch.post(manageResetDevice ,p
 export const tzjDeviceFun = (payload) => fetch.post(tzjDevice ,payload); //设备桶自洁
 export const getWxconfigFun = (payload) => fetch.post(getWxConfig,payload); //获取微信接口配置信息
 export const getShopFun = (payload) => fetch.post(getShop,payload); //获取店铺列表
+export const getShopListParentTypeFun = (payload) => fetch.post(getShopListParentType,payload); //获取一级类型
 export const getlistParentTypeFun = (payload) => fetch.post(getlistParentType,payload); //获取一级类型
 export const getlistSubTypeFun = (payload) => fetch.post(getlistSubType,payload); //获取二级类型
 export const getFunctionSetListFun = (payload) => fetch.post(getFunctionSetList,payload); //获取功能列表
@@ -53,6 +56,7 @@ export const shopSearchFun= (payload) => fetch.post(shopSearch,payload); //店�
 export const typeListFun= (payload) => fetch.post(typeList,payload); //通信类型（串口或者脉冲）
 export const listSubTypeByFun= (payload) => fetch.post(listSubTypeBy,payload); 
 export const stateMachineFun= (payload) => fetch.post(stateMachine,payload); 
+export const listSubTypeAllFun= (payload) => fetch.post(listSubTypeAll,payload); 
 
 
 

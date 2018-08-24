@@ -79,7 +79,7 @@
     <mt-popup v-model="subType2" position="bottom" :closeOnClickModal="false">
       <div class="resp-shop">
         <span class="quxi" @click="cancle">取消</span>
-        <span class="shop">店铺</span>
+        <span class="shop">设备型号</span>
         <span class="qued" @click="sure">确定</span>
       </div>
       <section class="resp-shop-wrap">
@@ -122,7 +122,7 @@
   import { Actionsheet } from "mint-ui";
   import AddCount from "@/components/AddCount/AddCount";
   import selectpickr from '@/components/selectPicker';
-  import { getWxconfigFun,getShopFun,getlistParentTypeFun,listSubTypeByFun,deviceAddorEditFun,getFunctionSetListFun } from '@/service/device';
+  import { getWxconfigFun,getShopFun,getShopListParentTypeFun,listSubTypeByFun,deviceAddorEditFun,getFunctionSetListFun } from '@/service/device';
  
 
 
@@ -348,8 +348,8 @@
       },
       async checkFirstClass() { //获取一级列表
         if(this.fromdata.shopType.id){
-           let payload = {shopid:this.fromdata.shopType.id};
-           let res = await getlistParentTypeFun(qs.stringify(payload));
+           let payload = {shopId:this.fromdata.shopType.id};
+           let res = await getShopListParentTypeFun(qs.stringify(payload));
            if(res.code === 0) {
              this.slotsFirst[0].values = res.data;
             }
@@ -365,8 +365,8 @@
          this.selectIndex = -1;
          this.selectIndex2 = -2;
          let count = 0;
-         if(this.fromdata.shopType.id && this.fromdata.firstType.id) {
-           let payload = {shopid:this.fromdata.shopType.id,parentTypeId:this.fromdata.firstType.id};
+         if(this.fromdata.firstType.id) {
+           let payload = {parentTypeId:this.fromdata.firstType.id};
            let res = await listSubTypeByFun(qs.stringify(payload));
            if(res.code === 0) {
              if(res.data.length>0){

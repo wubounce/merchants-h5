@@ -31,6 +31,10 @@
               <p :class="{current:index===8}">离线</p>
               <span :class="{current:index===8}">{{titleArr.offline}}</span>
             </div>
+            <div @click="titleClick(16)">
+              <p :class="{current:index===16}">超时未工作</p>
+              <span :class="{current:index===16}">{{titleArr.timeout}}</span>
+            </div>
           </div>
           <div class="filter-button" @click="rightPopup">
             <p>筛选</p>
@@ -72,9 +76,11 @@
       <div class="openItem" @click="toAddItem" v-show="isShow"><span class="iconfont icon-gengduo-tianchong"></span></div>
       <div v-show="isShow2">
         <div class="closeItem" @click="toCloseItem"><span class="iconfont icon-guanbi"></span></div>
-        <router-link :to="{name:'addDevice'}" v-has="'mer:machine:add'"><div class="addDev showItem"><span v-html="funNameArr[0]"></span></div></router-link>
-        <router-link :to="{name:'batchStart'}" v-has="'mer:machine:batchStart'"><div class="betchStartup showItem"><span v-html="funNameArr[1]"></span></div></router-link>
-        <router-link :to="{name:'batchEdit'}" v-has="'mer:machine:batchUpdate'"><div class="betchModf showItem"><span v-html="funNameArr[2]"></span></div></router-link>
+        <div class="moreItem">
+          <router-link :to="{name:'batchEdit'}" v-has="'mer:machine:batchUpdate'"><div class="showItem"><span v-html="funNameArr[2]"></span></div></router-link>
+          <router-link :to="{name:'batchStart'}" v-has="'mer:machine:batchStart'"><div class="showItem"><span v-html="funNameArr[1]"></span></div></router-link>    
+          <router-link :to="{name:'addDevice'}" v-has="'mer:machine:add'"><div class="showItem mb0"><span v-html="funNameArr[0]"></span></div></router-link>
+        </div>
       </div>
     </div>
     <mt-popup v-model="popupVisible" position="right" class="rightPopup">
@@ -125,8 +131,8 @@
         </div>
       </div>
       <section class="promiss-footer">
-        <span class="popCancal" @click="popCancal">重置</span>
-        <span class="popSure" @click="popSure">确认</span>
+        <span class="popCancel" @click="popCancal"><b>重置</b></span>
+        <span class="popSure" @click="popSure"><b>确定</b></span>
      </section>
     </mt-popup>
   </section>
@@ -137,7 +143,7 @@
   import Api from '@/utils/Api';
   import Web from '@/utils/Web';
   import PagerMixin from '@/mixins/pagerMixin';
-  import { deviceListFun , countDeviceFun , getShopFun , getlistParentTypeFun , getlistSubTypeFun , typeListFun , stateMachineFun } from '@/service/device';
+  import { deviceListFun , countDeviceFun , getShopFun , getlistParentTypeFun , getlistSubTypeFun , typeListFun , stateMachineFun , listSubTypeAllFun } from '@/service/device';
   export default {
     mixins: [PagerMixin],
     data() {
@@ -167,7 +173,8 @@
         deviceModelArr: [], 
         communicationArr: [],
         shopFlag: true,
-        modelFlag: true
+        modelFlag: true,
+        subFlag: true
 
       };
     },
@@ -178,34 +185,49 @@
     },
     methods: {
       selectShopClick(index) {
-        this.selectIndex = index;
-        this.popShopId = this.popupShop[index].shopId;
-        let payload = {shopId: this.popShopId};
-        this.getlistParentType(payload);
-        this.deviceModelArr = [];
-        this.selectDeviceTypeIndex = -1;
-        this.selectModelIndex = -1;
-        this.selectCommunicationIndex = -1;
-        this.typeList();
+        if(this.selectIndex != index) {
+          this.selectIndex = index;
+          this.popShopId = this.popupShop[index].shopId;
+          let payload = {shopId: this.popShopId};
+          this.getlistParentType(payload);
+          this.deviceModelArr = [];
+          this.deviceModelArrAll = [];
+          this.selectDeviceTypeIndex = -1;
+          this.popDeviceTypeId = '';
+          this.popDeviceModelId = '';
+          this.popCommunicationType = '';
+          this.selectModelIndex = -1;
+          this.selectCommunicationIndex = -1;
+          this.getlistSubTypeAll(this.subFlag,payload);
+          this.typeList();
+        }
       },
       selectDeviceTypeClick(index) {
-        this.selectDeviceTypeIndex = index;
-        this.popDeviceTypeId = this.deviceTypeArr[index].id;
-        let payload = this.popShopId?{shopId: this.popShopId,parentTypeId: this.popDeviceTypeId}:{parentTypeId: this.popDeviceTypeId,onlyMine: true};
-        this.getlistSubType(payload,this.modelFlag);
-        this.selectModelIndex = -1;
-        this.selectCommunicationIndex = -1;
+        if(this.selectDeviceTypeIndex != index){
+          this.selectDeviceTypeIndex = index;
+          this.popDeviceTypeId = this.deviceTypeArr[index].id;
+          let payload = this.popShopId?{shopId: this.popShopId,parentTypeId: this.popDeviceTypeId}:{parentTypeId: this.popDeviceTypeId,onlyMine: true};
+          this.getlistSubType(payload,this.modelFlag);
+          this.selectModelIndex = -1;
+          this.selectCommunicationIndex = -1;
+          this.popDeviceModelId = '';
+          this.popCommunicationType = '';
+          this.typeList();
+       }
       },
       selectModelClick(index) {
-         this.selectModelIndex = index;
-         this.popDeviceModelId = this.deviceModelArr[index].id;
-         this.selectCommunicationIndex = -1;
-         if(this.popShopId && this.popDeviceTypeId && this.popDeviceModelId){
-           let payload = {shopId:this.popShopId,parentTypeId:this.popDeviceTypeId,subTypeId:this.popDeviceModelId};
-           this.typeList(payload);
-         }else{
-           return false;
-         }
+        if(this.selectModelIndex != index){
+          this.selectModelIndex = index;
+          this.popDeviceModelId = this.deviceModelArr[index].id;
+          this.selectCommunicationIndex = -1;
+          this.popCommunicationType = '';
+          if(this.popShopId && this.popDeviceTypeId && this.popDeviceModelId){
+            let payload = {shopId:this.popShopId,parentTypeId:this.popDeviceTypeId,subTypeId:this.popDeviceModelId};
+            this.typeList(payload);
+          }else{
+            return false;
+          }
+        }
       },
       selectCommunicationClick(index) {
         this.selectCommunicationIndex = index;
@@ -216,7 +238,16 @@
         this.popCommunicationType = arr[index].type;      
       },
       popCancal() {
+        this.selectIndex = -1;
+        this.selectDeviceTypeIndex = -1;
+        this.selectModelIndex = -1;
+        this.selectCommunicationIndex = -1;
         this.popupVisible = false;
+        this.popShopId = '';
+        this.popDeviceTypeId = '';
+        this.popDeviceModelId = '';
+        this.popCommunicationType = '';
+        this._getList();
       },
       popSure() {
         let payload = {shopId:this.popShopId,parentTypeId:this.popDeviceTypeId,subTypeId:this.popDeviceModelId,communicateType:this.popCommunicationType,page:this.page,pageSize: this.pageSize};
@@ -243,8 +274,9 @@
       rightPopup() {
         this.getPopupShop(this.shopFlag);
         let payload = {onlyMine: true};
-        this.getlistParentType(payload);
-        this.typeList();
+        if(!this.popDeviceTypeId) this.getlistParentType(payload);
+        if(!this.popDeviceModelId) this.getlistSubTypeAll(this.subFlag);
+        if(!this.popCommunicationType) this.typeList();
         this.popupVisible = true;
       },
       wxScan() { //微信扫码
@@ -299,7 +331,8 @@
         }
       }, 
       async getPopupShop(flag) {  //获取店铺
-        let res = await getShopFun();
+        let payload = {hasMachine: true};
+        let res = await getShopFun(qs.stringify(payload));
         if(res.code === 0) {
           this.popupShop = flag?res.data.slice(0,4):res.data;
         }
@@ -314,6 +347,13 @@
           this.deviceTypeArr = res.data;
           this.initialParentTypeId = res.data[0]?res.data[0].id:"";
 
+        }
+      },
+      async getlistSubTypeAll(flag,object) {
+        let res = await listSubTypeAllFun(qs.stringify(object));
+        if(res.code === 0) {
+          this.deviceModelArrAll = res.data;
+          this.deviceModelArr = flag?res.data.slice(0,4):res.data;
         }
       },
       async getlistSubType(payload,flag) {
@@ -451,7 +491,8 @@
         border-bottom: 1px solid rgba(220, 224, 230, 1);
         background-color: #ffffff;
         .device-status {
-          display: flex;
+          display: -webkit-box;
+          display: -ms-flexbox;
           font-size: 0.35rem;
           width: 8.51rem;
           color: #333;
@@ -642,6 +683,12 @@
         width: 20px;
       }
     }
+    .moreItem {
+      position: fixed;
+      right: 0.54rem;
+      width: 1.49rem;
+      bottom: 2.64rem;
+    }
     .showItem{
       width: 1.49rem;
       height: 1.49rem;
@@ -649,11 +696,10 @@
       overflow: auto;
       background: rgba(19, 194, 194, 1);
       border-radius: 50%;
-      position: fixed;
-      right: 0.54rem;
       line-height: 16px;
       display: table;
       font-size: 12px;
+      margin-bottom: 0.48rem;
       color: rgba(255,255,255,1);
       span {
         display: table-cell;
@@ -661,21 +707,9 @@
         font-weight: bold;
       }
     }
-    .addDev{
-      bottom: 2.52rem;
-      transition:all 0.2s 
+    .mb0 {
+      margin-bottom: 0;
     }
-    
-    .betchStartup{
-      bottom: 4.32rem;
-      transition:all 0.3s 
-    }
-    
-    .betchModf{
-      bottom: 6.12rem;
-      transition:all 0.4s 
-    }
-    
     .rightPopup {
       padding: 0 0.26rem;
       width: 8.93rem;
@@ -802,7 +836,7 @@
       .promiss-footer .popCancel {
         font-size: 18px;
         color: #1890FF;
-        background: #f6f8ff;
+        background:rgba(246,248,255,1)
       }
       .promiss-footer .popSure {
         background: #1890FF;
