@@ -47,7 +47,7 @@
         <calendar :range="calendar.range" :zero="calendar.zero" :lunar="calendar.lunar" :begin="calendar.begin" :end="calendar.end" :type="calendar.type" :value="calendar.value"  @select="calendar.select">
           
         </calendar>
-        <mt-button class="calendar-btn" :disabled="disabled" @click="selectDateCom">确定</mt-button>
+        <mt-button class="calendar-btn" @click="selectDateCom">确定</mt-button>
     </div>
   </mt-popup>
 </div>
@@ -130,7 +130,6 @@ export default {
       totalCount:null,
       totalMoney:null,
 
-      disabled:false,
       calendar:{
         range:true,
         lunar:false, //显示农历
@@ -140,13 +139,8 @@ export default {
         type:'datetime',
         value:[], //默认日期
         select:(begin,end)=>{
-            if (begin.length>0&&end.length>0) {
-              this.startDate = begin;
-              this.endDate = end;
-              this.disabled = false;
-            }else{
-              this.disabled = true;
-            }
+          this.startDate = begin;
+          this.endDate = end;
         }
     },
 
@@ -159,7 +153,6 @@ export default {
     this.dateCurrentTag = this.dateSlots[0].values[0];
     this.dateLevel = this.dateCurrentTag.value;
     this.calendar.value = [[...this.startDate],[...this.endDate]];
-    this.calendar.display = this.startDate.join('-')+'至'+this.endDate.join('-');
     this.dayReportFun();
     this.shopListFun();
   },
@@ -250,7 +243,15 @@ export default {
     openByDialog(){
       this.calendar.show=true;
       if (this.calendar.type === 'datetime') {
-         this.calendar.value = [[...this.startDate],[...this.endDate]];
+        if (this.startDate.length<=2) { //如果之前是月份，切换过来，默认显示一个星期
+            this.startDate = moment().subtract('days',6).format('YYYY-MM-DD').split('-');
+            this.endDate = moment().format('YYYY-MM-DD').split('-');
+        }
+        this.calendar.value = [[...this.startDate],[...this.endDate]];
+      }else if(this.calendar.type === 'month'){//如果之前是日期，切换过来，默认显示月份
+        this.startDate = [this.startDate[0],this.startDate[1]];
+        this.endDate = [this.endDate[0],this.endDate[1]];
+        this.calendar.value = [this.startDate,this.endDate];
       }
      
     },

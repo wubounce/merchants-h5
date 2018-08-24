@@ -379,20 +379,7 @@ export default {
                 },
             },
             // 自定义月份
-            multiMonths:[
-                {month: '一月',selected:false,monthNum:1},
-                {month: '二月',selected:false,monthNum:2},
-                {month: '三月',selected:false,monthNum:3},
-                {month: '四月',selected:false,monthNum:4},
-                {month: '五月',selected:false,monthNum:5},
-                {month: '六月',selected:false,monthNum:6},
-                {month: '七月',selected:false,monthNum:7},
-                {month: '八月',selected:false,monthNum:8},
-                {month: '九月',selected:false,monthNum:9},
-                {month: '十月',selected:false,monthNum:10},
-                {month: '十一月',selected:false,monthNum:11},
-                {month: '十二月',selected:false,monthNum:12}
-            ],
+            multiMonths:[],
             rangeBegin:[],
             rangeEnd:[],
         };
@@ -404,15 +391,6 @@ export default {
         value(){
             this.init();
         },
-        type(val,oldval){
-            console.log(val,oldval);
-            if (val==='month') {
-                console.log(123456);
-                this.multiMonths.forEach(i=>{
-                    i.selected = false;
-                });
-            }
-        }
     },
     mounted() {
         this.init();
@@ -463,16 +441,23 @@ export default {
             this.renderMonth();
         },
         renderMonth(){
-            this.multiMonths.forEach(i=>{
-                if (this.rangeBegin.length > 0) {
-                    let beginTime = Number(this.rangeBegin[1]);
-                    let endTime = Number(this.rangeEnd[1]);
-                    let stepTime = Number(i.monthNum);
-                    if (beginTime <= stepTime && endTime >= stepTime) {
-                        i.selected = true;
+            let temp = [];
+             for (let i = 1; i <= 12; i++) {
+               if (this.range) { // 范围
+                    let options = Object.assign({month: this.months[i-1],monthNum:i});
+                    if (this.rangeBegin.length > 0) {
+                        let beginTime = Number(new Date(this.rangeBegin[0], this.rangeBegin[1]));
+                        let endTime = Number(new Date(this.rangeEnd[0], this.rangeEnd[1]));
+                        let stepTime = Number(new Date(this.year, i));
+                        if (beginTime <= stepTime && endTime >= stepTime) {
+                            options.selected = true;
+                        }
                     }
+                    temp.push(options);
                 }
-            });
+
+             }
+            this.multiMonths = temp;
         },
         // 渲染日期
         render(y, m) {

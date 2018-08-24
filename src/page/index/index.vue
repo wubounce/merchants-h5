@@ -759,7 +759,7 @@ export default {
   },
   filters: {
     tofixd(value){
-     return Number(value).toFixed(2);
+     return value<0 ? '0.00' : Number(value).toFixed(2);
     }
   },
   components:{
