@@ -47,7 +47,7 @@
             </div>
           </div>
         </div>
-        <div class="offline-tip">离线：连续30分钟未在线的设备数量。可能由于断电，信号不稳定，模块、设备损坏等原因引起，请自行检查或联系客服报备。</div>
+        <div class="offline-tip" v-if="offlineTip"><span class="iconfont icon-guanbi" @click="offlineTip=false;"></span>  离线：连续30分钟未在线的设备数量。可能由于断电，信号不稳定，模块、设备损坏等原因引起，请自行检查或联系客服报备。</div>
       </div>
       <div class="noData" v-show="hasNoData">暂无设备</div>
       <div class="page-top">
@@ -180,8 +180,8 @@
         communicationArr: [{type:"脉冲"},{type:"串口"}],
         shopFlag: true,
         modelFlag: true,
-        subFlag: true
-
+        subFlag: true,
+        offlineTip:true,
       };
     },
     filters: { //过滤器，过滤2位小数
@@ -559,7 +559,7 @@
       padding-top: 6rem;
       }
     .page-top {
-      padding-top: 4.2rem;
+      padding-top: 5.07rem;
       height: 100%;
       box-sizing: border-box;
       .page-loadmore-wrapper {
@@ -863,9 +863,9 @@
       }
     
   .offline-tip {
-    font-size: 12px;
-    color: red;
-    padding: .1rem .3rem;
+    height: 1.17rem;
+    margin-top: 0;
+    border-radius: 0;
   }
 
 
