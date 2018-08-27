@@ -59,7 +59,7 @@ export default {
         this.list = res.data.items?[...this.list,...res.data.items]:[];  //分页添加
         this.list.length <= 0 ? this.noList = true:this.noList = false;
         this.total = res.data.total;
-        res.data.items.forEach((item)=>{
+        this.list.forEach((item)=>{
           if (item.isLock === 0) {
             item.isLock = true;
           } else {

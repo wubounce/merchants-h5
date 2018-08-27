@@ -61,6 +61,7 @@ const user = {
         commit('setMenu', data.data);
         setMenu(data.data);
       });
+
     },
     // 获取用户信息
     getUser ({ commit, state },userInfo) {

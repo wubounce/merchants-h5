@@ -1,5 +1,6 @@
 <template>
 <div class="shop-report-detail" v-title="title">
+    <div class="shop-title">{{date}}</div>
     <div class="tabledata">
         <div class="listcon">
           <span class="detail-name title-name">店铺名称</span>
@@ -28,6 +29,7 @@ export default {
        tableTitleType:'',
        list:[],
        noList:false,
+       date:null
     };
   },
   created(){
@@ -47,6 +49,7 @@ export default {
       let res = await shopReportFun(qs.stringify(payload));
       if (res.code === 0) {
         this.list = res.data.list;
+        this.date = res.data.date;
         this.list.length <= 0 ? this.noList = true:this.noList = false;
       }
       

@@ -15,8 +15,7 @@ import App from './App';
 import router from './router';
 import store from './store';
 
-import { getToken } from '@/utils/tool';
-
+import { getToken, getMenu } from '@/utils/tool';
 import VueAMap from 'vue-amap';
 Vue.use(VueAMap);
 import VueAwesomeSwiper from 'vue-awesome-swiper';
@@ -93,7 +92,7 @@ Vue.directive('focus', {
     el.focus();
   }
 });
-import { getMenu } from '@/utils/tool';
+
 //权限检查方法
 Vue.prototype.$_has = function(value) {
   let isExist=false;
