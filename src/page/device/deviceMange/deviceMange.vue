@@ -249,6 +249,7 @@
         this.shopFlag = true,
         this.modelFlag = true,
         this.list = [];
+        this.payload = null;
         this.getStateDevice();
         this._getList();
       },
