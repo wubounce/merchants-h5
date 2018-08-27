@@ -93,7 +93,7 @@
       <div class="content">
         <div class="shop-type">
           <div class="header">
-            <span class="header-title">所属店铺</span>
+            <span class="header-title pingFangSC-Medium">所属店铺</span>
             <p>全部</p>
             <span class="iconfont icon-xiangshangjiantou" @click="allShopList" :class="{'rotate': !shopFlag}"></span>
           </div>
@@ -105,7 +105,7 @@
           </ul>
         </div>
         <div class="device-type">
-          <p>设备类型</p>
+          <p class="pingFangSC-Medium">设备类型</p>
           <ul>
             <li class="deviceType-item" v-for="(item,index) in deviceTypeArr" :key="index" :class="{'select':index==selectDeviceTypeIndex}" @click="selectDeviceTypeClick(index)">
               <span>{{item.name}}</span>
@@ -115,7 +115,7 @@
         </div>
         <div class="shop-type">
           <div class="header">
-            <span class="header-title">设备型号</span>
+            <span class="header-title pingFangSC-Medium">设备型号</span>
             <p>全部</p>
             <span class="iconfont icon-xiangshangjiantou" @click="allModelList" :class="{'rotate': !modelFlag}"></span>
           </div>
@@ -127,7 +127,7 @@
           </ul>
         </div>
         <div class="communication-type">
-          <P>通信类型</p>
+          <P class="pingFangSC-Medium">通信类型</p>
           <ul>
             <li :class="{'select':index==selectCommunicationIndex}" @click="selectCommunicationClick(index)" v-for="(item,index) in communicationArr" :key="index">
               <span>{{item.type}}</span>
@@ -253,10 +253,11 @@
         this._getList();
       },
       popSure() {
-        let payload = {shopId:this.popShopId,parentTypeId:this.popDeviceTypeId,subTypeId:this.popDeviceModelId,communicateType:this.popCommunicationType,page:this.page,pageSize: this.pageSize};
+        this.page = 1;
+        this.payload = {shopId:this.popShopId,parentTypeId:this.popDeviceTypeId,subTypeId:this.popDeviceModelId,communicateType:this.popCommunicationType,page:this.page,pageSize: this.pageSize};
         this.list = [];
-        this._getList(payload);
-        this.getStateDevice(payload);
+        this._getList(this.payload);
+        this.getStateDevice(this.payload);
       },
       titleClick(index) {
         this.list = [];
@@ -364,7 +365,7 @@
         this.deviceModelArr = (this.modelFlag && this.deviceModelArrAll.length>0)?this.deviceModelArrAll.slice(0,4):this.deviceModelArrAll;
       },  
       async _getList(object)  { //获取设备
-        let payload = object?object:{machineState: this.index,page:this.page,pageSize: this.pageSize};
+        let payload = object ? object : {machineState: this.index,page:this.page,pageSize: this.pageSize};
         let res = await deviceListFun(qs.stringify(payload));
         if(res.code === 0) {
           if(this.popupVisible){

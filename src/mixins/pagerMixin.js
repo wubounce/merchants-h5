@@ -14,7 +14,8 @@ export default {
       bottomStatus: null,//底部上拉加载状态
       translate: 0,//
       moveTranslate: 0,
-      accountOnlySix:true //收支明细六个月记录
+      accountOnlySix:true, //收支明细六个月记录
+      payload: null
     };
   },
   computed: {
@@ -31,7 +32,11 @@ export default {
       this.page += 1;
       let allpage = Math.ceil(this.total/this.pageSize);
       if(this.page <= allpage){
-        this._getList();
+        if(this.payload) {
+          this._getList(this.payload);
+        }else{
+          this._getList();
+        }
       }else{
          this.accountOnlySix = true;
         this.allLoaded = true;//模拟数据加载完毕 禁用上拉加载
@@ -52,7 +57,11 @@ export default {
       // this.handleTopChange("loading");//下拉时 改变状态码
       this.page = 1;
       this.list = [];
-      this._getList();
+      if(this.payload) {
+        this._getList(this.payload);
+      }else{
+        this._getList();
+      }
       this.allLoaded = false;//下拉刷新时解除上拉加载的禁用
       // this.handleTopChange("loadingEnd")//数据加载完毕 修改状态码
       this.$refs.loadmore.onTopLoaded();

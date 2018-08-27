@@ -11,9 +11,9 @@
                 <mt-loadmore  :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" @translate-change="translateChange" :auto-fill="false" ref="loadmore">
                     <div class="listcon tableearn-list" v-for="(item,index) in  listdata" :key="index">
                         <div class="detail">
-                            <span class="listtime report-table-date">{{item.createTime | momentTime}}</span>
-                            <span  class="report-table-count">{{item.orderNo}}</span>
-                            <span  class="report-table-money">{{ item.type | showNegative }}{{item.money}}</span>
+                            <span class="report-table-date">{{item.createTime | momentTime}}</span>
+                            <span class="report-table-count">{{item.orderNo}}</span>
+                            <span class="report-table-money">{{ item.type | showNegative }}{{item.money}}</span>
                         </div>
                     </div>
                     <div v-if="allLoaded" class="nomore-data">没有更多了</div>
