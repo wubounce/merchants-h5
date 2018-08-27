@@ -77,7 +77,6 @@ export default {
     titleClick: function(index) {
       this.titleIndex = index;
       this.type = this.titleArr[this.titleIndex].value;
-      console.log(this.type);
       this.page = 1; //从第一页起
       this.list = [];
       this.allLoaded = false;//下拉刷新时解除上拉加载的禁用
