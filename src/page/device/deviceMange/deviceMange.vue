@@ -248,6 +248,7 @@
         this.popCommunicationType = '';
         this.shopFlag = true,
         this.modelFlag = true,
+        this.getCountDevice();
         this._getList();
       },
       popSure() {
@@ -719,7 +720,7 @@
     }
     .rightPopup {
       padding: 0 0.26rem;
-      width: 8.93rem;
+      width: 8.53rem;
       height: 100%;
       .content {
         padding-bottom: 1.5rem;overflow: hidden;overflow-y: auto;box-sizing: border-box;height: 100%;
@@ -748,8 +749,6 @@
         }
         .list {
           padding-top: .2rem;
-          max-height: 6rem;
-          overflow-y: scroll;
           .select {
             background:rgba(231,243,255,1); 
           }
@@ -883,6 +882,7 @@
   .paddingTop {
     padding-top: 3.5rem;
   }
+
 
 
 </style>

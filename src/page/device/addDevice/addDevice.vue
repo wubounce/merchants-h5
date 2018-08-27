@@ -210,11 +210,11 @@
           },
           firstType: {
             name: "",
-            value: ""
+            id: ""
           },
           secondType: {
             name: "",
-            value: ""
+            id: ""
           },
           functionType: {
             name: "未设置",
@@ -236,7 +236,11 @@
         this.fromdata.shopType.id = data.shopId;
         this.fromdata.shopType.name = data.shopName;
         this.fromdata.firstType.name = '';
-        this.fromdata.secondType.name = data.name;
+        this.fromdata.firstType.id = '';
+        this.fromdata.secondType.name = '';
+        this.fromdata.secondType.id = "";
+        this.fromdata.functionType.name = "未设置";
+        this.functionSetList = [];
       },
       machineselectpickertatusShop(data){
         this.companyVisible = data;
@@ -245,6 +249,9 @@
         this.fromdata.firstType.id = data.id;
         this.fromdata.firstType.name = data.name;
         this.fromdata.secondType.name = '';
+        this.fromdata.secondType.id = '';
+        this.functionSetList = [];
+        this.fromdata.functionType.name = "未设置";
       },
       machineselectpickertatusFirst(data){
         this.parentType = data;
@@ -252,6 +259,7 @@
       machineselectpickerFun(data){ //获取二级类型
         this.fromdata.secondType.id = data.id;
         this.fromdata.secondType.name = data.name;
+        this.functionSetList = [];
       },
       machineselectpickertatusFun(data){
         this.subType = data;
@@ -405,24 +413,26 @@
           if(res.code === 0) {
             this.functionTempletType = res.data.functionTempletType;
             this.functionSetList = res.data.list;
-            this.fromdata.functionType.name = "已设置";
             this.fromdata.communicateType = res.data.communicateType;
             this.functionSetList.forEach(item=>{
               item.ifOpen=item.ifOpen === 0?(!item.ifOpen) : (!!item.ifOpen);
             });
             if(Number(this.fromdata.communicateType)=== Number(this.fromdata.smCommunicateType)){
-               this.setModelShow= true;
-               this.modelShow = false;
-               this.title = "功能列表";
+              this.setModelShow= true;
+              this.modelShow = false;
+              this.title = "功能列表";
             }else{
-               this.$toast("您扫描的二维码和您选择的设备型号不一致");
-               return false;
-            }             
+              this.$toast("您扫描的二维码和您选择的设备型号不一致");
+              return false;
+            }        
           }
           else {
             this.$toast(res.msg);
-          }
+          }        
         }
+        this.setModelShow= true;
+        this.modelShow = false;
+        this.title = "功能列表";
       },
       async submit() {  //提交
         if(!this.fromdata.machineName) {
@@ -524,8 +534,8 @@
         if(!this.fromdata.company && !this.fromdata.communicateType) {
           this.$toast("请扫描NQT码");
           return false;
-        } 
-        if(!this.fromdata.shopType.id && !this.fromdata.firstType.id && !this.fromdata.secondType.id ) {
+        }    
+        if(!this.fromdata.shopType.id || !this.fromdata.firstType.id || !this.fromdata.secondType.id ) {
           this.$toast("请先选择设备型号");
           return false;
         }
@@ -580,6 +590,7 @@
                
         }
         if(flag1 && flag2 && flag3 && flag4){
+          this.fromdata.functionType.name = "已设置";
           this.setModelShow= false;
           this.modelShow = true;
           this.title = "新增设备";
@@ -911,5 +922,9 @@
         background-color: rgba(14, 14, 255, 0.05);
       }
     }
+  }
+
+  .shoppicker .picker {
+    height: 7rem;
   }
 </style>
