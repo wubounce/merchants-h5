@@ -149,7 +149,7 @@ export default {
           let res = await batchStartOnFun(qs.stringify(payload));
           if(res.code === 0) {
             let instance = this.$toast({
-                message: '设置成功。现在是批量启动成功',
+                message: '设置成功',
                 iconClass: 'mint-toast-icon mintui mintui-success'
               });
               setTimeout(() => {
