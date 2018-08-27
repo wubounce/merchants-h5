@@ -112,4 +112,5 @@ export default {
 </script>
 <style type="text/css" lang="scss" scoped>
   @import "../../assets/scss/management";
+
 </style>
