@@ -250,6 +250,7 @@
         this.modelFlag = true,
         this.list = [];
         this.payload = null;
+        this.page = 1;
         this.getStateDevice();
         this._getList();
       },
