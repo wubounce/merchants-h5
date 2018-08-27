@@ -248,6 +248,7 @@
         this.popCommunicationType = '';
         this.shopFlag = true,
         this.modelFlag = true,
+        this.list = [];
         this.getStateDevice();
         this._getList();
       },
