@@ -178,6 +178,10 @@
          if(res.code === 0) {
           this.deviceDetail= res.data;
           this.functionList = res.data.functionList;
+          let comment = res.comment;
+          if(comment) {
+            this.$toast("此设备数据存在问题，建议删除重新绑定");
+          }
           if(res.data.hasTzj) { //判断是否有筒自洁功能
             this.tzjShow = true;
           }else {

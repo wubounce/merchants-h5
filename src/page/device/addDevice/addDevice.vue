@@ -244,6 +244,7 @@
           this.fromdata.functionType.name = "未设置";
           this.functionSetList = [];
           this.keepFunctionArr = [];
+          this.subTypeName = "";
         }else {
           this.fromdata.shopType.id = data.shopId;
           this.fromdata.shopType.name = data.shopName;
@@ -261,6 +262,7 @@
           this.functionSetList = [];
           this.keepFunctionArr = [];
           this.fromdata.functionType.name = "未设置";
+          this.subTypeName = "";
         }else{
           this.fromdata.firstType.id = data.id;
           this.fromdata.firstType.name = data.name;
@@ -276,6 +278,7 @@
           this.functionSetList = [];
           this.keepFunctionArr = [];
           this.fromdata.functionType.name = "未设置";
+          this.subTypeName = "";
         }else {
           this.fromdata.secondType.id = data.id;
           this.fromdata.secondType.name = data.name;
@@ -434,11 +437,16 @@
       },
       async getFunctionSetList() {  //获取功能列表数据 
         if(this.keepFunctionArr.length >0 ) {
-          let arr = [].concat(JSON.parse(JSON.stringify(this.keepFunctionArr))); 
-          this.functionSetList = arr;
-          this.setModelShow= true;
-          this.modelShow = false;
-          this.title = "功能列表";
+          if(Number(this.fromdata.communicateType)=== Number(this.fromdata.smCommunicateType)){
+            let arr = [].concat(JSON.parse(JSON.stringify(this.keepFunctionArr))); 
+            this.functionSetList = arr;
+            this.setModelShow= true;
+            this.modelShow = false;
+            this.title = "功能列表";
+          }else{
+            this.$toast("您扫描的NQT和选择的设备型号不一致");
+            return flase;
+          }        
         }else{         
           if(this.functionSetList.length === 0){
             let payload = {subTypeId: this.fromdata.secondType.id,shopId: this.fromdata.shopType.id} ;     
@@ -449,6 +457,7 @@
               this.fromdata.communicateType = res.data.communicateType;
               this.functionSetList.forEach(item=>{
                 item.ifOpen=item.ifOpen === 0?(!item.ifOpen) : (!!item.ifOpen);
+                item.functionCode = item.functionCode?1:item.functionCode;
               });
               this.keepFunctionArr= [].concat(JSON.parse(JSON.stringify(res.data.list)));
               if(Number(this.fromdata.communicateType)=== Number(this.fromdata.smCommunicateType)){
@@ -457,16 +466,21 @@
                 this.title = "功能列表";
               }else{
                 this.$toast("您扫描的NQT和选择的设备型号不一致");
-                return false;
+                return;
               } 
             }
             else {
               this.$toast(res.msg);
             }        
           }else {
-            this.setModelShow= true;
-            this.modelShow = false;
-            this.title = "功能列表";
+            if(Number(this.fromdata.communicateType)=== Number(this.fromdata.smCommunicateType)){
+              this.setModelShow= true;
+              this.modelShow = false;
+              this.title = "功能列表";
+            }else{
+              this.$toast("您扫描的NQT和选择的设备型号不一致");
+              return flase;
+            }
           }
         }
       },
@@ -607,6 +621,11 @@
           if(item.functionPrice==='' || !reg1.test(Number(item.functionPrice))){          
             this.$toast("原价填写格式错误，请输入非空正整数，最多2位小数");
              flag2 = false;
+            break;
+          }
+          if(Number(this.fromdata.communicateType)=== 0 && !reg.test(Number(item.functionCode))){
+            flag3 = false;
+            this.$toast("脉冲填写格式错误，请填写非0非空正整数");
             break;
           }
           if(Number(this.fromdata.communicateType)=== 0 && !reg.test(Number(item.functionCode))){
