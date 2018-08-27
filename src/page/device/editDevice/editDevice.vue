@@ -97,6 +97,7 @@
         functionSetList: [],
         jsonArr:[],
         getJsonArr:[],
+        keepFunctionArr: [],
         slotsShop: [
         {
           flex: 1,
@@ -172,57 +173,11 @@
       checkItem(index) {
         this.selectedIndex = index;
       },
-       checkData(val,index,name,flag) {
-        let reg = /^\+?[1-9][0-9]*$/;  //验证非0整数
-        let reg1 = /^[0-9]+([.]{1}[0-9]{1,2})?$/;  //验证非0正整数和带一位小数字非0正整数
-        if(flag ===0 && !reg.test(val)) {
-          if(!val){
-            this.$toast("输入内容不能为空");
-            this.nullDisable = true;
-          }else{
-          this.$toast("耗时格式有误");
-          this.timeIsDisable= true;
-          }
-        }else{
-          this.timeIsDisable= false;
-          this.nullDisable = false;
-        }
-        if(flag ===1 && !reg1.test(val)) {
-          if(!val){
-            this.$toast("输入内容不能为空");
-            this.nullDisable = true;
-          }else{
-          this.$toast("价格格式有误");
-          this.priceIsDisable = true;
-          }
-        }else{
-          this.priceIsDisable = false;
-          this.nullDisable = false;
-        }
-        if(flag ===2 && !reg.test(val)) {
-          if(!val){
-            this.$toast("输入内容不能为空");
-            this.nullDisable = true;
-          }else{
-          this.$toast("脉冲格式有误");
-          this.codeIsDisable = true;
-          }
-        }else{
-          this.codeIsDisable= false;
-          this.nullDisable = false;
-        }
-        if(this.nullDisable || this.timeIsDisable || this.priceIsDisable || this.codeIsDisable){
-          this.isDisable = true;
-          return false;
-        }else{
-          this.isDisable = false;
-        }
-      },
       getCheckShop() {
         if(this.fromdata.shopType.name !== this.selectListA[this.selectedIndex].shopName){
           this.fromdata.shopType.name = this.selectListA[this.selectedIndex].shopName;
           this.fromdata.shopType.id = this.selectListA[this.selectedIndex].shopId;
-          this.functionSetList = [];
+          this.functionList = [];
           this.fromdata.functionType.name = "未设置";
         }else{
           this.fromdata.shopType.name = this.selectListA[this.selectedIndex].shopName;
@@ -279,6 +234,7 @@
           this.functionList.forEach(item=>{
             item.ifOpen=item.ifOpen === "0"?(!!item.ifOpen) : (!item.ifOpen);
           });
+          this.keepFunctionArr= [].concat(JSON.parse(JSON.stringify(this.functionList)));
         }
         else {
            this.$toast(res.msg);
@@ -366,9 +322,14 @@
         if(!this.fromdata.company && !this.fromdata.communicateType) {
           this.$toast("请扫描NQT码");
           return false;
-        }       
+        } 
+        if(this.keepFunctionArr.length >0 ) {
+          let arr = [].concat(JSON.parse(JSON.stringify(this.keepFunctionArr))); 
+          this.functionList = arr;
           this.setModelShow= true;
           this.modelShow = false;
+          this.title = "功能列表";         
+        }          
       },
       goNext(){ //功能列表确认
         let flag1 = true;
@@ -421,6 +382,7 @@
           this.setModelShow= false;
           this.modelShow = true;
           this.title = "编辑设备";
+          this.keepFunctionArr = [].concat(JSON.parse(JSON.stringify(this.functionList)));
         }
       },
       goBack(){ //功能列表返回

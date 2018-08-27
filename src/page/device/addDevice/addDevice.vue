@@ -539,7 +539,7 @@
             }, 2000);
           return false;
         }
-        if(fromdata.functionType.name === "未设置") {
+        if(this.fromdata.functionType.name === "未设置") {
           let instance = this.$toast({
             message: '请设置功能列表'
           });
@@ -601,7 +601,6 @@
         let reg = /^\+?[1-9][0-9]*$/; //非0正整数
         let reg1 = /^[0-9]+([.]{1}[0-9]{1,2})?$/; //可以0带二位小数的正整数
         let reg2 = /^[1-9]+([.]{1}[0-9]{1,2})?$/; //不可以0带二位小数的正整数
-        console.log(this.functionSetList);
         for(let i = 0;i < len;i++){
           let item = this.functionSetList[i];
           if(item.ifOpen === false){
@@ -654,8 +653,6 @@
         }
       },
       goBack(){ //功能列表返回
-       this.functionSetList = [];
-       console.log(this.keepFunctionArr);
        this.setModelShow= false;
        this.modelShow = true;
        this.title = "新增设备";
