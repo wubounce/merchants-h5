@@ -443,3 +443,8 @@ export default {
 <style lang="scss" scoped>
   @import "../../assets/scss/report/report";
 </style>
+<style>
+  @media screen and (max-width: 360px) {
+    .slectdata,.echart-title {  font-size: 12px !important; }
+  }
+</style>
