@@ -57,7 +57,7 @@
     <section class="fun-item-bd funlist" style="-webkit-overflow-scrolling:touch;overflow-y:scroll;">
       <div v-for="(item,index) in functionSetList" :key="index">
         <span class="fun-list-item">{{item.functionName}}</span>
-        <input type="number" class="fun-list-item" v-model="item.needMinutes"   min=0/>
+        <input type="number" class="fun-list-item" v-model="item.needMinutes"  min=0/>
         <input type="number" class="fun-list-item" v-model="item.functionPrice"  min=0/>
         <input type="number" class="fun-list-item" v-model="item.functionCode" v-if="isShow2"  min=0/>
         <p class="fun-list-item">
@@ -432,8 +432,10 @@
           return false;
         }
       },
-      async getFunctionSetList() {  //获取功能列表数据
+      async getFunctionSetList() {  //获取功能列表数据 
         if(this.keepFunctionArr.length >0 ) {
+          let arr = [].concat(JSON.parse(JSON.stringify(this.keepFunctionArr))); 
+          this.functionSetList = arr;
           this.setModelShow= true;
           this.modelShow = false;
           this.title = "功能列表";
@@ -442,22 +444,21 @@
             let payload = {subTypeId: this.fromdata.secondType.id,shopId: this.fromdata.shopType.id} ;     
             let res = await getFunctionSetListFun(qs.stringify(payload));
             if(res.code === 0) {
-              this.functionTempletType = res.data.functionTempletType;
+              this.functionTempletType = res.data.functionTempletType; 
               this.functionSetList = res.data.list;
               this.fromdata.communicateType = res.data.communicateType;
               this.functionSetList.forEach(item=>{
                 item.ifOpen=item.ifOpen === 0?(!item.ifOpen) : (!!item.ifOpen);
               });
-              this.keepFunctionArr= [].concat(JSON.parse(JSON.stringify(this.functionSetList))); 
+              this.keepFunctionArr= [].concat(JSON.parse(JSON.stringify(res.data.list)));
               if(Number(this.fromdata.communicateType)=== Number(this.fromdata.smCommunicateType)){
                 this.setModelShow= true;
                 this.modelShow = false;
                 this.title = "功能列表";
-
               }else{
-                this.$toast("您扫描的二维码和您选择的设备型号不一致");
+                this.$toast("您扫描的NQT和选择的设备型号不一致");
                 return false;
-              }   
+              } 
             }
             else {
               this.$toast(res.msg);
@@ -524,7 +525,7 @@
             }, 2000);
           return false;
         }
-        if(!this.functionSetList) {
+        if(fromdata.functionType.name === "未设置") {
           let instance = this.$toast({
             message: '请设置功能列表'
           });
@@ -566,15 +567,15 @@
 
       },
       toFunctionSeting() { //切换到功能列表
-       if(!this.fromdata.company && !this.fromdata.communicateType) {
+        if(!this.fromdata.company && !this.fromdata.communicateType) {
           this.$toast("请扫描NQT码");
           return false;
-        } 
+        }
         if(!this.fromdata.shopType.id || !this.fromdata.firstType.id || !this.fromdata.secondType.id ) {
           this.$toast("请先选择设备型号");
           return false;
         }
-        this.getFunctionSetList();      
+        this.getFunctionSetList();   
       },
       goNext(){ //功能列表确认
         let flag1 = true;
@@ -586,6 +587,7 @@
         let reg = /^\+?[1-9][0-9]*$/; //非0正整数
         let reg1 = /^[0-9]+([.]{1}[0-9]{1,2})?$/; //可以0带二位小数的正整数
         let reg2 = /^[1-9]+([.]{1}[0-9]{1,2})?$/; //不可以0带二位小数的正整数
+        console.log(this.functionSetList);
         for(let i = 0;i < len;i++){
           let item = this.functionSetList[i];
           if(item.ifOpen === false){
@@ -629,10 +631,12 @@
           this.setModelShow= false;
           this.modelShow = true;
           this.title = "新增设备";
+          this.keepFunctionArr = [].concat(JSON.parse(JSON.stringify(this.functionSetList)));
         }
       },
       goBack(){ //功能列表返回
-       this.functionSetList = this.keepFunctionArr;
+       this.functionSetList = [];
+       console.log(this.keepFunctionArr);
        this.setModelShow= false;
        this.modelShow = true;
        this.title = "新增设备";
