@@ -437,30 +437,24 @@
       },
       async getFunctionSetList() {  //获取功能列表数据 
         if(this.keepFunctionArr.length >0 ) {
-          if(Number(this.fromdata.communicateType)=== Number(this.fromdata.smCommunicateType)){
-            let arr = [].concat(JSON.parse(JSON.stringify(this.keepFunctionArr))); 
-            this.functionSetList = arr;
-            this.setModelShow= true;
-            this.modelShow = false;
-            this.title = "功能列表";
-          }else{
-            this.$toast("您扫描的NQT和选择的设备型号不一致");
-            return flase;
-          }        
+          let arr = [].concat(JSON.parse(JSON.stringify(this.keepFunctionArr))); 
+          this.functionSetList = arr;
+          this.setModelShow= true;
+          this.modelShow = false;
+          this.title = "功能列表";       
         }else{         
           if(this.functionSetList.length === 0){
             let payload = {subTypeId: this.fromdata.secondType.id,shopId: this.fromdata.shopType.id} ;     
             let res = await getFunctionSetListFun(qs.stringify(payload));
             if(res.code === 0) {
-              this.functionTempletType = res.data.functionTempletType; 
-              this.functionSetList = res.data.list;
               this.fromdata.communicateType = res.data.communicateType;
-              this.functionSetList.forEach(item=>{
-                item.ifOpen=item.ifOpen === 0?(!item.ifOpen) : (!!item.ifOpen);
-                item.functionCode = item.functionCode?1:item.functionCode;
-              });
-              this.keepFunctionArr= [].concat(JSON.parse(JSON.stringify(res.data.list)));
               if(Number(this.fromdata.communicateType)=== Number(this.fromdata.smCommunicateType)){
+                this.functionTempletType = res.data.functionTempletType; 
+                this.functionSetList = res.data.list;
+                this.functionSetList.forEach(item=>{
+                 item.ifOpen=item.ifOpen === 0?(!item.ifOpen) : (!!item.ifOpen);
+                });
+                this.keepFunctionArr= [].concat(JSON.parse(JSON.stringify(res.data.list)));
                 this.setModelShow= true;
                 this.modelShow = false;
                 this.title = "功能列表";
@@ -468,19 +462,15 @@
                 this.$toast("您扫描的NQT和选择的设备型号不一致");
                 return;
               } 
+             
             }
             else {
               this.$toast(res.msg);
             }        
-          }else {
-            if(Number(this.fromdata.communicateType)=== Number(this.fromdata.smCommunicateType)){
-              this.setModelShow= true;
-              this.modelShow = false;
-              this.title = "功能列表";
-            }else{
-              this.$toast("您扫描的NQT和选择的设备型号不一致");
-              return flase;
-            }
+          }else {      
+            this.setModelShow= true;
+            this.modelShow = false;
+            this.title = "功能列表";
           }
         }
       },
