@@ -109,7 +109,7 @@
     data() {
       return {
         deviceDetail: [],
-        tzjShow: true,
+        tzjShow: false,
         functionSetListShow: true,
         functionCodeShow: false,
         title: '设备详情',

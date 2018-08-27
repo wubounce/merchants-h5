@@ -248,7 +248,7 @@
         this.popCommunicationType = '';
         this.shopFlag = true,
         this.modelFlag = true,
-        this.getCountDevice();
+        this.getStateDevice();
         this._getList();
       },
       popSure() {
@@ -316,15 +316,6 @@
         let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
         let r = url.match(reg);  //匹配目标参数
         if (r != null) return unescape(r[2]); return null; //返回参数值
-      },
-      async getCountDevice(){      
-        let res = await countDeviceFun();
-         if(res.code === 0) {
-          this.titleArr= res.data; 
-        }
-        else {
-          this.$toast(res.msg);
-        }
       },
       async getStateDevice(payload){      
         let res = await stateMachineFun(qs.stringify(payload));
@@ -420,7 +411,7 @@
       },
     },
     created() {
-      this.getCountDevice();
+      this.getStateDevice();
     },
     
     components: {
