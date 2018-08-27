@@ -32,13 +32,14 @@ export default {
       this.page += 1;
       let allpage = Math.ceil(this.total/this.pageSize);
       if(this.page <= allpage){
+        this.payload = {machineState:this.index,shopId:this.popShopId,parentTypeId:this.popDeviceTypeId,subTypeId:this.popDeviceModelId,communicateType:this.popCommunicationType,page:this.page,pageSize: this.pageSize};
         if(this.payload) {
           this._getList(this.payload);
         }else{
           this._getList();
         }
       }else{
-         this.accountOnlySix = true;
+        this.accountOnlySix = true;
         this.allLoaded = true;//模拟数据加载完毕 禁用上拉加载
       }
       // this.handleBottomChange("loadingEnd");//数据加载完毕 修改状态码

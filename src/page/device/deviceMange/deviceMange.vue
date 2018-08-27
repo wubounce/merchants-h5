@@ -255,7 +255,7 @@
       },
       popSure() {
         this.page = 1;
-        this.payload = {shopId:this.popShopId,parentTypeId:this.popDeviceTypeId,subTypeId:this.popDeviceModelId,communicateType:this.popCommunicationType,page:this.page,pageSize: this.pageSize};
+        this.payload = {machineState:this.index,shopId:this.popShopId,parentTypeId:this.popDeviceTypeId,subTypeId:this.popDeviceModelId,communicateType:this.popCommunicationType,page:this.page,pageSize: this.pageSize};
         this.list = [];
         this._getList(this.payload);
         this.getStateDevice(this.payload);
@@ -265,8 +265,8 @@
         this.page = 1; //从第一页起 
         this.allLoaded = false;//下拉刷新时解除上拉加载的禁用
         this.index = index;
-        let payload1 = {machineState:this.index,shopId:this.popShopId,parentTypeId:this.popDeviceTypeId,subTypeId:this.popDeviceModelId,communicateType:this.popCommunicationType,page:this.page,pageSize: this.pageSize};
-        this._getList(payload1);
+        this.payload = {machineState:this.index,shopId:this.popShopId,parentTypeId:this.popDeviceTypeId,subTypeId:this.popDeviceModelId,communicateType:this.popCommunicationType,page:this.page,pageSize: this.pageSize};
+        this._getList(this.payload);
 
       },
       toAddItem() {
