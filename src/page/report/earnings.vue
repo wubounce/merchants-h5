@@ -193,8 +193,8 @@ export default {
           this.reportCount.push(item.count);
           this.reportMoney.push(item.money);
         });
-        this.orderMax = calMax(this.reportCount);//订单Y轴最大值
-        this.moneyMax = calMax(this.reportMoney);//金额Y轴最大值
+        this.orderMax = calMax(this.reportCount)>0 ? calMax(this.reportCount) : 1;//订单Y轴最大值
+        this.moneyMax = calMax(this.reportMoney)>0 ? calMax(this.reportMoney) : 1;//金额Y轴最大值
         this.orderMin = calMin(this.reportCount);//订单Y轴最大值
         this.moneyMin = calMin(this.reportMoney);//金额Y轴最大值
         this.lsitdata = res.data.list;
@@ -319,9 +319,9 @@ export default {
           {   name: '收益金额',
               type: 'value',
               min:this.moneyMin,
-              max:this.moneyMax>0?this.moneyMax : 1,
+              max:this.moneyMax,
               splitNumber:4,
-              interval:this.moneyMax>0? (this.moneyMax-this.moneyMin)/4: 1/4,
+              interval:(this.moneyMax-this.moneyMin)/4,
               axisLine:{
                 show:false,
                 lineStyle:{
@@ -348,9 +348,9 @@ export default {
           {   name: '订单数量',
               type: 'value',
               min:this.orderMin,
-              max:this.orderMax>0?this.orderMax : 1,
+              max:this.orderMax,
               splitNumber:4,
-              interval:this.orderMax>0? (this.orderMax-this.orderMin)/4: 1/4,
+              interval:(this.orderMax-this.orderMin)/4,
               axisLine:{
                 show:false,
                 lineStyle:{

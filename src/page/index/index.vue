@@ -242,7 +242,7 @@ export default {
           this.barseriesData.push(res.data[i]);
           this.barxAxisData.push(MachineStatus(i));
         }
-        this.barMax = calMax(this.barseriesData);//Y轴最大值
+        this.barMax = calMax(this.barseriesData)>0? calMax(this.barseriesData): 1;//Y轴最大值
         this.barchart.setOption(this.barOChartOPtion);
       }
       
@@ -276,7 +276,7 @@ export default {
           }
           
         });
-        this.lineMax = calMax(this.lineseriesData);//Y轴最大值
+        this.lineMax = calMax(this.lineseriesData)>0 ? calMax(this.lineseriesData):1;//Y轴最大值
         this.lineMin = calMin(this.lineseriesData);
         // 把配置和数据放这里
         this.linechart.setOption(this.lineChartOption);
@@ -470,9 +470,9 @@ export default {
           type : 'value',
           offset:10,
           min:this.lineMin,
-          max:this.lineMax>0?this.lineMax : 1,
+          max:this.lineMax,
           splitNumber:4,
-          interval:this.lineMax>0? (this.lineMax-this.lineMin)/4: 1/4,
+          interval:(this.lineMax-this.lineMin)/4,
           axisLine:{
             show:false,
             lineStyle:{
@@ -586,9 +586,9 @@ export default {
             textStyle: {color: '#999'}
           },
           min:0,
-          max:this.barMax>0?this.barMax : 1,
+          max:this.barMax,
           splitNumber:5,
-          interval:this.barMax>0? this.barMax/4: 1/4,
+          interval:this.barMax/4,
         }],
         series: [{
           name: '设备监控',
