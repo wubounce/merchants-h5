@@ -2,7 +2,7 @@
     <section v-title="title">
         <div class="tableearn">
             <div class="top">
-                <p class='showDate'>当月收益：{{monthMoney}} 元</p>
+                <p class='showDate'><span>{{date}}</span><span style="margin-left: 0.35rem;">收益：{{monthMoney}} 元</span></p>
                 <p class="black"></p>
                 <div class="table-header">
                     <span class="report-table-date">时间</span>
@@ -74,6 +74,7 @@ export default {
     created() {
         this.getMonthIncome();
         this.monthMoney = this.change(this.$route.query.monthMoney);
+        this.date = this.$route.query.dateName;
     }
 };
 </script>

@@ -806,8 +806,7 @@ export default {
       } else {
         this.ModalHelper.beforeClose();
       }
-    },
-
+    }
   }
 };
 </script>
