@@ -842,6 +842,27 @@ export default {
       else if(from.name == 'shopDetail'){
         location.reload();
       }
+    },
+    popupVisible: function () {
+      if (this.popupVisible) {
+        this.ModalHelper.afterOpen();
+      } else {
+        this.ModalHelper.beforeClose();
+      }
+    },
+    placeVisible: function () {
+      if (this.placeVisible) {
+        this.ModalHelper.afterOpen();
+      } else {
+        this.ModalHelper.beforeClose();
+      }
+    },
+    deviceDetail: function () {
+      if (this.deviceDetail) {
+        this.ModalHelper.afterOpen();
+      } else {
+        this.ModalHelper.beforeClose();
+      }
     }
   }
 };
