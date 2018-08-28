@@ -5,19 +5,19 @@
       <p>更多<i class="iconfont icon-nextx"></i></p>
     </div>
     <div class="earnings-wrap">
-      <router-link to='/index/totalincome'>
+      <router-link :to="{ name: 'totalincome', query:{allMoney: allMoney } }">
         <div class="earning-type">
           <p style='padding-top:0.12rem;'>总收益 (元)</p>
           <p class="earning-type-size">{{allMoney?allMoney:'0.00'|  tofixd}}</p>
         </div>
       </router-link>
-      <router-link :to="{ name: 'todayincome', query:{dateName:thisDay , fromMonth: fromMonth } }">
+      <router-link :to="{ name: 'todayincome', query:{dateName:thisDay , fromMonth: fromMonth , todayMoney: todayMoney } }">
         <div class="today-earning">
-          <p style="margin-top: 0.35rem;padding-top: 0.4rem;">今日收益 (元)</p>
+          <p style="margin-top: 0.35rem;padding-top: 0.4rem;">今日收益 (元)</p>
           <p class="today-earning-size">{{todayMoney?todayMoney:'0.00'|  tofixd}}</p>
         </div>
       </router-link>
-      <router-link :to="{ name: 'monthincome', query:{dateName:thisMonth} }">
+      <router-link :to="{ name: 'monthincome', query:{ dateName: thisMonth , monthMoney: monthMoney } }">
         <div class="earning-type">
           <p style='padding-top:0.12rem;'>当月收益 (元)</p>
           <p class="earning-type-size">{{monthMoney?monthMoney:'0.00'|  tofixd}}</p>

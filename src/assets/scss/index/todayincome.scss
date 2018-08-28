@@ -1,84 +1,149 @@
-.tableearn {
+section {
     height: 100%;
-    .showDate {
-        align-items: center;
-        background-color: #fff;
-        box-sizing: border-box;
-        color: #999999;
-        display: -ms-flexbox;
-        display: flex;
-        font-size: 14px;
-        height: 1.04rem;
-        line-height: 1.04rem;
-        padding: 0 .4rem;
-        position: relative;
-        white-space: nowrap;
-        margin-bottom: 0.3rem;
-
-    }
-    .listcon {
-        align-items: center;
-        background-color: #fff;
-        box-sizing: border-box;
-        color: #333;
-        font-size: 14px;
-        display: -ms-flexbox;
-        display: flex;
-        height: 1.04rem;
-        line-height: 1.04rem;
-        padding: 0 .4rem;
-        position: relative;
-        white-space: nowrap;
-        border-bottom: 1px solid #f9f8ff;
-        .detail {
-            align-items: center;
+    .tableearn {
+        height: 100%;
+        .top {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 999;
+            .black {
+                height: 0.3rem;
+                background-color: #efeff4;
+            }
+            .showDate {
+                background-color: #fff;
+                box-sizing: border-box;
+                color: #999999;
+                display: -ms-flexbox;
+                display: flex;
+                justify-content: space-between;
+                font-size: 14px;
+                height: 1.04rem;
+                line-height: 1.04rem;
+                padding: 0 .4rem;
+            }
+            .listcon {
+                align-items: center;
+                background-color: #fff;
+                box-sizing: border-box;
+                color: #333;
+                font-size: 14px;
+                display: -ms-flexbox;
+                display: flex;
+                height: 1.04rem;
+                line-height: 1.04rem;
+                padding: 0 .4rem;
+                position: relative;
+                white-space: nowrap;
+                border-bottom: 1px solid #f9f8ff;
+                .detail {
+                    align-items: center;
+                    box-sizing: border-box;
+                    display: -ms-flexbox;
+                    display: flex;
+                    //justify-content: space-between;
+                    font-size: 14px;
+                    height: 1.04rem;
+                    line-height: 1.04rem;
+                    position: relative;
+                    white-space: nowrap;
+                }
+                .nomore-data {
+                    text-align: center;
+                    color: #999;
+                    font-size: 12px;
+                    margin-bottom: 0.266667rem;
+                }
+                .report-table-date {
+                    width: 2.0rem;
+                }
+                .report-table-count {
+                    width: 5.5rem;
+                    text-align: center;
+                }
+                .report-table-money {
+                    width: 1.7rem;
+                    text-align: right;
+                }
+                .listtime {
+                    color: #1890FF;
+                }
+            }
+            .table-header {
+                span {
+                    font-weight: 600;
+                }
+            }
+        }
+        .bottom {
+            height: 100%;
+            padding-top: 2.3rem;    
             box-sizing: border-box;
-            display: -ms-flexbox;
-            display: flex;
-            //justify-content: space-between;
-            font-size: 14px;
-            height: 1.04rem;
-            line-height: 1.04rem;
-            position: relative;
-            white-space: nowrap;
+            overflow: scroll;
+            overflow-y: auto;
+            .listcon {
+                align-items: center;
+                background-color: #fff;
+                box-sizing: border-box;
+                color: #333;
+                font-size: 14px;
+                display: -ms-flexbox;
+                display: flex;
+                height: 1.04rem;
+                line-height: 1.04rem;
+                padding: 0 .4rem;
+                position: relative;
+                white-space: nowrap;
+                border-bottom: 1px solid #f9f8ff;
+                .detail {
+                    align-items: center;
+                    box-sizing: border-box;
+                    display: -ms-flexbox;
+                    display: flex;
+                    //justify-content: space-between;
+                    font-size: 14px;
+                    height: 1.04rem;
+                    line-height: 1.04rem;
+                    position: relative;
+                    white-space: nowrap;
+                }
+                .nomore-data {
+                    text-align: center;
+                    color: #999;
+                    font-size: 12px;
+                    margin-bottom: 0.266667rem;
+                }
+                .report-table-date {
+                    width: 2.0rem;
+                }
+                .report-table-count {
+                    width: 5.5rem;
+                    text-align: center;
+                }
+                .report-table-money {
+                    width: 1.7rem;
+                    text-align: right;
+                }
+                .listtime {
+                    color: #1890FF;
+                }
+                &:nth-child(2n-1) {
+                    background: #FAFCFE !important;
+                }
+            }
+            
+            .page-loadmore-wrapper {
+                height: 100%;
+                overflow: scroll;
+                -webkit-overflow-scrolling: touch;
+                .nodata {
+                    text-align: center;
+                    color: #999;
+                    font-size: 16px;
+                    padding-top: 4rem;
+                }
+            }
         }
-        .nomore-data {
-            text-align: center;
-            color: #999;
-            font-size: 12px;
-            margin-bottom: 0.266667rem;
-        }
-        .report-table-date {
-            width: 2.0rem;
-        }
-        .report-table-count {
-            width: 5.5rem;
-            text-align: center;
-        }
-        .report-table-money {
-            width: 1.7rem;
-            text-align: right;
-        }
-        .listtime {
-            color: #1890FF;
-        }
-        &:nth-child(2n-1) {
-            background: #FAFCFE !important;
-        }
-    }
-    .nodata {
-        text-align: center;
-        color: #999;
-        font-size: 16px;
-        padding-top: 4rem;
-    }
-    .table-header {
-        span {
-            font-weight: 600;
-        }
-    }
-    .page-loadmore-wrapper {
-        overflow: scroll;
-        -webkit-overflow-scrolling: touch;
     }
 }

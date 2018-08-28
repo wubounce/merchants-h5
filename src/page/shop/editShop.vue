@@ -85,6 +85,7 @@ export default {
       placeholdercontent:'开启预约功能后可填',
       address:'',
       machineName:'',
+      lastMachine: '',    // 修改bug
       machineTypeIds:'',
       machineArray: [],
       machineTypeIdsArray:'',
@@ -395,6 +396,9 @@ export default {
             }
           }
           this.machine = this.sort;
+          //console.log('确认：',this.machine);
+          this.lastMachine = [].concat(this.machine); // 修改bug
+          // console.log('确认lastMachine',this.lastMachine); // 修改bug
           if(this.machine.join(' , ').length > 10 ) {
             this.machineName = this.machine.join(' , ').slice(0,10) + '...';
           }
@@ -456,6 +460,8 @@ export default {
         case 3:
           this.deviceDetail = false;
           this.isbgc = false;
+          this.machine = [].concat(this.lastMachine); // 修改bug
+          // console.log('取消：',this.machine); // 修改bug
           break;
         case 4:
           this.timeVisible = false;
@@ -747,6 +753,8 @@ export default {
         this.machine = res.data.machineTypeNames;
         if(this.machine) {
           this.machine = this.machine.split(','); 
+          this.lastMachine = [].concat(this.machine); // 修改bug
+          // console.log('初始值：',this.lastMachine); // 修改bug
         } 
         if(res.data.machineTypeNames) {
           if(res.data.machineTypeNames.length > 10) {
@@ -795,22 +803,6 @@ export default {
             //console.log(x);
           }
         }
-        // //市
-        // let objCity = { parentId: this.provinceId };
-        // let resCity = await areaListFun(qs.stringify(objCity));
-        // for(let x=0;x<resCity.data.length;x++) {
-        //   if(res.data.cityName == resCity.data[x].areaName) {
-        //     this.cityIndex = x;
-        //   }
-        // }
-        // //区
-        // let objDis = { parentId: this.cityId };
-        // let resDis = await areaListFun(qs.stringify(objDis));
-        // for(let x=0;x<resDis.data.length;x++) {
-        //   if(res.data.districtName == resDis.data[x].areaName) {
-        //     this.disIndex = x;
-        //   }
-        // }
         //设备类型
         let resMachine = await listParentTypeFun();
         if(resMachine.code ===0 ) {

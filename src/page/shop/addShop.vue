@@ -80,6 +80,7 @@ export default {
       arrName:[],
       address:'',
       machineName:'',
+      lastMachine: [],
       machineTypeIds:'',
       machineArray: [],
       machineTypeIdsArray:'',
@@ -392,6 +393,8 @@ export default {
           else {
             this.machineName = this.machine.join(' , ');   
           }
+          this.lastMachine = [].concat(this.machine); // 修改bug
+          // console.log('last',this.lastMachine);
           let arr = [];
           for(let i=0;i<this.machine.length;i++) {
             for(let j=0;j<this.machineArray.length;j++) {
@@ -446,6 +449,8 @@ export default {
         case 3:
           this.isbgc = false;
           this.deviceDetail = false;
+          this.machine = [].concat(this.lastMachine); // 修改bug
+          // console.log('取消：',this.machine); // 修改bug
           break;
         case 4:
           this.timeVisible = false;

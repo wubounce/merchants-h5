@@ -44,7 +44,7 @@ export default new Router({
         },
       ]
     },
-    //首页头部首页相关
+    //首页头部收益相关
     {
       path: '/index/totalincome',
       name: 'totalincome',

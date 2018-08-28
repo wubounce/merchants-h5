@@ -1,23 +1,26 @@
 <template>
     <section v-title="title">
         <div class="tableearn">
-            <div class="table-header">
-                <span class="report-table-date">时间</span>
-                <span class="report-table-count">订单数量</span>
-                <span class="report-table-money">订单金额</span>
+            <div class="top">
+                <p class='showDate'>当月收益：{{monthMoney}} 元</p>
+                <p class="black"></p>
+                <div class="table-header">
+                    <span class="report-table-date">时间</span>
+                    <span class="report-table-money">订单金额</span>
+                </div>
             </div>
-            <div class="listcon tableearn-list" v-for="(item,index) in  listdata" :key="index">
-                <router-link :to="{ name: 'todayincome', query:{dateName:item.dateName , fromMonth : fromMonth} }">
-                    <div class="detail">
-                        <span class="listtime report-table-date">{{item.dateName}}</span>
-                        <span  class="report-table-count">{{item.orderNum}}</span>
-                        <span  class="report-table-money">{{item.money}}</span>
-                    </div>
-                </router-link>
+            <div class="bottom">
+                <div class="listcon tableearn-list" v-for="(item,index) in  listdata" :key="index">
+                    <router-link :to="{ name: 'todayincome', query:{dateName:item.dateName ,todayMoney:item.money } }">
+                        <div class="detail">
+                            <span class="listtime report-table-date">{{item.dateName}}</span>
+                            <span  class="report-table-money">{{item.money}}</span>
+                        </div>
+                    </router-link>
+                </div>
+                <div class="nodata" v-if="!this.listdata">暂无数据</div>
             </div>
-            <div class="nodata" v-if="!this.listdata">暂无数据</div>
         </div>
-        <p class='black'></p>
     </section>
 </template>
 <script>
@@ -27,7 +30,7 @@ export default {
     data() {
         return {
             title: '当月收益',
-            fromMonth:true,
+            monthMoney: '',
             listdata:[]
         };
     },
@@ -46,14 +49,34 @@ export default {
                     message: res.msg
                 });
             }
-        }
+        },
+        change(i) {
+            if(i) {
+              //将number类型的数据转化成string
+              i = i+'';
+              //判断是不是'5'
+              if(i.split('.').length == 1) {
+                i = i + '.00';
+              }
+              else {
+                //判断是不是'5.0'
+                if(i.split('.')[1].length ==1) {
+                  i = i + '0';
+                }
+              }
+            }
+            else {
+              i = '0.00';
+            }
+            return i;
+        },
     },
     created() {
         this.getMonthIncome();
+        this.monthMoney = this.change(this.$route.query.monthMoney);
     }
 };
 </script>
 <style type="text/css" lang="scss" scoped>
  @import '../../assets/scss/index/monthincome';
 </style>
-
