@@ -8,8 +8,8 @@
             <span v-if="data.type===1">{{data.shopName}}</span>
             <span v-if="data.type===3">退款订单</span>
             </p>
-			<p class="price" v-if="data.type===1">+{{data.payPrice}}</p>
-            <p class="price" v-if="data.type===3">-{{data.payPrice}}</p>
+			<p class="price" v-if="data.type===1">+{{data.price}}</p>
+            <p class="price" v-if="data.type===3">-{{data.price}}</p>
 			<p class="satus" v-if="data.type===1">交易成功</p>
             <p class="satus" v-if="data.type===3">退款成功</p>
 		</header>		
