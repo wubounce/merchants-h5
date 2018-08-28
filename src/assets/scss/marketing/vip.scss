@@ -11,32 +11,33 @@
     }
   }
 .card-banner{
-padding-top: 0.4rem;
-width: 100%;
-white-space: nowrap;
+    padding-top: 0.4rem;
+    width: 100%;
+    white-space: nowrap;
 .swiper-slide {
     width: 6.93rem;
+    height: 3.73rem;
     .card{  
         transform: scale(.84);           
         -webkit-transform: scale(.84);            
-        height: 100%;
         background-size: cover;
         border-radius: .2rem;
+        height: 2.67rem;
         padding: 0.48rem 0 0.48rem 0.8rem;     
         color:#393537;                
         &.year-card{
             background-image: url(../../../static/image/vip/create_year2x.png);
-            box-shadow:0px 0.08rem 0.27rem -0.03rem rgba(245,218,169,1);
+            box-shadow:0rem 0.08rem 0.13rem -0.03rem rgba(245,218,169,1);
             border-radius:0.27rem;
         }   
         &.halfYear-card{
             background-image: url(../../../static/image/vip/create_half_year2x.png);
-            box-shadow:0px 0.08rem 0.27rem -0.03rem rgba(245,218,169,1);
+            box-shadow:0rem 0.08rem 0.13rem -0.03rem rgba(252,232,157,1);
             border-radius:0.27rem;
         } 
         &.season-card{
             background-image: url(../../../static/image/vip/create_season2x.png);
-            box-shadow:0px 0.08rem 0.27rem -0.03rem rgba(245,218,169,1);
+            box-shadow:0rem 0.08rem 0.13rem -0.03rem rgba(237,237,237,1);
             border-radius:0.27rem;
         }
         .vip-type{

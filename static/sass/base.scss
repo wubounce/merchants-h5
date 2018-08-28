@@ -247,3 +247,9 @@ input:-webkit-autofill { box-shadow: 0 0 0px 1000px white inset !important;}
 .pingFangSC-Medium {
   font-family:PingFangSC-Medium;
 }
+
+/*弹框禁止页面滚动*/
+body.dialog-open {
+    position: fixed;
+    width: 100%;
+}

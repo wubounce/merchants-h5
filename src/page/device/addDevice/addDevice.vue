@@ -538,6 +538,15 @@
             }, 2000);
           return false;
         }
+        if(Number(this.fromdata.communicateType)!== Number(this.fromdata.smCommunicateType)){
+          let instance = this.$toast({
+            message: '您扫描的NQT和选择的设备型号不一致'
+          });
+          setTimeout(() => {
+            instance.close();
+            }, 2000);
+          return false;
+        }
         let arr= [].concat(JSON.parse(JSON.stringify(this.functionSetList))); 
         arr.forEach(item=>{
           return item.ifOpen=item.ifOpen?0:1;
@@ -660,6 +669,36 @@
       }
 
 
+    },
+    watch: {
+      subType: function () {
+        if (this.subType) {
+          this.ModalHelper.afterOpen();
+        } else {
+          this.ModalHelper.beforeClose();
+        }
+      },
+      subType2: function () {
+        if (this.subType2) {
+          this.ModalHelper.afterOpen();
+        } else {
+          this.ModalHelper.beforeClose();
+        }
+      },
+      companyVisible: function () {
+        if (this.companyVisible) {
+          this.ModalHelper.afterOpen();
+        } else {
+          this.ModalHelper.beforeClose();
+        }
+      },
+      parentType: function () {
+        if (this.parentType) {
+          this.ModalHelper.afterOpen();
+        } else {
+          this.ModalHelper.beforeClose();
+        }
+      }
     },
     created() {
 
@@ -942,7 +981,7 @@
       }   
     }    
     .all-list {
-      height: 6rem;
+      height: 9rem;
       overflow-y: scroll;
       .mint-checklist-label {
         text-align: center;
@@ -971,9 +1010,5 @@
         background-color: rgba(14, 14, 255, 0.05);
       }
     }
-  }
-
-  .shoppicker .picker {
-    height: 7rem;
   }
 </style>

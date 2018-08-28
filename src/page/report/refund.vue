@@ -1,13 +1,13 @@
 <template>
 <div class="earnings">
   <div class="search">
-    <div class="slectdata monthchoose"  @click="dateVisible=true;">
+    <div class="slectdata monthchoose"  @click="dateVisible = true;">
       <span>{{dateCurrentTag.label}}</span><i class="iconfont icon-xiangxiajiantou select-back"></i>
     </div>
     <div class="slectdata timechoose"  @click="openByDialog">
       <span class="time">{{startDate.join('-')}}</span><span class="zhi">至</span><span class="time">{{endDate.join('-')}}</span><i class="iconfont icon-xiangxiajiantou select-back"></i>
     </div>
-    <div class="slectdata shopchoose"  @click="popupVisible=true">
+    <div class="slectdata shopchoose"  @click="popupVisible=true;">
       <span>{{currentTags?currentTags.shopName:'全部店铺'}}</span><i class="iconfont icon-xiangxiajiantou select-back"></i>
     </div>
   </div>
@@ -193,8 +193,8 @@ export default {
           this.reportCount.push(item.count);
           this.reportMoney.push(item.money);
         });
-        this.orderMax = calMax(this.reportCount);//订单Y轴最大值
-        this.moneyMax = calMax(this.reportMoney);//金额Y轴最大值
+        this.orderMax = calMax(this.reportCount)>0 ? calMax(this.reportCount) : 1;//订单Y轴最大值
+        this.moneyMax = calMax(this.reportMoney)>0 ? calMax(this.reportMoney) : 1;//金额Y轴最大值
         this.orderMin = calMin(this.reportCount);//订单Y轴最大值
         this.moneyMin = calMin(this.reportMoney);//金额Y轴最大值
         this.lsitdata = res.data.list;
@@ -206,24 +206,10 @@ export default {
       }
       this.chart.setOption(this.chartOption);
     },
-    calMax(arr) {
-      var max = arr[0];
-      for ( var i = 1; i < arr.length; i++) {// 求出一组数组中的最大值
-        if (max < arr[i]) {
-          max = arr[i];
-        }
-      }
-      var maxint = Math.ceil(max / 10);// 向上取整
-      var maxval = maxint * 10;// 最终设置的最大值
-      return maxval;// 输出最大值
-    },
     ortId(a,b){ //数据排序
       let k = a.date.replace(/\-/g, '');   
       let h = b.date.replace(/\-/g, '');
       return h-k;
-    },
-    open(picker) {
-      this.$refs[picker].open();
     },
     shopselectpicker(data){
       this.currentTags = data;
@@ -319,9 +305,9 @@ export default {
           {   name: '退款金额',
               type: 'value',
               min:this.moneyMin,
-              max:this.moneyMax>0?this.moneyMax : 1,
+              max:this.moneyMax,
               splitNumber:4,
-              interval:this.moneyMax>0? (this.moneyMax-this.moneyMin)/4: 1/4,
+              interval:(this.moneyMax-this.moneyMin)/4,
               axisLine:{
                 show:false,
                 lineStyle:{
@@ -348,9 +334,9 @@ export default {
           {   name: '订单数量',
               type: 'value',
               min:this.orderMin,
-              max:this.orderMax>0?this.orderMax : 1,
+              max:this.orderMax,
               splitNumber:4,
-              interval:this.orderMax>0? (this.orderMax-this.orderMin)/4: 1/4,
+              interval:(this.orderMax-this.orderMin)/4,
               axisLine:{
                 show:false,
                 lineStyle:{
@@ -429,9 +415,27 @@ export default {
       return option;
     }
   },
-  filters: {
-    tofixd(value){
-     return Number(value).toFixed(2);
+  watch: {
+    dateVisible: function () {
+      if (this.dateVisible) {
+        this.ModalHelper.afterOpen();
+      } else {
+        this.ModalHelper.beforeClose();
+      }
+    },
+    popupVisible: function () {
+      if (this.popupVisible) {
+        this.ModalHelper.afterOpen();
+      } else {
+        this.ModalHelper.beforeClose();
+      }
+    },
+    'calendar.show': function () {
+      if (this.calendar.show) {
+        this.ModalHelper.afterOpen();
+      } else {
+        this.ModalHelper.beforeClose();
+      }
     }
   },
   components:{
@@ -442,4 +446,9 @@ export default {
 </script>
 <style lang="scss" scoped>
   @import "../../assets/scss/report/report";
+</style>
+<style>
+  @media screen and (max-width: 360px) {
+    .slectdata,.echart-title {  font-size: 12px !important; }
+  }
 </style>

@@ -5,19 +5,19 @@
       <p>更多<i class="iconfont icon-nextx"></i></p>
     </div>
     <div class="earnings-wrap">
-      <router-link to='/index/totalincome'>
+      <router-link :to="{ name: 'totalincome', query:{allMoney: allMoney } }">
         <div class="earning-type">
           <p style='padding-top:0.12rem;'>总收益 (元)</p>
           <p class="earning-type-size">{{allMoney?allMoney:'0.00'|  tofixd}}</p>
         </div>
       </router-link>
-      <router-link :to="{ name: 'todayincome', query:{dateName:thisDay , fromMonth: fromMonth } }">
+      <router-link :to="{ name: 'todayincome', query:{dateName:thisDay , fromMonth: fromMonth , todayMoney: todayMoney } }">
         <div class="today-earning">
-          <p style="margin-top: 0.35rem;padding-top: 0.4rem;">今日收益 (元)</p>
+          <p style="margin-top: 0.35rem;padding-top: 0.4rem;">今日收益 (元)</p>
           <p class="today-earning-size">{{todayMoney?todayMoney:'0.00'|  tofixd}}</p>
         </div>
       </router-link>
-      <router-link :to="{ name: 'monthincome', query:{dateName:thisMonth} }">
+      <router-link :to="{ name: 'monthincome', query:{ dateName: thisMonth , monthMoney: monthMoney } }">
         <div class="earning-type">
           <p style='padding-top:0.12rem;'>当月收益 (元)</p>
           <p class="earning-type-size">{{monthMoney?monthMoney:'0.00'|  tofixd}}</p>
@@ -242,7 +242,7 @@ export default {
           this.barseriesData.push(res.data[i]);
           this.barxAxisData.push(MachineStatus(i));
         }
-        this.barMax = calMax(this.barseriesData);//Y轴最大值
+        this.barMax = calMax(this.barseriesData)>0? calMax(this.barseriesData): 1;//Y轴最大值
         this.barchart.setOption(this.barOChartOPtion);
       }
       
@@ -276,7 +276,7 @@ export default {
           }
           
         });
-        this.lineMax = calMax(this.lineseriesData);//Y轴最大值
+        this.lineMax = calMax(this.lineseriesData)>0 ? calMax(this.lineseriesData):1;//Y轴最大值
         this.lineMin = calMin(this.lineseriesData);
         // 把配置和数据放这里
         this.linechart.setOption(this.lineChartOption);
@@ -470,9 +470,9 @@ export default {
           type : 'value',
           offset:10,
           min:this.lineMin,
-          max:this.lineMax>0?this.lineMax : 1,
+          max:this.lineMax,
           splitNumber:4,
-          interval:this.lineMax>0? (this.lineMax-this.lineMin)/4: 1/4,
+          interval:(this.lineMax-this.lineMin)/4,
           axisLine:{
             show:false,
             lineStyle:{
@@ -586,9 +586,9 @@ export default {
             textStyle: {color: '#999'}
           },
           min:0,
-          max:this.barMax>0?this.barMax : 1,
+          max:this.barMax,
           splitNumber:5,
-          interval:this.barMax>0? this.barMax/4: 1/4,
+          interval:this.barMax/4,
         }],
         series: [{
           name: '设备监控',
@@ -748,9 +748,27 @@ export default {
       return opt;
     }
   },
-  filters: {
-    tofixd(value){
-     return Number(value).toFixed(2);
+  watch: {
+    machineVisible: function () {
+      if (this.machineVisible) {
+        this.ModalHelper.afterOpen();
+      } else {
+        this.ModalHelper.beforeClose();
+      }
+    },
+    distributionVisible: function () {
+      if (this.distributionVisible) {
+        this.ModalHelper.afterOpen();
+      } else {
+        this.ModalHelper.beforeClose();
+      }
+    },
+    equipmentVisible: function () {
+      if (this.equipmentVisible) {
+        this.ModalHelper.afterOpen();
+      } else {
+        this.ModalHelper.beforeClose();
+      }
     }
   },
   components:{

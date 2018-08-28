@@ -241,7 +241,6 @@
         this.selectDeviceTypeIndex = -1;
         this.selectModelIndex = -1;
         this.selectCommunicationIndex = -1;
-        this.popupVisible = false;
         this.popShopId = '';
         this.popDeviceTypeId = '';
         this.popDeviceModelId = '';
@@ -258,6 +257,7 @@
         this.page = 1;
         this.payload = {machineState:this.index,shopId:this.popShopId,parentTypeId:this.popDeviceTypeId,subTypeId:this.popDeviceModelId,communicateType:this.popCommunicationType,page:this.page,pageSize: this.pageSize};
         this.list = [];
+        this.popupVisible = false;
         this._getList(this.payload);
         this.getStateDevice(this.payload);
       },
@@ -371,9 +371,6 @@
         let payload = object ? object : {machineState: this.index,page:this.page,pageSize: this.pageSize};
         let res = await deviceListFun(qs.stringify(payload));
         if(res.code === 0) {
-          if(this.popupVisible){
-            this.popupVisible = false;
-          }
           this.list = res.data.items?[...this.list,...res.data.items]:[];
           this.total = res.data.total;
           this.hasNoData = this.list.length<= 0 ? true: false;

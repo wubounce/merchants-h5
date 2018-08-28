@@ -201,6 +201,15 @@ export default {
       }
     }
   },
+  watch: {
+    shopVisible: function () {
+      if (this.shopVisible) {
+        this.ModalHelper.afterOpen();
+      } else {
+        this.ModalHelper.beforeClose();
+      }
+    },
+  },
   components:{
     selectpickr
   },

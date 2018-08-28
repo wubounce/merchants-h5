@@ -103,6 +103,8 @@ export const  calMax = (arr) =>{
 	var maxval = maxint * 10;// 最终设置的最大值
 	return maxval;// 输出最大值
 };
+
+
 export const calMin = (arr) => {
 	var min = arr[0];
 	for ( var i = 1; i < arr.length; i++) {// 求出一组数组中的最大值
@@ -110,7 +112,7 @@ export const calMin = (arr) => {
 	  min = arr[i];
 	}
 	}
-	var minint = Math.floor(min / 5);// 向上取整
+	var minint = Math.floor(min / 5);// 向下取整
 	var minval = minint * 5;// 最终设置的最大值
 	return minval;// 输出最大值
 };
