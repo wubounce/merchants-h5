@@ -376,6 +376,13 @@ export default {
       } else {
         this.ModalHelper.beforeClose();
       }
+    },
+    weekVisible: function () {
+      if (this.weekVisible) {
+        this.ModalHelper.afterOpen();
+      } else {
+        this.ModalHelper.beforeClose();
+      }
     }
   },
   components:{

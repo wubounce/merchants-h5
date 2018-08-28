@@ -17,7 +17,8 @@
 			<li>
                 <div><p>订单金额</p><p>{{data.markPrice}}</p></div>   
 				<div class="discounts" v-if="data.discountType===1 && data.discountPrice>0"><p>vip优惠</p><p><span >-</span>{{data.discountPrice}}</p></div>
-                <div class="discounts" v-if="data.discountType===2&&data.discountPrice>0 || data.discountType===null&&data.discountPrice>0"><p>限时优惠</p><p><span>-</span>{{data.discountPrice}}</p></div>  
+                <div class="discounts" v-if="data.discountType===2&&data.discountPrice>0 || data.discountType===null&&data.discountPrice>0"><p>限时优惠</p><p><span>-</span>{{data.discountPrice}}</p></div> 
+                <div class="discounts" v-if="data.voucherType===1&&data.voucherPrice>0"><p>优惠券</p><p><span>-</span>{{data.voucherPrice}}</p></div> 
             </li>	
             <li>
                 <div><p>支付方式</p><p>{{data.payType | PayType}}</p></div>
@@ -39,7 +40,8 @@
 		</ul>
         <ul class="record" v-if="data.type===3">
             <li>
-                <div><p>付款金额</p><p>{{data.payPrice}}</p></div>   
+                <div><p>付款金额</p><p>{{data.payPrice}}</p></div> 
+                <div class="discounts" v-if="data.voucherType===1&&data.voucherPrice>0"><p>优惠券</p><p><span>-</span>{{data.voucherPrice}}</p></div> 
                 <div class="discounts"><p>退款金额</p><p><span >-</span>{{data.price}}</p></div>            
             </li>   
             <li>
@@ -186,6 +188,4 @@ export default {
             }
         }
     }
-
-		
 </style>

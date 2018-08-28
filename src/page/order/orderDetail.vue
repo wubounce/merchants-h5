@@ -26,8 +26,12 @@
         <div class="vip"><span class="viptag"><img src="../../../static/image/vip/discount@2x.png" alt=""></span>限时优惠</div>
         <div class="discount">-¥{{detail.discountPrice}}</div>
       </div>
-      <div class="total-border"  v-cloak v-if="detail.voucherPrice>0">
-        <div class="vip"><span class="viptag"><img src="../../../static/image/vip/coupons@2x.png" alt=""></span>优惠券</div>
+      <div class="total-border"  v-cloak v-if="detail.voucherType===0&&detail.voucherPrice>0">
+        <div class="vip"><span class="viptag"><img src="../../../static/image/vip/coupons@2x.png" alt=""></span>通用优惠券</div>
+        <div class="discount" style="color:#333">¥{{detail.voucherPrice}}</div>
+      </div>
+      <div class="total-border"  v-cloak v-if="detail.voucherType===1&&detail.voucherPrice>0">
+        <div class="vip"><span class="viptag"><img src="../../../static/image/vip/coupons@2x.png" alt=""></span>店铺优惠券</div>
         <div class="discount">-¥{{detail.voucherPrice}}</div>
       </div>
     </section>
