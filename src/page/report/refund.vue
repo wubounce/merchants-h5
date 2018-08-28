@@ -18,8 +18,8 @@
     </div>
     <div :class="className" :id="id" :style="{height:height,width:width}" ref="myEchart"></div>
     <div class="echart-title">
-      <i style="background:#1890FF"></i>总退款金额<span class="totalMoney">({{totalMoney | tofixd}}元)</span>
-      <i style="background:#FACC14"></i>总订单数量<span class="totalOrder">({{totalCount}})</span>
+      <div class="money"><i style="background:#1890FF"></i>总退款金额<span class="totalMoney">({{totalMoney | tofixd}}元)</span></div>
+      <div  class="order"><i style="background:#FACC14"></i>总订单数量<span class="totalOrder">({{totalCount}})</span></div>
     </div>
   </div>
   <div class="tabledata">

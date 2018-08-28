@@ -2,7 +2,7 @@
     <section v-title="title">
         <div class="tableearn">
             <div class="top">
-                <p class='showDate'><span>今日收益：{{todayMoney}} 元</span><span>{{date}}</span></p>
+                <p class='showDate'><span>{{date}}</span><span style="margin-left: 0.35rem;">收益：{{todayMoney}} 元</span></p>
                 <p class="black"></p>
                 <div class="listcon table-header">
                     <span class="report-table-date" >时间</span>

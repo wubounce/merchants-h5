@@ -10,6 +10,7 @@ import 'normalize.css';
 import 'mint-ui/lib/style.css';
 
 import 'lib-flexible';
+
 import App from './App';
 import router from './router';
 import store from './store';

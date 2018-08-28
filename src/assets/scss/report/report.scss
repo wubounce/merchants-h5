@@ -48,10 +48,12 @@
     }
   }
   .echart-title {
-    width: 8rem;
+    width: 9rem;
     font-size: 14px;
     color:rgba(153,153,153,1);
     margin: 0.4rem auto 0;
+    overflow-y: hidden;
+    display: flex;
     i {
       width: 0.19rem;
       height: 0.19rem;

@@ -50,9 +50,13 @@ section {
                     position: relative;
                     white-space: nowrap;
                 }
-                .report-table-date,.report-table-money {
+                .report-table-date {
                     width: 4.6rem;
-                    text-align: center;
+                    text-align: left;
+                }
+                .report-table-money {
+                    width: 4.6rem;
+                    text-align: right;
                 }
                 .listtime {
                     color: #1890FF;
@@ -91,9 +95,13 @@ section {
                     position: relative;
                     white-space: nowrap;
                 }
-                .report-table-date,.report-table-money {
+                .report-table-date {
                     width: 4.6rem;
-                    text-align: center;
+                    text-align: left;
+                }
+                .report-table-money {
+                    width: 4.6rem;
+                    text-align: right;
                 }
                 .listtime {
                     color: #1890FF;

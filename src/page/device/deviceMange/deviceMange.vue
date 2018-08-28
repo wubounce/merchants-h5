@@ -250,6 +250,9 @@
         this.list = [];
         this.payload = null;
         this.page = 1;
+        this.getPopupShop(this.shopFlag);
+        this.getlistParentType({onlyMine: true});
+        this.getlistSubTypeAll(this.subFlag);
         this.getStateDevice();
         this._getList();
       },
@@ -280,8 +283,7 @@
       },
       rightPopup() {
         this.getPopupShop(this.shopFlag);
-        let payload = {onlyMine: true};
-        if(!this.popDeviceTypeId && !this.popShopId) this.getlistParentType(payload);
+        if(!this.popDeviceTypeId && !this.popShopId) this.getlistParentType({onlyMine: true});
         if(!this.popDeviceModelId && !this.popDeviceTypeId && !this.popShopId) this.getlistSubTypeAll(this.subFlag);
         this.popupVisible = true;
       },
