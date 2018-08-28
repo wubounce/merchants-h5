@@ -15,14 +15,15 @@ import App from './App';
 import router from './router';
 import store from './store';
 
-import { getToken, getMenu } from '@/utils/tool';
+import { getToken } from '@/utils/tool';
 import VueAMap from 'vue-amap';
 Vue.use(VueAMap);
 import VueAwesomeSwiper from 'vue-awesome-swiper';
 import 'swiper/dist/css/swiper.css';
+import filter from '@/utils/filter';
+
+Vue.use(filter);
 Vue.use(VueAwesomeSwiper);
-import { Tree } from 'element-ui';
-Vue.use(Tree);
 Vue.use(MintUI);
 Vue.use(Vant);
 // 初始化vue-amap
@@ -64,74 +65,3 @@ new Vue({
   components: { App },
   template: '<App/>'
 });
-//v-title
-Vue.directive('title', {
-  inserted: function (el, binding) {
-    document.title = binding.value;
-  }
-});
-
-/**权限指令**/
-Vue.directive('has', {
-  bind: function(el, binding) {
-    if (!Vue.prototype.$_has(binding.value)) {
-       // el.parentNode.removeChild(el);
-      var childs = el.childNodes;
-      if (childs) {
-        for(var i = childs.length - 1; i >= 0; i--) { 
-          el.removeChild(childs[i]); 
-        }
-      }
-      el.style.display = "none";
-    }
-  }
-});
-/**权限指令**/
-Vue.directive('focus', {
-  inserted: function (el, {value}) {
-    el.focus();
-  }
-});
-
-//权限检查方法
-Vue.prototype.$_has = function(value) {
-  let isExist=false;
-  let buttonpermsStr = getMenu();
-  if(buttonpermsStr==undefined || buttonpermsStr==null){
-    return false;
-  }
-  for(let i=0;i<buttonpermsStr.length;i++){
-    if(buttonpermsStr[i].perms.includes(String(value))){
-      isExist=true;
-      break;
-    }
-  }
-  return isExist;
-};
-
-//签名算法：
-Vue.prototype.get_sign = (obj)=>{
-
-  obj._appid = '44efec05494c4ca3a4a7ada47722a1a8';
-
-  let newKey = Object.keys(obj).sort();
-
-  let newObj = {};
-  for(let i = 0; i < newKey.length; i++) {
-    newObj[newKey[i]] = obj[newKey[i]]; 
-  }
-  
-  let jsonstr = JSON.stringify(newObj);
-  let str2 = jsonstr.replace(new RegExp(':','g'),'=').replace(new RegExp(',','g'),'&');
-  let str3 = str2.substring(1,str2.length-1);
-  console.log('加密前的str:',str3.split('"').join(''));
-  
-  //sha1加密
-  let sha1 = require('sha1');
-  let _sign = sha1(str3.split('"').join(''));
-  console.log("sha1加密后的str:",_sign);
-  delete obj._appid;
-  obj._sign = _sign;
-  console.log('处理过的请求参数：',obj);
-  return obj;
-};

@@ -748,9 +748,27 @@ export default {
       return opt;
     }
   },
-  filters: {
-    tofixd(value){
-     return Number(value).toFixed(2);
+  watch: {
+    machineVisible: function () {
+      if (this.machineVisible) {
+        this.ModalHelper.afterOpen();
+      } else {
+        this.ModalHelper.beforeClose();
+      }
+    },
+    distributionVisible: function () {
+      if (this.distributionVisible) {
+        this.ModalHelper.afterOpen();
+      } else {
+        this.ModalHelper.beforeClose();
+      }
+    },
+    equipmentVisible: function () {
+      if (this.equipmentVisible) {
+        this.ModalHelper.afterOpen();
+      } else {
+        this.ModalHelper.beforeClose();
+      }
     }
   },
   components:{

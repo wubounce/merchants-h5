@@ -107,11 +107,6 @@ export default {
         }
     }
   },
-  filters:{
-    replaceAliply(value){
-        return String(value).replace(/^(\d{4})\d{4}(\d+)/,"$1****$2");
-    }
-  },
 };
 </script>
 <style lang="scss" scoped>

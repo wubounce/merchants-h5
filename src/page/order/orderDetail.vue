@@ -19,12 +19,16 @@
     </div>
     <section class="total-wrap">
       <div class="total-border" v-cloak v-if="detail.discountType===1 && detail.discountPrice>0">
-        <div class="vip"><span class="viptag"><img src="../../../static/image/vip/icon-VIP@2x.png" alt=""></span>VIP会员卡</div>
+        <div class="vip"><span class="viptag"><img src="../../../static/image/vip/VIP@2x.png" alt=""></span>VIP会员卡</div>
         <div class="discount">-¥{{detail.discountPrice}}</div>
       </div>
-       <div class="total-border" v-cloak v-if="detail.discountType===2&&detail.discountPrice>0 || detail.discountType===null&&detail.discountPrice>0">
-        <div class="vip">限时优惠</div>
+      <div class="total-border" v-cloak v-if="detail.discountType===2&&detail.discountPrice>0 || detail.discountType===null&&detail.discountPrice>0">
+        <div class="vip"><span class="viptag"><img src="../../../static/image/vip/discount@2x.png" alt=""></span>限时优惠</div>
         <div class="discount">-¥{{detail.discountPrice}}</div>
+      </div>
+      <div class="total-border"  v-cloak v-if="detail.voucherPrice>0">
+        <div class="vip"><span class="viptag"><img src="../../../static/image/vip/coupons@2x.png" alt=""></span>优惠券</div>
+        <div class="discount">-¥{{detail.voucherPrice}}</div>
       </div>
     </section>
     <section class="money-wrap"  v-cloak v-if="detail.orderType !== 2 && detail.orderStatus !==1 || detail.orderType !==2 && detail.orderStatus !==0">
