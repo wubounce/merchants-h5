@@ -90,7 +90,7 @@ export default {
     async getOrderDetail(type){
         let payload = {balanceLogId:this.$route.query.balanceLogId};
         let res = await getOrderDetailFun(qs.stringify(payload));
-        this.data = res.data;
+        this.data = res;
     }
   },
   filters: {

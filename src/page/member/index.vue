@@ -55,20 +55,16 @@ export default {
     async _getList(){
       let payload = {page:this.page,pageSize:this.pageSize};
       let res = await operatorListFun(qs.stringify(payload));
-      if (res.code === 0) {
-        this.list = res.data.items?[...this.list,...res.data.items]:[];  //分页添加
-        this.list.length <= 0 ? this.noList = true:this.noList = false;
-        this.total = res.data.total;
-        this.list.forEach((item)=>{
-          if (item.isLock === 0) {
-            item.isLock = true;
-          } else {
-            item.isLock = false;
-          }
-        });
-      }else {
-        this.noList = true;
-      }
+      this.list = res.items?[...this.list,...res.items]:[];  //分页添加
+      this.list.length <= 0 ? this.noList = true:this.noList = false;
+      this.total = res.total;
+      this.list.forEach((item)=>{
+        if (item.isLock === 0) {
+          item.isLock = true;
+        } else {
+          item.isLock = false;
+        }
+      });
     },
     async lockOperator(id,isLock){
       if (isLock === true) {

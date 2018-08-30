@@ -77,7 +77,6 @@ export default {
     titleClick: function(index) {
       this.titleIndex = index;
       this.type = this.titleArr[this.titleIndex].value;
-      this.page = 1; //从第一页起
       this.list = [];
       this.allLoaded = false;//下拉刷新时解除上拉加载的禁用
       this._getList(this.type);
@@ -85,11 +84,9 @@ export default {
     async _getList(type){
         let payload = {page:this.page,pageSize: this.pageSize,type:this.type};
         let res = await getApplyListFun(qs.stringify(payload));
-        if (res.code ===0) {
-            this.list = res.data.items?[...this.list,...res.data.items]:[];  //分页添加
-            this.total = res.data.total;
-            this.total > 10 ? this.accountOnlySix = false : this.accountOnlySix = true;
-        }
+        this.list = res.items?[...this.list,...res.items]:[];  //分页添加
+        this.total = res.total;
+        this.total > 10 ? this.accountOnlySix = false : this.accountOnlySix = true;
         
     }
   },

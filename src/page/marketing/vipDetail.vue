@@ -73,27 +73,15 @@ export default {
     async getDetail(shopVipId){
       let payload = Object.assign({},{shopVipId:shopVipId});
       let res = await vipDetailFun(qs.stringify(payload));
-      if (res.code ===0) {
-        this.detail = res.data;
-      }
+      this.detail = res;
     },
     async delShopVip(){
       MessageBox.confirm(`确定删除？`,'').then(async () => {
-          let payload = {shopVipId:this.detail.shopVipId};
-          let res = await delVipFun(qs.stringify(payload));
-          if (res.code === 0) {
-            this.$toast({message: '删除成功'});
-            this.$router.push({name:'marketing',query:{tabindex:1}});
-          } else {
-            this.$toast({message: res.msg });
-            this.$router.push({name:'marketing',query:{tabindex:1}});
-          }
+        let payload = {shopVipId:this.detail.shopVipId};
+        let res = await delVipFun(qs.stringify(payload));
+        this.$toast({message: '删除成功'});
+        this.$router.push({name:'marketing',query:{tabindex:1}});
       });
-    }
-  },
-  filters:{
-    tofixd(value){
-     return value? Number(value).toFixed(0):'';
     }
   },
   components:{

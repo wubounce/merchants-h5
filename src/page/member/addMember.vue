@@ -174,12 +174,12 @@ export default {
     },
     async menuSelect(){
       let res = await permsMenuFun(); //拼接权限菜单
-      this.allmenu = res.data;
-      this.permissionsData = getTrees(res.data,0);
+      this.allmenu = res;
+      this.permissionsData = getTrees(res,0);
     },
     async shopListFun(){
       let res = await shopListFun();
-      this.shoplist = res.data;
+      this.shoplist = res;
     },
     toggle:function(item){
       this.$set(item,'show',this.show=!this.show);
@@ -217,12 +217,8 @@ export default {
           mIds:this.checkpermissionslist.join(',')
         };
         let res = await addOperatorFun(qs.stringify(payload));
-        if (res.code === 0) {
-          this.$toast({message: '新增成功,密码将发送至此手机' });
-          this.$router.push({name:'member'});
-        } else {
-          this.$toast({message: res.msg });
-        }
+        this.$toast({message: '新增成功,密码将发送至此手机' });
+        this.$router.push({name:'member'});
       }
     }
   },

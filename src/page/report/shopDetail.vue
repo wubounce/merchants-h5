@@ -47,11 +47,9 @@ export default {
     async getDetail(date,type,dateLevel){
       let payload = Object.assign({},{date:date,type:type,dateLevel:dateLevel});
       let res = await shopReportFun(qs.stringify(payload));
-      if (res.code === 0) {
-        this.list = res.data.list;
-        this.date = res.data.date;
-        this.list.length <= 0 ? this.noList = true:this.noList = false;
-      }
+      this.list = res.list;
+      this.date = res.date;
+      this.list.length <= 0 ? this.noList = true:this.noList = false;
       
     },
     goDetail(shopId){

@@ -172,38 +172,32 @@ export default {
     },
     async shopListFun(){
       let res = await shopListFun();
-      if (res.code === 0) {
-        this.shopSlots[0].values = [{shopName:'全部店铺'},...res.data];
-      }
+      this.shopSlots[0].values = [{shopName:'全部店铺'},...res];
     },
     async dayReportFun(){
       let shopId = this.currentTags?this.currentTags.shopId:null;
       let payload = Object.assign({},{startDate:this.startDate.join('-'),endDate:this.endDate.join('-'),type:1,shopId:shopId,dateLevel:this.dateLevel});
       let res = await dayReportFun(qs.stringify(payload));
-      if (res.code === 0) {
-        this.reportDate = [];
-        this.reportCount = [];
-        this.reportMoney = [];
-        res.data.list.forEach(item=>{
-          if (this.dateLevel === 1) {
-            this.reportDate.push(moment(item.date).format('MM-DD'));
-          } else {
-            this.reportDate.push(item.date);
-          }
-          this.reportCount.push(item.count);
-          this.reportMoney.push(item.money);
-        });
-        this.orderMax = calMax(this.reportCount)>0 ? calMax(this.reportCount) : 1;//订单Y轴最大值
-        this.moneyMax = calMax(this.reportMoney)>0 ? calMax(this.reportMoney) : 1;//金额Y轴最大值
-        this.orderMin = calMin(this.reportCount);//订单Y轴最大值
-        this.moneyMin = calMin(this.reportMoney);//金额Y轴最大值
-        this.lsitdata = res.data.list;
-        this.lsitdata.sort(this.ortId); //表格时间倒序
-        this.totalMoney = res.data.totalMoney;
-        this.totalCount = res.data.totalCount;
-      }else {
-        this.$toast({message: res.msg });
-      }
+      this.reportDate = [];
+      this.reportCount = [];
+      this.reportMoney = [];
+      res.list.forEach(item=>{
+        if (this.dateLevel === 1) {
+          this.reportDate.push(moment(item.date).format('MM-DD'));
+        } else {
+          this.reportDate.push(item.date);
+        }
+        this.reportCount.push(item.count);
+        this.reportMoney.push(item.money);
+      });
+      this.orderMax = calMax(this.reportCount)>0 ? calMax(this.reportCount) : 1;//订单Y轴最大值
+      this.moneyMax = calMax(this.reportMoney)>0 ? calMax(this.reportMoney) : 1;//金额Y轴最大值
+      this.orderMin = calMin(this.reportCount);//订单Y轴最大值
+      this.moneyMin = calMin(this.reportMoney);//金额Y轴最大值
+      this.lsitdata = res.list;
+      this.lsitdata.sort(this.ortId); //表格时间倒序
+      this.totalMoney = res.totalMoney;
+      this.totalCount = res.totalCount;
       this.chart.setOption(this.chartOption);
     },
     ortId(a,b){ //数据排序

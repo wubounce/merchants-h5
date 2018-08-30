@@ -75,7 +75,7 @@ export default {
     async getMoneySubmitDetail(balanceLogId){
       let payload = {balanceLogId:balanceLogId};
       let res = await getMoneySubmitDetailFun(qs.stringify(payload));
-      this.data = res.data;
+      this.data = res;
     }
   },
   components:{

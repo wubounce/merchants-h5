@@ -258,23 +258,21 @@ export default {
         payload = Object.assign({},{type:0});
       }
       let res = await timeProfitFun(qs.stringify(payload));
-      if (res.code === 0) {
-        this.lineseriesData = [];
-        this.linexAxisData = [];
-        res.data.forEach(item=>{
-          this.lineseriesData.push(item.sum);
-          if (String(item.time).length <=2 ) {
-            this.linexAxisData.push(`${item.time}:00`);
-          } else {
-            this.linexAxisData.push(item.time);
-          }
-          
-        });
-        this.lineMax = calMax(this.lineseriesData)>0 ? calMax(this.lineseriesData):1;//Y轴最大值
-        this.lineMin = calMin(this.lineseriesData);
-        // 把配置和数据放这里
-        this.linechart.setOption(this.lineChartOption);
-      }
+      this.lineseriesData = [];
+      this.linexAxisData = [];
+      res.forEach(item=>{
+        this.lineseriesData.push(item.sum);
+        if (String(item.time).length <=2 ) {
+          this.linexAxisData.push(`${item.time}:00`);
+        } else {
+          this.linexAxisData.push(item.time);
+        }
+        
+      });
+      this.lineMax = calMax(this.lineseriesData)>0 ? calMax(this.lineseriesData):1;//Y轴最大值
+      this.lineMin = calMin(this.lineseriesData);
+      // 把配置和数据放这里
+      this.linechart.setOption(this.lineChartOption);
       
     },
     async typeProfitData(parentTypeId,type){ //收益分布
@@ -285,72 +283,70 @@ export default {
         payload = Object.assign({},{parentTypeId:this.washingMachineId,type:0});
       }
       let res = await typeProfitFun(qs.stringify(payload));
-      if (res.code === 0) {
-        let communicateTypeData = res.data ? res.data.communicateType :[];
-        if (communicateTypeData.length>0) {
-          communicateTypeData.forEach(item=>{
-            this.pietypeData.push({
-              value: item.sum,
-              name: communicateType(Number(item.type))
-            });
-          });
-        } else {
+      console.log(res);
+      let communicateTypeData = res ? res.communicateType :[];
+      if (communicateTypeData.length>0) {
+        communicateTypeData.forEach(item=>{
           this.pietypeData.push({
-            value: 0,
-            name: '脉冲'
-          },
-          {
-            value: 0,
-            name: '串口'
+            value: item.sum,
+            name: communicateType(Number(item.type))
           });
-        }
-        let machineTypeData = res.data ? res.data.machineType :[];
-        if (machineTypeData.length>0) {
-
-          machineTypeData = machineTypeData.sort(this.ortId).slice(0,3); //类型标题只显示最大的三个类型
-          this.piefunDatatitle = [];
-          machineTypeData.forEach(item=>{
-            this.piefunDatatitle.push({
-              name:item.type,
-              icon : 'circle',
-              textStyle:{fontWeight:'normal', color:'#999',fontSize:12, padding:0},
-            });
-          });
-
-          let fristFour = res.data.machineType.sort(this.ortId).slice(0,5); //饼图取出最大五个类型，多余的合并成其他类型
-          let other = res.data.machineType.sort(this.ortId).slice(5);
-          let otherNum = null;
-          other.forEach(item=>{
-            otherNum += item.sum;
-          });
-          other = [{
-            sum: otherNum,
-            type: '其他'
-          }];
-          this.piefunData = [];
-          let machineType = [...fristFour,...other];
-          machineType.forEach(item=>{
-            item.sum =  item.sum<0 ? 0 :  item.sum; //如果收益是负数等于0;
-            this.piefunData.push({
-              value: item.sum,
-              name: item.type
-            });
-          });
-        } else {
-          this.piefunDatatitle.push({
-              name:'功能模式占比',
-              icon : 'circle',
-              textStyle:{fontWeight:'normal', color:'#999',fontSize:12, padding:0},
-            });
-          this.piefunData.push({
-              value: 0,
-              name: '功能模式占比'
-            });
-        }
-        // 把配置和数据放这里
-        this.pietypechart.setOption(this.pietypeChartOPtion);
-        this.piefunchart.setOption(this.piefunChartOption);
+        });
+      } else {
+        this.pietypeData.push({
+          value: 0,
+          name: '脉冲'
+        },
+        {
+          value: 0,
+          name: '串口'
+        });
       }
+      let machineTypeData = res ? res.machineType :[];
+      if (machineTypeData.length>0) {
+        machineTypeData = machineTypeData.sort(this.ortId).slice(0,3); //类型标题只显示最大的三个类型
+        this.piefunDatatitle = [];
+        machineTypeData.forEach(item=>{
+          this.piefunDatatitle.push({
+            name:item.type,
+            icon : 'circle',
+            textStyle:{fontWeight:'normal', color:'#999',fontSize:12, padding:0},
+          });
+        });
+
+        let fristFour = res.machineType.sort(this.ortId).slice(0,5); //饼图取出最大五个类型，多余的合并成其他类型
+        let other = res.machineType.sort(this.ortId).slice(5);
+        let otherNum = null;
+        other.forEach(item=>{
+          otherNum += item.sum;
+        });
+        other = [{
+          sum: otherNum,
+          type: '其他'
+        }];
+        this.piefunData = [];
+        let machineType = [...fristFour,...other];
+        machineType.forEach(item=>{
+          item.sum =  item.sum<0 ? 0 :  item.sum; //如果收益是负数等于0;
+          this.piefunData.push({
+            value: item.sum,
+            name: item.type
+          });
+        });
+      } else {
+        this.piefunDatatitle.push({
+            name:'功能模式占比',
+            icon : 'circle',
+            textStyle:{fontWeight:'normal', color:'#999',fontSize:12, padding:0},
+          });
+        this.piefunData.push({
+            value: 0,
+            name: '功能模式占比'
+          });
+      }
+      // 把配置和数据放这里
+      this.pietypechart.setOption(this.pietypeChartOPtion);
+      this.piefunchart.setOption(this.piefunChartOption);
      
     },
     ortId(k,h){ //最大值排序
@@ -362,7 +358,6 @@ export default {
       this.pietypechart = echarts.init(document.getElementById('pietype'));
       this.piefunchart = echarts.init(document.getElementById('piefun'));
     },
-    
     machineselectpicker(data){ //收益收据选择设备类型搜索
       this.machinecurrentTags = data;
       this.linexAxisData=[];

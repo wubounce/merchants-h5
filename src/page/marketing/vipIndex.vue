@@ -95,11 +95,9 @@ export default {
     async _getList(){
       let payload = {page:this.page,pageSize: this.pageSize};
       let res = await vipListFun(qs.stringify(payload));
-      if (res.code === 0) {
-        this.list = res.data.items?[...this.list,...res.data.items]:[];  //分页添加
-        this.list.length <= 0 ? this.noList = true:this.noList = false;
-        this.total = res.data.total;
-      } 
+      this.list = res.items?[...this.list,...res.items]:[];  //分页添加
+      this.list.length <= 0 ? this.noList = true:this.noList = false;
+      this.total = res.total;
     },
     goaddvip(){
       this.$router.push({name:'addvip'});

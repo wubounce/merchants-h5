@@ -102,9 +102,7 @@ export default {
   methods: {
     async shopListFun(){
       let res = await vipShopsFun();
-      if (res.code === 0) {
-        this.shoplist = res.data;
-      }
+      this.shoplist = res;
     },
     getcheckshop(){
       let checklist = this.shoplist.filter(v=>this.shopIds.some(k=>k==v.shopId));
@@ -171,10 +169,8 @@ export default {
       paylod.halfYearCardLimitTime =  paylod.halfYearCardLimitTime ?  paylod.halfYearCardLimitTime:0;
       paylod.seasonCardLimitTime =  paylod.seasonCardLimitTime ?  paylod.seasonCardLimitTime:0;
       let res = await addOrUpdateVipFun(qs.stringify(paylod));
-      if (res.code === 0) {
-         this.$toast({message: "新增成功" });
-         this.$router.push({name:'marketing',query:{tabindex:1}});
-      }
+      this.$toast({message: "新增成功" });
+      this.$router.push({name:'marketing',query:{tabindex:1}});
     }
   },
   watch: {

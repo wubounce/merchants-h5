@@ -57,15 +57,13 @@ export default {
     async _getList(){
        let payload = {page:this.page,pageSize: this.pageSize};
       let res = await timeMarketListFun(qs.stringify(payload));
-      if (res.code === 0) {
-        this.list = res.data.items?[...this.list,...res.data.items]:[];  //分页添加
-        this.list.length <= 0 ? this.noList = true:this.noList = false;
-        this.total = res.data.total;
-        res.data.items.forEach((item)=>{
-            item.noDiscountStart = item.noDiscountStart ? moment(item.noDiscountStart).format('YYYY-MM-DD') : '';
-            item.noDiscountEnd = item.noDiscountEnd ? moment(item.noDiscountEnd).format('YYYY-MM-DD'): '';
-        });
-      }
+      this.list = res.items?[...this.list,...res.items]:[];  //分页添加
+      this.list.length <= 0 ? this.noList = true:this.noList = false;
+      this.total = res.total;
+      res.items.forEach((item)=>{
+          item.noDiscountStart = item.noDiscountStart ? moment(item.noDiscountStart).format('YYYY-MM-DD') : '';
+          item.noDiscountEnd = item.noDiscountEnd ? moment(item.noDiscountEnd).format('YYYY-MM-DD'): '';
+      });
     },
     goaddMarket(){
       this.$router.push({name:'addMarket'});

@@ -88,20 +88,14 @@ export default {
   methods: {
     async getDetail(orderNo){
       let res = await orderDetailFun(qs.stringify({orderNo:orderNo}));
-      if (res.code === 0) {
-          this.detail = res.data;
-      }
+      this.detail = res;
     },
     machineReset(orderNo,machineId){ //设备复位
       MessageBox.confirm(`您确定要复位${this.detail.machineName}？`,'').then(async () => {
           let query = this.$route.query;
           let payload = {machineId:machineId,orderNo:orderNo};
           let res = await machineResetFun(qs.stringify(payload));
-          if (res.code === 0) {
-            this.$toast({message: '复位成功' });
-          } else {
-            this.$toast({message: res.msg });
-          }
+          this.$toast({message: '复位成功' });
       });
       
     },
@@ -110,11 +104,7 @@ export default {
         let query = this.$route.query;
         let payload = {orderId:id};
         let res = await machineBootFun(qs.stringify(payload));
-        if (res.code === 0) {
-          this.$toast({message: '启动成功' });
-        } else {
-          this.$toast({message: res.msg });
-        }
+        this.$toast({message: '启动成功' });
       });
       
     },
@@ -127,15 +117,9 @@ export default {
         let query = this.$route.query;
         let payload = {orderNo:orderNo,refundMoney:payPrice};
         let res = await ordeRrefundFun(qs.stringify(payload));
-        if (res.code === 0) {
-          this.$toast({message: '退款成功' });
-          this.$router.push({name:'order'});
-        } else {
-          this.$toast(res.msg);
-          this.$router.push({name:'order'});
-        }
+        this.$toast({message: '退款成功' });
+        this.$router.push({name:'order'});
         this.refundDisabled = false;
-
       }).catch(err => { 
          this.refundDisabled = false;
       });

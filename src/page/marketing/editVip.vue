@@ -101,35 +101,31 @@ export default {
     async getVipDetail(shopVipId){
       let payload = Object.assign({},{shopVipId:shopVipId});
       let res = await vipDetailFun(qs.stringify(payload));
-      if (res.code ===0) {
-        let beshop = [];
-        res.data.shopList.forEach(item=>{
-          beshop.push(item.shopName);
-          this.shopIds.push(item.shopId);
-        });
-        this.checkshoptxt = beshop.join(',');
-        
-        this.vipform.yearCardPrice = res.data.yearCardPrice?Number(res.data.yearCardPrice).toFixed(0):'';
-        this.vipform.halfYearCardPrice = res.data.halfYearCardPrice?Number(res.data.halfYearCardPrice).toFixed(0) : '';
-        this.vipform.seasonCardPrice = res.data.seasonCardPrice?Number(res.data.seasonCardPrice).toFixed(0) : '';
+      let beshop = [];
+      res.shopList.forEach(item=>{
+        beshop.push(item.shopName);
+        this.shopIds.push(item.shopId);
+      });
+      this.checkshoptxt = beshop.join(',');
+      
+      this.vipform.yearCardPrice = res.yearCardPrice?Number(res.yearCardPrice).toFixed(0):'';
+      this.vipform.halfYearCardPrice = res.halfYearCardPrice?Number(res.halfYearCardPrice).toFixed(0) : '';
+      this.vipform.seasonCardPrice = res.seasonCardPrice?Number(res.seasonCardPrice).toFixed(0) : '';
 
-        this.vipform.yearCardDiscount = res.data.yearCardDiscount?res.data.yearCardDiscount:'';
-        this.vipform.halfYearCardDiscount = res.data.halfYearCardDiscount?res.data.halfYearCardDiscount : '';
-        this.vipform.seasonCardDiscount = res.data.seasonCardDiscount?res.data.seasonCardDiscount : '';
-        
-        this.vipform.yearCardLimitTime = res.data.yearCardLimitTime? res.data.yearCardLimitTime :0;
-        this.vipform.halfYearCardLimitTime= res.data.halfYearCardLimitTime? res.data.halfYearCardLimitTime: 0;
-        this.vipform.seasonCardLimitTime = res.data.seasonCardLimitTime? res.data.seasonCardLimitTime:0;
-        this.vipform.shopVipId  = res.data.shopVipId ? res.data.shopVipId:'';
-        this.shopListFun(res.data.shopVipId);
-      }
+      this.vipform.yearCardDiscount = res.yearCardDiscount?res.yearCardDiscount:'';
+      this.vipform.halfYearCardDiscount = res.halfYearCardDiscount?res.halfYearCardDiscount : '';
+      this.vipform.seasonCardDiscount = res.seasonCardDiscount?res.seasonCardDiscount : '';
+      
+      this.vipform.yearCardLimitTime = res.yearCardLimitTime? res.yearCardLimitTime :0;
+      this.vipform.halfYearCardLimitTime= res.halfYearCardLimitTime? res.halfYearCardLimitTime: 0;
+      this.vipform.seasonCardLimitTime = res.seasonCardLimitTime? res.seasonCardLimitTime:0;
+      this.vipform.shopVipId  = res.shopVipId ? res.shopVipId:'';
+      this.shopListFun(res.shopVipId);
     },
     async shopListFun(id){
       let payload = Object.assign({},{shopVipId:id});
       let res = await vipShopsFun(qs.stringify(payload));
-      if (res.code === 0) {
-        this.shoplist = res.data;
-      }
+      this.shoplist = res;
     },
     getcheckshop(){
       let checklist = this.shoplist.filter(v=>this.shopIds.some(k=>k==v.shopId));
@@ -195,10 +191,8 @@ export default {
       paylod.halfYearCardLimitTime =  paylod.halfYearCardLimitTime ?  paylod.halfYearCardLimitTime:0;
       paylod.seasonCardLimitTime =  paylod.seasonCardLimitTime ?  paylod.seasonCardLimitTime:0;
       let res = await addOrUpdateVipFun(qs.stringify(paylod));
-      if (res.code === 0) {
-         this.$toast({message: "修改成功" });
-         this.$router.push({name:'marketing',query:{tabindex:1}});
-      }
+      this.$toast({message: "修改成功" });
+      this.$router.push({name:'marketing',query:{tabindex:1}});
     }
   },
   watch: {

@@ -211,8 +211,7 @@ export default {
       let payload = {timeId:query.id};
       let res = await detailMarketFun(qs.stringify(payload));
       this.shopListFun(query.id);
-      if (res.code === 0) {
-        let detail = res.data;
+        let detail = res;
         this.addmarket.startTime = detail.noDiscountStart ? moment(detail.noDiscountStart).format('YYYY-MM-DD') : '';
         this.addmarket.endTime = detail.noDiscountEnd ? moment(detail.noDiscountEnd).format('YYYY-MM-DD'): '';
         this.addmarket.addstatus =  detail.status ===  0 ? this.addmarket.addstatus = true  : this.addmarket.addstatus = false;
@@ -221,7 +220,6 @@ export default {
         this.addmarket.noWorkStart = detail.noWorkStart ? moment(detail.noWorkStart).format('YYYY-MM-DD') : '';
         this.addmarket.noWorkEnd = detail.noWorkEnd ? moment(detail.noWorkEnd).format('YYYY-MM-DD') : '';
         this.addmarket.noWorkTime = detail.noWorkTime;
-
         let beshop = [];
         detail.shop.forEach(item=>{
           beshop.push(item.name);
@@ -230,13 +228,12 @@ export default {
         this.checkshoptxt = beshop.join(',');
         this.weeklist = detail.noWeek ?detail.noWeek.split(',') :[];
         this.checkWeeklisttxt = [...this.weeklist];
-      }
       
     },
     async shopListFun(timeid){
       let payload = {timeId:timeid};
       let res = await shopListFun(qs.stringify(payload));
-      this.shoplist = res.data;
+      this.shoplist = res;
     },
     getcheckshop(){
       let checklist = this.shoplist.filter(v=>this.shopIds.some(k=>k==v.shopId));
@@ -283,7 +280,6 @@ export default {
         this.noWorkVisible = false;
         this.addmarket.noWorkTime = this.noWorkCurrentTags;
       }
-     
     },
     open(picker) {
       this.$refs[picker].open();
@@ -340,12 +336,9 @@ export default {
       let payload = Object.assign({},this.addmarket,{week:this.weeklist.join(','),shopIds:this.shopIds.join(','),timeId:this.$route.query.id,status:status});
       delete payload.addstatus;
       let res = await addOruPdateFun(qs.stringify(payload));
-      if (res.code === 0) {
-        this.$toast({message: '编辑成功' });
-        this.$router.push({name:'marketing'});
-      } else {
-        this.$toast({message: res.msg });
-      }
+      this.$toast({message: '编辑成功' });
+      this.$router.push({name:'marketing'});
+     
     }
   },
   watch: {

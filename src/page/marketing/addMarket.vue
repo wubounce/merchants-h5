@@ -204,7 +204,7 @@ export default {
     async shopListFun(){
       let payload = Object.assign({},{timeId:'123'});
       let res = await shopListFun(qs.stringify(payload));
-      this.shoplist = res.data;
+      this.shoplist = res;
     },
     getcheckshop(){
       let checklist = this.shoplist.filter(v=>this.shopIds.some(k=>k==v.shopId));
@@ -308,12 +308,8 @@ export default {
       let payload = Object.assign({},this.addmarket,{week:this.weeklist.join(','),shopIds:this.shopIds.join(','),status:status});
       delete payload.addstatus;
       let res = await addOruPdateFun(qs.stringify(payload));
-      if (res.code === 0) {
-        this.$toast({message: '新增成功' });
-        this.$router.push({name:'marketing'});
-      } else {
-        this.$toast({message: res.msg });
-      }
+      this.$toast({message: '新增成功' });
+      this.$router.push({name:'marketing'});
     }
   },
   watch: {

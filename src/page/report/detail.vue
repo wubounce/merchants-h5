@@ -55,12 +55,10 @@ export default {
     async getDetail(date,type,shopId,dateLevel){
       let payload = Object.assign({},{date:date,type:type,shopId:shopId,dateLevel:dateLevel});
       let res = await machineReportFun(qs.stringify(payload));
-      if (res.code === 0) {
-        this.list = res.data.list;
-        this.shopName = res.data.shopName;
-        this.date = res.data.date;
-        this.list.length <= 0 ? this.noList = true:this.noList = false;
-      }
+      this.list = res.list;
+      this.shopName = res.shopName;
+      this.date = res.date;
+      this.list.length <= 0 ? this.noList = true:this.noList = false;
       
     },
     showTooltip(name,event){

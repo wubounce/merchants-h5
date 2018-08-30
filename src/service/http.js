@@ -43,7 +43,6 @@ http.interceptors.request.use(config => {
 http.interceptors.response.use(
   response => {
     Indicator.close();
-    console.log(response);
     if (response.status === 200 && response.data.code===0) {
       // 时间验证 & 把时间放到vuex中
       if (response.data.t > 0) {
