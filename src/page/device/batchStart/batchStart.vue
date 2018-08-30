@@ -42,8 +42,7 @@
 </template>
 
 <script>
-  /* eslint-disable */
-  import qs from "qs";
+  /* eslint-disable */ 
   import {delay} from "@/utils/tool";
   import { getShopFun,shopSearchFun } from '@/service/device';
   export default {
@@ -91,28 +90,26 @@
       async fetchData(e) {
         let keywords = this.keyword;
         let payload = {shopName: keywords,hasMachine: true};
-        let res = await shopSearchFun(qs.stringify(payload));
-        if(res.code === 0) {
-          this.shopList= res.data; 
-          this.shopList.forEach(item=>{
-          this.provinceName = item.province;
-          this.cityName = item.city;
-          this.districtName = item.district;
-          this.address = item.address;
-          if(item.organization) {
-            this.organization = item.organization;
-          }
-          else {
-            this.organization = '';
-          }
-          if(this.provinceName == this.cityName.slice(0,this.cityName.length-1)) {
-            item.address = this.cityName + this.districtName + this.organization + this.address;
-          }
-          else {
-            item.address = this.provinceName + this.cityName + this.districtName + this.organization + this.address;
-            }
-          });   
+        let res = await shopSearchFun(payload);
+        this.shopList= data; 
+        this.shopList.forEach(item=>{
+        this.provinceName = item.province;
+        this.cityName = item.city;
+        this.districtName = item.district;
+        this.address = item.address;
+        if(item.organization) {
+          this.organization = item.organization;
         }
+        else {
+          this.organization = '';
+        }
+        if(this.provinceName == this.cityName.slice(0,this.cityName.length-1)) {
+          item.address = this.cityName + this.districtName + this.organization + this.address;
+        }
+        else {
+          item.address = this.provinceName + this.cityName + this.districtName + this.organization + this.address;
+          }
+        });   
       },
       selectClick: function (index,name) {
         this.selectIndex = index
@@ -132,28 +129,26 @@
       },
       async checkShopSelect() { //获取店铺
         let payload = {hasMachine: true};
-        let res = await getShopFun(qs.stringify(payload));
-         if(res.code === 0) {
-          this.shopList= res.data; 
-          this.shopList.forEach(item=>{
-          this.provinceName = item.province;
-          this.cityName = item.city;
-          this.districtName = item.district;
-          this.address = item.address;
-          if(item.organization) {
-            this.organization = item.organization;
-          }
-          else {
-            this.organization = '';
-          }
-          if(this.provinceName == this.cityName.slice(0,this.cityName.length-1)) {
-            item.address = this.cityName + this.districtName + this.organization + this.address;
-          }
-          else {
-            item.address = this.provinceName + this.cityName + this.districtName + this.organization + this.address;
-            }
-          });   
+        let res = await getShopFun(payload);
+        this.shopList= res; 
+        this.shopList.forEach(item=>{
+        this.provinceName = item.province;
+        this.cityName = item.city;
+        this.districtName = item.district;
+        this.address = item.address;
+        if(item.organization) {
+          this.organization = item.organization;
         }
+        else {
+          this.organization = '';
+        }
+        if(this.provinceName == this.cityName.slice(0,this.cityName.length-1)) {
+          item.address = this.cityName + this.districtName + this.organization + this.address;
+        }
+        else {
+          item.address = this.provinceName + this.cityName + this.districtName + this.organization + this.address;
+          }
+        });   
       }
     },
 

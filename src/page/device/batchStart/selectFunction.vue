@@ -53,7 +53,6 @@
   </section>
 </template>
 <script>
-import qs from "qs";
 import { MessageBox } from 'mint-ui';
 import { batchFunctionSetListFun,batchStartOnFun } from '@/service/device';
 import moment from 'moment';
@@ -128,13 +127,12 @@ export default {
       async checkSecondClass() { //获取功能列表
         let query = this.$route.query;
         let payload = {machineParentTypeId: query.parentTypeId,shopId: query.shopId};
-        let res = await batchFunctionSetListFun(qs.stringify(payload));
-          if(res.code === 0) {
-            res.data.forEach(item=>{
-              item.ifOpen=item.ifOpen === 0? "开启":"关闭";
-            });        
-            this.secondTypeList = res.data; 
-          }
+        let res = await batchFunctionSetListFun(payload);
+        res.forEach(item=>{
+          item.ifOpen=item.ifOpen === 0? "开启":"关闭";
+        });        
+        this.secondTypeList = res; 
+
       },
       chooseTime() {
         if (!this.functionSetModel){
@@ -146,22 +144,18 @@ export default {
         if(this.startTime){
           let query = this.$route.query;
           let payload = {machineParentTypeId:query.parentTypeId,shopId:query.shopId,standardFunctionId:this.functionId,startTime:this.startTime};
-          let res = await batchStartOnFun(qs.stringify(payload));
-          if(res.code === 0) {
-            let instance = this.$toast({
-                message: '设置成功',
-                iconClass: 'mint-toast-icon mintui mintui-success'
-              });
-              setTimeout(() => {
-                instance.close();
-                this.$router.push({name:'todolist'});
-                }, 2000);
-          }else {
-            this.$toast(res.msg);
-          }
-       }else{
-         this.$toast("请设置启动时间");
-       }
+          let res = await batchStartOnFun(payload);
+          let instance = this.$toast({
+            message: '设置成功',
+            iconClass: 'mint-toast-icon mintui mintui-success'
+          });
+          setTimeout(() => {
+            instance.close();
+            this.$router.push({name:'todolist'});
+          }, 2000);
+        }else{
+          this.$toast("请设置启动时间");
+        }
       },
       handleConfirm(data) {
         //判断启动时间是否小于当前时间

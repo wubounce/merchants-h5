@@ -114,7 +114,6 @@
 </template>
 
 <script>
-  import qs from "qs";
   import Api from '@/utils/Api';
   import Web from '@/utils/Web';
   import { MessageBox } from 'mint-ui';
@@ -122,8 +121,6 @@
   import selectpickr from '@/components/selectPicker';
   import { getWxconfigFun,getShopFun,getShopListParentTypeFun,listSubTypeByFun,deviceAddorEditFun,getFunctionSetListFun } from '@/service/device';
  
-
-
   export default {
     data() {
       return {
@@ -382,19 +379,15 @@
       },
       async checkDeviceSelect() { //获取店铺
         let res = await getShopFun();
-        if(res.code === 0) {
-          this.slotsShop[0].values = res.data;
-          this.companyVisible = true;
-        }       
+        this.slotsShop[0].values = res;
+        this.companyVisible = true;     
       },
       async checkFirstClass() { //获取一级列表
         if(this.fromdata.shopType.id){
-           let payload = {shopId:this.fromdata.shopType.id};
-           let res = await getShopListParentTypeFun(qs.stringify(payload));
-           if(res.code === 0) {
-             this.slotsFirst[0].values = res.data;
-            }
-            this.parentType = true;        
+          let payload = {shopId:this.fromdata.shopType.id};
+          let res = await getShopListParentTypeFun(payload);
+          this.slotsFirst[0].values = res;
+          this.parentType = true;        
         }else{
           this.$toast("请先选择店铺"); //MessageBox.alert
           return false;
@@ -407,29 +400,26 @@
          this.selectIndex2 = -2;
          let count = 0;
          if(this.fromdata.firstType.id) {
-           let payload = {parentTypeId:this.fromdata.firstType.id};
-           let res = await listSubTypeByFun(qs.stringify(payload));
-           if(res.code === 0) {
-             if(res.data.length>0){
-               res.data.forEach(item=>{
-                 if(item.machineCount>0){
-                   this.secondOnTypeList.push(item);
-                   count++;
-                 }else{
-                   this.secondOffTypeList.push(item);
-                 }
-               });
-               if(count > 0) {
-                 this.subType2 = true;
-               }else{
-                 this.slotsFun[0].values = res.data;
-                 this.subType = true;
-               }
-             }else{
-               this.$toast("设备型号为空"); 
-             }
+            let payload = {parentTypeId:this.fromdata.firstType.id};
+            let res = await listSubTypeByFun(payload);
+            if(res.length>0){
+              res.forEach(item=>{
+                if(item.machineCount>0){
+                  this.secondOnTypeList.push(item);
+                  count++;
+                }else{
+                  this.secondOffTypeList.push(item);
+                }
+              });
+              if(count > 0) {
+                this.subType2 = true;
+              }else{
+                this.slotsFun[0].values = res;
+                this.subType = true;
+              }
+            }else{
+              this.$toast("设备型号为空"); 
             }
-           
         }else{
           this.$toast("请先选择类型");
           return false;
@@ -445,27 +435,21 @@
         }else{         
           if(this.functionSetList.length === 0){
             let payload = {subTypeId: this.fromdata.secondType.id,shopId: this.fromdata.shopType.id} ;     
-            let res = await getFunctionSetListFun(qs.stringify(payload));
-            if(res.code === 0) {
-              this.fromdata.communicateType = res.data.communicateType;
-              if(Number(this.fromdata.communicateType)=== Number(this.fromdata.smCommunicateType)){
-                this.functionTempletType = res.data.functionTempletType; 
-                this.functionSetList = res.data.list;
-                this.functionSetList.forEach(item=>{
-                 item.ifOpen=item.ifOpen === 0?(!item.ifOpen) : (!!item.ifOpen);
-                });
-                this.keepFunctionArr= [].concat(JSON.parse(JSON.stringify(res.data.list)));
-                this.setModelShow= true;
-                this.modelShow = false;
-                this.title = "功能列表";
-              }else{
-                this.$toast("您扫描的NQT和选择的设备型号不一致");
-                return;
-              } 
-             
-            }
-            else {
-              this.$toast(res.msg);
+            let res = await getFunctionSetListFun(payload);
+            this.fromdata.communicateType = res.communicateType;
+            if(Number(this.fromdata.communicateType)=== Number(this.fromdata.smCommunicateType)){
+              this.functionTempletType = res.functionTempletType; 
+              this.functionSetList = res.list;
+              this.functionSetList.forEach(item=>{
+                item.ifOpen=item.ifOpen === 0?(!item.ifOpen) : (!!item.ifOpen);
+              });
+              this.keepFunctionArr= [].concat(JSON.parse(JSON.stringify(res.list)));
+              this.setModelShow= true;
+              this.modelShow = false;
+              this.title = "功能列表";
+            }else{
+              this.$toast("您扫描的NQT和选择的设备型号不一致");
+              return;
             }        
           }else {      
             this.setModelShow= true;
@@ -564,20 +548,15 @@
           functionTempletType: this.functionTempletType,
           functionJson: JSON.stringify(arr)
         };
-        let res = await deviceAddorEditFun(qs.stringify(obj));
-        if(res.code===0) {
-          let instance = this.$toast({
-            message: '新增设备成功',
-            iconClass: 'mint-toast-icon mintui mintui-success'
-          });
-          setTimeout(() => {
-            instance.close();
-            this.$router.push({name:'deviceMange'});
-          }, 2000);
-        }else {
-          this.$toast((res.msg).toUpperCase());
-        }
-
+        let res = await deviceAddorEditFun(bj);
+        let instance = this.$toast({
+          message: '新增设备成功',
+          iconClass: 'mint-toast-icon mintui mintui-success'
+        });
+        setTimeout(() => {
+          instance.close();
+          this.$router.push({name:'deviceMange'});
+        }, 2000);
       },
       toFunctionSeting() { //切换到功能列表
         if(!this.fromdata.company && !this.fromdata.communicateType) {

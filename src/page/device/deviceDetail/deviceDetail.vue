@@ -101,7 +101,6 @@
 </template>
 
 <script>
-  import qs from "qs";
   import Button from "@/components/Button/Button";
   import { MessageBox } from 'mint-ui';
   import { detailDeviceListFun,deleteDeviceFun,manageResetDeviceFun,tzjDeviceFun } from '@/service/device';
@@ -174,62 +173,56 @@
     methods: {
       async getDetailDevice() {  //获取数据
         let payload = { machineId: this.$route.query.machineId} ;     
-        let res = await detailDeviceListFun(qs.stringify(payload));
-         if(res.code === 0) {
-          this.deviceDetail= res.data;
-          this.functionList = res.data.functionList;
-          let comment = res.comment;
-          if(comment) {
-            this.$toast("设备型号与功能不匹配，请删除设备重新绑定。");
-          }
-          if(res.data.hasTzj) { //判断是否有筒自洁功能
-            this.tzjShow = true;
-          }else {
-            this.tzjShow = false;
-          }
-          if(res.data.communicateType === 1){
-            this.tongxin = "串口";
-          } else {
-            this.tongxin = "脉冲";
-            this.functionCodeShow = true;
-            this.functionListTitle = this.functionListTitle2;
-          }
-          this.functionList.forEach(item=>{
-            item.ifOpen=item.ifOpen === 0? "开启":"关闭";
-          });
-           switch(res.data.machineState){
-            case 1:
-            this.machineState = "空闲";
-            break;
-            case 2:
-            this.machineState = "运行";
-            break;
-            case 3:
-            this.machineState = "预约";
-            break;
-            case 4:
-            this.machineState = "故障";
-            break;
-            case 5:
-            this.machineState = "参数设置";
-            break;
-            case 6:
-            this.machineState = "自检";
-            break;
-            case 7:
-            this.machineState = "预约";
-            break;
-            case 8:
-            this.machineState = "离线";
-            break;
-            case 16:
-            this.machineState = "超时未工作";
-            break;
-
-          }
+        let res = await detailDeviceListFun(payload);
+        this.deviceDetail= res;
+        this.functionList = res.functionList;
+        let comment = res.comment;
+        if(comment) {
+          this.$toast("设备型号与功能不匹配，请删除设备重新绑定。");
         }
-        else {
-          this.$toast(res.msg);
+        if(res.hasTzj) { //判断是否有筒自洁功能
+          this.tzjShow = true;
+        }else {
+          this.tzjShow = false;
+        }
+        if(res.communicateType === 1){
+          this.tongxin = "串口";
+        } else {
+          this.tongxin = "脉冲";
+          this.functionCodeShow = true;
+          this.functionListTitle = this.functionListTitle2;
+        }
+        this.functionList.forEach(item=>{
+          item.ifOpen=item.ifOpen === 0? "开启":"关闭";
+        });
+          switch(res.machineState){
+          case 1:
+          this.machineState = "空闲";
+          break;
+          case 2:
+          this.machineState = "运行";
+          break;
+          case 3:
+          this.machineState = "预约";
+          break;
+          case 4:
+          this.machineState = "故障";
+          break;
+          case 5:
+          this.machineState = "参数设置";
+          break;
+          case 6:
+          this.machineState = "自检";
+          break;
+          case 7:
+          this.machineState = "预约";
+          break;
+          case 8:
+          this.machineState = "离线";
+          break;
+          case 16:
+          this.machineState = "超时未工作";
+          break;
         }
       }, 
       functionSetListShowClick() {
@@ -237,59 +230,43 @@
       },
       deviceDele() {  //删除
         MessageBox.confirm('是否确认删除此设备?').then(async () => {
-          let res = await deleteDeviceFun(qs.stringify({machineId: this.$route.query.machineId}));
-          if(res.code === 0) {
-            let instance = this.$toast({
-              message: '删除设备成功',
-              iconClass: 'mint-toast-icon mintui mintui-success'
-            });
-            setTimeout(() => {
-              instance.close();
-              this.$router.push({name:'deviceMange'});
-              }, 2000);
-          
-            }
-          else {
-          this.$toast(res.msg);
-          }
+          let res = await deleteDeviceFun({machineId: this.$route.query.machineId});
+          let instance = this.$toast({
+            message: '删除设备成功',
+            iconClass: 'mint-toast-icon mintui mintui-success'
+          });
+          setTimeout(() => {
+            instance.close();
+            this.$router.push({name:'deviceMange'});
+          }, 2000);
         });   
         
       },
       deviceTZJ() {  //桶自洁
         MessageBox.confirm('是否确认桶自洁此设备?').then(async () => {
-          let res = await tzjDeviceFun(qs.stringify({machineId: this.$route.query.machineId}));
-          if(res.code === 0) {
-            let instance = this.$toast({
-              message: '筒自洁成功',
-              iconClass: 'mint-toast-icon mintui mintui-success'
-            });
-            setTimeout(() => {
-              instance.close();
-              this.$router.push({name:'deviceMange'});
-              }, 2000);
-          }
-          else {
-            this.$toast(res.msg);
-          }
+          let res = await tzjDeviceFun({machineId: this.$route.query.machineId});
+          let instance = this.$toast({
+            message: '筒自洁成功',
+            iconClass: 'mint-toast-icon mintui mintui-success'
+          });
+          setTimeout(() => {
+            instance.close();
+            this.$router.push({name:'deviceMange'});
+          }, 2000);
         });
         
       },
       deviceRest() {  //复位
         MessageBox.confirm('是否确认复位此设备?').then(async ()=> {
-          let res = await manageResetDeviceFun(qs.stringify({machineId: this.$route.query.machineId}));
-          if(res.code === 0) {
-            let instance = this.$toast({
-              message: '复位成功',
-              iconClass: 'mint-toast-icon mintui mintui-success'
-            });
-            setTimeout(() => {
-              instance.close();
-              this.$router.push({name:'deviceMange'});
-              }, 2000);
-          }
-          else {
-            this.$toast(res.msg);
-          }
+          let res = await manageResetDeviceFun({machineId: this.$route.query.machineId});
+          let instance = this.$toast({
+            message: '复位成功',
+            iconClass: 'mint-toast-icon mintui mintui-success'
+          });
+          setTimeout(() => {
+            instance.close();
+            this.$router.push({name:'deviceMange'});
+          }, 2000);
         });
 
       },

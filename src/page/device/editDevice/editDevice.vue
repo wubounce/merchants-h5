@@ -1,8 +1,7 @@
 <template>
   <section v-title="title">
     <div v-show="modelShow">
-      <ul class="device-detail">
-    
+      <ul class="device-detail">   
         <!-- 表单模块部分  -->
         <li class="device-detail-item">
           <!-- 表单元格渲染 -->
@@ -71,11 +70,6 @@
 </template>
 
 <script>
-  // import wx from 'weixin-js-sdk';
-  // import {
-  //   device
-  // } from "@/service/device";
-  import qs from "qs";
   import Api from '@/utils/Api';
   import Web from '@/utils/Web';
   import { MessageBox } from 'mint-ui';
@@ -212,40 +206,33 @@
       },
       async getDetailDevice() {  //获取数据
         let payload = { machineId: this.$route.query.machineId} ;     
-        let res = await detailDeviceListFun(qs.stringify(payload));
-         if(res.code === 0) {
-           if(Number(res.data.communicateType) !== 1){
-             this.functionListTitle2 = this.functionListTitle;
-             this.isShow2 = true;
-           }
-          this.fromdata.machineName = res.data.machineName;
-          this.fromdata.machineId = res.data.machineId;
-          this.fromdata.shopType.name = res.data.shopName;
-          this.fromdata.shopType.id = res.data.shopId;
-          this.fromdata.firstType.id = res.data.parentTypeId;
-          this.fromdata.secondType.id = res.data.subTypeId;
-          this.fromdata.functionTempletType = res.data.functionTempletType;
-          this.fromdata.company = res.data.company;
-          this.fromdata.ver = res.data.ver;
-          this.fromdata.communicateType = res.data.communicateType;
-          this.fromdata.nqt = res.data.nqt?res.data.nqt:"点击扫描设备上二维码";
-          this.fromdata.imei = res.data.imei?res.data.imei:"点击扫描模块上二维码";
-          this.functionList = res.data.functionList;
-          this.functionList.forEach(item=>{
-            item.ifOpen=item.ifOpen === "0"?(!!item.ifOpen) : (!item.ifOpen);
-          });
-          this.keepFunctionArr= [].concat(JSON.parse(JSON.stringify(this.functionList)));
+        let res = await detailDeviceListFun(payload);
+        if(Number(res.communicateType) !== 1){
+          this.functionListTitle2 = this.functionListTitle;
+          this.isShow2 = true;
         }
-        else {
-           this.$toast(res.msg);
-        }
+        this.fromdata.machineName = res.machineName;
+        this.fromdata.machineId = res.machineId;
+        this.fromdata.shopType.name = res.shopName;
+        this.fromdata.shopType.id = res.shopId;
+        this.fromdata.firstType.id = res.parentTypeId;
+        this.fromdata.secondType.id = res.subTypeId;
+        this.fromdata.functionTempletType = res.functionTempletType;
+        this.fromdata.company = res.company;
+        this.fromdata.ver = res.ver;
+        this.fromdata.communicateType = res.communicateType;
+        this.fromdata.nqt = res.nqt?res.nqt:"点击扫描设备上二维码";
+        this.fromdata.imei = res.imei?res.imei:"点击扫描模块上二维码";
+        this.functionList = res.functionList;
+        this.functionList.forEach(item=>{
+          item.ifOpen=item.ifOpen === "0"?(!!item.ifOpen) : (!item.ifOpen);
+        });
+        this.keepFunctionArr= [].concat(JSON.parse(JSON.stringify(this.functionList)));
       }, 
       async checkDeviceSelect() { //获取店铺
         let res = await getShopFun();
-         if(res.code === 0) {
-          this.slotsShop[0].values = res.data;
-         }
-         this.companyVisible = true;
+        this.slotsShop[0].values = res;
+        this.companyVisible = true;
       },
 
       async submit() {  //提交
@@ -285,37 +272,33 @@
             }, 2000);
           return false;
         }
-          let arr= [].concat(JSON.parse(JSON.stringify(this.functionList))); 
-          arr.forEach(item=>{
-            return item.ifOpen=item.ifOpen?0:1;
-          });
-          let obj = {
-            machineId: this.fromdata.machineId,
-            machineName: this.fromdata.machineName,
-            shopId: this.fromdata.shopType.id,
-            parentTypeId: this.fromdata.firstType.id,
-            subTypeId: this.fromdata.secondType.id,
-            nqt: this.fromdata.nqt,
-            company: this.fromdata.company,
-            communicateType: this.fromdata.communicateType,
-            ver: this.fromdata.ver,
-            imei: this.fromdata.imei,
-            functionTempletType: this.fromdata.functionTempletType,
-            functionJson: JSON.stringify(arr)
-          };
-          let res = await deviceAddorEditFun(qs.stringify(obj));
-          if(res.code===0) {
-            let instance = this.$toast({
-              message: '编辑成功',
-              iconClass: 'mint-toast-icon mintui mintui-success'
-            });
-            setTimeout(() => {
-              instance.close();
-              this.$router.push({name:'deviceMange'});
-              }, 2000);
-          }else {
-            this.$toast(res.msg);
-          }
+        let arr= [].concat(JSON.parse(JSON.stringify(this.functionList))); 
+        arr.forEach(item=>{
+          return item.ifOpen=item.ifOpen?0:1;
+        });
+        let obj = {
+          machineId: this.fromdata.machineId,
+          machineName: this.fromdata.machineName,
+          shopId: this.fromdata.shopType.id,
+          parentTypeId: this.fromdata.firstType.id,
+          subTypeId: this.fromdata.secondType.id,
+          nqt: this.fromdata.nqt,
+          company: this.fromdata.company,
+          communicateType: this.fromdata.communicateType,
+          ver: this.fromdata.ver,
+          imei: this.fromdata.imei,
+          functionTempletType: this.fromdata.functionTempletType,
+          functionJson: JSON.stringify(arr)
+        };
+        let res = await deviceAddorEditFun(obj);
+        let instance = this.$toast({
+          message: '编辑成功',
+          iconClass: 'mint-toast-icon mintui mintui-success'
+        });
+        setTimeout(() => {
+          instance.close();
+          this.$router.push({name:'deviceMange'});
+          }, 2000);
       },
 
       toFunctionSeting() { //切换到功能列表
