@@ -129,12 +129,6 @@ export default new Router({
       component: () => import ('@/page/device/deviceDetail/deviceDetail')
     },
     {
-      path: '/functionSet',
-      name: 'functionSet',
-      component: () => import ('@/page/device/functionSet/functionSet')
-    },
-
-    {
       path: '/batchStart',
       name: 'batchStart',
       component: () => import ('@/page/device/batchStart/batchStart'),
