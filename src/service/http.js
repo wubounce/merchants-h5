@@ -63,11 +63,11 @@ http.interceptors.response.use(
       }
       return Promise.resolve(response.data.data);
 
-    }else if (response.data.code === 11) { //11:Token 过期了;
+    }else if (response.status === 200 && response.data.code === 11) { //11:Token 过期了;
       store.dispatch('LogOut').then(() => {
         location.reload();
       });
-    }else if (response.data.code === 7004) {  //11:无权限;
+    }else if (response.status === 200 && response.data.code === 7004) {  //11:无权限;
         store.dispatch('LogOut').then(() => {
           location.reload();
         });
