@@ -11,7 +11,6 @@
   </section>
 </template>
 <script>
-import qs from 'qs';
 import { updateOperatorFun } from '@/service/user';
 export default {
   data() {
@@ -35,8 +34,8 @@ export default {
         let obj ={
           alipayAccount: this.account
         };
-        let res = await updateOperatorFun(qs.stringify(obj));
-        if(res.code === 0 ) {
+        let res = await updateOperatorFun(obj);
+        
           this.$router.push({
             name: 'accountSet'
           });
@@ -47,10 +46,7 @@ export default {
           setTimeout(() => {
             instance.close();
           }, 2000);
-        }
-        else {
-          this.$toast(res.msg);
-        }
+
       }
       else {
         this.$toast({

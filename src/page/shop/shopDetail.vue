@@ -40,7 +40,6 @@
   </section>
 </template>
 <script>
-import qs from "qs";
 import Button from "@/components/Button/Button";
 import { MessageBox } from 'mint-ui';
 import { shopDetailFun } from '@/service/shop';
@@ -68,13 +67,9 @@ export default {
     isDeleteOrNot(id) {
       MessageBox.confirm('确认删除店铺？','').then(async () => {
         let payload = {shopId: id};
-        let res = await deleteShopFun(qs.stringify(payload));
-        if (res.code === 0) {
-          this.$toast({message: '删除成功' });
-           this.$router.push({name:'shopList'});
-        } else {
-          this.$toast({message: res.msg });
-        }
+        let res = await deleteShopFun(payload);
+        this.$toast({message: '删除成功' });
+        this.$router.push({name:'shopList'});
       });
     },
     goShopEdit() {
@@ -87,66 +82,64 @@ export default {
       });
     },
     async getShopDetail() {
-      let obj = { shopId: this.$route.query.shopId };
-      let res = await shopDetailFun(qs.stringify(obj));
-      if(res.code===0) {
-        this.shopdetail = res.data;
-        if(res.data.imageId == null || res.data.imageId == '' ) {
-          this.shopdetail.imageId = '../../../static/image/shop/add.png';
+      let payload = { shopId: this.$route.query.shopId };
+      let res = await shopDetailFun(payload);
+      this.shopdetail = res;
+      if(res.imageId == null || res.imageId == '' ) {
+        this.shopdetail.imageId = '../../../static/image/shop/add.png';
+      }
+      this.list = res.machineTypeNames.split(',');
+      this.lng = res.lng;
+      this.lat = res.lat;
+      //累计收益
+      this.shopdetail.profit = res.profit;
+      if(this.shopdetail.profit) {
+        //将number类型的数据转化成string
+        this.shopdetail.profit = this.shopdetail.profit+'';
+        //判断是不是'5'
+        if(this.shopdetail.profit.split('.').length == 1) {
+          this.shopdetail.profit = this.shopdetail.profit + '.00';
         }
-        this.list = res.data.machineTypeNames.split(',');
-        this.lng = res.data.lng;
-        this.lat = res.data.lat;
-        //累计收益
-        this.shopdetail.profit = res.data.profit;
-        if(this.shopdetail.profit) {
-          //将number类型的数据转化成string
-          this.shopdetail.profit = this.shopdetail.profit+'';
-          //判断是不是'5'
-          if(this.shopdetail.profit.split('.').length == 1) {
-            this.shopdetail.profit = this.shopdetail.profit + '.00';
-          }
-          else {
-            //判断是不是'5.0'
-            if(this.shopdetail.profit.split('.')[1].length ==1) {
-              this.shopdetail.profit = this.shopdetail.profit + '0';
-            }
+        else {
+          //判断是不是'5.0'
+          if(this.shopdetail.profit.split('.')[1].length ==1) {
+            this.shopdetail.profit = this.shopdetail.profit + '0';
           }
         }
-        else {
-          this.shopdetail.profit = '0.00';
-        }
-        
-        //店铺类型
-        this.shopdetail.shopType = res.data.shopTypeName;
-        //店铺地址
-        this.provinceName = res.data.provinceName;
-        this.cityName = res.data.cityName;
-        this.districtName = res.data.districtName;
-        
-        this.address = res.data.address;
-        if(res.data.organization) {
-          this.organization = res.data.organization;
-        }
-        else {
-          this.organization = '';
-        }
-        if(this.districtName == this.cityName) {
-          this.districtName = '';
-        }
-        if(this.provinceName == this.cityName.slice(0,this.cityName.length-1)) {
-          this.completeAddress = this.cityName + this.districtName + this.organization + this.address;
-        }
-        else {
-          this.completeAddress = this.provinceName + this.cityName + this.districtName + this.organization + this.address;
-        }
-        //预约时长
-        if(res.data.orderLimitMinutes) {
-          this.shopdetail.orderLimitMinutes = res.data.orderLimitMinutes;
-        }
-        else {
-          this.shopdetail.orderLimitMinutes = '';
-        }
+      }
+      else {
+        this.shopdetail.profit = '0.00';
+      }
+      
+      //店铺类型
+      this.shopdetail.shopType = res.shopTypeName;
+      //店铺地址
+      this.provinceName = res.provinceName;
+      this.cityName = res.cityName;
+      this.districtName = res.districtName;
+      
+      this.address = res.address;
+      if(res.organization) {
+        this.organization = res.organization;
+      }
+      else {
+        this.organization = '';
+      }
+      if(this.districtName == this.cityName) {
+        this.districtName = '';
+      }
+      if(this.provinceName == this.cityName.slice(0,this.cityName.length-1)) {
+        this.completeAddress = this.cityName + this.districtName + this.organization + this.address;
+      }
+      else {
+        this.completeAddress = this.provinceName + this.cityName + this.districtName + this.organization + this.address;
+      }
+      //预约时长
+      if(res.orderLimitMinutes) {
+        this.shopdetail.orderLimitMinutes = res.orderLimitMinutes;
+      }
+      else {
+        this.shopdetail.orderLimitMinutes = '';
       }
     }
   },

@@ -63,7 +63,6 @@
 
 <script>
 import { MessageBox } from 'mint-ui';
-import qs from "qs";
 import { addOrEditShopFun } from '@/service/shop';
 import { areaListFun } from '@/service/shop';
 import { listParentTypeFun } from '@/service/shop';
@@ -463,15 +462,12 @@ export default {
         if(values[0] == this.provinceArray[i].areaName) {
           let city = { parentId: this.provinceArray[i].areaId };
           this.provinceId = this.provinceArray[i].areaId;
-          let res = await areaListFun(qs.stringify(city));
-          if(res.code===0) {
-            let chooseCity = res.data.map((c)=> {
-              return c.areaName;
-            });
-
-            this.cityArray = res.data;
-            picker.setSlotValues(1, chooseCity); //设置市
-          }
+          let res = await areaListFun(city);
+          let chooseCity = res.map((c)=> {
+            return c.areaName;
+          });
+          this.cityArray = res;
+          picker.setSlotValues(1, chooseCity); //设置市
         }
       }
 
@@ -480,15 +476,13 @@ export default {
         if(values[1] == this.cityArray[j].areaName) {
           let district = { parentId: this.cityArray[j].areaId };
           this.cityId = this.cityArray[j].areaId;
-          let resDistrict = await areaListFun(qs.stringify(district));
-          if(resDistrict.code===0) {
-            let chooseDistrict = resDistrict.data.map((d)=> {
-              return d.areaName;
-            });
+          let resDistrict = await areaListFun(district);
+          let chooseDistrict = resDistrict.map((d)=> {
+            return d.areaName;
+          });
 
-            this.districtArray = resDistrict.data;
-            picker.setSlotValues(2, chooseDistrict); //设置市
-          }
+          this.districtArray = resDistrict;
+          picker.setSlotValues(2, chooseDistrict); //设置市
         }
       }
 
@@ -509,34 +503,14 @@ export default {
       let obj = {
         //onlyMine: false
       };
-      let res = await listParentTypeFun(qs.stringify(obj));
-      if(res.code ===0 ) {
-        this.machineArray = res.data;
-        let arr = [];
-        arr = JSON.parse(JSON.stringify(res.data).replace(/name/g,"label"));
-        this.options = JSON.parse(JSON.stringify(arr).replace(/id/g,"value"));
-        for(let i=0;i<this.options.length;i++) {
-          this.options[i]['value'] = this.options[i]['label'];
-        }
+      let res = await listParentTypeFun(obj);
+      this.machineArray = res;
+      let arr = [];
+      arr = JSON.parse(JSON.stringify(res).replace(/name/g,"label"));
+      this.options = JSON.parse(JSON.stringify(arr).replace(/id/g,"value"));
+      for(let i=0;i<this.options.length;i++) {
+        this.options[i]['value'] = this.options[i]['label'];
       }
-    },
-    async UpdatedImgFiles(msg) {
-      //判断图片类型
-      if(msg.substring(0,22)=="data:image/png;base64,") {
-        msg = msg.replace("data:image/png;base64,","");
-      }
-      else if(msg.substring(0,23)=="data:image/jpeg;base64,") {
-        msg = msg.replace("data:image/jpeg;base64,","");
-      }
-      let obj = { files:msg };
-      let res = await uploadFileFun(qs.stringify(obj));
-      if(res.code ===0 ) {
-        this.imageId = res.data[0].url;
-      }
-      else {
-        this.$toast(res.msg);
-      }
-      this.imgId.defaultPicture = this.imageId;
     },
     changeTime(picker, values) {
       this.shopTime.startTime = values[0].slice(0,2) + ':' +values[1].slice(0,2);
@@ -579,8 +553,8 @@ export default {
               workTime: this.addBusinessTime,
               organization: this.organization
             };
-            let res = await addOrEditShopFun(qs.stringify(obj));
-            if(res.code===0) {
+            let res = await addOrEditShopFun(obj);
+            
             //成功后的操作
             let instance = this.$toast({
               message: '添加成功',
@@ -592,14 +566,7 @@ export default {
               this.$router.push({
                 name:'shopList'
               });
-            }
-            else {
-              this.$toast({
-                message: res.msg,
-                position: 'middle',
-                duration: 3000
-              });
-            }
+           
             //上面是传值
           }
           else {
@@ -630,8 +597,8 @@ export default {
             workTime: this.addBusinessTime,
             organization: this.organization
           };
-          let res = await addOrEditShopFun(qs.stringify(obj));
-          if(res.code===0) {
+          let res = await addOrEditShopFun(obj);
+          
           //成功后的操作
           let instance = this.$toast({
             message: '添加成功',
@@ -643,14 +610,6 @@ export default {
             this.$router.push({
               name:'shopList'
             });
-          }
-          else {
-            this.$toast({
-              message: res.msg,
-              position: 'middle',
-              duration: 3000
-            });
-          }
         }
         
       }else if(!this.list[0].value) {
@@ -689,88 +648,23 @@ export default {
     //省市区联动
     async getArea() {
       let obj = { parentId: 0 };
-      let res = await areaListFun(qs.stringify(obj));
-      this.provinceArray = res.data;
-      if(res.code===0) {
-        for(let i=0;i<res.data.length;i++) {
-          this.addressSlots[0].values.push(res.data[i].areaName);
-        }
+      let res = await areaListFun(obj);
+      this.provinceArray = res;
+     
+      for(let i=0;i<res.length;i++) {
+        this.addressSlots[0].values.push(res[i].areaName);
       }
-      else {
-        this.$toast({
-          message:res.msg,
-          position:'middle',
-          duration:3000
-        });
-      }
+      
     },
     async getShoplist() {
       let res = await manageListFun();
-      if(res.code === 0 ) {
-        this.arrName = res.data.items.map((i) => {
-          return i.shopName;
-        });
-      }
-    },
-    //从mapSearch里取数据
-    getFromValue(data) {
-      this.list[2].value = this.$route.query.special;
-      this.shopName = (this.$route.query.name == '') ? '' : this.$route.query.name;
-      
-      this.slots[0].defaultIndex = this.$route.query.type-1;
-      switch(this.$route.query.type) {
-        case 1:
-          this.list[0].value = '学校';
-          break;
-        case 2:
-          this.list[0].value = '公寓';
-          break;
-        case 3:
-          this.list[0].value = '流动人口社区';
-          break;
-        case 4:
-          this.list[0].value = '酒店';
-          break;
-          case 5:
-          this.list[0].value = '医院';
-          break;
-        case 6:
-          this.list[0].value = '养老院';
-          break;
-          case 7:
-          this.list[0].value = '工厂';
-          break;
-        case 8:
-          this.list[0].value = '浴场';
-          break;
-        case 9:
-          this.list[0].value = '其他';
-          break;
-        default:
-          this.list[0].value = '';
-          break;
-      }
-      this.list[1].value = (this.$route.query.place == '') ? '' : this.$route.query.place;
-      this.provinceId = (this.$route.query.provinceId == '') ? '' : this.$route.query.provinceId;
-      this.cityId = (this.$route.query.cityId == '') ? '' : this.$route.query.cityId;
-      this.districtId = (this.$route.query.districtId == '') ? '' : this.$route.query.districtId;
-
-      this.address = (this.$route.query.address == '') ? '' : this.$route.query.address;
-      this.machineName = (this.$route.query.machineName == '') ? '' : this.$route.query.machineName;
-      this.isReserve = (this.$route.query.isReserve == true) ? true : false;
-      this.orderLimitMinutes = (this.$route.query.LimitMinutes == '') ? '' : this.$route.query.LimitMinutes;
-      this.addBusinessTime = (this.$route.query.worktime == '') ? '' : this.$route.query.worktime;
-      if(this.$route.query.img != "" && this.$route.query.img != undefined) {
-        this.imgId.defaultPicture = this.$route.query.img;
-      }
-      else {
-        this.imgId.defaultPicture = '../../../static/image/shop/add.png';
-      }
+      this.arrName = res.items.map((i) => {
+        return i.shopName;
+      });
     }
   },
   created() {
     this.getShoplist();
-    this.getFromValue();
   },
   watch: {
     $route(to,from) {

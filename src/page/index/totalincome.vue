@@ -24,7 +24,6 @@
     </section>
 </template>
 <script>
-import qs from 'qs';
 import { balanceLogProfitListFun } from '@/service/index';
 export default {
     data() {
@@ -39,14 +38,8 @@ export default {
             let obj = {
                 isDay: false
             };
-            let res = await balanceLogProfitListFun(qs.stringify(obj));
-            if(res.code ===0 ) {
-                this.listdata = res.data.items;
-            }else {
-                this.$toast({
-                    message: res.msg
-                });
-            }
+            let res = await balanceLogProfitListFun(obj);
+            this.listdata = res.items;
         },
         change(i) {
             if(i) {

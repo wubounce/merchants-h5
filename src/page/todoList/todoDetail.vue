@@ -24,12 +24,9 @@
 </template>
 
 <script>
-import qs from "qs";
 import Button from "@/components/Button/Button";
 import { MessageBox } from 'mint-ui';
-import { getBatchStartFun } from '@/service/todoList';
-import { delBatchStartFun } from '@/service/todoList';
-import { batchStartNowFun } from '@/service/todoList';
+import { batchStartNowFun , getBatchStartFun , delBatchStartFun } from '@/service/todoList';
 import moment from 'moment';
   export default {
     data() {
@@ -43,23 +40,17 @@ import moment from 'moment';
         //删除
         MessageBox.confirm('您确定要取消批量启动设备么？','').then(async() => {
           let objDel = { id:this.$route.query.id };
-          let resDel = await delBatchStartFun(qs.stringify(objDel));
-          if(resDel.code ===0 ) {
-            let instance = this.$toast({
-              message: '删除成功',
-              iconClass: 'mint-toast-icon mintui mintui-success'
-            });
-            setTimeout(() => {
-              instance.close();
-            }, 1000);
-            this.$router.push({
-              name:'todolist'
-            });
-          }
-          else {
-            this.$router.push({name:'todolist'});
-            MessageBox.alert(resDel.msg,'');
-          }
+          let resDel = await delBatchStartFun(objDel);
+          let instance = this.$toast({
+            message: '删除成功',
+            iconClass: 'mint-toast-icon mintui mintui-success'
+          });
+          setTimeout(() => {
+            instance.close();
+          }, 1000);
+          this.$router.push({
+            name:'todolist'
+          });
 	      }
 	     );
       },
@@ -80,19 +71,14 @@ import moment from 'moment';
           let obj = {
             id: this.$route.query.id
           };
-          let res = await batchStartNowFun(qs.stringify(obj));
-          if(res.code===0) {
-           this.$toast({
-                message: res.msg,
-                position: "middle",
-                duration: 3000
-              });
-           this.$router.push({name:'todolist'});
-          }
-          else {
-            this.$router.push({name:'todolist'});
-            this.$toast(res.msg);
-          }
+          let res = await batchStartNowFun(obj);
+         
+          this.$toast({
+              message: res.msg,
+              position: "middle",
+              duration: 3000
+            });
+          this.$router.push({name:'todolist'});
 	      },
 	      action => {
 	      }
@@ -104,17 +90,15 @@ import moment from 'moment';
           page:1,
           pageSize: 10
         };
-        let res = await getBatchStartFun(qs.stringify(obj));
-        if(res.code ===0 ) {
-          //参数异常，待后台确认
-          this.item = res.data;
-          this.item.createTime = moment(res.data.createTime).format('YYYY-MM-DD HH:mm:ss');
-          if(res.data.shopName.length>15) {
-            this.item.shopName = res.data.shopName.slice(0,15) + '...';
-          }
-          else {
-            this.item.shopName = res.data.shopName;
-          }
+        let res = await getBatchStartFun(obj);       
+        //参数异常，待后台确认
+        this.item = res;
+        this.item.createTime = moment(res.createTime).format('YYYY-MM-DD HH:mm:ss');
+        if(res.shopName.length>15) {
+          this.item.shopName = res.shopName.slice(0,15) + '...';
+        }
+        else {
+          this.item.shopName = res.shopName;
         }
       }
     }, 

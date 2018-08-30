@@ -30,7 +30,6 @@
 </template>
 <script>
 import moment from 'moment';
-import qs from 'qs';
 import { balanceLogProfitListFun } from '@/service/index';
 import PagerMixin from '@/mixins/pagerMixin';
 export default {
@@ -77,17 +76,10 @@ export default {
                 page: this.page,
                 pageSize: this.pageSize
             };
-            let res = await balanceLogProfitListFun(qs.stringify(obj));
-            if(res.code ===0 ) {
-					if(res.data.total != 0) {
-						this.listdata = res.data.items?[...this.listdata,...res.data.items]:[];  //分页添加
-                        this.total = res.data.total;
-					}
-            }
-            else {
-                this.$toast({
-                    message: res.msg
-                });
+            let res = await balanceLogProfitListFun(obj);
+            if(res.total != 0) {
+                this.listdata = res.items?[...this.listdata,...res.items]:[];  //分页添加
+                this.total = res.total;
             }
         },
     },

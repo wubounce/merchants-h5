@@ -10,7 +10,6 @@
   </section>
 </template>
 <script>
-import qs from 'qs';
 import { getAliAndStatusFun } from '@/service/setAlipayAndStatus';
 export default {
   data() {
@@ -52,12 +51,12 @@ export default {
     },
     async getAliAndStatus() {
       let res = await getAliAndStatusFun();
-      if(res.code ===0) {
-        this.user = res.data;
-        this.isBlue = res.data.alipayAccount == "" || res.data.alipayAccount == null ? true : false;
-        this.isAlipay = res.data.alipayAccount;
+      
+        this.user = res;
+        this.isBlue = res.alipayAccount == "" || res.alipayAccount == null ? true : false;
+        this.isAlipay = res.alipayAccount;
         //判断认证情况
-        switch(res.data.status) {
+        switch(res.status) {
               case 0: 
                 this.user.status = '未认证';
                 break;
@@ -72,7 +71,7 @@ export default {
                 this.user.status = '未通过';
                 break;
             }
-      }
+      
     }
   },
   filters:{

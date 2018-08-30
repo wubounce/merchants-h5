@@ -27,11 +27,9 @@
    </section>
 </template>
 <script>
-import qs from 'qs';
 import UploadImg from "@/components/UploadImg/UploadImg";
 import { uploadFileFun } from '@/service/shop';
-import { confirmOperatorFun } from '@/service/user';
-import { getRealNameFun } from '@/service/user';
+import { confirmOperatorFun , getRealNameFun } from '@/service/user';
 import { MessageBox } from 'mint-ui';
 export default {
   data() {
@@ -71,13 +69,10 @@ export default {
         msg = msg.replace("data:image/jpeg;base64,","");
       }
       let obj = { files:msg };
-      let res = await uploadFileFun(qs.stringify(obj));
-      if(res.code ===0 ) {
-        this.img.defaultPicture1 = res.data[0].url;
-      }
-      else {
-        MessageBox.alert(res.msg);
-      }
+      let res = await uploadFileFun(obj);
+      
+      this.img.defaultPicture1 = res[0].url;
+      
       this.imgChange.a = this.img.defaultPicture1;
     },
     async UpdatedImgFiles2(msg) {
@@ -88,13 +83,9 @@ export default {
         msg = msg.replace("data:image/jpeg;base64,","");
       }
       let obj = { files:msg };
-      let res = await uploadFileFun(qs.stringify(obj));
-      if(res.code ===0 ) {
-        this.img.defaultPicture2 = res.data[0].url;
-      }
-      else {
-        MessageBox.alert(res.msg);
-      }
+      let res = await uploadFileFun(obj);
+      
+      this.img.defaultPicture2 = res[0].url;
       this.imgChange.b = this.img.defaultPicture2;
     },
     async UpdatedImgFiles3(msg) {
@@ -105,13 +96,9 @@ export default {
         msg = msg.replace("data:image/jpeg;base64,","");
       }
       let obj = { files:msg };
-      let res = await uploadFileFun(qs.stringify(obj));
-      if(res.code ===0 ) {
-        this.img.defaultPicture3 = res.data[0].url;
-      }
-      else {
-        MessageBox.alert(res.msg);
-      }
+      let res = await uploadFileFun(obj);
+      
+      this.img.defaultPicture3 = res[0].url;
       this.imgChange.c = this.img.defaultPicture3;
     },
     //判断是否可提交
@@ -128,38 +115,27 @@ export default {
         IDCardReverse: this.imgChange.b,
         IDCardImg: this.imgChange.c
       };
-      let res =await confirmOperatorFun(qs.stringify(obj));
-      if(res.code ===0 ) {
-        this.$toast({
-          message: '已申请实名认证，请耐心等待审核',
-          position: 'middle',
-          duration: 3000
-        });
-        this.$router.push({
-          name:'accountSet'
-        });
-      }
-      else {
-        this.$toast({
-          message: res.msg,
-          position: "middle",
-          duration: 3000
-        });
-      }
+      let res =await confirmOperatorFun(obj);
+      this.$toast({
+        message: '已申请实名认证，请耐心等待审核',
+        position: 'middle',
+        duration: 3000
+      });
+      this.$router.push({
+        name:'accountSet'
+      });
     },
     async getRealName() {
       this.disabled = false;
       let res = await getRealNameFun();
-      if(res.code ===0 ) {
-        this.cardName = res.data.cardName;
-        this.IDCardNo = res.data.idcardNo;
-        this.img.defaultPicture1 = res.data.idcardFont;
-        this.img.defaultPicture2 = res.data.idcardReverse;
-        this.img.defaultPicture3 = res.data.idcardImg;   
-        this.imgChange.a = this.img.defaultPicture1;
-        this.imgChange.b = this.img.defaultPicture2;
-        this.imgChange.c = this.img.defaultPicture3;
-      }
+      this.cardName = res.cardName;
+      this.IDCardNo = res.idcardNo;
+      this.img.defaultPicture1 = res.idcardFont;
+      this.img.defaultPicture2 = res.idcardReverse;
+      this.img.defaultPicture3 = res.idcardImg;   
+      this.imgChange.a = this.img.defaultPicture1;
+      this.imgChange.b = this.img.defaultPicture2;
+      this.imgChange.c = this.img.defaultPicture3;
     }
   },
   filters:{

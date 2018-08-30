@@ -27,7 +27,6 @@
 </template>
 
 <script>
-import qs from "qs";
 import { listBatchStartFun } from '@/service/todoList';
 import {Loadmore} from 'mint-ui';
 import { MessageBox } from 'mint-ui';
@@ -53,19 +52,15 @@ import PagerMixin from '@/mixins/pagerMixin';
 					page: this.page,
 					pageSize: this.pageSize
 				};
-				let res = await listBatchStartFun(qs.stringify(obj));
-				if(res.code===0) {
-					//判断该账号是否存在店铺
-					if(res.data.total == 0) {
-						this.noData = true;
-					}
-					else {
-						this.list = res.data.items?[...this.list,...res.data.items]:[];  //分页添加
-						this.total = res.data.total;
-					}
+				let res = await listBatchStartFun(obj);
+			
+				//判断该账号是否存在店铺
+				if(res.total == 0) {
+					this.noData = true;
 				}
 				else {
-					MessageBox.alert(res.msg,'');
+					this.list = res.items?[...this.list,...res.items]:[];  //分页添加
+					this.total = res.total;
 				}
       }
     },

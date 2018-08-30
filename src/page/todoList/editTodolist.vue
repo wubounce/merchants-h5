@@ -23,10 +23,7 @@
 </template>
 
 <script>
-import qs from "qs";
-import { getBatchStartFun } from '@/service/todoList';
-import { updateBatchStartFun } from '@/service/todoList';
-import { getFunctionListFun } from '@/service/todoList';
+import { getBatchStartFun , updateBatchStartFun , getFunctionListFun } from '@/service/todoList';
 import Button from "@/components/Button/Button";
 import { MessageBox } from 'mint-ui';
 import moment from 'moment';
@@ -94,24 +91,17 @@ import moment from 'moment';
           startTime: this.item.beginTime
         };
 
-        let resUpdate = await updateBatchStartFun(qs.stringify(objUpdate));
-        if(resUpdate.code ===0) {
-          let instance = this.$toast({
-            message: '编辑成功',
-            iconClass: 'mint-toast-icon mintui mintui-success'
-          });
-          setTimeout(() => {
-            instance.close();
-          }, 1000);
-          this.$router.push({
-            name:'todolist'
-          });
-        }
-        else {
-          this.$toast({
-            message:resUpdate.msg
-          });
-        }
+        let resUpdate = await updateBatchStartFun(objUpdate);
+        let instance = this.$toast({
+          message: '编辑成功',
+          iconClass: 'mint-toast-icon mintui mintui-success'
+        });
+        setTimeout(() => {
+          instance.close();
+        }, 1000);
+        this.$router.push({
+          name:'todolist'
+        });
       },
       valuesChange(picker, values) {
         this.machineFunction = values[0];
@@ -137,14 +127,9 @@ import moment from 'moment';
           page:1,
           pageSize: 10
         };
-        let res = await getBatchStartFun(qs.stringify(obj));
-        if(res.code ===0 ) {
-          this.item = res.data;
-          this.pickerValue = res.data.beginTime;
-        }
-        else {
-          MessageBox.alert(res.msg,'');
-        }
+        let res = await getBatchStartFun(obj);
+        this.item = res;
+        this.pickerValue = res.beginTime;
       },
       updateBatchStart() {
         //修改待办信息
@@ -154,17 +139,12 @@ import moment from 'moment';
           machineParentTypeId: this.$route.query.machineParentTypeId,
           shopId: this.$route.query.shopId
         };
-        let resFunList = await getFunctionListFun(qs.stringify(objFunList));
-        if(resFunList.code === 0 ) {
-          this.funArr = resFunList.data;
-          let arr = resFunList.data.map((i)=>{
-            return i.functionName;
-          });
-          this.slots[0].values = arr;
-        }
-        else {
-          MessageBox.alert(resFunList.msg,'');
-        }
+        let resFunList = await getFunctionListFun(objFunList);
+        this.funArr = resFunList;
+        let arr = resFunList.map((i)=>{
+          return i.functionName;
+        });
+        this.slots[0].values = arr;
       }
     },
     created() {

@@ -15,7 +15,6 @@
    </section>
 </template>
 <script>
-import qs from 'qs';
 import { getRealNameFun } from '@/service/user';
 export default {
   data() {
@@ -27,23 +26,21 @@ export default {
   methods: {
     async getRealName() {
         let res = await getRealNameFun();
-        if(res.code ===0 ) {
-            this.item = res.data;
-            //判断认证情况
-            switch(res.data.status) {
-                case 0: 
-                    this.item.status = '未认证';
-                    break;
-                case 1:
-                    this.item.status = '正在进行审核, 请您耐心等候';
-                    break;
-                case 2:
-                    this.item.status = '认证成功';
-                    break;
-                case 3:
-                    this.item.status = '您的实名认证未通过';
-                    break;
-            }
+        this.item = res;
+        //判断认证情况
+        switch(res.status) {
+            case 0: 
+                this.item.status = '未认证';
+                break;
+            case 1:
+                this.item.status = '正在进行审核, 请您耐心等候';
+                break;
+            case 2:
+                this.item.status = '认证成功';
+                break;
+            case 3:
+                this.item.status = '您的实名认证未通过';
+                break;
         }
     }
   },

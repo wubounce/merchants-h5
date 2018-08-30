@@ -62,14 +62,8 @@
 </template>
 
 <script>
-import qs from "qs";
 import UploadImg from "@/components/UploadImg/UploadImg";
-import { shopDetailFun } from '@/service/shop';
-import { addOrEditShopFun } from '@/service/shop';
-import { areaListFun } from '@/service/shop';
-import { listParentTypeFun } from '@/service/shop';
-import { uploadFileFun } from '@/service/shop';
-import { manageListFun } from '@/service/shop';
+import { shopDetailFun , addOrEditShopFun , areaListFun , listParentTypeFun , uploadFileFun , manageListFun } from '@/service/shop';
 import { MessageBox } from 'mint-ui';
 export default {
   data() {
@@ -474,15 +468,13 @@ export default {
         if(values[0] == this.provinceArray[i].areaName) {
           let city = { parentId: this.provinceArray[i].areaId };
           this.provinceId = this.provinceArray[i].areaId;
-          let res = await areaListFun(qs.stringify(city));
-          if(res.code===0) {
-            let chooseCity = res.data.map((c)=> {
-              return c.areaName;
-            });
+          let res = await areaListFun(city);
+          let chooseCity = res.map((c)=> {
+            return c.areaName;
+          });
 
-            this.cityArray = res.data;
-            picker.setSlotValues(1, chooseCity); //设置市
-          }
+          this.cityArray = res;
+          picker.setSlotValues(1, chooseCity); //设置市
         }
       }
 
@@ -491,15 +483,13 @@ export default {
         if(values[1] == this.cityArray[j].areaName) {
           let district = { parentId: this.cityArray[j].areaId };
           this.cityId = this.cityArray[j].areaId;
-          let resDistrict = await areaListFun(qs.stringify(district));
-          if(resDistrict.code===0) {
-            let chooseDistrict = resDistrict.data.map((d)=> {
-              return d.areaName;
-            });
+          let resDistrict = await areaListFun(district);
+          let chooseDistrict = resDistrict.map((d)=> {
+            return d.areaName;
+          });
 
-            this.districtArray = resDistrict.data;
-            picker.setSlotValues(2, chooseDistrict); //设置市
-          }
+          this.districtArray = resDistrict;
+          picker.setSlotValues(2, chooseDistrict); //设置市
         }
       }
 
@@ -520,38 +510,15 @@ export default {
       this.isbgc = true;
       this.deviceDetail = true;
       let res = await listParentTypeFun();
-      if(res.code ===0 ) {
-        this.machineArray = res.data;
-        let arr = [];
-        arr = JSON.parse(JSON.stringify(res.data).replace(/name/g,"label"));
-        this.options = JSON.parse(JSON.stringify(arr).replace(/id/g,"value"));
-        for(let i=0;i<this.options.length;i++) {
-          this.options[i]['value'] = this.options[i]['label'];
-        }
+      this.machineArray = res;
+      let arr = [];
+      arr = JSON.parse(JSON.stringify(res).replace(/name/g,"label"));
+      this.options = JSON.parse(JSON.stringify(arr).replace(/id/g,"value"));
+      for(let i=0;i<this.options.length;i++) {
+        this.options[i]['value'] = this.options[i]['label'];
       }
     },
-    async UpdatedImgFiles(msg) {
-      //判断图片类型
-      if(msg.substring(0,22)=="data:image/png;base64,") {
-        msg = msg.replace("data:image/png;base64,","");
-      }
-      else if(msg.substring(0,23)=="data:image/jpeg;base64,") {
-        msg = msg.replace("data:image/jpeg;base64,","");
-      }
-      let obj = { files:msg };
-      let res = await uploadFileFun(qs.stringify(obj));
-      if(res.code ===0 ) {
-        this.imageId = res.data[0].url;
-      }
-      else {
-        this.$toast({
-            message: res.msg,
-            position: 'middle',
-            duration: 3000
-          });
-      }
-      this.imgId.defaultPicture = this.imageId;
-    },
+  
     changeTime(picker, values) {
       this.shopTime.startTime = values[0].slice(0,2) + ':' +values[1].slice(0,2);
       this.shopTime.endTime = values[2].slice(0,2) + ':' +values[3].slice(0,2);
@@ -569,7 +536,7 @@ export default {
     },
     //提交修改信息
     async submit() {
-      console.log(this.lng);
+      // console.log(this.lng);
       if(this.shopName!=false && this.shopType!=false && this.provinceId != false && this.cityId !=false && this.provinceId != false && this.address != false && this.lat !=undefined &&this.lat != false && this.lng != false&& this.lng != undefined && this.organization!=false && this.machineTypeIdsArray !=false ) {
         if(this.orderLimitMinutes) {
           //在判断
@@ -593,8 +560,8 @@ export default {
               workTime: this.addBusinessTime,
               organization: this.organization
             };
-            let res = await addOrEditShopFun(qs.stringify(obj));
-            if(res.code===0) {
+            let res = await addOrEditShopFun(obj);
+            
             //成功后的操作
             let instance = this.$toast({
               message: '编辑成功',
@@ -606,14 +573,6 @@ export default {
               this.$router.push({
                 name:'shopList'
               });
-            }
-            else {
-              this.$toast({
-                message: res.msg,
-                position: 'middle',
-                duration: 3000
-              });
-            }
             //上面是传值
           }
           else {
@@ -644,8 +603,8 @@ export default {
             workTime: this.addBusinessTime,
             organization: this.organization
           };
-          let res = await addOrEditShopFun(qs.stringify(obj));
-          if(res.code===0) {
+          let res = await addOrEditShopFun(obj);
+          
           //成功后的操作
           let instance = this.$toast({
             message: '编辑成功',
@@ -657,14 +616,6 @@ export default {
             this.$router.push({
               name:'shopList'
             });
-          }
-          else {
-            this.$toast({
-              message: res.msg,
-              position: 'middle',
-              duration: 3000
-            });
-          }
         }
         
       }else if(!this.list[0].value) {
@@ -702,121 +653,108 @@ export default {
     //省市区联动
     async getArea() {
       let obj = { parentId: 0 };
-      let res = await areaListFun(qs.stringify(obj));
-      this.provinceArray = res.data;
-      if(res.code===0) {
-        for(let i=0;i<res.data.length;i++) {
-          this.addressSlots[0].values.push(res.data[i].areaName);
-        }
-      }
-      else {
-        this.$toast({
-            message: res.msg,
-            position: 'middle',
-            duration: 3000
-          });
+      let res = await areaListFun(obj);
+      this.provinceArray = res;
+      for(let i=0;i<res.length;i++) {
+        this.addressSlots[0].values.push(res[i].areaName);
       }
     },
     async getShopDetail() {
-      let obj = { shopId: this.$route.query.shopId };
-      let res = await shopDetailFun(qs.stringify(obj));
-      if(res.code===0) {
-        this.shopId = res.data.shopId;
-        this.mapCity = res.data.cityName;  //初始的传到地图界面的城市的值
-        this.shopName = res.data.shopName; //店铺名称
-        this.oldName = res.data.shopName; //旧店铺名称
-        this.slots[0].defaultIndex = res.data.shopTypeId-1;
-        this.list[0].value = res.data.shopTypeName;
-        //判断区是否存在
-        if(res.data.cityName == res.data.districtName) {
-          res.data.districtName = '';
+      let payload = { shopId: this.$route.query.shopId };
+      let res = await shopDetailFun(payload);
+      this.shopId = res.shopId;
+      this.mapCity = res.cityName;  //初始的传到地图界面的城市的值
+      this.shopName = res.shopName; //店铺名称
+      this.oldName = res.shopName; //旧店铺名称
+      this.slots[0].defaultIndex = res.shopTypeId-1;
+      this.list[0].value = res.shopTypeName;
+      //判断区是否存在
+      if(res.cityName == res.districtName) {
+        res.districtName = '';
+      }
+      //所在地区
+      if(res.cityName) {
+        if(res.provinceName == res.cityName.slice(0,2)) {
+          this.list[1].value = res.cityName + res.districtName;
         }
-        //所在地区
-        if(res.data.cityName) {
-          if(res.data.provinceName == res.data.cityName.slice(0,2)) {
-            this.list[1].value = res.data.cityName + res.data.districtName;
-          }
-          else {
-            this.list[1].value = res.data.provinceName + res.data.cityName + res.data.districtName;
-          }
+        else {
+          this.list[1].value = res.provinceName + res.cityName + res.districtName;
         }
-        if(this.list[1].value) {
-          this.list[1].value = this.list[1].value.length>10? this.list[1].value.slice(0,10)+'...' : this.list[1].value;
+      }
+      if(this.list[1].value) {
+        this.list[1].value = this.list[1].value.length>10? this.list[1].value.slice(0,10)+'...' : this.list[1].value;
+      }
+      //经纬度
+      this.lng = res.lng;
+      this.lat = res.lat;
+      this.organization = res.organization;
+      //详细地址
+      this.address = res.address;
+      //设备类型
+      this.machine = res.machineTypeNames;
+      if(this.machine) {
+        this.machine = this.machine.split(','); 
+        this.lastMachine = [].concat(this.machine); // 修改bug
+        // console.log('初始值：',this.lastMachine); // 修改bug
+      } 
+      if(res.machineTypeNames) {
+        if(res.machineTypeNames.length > 10) {
+          this.machineName = res.machineTypeNames.slice(0,10) + '...';
         }
-        //经纬度
-        this.lng = res.data.lng;
-        this.lat = res.data.lat;
-        this.organization = res.data.organization;
-        //详细地址
-        this.address = res.data.address;
-        //设备类型
-        this.machine = res.data.machineTypeNames;
-        if(this.machine) {
-          this.machine = this.machine.split(','); 
-          this.lastMachine = [].concat(this.machine); // 修改bug
-          // console.log('初始值：',this.lastMachine); // 修改bug
-        } 
-        if(res.data.machineTypeNames) {
-          if(res.data.machineTypeNames.length > 10) {
-            this.machineName = res.data.machineTypeNames.slice(0,10) + '...';
-          }
-          else {
-            this.machineName = res.data.machineTypeNames;
-          }  
-        }           
-        //预约功能
-        this.isReserve = res.data.isReserve == 0 ? true : false;
-        this.noEdit = res.data.isReserve == 0 ? false :true;
-        //预约时长
-        this.orderLimitMinutes = res.data.orderLimitMinutes;
-        //营业时间
-        this.addBusinessTime = res.data.workTime;      
+        else {
+          this.machineName = res.machineTypeNames;
+        }  
+      }           
+      //预约功能
+      this.isReserve = res.isReserve == 0 ? true : false;
+      this.noEdit = res.isReserve == 0 ? false :true;
+      //预约时长
+      this.orderLimitMinutes = res.orderLimitMinutes;
+      //营业时间
+      this.addBusinessTime = res.workTime;      
 
-        
-        if(res.data.organization) {
-          if(res.data.organization.length>5) {
-            this.list[2].value = res.data.organization.slice(0,5) + '...';
-          }
-          else {
-            this.list[2].value = res.data.organization;
-          }
+      
+      if(res.organization) {
+        if(res.organization.length>5) {
+          this.list[2].value = res.organization.slice(0,5) + '...';
         }
-
-        //省、市、区
-        this.provinceId = res.data.provinceId;
-        this.cityId = res.data.cityId;
-        this.districtId = res.data.districtId;
-        this.provinceName = res.data.provinceName;
-        this.cityName = res.data.cityName;
-        this.districtName = res.data.districtName;
-        //console.log('created:',this.provinceId);
-
-
-        this.addressSlots[0].defaultIndex = 2;
-        // 省
-        let objPro = { parentId: 0 };
-        let resPro = await areaListFun(qs.stringify(objPro));
-        //console.log('省：',resPro.data.length);
-        for(let x=0;x<resPro.data.length;x++) {
-          if(res.data.provinceName == resPro.data[x].areaName) {
-            this.proIndex = x;
-            //console.log(x);
-          }
+        else {
+          this.list[2].value = res.organization;
         }
-        //设备类型
-        let resMachine = await listParentTypeFun();
-        if(resMachine.code ===0 ) {
-          let arrmachine = res.data.machineTypeNames.split(',');
-          let arr = [];
-          for(let i=0;i<arrmachine.length;i++) {
-            for(let j=0;j<resMachine.data.length;j++) {
-              if(arrmachine[i] == resMachine.data[j].name) {
-                arr.push(resMachine.data[j].id);
-              }
+      }
+
+      //省、市、区
+      this.provinceId = res.provinceId;
+      this.cityId = res.cityId;
+      this.districtId = res.districtId;
+      this.provinceName = res.provinceName;
+      this.cityName = res.cityName;
+      this.districtName = res.districtName;
+      //console.log('created:',this.provinceId);
+
+
+      this.addressSlots[0].defaultIndex = 2;
+      // 省
+      let objPro = { parentId: 0 };
+      let resPro = await areaListFun(objPro);
+      //console.log('省：',resPro.length);
+      for(let x=0;x<resPro.length;x++) {
+        if(res.provinceName == resPro[x].areaName) {
+          this.proIndex = x;
+          //console.log(x);
+        }
+      }
+      //设备类型
+      let resMachine = await listParentTypeFun();
+        let arrmachine = res.machineTypeNames.split(',');
+        let arr = [];
+        for(let i=0;i<arrmachine.length;i++) {
+          for(let j=0;j<resMachine.length;j++) {
+            if(arrmachine[i] == resMachine[j].name) {
+              arr.push(resMachine[j].id);
             }
           }
-          this.machineTypeIdsArray = arr.join(',');
-        }
+        this.machineTypeIdsArray = arr.join(',');
       }
     },
     async getShoplist() {

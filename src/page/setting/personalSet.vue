@@ -35,7 +35,6 @@
 </section>
 </template>
 <script>
-import qs from "qs";
 import { areaListFun } from '@/service/shop';
 import { getPersonalInfoFun } from '@/service/user';
 import { updateOperatorFun } from '@/service/user';
@@ -99,8 +98,8 @@ export default {
   methods: {
     async getPersonalInfo() {
       let res = await getPersonalInfoFun();
-      this.item = res.data;
-      this.noRealName = res.data.realName;
+      this.item = res;
+      this.noRealName = res.realName;
       let arr = [];
       //设置隐藏名字
       if(this.noRealName != ''  && this.noRealName != null ) {
@@ -115,7 +114,7 @@ export default {
         this.item.realName = arr.join('');
       }
       //默认地址
-      this.item.address = res.data.address;
+      this.item.address = res.address;
       //兼容老数据
       if(this.item.address) {
         if(this.item.address.split('u').length ==2 ) {
@@ -123,8 +122,8 @@ export default {
         }
       }
       //console.log(this.item.address.split('u')[0]);
-      if(res.data.address) {
-        if( res.data.address.length>12) {
+      if(res.address) {
+        if( res.address.length>12) {
           this.row = false;
         }
         else {
@@ -156,7 +155,7 @@ export default {
       let objUpdate = {
         address: this.item.address
       };
-      let res = await updateOperatorFun(qs.stringify(objUpdate));
+      let res = await updateOperatorFun(objUpdate);
       this.getPersonalInfo();
     },
     async onAddressChange(picker,values) {
@@ -166,14 +165,14 @@ export default {
           let city ={
             parentId: this.provinceArray[i].areaId
           };
-          let resCity = await areaListFun(qs.stringify(city));
-          if(resCity.code===0) {
-            let chooseCity = resCity.data.map((c)=> {
-              return c.areaName;
-            });
-            this.cityArray = resCity.data;
-            picker.setSlotValues(1, chooseCity); //设置市
-          }
+          let resCity = await areaListFun(city);
+          
+          let chooseCity = resCity.map((c)=> {
+            return c.areaName;
+          });
+          this.cityArray = resCity;
+          picker.setSlotValues(1, chooseCity); //设置市
+          
         }
       }
       
@@ -182,14 +181,14 @@ export default {
         if(values[1] == this.cityArray[j].areaName) {
           let district = { parentId: this.cityArray[j].areaId };
           this.cityId = this.cityArray[j].areaId;
-          let resDistrict = await areaListFun(qs.stringify(district));
-          if(resDistrict.code===0) {
-            let chooseDistrict = resDistrict.data.map((d)=> {
-              return d.areaName;
-            });
-            this.districtArray = resDistrict.data;
-            picker.setSlotValues(2, chooseDistrict); //设置市
-          }
+          let resDistrict = await areaListFun(district);
+          
+          let chooseDistrict = resDistrict.map((d)=> {
+            return d.areaName;
+          });
+          this.districtArray = resDistrict;
+          picker.setSlotValues(2, chooseDistrict); //设置市
+          
         }
       }
       //传区的id
@@ -207,15 +206,10 @@ export default {
       let obj = {
         parentId: '0'
       };
-      let resProvince = await areaListFun(qs.stringify(obj));
-      if(resProvince.code===0) {
-        this.provinceArray = resProvince.data;        
-        for(let i=0;i<resProvince.data.length;i++) {
-          this.addressSlots[0].values.push(resProvince.data[i].areaName);
-        }
-      }
-      else {
-        MessageBox.alert(resProvince.msg);
+      let resProvince = await areaListFun(obj); 
+      this.provinceArray = resProvince;        
+      for(let i=0;i<resProvince.length;i++) {
+        this.addressSlots[0].values.push(resProvince[i].areaName);
       }
     }
   },

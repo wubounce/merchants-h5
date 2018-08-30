@@ -40,7 +40,6 @@
 	</section>
 </template>
 <script>
-import qs from "qs";
 import { MessageBox } from 'mint-ui';
 import { manageListFun } from '@/service/shop';
 import PagerMixin from '@/mixins/pagerMixin';
@@ -70,20 +69,19 @@ export default {
       });
     },
     async _getList() {
-      let obj = {
+      let payload = {
         page: this.page,
         pageSize: this.pageSize
       };
-      let res = await manageListFun(qs.stringify(obj));
-      if(res.code===0) {
-        //判断该账号是否存在店铺
-        if(res.data.items == null || res.data.items == "") {
+      let res = await manageListFun(payload);
+      console.log(res);
+      if(res.items == null || res.items == "") {
           this.hasNews = false;
         }
         else {
-          this.list = res.data.items?[...this.list,...res.data.items]:[];  //分页添加
+          this.list = res.items?[...this.list,...res.items]:[];  //分页添加
           //判断是否超过10条
-          this.total = res.data.total;
+          this.total = res.total;
           if(this.total<10) {
             this.lessTen = false;
           }else {
@@ -111,10 +109,6 @@ export default {
             }
           }
         }
-      }
-      else {
-        MessageBox.alert(res.msg,'');
-      }
     }
   },
   created() {

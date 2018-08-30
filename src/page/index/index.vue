@@ -83,7 +83,6 @@
   
 </template>
 <script>
-import qs from 'qs';
 import { getNoticeType, setNoticeType, removeNoticeType, calMax, calMin } from '@/utils/tool';
 // 引入 ECharts 主模块
 import echarts from 'echarts/lib/echarts';
