@@ -31,7 +31,6 @@
   </section>
 </template>
 <script>
-import qs from "qs";
 import { MessageBox } from 'mint-ui';
 import { getlistParentTypeFun } from '@/service/device';
   export default {
@@ -77,10 +76,8 @@ import { getlistParentTypeFun } from '@/service/device';
       async checkFirstClass() { //获取一级列表
         let query = this.$route.query;
         let payload = {shopId:query.shopId};
-        let res = await getlistParentTypeFun(qs.stringify(payload));
-        if(res.code === 0) {
-          this.parentTypeList = res.data; 
-        }
+        let res = await getlistParentTypeFun(payload);
+        this.parentTypeList = res; 
       },
       goBack(){
         this.$router.go(-1);

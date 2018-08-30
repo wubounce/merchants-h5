@@ -1,11 +1,8 @@
-import { getToken, setToken, removeToken, getUser, setUser, removeUser, setMenu, removeMenu, getMenu } from '@/utils/tool';
+import { getToken, setToken, removeToken, setMenu, removeMenu, getMenu } from '@/utils/tool';
 import { menuSelectFun } from '@/service/member';
 const user = {
   state: {
     token: getToken(),
-    name: '',
-    roles: [],
-    userInfo: getUser(),
     menu:[],
     timeOffset: 0,
   },
@@ -33,15 +30,6 @@ const user = {
     SET_TOKEN: (state, token) => {
       state.token = token;
     },
-    SET_NAME: (state, name) => {
-      state.name = name;
-    },
-    SET_ROLES: (state, roles) => {
-      state.roles = roles;
-    },
-    setUserInfo: (state, userInfo) => {
-      state.userInfo = userInfo;
-    },
     setMenu: (state, menu) => {
       state.menu = menu;
     },
@@ -63,25 +51,12 @@ const user = {
       });
 
     },
-    // 获取用户信息
-    getUser ({ commit, state },userInfo) {
-      setUser(userInfo);
-      commit('SET_NAME', userInfo.userName);
-      commit('SET_ROLES', userInfo.roles);
-      commit('setUserInfo', userInfo);
-      return Promise.resolve(state.userInfo);
-    },
-
     // 前端 登出
     LogOut({ commit }) {
       return new Promise(resolve => {
         commit('SET_TOKEN', '');
-        commit('SET_NAME', '');
-        commit('SET_ROLES', '');
-        commit('setUserInfo', '');
         commit('setMenu', []);
         removeToken();
-        removeUser();
         removeMenu();
         resolve();
       });

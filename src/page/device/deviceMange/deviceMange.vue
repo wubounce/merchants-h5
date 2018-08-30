@@ -145,7 +145,6 @@
 
 </template>
 <script>
-  import qs from "qs";
   import Api from '@/utils/Api';
   import Web from '@/utils/Web';
   import PagerMixin from '@/mixins/pagerMixin';
@@ -325,45 +324,31 @@
         if (r != null) return unescape(r[2]); return null; //返回参数值
       },
       async getStateDevice(payload){      
-        let res = await stateMachineFun(qs.stringify(payload));
-         if(res.code === 0) {
-          this.titleArr= res.data; 
-        }
-        else {
-          this.$toast(res.msg);
-        }
+        let res = await stateMachineFun(payload);
+        this.titleArr= res; 
       }, 
       async getPopupShop(flag) {  //获取店铺
         let res = await getShopFun();
-        if(res.code === 0) {
-          this.popupShop = flag?res.data.slice(0,4):res.data;
-        }
+        this.popupShop = flag?res.slice(0,4):res;
       },
       allShopList() { //展示全部店铺
         this.shopFlag = !this.shopFlag;
         this.getPopupShop(this.shopFlag);
       },
       async getlistParentType(payload) {  //获取设备类型     
-        let res = await getlistParentTypeFun(qs.stringify(payload));
-        if(res.code === 0) {
-          this.deviceTypeArr = res.data;
-          this.initialParentTypeId = res.data[0]?res.data[0].id:"";
-
-        }
+        let res = await getlistParentTypeFun(payload);
+        this.deviceTypeArr = res;
+        this.initialParentTypeId = res[0]?res[0].id:"";
       },
       async getlistSubTypeAll(flag,object) {
-        let res = await listSubTypeAllFun(qs.stringify(object));
-        if(res.code === 0) {
-          this.deviceModelArrAll = res.data;
-          this.deviceModelArr = flag?res.data.slice(0,4):res.data;
-        }
+        let res = await listSubTypeAllFun(object);
+        this.deviceModelArrAll = res;
+        this.deviceModelArr = flag?res.slice(0,4):res;
       },
       async getlistSubType(payload,flag) {
-        let res= await getlistSubTypeFun(qs.stringify(payload));
-        if(res.code === 0) {
-          this.deviceModelArrAll = res.data;
-          this.deviceModelArr = flag?res.data.slice(0,4):res.data;
-        }
+        let res= await getlistSubTypeFun(payload);
+        this.deviceModelArrAll = res;
+        this.deviceModelArr = flag?res.slice(0,4):res;
       },
       allModelList() { //展示全部店铺
         this.modelFlag = !this.modelFlag;
@@ -371,47 +356,42 @@
       },  
       async _getList(object)  { //获取设备
         let payload = object ? object : {machineState: this.index,page:this.page,pageSize: this.pageSize};
-        let res = await deviceListFun(qs.stringify(payload));
-        if(res.code === 0) {
-          this.list = res.data.items?[...this.list,...res.data.items]:[];
-          this.total = res.data.total;
-          this.hasNoData = this.list.length<= 0 ? true: false;
-          this.noMore = this.page>1?true: false;
-          this.list.forEach(item=>{
-            switch(item.machineState){
-            case 1:
-            item.machineState = "空闲";
-            break;
-            case 2:
-            item.machineState = "运行";
-            break;
-            case 3:
-            item.machineState = "预约";
-            break;
-            case 4:
-            item.machineState = "故障";
-            break;
-            case 5:
-            item.machineState = "参数设置";
-            break;
-            case 6:
-            item.machineState = "自检";
-            break;
-            case 7:
-            item.machineState = "预约";
-            break;
-            case 8:
-            item.machineState = "离线";
-            break;
-            case 16:
-            item.machineState = "超时未工作";
-            break;
+        let res = await deviceListFun(payload);
+        this.list = res.items?[...this.list,...res.items]:[];
+        this.total = res.total;
+        this.hasNoData = this.list.length<= 0 ? true: false;
+        this.noMore = this.page>1?true: false;
+        this.list.forEach(item=>{
+          switch(item.machineState){
+          case 1:
+          item.machineState = "空闲";
+          break;
+          case 2:
+          item.machineState = "运行";
+          break;
+          case 3:
+          item.machineState = "预约";
+          break;
+          case 4:
+          item.machineState = "故障";
+          break;
+          case 5:
+          item.machineState = "参数设置";
+          break;
+          case 6:
+          item.machineState = "自检";
+          break;
+          case 7:
+          item.machineState = "预约";
+          break;
+          case 8:
+          item.machineState = "离线";
+          break;
+          case 16:
+          item.machineState = "超时未工作";
+          break;
           }
         });
-        }
-        else {
-          this.$toast(res.msg);
-        }
       },
     },
     created() {

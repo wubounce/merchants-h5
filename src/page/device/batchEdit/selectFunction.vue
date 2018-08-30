@@ -37,7 +37,6 @@
   </section>
 </template>
 <script>
-import qs from "qs";
 import { MessageBox } from 'mint-ui';
 import { getFunctionSetListFun,batchEditFun,batchEditMachineListFun } from '@/service/device';
 
@@ -145,31 +144,25 @@ export default {
           subTypeId: query.subTypeId,
           shopId: query.shopId,
         };
-        let res = await batchEditMachineListFun(qs.stringify(obj));
-          if(res.code === 0) {   
-            this.getFunctionSetList();
-          }else{
-            this.$toast(res.msg);
-          }
+        let res = await batchEditMachineListFun(obj);
+        this.getFunctionSetList();
       },
         
       async getFunctionSetList() {
         let query = this.$route.query;
         let payload = {shopId: query.shopId,subTypeId: query.subTypeId};
-        let res = await getFunctionSetListFun(qs.stringify(payload));
-          if(res.code === 0) {
-            this.getJsonArr = res.data.list;
-            this.functionTempletType = res.data.functionTempletType;
-            this.communicateType = res.data.communicateType;
-            if(this.communicateType !== 1){
-              this.functionListTitle2 = this.functionListTitle;
-              this.isShow2 = true;
-            }
-            res.data.list.forEach(item=>{
-              item.ifOpen=item.ifOpen === "0"?(!!item.ifOpen) : (!item.ifOpen);
-            });
-            this.funTypeList = res.data.list;         
-          }
+        let res = await getFunctionSetListFun(payload);
+        this.getJsonArr = res.list;
+        this.functionTempletType = res.functionTempletType;
+        this.communicateType = res.communicateType;
+        if(this.communicateType !== 1){
+          this.functionListTitle2 = this.functionListTitle;
+          this.isShow2 = true;
+        }
+        res.list.forEach(item=>{
+          item.ifOpen=item.ifOpen === "0"?(!!item.ifOpen) : (!item.ifOpen);
+        });
+        this.funTypeList = res.list;         
       },  
      
       async goNext() {
@@ -231,19 +224,15 @@ export default {
             functionTempletType: this.functionTempletType,
             functionJson: JSON.stringify(arr)
           };
-          let res = await batchEditFun(qs.stringify(obj));
-            if(res.code === 0) {
-              let instance = this.$toast({
-                message: '批量修改成功',
-                iconClass: 'mint-toast-icon mintui mintui-success'
-              });
-              setTimeout(() => {
-                instance.close();
-                this.$router.push({name:'deviceMange'});
-                }, 2000);
-            }else {
-              this.$toast(res.msg);
-            }
+          let res = await batchEditFun(obj);
+          let instance = this.$toast({
+            message: '批量修改成功',
+            iconClass: 'mint-toast-icon mintui mintui-success'
+          });
+          setTimeout(() => {
+            instance.close();
+            this.$router.push({name:'deviceMange'});
+            }, 2000);
         } 
       }
         

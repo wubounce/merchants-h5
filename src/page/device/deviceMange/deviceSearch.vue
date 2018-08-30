@@ -50,7 +50,6 @@
 </template>
 
 <script type="text/javascript">
-import qs from "qs";
 import Api from '@/utils/Api';
 import Web from '@/utils/Web';
 import { listByNameOrlmeiFun,deviceListFun } from '@/service/device';
@@ -78,42 +77,39 @@ import {delay } from "@/utils/tool";
       async _getList(id)  {
         let machineState = null;
         let payload = {machineState:machineState ,machineId: id};
-        let res = await deviceListFun(qs.stringify(payload));
-        if(res.code === 0) {
-          this.list = res.data.items;
-          this.list.forEach(item=>{
-            switch(item.machineState){
-            case 1:
+        let res = await deviceListFun(payload);
+        this.list = res.items;
+        this.list.forEach(item=>{
+          switch(item.machineState){
+          case 1:
             item.machineState = "空闲";
             break;
-            case 2:
+          case 2:
             item.machineState = "运行";
             break;
-            case 3:
+          case 3:
             item.machineState = "预约";
             break;
-            case 4:
+          case 4:
             item.machineState = "故障";
             break;
-            case 5:
+          case 5:
             item.machineState = "参数设置";
             break;
-            case 6:
+          case 6:
             item.machineState = "自检";
             break;
-            case 7:
+          case 7:
             item.machineState = "预约";
             break;
-            case 8:
+          case 8:
             item.machineState = "离线";
             break;
-            case 16:
+          case 16:
             item.machineState = "超时未工作";
             break;
-
-            }
-          });
-        }
+          }
+        });
       },
       goBack() {
         this.$router.go(-1);
@@ -124,11 +120,9 @@ import {delay } from "@/utils/tool";
       },
       async search(name) {
         let payload = {nameOrImei: name};
-        let res = await listByNameOrlmeiFun(qs.stringify(payload));
-          if(res.code === 0) {
-            this.message = "未找到相关结果"
-            this.searchList = res.data;  
-          }
+        let res = await listByNameOrlmeiFun(payload);
+        this.message = "未找到相关结果"
+        this.searchList = res;  
       },
       selectClick: function (index) {
         let machineId = this.searchList[index].machineId;

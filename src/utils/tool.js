@@ -12,11 +12,6 @@ export const getNoticeType = () => Cookies.get(NoticeTypeKey);
 export const setNoticeType = (NoticeType) => Cookies.set(NoticeTypeKey, NoticeType);
 export const removeNoticeType = () => Cookies.remove(NoticeTypeKey);
 
-const storeKey = 'user';
-export const setUser = (user) => localStorage.setItem(storeKey, JSON.stringify(user));
-export const getUser = () => JSON.parse(localStorage.getItem(storeKey));
-export const removeUser = () => localStorage.removeItem(storeKey);
-
 const menuKey = 'menu';
 export const setMenu = (menu) => localStorage.setItem(menuKey, JSON.stringify(menu));
 export const getMenu = () => JSON.parse(localStorage.getItem(menuKey));
@@ -117,7 +112,6 @@ export const calMin = (arr) => {
 	return minval;// 输出最大值
 };
 
-
 export const filterData = (data)=>{
 	let params = new URLSearchParams();
 	for (let i in data) {
@@ -125,4 +119,59 @@ export const filterData = (data)=>{
 	   params.append(i, data[i]);
 	}
 	return params.toString();
+};
+
+// 签名算法 - sha1加密
+export const get_sign = (data,time) => {
+	// 防止浏览器转义
+	data = decodeURIComponent(data);
+	if(data) {
+		// 从字符串里把属性和值取到数组中
+		let dataSplit = data.split('&');
+		let objkey = [], // 存属性名
+				objvalue = []; // 存属性值
+		// 分别将key和value放在对应函数中
+		for (let i=0; i<dataSplit.length; i++) {
+			if(dataSplit[i].split('=').length ==2 ) {
+				objkey.push(dataSplit[i].split('=')[0]);
+				objvalue.push(dataSplit[i].split('=')[1]);
+			}
+			else {
+				objkey.push(dataSplit[i].split('=')[0]);
+				objvalue.push(' ');
+			}
+		}
+
+		// 将选出来的属性和值从数组里一一对应存到对象中
+		let obj ={};
+		for (let j=0;j<objkey.length;j++) {
+			obj[objkey[j]] = objvalue[j];
+		}
+
+		//获取当前时间并添加当前时间戳到obj对象中
+		obj._timestamp = time;
+
+		// 添加_appid
+		obj._appid = '44efec05494c4ca3a4a7ada47722a1a8';
+
+		// 字典排序得到对象newObj
+		let newKey = Object.keys(obj).sort();
+	  let newObj = {};
+	  for(let i = 0; i < newKey.length; i++) {
+	    newObj[newKey[i]] = obj[newKey[i]]; 
+		}
+
+		let signarr = []; // 存排序后的数组
+
+		for(let key in newObj) {
+			signarr.push(key + '=' + newObj[key]); // 存储操作
+		}
+
+	  let str = signarr.join('&'); //需要加密的字符串
+
+		//sha1加密
+	  let sha1 = require('sha1');
+	  let _sign = sha1(str);
+	  return _sign; //返回	请求参数_sign
+	}
 };

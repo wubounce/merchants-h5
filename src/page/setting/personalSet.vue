@@ -215,6 +215,15 @@ export default {
   },
   components:{
     
+  },
+  watch: {
+    placeVisible: function () {
+      if (this.placeVisible) {
+        this.ModalHelper.afterOpen();
+      } else {
+        this.ModalHelper.beforeClose();
+      }
+    }
   }
 };
 </script>

@@ -31,7 +31,6 @@
   </section>
 </template>
 <script>
-import qs from "qs";
 import { MessageBox } from 'mint-ui';
 import { getlistParentTypeFun, getlistSubTypeFun} from '@/service/device';
   export default {
@@ -73,16 +72,12 @@ import { getlistParentTypeFun, getlistSubTypeFun} from '@/service/device';
         this.selectIndex = index;
         this.selectedSecondType= name;
         this.subTypeId = this.secondTypeList[index].id;
-        // this.keyword = this.resData[index];
-        // this.search();
       },
       async checkSecondClass() { //获取二级列表
         let query = this.$route.query;
         let payload = {shopId:query.shopId,parentTypeId:query.parentTypeId};
-           let res = await getlistSubTypeFun(qs.stringify(payload));
-           if(res.code === 0) {
-             this.secondTypeList = res.data; 
-            }
+        let res = await getlistSubTypeFun(payload);
+        this.secondTypeList = res; 
       },
       goBack(){
         this.$router.go(-1);

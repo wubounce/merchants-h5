@@ -666,6 +666,7 @@ export default {
   created() {
     this.getShoplist();
   },
+  // 背景滚动
   watch: {
     $route(to,from) {
       if(from.name == 'mapSearch') {
