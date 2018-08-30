@@ -1,9 +1,10 @@
 import axios from 'axios';
 import { Indicator, MessageBox, Toast } from 'mint-ui';
 import store from '../store';
-import { getToken, removeMenu } from '@/utils/tool';
+import { getToken, removeMenu,get_sign } from '@/utils/tool';
+
 import { menuSelectFun } from '@/service/member';
-const baseUrl = process.env.NODE_ENV === 'production' ? 'http://192.168.5.10:8089/merchant/' : 'http://192.168.5.10:8089/merchant/'; 
+const baseUrl = process.env.NODE_ENV === 'production' ? 'http://192.168.5.10:8089/merchant/' : 'http://192.168.4.70:8089/merchant/'; 
 // 创建axios实例
 const http = axios.create({
   baseURL: baseUrl, // api的base_url
@@ -27,12 +28,21 @@ http.interceptors.request.use(config => {
   }
   
   let token = getToken();
+  let _timestamp = (new Date()).getTime();
   if (config.method === 'post' && config.headers['Content-Type'] !== 'multipart/form-data') {
     config.headers['content-type'] = 'application/x-www-form-urlencoded';
   }
   if (token && config.headers['Content-Type'] !== 'multipart/form-data') {
-      config.data = config.data ? config.data + `&token=${token}`:`token=${token}`;
-    }
+    console.log(config.data);
+    config.data = config.data ? config.data + `&token=${token}`:`token=${token}`;
+    // 添加签名
+    let _sign = get_sign(config.data,_timestamp);
+    config.data = config.data + `&_sign=${_sign}`+`&_timestamp=${_timestamp}`;
+  }
+  else if( !token && config.headers['Content-Type'] !== 'multipart/form-data' ){
+    let _sign = get_sign(config.data,_timestamp);
+    config.data =  config.data + `&_sign=${_sign}` + `&_timestamp=${_timestamp}`;
+  }
   return config;
 }, error => {
   MessageBox.alert('加载超时');

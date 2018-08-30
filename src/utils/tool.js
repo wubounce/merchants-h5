@@ -116,3 +116,70 @@ export const calMin = (arr) => {
 	var minval = minint * 5;// 最终设置的最大值
 	return minval;// 输出最大值
 };
+
+// 签名算法
+export const get_sign = (data,time) => {
+	console.log('转义前的config.data：',data);
+	data = decodeURIComponent(data);
+	console.log('转义后的config.data：',data);
+	if(data) {
+		// 从字符串里把属性和值取到数组中
+		// console.log(data.split('&'));
+		let dataSplit = data.split('&');
+		let objkey = [], // 存属性名
+		    objvalue = []; // 存属性值
+		for (let i=0; i<dataSplit.length; i++) {
+			if(dataSplit[i].split('=').length ==2 ) {
+				objkey.push(dataSplit[i].split('=')[0]);
+				objvalue.push(dataSplit[i].split('=')[1]);
+			}
+			else {
+				objkey.push(dataSplit[i].split('=')[0]);
+				objvalue.push(' ');
+			}
+		}
+		 //console.log('属性：',objkey);
+		 //console.log('值：',objvalue);
+
+		// 将选出来的属性和值从数组里一一对应存到对象中
+		let obj ={};
+		for (let j=0;j<objkey.length;j++) {
+			obj[objkey[j]] = objvalue[j];
+		}
+		// console.log('obj:',obj);
+
+		//获取当前时间并添加当前时间戳到obj对象中
+		//let time = (new Date()).getTime();
+		obj._timestamp = time;
+
+		// 添加_appid=44efec05494c4ca3a4a7ada47722a1a8
+		obj._appid = '44efec05494c4ca3a4a7ada47722a1a8';
+		//console.log('转换后的obj',obj);
+
+		// 字典排序且连接
+		let newKey = Object.keys(obj).sort();
+	  let newObj = {};
+	  for(let i = 0; i < newKey.length; i++) {
+	    newObj[newKey[i]] = obj[newKey[i]]; 
+		}
+
+		// console.log('newObj:',newObj);
+
+		let signarr = [];
+
+		for(let key in newObj) {
+			console.log(key + '=' + newObj[key]);
+			signarr.push(key + '=' + newObj[key]);
+		}
+		console.log('signarr:',signarr);
+
+	 let str = signarr.join('&');
+	 // console.log('加密前字典排序的str:',str);
+
+		//sha1加密，得到参数_sign
+	  let sha1 = require('sha1');
+	  let _sign = sha1(str.split('"').join(''));
+	  //console.log("sha1加密后的str:",_sign);
+	  return _sign;
+	}
+};
