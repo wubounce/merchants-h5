@@ -772,6 +772,7 @@ export default {
     this.getShoplist();
     this.getFromValue();
   },
+  // 背景滚动
   watch: {
     $route(to,from) {
       if(from.name == 'mapSearch') {

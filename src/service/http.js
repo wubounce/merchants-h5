@@ -1,8 +1,7 @@
 import axios from 'axios';
 import { Indicator, MessageBox, Toast } from 'mint-ui';
 import store from '../store';
-import { getToken, removeMenu, filterData } from '@/utils/tool';
-import { menuSelectFun } from '@/service/member';
+import { getToken, filterData, get_sign } from '@/utils/tool';
 import qs from 'qs';
 const baseUrl = process.env.NODE_ENV === 'production' ? 'http://192.168.5.10:8089/merchant/' : 'http://192.168.5.10:8089/merchant/'; 
 // 创建axios实例
@@ -32,8 +31,15 @@ http.interceptors.request.use(config => {
 
   config.data = filterData(config.data);//格式化参数;
   let token = getToken();
+  let _timestamp = (new Date()).getTime();
   if (token) {
     config.data = config.data ? config.data + `&token=${token}`:`token=${token}`;
+    // 添加签名
+    let _sign = get_sign(config.data,_timestamp);
+    config.data = config.data + `&_sign=${_sign}`+`&_timestamp=${_timestamp}`;
+  }else{
+    let _sign = get_sign(config.data,_timestamp);
+    config.data =  config.data + `&_sign=${_sign}` + `&_timestamp=${_timestamp}`;
   }
   return config;
 

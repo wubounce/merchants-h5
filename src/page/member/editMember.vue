@@ -104,8 +104,6 @@ export default {
 
       shoplist:[],
       operateShopIds:[],
-      username:'',
-      phone:'',
       checkshoptxt:'',
       createTime:''
       
@@ -134,8 +132,6 @@ export default {
     },
     async getOperatorInfo(id){
       let res = await getOperatorInfoFun({id:id});
-        this.username = res.realName;
-        this.phone = res.phone;
         this.createTime = res.createTime;
         this.checkshoptxt = res.operateShopNames;
 
@@ -187,8 +183,6 @@ export default {
         this.operateShopIds.forEach(item=>menshopids.push(`'${item}'`));
         let payload = {
           id:this.$route.query.id,
-          username:this.username,
-          phone:this.phone,
           operateShopIds:menshopids.join(','),
           mIds:this.checkpermissionslist.join(',')
         };
