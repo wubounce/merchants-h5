@@ -33,7 +33,6 @@
 </template>
 <script>
 import { MessageBox } from 'mint-ui';
-import qs from 'qs';
 import { getOperatorInfoFun, delOperatorFun } from '@/service/member';
 export default {
   data() {
@@ -51,24 +50,17 @@ export default {
   },
   methods: {
     async getOperatorInfo(id){
-      let res = await getOperatorInfoFun(qs.stringify({id:id}));
-      if (res.code === 0) {
-        this.detail = res.data;
-      }else {
-        this.$toast(res.msg);
-      }
+      let res = await getOperatorInfoFun({id:id});
+      this.detail = res;
     },
     deldelMember(id){
       MessageBox.confirm(`确认删除？`,'').then(async () => {
         let query = this.$route.query;
         let payload = {id:query.id};
-        let res = await delOperatorFun(qs.stringify(payload));
-        if (res.code === 0) {
-          this.$toast({message: '删除成功' });
-           this.$router.push({name:'member'});
-        } else {
-          this.$toast({message: res.msg });
-        }
+        let res = await delOperatorFun(payload);
+        this.$toast({message: '删除成功' });
+        this.$router.push({name:'member'});
+        
       });
     }
   },

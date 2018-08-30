@@ -85,7 +85,6 @@
 </div>
 </template>
 <script>
-import qs from 'qs';
 import { validatPhone } from '@/utils/validate';
 import { shopListFun, updateOperatorInfoFun, getOperatorInfoFun, permsMenuFun } from '@/service/member';
 import { getTrees} from '@/utils/tool';
@@ -134,29 +133,26 @@ export default {
       return true;
     },
     async getOperatorInfo(id){
-      let res = await getOperatorInfoFun(qs.stringify({id:id}));
-      if (res.code === 0) {
-        this.username = res.data.realName;
-        this.phone = res.data.phone;
-        this.createTime = res.data.createTime;
-        this.checkshoptxt = res.data.operateShopNames;
+      let res = await getOperatorInfoFun({id:id});
+        this.username = res.realName;
+        this.phone = res.phone;
+        this.createTime = res.createTime;
+        this.checkshoptxt = res.operateShopNames;
 
-        let updateOperateShopIds = res.data.operateShopNames ? res.data.operateShopNames.split(',') :[];
+        let updateOperateShopIds = res.operateShopNames ? res.operateShopNames.split(',') :[];
         updateOperateShopIds = this.shoplist.filter(v=>updateOperateShopIds.some(k=>k==v.shopName));
         this.operateShopIds = updateOperateShopIds.map(item=>item.shopId);
-        console.log(this.operateShopIds);
-        this.checkpermissionslist = res.data.list.map(item=>item.menuId);
-        this.permissionsMIdsTxt = res.data.list.map(item=>item.name).join(',');
-      }
+        this.checkpermissionslist = res.list.map(item=>item.menuId);
+        this.permissionsMIdsTxt = res.list.map(item=>item.name).join(',');
     },
     async menuSelect(){
       let res = await permsMenuFun(); //拼接权限菜单
-      this.allmenu = res.data;
-      this.permissionsData = getTrees(res.data,0);
+      this.allmenu = res;
+      this.permissionsData = getTrees(res,0);
     },
     async shopListFun(){
       let res = await shopListFun();
-      this.shoplist = res.data;
+      this.shoplist = res;
       let id = this.$route.query ? this.$route.query.id:'';
       this.getOperatorInfo(id);
     },
@@ -178,7 +174,6 @@ export default {
       this.permissionsVisible=false;
       let checklist = this.allmenu.filter(v=>this.checkpermissionslist.some(k=>k==v.menuId));
       this.permissionsMIdsTxt = checklist.map(item=>item.name).join(',');
-      console.log(this.operateShopIds);
     },
     cancelPermissions(){
       let canceIds = this.permissionsMIdsTxt ?  this.permissionsMIdsTxt.split(',') :[];
@@ -187,7 +182,6 @@ export default {
       this.permissionsVisible = false;
     },
     async updateMember(){
-      console.log(this.operateShopIds);
       if (this.validate()) {
         let menshopids = [];
         this.operateShopIds.forEach(item=>menshopids.push(`'${item}'`));
@@ -198,13 +192,9 @@ export default {
           operateShopIds:menshopids.join(','),
           mIds:this.checkpermissionslist.join(',')
         };
-        let res = await updateOperatorInfoFun(qs.stringify(payload));
-        if (res.code === 0) {
-          this.$toast({message: '修改成功' });
-          this.$router.push({name:'member'});
-        } else {
-          this.$toast({message: res.msg });
-        }
+        let res = await updateOperatorInfoFun(payload);
+        this.$toast({message: '修改成功' });
+        this.$router.push({name:'member'});
       }
     }
   },

@@ -90,7 +90,6 @@
 </div>
 </template>
 <script>
-import qs from 'qs';
 import { mapState } from 'vuex';
 import { validatPhone, validatName } from '@/utils/validate';
 import { shopListFun, addOperatorFun, permsMenuFun } from '@/service/member';
@@ -216,7 +215,7 @@ export default {
           operateShopIds:menshopids.join(','),
           mIds:this.checkpermissionslist.join(',')
         };
-        let res = await addOperatorFun(qs.stringify(payload));
+        let res = await addOperatorFun(payload);
         this.$toast({message: '新增成功,密码将发送至此手机' });
         this.$router.push({name:'member'});
       }

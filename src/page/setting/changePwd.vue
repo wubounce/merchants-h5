@@ -21,7 +21,6 @@
 
 <script>
   import { updatePwdFun } from '@/service/resetPwd';
-  import qs from 'qs';
   import { validatPwd } from '@/utils/validate';
   import { removeToken, removeNavTabIndex } from '@/utils/tool';
   export default {
@@ -78,18 +77,10 @@
         if (this.validate()) { 
           let payload = Object.assign({},this.reset);
           delete payload.checkpassword;
-          let res = await updatePwdFun(qs.stringify(payload));
-          if (res.code===0) {
-            removeNavTabIndex();
-            removeToken();
-            this.$router.push({name:'login'});
-          }else {
-            this.$toast({
-              message: "您输入的旧密码有误",
-              position: "middle",
-              duration: 3000
-            });
-          }
+          let res = await updatePwdFun(payload);
+          removeNavTabIndex();
+          removeToken();
+          this.$router.push({name:'login'});
         }
       },
     },

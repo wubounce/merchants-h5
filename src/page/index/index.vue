@@ -214,7 +214,7 @@ export default {
       }
     }, 
     async ParentTypeFun(){ //获取设备类型
-        let res = await ParentTypeFun(qs.stringify({onlyMine:true}));
+        let res = await ParentTypeFun({onlyMine:true});
         res = res.length>0 ? res :[];
         this.parentTypList = res;
         let fristType = res.length>0 ? res[0] : [{id:'',name:''}]; //如果有洗衣机优先展示洗衣机,没有洗衣机优先展示第一个类型
@@ -225,14 +225,8 @@ export default {
         this.equipmentSlots[0].values = [{name:'全部'},...res];
         this.distributionSlots[0].values = [...res];
     },
-    async countMachine(parentTypeId){ //设备监控
-      let res = null;
-      if (parentTypeId) {
-        let payload = Object.assign({},{parentTypeId:parentTypeId});
-        res = await countMachineFun(qs.stringify(payload));
-      } else {
-        res = await countMachineFun();
-      }
+    async countMachine(parentTypeId=""){ //设备监控
+      let res = await countMachineFun({parentTypeId:parentTypeId});
       this.barseriesData = [];
       this.barxAxisData = [];
       this.allmMachine = res.all; //设备总数
@@ -250,14 +244,8 @@ export default {
       this.monthMoney = res.monthMoney; //当月收益
       this.todayMoney = res.todayMoney;//今日收益
     },
-    async ProfitDate(parentTypeId,type){ //收益数据
-      let payload = null;
-      if (parentTypeId !== undefined || parentTypeId !== null && type !== undefined) {
-        payload = Object.assign({},{parentTypeId:parentTypeId,type:type});
-      } else {
-        payload = Object.assign({},{type:0});
-      }
-      let res = await timeProfitFun(qs.stringify(payload));
+    async ProfitDate(parentTypeId="",type=0){ //收益数据
+      let res = await timeProfitFun({parentTypeId:parentTypeId,type:type});
       this.lineseriesData = [];
       this.linexAxisData = [];
       res.forEach(item=>{
@@ -275,15 +263,8 @@ export default {
       this.linechart.setOption(this.lineChartOption);
       
     },
-    async typeProfitData(parentTypeId,type){ //收益分布
-      let payload = null;
-      if (parentTypeId !== undefined || parentTypeId !== null && type !== undefined) {
-        payload = Object.assign({},{parentTypeId:parentTypeId,type:type});
-      } else {
-        payload = Object.assign({},{parentTypeId:this.washingMachineId,type:0});
-      }
-      let res = await typeProfitFun(qs.stringify(payload));
-      console.log(res);
+    async typeProfitData(parentTypeId=this.washingMachineId,type=0){ //收益分布
+      let res = await typeProfitFun({parentTypeId:parentTypeId,type:type});
       let communicateTypeData = res ? res.communicateType :[];
       if (communicateTypeData.length>0) {
         communicateTypeData.forEach(item=>{

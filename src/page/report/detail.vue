@@ -26,7 +26,6 @@
 </template>
 <script>
 import { machineReportFun } from '@/service/report';
-import qs from 'qs';
 export default {
   data() {
     return {
@@ -54,7 +53,7 @@ export default {
   methods: {
     async getDetail(date,type,shopId,dateLevel){
       let payload = Object.assign({},{date:date,type:type,shopId:shopId,dateLevel:dateLevel});
-      let res = await machineReportFun(qs.stringify(payload));
+      let res = await machineReportFun(payload);
       this.list = res.list;
       this.shopName = res.shopName;
       this.date = res.date;

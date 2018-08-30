@@ -54,7 +54,6 @@
 </template>
 <script>
 
-import qs from 'qs';
 import moment from 'moment';
 // 引入 ECharts 主模块
 import echarts from 'echarts/lib/echarts';
@@ -177,7 +176,7 @@ export default {
     async dayReportFun(){
       let shopId = this.currentTags?this.currentTags.shopId:null;
       let payload = Object.assign({},{startDate:this.startDate.join('-'),endDate:this.endDate.join('-'),type:3,shopId:shopId,dateLevel:this.dateLevel});
-      let res = await dayReportFun(qs.stringify(payload));
+      let res = await dayReportFun(payload);
       this.reportDate = [];
       this.reportCount = [];
       this.reportMoney = [];

@@ -57,7 +57,6 @@
 
 </template>
 <script>
-import qs from 'qs';
 import { swiper, swiperSlide } from 'vue-awesome-swiper';  
 import { vipListFun } from '@/service/market';
 import moment from 'moment';
@@ -94,7 +93,7 @@ export default {
   methods: {
     async _getList(){
       let payload = {page:this.page,pageSize: this.pageSize};
-      let res = await vipListFun(qs.stringify(payload));
+      let res = await vipListFun(payload);
       this.list = res.items?[...this.list,...res.items]:[];  //分页添加
       this.list.length <= 0 ? this.noList = true:this.noList = false;
       this.total = res.total;

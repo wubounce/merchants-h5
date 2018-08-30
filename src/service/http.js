@@ -1,15 +1,19 @@
 import axios from 'axios';
 import { Indicator, MessageBox, Toast } from 'mint-ui';
 import store from '../store';
-import { getToken, removeMenu } from '@/utils/tool';
+import { getToken, removeMenu, filterData } from '@/utils/tool';
 import { menuSelectFun } from '@/service/member';
+import qs from 'qs';
 const baseUrl = process.env.NODE_ENV === 'production' ? 'http://192.168.5.10:8089/merchant/' : 'http://192.168.5.10:8089/merchant/'; 
 // 创建axios实例
 const http = axios.create({
   baseURL: baseUrl, // api的base_url
-  timeout: 30000 // 请求超时时间
+  timeout: 30000, // 请求超时时间
+  paramsSerializer: (params) => {
+    return qs.stringify(params, { arrayFormat: 'brackets' });
+  }
 });
-
+// http.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 // request拦截器
 http.interceptors.request.use(config => {
   //由于省市区三级联动调用三次接口，避免闪屏现象，如下操作
@@ -25,15 +29,14 @@ http.interceptors.request.use(config => {
       spinnerType: "fading-circle"
     });
   }
-  
+
+  config.data = filterData(config.data);//格式化参数;
   let token = getToken();
-  if (config.method === 'post' && config.headers['Content-Type'] !== 'multipart/form-data') {
-    config.headers['content-type'] = 'application/x-www-form-urlencoded';
+  if (token) {
+    config.data = config.data ? config.data + `&token=${token}`:`token=${token}`;
   }
-  if (token && config.headers['Content-Type'] !== 'multipart/form-data') {
-      config.data = config.data ? config.data + `&token=${token}`:`token=${token}`;
-    }
   return config;
+
 }, error => {
   MessageBox.alert('加载超时');
   Promise.reject(error);

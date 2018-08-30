@@ -26,7 +26,6 @@
 </div>
 </template>
 <script>
-import qs from 'qs';
 import { getApplyListFun } from '@/service/user';
 import { ApplyType } from '@/utils/mapping';
 import PagerMixin from '@/mixins/pagerMixin';
@@ -44,7 +43,7 @@ export default {
   methods: {
     async _getList(){
         let payload = {page:this.page,pageSize: this.pageSize,type:2};
-        let res = await getApplyListFun(qs.stringify(payload));
+        let res = await getApplyListFun(payload);
         this.list = res.items?[...this.list,...res.items]:[];  //分页添加
         this.total = res.total;
     },

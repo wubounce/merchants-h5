@@ -54,7 +54,6 @@
 </template>
 <script>
 import moment from 'moment';
-import qs from 'qs';
 import { getMoneySubmitDetailFun } from '@/service/user';
 export default {
   data() {
@@ -74,7 +73,7 @@ export default {
   methods: {
     async getMoneySubmitDetail(balanceLogId){
       let payload = {balanceLogId:balanceLogId};
-      let res = await getMoneySubmitDetailFun(qs.stringify(payload));
+      let res = await getMoneySubmitDetailFun(payload);
       this.data = res;
     }
   },

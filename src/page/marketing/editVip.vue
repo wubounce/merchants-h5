@@ -72,7 +72,6 @@
 </div>
 </template>
 <script>
-import qs from 'qs';
 import selectpickr from '@/components/selectPicker';
 import { vipDetailFun, vipShopsFun, addOrUpdateVipFun} from '@/service/market';
 import { validatDiscount, validatCradPrice, validatVipLimit } from '@/utils/validate';
@@ -100,7 +99,7 @@ export default {
   methods: {
     async getVipDetail(shopVipId){
       let payload = Object.assign({},{shopVipId:shopVipId});
-      let res = await vipDetailFun(qs.stringify(payload));
+      let res = await vipDetailFun(payload);
       let beshop = [];
       res.shopList.forEach(item=>{
         beshop.push(item.shopName);
@@ -124,7 +123,7 @@ export default {
     },
     async shopListFun(id){
       let payload = Object.assign({},{shopVipId:id});
-      let res = await vipShopsFun(qs.stringify(payload));
+      let res = await vipShopsFun(payload);
       this.shoplist = res;
     },
     getcheckshop(){
@@ -190,7 +189,7 @@ export default {
       paylod.yearCardLimitTime =  paylod.yearCardLimitTime ?  paylod.yearCardLimitTime:0;
       paylod.halfYearCardLimitTime =  paylod.halfYearCardLimitTime ?  paylod.halfYearCardLimitTime:0;
       paylod.seasonCardLimitTime =  paylod.seasonCardLimitTime ?  paylod.seasonCardLimitTime:0;
-      let res = await addOrUpdateVipFun(qs.stringify(paylod));
+      let res = await addOrUpdateVipFun(paylod);
       this.$toast({message: "修改成功" });
       this.$router.push({name:'marketing',query:{tabindex:1}});
     }

@@ -92,8 +92,7 @@ export default {
       },
       async handleSubmit () {
         if (this.validate()) {
-          let loginInfo = Object.assign({},this.form);
-          let res = await login(qs.stringify(loginInfo));
+          let res = await login(this.form);
           this.login(res.token);
           this.getMenu();
           setPhone(this.form.userName);

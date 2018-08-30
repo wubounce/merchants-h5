@@ -32,7 +32,6 @@
 </div>
 </template>
 <script>
-import qs from 'qs';
 import { operatorListFun, lockOperatorrFun } from '@/service/member';
 import { memberIsLock } from '@/utils/mapping';
 import PagerMixin from '@/mixins/pagerMixin';
@@ -54,7 +53,7 @@ export default {
   methods: {
     async _getList(){
       let payload = {page:this.page,pageSize:this.pageSize};
-      let res = await operatorListFun(qs.stringify(payload));
+      let res = await operatorListFun(payload);
       this.list = res.items?[...this.list,...res.items]:[];  //分页添加
       this.list.length <= 0 ? this.noList = true:this.noList = false;
       this.total = res.total;
@@ -73,7 +72,7 @@ export default {
           isLock = 1;
         }
       let payload = Object.assign({},{id:id,isLock:isLock});
-      let res = await lockOperatorrFun(qs.stringify(payload));
+      let res = await lockOperatorrFun(payload);
     },
     addmemeber(){
       this.$router.push({name:'addMember'});

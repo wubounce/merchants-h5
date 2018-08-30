@@ -80,7 +80,6 @@
 </div>
 </template>
 <script>
-import qs from 'qs';
 import moment from 'moment';
 import selectpickr from '@/components/selectPicker';
 import { shopListFun } from '@/service/report';
@@ -203,7 +202,7 @@ export default {
   methods: {
     async shopListFun(){
       let payload = Object.assign({},{timeId:'123'});
-      let res = await shopListFun(qs.stringify(payload));
+      let res = await shopListFun(payload);
       this.shoplist = res;
     },
     getcheckshop(){
@@ -307,7 +306,7 @@ export default {
       this.addmarket.addstatus === true ? status = 0  : status = 1;
       let payload = Object.assign({},this.addmarket,{week:this.weeklist.join(','),shopIds:this.shopIds.join(','),status:status});
       delete payload.addstatus;
-      let res = await addOruPdateFun(qs.stringify(payload));
+      let res = await addOruPdateFun(payload);
       this.$toast({message: '新增成功' });
       this.$router.push({name:'marketing'});
     }

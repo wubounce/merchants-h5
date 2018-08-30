@@ -30,7 +30,6 @@
 </template>
 <script>
 import { MessageBox } from 'mint-ui';
-import qs from 'qs';
 import moment from 'moment';
 import { delMarketFun, detailMarketFun } from '@/service/market';
 
@@ -51,7 +50,7 @@ export default {
     async getDetail(){
       let query = this.$route.query;
       let payload = {timeId:query.id};
-      let res = await detailMarketFun(qs.stringify(payload));
+      let res = await detailMarketFun(payload);
       this.detail = res;
       this.detail.noDiscountStart = this.detail.noDiscountStart ? moment(this.detail.noDiscountStart).format('YYYY-MM-DD') : '';
       this.detail.noDiscountEnd = this.detail.noDiscountEnd ? moment(this.detail.noDiscountEnd).format('YYYY-MM-DD'): '';
@@ -62,7 +61,7 @@ export default {
       MessageBox.confirm(`确认删除？`,'').then(async () => {
         let query = this.$route.query;
         let payload = {timeId:query.id};
-        let res = await delMarketFun(qs.stringify(payload));
+        let res = await delMarketFun(payload);
         this.$toast('删除成功');
         this.$router.push({name:'marketing'});
       });

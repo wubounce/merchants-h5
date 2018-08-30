@@ -33,7 +33,6 @@
 </div>
 </template>
 <script>
-import qs from 'qs';
 import { timeMarketListFun } from '@/service/market';
 import moment from 'moment';
 import PagerMixin from '@/mixins/pagerMixin';
@@ -56,7 +55,7 @@ export default {
   methods: {
     async _getList(){
        let payload = {page:this.page,pageSize: this.pageSize};
-      let res = await timeMarketListFun(qs.stringify(payload));
+      let res = await timeMarketListFun(payload);
       this.list = res.items?[...this.list,...res.items]:[];  //分页添加
       this.list.length <= 0 ? this.noList = true:this.noList = false;
       this.total = res.total;

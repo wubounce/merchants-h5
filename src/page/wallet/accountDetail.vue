@@ -64,7 +64,6 @@
 </template>
 
 <script>
-import qs from 'qs';
 import { PayType } from '@/utils/mapping';
 import { getOrderDetailFun } from '@/service/user';
 export default {
@@ -89,7 +88,7 @@ export default {
   methods: {
     async getOrderDetail(type){
         let payload = {balanceLogId:this.$route.query.balanceLogId};
-        let res = await getOrderDetailFun(qs.stringify(payload));
+        let res = await getOrderDetailFun(payload);
         this.data = res;
     }
   },

@@ -60,7 +60,6 @@
 </div>
 </template>
 <script>
-import qs from 'qs';
 import { orderStatus } from '@/utils/mapping';
 import { orderListFun,searchOrderFun, ordeRrefundFun, machineResetFun, machineBootFun } from '@/service/order';
 import { MessageBox } from 'mint-ui';
@@ -119,19 +118,17 @@ export default {
       } else {
         payload = {orderStatus:this.orderStatus,page:this.page,pageSize:this.pageSize};
       }
-      res = await orderListFun(qs.stringify(payload));
-      if (res) {
-        this.list = res.items?[...this.list,...res.items]:[];  //分页添加
-        this.list.length <= 0 ? this.noOrderList = true:this.noOrderList = false;
-        this.total = res.total;
-        if (this.searchData) {
-          this.hiddenTab = false;
-          this.hiddenPageHeight = 1.71;
-          this.nosearchList = this.list.length<= 0 ? true: false;
-        } else {
-          this.hiddenTab = true;
-          this.noOrderList = this.list.length<= 0 ? true: false;
-        }
+      res = await orderListFun(payload);
+      this.list = res.items?[...this.list,...res.items]:[];  //分页添加
+      this.list.length <= 0 ? this.noOrderList = true:this.noOrderList = false;
+      this.total = res.total;
+      if (this.searchData) {
+        this.hiddenTab = false;
+        this.hiddenPageHeight = 1.71;
+        this.nosearchList = this.list.length<= 0 ? true: false;
+      } else {
+        this.hiddenTab = true;
+        this.noOrderList = this.list.length<= 0 ? true: false;
       }
     },
     async searchOrder(e){ //搜索
@@ -164,7 +161,7 @@ export default {
       MessageBox.confirm(`您确定要复位${machineName}？`,'').then(async () => {
           let query = this.$route.query;
           let payload = {machineId:machineId,orderNo:oederno};
-          let res = await machineResetFun(qs.stringify(payload));
+          let res = await machineResetFun(payload);
           this.$toast({message: '复位成功' });
       });
       
@@ -173,7 +170,7 @@ export default {
       MessageBox.confirm(`您确定要启动${machineName}？`,'').then(async () => {
         let query = this.$route.query;
         let payload = {orderId:id};
-        let res = await machineBootFun(qs.stringify(payload));
+        let res = await machineBootFun(payload);
         this.$toast({message: '启动成功' });
       });
       
@@ -186,7 +183,7 @@ export default {
       }).then(async () => {
         let query = this.$route.query;
         let payload = {orderNo:oederno,refundMoney:payPrice};
-        let res = await ordeRrefundFun(qs.stringify(payload));
+        let res = await ordeRrefundFun(payload);
         this.refundDisabled = false;
         this.$toast({message: '退款成功' });
         this.page = 1;

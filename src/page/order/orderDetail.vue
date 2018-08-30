@@ -66,7 +66,6 @@
 </div>
 </template>
 <script>
-import qs from 'qs';
 import { orderStatus, PayType } from '@/utils/mapping';
 import { ordeRrefundFun, orderDetailFun, machineResetFun, machineBootFun } from '@/service/order';
 import { MessageBox } from 'mint-ui';
@@ -87,14 +86,15 @@ export default {
   },
   methods: {
     async getDetail(orderNo){
-      let res = await orderDetailFun(qs.stringify({orderNo:orderNo}));
+      let payload = {orderNo:orderNo};
+      let res = await orderDetailFun(payload);
       this.detail = res;
     },
     machineReset(orderNo,machineId){ //设备复位
       MessageBox.confirm(`您确定要复位${this.detail.machineName}？`,'').then(async () => {
           let query = this.$route.query;
           let payload = {machineId:machineId,orderNo:orderNo};
-          let res = await machineResetFun(qs.stringify(payload));
+          let res = await machineResetFun(payload);
           this.$toast({message: '复位成功' });
       });
       
@@ -103,7 +103,7 @@ export default {
       MessageBox.confirm(`您确定要启动${this.detail.machineName}？`,'').then(async () => {
         let query = this.$route.query;
         let payload = {orderId:id};
-        let res = await machineBootFun(qs.stringify(payload));
+        let res = await machineBootFun(payload);
         this.$toast({message: '启动成功' });
       });
       
@@ -116,7 +116,7 @@ export default {
       }).then(async () => {
         let query = this.$route.query;
         let payload = {orderNo:orderNo,refundMoney:payPrice};
-        let res = await ordeRrefundFun(qs.stringify(payload));
+        let res = await ordeRrefundFun(payload);
         this.$toast({message: '退款成功' });
         this.$router.push({name:'order'});
         this.refundDisabled = false;

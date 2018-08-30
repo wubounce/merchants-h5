@@ -49,7 +49,6 @@
 </div>
 </template>
 <script>
-import qs from 'qs';
 import { Navbar, TabItem } from 'mint-ui';
 import { getApplyListFun } from '@/service/user';
 import { ApplyType } from '@/utils/mapping';
@@ -83,11 +82,10 @@ export default {
     },
     async _getList(type){
         let payload = {page:this.page,pageSize: this.pageSize,type:this.type};
-        let res = await getApplyListFun(qs.stringify(payload));
+        let res = await getApplyListFun(payload);
         this.list = res.items?[...this.list,...res.items]:[];  //分页添加
         this.total = res.total;
         this.total > 10 ? this.accountOnlySix = false : this.accountOnlySix = true;
-        
     }
   },
   filters: {

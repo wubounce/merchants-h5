@@ -21,7 +21,6 @@
 </template> 
 <script>
 import { shopReportFun } from '@/service/report';
-import qs from 'qs';
 export default {
   data() {
     return {
@@ -46,7 +45,7 @@ export default {
   methods: {
     async getDetail(date,type,dateLevel){
       let payload = Object.assign({},{date:date,type:type,dateLevel:dateLevel});
-      let res = await shopReportFun(qs.stringify(payload));
+      let res = await shopReportFun(payload);
       this.list = res.list;
       this.date = res.date;
       this.list.length <= 0 ? this.noList = true:this.noList = false;

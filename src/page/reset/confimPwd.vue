@@ -15,7 +15,6 @@
 </template>
 
 <script>
-import qs from 'qs';
 import { forgetPwdFun } from '@/service/resetPwd';
 import { validatPwd } from '@/utils/validate';
   export default {
@@ -69,12 +68,8 @@ import { validatPwd } from '@/utils/validate';
         if (this.validate()) {
           let phone = this.$route.query ? this.$route.query.phone:'';
           let payload = Object.assign({},{password:this.reset.password,phone:phone});
-          let res = await forgetPwdFun(qs.stringify(payload));
-          if (res.code===0) {
-            this.$router.push({name:'login'});
-          }else {
-             this.$toast(res.msg);
-          }
+          let res = await forgetPwdFun(payload);
+          this.$router.push({name:'login'});
         }
       },
     },

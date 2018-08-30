@@ -116,3 +116,13 @@ export const calMin = (arr) => {
 	var minval = minint * 5;// 最终设置的最大值
 	return minval;// 输出最大值
 };
+
+
+export const filterData = (data)=>{
+	let params = new URLSearchParams();
+	for (let i in data) {
+	   if (data[i] === null || data[i] === undefined || data[i] === '') continue;
+	   params.append(i, data[i]);
+	}
+	return params.toString();
+};

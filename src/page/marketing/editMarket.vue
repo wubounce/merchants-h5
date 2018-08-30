@@ -82,7 +82,6 @@
 </div>
 </template>
 <script>
-import qs from 'qs';
 import moment from 'moment';
 import selectpickr from '@/components/selectPicker';
 import { shopListFun } from '@/service/report';
@@ -209,7 +208,7 @@ export default {
      async getDetail(){
       let query = this.$route.query;
       let payload = {timeId:query.id};
-      let res = await detailMarketFun(qs.stringify(payload));
+      let res = await detailMarketFun(payload);
       this.shopListFun(query.id);
         let detail = res;
         this.addmarket.startTime = detail.noDiscountStart ? moment(detail.noDiscountStart).format('YYYY-MM-DD') : '';
@@ -232,7 +231,7 @@ export default {
     },
     async shopListFun(timeid){
       let payload = {timeId:timeid};
-      let res = await shopListFun(qs.stringify(payload));
+      let res = await shopListFun(payload);
       this.shoplist = res;
     },
     getcheckshop(){
@@ -335,7 +334,7 @@ export default {
       this.addmarket.addstatus === true ? status = 0  : status = 1;
       let payload = Object.assign({},this.addmarket,{week:this.weeklist.join(','),shopIds:this.shopIds.join(','),timeId:this.$route.query.id,status:status});
       delete payload.addstatus;
-      let res = await addOruPdateFun(qs.stringify(payload));
+      let res = await addOruPdateFun(payload);
       this.$toast({message: '编辑成功' });
       this.$router.push({name:'marketing'});
      

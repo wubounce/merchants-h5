@@ -21,7 +21,6 @@
 </div>
 </template>
 <script>
-import qs from 'qs';
 import { MessageBox } from 'mint-ui';
 import { getApplyaccountFun, applyMoneySubmitFun } from '@/service/user';
 export default {
@@ -68,7 +67,7 @@ export default {
         }
         this.disabled = true;
         let payload = Object.assign({},{money:this.money});
-        let res = await applyMoneySubmitFun(qs.stringify(payload));
+        let res = await applyMoneySubmitFun(payload);
         if(res.code === 1004 || res.code === 1014) {
             this.$toast(res.msg);
             this.$router.push({name:'accountSet'});
