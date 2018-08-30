@@ -12,11 +12,6 @@ export const getNoticeType = () => Cookies.get(NoticeTypeKey);
 export const setNoticeType = (NoticeType) => Cookies.set(NoticeTypeKey, NoticeType);
 export const removeNoticeType = () => Cookies.remove(NoticeTypeKey);
 
-const storeKey = 'user';
-export const setUser = (user) => localStorage.setItem(storeKey, JSON.stringify(user));
-export const getUser = () => JSON.parse(localStorage.getItem(storeKey));
-export const removeUser = () => localStorage.removeItem(storeKey);
-
 const menuKey = 'menu';
 export const setMenu = (menu) => localStorage.setItem(menuKey, JSON.stringify(menu));
 export const getMenu = () => JSON.parse(localStorage.getItem(menuKey));

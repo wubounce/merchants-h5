@@ -32,9 +32,8 @@
 </template>
 
 <script>
-import qs from "qs";
 import { mapActions } from 'vuex';
-import { getToken, removeToken, removeUser, removeMenu, removeNavTabIndex, getNavTabIndex, setPhone, getPhone } from '@/utils/tool';
+import { getToken, removeToken, removeMenu, removeNavTabIndex, getNavTabIndex, setPhone, getPhone } from '@/utils/tool';
 import { login } from '@/service/login';
 import Button from "@/components/Button/Button";
 export default {
@@ -68,7 +67,6 @@ export default {
     created () {
       // 每次登录之前清理缓存数据
       removeToken();
-      removeUser();
       removeMenu();
       removeNavTabIndex();
     },
@@ -77,7 +75,7 @@ export default {
     },
     methods: {
       ...mapActions([
-        'login','getUser','getMenu'
+        'login','getMenu'
       ]),
       validate() {
         if (this.form.userName === '') {
