@@ -173,6 +173,15 @@ import moment from 'moment';
     },
     components: {
       Button
+    },
+    watch: {
+      popupVisible: function () {
+        if (this.popupVisible) {
+          this.ModalHelper.afterOpen();
+        } else {
+          this.ModalHelper.beforeClose();
+        }
+      }
     }
   };
 </script>
