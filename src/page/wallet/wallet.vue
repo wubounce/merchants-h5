@@ -28,11 +28,7 @@ export default {
   methods: {
     async getApplyFinance(){
         let res = await getApplyFinanceFun();
-        if (res.code === 0) {
-            this.data = res.data || {};
-        }else {
-            this.$toast(res.msg);
-        }
+        this.data = res || {};
     },
     gowithdraw(){
         if(Number(this.data.code) === 1014 || Number(this.data.code) === 1004 || Number(this.data.code) === 1018) {

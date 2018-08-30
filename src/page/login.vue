@@ -94,17 +94,13 @@ export default {
         if (this.validate()) {
           let loginInfo = Object.assign({},this.form);
           let res = await login(qs.stringify(loginInfo));
-          if (res.code===0) {
-              this.login(res.data.token);
-              this.getMenu();
-              setPhone(this.form.userName);
-              if(res.data.code === 8002){
-                this.$router.push({name:'bindPhone'});
-              }else {
-                this.$router.push({name:'index'});
-              }
+          this.login(res.token);
+          this.getMenu();
+          setPhone(this.form.userName);
+          if(res.code === 8002){
+            this.$router.push({name:'bindPhone'});
           }else {
-             this.$toast(res.msg);
+            this.$router.push({name:'index'});
           }
         }
       },

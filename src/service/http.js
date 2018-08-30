@@ -43,7 +43,8 @@ http.interceptors.request.use(config => {
 http.interceptors.response.use(
   response => {
     Indicator.close();
-    if (response.status === 200) {
+    console.log(response);
+    if (response.status === 200 && response.data.code===0) {
       // 时间验证 & 把时间放到vuex中
       if (response.data.t > 0) {
         let offset = response.data.t - new Date().getTime();
@@ -52,19 +53,16 @@ http.interceptors.response.use(
         }
         store.commit('setServerTimeOffset', parseInt(offset / 1000));
       }
-      //11:Token 过期了;
-      if (response.data.code === 11) {
-        store.dispatch('LogOut').then(() => {
-          location.reload();
-        });
-      }
-      if (response.data.code === 7004) {
-        store.dispatch('LogOut').then(() => {
-          location.reload();
-        });
-      }
-      return Promise.resolve(response.data);
+      return Promise.resolve(response.data.data);
 
+    }else if (response.data.code === 11) { //11:Token 过期了;
+      store.dispatch('LogOut').then(() => {
+        location.reload();
+      });
+    }else if (response.data.code === 7004) {  //11:无权限;
+        store.dispatch('LogOut').then(() => {
+          location.reload();
+        });
     }else {
       Toast(response.data.msg);
       return Promise.reject(response.data);

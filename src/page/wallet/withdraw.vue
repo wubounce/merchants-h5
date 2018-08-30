@@ -45,12 +45,9 @@ export default {
   methods: {
     async getOperator(){
         let res = await getApplyaccountFun();
-        if (res.code === 0) {
-            this.userInfo = res.data;
-            this.inputDisabled = false;
-        }else {
-            this.$toast(res.msg);
-        }
+        this.userInfo = res;
+        this.inputDisabled = false;
+        console.log(res);
     },
     allWithdraw(){
         this.money = this.userInfo.balance;
@@ -73,6 +70,7 @@ export default {
         this.disabled = true;
         let payload = Object.assign({},{money:this.money});
         let res = await applyMoneySubmitFun(qs.stringify(payload));
+        console.log(res);
         if (res.code ===0) {
             if(res.data.code === 1004 || res.data.code === 1014) {
                 this.$toast(res.data.msg);

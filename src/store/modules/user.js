@@ -58,8 +58,8 @@ const user = {
     },
     getMenu({ commit }, menu){
       menuSelectFun().then((data) => {
-        commit('setMenu', data.data);
-        setMenu(data.data);
+        commit('setMenu', data);
+        setMenu(data);
       });
 
     },

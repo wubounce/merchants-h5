@@ -62,9 +62,7 @@ export default {
   methods: {
     async getOperator(){
         let res = await getOperatorFun();
-        if (res.code === 0) {
-            this.userInfo = res.data;
-        }
+        this.userInfo = res;
     }
   },
   components:{

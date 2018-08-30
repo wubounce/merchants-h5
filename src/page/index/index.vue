@@ -215,15 +215,15 @@ export default {
     }, 
     async ParentTypeFun(){ //获取设备类型
         let res = await ParentTypeFun(qs.stringify({onlyMine:true}));
-        res.data = res.data.length>0 ? res.data :[];
-        this.parentTypList = res.data;
-        let fristType = res.data.length>0 ? res.data[0] : [{id:'',name:''}]; //如果有洗衣机优先展示洗衣机,没有洗衣机优先展示第一个类型
-        let pac = res.data.find(item=>item.name === '洗衣机');
+        res = res.length>0 ? res :[];
+        this.parentTypList = res;
+        let fristType = res.length>0 ? res[0] : [{id:'',name:''}]; //如果有洗衣机优先展示洗衣机,没有洗衣机优先展示第一个类型
+        let pac = res.find(item=>item.name === '洗衣机');
         this.washingMachineId = pac ? pac.id : fristType.id;
         this.hasWashingMachine = pac ? '洗衣机' : fristType.name; 
         this.typeProfitData();
-        this.equipmentSlots[0].values = [{name:'全部'},...res.data];
-        this.distributionSlots[0].values = [...res.data];
+        this.equipmentSlots[0].values = [{name:'全部'},...res];
+        this.distributionSlots[0].values = [...res];
     },
     async countMachine(parentTypeId){ //设备监控
       let res = null;
@@ -233,28 +233,22 @@ export default {
       } else {
         res = await countMachineFun();
       }
-      if (res.code === 0) {
-         this.barseriesData = [];
-         this.barxAxisData = [];
-        this.allmMachine = res.data.all; //设备总数
-        delete res.data.all; //图表删除总数
-        for(var i in res.data){
-          this.barseriesData.push(res.data[i]);
-          this.barxAxisData.push(MachineStatus(i));
-        }
-        this.barMax = calMax(this.barseriesData)>0? calMax(this.barseriesData): 1;//Y轴最大值
-        this.barchart.setOption(this.barOChartOPtion);
+      this.barseriesData = [];
+      this.barxAxisData = [];
+      this.allmMachine = res.all; //设备总数
+      delete res.all; //图表删除总数
+      for(var i in res){
+        this.barseriesData.push(res[i]);
+        this.barxAxisData.push(MachineStatus(i));
       }
-      
+      this.barMax = calMax(this.barseriesData)>0? calMax(this.barseriesData): 1;//Y轴最大值
+      this.barchart.setOption(this.barOChartOPtion);
     },
     async totalProfitFun(){ //总收益
       let res = await totalProfitFun();
-      if (res.code === 0) {
-        this.allMoney = res.data.allMoney; //总收益
-        this.monthMoney = res.data.monthMoney; //当月收益
-        this.todayMoney = res.data.todayMoney;//今日收益
-      }
-     
+      this.allMoney = res.allMoney; //总收益
+      this.monthMoney = res.monthMoney; //当月收益
+      this.todayMoney = res.todayMoney;//今日收益
     },
     async ProfitDate(parentTypeId,type){ //收益数据
       let payload = null;
