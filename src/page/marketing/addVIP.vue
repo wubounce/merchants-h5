@@ -72,7 +72,6 @@
 </div>
 </template>
 <script>
-import qs from 'qs';
 import selectpickr from '@/components/selectPicker';
 import { vipShopsFun, addOrUpdateVipFun} from '@/service/market';
 import { validatDiscount, validatCradPrice, validatVipLimit } from '@/utils/validate';
@@ -168,7 +167,7 @@ export default {
       paylod.yearCardLimitTime =  paylod.yearCardLimitTime ?  paylod.yearCardLimitTime:0;
       paylod.halfYearCardLimitTime =  paylod.halfYearCardLimitTime ?  paylod.halfYearCardLimitTime:0;
       paylod.seasonCardLimitTime =  paylod.seasonCardLimitTime ?  paylod.seasonCardLimitTime:0;
-      let res = await addOrUpdateVipFun(qs.stringify(paylod));
+      let res = await addOrUpdateVipFun(paylod);
       this.$toast({message: "新增成功" });
       this.$router.push({name:'marketing',query:{tabindex:1}});
     }
