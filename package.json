@@ -13,13 +13,16 @@
     "build": "node build/build.js"
   },
   "dependencies": {
+    "64": "^0.2.0",
     "axios": "^0.18.0",
     "echarts": "^3.7.2",
     "element-ui": "^2.4.5",
     "eslint-plugin-html": "^4.0.5",
     "exif-js": "^2.3.0",
     "i": "^0.3.6",
+    "js-base": "^0.0.1-beta",
     "js-cookie": "^2.2.0",
+    "jsencrypt": "^3.0.0-rc.1",
     "less": "^3.6.0",
     "less-loader": "^4.1.0",
     "lib-flexible": "^0.3.2",

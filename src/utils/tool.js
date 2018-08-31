@@ -131,17 +131,18 @@ export const get_sign = (data,time) => {
 		let objkey = [], // 存属性名
 				objvalue = []; // 存属性值
 		// 分别将key和value放在对应函数中
+		// 分别将key和value放在对应函数中
 		for (let i=0; i<dataSplit.length; i++) {
-			if(dataSplit[i].split('=').length ==2 ) {
+			if(dataSplit[i].split('=').length > 2 ) {
+				let temp = dataSplit[i].indexOf('=');
+				objkey.push(dataSplit[i].substring(0,temp));
+				objvalue.push(dataSplit[i].substring(temp+1));
+			}else {
 				objkey.push(dataSplit[i].split('=')[0]);
 				objvalue.push(dataSplit[i].split('=')[1]);
 			}
-			else {
-				objkey.push(dataSplit[i].split('=')[0]);
-				objvalue.push(' ');
-			}
-		}
 
+		}
 		// 将选出来的属性和值从数组里一一对应存到对象中
 		let obj ={};
 		for (let j=0;j<objkey.length;j++) {

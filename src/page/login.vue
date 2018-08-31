@@ -35,7 +35,7 @@
 import { mapActions } from 'vuex';
 import { getToken, removeToken, removeMenu, removeNavTabIndex, getNavTabIndex, setPhone, getPhone } from '@/utils/tool';
 import { login } from '@/service/login';
-import Button from "@/components/Button/Button";
+import JsEncrypt from 'jsencrypt';
 export default {
     name: 'page-login',
     beforeRouteEnter(to, from, next) {
@@ -69,6 +69,7 @@ export default {
       removeToken();
       removeMenu();
       removeNavTabIndex();
+     
     },
     computed: {
       
@@ -90,7 +91,13 @@ export default {
       },
       async handleSubmit () {
         if (this.validate()) {
-          let res = await login(this.form);
+          let password = this.RSAencrypt(this.form.password);
+          let userName = this.RSAencrypt(this.form.userName);
+          let payload = {
+            userName:userName,
+            password:password
+          };
+          let res = await login(payload);
           this.login(res.token);
           this.getMenu();
           setPhone(this.form.userName);
@@ -100,6 +107,13 @@ export default {
             this.$router.push({name:'index'});
           }
         }
+      },
+      RSAencrypt(data){
+        const jsencrypt = new JSEncrypt(); // 实例化加密对象
+        let pubKey = 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAh/dHI4eSGQU55+WY2QIWguZ8got/aCairVO+8fMj6dHPWPb3AAhvfNZ7BrUaKUrPQqpt2QVRmV+UZp/bot6ukNEZMFMaSjGf4FFtRNbjIn+5jo8sC3rn6+9k2XNvAMydTDtU0P8Ebhbm1gg6O+gg+iRIAX3awWZajy2senYD7zSDguqyL8xuh6S9RG2wjPsN8LNuKd3klD1rw3kmX0Q672kSW6vm+GHzWun6jYaWac2w936NlvnbQI1P1lFjcgv0OgFBm/4yoLMhx6wZD9KTKG2S7wZRNmbzEaXyrTTdJ+Q1NE4+gqHCAFfHKrzB2zvY2I0v8QL7JLMpCevChRgEcwIDAQAB';
+        jsencrypt.setPublicKey(pubKey); // 设置公钥
+        data = jsencrypt.encrypt(data);
+        return data;
       },
       userinputFunc(){
         this.isuser = true;
@@ -125,7 +139,6 @@ export default {
       }
     },
     components: {
-      Button
     }
   };
 </script>
