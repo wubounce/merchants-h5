@@ -2,6 +2,7 @@
  *  描述：Global filters js
  */
 import { getMenu } from '@/utils/tool';
+import store from '@/store';
 // 待安装
 const install = (Vue, options) => {
 	//移动端滚动穿透问题
@@ -21,6 +22,7 @@ const install = (Vue, options) => {
 	})('dialog-open');
 	//权限检查方法
 	Vue.prototype.$_has = function(value) {
+		console.log(store);
 	  let isExist=false;
 	  let buttonpermsStr = getMenu();
 	  if(buttonpermsStr==undefined || buttonpermsStr==null){

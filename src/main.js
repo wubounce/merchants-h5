@@ -44,6 +44,8 @@ router.beforeEach((to, from, next) => {
   // 切换之前，把弹出框都关掉
   MessageBox.close();
   if (getToken()) {
+      // 初始化用户信息
+      store.dispatch('getMenu');
       next();
   } else {
     if (whiteList.indexOf(to.path) !== -1) {
@@ -55,6 +57,7 @@ router.beforeEach((to, from, next) => {
 		}); 
     }
   }
+
 });
 
 /* eslint-disable no-new */

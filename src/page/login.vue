@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex';
+import { mapState, mapActions } from 'vuex';
 import { getToken, removeToken, removeMenu, removeNavTabIndex, getNavTabIndex, setPhone, getPhone } from '@/utils/tool';
 import { login } from '@/service/login';
 import JsEncrypt from 'jsencrypt';
@@ -71,9 +71,10 @@ export default {
       removeNavTabIndex();
      
     },
-    computed: {
-      
-    },
+    computed: mapState([
+      // 映射 this.firstRoute 为 store.state.firstRoute
+      'firstRoute'
+    ]),
     methods: {
       ...mapActions([
         'login','getMenu'
@@ -99,8 +100,9 @@ export default {
           };
           let res = await login(payload);
           this.login(res.token);
-          this.getMenu();
           setPhone(this.form.userName);
+          console.log(this.$router.options.routes,this.$route);
+          console.log(this.firstRoute);
           if(res.code === 8002){
             this.$router.push({name:'bindPhone'});
           }else {

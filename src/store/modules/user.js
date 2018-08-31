@@ -5,11 +5,12 @@ const user = {
     token: getToken(),
     menu:[],
     timeOffset: 0,
+    firstRoute:{},
   },
   getters:{
     has: (state) => (value) => {
       let isExist = true;
-      let buttonpermsStr = getMenu();
+      let buttonpermsStr = state.menu;
       if(buttonpermsStr==undefined || buttonpermsStr==null){
         return false;
       }
@@ -36,6 +37,9 @@ const user = {
     setServerTimeOffset (state, data) {
       state.timeOffset = data;
     },
+    setFirstRoute (state, data) {
+      state.firstRoute = data;
+    },
   },
 
   actions: {
@@ -47,9 +51,9 @@ const user = {
     getMenu({ commit }, menu){
       menuSelectFun().then((data) => {
         commit('setMenu', data);
+        commit('setFirstRoute',data[0]);
         setMenu(data);
       });
-
     },
     // 前端 登出
     LogOut({ commit }) {
