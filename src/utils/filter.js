@@ -22,20 +22,20 @@ const install = (Vue, options) => {
 	})('dialog-open');
 	//权限检查方法
 	Vue.prototype.$_has = function(value) {
-		console.log(store);
-	  let isExist=false;
-	  let buttonpermsStr = getMenu();
-	  if(buttonpermsStr==undefined || buttonpermsStr==null){
-	    return false;
-	  }
-	  for(let i=0;i<buttonpermsStr.length;i++){
-	    if(buttonpermsStr[i].perms.includes(String(value))){
-	      isExist=true;
-	      break;
-	    }
-	  }
-	  return isExist;
-	};
+		let menuList = store.state.user.menu;
+		let isExist=false;
+		let buttonpermsStr = menuList;
+		if(buttonpermsStr==undefined || buttonpermsStr==null){
+			return false;
+		}
+		for(let i=0;i<buttonpermsStr.length;i++){
+			if(buttonpermsStr[i].perms.includes(String(value))){
+				isExist=true;
+				break;
+			}
+		}
+			return isExist;
+		};
 
 	Vue.directive('title', {
 	  inserted: function (el, binding) {

@@ -1,8 +1,7 @@
-import { getToken, setToken, removeToken, setMenu, removeMenu, getMenu } from '@/utils/tool';
+import { getToken, setToken, removeToken } from '@/utils/tool';
 import { menuSelectFun } from '@/service/member';
 const user = {
   state: {
-    token: getToken(),
     menu:[],
     timeOffset: 0,
     firstRoute:{},
@@ -28,9 +27,6 @@ const user = {
     }
   },
   mutations: {
-    SET_TOKEN: (state, token) => {
-      state.token = token;
-    },
     setMenu: (state, menu) => {
       state.menu = menu;
     },
@@ -46,22 +42,18 @@ const user = {
     // 登录
     login({ commit }, token) {
       setToken(token);
-      commit('SET_TOKEN', token);
     },
     getMenu({ commit }, menu){
       menuSelectFun().then((data) => {
         commit('setMenu', data);
         commit('setFirstRoute',data[0]);
-        setMenu(data);
       });
     },
     // 前端 登出
     LogOut({ commit }) {
       return new Promise(resolve => {
-        commit('SET_TOKEN', '');
         commit('setMenu', []);
         removeToken();
-        removeMenu();
         resolve();
       });
     }

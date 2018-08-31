@@ -45,16 +45,20 @@ router.beforeEach((to, from, next) => {
   MessageBox.close();
   if (getToken()) {
       // 初始化用户信息
-      store.dispatch('getMenu');
       next();
+      // 已初始化数据，不处理
+      console.log(store);
+      if (store.state.user.menu.lenght<0) {
+        store.dispatch('getMenu');
+      }
   } else {
     if (whiteList.indexOf(to.path) !== -1) {
       next();
     } else {
-		next({ 
-			path: '/login', // 未登录则跳转至login页面 
-			query: {redirect: to.fullPath} // 登陆成功后回到当前页面，这里传值给login页面，to.fullPath为当前点击的页面 
-		}); 
+  		next({ 
+  			path: '/login', // 未登录则跳转至login页面 
+  			query: {redirect: to.fullPath} // 登陆成功后回到当前页面，这里传值给login页面，to.fullPath为当前点击的页面 
+  		}); 
     }
   }
 

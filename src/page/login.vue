@@ -33,7 +33,7 @@
 
 <script>
 import { mapState, mapActions } from 'vuex';
-import { getToken, removeToken, removeMenu, removeNavTabIndex, getNavTabIndex, setPhone, getPhone } from '@/utils/tool';
+import { getToken, removeToken, removeNavTabIndex, getNavTabIndex, setPhone, getPhone } from '@/utils/tool';
 import { login } from '@/service/login';
 import JsEncrypt from 'jsencrypt';
 export default {
@@ -67,9 +67,7 @@ export default {
     created () {
       // 每次登录之前清理缓存数据
       removeToken();
-      removeMenu();
       removeNavTabIndex();
-     
     },
     computed: mapState([
       // 映射 this.firstRoute 为 store.state.firstRoute
@@ -77,7 +75,7 @@ export default {
     ]),
     methods: {
       ...mapActions([
-        'login','getMenu'
+        'login',
       ]),
       validate() {
         if (this.form.userName === '') {
@@ -102,7 +100,7 @@ export default {
           this.login(res.token);
           setPhone(this.form.userName);
           console.log(this.$router.options.routes,this.$route);
-          console.log(this.firstRoute);
+          console.log(this.$store.state);
           if(res.code === 8002){
             this.$router.push({name:'bindPhone'});
           }else {
