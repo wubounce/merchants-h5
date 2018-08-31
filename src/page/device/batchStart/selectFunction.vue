@@ -26,20 +26,13 @@
         <div class="searchNoItem" v-show="secondTypeList.length<=0">暂无功能列表</div>
       </div>
     </div>
-    <div class="itemBar" v-show="!functionSetModel">
-      <span>年</span>
-      <span>月</span>
-      <span>日</span>
-      <span>小时</span>
-      <span>分钟</span>
-    </div>
     <!-- 启动时间 -->
     <van-datetime-picker
       v-model="currentDate"
       type="datetime"
       :min-date="minDate" 
       @change="changeItem"
-      ref="checkoutTime"
+      :formatter="formatter"
       v-show="!functionSetModel"
     />
     <div style="width:100%;height:1.73rem;"></div>
@@ -114,6 +107,20 @@ export default {
       };
     },
     methods: {
+      formatter(type, value) {
+        if (type === 'year') {
+          return `${value}年`;
+        } else if (type === 'month') {
+          return `${value}月`;
+        } else if (type === 'day') {
+          return `${value}日`;
+        } else if (type === 'hour') {
+          return `${value}时`;
+        } else if (type === 'minute') {
+          return `${value}分`;
+        }
+        return value;
+      },
       changeItem(picker) {
       let timeArr = picker.getValues();
       this.beginTime = timeArr[0] + "年" + timeArr[1] + "月" + timeArr[2] + "日" + " " + timeArr[3] + ":" + timeArr[4];
@@ -413,10 +420,7 @@ export default {
   }
   .van-picker {
     padding-top: 5.13rem;
-    margin-top: -40px;
-    .van-picker-column__item--selected{
-      font-size: 20px;
-    }
+    margin-top: -93px;
   }
   .promiss-footer {
       display: flex;
@@ -458,5 +462,7 @@ export default {
     .default {
       opacity: 0.6;
     }
-
+    .van-picker-column__item--selected {
+      font-weight: bold !important;
+    }
 </style>
