@@ -178,7 +178,7 @@
         this.functionList = res.functionList;
         let comment = res.comment;
         if(comment) {
-          this.$toast("设备型号与功能不匹配，请删除设备重新绑定。");
+          this.$toast("设备功能不存在，请删除设备重新绑定");
         }
         if(res.hasTzj) { //判断是否有筒自洁功能
           this.tzjShow = true;
