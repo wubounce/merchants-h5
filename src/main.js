@@ -44,11 +44,9 @@ router.beforeEach((to, from, next) => {
   // 切换之前，把弹出框都关掉
   MessageBox.close();
   if (getToken()) {
-      // 初始化用户信息
       next();
-      // 已初始化数据，不处理
-      console.log(store);
-      if (store.state.user.menu.lenght<0) {
+      // 已初始化权限数据，不处理
+      if (store.state.user.menu.length<=0) {
         store.dispatch('getMenu');
       }
   } else {

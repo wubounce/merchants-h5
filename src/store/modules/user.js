@@ -46,7 +46,8 @@ const user = {
     getMenu({ commit }, menu){
       menuSelectFun().then((data) => {
         commit('setMenu', data);
-        commit('setFirstRoute',data[0]);
+        let parentRoute = data.filter(item=>Number(item.parentId)===0);
+        commit('setFirstRoute',parentRoute[0]);
       });
     },
     // 前端 登出

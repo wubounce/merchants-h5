@@ -2,17 +2,17 @@
 	<div class="home">
 		<router-view></router-view>
 		<mt-tabbar v-model="selected" fixed>
-	      <mt-tab-item id="/index">
+	      <mt-tab-item id="/index" v-has="'mer:index'">
 	      	<img slot="icon" src="../../static/image/index/index@2x.png" v-if="selected === '/index'">
 	        <img slot="icon" src="../../static/image/index/index-grey@2x.png" v-else>
 	        首页
 	      </mt-tab-item>
-	      <mt-tab-item id="/report">
+	      <mt-tab-item id="/report" v-has="'mer:report'">
 	        <img slot="icon" src="../../static/image/index/report@2x.png" v-if="selected === '/report'">
 	        <img slot="icon" src="../../static/image/index/report-grey@2x.png"  v-else>
 	        报表
 	      </mt-tab-item>
-	      <mt-tab-item id="/management">
+	      <mt-tab-item id="/management" v-if="!$store.getters.has('mer:shop:list')||!$store.getters.has('mer:machine:list')||!$store.getters.has('mer:order:list')||!$store.getters.has('mer:schedule:list')||!$store.getters.has('mer:marketing:list')||!$store.getters.has('mer:marketing:vip:list')||!$store.getters.has('mer:person:list')">
 	        <img slot="icon" src="../../static/image/index/mang@2x.png" v-if="selected === '/management'">
 	        <img slot="icon" src="../../static/image/index/mang-grey@2x.png"  v-else>
 	        管理

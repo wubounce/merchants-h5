@@ -105,28 +105,32 @@ export default new Router({
     {
       path: '/deviceSearch',
       name: 'deviceSearch',
-      component: () => import ('@/page/device/deviceMange/deviceSearch')
+      component: () => import ('@/page/device/deviceMange/deviceSearch'),
+      meta: {title: '设备搜索'},
     },
     {
       path: '/batchFuntionSet',
       name: 'batchFuntionSet',
-      component: () => import ('@/page/device/batchFuntionSet/batchFuntionSet')
+      component: () => import ('@/page/device/batchFuntionSet/batchFuntionSet'),
+      meta: {title: '批量设置'},
     },
     {
       path: '/addDevice',
       name: 'addDevice',
-      component: () => import ('@/page/device/addDevice/addDevice')
-
+      component: () => import ('@/page/device/addDevice/addDevice'),
+      meta: {title: '新增设备'},
     },
     {
       path: '/editDevice',
       name: 'editDevice',
-      component: () => import ('@/page/device/editDevice/editDevice')
+      component: () => import ('@/page/device/editDevice/editDevice'),
+      meta: {title: '编辑设备'},
     },
     {
       path: '/deviceDetail',
       name: 'deviceDetail',
-      component: () => import ('@/page/device/deviceDetail/deviceDetail')
+      component: () => import ('@/page/device/deviceDetail/deviceDetail'),
+      meta: {title: '设备详情'},
     },
     {
       path: '/batchStart',
@@ -202,7 +206,7 @@ export default new Router({
       path: '/order',
       name: 'order',
       component: () => import ('@/page/order/index'),
-      meta: {title: '订单管理'},
+      meta: {title: '订单查看'},
     },
     {
       path: '/orderdetail',
@@ -287,24 +291,27 @@ export default new Router({
     {
       path: '/setting',
       name: 'setting',
-      component: () => import ('@/page/setting/index')
+      component: () => import ('@/page/setting/index'),
+      meta: {title: '设置'},
     },
     {
       path: '/personalSet',
       name: 'personalSet',
-      component: () => import ('@/page/setting/personalSet')
+      component: () => import ('@/page/setting/personalSet'),
+      meta: {title: '个人信息'},
     },
     {
       path: '/accountSet',
       name: 'accountSet',
-      component: () => import ('@/page/setting/accountSet')
+      component: () => import ('@/page/setting/accountSet'),
+      meta: {title: '账户设置'},
     },
-    { path: '/changePwd', name: 'changePwd', component: () => import('@/page/setting/changePwd') },
-    { path: '/setAlipay', name: 'setAlipay', component: () => import('@/page/setting/setAlipay') },
-    { path: '/realName', name: 'realName', component: () => import('@/page/setting/realName') },
-    { path: '/realNameGet', name: 'realNameGet', component: () => import('@/page/setting/realNameGet') },
-    { path: '/contact', name: 'contact', component: () => import('@/page/contact/index') },
-    { path: '/cooperation', name: 'cooperation', component: () => import('@/page/cooperation/index') },
+    { path: '/changePwd', name: 'changePwd', component: () => import('@/page/setting/changePwd'),meta: {title: '修改密码'}, },
+    { path: '/setAlipay', name: 'setAlipay', component: () => import('@/page/setting/setAlipay'),meta: {title: '支付宝账户'}, },
+    { path: '/realName', name: 'realName', component: () => import('@/page/setting/realName'),meta: {title: '实名认证'}, },
+    { path: '/realNameGet', name: 'realNameGet', component: () => import('@/page/setting/realNameGet'),meta: {title: '实名认证详情'}, },
+    { path: '/contact', name: 'contact', component: () => import('@/page/contact/index'),meta: {title: '联系客服'}, },
+    { path: '/cooperation', name: 'cooperation', component: () => import('@/page/cooperation/index'),meta: {title: '合作热线'}, },
     
     //钱包
     {
