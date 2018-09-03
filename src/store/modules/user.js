@@ -34,7 +34,6 @@ const user = {
       state.timeOffset = data;
     },
     setFirstRoute (state, data) {
-      console.log(data);
       state.firstRoute = data;
     },
   },
@@ -44,12 +43,13 @@ const user = {
     login({ commit }, token) {
       setToken(token);
     },
-    getMenu({ commit }){
+    getMenu({ commit, state }){
       menuSelectFun().then((data) => {
         commit('setMenu', data);
         let parentRoute = data.filter(item=>Number(item.parentId)===0);
         commit('setFirstRoute',parentRoute[0]);
       });
+      return Promise.resolve(state.firstRoute);
     },
     // 前端 登出
     LogOut({ commit }) {

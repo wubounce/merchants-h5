@@ -33,7 +33,7 @@
 
 <script>
 import { mapState, mapActions } from 'vuex';
-import { getToken, removeToken, removeNavTabIndex, getNavTabIndex, setPhone, getPhone } from '@/utils/tool';
+import { getToken, removeToken, removeNavTabIndex,setNavTabIndex, getNavTabIndex, setPhone, getPhone } from '@/utils/tool';
 import { login } from '@/service/login';
 import JsEncrypt from 'jsencrypt';
 export default {
@@ -42,7 +42,7 @@ export default {
       // 已登录直接返回首页
       if (getToken()) {
         let localData = getNavTabIndex();
-        localData = localData?localData:'/index';
+        localData = localData?localData:'/user';
         next(localData);
         return;
       }
@@ -93,15 +93,17 @@ export default {
         if (this.validate()) {
           let res = await login(this.form);
           this.login(res.token);
-          this.getMenu();
           setPhone(this.form.userName);
-          if(res.code === 8002){
-            this.$router.push({name:'bindPhone'});     
-          }else {
-            console.log(this.firstRoute);   
-            let path = this.firstRoute.url;
-            this.$router.push({path:path});
-          }
+          this.getMenu().then((data) => {
+            if(res.code === 8002){
+              this.$router.push({name:'bindPhone'});     
+            }else {
+              let path = data.url;
+              setNavTabIndex('/'+ path);
+              this.$router.push({path:path});
+            }
+          });
+          
         }
       },
       userinputFunc(){

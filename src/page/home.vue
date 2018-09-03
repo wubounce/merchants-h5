@@ -31,13 +31,13 @@ import { setNavTabIndex, getNavTabIndex} from '@/utils/tool';
 	export default {
 		data() {
 			return {
-				selected: '/index',
+				selected: '/user',
 			};
 		},
-		 created: function(){
+		created: function(){
 		 	let currentPath = this.$route.path;
           	let localData = getNavTabIndex();
-          	this.selected = localData?localData:'/index';
+          	this.selected = localData?localData:currentPath;
 	    },
 		components:{
 		},
