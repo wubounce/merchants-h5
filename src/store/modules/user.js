@@ -34,6 +34,7 @@ const user = {
       state.timeOffset = data;
     },
     setFirstRoute (state, data) {
+      console.log(data);
       state.firstRoute = data;
     },
   },
@@ -43,7 +44,7 @@ const user = {
     login({ commit }, token) {
       setToken(token);
     },
-    getMenu({ commit }, menu){
+    getMenu({ commit }){
       menuSelectFun().then((data) => {
         commit('setMenu', data);
         let parentRoute = data.filter(item=>Number(item.parentId)===0);

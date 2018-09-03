@@ -2,12 +2,12 @@
 	<div class="home">
 		<router-view></router-view>
 		<mt-tabbar v-model="selected" fixed>
-	      <mt-tab-item id="/index" v-has="'mer:index'">
+	      <mt-tab-item id="/index" v-if="!$store.getters.has('mer:index')">
 	      	<img slot="icon" src="../../static/image/index/index@2x.png" v-if="selected === '/index'">
 	        <img slot="icon" src="../../static/image/index/index-grey@2x.png" v-else>
 	        首页
 	      </mt-tab-item>
-	      <mt-tab-item id="/report" v-has="'mer:report'">
+	      <mt-tab-item id="/report" v-if="!$store.getters.has('mer:report')">
 	        <img slot="icon" src="../../static/image/index/report@2x.png" v-if="selected === '/report'">
 	        <img slot="icon" src="../../static/image/index/report-grey@2x.png"  v-else>
 	        报表

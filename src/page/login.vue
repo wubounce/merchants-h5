@@ -76,7 +76,7 @@ export default {
     },
     methods: {
       ...mapActions([
-        'login',
+        'login','getMenu'
       ]),
       validate() {
         if (this.form.userName === '') {
@@ -93,12 +93,13 @@ export default {
         if (this.validate()) {
           let res = await login(this.form);
           this.login(res.token);
+          this.getMenu();
           setPhone(this.form.userName);
           if(res.code === 8002){
             this.$router.push({name:'bindPhone'});
           }else {
             console.log(this.firstRoute);
-            let path = this.firstRoute? this.firstRoute.url:'/management' ;
+            let path = this.firstRoute.url;
             this.$router.push({path:path});
           }
         }
