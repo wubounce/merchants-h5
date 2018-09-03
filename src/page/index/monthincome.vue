@@ -18,7 +18,7 @@
                         </div>
                     </router-link>
                 </div>
-                <div class="nodata" v-if="!this.listdata">暂无数据</div>
+                <div class="nodata" v-if="this.listdata.length == 0 ">暂无数据</div>
             </div>
         </div>
     </section>
