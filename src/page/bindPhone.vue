@@ -22,7 +22,6 @@
 <script>
   import { smscodeFun, validateCodeFun, bindPhoneFun } from '@/service/resetPwd';
   import { validatPhone } from '@/utils/validate';
-  import qs from 'qs';
   export default {
     data() {
       return {
@@ -50,14 +49,10 @@
       },          
       async sendcode() {
         if (this.validatePhone()) {
-          let res = await smscodeFun(qs.stringify({phone:this.bindPhone.phone,mark:true}));
-          if (res.code===0) {
+          let res = await smscodeFun({phone:this.bindPhone.phone,mark:true});
               this.time = 60;
               this.btn = false;
               this.countdown();
-          }else {
-             this.$toast(res.msg);
-          }
         }
       },
       countdown() {
@@ -76,12 +71,8 @@
             return false;
           }
           let payload = Object.assign({},this.bindPhone);
-          let res = await bindPhoneFun(qs.stringify(payload));
-          if (res.code===0) {
+          let res = await bindPhoneFun(payload);        
             this.$router.push({name:'index'});
-          }else {
-            this.$toast(res.msg);
-          }
         }
       },
       disbaledBtn(){
