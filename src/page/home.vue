@@ -35,22 +35,21 @@ import { setNavTabIndex, getNavTabIndex} from '@/utils/tool';
 			};
 		},
 		created: function(){
-		 	let currentPath = this.$route.path;
           	let localData = getNavTabIndex();
-          	this.selected = localData?localData:currentPath;
+          	this.selected = localData;
 	    },
 		components:{
 		},
 		watch: {
-		$route () {
-			if (this.$route.path==='/index' || this.$route.path==='/report' ||this.$route.path==='/management' ||this.$route.path==='/user'){
-				this.selected = this.$route.path;
-			}
-	      
-	    },
-		selected: function (val) {
-		      this.$router.push({path: val});
-		       setNavTabIndex(val);
+			$route () {
+				if (this.$route.path==='/index' || this.$route.path==='/report' ||this.$route.path==='/management' ||this.$route.path==='/user'){
+					this.selected = this.$route.path;
+				}
+		      
+		    },
+			selected: function (val) {
+		     	this.$router.push({path: val});
+		        setNavTabIndex(val);
 		    }
 		 }
 	};
