@@ -35,10 +35,11 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex';
+import { mapState, mapActions, mapMutations } from 'vuex';
 import { getToken, removeToken, removeNavTabIndex,setNavTabIndex, getNavTabIndex, setPhone, getPhone } from '@/utils/tool';
 import { login } from '@/service/login';
 import JsEncrypt from 'jsencrypt';
+import { menuSelectFun } from '@/service/member';
 export default {
     name: 'page-login',
     beforeRouteEnter(to, from, next) {
@@ -81,6 +82,9 @@ export default {
       ...mapActions([
         'login','getMenu'
       ]),
+      ...mapMutations([ 
+          'setMenu',
+      ]),
       validate() {
         if (this.form.userName === '') {
           this.$toast({message: "请输入用户名" });
@@ -97,16 +101,11 @@ export default {
           let res = await login(this.form);
           this.login(res.token);
           setPhone(this.form.userName);
-          this.getMenu().then((data) => {
-            if(res.code === 8002){
-              this.$router.push({name:'bindPhone'});     
-            }else {
-              let path = data.url;
-              setNavTabIndex('/'+ path);
-              this.$router.push({path:path});
-            }
-          });
-          
+         if(res.code === 8002){
+            this.$router.push({name:'bindPhone'});     
+          }else {
+           this.getMenu(); //跳转分配权限的第一个路由
+          }
         }
       },
       userinputFunc(){

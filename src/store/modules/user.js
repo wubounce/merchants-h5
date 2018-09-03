@@ -1,10 +1,10 @@
-import { getToken, setToken, removeToken } from '@/utils/tool';
+import { getToken, setToken, setNavTabIndex, removeToken } from '@/utils/tool';
 import { menuSelectFun } from '@/service/member';
+import router from '@/router';
 const user = {
   state: {
     menu:[],
     timeOffset: 0,
-    firstRoute:{},
   },
   getters:{
     has: (state) => (value) => {
@@ -33,9 +33,6 @@ const user = {
     setServerTimeOffset (state, data) {
       state.timeOffset = data;
     },
-    setFirstRoute (state, data) {
-      state.firstRoute = data;
-    },
   },
 
   actions: {
@@ -47,9 +44,10 @@ const user = {
       menuSelectFun().then((data) => {
         commit('setMenu', data);
         let parentRoute = data.filter(item=>Number(item.parentId)===0);
-        commit('setFirstRoute',parentRoute[0]);
+        let path = parentRoute[0].url;
+        setNavTabIndex('/'+ path);
+        router.push(path);
       });
-      return Promise.resolve(state.firstRoute);
     },
     // 前端 登出
     LogOut({ commit }) {
