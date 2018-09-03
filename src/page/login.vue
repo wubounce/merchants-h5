@@ -96,9 +96,9 @@ export default {
           this.getMenu();
           setPhone(this.form.userName);
           if(res.code === 8002){
-            this.$router.push({name:'bindPhone'});
+            this.$router.push({name:'bindPhone'});     
           }else {
-            console.log(this.firstRoute);
+            console.log(this.firstRoute);   
             let path = this.firstRoute.url;
             this.$router.push({path:path});
           }
