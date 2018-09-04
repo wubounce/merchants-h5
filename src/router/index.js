@@ -13,12 +13,6 @@ export default new Router({
       meta: {title: '登录'}
     },
     {
-      path: '/register',
-      name: 'register',
-      component: () => import ('@/page/register/index'),
-      meta: {title: '注册账号'},
-    },
-    {
       path: '/home',
       name: 'home',
       component: () =>import ('@/page/home'),
@@ -81,6 +75,12 @@ export default new Router({
       name: 'reset',
       component: () => import ('@/page/reset/index'),
       meta: {title: '重置密码'},
+    },
+    {
+      path: '/register',
+      name: 'register',
+      component: () => import ('@/page/register/index'),
+      meta: {title: '注册账号'},
     },
     {
       path: '/confimPwd',
