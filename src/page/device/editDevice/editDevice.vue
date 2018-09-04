@@ -40,29 +40,29 @@
     </div>
     <!--功能列表-->
     <div v-show="setModelShow">
-    <section class="fun-item-hd">
-      <div>
-        <p v-for="(item,index) in functionListTitle2 " :key="index">
-          <span v-for="(it,idx) in item " :key="idx">{{it}}</span>
-        </p>
-      </div>
-    </section>
-    <section class="fun-item-bd funlist">
-      <div v-for="(item,index) in functionList" :key="index">
-        <span class="fun-list-item">{{item.functionName}}</span>
-        <input type="tel" class="fun-list-item" v-model="item.needMinutes"  min=0/>
-        <input type="number" class="fun-list-item" v-model="item.functionPrice"  min=0/>
-        <input type="tel" class="fun-list-item" v-model="item.functionCode" v-if="isShow2"  min=0/>
-        <p class="fun-list-item">
-          <mt-switch v-model="item.ifOpen"></mt-switch>
-        </p>
-      </div>
-    </section>
-    <div style="width:100%;height:1.73rem;"></div>
-    <section class="promiss-footer">
-      <span class="can" @click="goBack">取消</span>
-      <span class="cifrm" @click="goNext" :class="{'default':isDisable}" :disabled="isDisable">确定</span>
-    </section>
+      <section class="fun-item-hd">
+        <div>
+          <p v-for="(item,index) in functionListTitle2 " :key="index">
+            <span v-for="(it,idx) in item " :key="idx">{{it}}</span>
+          </p>
+        </div>
+      </section>
+      <section class="fun-item-bd funlist">
+        <div v-for="(item,index) in functionList" :key="index">
+          <span class="fun-list-item">{{item.functionName}}</span>
+          <input type="tel" class="fun-list-item" v-model="item.needMinutes"  min=0/>
+          <input type="number" class="fun-list-item" v-model="item.functionPrice"  min=0/>
+          <input type="tel" class="fun-list-item" v-model="item.functionCode" v-if="isShow2"  min=0/>
+          <p class="fun-list-item">
+            <mt-switch v-model="item.ifOpen"></mt-switch>
+          </p>
+        </div>
+      </section>
+      <div style="width:100%;height:1.73rem;"></div>
+      <section class="promiss-footer">
+        <span class="can" @click="goBack">取消</span>
+        <span class="cifrm" @click="goNext" :class="{'default':isDisable}" :disabled="isDisable">确定</span>
+      </section>
     </div>
     <!-- 店铺-->
     <selectpickr :visible="companyVisible" :slots="slotsShop" :valueKey="shopname" @selectpicker="machineselectpickerShop" @onpickstatus="machineselectpickertatusShop"> </selectpickr>
@@ -308,11 +308,11 @@
         } 
         if(this.keepFunctionArr.length >0 ) {
           let arr = [].concat(JSON.parse(JSON.stringify(this.keepFunctionArr))); 
-          this.functionList = arr;
-          this.setModelShow= true;
-          this.modelShow = false;
-          this.title = "功能列表";         
-        }          
+          this.functionList = arr;       
+        } 
+        this.setModelShow= true;
+        this.modelShow = false;
+        this.title = "功能列表";           
       },
       goNext(){ //功能列表确认
         let flag1 = true;

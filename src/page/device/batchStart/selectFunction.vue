@@ -123,8 +123,8 @@ export default {
       },
       changeItem(picker) {
       let timeArr = picker.getValues();
-      this.beginTime = timeArr[0] + "年" + timeArr[1] + "月" + timeArr[2] + "日" + " " + timeArr[3] + ":" + timeArr[4];
-      this.startTime = timeArr[0] + "-" + timeArr[1] + "-" + timeArr[2] + " " + timeArr[3] + ":" + timeArr[4] + ":00";
+      this.beginTime = timeArr[0].substring(0,4) + "年" + timeArr[1].substring(0,2) + "月" + timeArr[2].substring(0,2) + "日" + " " + timeArr[3].substring(0,2) + ":" + timeArr[4].substring(0,2);
+      this.startTime = timeArr[0].substring(0,4) + "-" + timeArr[1].substring(0,2) + "-" + timeArr[2].substring(0,2) + " " + timeArr[3].substring(0,2) + ":" + timeArr[4].substring(0,2) + ":00";
       },
       selectClick: function (index,name) {
         this.selectIndex = index;
