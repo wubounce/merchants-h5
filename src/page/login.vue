@@ -91,7 +91,13 @@ export default {
       },
       async handleSubmit () {
         if (this.validate()) {
-          let res = await login(this.form);
+          let userName = this.encryptSend(this.form.userName);
+          let password = this.encryptSend(this.form.password);
+          let payload = {
+            password:password,
+            userName:userName
+          };
+          let res = await login(payload);
           this.login(res.token);
           this.getMenu();
           setPhone(this.form.userName);
@@ -101,6 +107,13 @@ export default {
             this.$router.push({name:'index'});
           }
         }
+      },
+      encryptSend(data) {
+        let jsencrypt = new JSEncrypt();
+        let publicKey = 'MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAh/dHI4eSGQU55+WY2QIWguZ8got/aCairVO+8fMj6dHPWPb3AAhvfNZ7BrUaKUrPQqpt2QVRmV+UZp/bot6ukNEZMFMaSjGf4FFtRNbjIn+5jo8sC3rn6+9k2XNvAMydTDtU0P8Ebhbm1gg6O+gg+iRIAX3awWZajy2senYD7zSDguqyL8xuh6S9RG2wjPsN8LNuKd3klD1rw3kmX0Q672kSW6vm+GHzWun6jYaWac2w936NlvnbQI1P1lFjcgv0OgFBm/4yoLMhx6wZD9KTKG2S7wZRNmbzEaXyrTTdJ+Q1NE4+gqHCAFfHKrzB2zvY2I0v8QL7JLMpCevChRgEcwIDAQAB';
+        jsencrypt.setPublicKey(publicKey);
+        return jsencrypt.encrypt(data);
+
       },
       userinputFunc(){
         this.isuser = true;
