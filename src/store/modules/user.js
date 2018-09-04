@@ -43,8 +43,7 @@ const user = {
     getMenu({ commit, state }){
       menuSelectFun().then((data) => {
         commit('setMenu', data);
-        let parentRoute = data.filter(item=>Number(item.parentId)===0);
-        let path = parentRoute[0].url;
+        let path = data[0].url;
         setNavTabIndex('/'+ path);
         router.push(path);
       });
