@@ -119,7 +119,7 @@
   import { MessageBox } from 'mint-ui';
   import Button from "@/components/Button/Button";
   import selectpickr from '@/components/selectPicker';
-  import { getWxconfigFun,getShopFun,getListParentTypeFun,listSubTypeByFun,deviceAddorEditFun,getFunctionSetListFun } from '@/service/device';
+  import { getWxconfigFun,getShopFun,getlistParentTypeFun,listSubTypeByFun,deviceAddorEditFun,getFunctionSetListFun } from '@/service/device';
  
   export default {
     data() {
@@ -385,7 +385,7 @@
       async checkFirstClass() { //获取一级列表
         if(this.fromdata.shopType.id){
           let payload = {shopId:this.fromdata.shopType.id};
-          let res = await getListParentTypeFun(payload);
+          let res = await getlistParentTypeFun(payload);
           this.slotsFirst[0].values = res;
           this.parentType = true;        
         }else{
