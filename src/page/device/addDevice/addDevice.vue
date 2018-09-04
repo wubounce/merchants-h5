@@ -234,14 +234,9 @@
         if(this.fromdata.shopType.name !== data.shopName) {
           this.fromdata.shopType.id = data.shopId;
           this.fromdata.shopType.name = data.shopName;
-          this.fromdata.firstType.name = '';
-          this.fromdata.firstType.id = '';
-          this.fromdata.secondType.name = '';
-          this.fromdata.secondType.id = "";
           this.fromdata.functionType.name = "未设置";
           this.functionSetList = [];
           this.keepFunctionArr = [];
-          this.subTypeName = "";
         }else {
           this.fromdata.shopType.id = data.shopId;
           this.fromdata.shopType.name = data.shopName;
@@ -557,7 +552,11 @@
           this.$toast("请扫描NQT码");
           return false;
         }
-        if(!this.fromdata.shopType.id || !this.fromdata.firstType.id || !this.fromdata.secondType.id ) {
+         if(!this.fromdata.shopType.id) {
+          this.$toast("请先选择店铺");
+          return false;
+        }
+        if(!this.fromdata.secondType.id ) {
           this.$toast("请先选择设备型号");
           return false;
         }
