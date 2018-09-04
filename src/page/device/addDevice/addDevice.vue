@@ -548,7 +548,7 @@
           functionTempletType: this.functionTempletType,
           functionJson: JSON.stringify(arr)
         };
-        let res = await deviceAddorEditFun(bj);
+        let res = await deviceAddorEditFun(obj);
         let instance = this.$toast({
           message: '新增设备成功',
           iconClass: 'mint-toast-icon mintui mintui-success'
