@@ -13,6 +13,12 @@ export default new Router({
       meta: {title: '登录'}
     },
     {
+      path: '/register',
+      name: 'register',
+      component: () => import ('@/page/register/index'),
+      meta: {title: '注册账号'},
+    },
+    {
       path: '/home',
       name: 'home',
       component: () =>import ('@/page/home'),
