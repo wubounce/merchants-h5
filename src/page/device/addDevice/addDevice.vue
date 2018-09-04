@@ -383,15 +383,9 @@
         this.companyVisible = true;     
       },
       async checkFirstClass() { //获取一级列表
-        if(this.fromdata.shopType.id){
-          let payload = {shopId:this.fromdata.shopType.id};
-          let res = await getlistParentTypeFun(payload);
+          let res = await getlistParentTypeFun();
           this.slotsFirst[0].values = res;
           this.parentType = true;        
-        }else{
-          this.$toast("请先选择店铺"); //MessageBox.alert
-          return false;
-        }
       },
       async checkSecondClass() { //获取二级类型
          this.secondOnTypeList = [];
