@@ -317,10 +317,6 @@ export default {
           {
             this.placeVisible = true;
             this.getArea();
-            // //获取的省市区
-            //console.log(this.provinceName,this.cityName,this.districtName);
-            //console.log(this.provinceId,this.cityId,this.districtId); 
-            this.addressSlots[0].defaultIndex = this.proIndex;
           }
           break;
         case 2:
@@ -450,8 +446,7 @@ export default {
         case 3:
           this.deviceDetail = false;
           this.isbgc = false;
-          this.machine = [].concat(this.lastMachine); // 修改bug
-          // console.log('取消：',this.machine); // 修改bug
+          this.machine = [].concat(this.lastMachine); 
           break;
         case 4:
           this.timeVisible = false;
@@ -520,11 +515,6 @@ export default {
       this.shopTime.endTime = values[2].slice(0,2) + ':' +values[3].slice(0,2);
     },
     chooseDay() {
-      // this.slotsTime[0].defaultIndex = 0;
-      // this.slotsTime[2].defaultIndex = 0;
-      // this.slotsTime[4].defaultIndex = 23;
-      // this.slotsTime[6].defaultIndex = 59;
-
       // 点击全天直接获取全天并且退出弹框
       this.timeVisible = false;
       this.addBusinessTime = '00:00-23:59';
@@ -646,6 +636,12 @@ export default {
             position: 'middle',
             duration: 3000
           });
+      }else if(this.isReserve == true && !this.orderLimitMinutes ) {
+        this.$toast({
+            message: '预约时长为空',
+            position: 'middle',
+            duration: 3000
+          });
       }else if(!this.addBusinessTime) {
         this.$toast({
             message: '请选择营业时间',
@@ -739,16 +735,16 @@ export default {
 
       
       // 省
-      let objPro = { parentId: 0 };
-      let resPro = await areaListFun(objPro);
-      //console.log('省：',resPro.length);
-      for(let x=0;x<resPro.length;x++) {
-        if(res.provinceName == resPro[x].areaName) {
-          this.proIndex = x;
-          console.log(x);
-          //this.addressSlots[0].defaultIndex = parseInt(x);
-        }
-      }
+      // let objPro = { parentId: 0 };
+      // let resPro = await areaListFun(objPro);
+      // //console.log('省：',resPro.length);
+      // for(let x=0;x<resPro.length;x++) {
+      //   if(res.provinceName == resPro[x].areaName) {
+      //     this.proIndex = x;
+      //     console.log(x);
+      //     //this.addressSlots[0].defaultIndex = parseInt(x);
+      //   }
+      // }
       //设备类型
       let resMachine = await listParentTypeFun();
         let arrmachine = res.machineTypeNames.split(',');
@@ -761,16 +757,13 @@ export default {
           }
         this.machineTypeIdsArray = arr.join(',');
       }
-    },
-    async getShoplist() {
-      let res = await manageListFun();
     }
   },
   created() {
     this.getShopDetail();
-    this.getShoplist();
   },
   mounted() {
+    
   },
   watch: {
     $route(to,from) {
