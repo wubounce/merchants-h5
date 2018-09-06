@@ -457,11 +457,6 @@ export default {
           break;
         case 4:
           this.timeVisible = false;
-          // 点击直接跳转出去
-          // this.slotsTime[0].defaultIndex = 4;
-          // this.slotsTime[2].defaultIndex = 30;
-          // this.slotsTime[4].defaultIndex = 20;
-          // this.slotsTime[6].defaultIndex = 30;
           break;
       }
     },
@@ -527,11 +522,6 @@ export default {
       console.log('values[0]:',values[0]);
     },
     chooseDay() {
-      // this.slotsTime[0].defaultIndex = 0;
-      // this.slotsTime[2].defaultIndex = 0;
-      // this.slotsTime[4].defaultIndex = 23;
-      // this.slotsTime[6].defaultIndex = 59;
-
       // 点击全天直接获取全天并且退出弹框
       this.timeVisible = false;
       this.addBusinessTime = '00:00-23:59';
