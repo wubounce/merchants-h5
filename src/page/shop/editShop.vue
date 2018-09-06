@@ -9,8 +9,8 @@
       <p class="shopname-p"><span>详细地址</span><span><input  type="text" class='addressInput' v-model="address"  placeholder="请填写详细地址"></span></p>
     </ul>
     <div class="second">
-      <li class="device business" @click="addDevice">设备类型<span>{{machineName}}</span></li>
-      <p class="isReserve">
+      <!-- <li class="device business" @click="addDevice">设备类型<span>{{machineName}}</span></li> -->
+      <p class="isReserve device">
         <span>预约功能</span>
         <span>
           <mt-switch @change="editTime(isReserve)" class="check-switch" v-model="isReserve">
@@ -23,6 +23,7 @@
           <input  v-model="orderLimitMinutes" :disabled="noEdit" :placeholder="placeholdercontent"   type='text' maxlength="1">
         </span>
       </p>
+      <li class="business" @click="chooseTime">营业时间<span>{{addBusinessTime}}</span></li>
     </div>
     <p class="blank"></p>
     <button  class="submit" @click="submit">提交</button>
@@ -40,23 +41,23 @@
     <mt-popup v-model="placeVisible" position="bottom" class="mint-popup">
       <div class="prop-bd">
         <div class="page-picker-wrapper">
-          <mt-picker :slots="addressSlots" @change="onAddressChange" :showToolbar="true"><p class="toolBar"><span @click="cancel">取消</span><span>所在地区</span><span @click="confirmNews">确定</span></p></mt-picker>
+          <mt-picker :slots="addressSlots"  @change="onAddressChange" :showToolbar="true"><p class="toolBar"><span @click="cancel">取消</span><span>所在地区</span><span @click="confirmNews">确定</span></p></mt-picker>
         </div>
       </div>
     </mt-popup>
     
     <!-- 设备类型 -->
-    <mt-popup v-model='deviceDetail' position="bottom" class="mint-popup">
+    <!-- <mt-popup v-model='deviceDetail' position="bottom" class="mint-popup">
       <p class="toolBar"><span @click="cancel">取消</span><span>设备类型</span><span @click="confirmNews">确定</span></p>
       <div class='resp-shop-wrap'>
         <mt-checklist align="right" :options="options" v-model="machine"></mt-checklist>
       </div>
-    </mt-popup>
+    </mt-popup> -->
 
     <!-- 营业时间 -->
-    <!-- <mt-popup v-model="timeVisible" position="bottom" class="mint-popup">
-       <mt-picker class="picker"  :slots="slotsTime" @change="changeTime" :showToolbar="true"><p class="toolBar"><span @click="cancel">取消</span><span @click="chooseDay" id="allDay">全天</span><span @click="confirmNews">确定</span></p></mt-picker>
-    </mt-popup> -->
+    <mt-popup v-model="timeVisible" position="bottom" class="mint-popup">
+       <mt-picker class="picker"  :slots="slotsTime"  @change="changeTime" :showToolbar="true"><p class="toolBar"><span @click="cancel">取消</span><span @click="chooseDay" id="allDay">全天</span><span @click="confirmNews">确定</span></p></mt-picker>
+    </mt-popup>
 
   </section>
 </template>
@@ -183,8 +184,7 @@ export default {
           flex: 1,
           values: ['00 时','01 时', '02 时', '03 时', '04 时', '05 时', '06 时','07 时','08 时', '09 时', '10 时', '11 时', '12 时', '13 时','14 时','15 时','16 时','17 时','18 时','19 时','20 时','21 时','22 时','23 时'],
           className: 'slot1',
-          textAlign: 'right',
-          defaultIndex:4
+          textAlign: 'right'
         },
         {
           divider: true,
@@ -196,8 +196,7 @@ export default {
           values: ['00 分','01 分', '02 分', '03 分', '04 分', '05 分', '06 分','07 分','08 分', '09 分', '10 分', '11 分', '12 分', '13 分','14 分','15 分','16 分','17 分','18 分','19 分','20 分','21 分','22 分','23 分','24 分','25 分','26 分','27 分','28 分','29 分',
           '30 分','31 分', '32 分', '33 分', '34 分', '35 分', '36 分','37 分','38 分', '39 分', '40 分', '41 分', '42 分', '43 分','44 分','45 分','46 分','47 分','48 分','49 分','50 分','51 分','52 分','53 分','54 分','55 分','56 分','57 分','58 分','59 分'],
           className: 'slot3',
-          textAlign: 'left',
-          defaultIndex:30
+          textAlign: 'left'
         },
         {
           divider: true,
@@ -208,8 +207,7 @@ export default {
           flex: 1,
           values: ['00 时','01 时', '02 时', '03 时', '04 时', '05 时', '06 时','07 时','08 时', '09 时', '10 时', '11 时', '12 时', '13 时','14 时','15 时','16 时','17 时','18 时','19 时','20 时','21 时','22 时','23 时'],
           className: 'slot1',
-          textAlign: 'right',
-          defaultIndex:20
+          textAlign: 'right'
         },
         {
           divider: true,
@@ -221,8 +219,7 @@ export default {
           values: ['00 分','01 分', '02 分', '03 分', '04 分', '05 分', '06 分','07 分','08 分', '09 分', '10 分', '11 分', '12 分', '13 分','14 分','15 分','16 分','17 分','18 分','19 分','20 分','21 分','22 分','23 分','24 分','25 分','26 分','27 分','28 分','29 分',
           '30 分','31 分', '32 分', '33 分', '34 分', '35 分', '36 分','37 分','38 分', '39 分', '40 分', '41 分', '42 分', '43 分','44 分','45 分','46 分','47 分','48 分','49 分','50 分','51 分','52 分','53 分','54 分','55 分','56 分','57 分','58 分','59 分'],
           className: 'slot3',
-          textAlign: 'left',
-          defaultIndex:30
+          textAlign: 'left'
         }
       ],
       timeVisible: false,
@@ -524,20 +521,28 @@ export default {
       this.shopTime.endTime = values[2].slice(0,2) + ':' +values[3].slice(0,2);
     },
     chooseDay() {
-      this.slotsTime[0].defaultIndex = 0;
-      this.slotsTime[2].defaultIndex = 0;
-      this.slotsTime[4].defaultIndex = 23;
-      this.slotsTime[6].defaultIndex = 59;
+      // this.slotsTime[0].defaultIndex = 0;
+      // this.slotsTime[2].defaultIndex = 0;
+      // this.slotsTime[4].defaultIndex = 23;
+      // this.slotsTime[6].defaultIndex = 59;
+
+      // 点击全天直接获取全天并且退出弹框
+      this.timeVisible = false;
+      this.addBusinessTime = '00:00-23:59';
     },
     chooseTime() {
       this.index = 4;
       this.timeVisible = true;
       this.isClass = true;
+      this.slotsTime[0].defaultIndex = parseInt(this.addBusinessTime.slice(0,2));
+      this.slotsTime[2].defaultIndex = parseInt(this.addBusinessTime.slice(3,5));
+      this.slotsTime[4].defaultIndex = parseInt(this.addBusinessTime.slice(6,8));
+      this.slotsTime[6].defaultIndex = parseInt(this.addBusinessTime.slice(9,11));
     },
     //提交修改信息
     async submit() {
       // console.log(this.lng);
-      if(this.shopName!=false && this.shopType!=false && this.provinceId != false && this.cityId !=false && this.provinceId != false && this.address != false && this.lat !=undefined &&this.lat != false && this.lng != false&& this.lng != undefined && this.organization!=false && this.machineTypeIdsArray !=false ) {
+      if(this.shopName!=false && this.shopType!=false && this.provinceId != false && this.cityId !=false && this.provinceId != false && this.address != false && this.lat !=undefined &&this.lat != false && this.lng != false&& this.lng != undefined && this.organization!=false && this.addBusinessTime !=false ) {
         if(this.orderLimitMinutes) {
           //在判断
           let reg=/^[1-9]+\d*$/;
@@ -554,7 +559,7 @@ export default {
               address: this.address,
               lat:this.lat,
               lng:this.lng,
-              machineTypeIds: this.machineTypeIdsArray,
+              //machineTypeIds: this.machineTypeIdsArray,
               isReserve: changeisReserve,
               orderLimitMinutes: this.orderLimitMinutes,
               workTime: this.addBusinessTime,
@@ -597,7 +602,7 @@ export default {
             address: this.address,
             lat:this.lat,
             lng:this.lng,
-            machineTypeIds: this.machineTypeIdsArray,
+            //machineTypeIds: this.machineTypeIdsArray,
             isReserve: changeisReserve,
             orderLimitMinutes: this.orderLimitMinutes,
             workTime: this.addBusinessTime,
@@ -642,9 +647,9 @@ export default {
             position: 'middle',
             duration: 3000
           });
-      }else if(!this.machineTypeIdsArray) {
+      }else if(!this.addBusinessTime) {
         this.$toast({
-            message: '请选择设备类型',
+            message: '请选择营业时间',
             position: 'middle',
             duration: 3000
           });
@@ -733,7 +738,7 @@ export default {
       //console.log('created:',this.provinceId);
 
 
-      this.addressSlots[0].defaultIndex = 2;
+      
       // 省
       let objPro = { parentId: 0 };
       let resPro = await areaListFun(objPro);
@@ -741,7 +746,8 @@ export default {
       for(let x=0;x<resPro.length;x++) {
         if(res.provinceName == resPro[x].areaName) {
           this.proIndex = x;
-          //console.log(x);
+          console.log(x);
+          //this.addressSlots[0].defaultIndex = parseInt(x);
         }
       }
       //设备类型
@@ -778,7 +784,7 @@ export default {
         }
       }
       else if(from.name == 'shopDetail'){
-        location.reload();
+        //location.reload();
       }
     },
     popupVisible: function () {
@@ -797,6 +803,13 @@ export default {
     },
     deviceDetail: function () {
       if (this.deviceDetail) {
+        this.ModalHelper.afterOpen();
+      } else {
+        this.ModalHelper.beforeClose();
+      }
+    },
+    timeVisible: function () {
+      if (this.timeVisible) {
         this.ModalHelper.afterOpen();
       } else {
         this.ModalHelper.beforeClose();
