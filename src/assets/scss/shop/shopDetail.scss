@@ -25,6 +25,9 @@
       font-size: 16px;
       background-color: #fff;
       border-bottom: 1px solid #f9f8ff;
+      .machine-type {
+        padding-top: 0.3rem;
+      }
       span {
         &:first-child {
            color:rgba(153,153,153,1);
@@ -105,7 +108,7 @@
      padding-bottom: 0.3rem;
    }
    .blank {
-     height: 2.5rem;
+     height: 1.67rem;
    }
    .about-button {
      position: fixed;
@@ -115,12 +118,12 @@
      display: flex;
      justify-content: flex-end;
      #delete,#edit {
-       margin: 0.3rem 0;
-       width: 2.2rem;
-       line-height: 0.9rem;
-       height: 0.9rem;
-       border-radius: 5px;
-       margin-right: 0.3rem;
+       margin: 0.28rem 0;
+       width: 2.4rem;
+       line-height: 0.8rem;
+       height: 0.8rem;
+       border-radius: 0.11rem;
+       margin-right: 0.4rem;
        font-size: 14px;
      }
      #delete {

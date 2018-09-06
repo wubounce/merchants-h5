@@ -4,12 +4,16 @@
     <div v-else>
       <ul v-if="hasNews">
         <div class="page-loadmore-wrapper" ref="wrapper" :style="{overflowY:scrollShow}" >
-          <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" @translate-change="translateChange" :auto-fill="false" ref="loadmore">
+          <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore">
                 <li class="list" v-for="(item,index) in list" :key="index">
                    <router-link :to="{ name: 'shopDetail', query:{shopId:item.shopId}}">
                   <p class="top">
                     <span>{{item.shopName.length>15 ? item.shopName.slice(0,15) + '...' : item.shopName }}</span>
-                    <span><span v-if="item.isDiscount" class="iconMark discount">惠</span><span v-if="!item.isReserve" class="iconMark reserve">预</span></span>
+                    <span>
+                      <img src="../../../static/image/shop/vip@2x.png" alt="vip" v-if='item.hasVip' style='width: 0.4rem;vertical-align: middle;'>
+                      <img src="../../../static/image/shop/discount@2x.png" alt="discount" v-if='item.isDiscount' style='width: 0.4rem;vertical-align: middle;'>
+                      <img src="../../../static/image/shop/reserve@2x.png" alt="reserve" v-if='!item.isReserve' style='width: 0.4rem;vertical-align: middle;'>
+                    </span>
                   </p>
                   <div class="bottom">
                     <div class="kindof">
@@ -27,7 +31,7 @@
                   </div>
                   </router-link>
                 </li>
-            <div v-if="moreOrthen()" class="nomore-data">没有更多了</div>
+            <div v-if="allLoaded" class="nomore-data">没有更多了</div>
           </mt-loadmore>
         </div>
       </ul>
@@ -73,7 +77,7 @@ export default {
         pageSize: this.pageSize
       };
       let res = await manageListFun(payload);
-      console.log(res);
+      // console.log(res);
       if(res.items == null || res.items == "") {
           this.hasNews = false;
         }
@@ -114,13 +118,6 @@ export default {
   },
   mounted() {
     
-  },
-  watch: {
-    $route(to,from) {
-      if(to.name === 'shopList') {
-        this._getList();
-      }
-    }
   }
 };
 </script>
