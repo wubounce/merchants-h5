@@ -119,7 +119,7 @@
   import { MessageBox } from 'mint-ui';
   import Button from "@/components/Button/Button";
   import selectpickr from '@/components/selectPicker';
-  import { getWxconfigFun,getShopFun,getShopListParentTypeFun,listSubTypeByFun,deviceAddorEditFun,getFunctionSetListFun } from '@/service/device';
+  import { getWxconfigFun,getShopFun,getlistParentTypeFun,listSubTypeByFun,deviceAddorEditFun,getFunctionSetListFun } from '@/service/device';
  
   export default {
     data() {
@@ -234,14 +234,9 @@
         if(this.fromdata.shopType.name !== data.shopName) {
           this.fromdata.shopType.id = data.shopId;
           this.fromdata.shopType.name = data.shopName;
-          this.fromdata.firstType.name = '';
-          this.fromdata.firstType.id = '';
-          this.fromdata.secondType.name = '';
-          this.fromdata.secondType.id = "";
           this.fromdata.functionType.name = "未设置";
           this.functionSetList = [];
           this.keepFunctionArr = [];
-          this.subTypeName = "";
         }else {
           this.fromdata.shopType.id = data.shopId;
           this.fromdata.shopType.name = data.shopName;
@@ -383,15 +378,9 @@
         this.companyVisible = true;     
       },
       async checkFirstClass() { //获取一级列表
-        if(this.fromdata.shopType.id){
-          let payload = {shopId:this.fromdata.shopType.id};
-          let res = await getShopListParentTypeFun(payload);
+          let res = await getlistParentTypeFun();
           this.slotsFirst[0].values = res;
           this.parentType = true;        
-        }else{
-          this.$toast("请先选择店铺"); //MessageBox.alert
-          return false;
-        }
       },
       async checkSecondClass() { //获取二级类型
          this.secondOnTypeList = [];
@@ -563,7 +552,11 @@
           this.$toast("请扫描NQT码");
           return false;
         }
-        if(!this.fromdata.shopType.id || !this.fromdata.firstType.id || !this.fromdata.secondType.id ) {
+         if(!this.fromdata.shopType.id) {
+          this.$toast("请先选择店铺");
+          return false;
+        }
+        if(!this.fromdata.secondType.id ) {
           this.$toast("请先选择设备型号");
           return false;
         }
