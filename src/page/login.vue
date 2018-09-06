@@ -110,7 +110,12 @@ export default {
          if(res.code === 8002){
             this.$router.push({name:'bindPhone'});     
           }else {
-           this.getMenu(); //跳转分配权限的第一个路由
+            menuSelectFun().then((data) => {
+              this.setMenu(data);
+              let path = data[0].url;
+              setNavTabIndex('/'+ path);
+              this.$router.push(path);
+            }); //跳转分配权限的第一个路由
           }
         }
       },

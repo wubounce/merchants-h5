@@ -46,7 +46,7 @@ export default {
   mounted() {
     
   },
-  activated(){
+  created(){
     this.shopListFun();
     this.menuSelect();
     this.query = this.$route.query ? this.$route.query :{};

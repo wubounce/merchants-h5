@@ -50,7 +50,7 @@ export default {
   mounted() {
     
   },
-  activated(){
+  created(){
     this.query = this.$route.query ? this.$route.query :{};
     console.log(this.query);
     this.shopListFun();
@@ -133,7 +133,6 @@ export default {
     openShop(){
       this.$router.push({name:'premshopList',query:{operateShopIds:this.query.operateShopIds,checkpermissionslist:this.query.checkpermissionslist,parentIds:this.query.parentIds}});
     },
-
     async addmember(){
       if (this.validate()) {
         let menshopids = [];

@@ -43,9 +43,9 @@ const user = {
     getMenu({ commit, state }){
       menuSelectFun().then((data) => {
         commit('setMenu', data);
-        let path = data[0].url;
-        setNavTabIndex('/'+ path);
-        router.push(path);
+        // let path = data[0].url;
+        // setNavTabIndex('/'+ path);
+        // router.push(path);
       });
     },
     // 前端 登出

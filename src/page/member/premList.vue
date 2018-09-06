@@ -80,6 +80,11 @@ export default {
       
     },
   },
+  beforeRouteLeave(to, from, next) {
+       // 设置下一个路由的 meta
+      to.meta.keepAlive = true;  // B 跳转到 A 时，让 A 缓存，即不刷新
+      next();
+  },
   components:{
   }
 };
