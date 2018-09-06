@@ -784,7 +784,7 @@ export default {
         }
       }
       else if(from.name == 'shopDetail'){
-        //location.reload();
+        location.reload();
       }
     },
     popupVisible: function () {
