@@ -17,7 +17,12 @@
                 <div class="right"><mt-switch v-model="item.isLock" class="check-switch" @change="lockOperator(item.id,item.isLock)"></mt-switch></div>
               </div>
             </div>
-            <p class="memberdesc">权限：<span v-for="(items,index) in item.list" :key="index">{{items.name}}<i v-if="index !== (item.list.length-1)">,</i></span></p>
+            <router-link :to="{name:'detailMember',query:{ id:item.id }}">
+              <div class="action-prme">
+                <p class="memberdesc">权限：<span v-for="(items,index) in item.list" :key="index">{{items.name}}<i v-if="index !== (item.list.length-1)">,</i></span></p>
+                <span class="forward iconfont icon-nextx"></span>
+              </div>
+            </router-link>
           </div>
         </div>
         <div v-if="allLoaded" class="nomore-data">没有更多了</div>
@@ -84,6 +89,17 @@ export default {
 </script>
 <style type="text/css" lang="scss" scoped>
   @import '../../assets/scss/member/member';
+  .action-prme {
+    display: flex;
+  }
+  .memberdesc {
+    width: 9.07rem;
+  }
+  .forward {
+    color: #999;
+    height: 0.8rem;
+    line-height: 0.8rem;
+  }
 </style>
 <style>
   .member .mint-switch-input:checked + .mint-switch-core {

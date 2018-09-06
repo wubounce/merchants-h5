@@ -43,12 +43,16 @@ export default {
       phone:'',
      
       checkshoptxt:'',
+
+      query:{}
     };
   },
   mounted() {
     
   },
   activated(){
+    this.query = this.$route.query ? this.$route.query :{};
+    console.log(this.query);
     this.shopListFun();
     this.menuSelect();
   },
@@ -111,34 +115,37 @@ export default {
       this.getcheckshop();
     },
     getcheckshop(){
-      let query = this.$route.query ? this.$route.query :{};
-      this.operateShopIds = query.operateShopIds ? query.operateShopIds.split(','): [];
+      
+      this.operateShopIds = this.query.operateShopIds ? this.query.operateShopIds.split(','): [];
 
       let checklist = this.shoplist.filter(v=>this.operateShopIds.some(k=>k==v.shopId));
       this.checkshoptxt = checklist.map(item=>item.shopName).join(',');
     },
-    openPrem(){
-      this.$router.push({name:'premList',query:{checkpermissionslist:this.checkpermissionslist.join(','),operateShopIds:this.operateShopIds.join(',')}});
-    },
-    openShop(){
-      this.$router.push({name:'premshopList',query:{operateShopIds:this.operateShopIds.join(','),checkpermissionslist:this.checkpermissionslist.join(',')}});
-    },
     addPermissions(){
-      let query = this.$route.query ? this.$route.query :{};
-      this.checkpermissionslist = query.checkpermissionslist ? query.checkpermissionslist.split(','): [];
+      this.checkpermissionslist = this.query.checkpermissionslist ? this.query.checkpermissionslist.split(','): [];
 
       let checklist = this.allmenu.filter(v=>this.checkpermissionslist.some(k=>k==v.menuId));
       this.permissionsMIdsTxt = checklist.map(item=>item.name).join(',');
     },
+    openPrem(){
+      this.$router.push({name:'premList',query:{checkpermissionslist:this.query.checkpermissionslist,operateShopIds:this.query.operateShopIds,parentIds:this.query.parentIds}});
+    },
+    openShop(){
+      this.$router.push({name:'premshopList',query:{operateShopIds:this.query.operateShopIds,checkpermissionslist:this.query.checkpermissionslist,parentIds:this.query.parentIds}});
+    },
+
     async addmember(){
       if (this.validate()) {
         let menshopids = [];
         this.operateShopIds.forEach(item=>menshopids.push(`'${item}'`));
+        let parentIds = this.query.parentIds ? this.query.parentIds.split(','): []; //权限父级id
+        let mIds = [...this.checkpermissionslist,...parentIds];
+        mIds = Array.from(new Set([...mIds]));//去重
         let payload = {
           username:this.username,
           phone:this.phone,
           operateShopIds:menshopids.join(','),
-          mIds:this.checkpermissionslist.join(',')
+          mIds:mIds.join(',')
         };
         let res = await addOperatorFun(payload);
         this.$toast({message: '新增成功,密码将发送至此手机' });

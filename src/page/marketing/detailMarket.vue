@@ -4,18 +4,14 @@
   <div v-else>
     <div class="addvip-header">
       <p>所属店铺<span class="add-market-shop"><span v-for="(item,index) in detail.shop" :key="index">{{item.name}}<i v-if="index !== (detail.shop.length-1)">,</i></span></span></p>
+      
+      <p>设备类型<span class="addvip-con" v-for="(item,index) in detail.parentTypeMap" :key="index">{{item.parentTypeName}}</span></p>
+
       <p>优惠期<span class="addvip-con">{{detail.noDiscountStart}}<span v-if="detail.noDiscountStart&&detail.noDiscountEnd">~</span>{{detail.noDiscountEnd}}</span></p>
       <p>活动日<span class="addvip-con">{{detail.noWeek | week}}</span></p>
       <p>每日活动时段<span class="addvip-con">{{detail.noTime}}</span></p>
       <p>折扣优惠<span class="addvip-con">{{detail.discountVO ? detail.discountVO: '' | tofixd}}%</span></p>
       <p>活动状态<span class="addvip-con">{{detail.status === 0 ? '开放':'暂停'}}</span></p>
-    </div>
-    <div class="nopay-time">
-      <h6>不可支付时段</h6>
-      <div class="time-chose">
-        <p>不可支付日期<span class="addvip-con">{{detail.noWork}}</span></p>
-        <p>每日不可支付时间<span class="addvip-con">{{detail.noWorkTime}}</span></p>
-      </div>
     </div>
     <div class="create-wrap">
       <p>创建人：{{detail.createUserName}}</p>
@@ -37,7 +33,7 @@ export default {
   data() {
     return {
       title: '限时优惠详情',
-      detail:{}
+      detail:{},
     };
   },
   mounted() {

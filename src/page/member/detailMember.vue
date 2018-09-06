@@ -15,9 +15,14 @@
         <div class="form-title">负责店铺</div>
         <div class="form-input">{{detail.operateShopNames}}</div>
       </div>
-      <div class="input-group" style="border:none">
-        <div class="form-title">权限</div>
-        <div class="form-input"><span v-for="(item,index) in detail.list" :key="index">{{item.name}}<i v-if="index !== (detail.list.length-1)">,</i></span></div>
+      
+      <div class="prem-list">
+        <p class="prem-wrap-title">权限</p>
+        <div class="pid-list" v-for="(item,index) in permissionsData" :key="index">
+          <span v-if="item.name==='首页'||item.name==='报表'">{{item.name}}</span>
+          <p class="pid-title" v-else>{{item.name}}</p>
+          <span v-for="(sitem,index) in item.children" :key="index">{{sitem.name}}</span>
+        </div>
       </div>
     </div>
     <div class="input-group createtime">
@@ -34,11 +39,13 @@
 <script>
 import { MessageBox } from 'mint-ui';
 import { getOperatorInfoFun, delOperatorFun } from '@/service/member';
+import { getTrees} from '@/utils/tool';
 export default {
   data() {
     return {
       title: '人员详情',
-      detail:{}
+      detail:{},
+      permissionsData:[],
     };
   },
   mounted() {
@@ -52,6 +59,7 @@ export default {
     async getOperatorInfo(id){
       let res = await getOperatorInfoFun({id:id});
       this.detail = res;
+      this.permissionsData = getTrees(res.list,0);
     },
     deldelMember(id){
       MessageBox.confirm(`确认删除？`,'').then(async () => {
@@ -60,7 +68,6 @@ export default {
         let res = await delOperatorFun(payload);
         this.$toast({message: '删除成功' });
         this.$router.push({name:'member'});
-        
       });
     }
   },
@@ -70,5 +77,37 @@ export default {
 </script>
 <style type="text/css" lang="scss" scoped>
 @import '../../assets/scss/member/detailmember';
+.prem-list {
+  padding-top:0.33rem;
+  padding-bottom:0.0rem;
+}
+.prem-wrap-title {
+  font-weight:400;
+  color:#999;
+  line-height:0.6rem;
+  font-size: 16px;
+  padding-bottom: 0.47rem;
+}
+.prem-list {
+  span {
+    background:rgba(24,144,255,0.05);
+    border-radius:0.11rem;
+    font-size: 14px;
+    display: inline-block;
+    line-height: 0.53rem;
+    padding:0.08rem 0.29rem;
+    margin-right: 0.27rem;
+    margin-bottom: 0.27rem;
+    color: #333;
+  }
+}
+.pid-title {
+  font-size:11px;
+  font-weight:400;
+  color:#999999;
+  line-height:0.4rem;
+  margin-top: 0.27rem;
+  margin-bottom: 0.13rem;
+}
 </style>
 

@@ -48,11 +48,21 @@ export default {
     },
     getcheckshop(){
       let query = this.$route.query;
-      this.$router.push({name:'addMember',query:{operateShopIds:this.operateShopIds.join(','),checkpermissionslist:query.checkpermissionslist}});
+      if (query.updateOperatorId) {
+        this.$router.push({name:'editMember',query:{operateShopIds:this.operateShopIds.join(','),checkpermissionslist:query.checkpermissionslist,updateOperatorId:query.updateOperatorId,parentIds:query.parentIds}});
+      }else {
+        this.$router.push({name:'addMember',query:{operateShopIds:this.operateShopIds.join(','),checkpermissionslist:query.checkpermissionslist,parentIds:query.parentIds}});
+      }
+      
     },
     cancelCheckshop(){
       let query = this.$route.query;
-      this.$router.push({name:'addMember',query:{operateShopIds:query.operateShopIds,checkpermissionslist:query.checkpermissionslist}});
+      if (query.updateOperatorId) {
+        this.$router.push({name:'editMember',query:{operateShopIds:query.operateShopIds,checkpermissionslist:query.checkpermissionslist,updateOperatorId:query.updateOperatorId,parentIds:query.parentIds}});
+      }else{
+        this.$router.push({name:'addMember',query:{operateShopIds:query.operateShopIds,checkpermissionslist:query.checkpermissionslist,parentIds:query.parentIds}});
+      }
+      
     },
   },
   components:{
@@ -61,6 +71,9 @@ export default {
 </script>
 <style type="text/css" lang="scss" scoped>
   @import '../../assets/scss/member/adddmember';
+  .premlist {
+    padding-bottom: 1.33rem; 
+  }
   .resp-shop-wrap {
     background: #fff;
   } 

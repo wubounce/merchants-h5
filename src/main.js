@@ -22,6 +22,8 @@ import VueAwesomeSwiper from 'vue-awesome-swiper';
 import 'swiper/dist/css/swiper.css';
 import filter from '@/utils/filter';
 
+import { Tree } from 'element-ui';
+Vue.use(Tree);
 Vue.use(filter);
 Vue.use(VueAwesomeSwiper);
 Vue.use(MintUI);

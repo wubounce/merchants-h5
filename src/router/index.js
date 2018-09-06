@@ -206,7 +206,7 @@ export default new Router({
       path: '/editMember',
       name: 'editMember',
       component: () => import ('@/page/member/editMember'),
-      meta: {title: '人员修改'},
+      meta: {title: '人员修改',keepAlive:true},
     },
     {
       path: '/premList',

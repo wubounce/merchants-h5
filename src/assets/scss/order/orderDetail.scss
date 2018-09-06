@@ -135,6 +135,30 @@
       color: #FF5F5F;
     }
   }
+
+  .detail-list {
+    background: #fff;
+    font-size: 14px;
+    display: flex;
+    padding:0 0.4rem;
+    >div {
+      width: 100%;
+      padding:0.4rem 0;
+      border-bottom:1px solid #f9f8ff;
+    }
+    .title {
+      display: inline-block;
+      width: 1.87rem;
+      margin-right: 0.24rem;
+      vertical-align: top;
+    }
+    .content {
+      width: 7rem;
+      display: inline-block;
+    }
+   }
+
+
   .oder-time {
     background: #fff;
     line-height: 1.35rem;

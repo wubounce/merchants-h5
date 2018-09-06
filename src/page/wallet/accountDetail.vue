@@ -52,12 +52,16 @@
             <li>
                 <div class="remarks"><p>店铺</p><p>{{data.shopName}}</p></div>
                 <div><p>类型</p><p>{{data.parentType}}</p></div>
-                <div><p>设备型号</p><p>{{data.subType}}-636U7</p></div>
+                <div><p>设备型号</p><p>{{data.subType}}</p></div>
                 <div><p>设备名称</p><p>{{data.machineName}}</p></div>
                 <div><p>IMEI号</p><p>{{data.imei}}</p></div>
             </li>
             <li>
                 <div class="remarks"><p>备注</p><p>{{data.content.replace(',null','')}}</p></div>    
+            </li>
+            <li>
+                <div><p>退款人</p><p>{{data.refundName}}</p></div>
+                <div><p>退款时间</p><p>{{data.refundTime}}</p></div>
             </li>
         </ul>
 	</div>

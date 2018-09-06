@@ -13,6 +13,8 @@ const addOrUpdateVipApi = 'shop/vip/save';                                      
 const delVipApi = 'shop/vip/hidden';                                                    // 店铺vip卡删除 method 'post'
 const vipShopsApi = 'shop/vip/shops';                                                   //vip卡-可选择的店铺
 
+const marketlistParentTypeId = '/timeMarket/listParentTypeId';                                                   //vip卡-可选择的店铺
+
 // 获取时段营销列表
 export const timeMarketListFun = (payload) => fetch.post(timeMarketListApi,  payload);
 
@@ -40,3 +42,8 @@ export const delVipFun = (payload) => fetch.post(delVipApi,  payload);
 
 //vip卡-可选择的店铺
 export const vipShopsFun = (payload) => fetch.post(vipShopsApi,  payload);
+
+
+
+//vip卡-可选择的店铺
+export const marketlistParentTypeIdFun = (payload) => fetch.post(marketlistParentTypeId,  payload);

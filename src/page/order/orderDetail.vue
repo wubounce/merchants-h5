@@ -39,28 +39,49 @@
       <span class="heji">合计：</span>
       <span class="money">¥{{detail.payPrice}}</span>
     </section>
-    <section class="total-wrap">
-      <div class="total-border">
-        <div class="vip">用户账号：{{detail.phone}}</div>
+    <section class="detail-list">
+      <div>
+        <span class="title">用户账号：</span><span class="content">{{detail.phone}}</span>
       </div>
     </section>
-    <section class="total-wrap">
-      <div class="total-border">
-        <div class="vip">订单编号：{{detail.orderNo}}</div>
+    <section class="detail-list">
+      <div>
+      <span class="title">订单编号：</span><span class="content">{{detail.orderNo}}</span>
       </div>
     </section>
-    <section class="total-wrap" v-cloak v-if="detail.orderStatus === 2|| detail.orderStatus === 5">
-      <div class="total-border">
-        <div class="vip">支付方式：{{detail.payType | PayType}}</div>
+    <section class="detail-list" v-cloak v-if="detail.orderStatus === 2|| detail.orderStatus === 5">
+      <div>
+        <span class="title">支付方式：</span><span class="content">{{detail.payType | PayType}}</span>
       </div>
     </section>
-    <section class="oder-time">
-      <span>下单时间：{{detail.createTime}}</span>
+    <section class="detail-list">
+      <div>
+        <span class="title">下单时间：</span><span class="content">{{detail.createTime}}</span>
+      </div>
     </section>
+    <div v-if="detail.orderStatus === 5">
+        <section class="detail-list">
+          <div>
+            <span class="title">退款人：</span><span class="content">{{detail.refundName}}</span>
+          </div>
+        </section>
+        <section class="detail-list">
+          <div>
+            <span class="title">退款时间：</span><span class="content">{{detail.refundTime}}</span>
+          </div>
+        </section>
+        <section class="detail-list">
+          <div>
+            <span class="title">备注：</span><span class="content">{{detail.refundRemark}}</span>
+          </div>
+        </section>
+    </div>
+
+
      <section class="listaction" v-cloak v-if="detail.orderStatus === 2"> 
       <mt-button @click="orderRefund(detail.orderNo,detail.payPrice)" v-has="'mer:order:refund,mer:order:info'" :disabled="refundDisabled">退款</mt-button>
-      <mt-button @click="machineBoot(detail.id)" v-has="'mer:order:start,mer:order:info'">启动</mt-button>
-      <mt-button @click="machineReset(detail.orderNo,detail.machineId)" v-has="'mer:order:reset,mer:order:info'">复位</mt-button>
+      <mt-button @click="machineBoot(detail.id)" v-has="'mer:order:start,mer:order:info'" v-if="detail.isESource === 0">启动</mt-button>
+      <mt-button @click="machineReset(detail.orderNo,detail.machineId)" v-has="'mer:order:reset,mer:order:info'" v-if="detail.isESource === 0">复位</mt-button>
     </section>
   </div>
 </div>
@@ -139,4 +160,15 @@ export default {
 </script>
 <style type="text/css" lang="scss" scoped>
  @import "../../assets/scss/order/orderDetail";
+</style>
+<style>
+  @media screen and (max-width: 360px) {
+    .order-title {  font-size: 15px !important; }
+    .detail-list .title {
+      width: 2.3rem !important;
+    }
+    .detail-list .content {
+      width: 6.5rem !important;
+    }
+  }
 </style>
