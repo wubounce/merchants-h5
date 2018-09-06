@@ -4,15 +4,18 @@
     <div v-else>
         <!-- 第一模块 -->
         <p class="shop-item title"><span>累计收益</span><span>{{shopdetail.profit}} 元</span></p>
+
+        <!-- 第二模块 -->
         <p class="shop-item second-p"><span>店铺名称</span><span>{{shopdetail.shopName}}</span></p>
         <p class="shop-item"><span>店铺类型</span><span>{{shopdetail.shopType}}</span></p>
         <p class="shop-address">
           <span>店铺地址</span><br>
-          <span>{{ completeAddress }}</span></p>
-
-        <!-- 第二模块 -->
-        <div class="shop-machine">
-          <span class='machine-type'>设备类型</span>
+          <span>{{ completeAddress }}</span>
+        </p>
+        
+        <!-- 第三模块 -->
+        <div class="shop-machine second-p">
+          <span class='machine-type'>已有设备</span>
           <div class="shop-machine-bottom">
             <span class="one-machine" v-for="(item,index) in list" :key="index">{{item}}</span>
           </div>
@@ -20,10 +23,23 @@
         <p class="shop-item"><span>设备数量</span><span>{{shopdetail.machineCount}} 台</span></p>
         <p class="shop-item"><span>预约功能</span><span>{{shopdetail.isReserve == 0? '已开通' : '未开通'}}</span></p>
         <p class="shop-item"><span>预约时长(分钟)</span><span>{{shopdetail.orderLimitMinutes}}</span></p>
-        <!-- 下个版本再做，营业时间 -->
-        <!-- <p class="shop-item"><span>营业时间</span><span>{{shopdetail.workTime}}</span></p> -->
-        <!-- 第三模块 -->
-        <p class="shop-item second-p"><span>限时优惠</span><span>{{shopdetail.isDiscount ==true ? '已设置' : '未设置'}}</span></p>
+        <p class="shop-item"><span>营业时间</span><span>{{shopdetail.workTime}}</span></p>
+        <p class="shop-item"><span>限时优惠</span><span>{{shopdetail.isDiscount ==true ? '已设置' : '未设置'}}</span></p>
+        <p class="shop-item">
+          <span>已设置 VIP卡</span>
+          <span>
+            {{shopdetail.hasVip == false ? '暂无' : '' }}
+            {{shopdetail.seasonCard == true ? '季卡' : '' }}
+            <!-- 拥有季卡和半年卡 -->
+            {{shopdetail.seasonCard == true && shopdetail.halfYearCard == true  ? '、' : '' }}
+            {{shopdetail.halfYearCard == true ? '半年卡' : '' }}
+            <!-- 拥有半年卡和年卡 -->
+            {{shopdetail.yearCard == true && shopdetail.halfYearCard == true  ? '、' : '' }}
+            <!-- 拥有季卡和年卡 -->
+            {{shopdetail.yearCard == true && shopdetail.seasonCard == true &&  shopdetail.halfYearCard == false ? '、' : '' }}
+            {{shopdetail.yearCard == true ? '年卡' : '' }}
+          </span>
+        </p>
         <p class="shop-item"><span>VIP数量</span><span>{{shopdetail.vipCount}}个</span></p>
 
         <!-- 第四模块 -->

@@ -9,8 +9,8 @@
       <p class="shopname-p"><span>详细地址</span><span><input  type="text" class='addressInput' v-model="address"  placeholder="请填写详细地址"></span></p>
     </ul>
     <div class="second">
-      <li class="device business" @click="addDevice">设备类型<span>{{machineName}}</span></li>
-      <p class="isReserve">
+      <!-- <li class="device business" @click="addDevice">设备类型<span>{{machineName}}</span></li> -->
+      <p class="isReserve device">
         <span>预约功能</span>
         <span><mt-switch class="check-switch" v-model="isReserve" @change="editTime(isReserve)"></mt-switch></span>
       </p>
@@ -21,7 +21,7 @@
         </span>
       </p>
       <!-- 先注释掉，下个版本做营业时间 -->
-      <!-- <li class="business" @click="chooseTime">营业时间<span>{{addBusinessTime}}</span></li> -->
+      <li class="business" @click="chooseTime">营业时间<span>{{addBusinessTime}}</span></li>
     </div>
     <p class="blank"></p>
     <button class="submit" @click="submit">提交</button>
@@ -46,17 +46,17 @@
 
     
     <!-- 设备类型 -->
-    <mt-popup v-model='deviceDetail' position="bottom" class="mint-popup">
+    <!-- <mt-popup v-model='deviceDetail' position="bottom" class="mint-popup">
       <p class="toolBarMachine"><span @click="cancel">取消</span><span>设备类型</span><span @click="confirmNews">确定</span></p>
       <div class='resp-shop-wrap'>
         <mt-checklist align="right" :options="options" v-model="machine"></mt-checklist>
       </div>
-    </mt-popup>
-
-    <!-- 先注释掉，下个版本再做营业时间 -->
-    <!-- <mt-popup v-model="timeVisible" position="bottom" class="mint-popup">
-       <mt-picker class="picker"  :slots="slotsTime" @change="changeTime" :showToolbar="true"><p class="toolBar"><span @click="cancel">取消</span><span @click="chooseDay" id="allDay">全天</span><span @click="confirmNews">确定</span></p></mt-picker>
     </mt-popup> -->
+
+    <!-- 营业时间 -->
+    <mt-popup v-model="timeVisible" position="bottom" class="mint-popup">
+       <mt-picker class="picker"  :slots="slotsTime" @change="changeTime" :showToolbar="true"><p class="toolBar"><span @click="cancel">取消</span><span @click="chooseDay" id="allDay">全天</span><span @click="confirmNews">确定</span></p></mt-picker>
+    </mt-popup>
 
   </section>
 </template>
@@ -226,7 +226,7 @@ export default {
       ],
       timeVisible: false,
       isTime:true,
-      isReserve:true,
+      isReserve:false,
       lat:'',
       lng:'',
       mapCity:'',
@@ -409,6 +409,11 @@ export default {
           this.timeVisible = false;
           if(parseInt(this.shopTime.startTime.slice(0,2)) < parseInt(this.shopTime.endTime.slice(0,2))) {
             this.addBusinessTime = this.shopTime.startTime + '-' + this.shopTime.endTime;
+            // 点击直接跳转出去
+            // this.slotsTime[0].defaultIndex = 4;
+            // this.slotsTime[2].defaultIndex = 30;
+            // this.slotsTime[4].defaultIndex = 20;
+            // this.slotsTime[6].defaultIndex = 30;
           }
           else {
             if(parseInt(this.shopTime.startTime.slice(0,2)) == parseInt(this.shopTime.endTime.slice(0,2))) {
@@ -453,6 +458,11 @@ export default {
           break;
         case 4:
           this.timeVisible = false;
+          // 点击直接跳转出去
+          // this.slotsTime[0].defaultIndex = 4;
+          // this.slotsTime[2].defaultIndex = 30;
+          // this.slotsTime[4].defaultIndex = 20;
+          // this.slotsTime[6].defaultIndex = 30;
           break;
       }
     },
@@ -515,12 +525,18 @@ export default {
     changeTime(picker, values) {
       this.shopTime.startTime = values[0].slice(0,2) + ':' +values[1].slice(0,2);
       this.shopTime.endTime = values[2].slice(0,2) + ':' +values[3].slice(0,2);
+      console.log('values[0]:',values[0]);
     },
     chooseDay() {
-      this.slotsTime[0].defaultIndex = 0;
-      this.slotsTime[2].defaultIndex = 0;
-      this.slotsTime[4].defaultIndex = 23;
-      this.slotsTime[6].defaultIndex = 59;
+      // this.slotsTime[0].defaultIndex = 0;
+      // this.slotsTime[2].defaultIndex = 0;
+      // this.slotsTime[4].defaultIndex = 23;
+      // this.slotsTime[6].defaultIndex = 59;
+
+      // 点击全天直接获取全天并且退出弹框
+      this.timeVisible = false;
+      this.addBusinessTime = '00:00-23:59';
+
     },
     chooseTime() {
       this.index = 4;
@@ -529,7 +545,7 @@ export default {
     },
     async submit() {
       console.log(this.lng);
-      if(this.shopName!=false && this.shopType!=false && this.provinceId != false && this.cityId !=false && this.provinceId != false && this.address != false && this.lat !=false && this.lng != false && this.lat !=undefined && this.lng != undefined && this.machineTypeIdsArray !=false ) {
+      if(this.shopName!=false && this.shopType!=false && this.provinceId != false && this.cityId !=false && this.provinceId != false && this.address != false && this.lat !=false && this.lng != false && this.lat !=undefined && this.lng != undefined && this.addBusinessTime != false) {
         if(this.orderLimitMinutes) {
           //在判断
           let reg=/^[1-9]+\d*$/;
@@ -547,7 +563,7 @@ export default {
               address: this.address,
               lat:this.lat,
               lng:this.lng,
-              machineTypeIds: this.machineTypeIdsArray,
+              //machineTypeIds: this.machineTypeIdsArray,
               isReserve: changeisReserve,
               orderLimitMinutes: this.orderLimitMinutes,
               workTime: this.addBusinessTime,
@@ -591,7 +607,7 @@ export default {
             address: this.address,
             lat:this.lat,
             lng:this.lng,
-            machineTypeIds: this.machineTypeIdsArray,
+            //machineTypeIds: this.machineTypeIdsArray,
             isReserve: changeisReserve,
             orderLimitMinutes: this.orderLimitMinutes,
             workTime: this.addBusinessTime,
@@ -636,9 +652,9 @@ export default {
             position: 'middle',
             duration: 3000
           });
-      }else if(!this.machineTypeIdsArray) {
+      }else if(!this.addBusinessTime) {
         this.$toast({
-            message: '请选择设备类型',
+            message: '请选择营业时间',
             position: 'middle',
             duration: 3000
           });
@@ -697,6 +713,13 @@ export default {
     },
     deviceDetail: function () {
       if (this.deviceDetail) {
+        this.ModalHelper.afterOpen();
+      } else {
+        this.ModalHelper.beforeClose();
+      }
+    },
+    timeVisible: function () {
+      if (this.timeVisible) {
         this.ModalHelper.afterOpen();
       } else {
         this.ModalHelper.beforeClose();
