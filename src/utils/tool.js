@@ -18,9 +18,16 @@ export const getNavTabIndex = () => sessionStorage.getItem(navTabKey);
 export const removeNavTabIndex = () => sessionStorage.removeItem(navTabKey);
 
 const PhoneKey = 'phone';
-export const setPhone = (navTab) => sessionStorage.setItem(PhoneKey,navTab);
-export const getPhone = () => sessionStorage.getItem(PhoneKey);
-export const removePhone = () => sessionStorage.removeItem(PhoneKey);
+export const setPhone = (navTab) => localStorage.setItem(PhoneKey,JSON.stringify(navTab));
+export const getPhone = () => JSON.parse(localStorage.getItem(PhoneKey));
+export const removePhone = () => localStorage.removeItem(PhoneKey);
+
+
+const MemberKey = 'member';
+export const setMember = (data) => sessionStorage.setItem(MemberKey,JSON.stringify(data));
+export const getMember = () => JSON.parse(sessionStorage.getItem(MemberKey));
+export const removeMember = () => sessionStorage.removeItem(MemberKey);
+
 /**
  * 截流函数
  */

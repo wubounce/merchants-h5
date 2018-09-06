@@ -21,7 +21,7 @@
 import { mapState } from 'vuex';
 import { validatPhone, validatName } from '@/utils/validate';
 import { shopListFun, getOperatorInfoFun, updateOperatorInfoFun, permsMenuFun } from '@/service/member';
-import { getTrees} from '@/utils/tool';
+import { getTrees, setMember, getMember, removeMember } from '@/utils/tool';
 export default {
   data() {
     return {
@@ -40,7 +40,7 @@ export default {
       checkshoptxt:'',
       createTime:null,
 
-      query:{}
+      localData:{}
     };
   },
   mounted() {
@@ -49,8 +49,12 @@ export default {
   created(){
     this.shopListFun();
     this.menuSelect();
-    this.query = this.$route.query ? this.$route.query :{};
-    this.updateOperatorId = this.query.id?this.query.id:this.query.updateOperatorId;
+    this.localData = getMember() ? getMember() :{};
+    this.updateOperatorId = this.$route.query.id?this.$route.query.id:this.$route.query.updateOperatorId;
+    this.createTime = this.localData.createTime;
+    this.parentIds = this.localData.parentIds ? this.localData.parentIds:[];
+    this.operateShopIds = this.localData.operateShopIds ? this.localData.operateShopIds: [];
+    this.checkpermissionslist = this.localData.checkpermissionslist ? this.localData.checkpermissionslist: [];
   },
   computed: {
       
@@ -95,38 +99,41 @@ export default {
     async shopListFun(){
       let res = await shopListFun();
       this.shoplist = res;
-      this.getcheckshop();
       if (this.$route.query.id) {
         this.getOperatorInfo(this.updateOperatorId);
       }
+      this.getcheckshop();
     },
     getcheckshop(){
-      this.operateShopIds = this.query.operateShopIds ? this.query.operateShopIds.split(','): [];
-
       let checklist = this.shoplist.filter(v=>this.operateShopIds.some(k=>k==v.shopId));
       this.checkshoptxt = checklist.map(item=>item.shopName).join(',');
     },
     addPermissions(){
-      this.checkpermissionslist = this.query.checkpermissionslist ? this.query.checkpermissionslist.split(','): [];
-
       let checklist = this.allmenu.filter(v=>this.checkpermissionslist.some(k=>k==v.menuId));
       this.permissionsMIdsTxt = checklist.map(item=>item.name).join(',');
     },
     openPrem(){
-      this.parentIds = this.query.parentIds ? this.query.parentIds.split(','): this.parentIds;
-      this.$router.push({name:'premList',query:{checkpermissionslist:this.checkpermissionslist.join(','),operateShopIds:this.operateShopIds.join(','),updateOperatorId:this.updateOperatorId,parentIds:this.parentIds.join(',')}});
+      setMember(this.setMemberdata());
+      this.$router.push({name:'premList',query:{updateOperatorId:this.updateOperatorId}});
     },
     openShop(){
-      this.parentIds = this.query.parentIds ? this.query.parentIds.split(','): this.parentIds;
-      this.$router.push({name:'premshopList',query:{operateShopIds:this.operateShopIds.join(','),checkpermissionslist:this.checkpermissionslist.join(','),updateOperatorId:this.updateOperatorId,parentIds:this.parentIds.join(',')}});
+     setMember(this.setMemberdata());
+      this.$router.push({name:'premshopList',query:{updateOperatorId:this.updateOperatorId}});
     },
-
+    setMemberdata(){
+      let setData = {
+          createTime:this.createTime,
+          operateShopIds:this.operateShopIds,
+          checkpermissionslist:this.checkpermissionslist,
+          parentIds:this.parentIds,
+      };
+      return setData;
+    },
     async addmember(){
       if (this.validate()) {
         let menshopids = [];
         this.operateShopIds.forEach(item=>menshopids.push(`'${item}'`));
-        let parentIds = this.query.parentIds ? this.query.parentIds.split(','): this.parentIds; //权限父级id
-        let mIds = [...this.checkpermissionslist,...parentIds];
+        let mIds = [...this.checkpermissionslist,... this.parentIds];
         mIds = Array.from(new Set([...mIds]));//去重
         let payload = {
           id:this.updateOperatorId,
@@ -136,6 +143,7 @@ export default {
         let res = await updateOperatorInfoFun(payload);
         this.$toast({message: '修改成功' });
         this.$router.push({name:'member'});
+        removeMember();//新增成功清楚localhostStorage
       }
     }
   },

@@ -72,7 +72,7 @@
         </section>
         <section class="detail-list">
           <div>
-            <span class="title">备注：</span><span class="content">{{detail.refundRemark}}</span>
+            <span class="title">备注：</span><span class="content">{{detail.refundRemark.replace(',null','')}}</span>
           </div>
         </section>
     </div>

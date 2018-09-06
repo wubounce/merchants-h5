@@ -22,7 +22,7 @@
 import { mapState } from 'vuex';
 import { validatPhone, validatName } from '@/utils/validate';
 import { shopListFun, addOperatorFun, permsMenuFun } from '@/service/member';
-import { getTrees } from '@/utils/tool';
+import { getTrees, setMember, getMember } from '@/utils/tool';
 export default {
   data() {
     return {
@@ -36,6 +36,7 @@ export default {
       parentIds:[],
       maxPid:null,//最大父级id
       allMenu:[],
+      localData:{},
     };
   },
   mounted() {
@@ -48,9 +49,9 @@ export default {
       let res = await permsMenuFun(); //拼接权限菜单
       this.allMenu = res;
       this.permissionsData = getTrees(res,0);
-      let query = this.$route.query ? this.$route.query :{};
-      this.checkpermissionslist = query.checkpermissionslist ? query.checkpermissionslist.split(',').map(Number): [];
-      this.parentIds = query.parentIds ? query.parentIds.split(',').map(Number): [];
+      this.localData = getMember() ? getMember() :{};
+      this.checkpermissionslist = this.localData.checkpermissionslist ? this.localData.checkpermissionslist.map(Number): [];
+      this.parentIds = this.localData.parentIds ? this.localData.parentIds.map(Number): [];
       this.$refs.tree.setCheckedKeys(this.checkpermissionslist);
     },
     handleCheck() {
@@ -62,28 +63,28 @@ export default {
     addPermissions(){
       this.parentIds = Array.from(new Set([...this.parentIds]));
       this.checkpermissionslist = Array.from(new Set([...this.checkpermissionslist]));
+
+      this.localData.checkpermissionslist = this.checkpermissionslist;
+      this.localData.parentIds = this.parentIds;
+      setMember(this.localData);
+
       let query = this.$route.query;
       if (query.updateOperatorId) {
-        this.$router.push({name:'editMember',query:{checkpermissionslist:this.checkpermissionslist.join(','),parentIds:this.parentIds.join(','),operateShopIds:query.operateShopIds,updateOperatorId:query.updateOperatorId}});
+        this.$router.push({name:'editMember',query:{updateOperatorId:query.updateOperatorId}});
       } else {
-        this.$router.push({name:'addMember',query:{checkpermissionslist:this.checkpermissionslist.join(','),parentIds:this.parentIds.join(','),operateShopIds:query.operateShopIds}});
+        this.$router.push({name:'addMember'});
       }
       
     },
     cancelPermissions(){
       let query = this.$route.query;
       if (query.updateOperatorId) {
-        this.$router.push({name:'editMember',query:{checkpermissionslist:query.checkpermissionslist,parentIds:query.parentIds,operateShopIds:query.operateShopIds,updateOperatorId:query.updateOperatorId}});
+        this.$router.push({name:'editMember',query:{updateOperatorId:query.updateOperatorId}});
       }else{
-        this.$router.push({name:'addMember',query:{checkpermissionslist:query.checkpermissionslist,parentIds:query.parentIds,operateShopIds:query.operateShopIds}});
+        this.$router.push({name:'addMember'});
       }
       
     },
-  },
-  beforeRouteLeave(to, from, next) {
-       // 设置下一个路由的 meta
-      to.meta.keepAlive = true;  // B 跳转到 A 时，让 A 缓存，即不刷新
-      next();
   },
   components:{
   }

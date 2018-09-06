@@ -10,7 +10,10 @@
       <div class="form-group input">
         <p class="userName">
           <input type="text" v-model.trim="form.userName" v-on:input="userinputFunc" placeholder="请输入用户名/手机号">
-          <span class="open-eyes eyes iconfont icon-guanbi" v-if="isuser" @click="form.userName='';isuser=false;disabled=true"></span>
+          <span class="open-eyes eyes iconfont icon-guanbi" v-if="isuser" @click="form.userName='';isuser=false;disabled=true;searchPhone=false"></span>
+          <div class="phone-list" v-if="searchPhone">
+            <p v-for="(item,index) in searchPhoneList" :key="index" @click="checkPhone(item)">{{item}}</p>
+          </div>
         </p>
         <div class="passWord">
           <input type="text" v-model.trim="form.password" v-if="typepwd" v-on:input="pwdinputFunc" autocomplete="off">
@@ -36,7 +39,7 @@
 
 <script>
 import { mapState, mapActions, mapMutations } from 'vuex';
-import { getToken, removeToken, removeNavTabIndex,setNavTabIndex, getNavTabIndex, setPhone, getPhone } from '@/utils/tool';
+import { getToken, removeToken, removeNavTabIndex,setNavTabIndex, getNavTabIndex, setPhone, getPhone, removeMember } from '@/utils/tool';
 import { login } from '@/service/login';
 import JsEncrypt from 'jsencrypt';
 import { menuSelectFun } from '@/service/member';
@@ -46,7 +49,7 @@ export default {
       // 已登录直接返回首页
       if (getToken()) {
         let localData = getNavTabIndex();
-        localData = localData?localData:'/user';
+        localData = localData?localData:'/management';
         next(localData);
         return;
       }
@@ -60,18 +63,23 @@ export default {
     data () {
       return {
         form: {
-          userName: getPhone()? getPhone():'',
+          userName: '',
           password: ''
         },
         isuser:false,
         typepwd:false,
-        disabled:true
+        disabled:true,
+        phoneArray: getPhone()? getPhone():[],
+        searchPhone:false,
+        searchPhoneList:[],
       };
     },
     created () {
       // 每次登录之前清理缓存数据
       removeToken();
       removeNavTabIndex();
+      removeMember();
+      this.form.userName = getPhone() ? getPhone()[0]:''; //最新一个用户名
     },
      computed: {
         ...mapState({
@@ -106,16 +114,13 @@ export default {
           };
           let res = await login(payload);
           this.login(res.token);
-          setPhone(this.form.userName);
+          this.phoneArray = [this.form.userName,...this.phoneArray];
+          this.phoneArray = Array.from(new Set([...this.phoneArray]));//去重
+          setPhone(this.phoneArray); //保存登录过的手机号
          if(res.code === 8002){
             this.$router.push({name:'bindPhone'});     
           }else {
-            menuSelectFun().then((data) => {
-              this.setMenu(data);
-              let path = data[0].url;
-              setNavTabIndex('/'+ path);
-              this.$router.push(path);
-            }); //跳转分配权限的第一个路由
+            this.getMenu();
           }
         }
       },
@@ -128,6 +133,8 @@ export default {
       },
       userinputFunc(){
         this.isuser = true;
+        this.form.userName ? this.searchPhone = true:this.searchPhone = false;
+        this.searchPhoneList = this.phoneArray.filter(item => item.startsWith(this.form.userName));
         if (!this.form.userName || !this.form.password) {
           this.disabled = true;
         } else {
@@ -141,6 +148,10 @@ export default {
         } else {
           this.disabled = false;
         }
+      },
+      checkPhone(item){
+        this.form.userName = item;
+        this.searchPhone = false;
       },
       openpwd(){
         this.typepwd = !this.typepwd;
@@ -238,6 +249,17 @@ export default {
   width: 8.13rem;
   padding:0;
   border-radius:0.13rem;
+}
+.phone-list {
+  position: absolute;
+  z-index: 2;
+  background: #fff;
+  width: 100%;
+  p {
+    font-size: 16px;
+    color: #999;
+    line-height: 1rem;
+  }
 }
 </style>
 <style lang="scss">

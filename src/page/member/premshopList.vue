@@ -22,21 +22,22 @@
 import { mapState } from 'vuex';
 import { validatPhone, validatName } from '@/utils/validate';
 import { shopListFun, addOperatorFun, permsMenuFun } from '@/service/member';
-import { getTrees} from '@/utils/tool';
+import { getTrees, setMember, getMember } from '@/utils/tool';
 export default {
   data() {
     return {
       title: '选择店铺',
       shoplist:[],
       operateShopIds:[],
+      query:{},
     };
   },
   mounted() {
     this.shopListFun();
   },
   created(){
-    let query = this.$route.query ? this.$route.query :{};
-    this.operateShopIds = query.operateShopIds ? query.operateShopIds.split(','): [];
+    this.localData = getMember() ? getMember() :{};
+    this.operateShopIds = this.localData.operateShopIds ? this.localData.operateShopIds: [];
   },
   computed: {
       
@@ -47,28 +48,25 @@ export default {
       this.shoplist = res;
     },
     getcheckshop(){
+      this.localData.operateShopIds = this.operateShopIds;
+      setMember(this.localData);
       let query = this.$route.query;
       if (query.updateOperatorId) {
-        this.$router.push({name:'editMember',query:{operateShopIds:this.operateShopIds.join(','),checkpermissionslist:query.checkpermissionslist,updateOperatorId:query.updateOperatorId,parentIds:query.parentIds}});
+        this.$router.push({name:'editMember',query:{updateOperatorId:query.updateOperatorId}});
       }else {
-        this.$router.push({name:'addMember',query:{operateShopIds:this.operateShopIds.join(','),checkpermissionslist:query.checkpermissionslist,parentIds:query.parentIds}});
+        this.$router.push({name:'addMember'});
       }
       
     },
     cancelCheckshop(){
       let query = this.$route.query;
       if (query.updateOperatorId) {
-        this.$router.push({name:'editMember',query:{operateShopIds:query.operateShopIds,checkpermissionslist:query.checkpermissionslist,updateOperatorId:query.updateOperatorId,parentIds:query.parentIds}});
+        this.$router.push({name:'editMember',query:{updateOperatorId:query.updateOperatorId}});
       }else{
-        this.$router.push({name:'addMember',query:{operateShopIds:query.operateShopIds,checkpermissionslist:query.checkpermissionslist,parentIds:query.parentIds}});
+        this.$router.push({name:'addMember'});
       }
       
     },
-  },
-  beforeRouteLeave(to, from, next) {
-       // 设置下一个路由的 meta
-      to.meta.keepAlive = true;  // B 跳转到 A 时，让 A 缓存，即不刷新
-      next();
   },
   components:{
   }

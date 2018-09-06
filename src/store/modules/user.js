@@ -1,4 +1,4 @@
-import { getToken, setToken, setNavTabIndex, removeToken } from '@/utils/tool';
+import { getToken, setToken, setNavTabIndex, removeToken, removeMember } from '@/utils/tool';
 import { menuSelectFun } from '@/service/member';
 import router from '@/router';
 const user = {
@@ -43,9 +43,11 @@ const user = {
     getMenu({ commit, state }){
       menuSelectFun().then((data) => {
         commit('setMenu', data);
-        // let path = data[0].url;
-        // setNavTabIndex('/'+ path);
-        // router.push(path);
+        let path = data[0].url;
+        console.log(router);
+        removeMember();
+        setNavTabIndex('/'+ path);
+        router.push(path);
       });
     },
     // 前端 登出

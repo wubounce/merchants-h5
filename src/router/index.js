@@ -194,7 +194,7 @@ export default new Router({
       path: '/addMember',
       name: 'addMember',
       component: () => import ('@/page/member/addMember'),
-      meta: {title: '人员新增',keepAlive:true},
+      meta: {title: '人员新增'},
     },
     {
       path: '/detailMember',
@@ -206,7 +206,7 @@ export default new Router({
       path: '/editMember',
       name: 'editMember',
       component: () => import ('@/page/member/editMember'),
-      meta: {title: '人员修改',keepAlive:true},
+      meta: {title: '人员修改'},
     },
     {
       path: '/premList',
