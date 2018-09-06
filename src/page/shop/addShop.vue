@@ -642,7 +642,14 @@ export default {
             position: 'middle',
             duration: 3000
           });
-      }else if(!this.addBusinessTime) {
+      }else if(this.isReserve == true && !this.orderLimitMinutes ) {
+        this.$toast({
+            message: '预约时长为空',
+            position: 'middle',
+            duration: 3000
+          });
+      }
+      else if(!this.addBusinessTime) {
         this.$toast({
             message: '请选择营业时间',
             position: 'middle',
