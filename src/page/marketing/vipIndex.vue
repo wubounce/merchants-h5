@@ -14,7 +14,8 @@
                             <p class="vip-type">VIP年卡</p>            
                             <p class="price" v-if="item.yearCardPrice">{{item.yearCardPrice | tofixd}}<span>元</span></p>
                             <p class="price" v-else><span>未设置</span></p>
-                            <p class="usenum">{{item.yearCardLimitTime === null ?'':item.yearCardLimitTime===0?'每日使用次数无限制':`每日仅限使用${item.yearCardLimitTime}次`}}</p>
+                            <p class="usenum" v-if="item.yearLimitType===1">{{item.yearCardLimitTime === null ?'':item.yearCardLimitTime===0?'每日使用次数无限制':`每日仅限使用${item.yearCardLimitTime}次`}}</p>
+                            <p class="usenum" v-if="item.yearLimitType===2">{{item.yearCardLimitTime === null ?'':item.yearCardLimitTime===0?'每周使用次数无限制':`每周仅限使用${item.yearCardLimitTime}次`}}</p>
                             <p class="tag" v-if="item.yearCardDiscount">{{item.yearCardDiscount}}<span>折</span></p> 
                           </div>
                          </router-link>                     
@@ -25,7 +26,8 @@
                             <p class="vip-type">VIP半年卡</p>            
                             <p class="price" v-if="item.halfYearCardPrice">{{item.halfYearCardPrice | tofixd}}<span>元</span></p>
                             <p class="price" v-else><span>未设置</span></p>
-                            <p class="usenum">{{item.halfYearCardLimitTime === null ?'':item.halfYearCardLimitTime===0?'每日使用次数无限制':`每日仅限使用${item.halfYearCardLimitTime}次`}}</p>
+                            <p class="usenum" v-if="item.halfLimitType===1">{{item.halfYearCardLimitTime === null ?'':item.halfYearCardLimitTime===0?'每日使用次数无限制':`每日仅限使用${item.halfYearCardLimitTime}次`}}</p>
+                            <p class="usenum" v-if="item.halfLimitType===2">{{item.halfYearCardLimitTime === null ?'':item.halfYearCardLimitTime===0?'每周使用次数无限制':`每周仅限使用${item.halfYearCardLimitTime}次`}}</p>
                             <p class="tag"  v-if="item.halfYearCardDiscount">{{item.halfYearCardDiscount}}<span>折</span></p> 
                           </div>
                          </router-link>                     
@@ -36,7 +38,8 @@
                             <p class="vip-type">VIP季卡</p>            
                             <p class="price" v-if="item.seasonCardPrice">{{item.seasonCardPrice  | tofixd}}<span>元</span></p>
                             <p class="price" v-else><span>未设置</span></p>
-                            <p class="usenum">{{item.seasonCardLimitTime === null ?'':item.seasonCardLimitTime===0?'每日使用次数无限制':`每日仅限使用${item.seasonCardLimitTime}次`}}</p>
+                            <p class="usenum" v-if="item.seasonLimitType===1">{{item.seasonCardLimitTime === null ?'':item.seasonCardLimitTime===0?'每日使用次数无限制':`每日仅限使用${item.seasonCardLimitTime}次`}}</p>
+                             <p class="usenum" v-if="item.seasonLimitType===2">{{item.seasonCardLimitTime === null ?'':item.seasonCardLimitTime===0?'每周使用次数无限制':`每周仅限使用${item.seasonCardLimitTime}次`}}</p>
                             <p class="tag"  v-if="item.seasonCardDiscount">{{item.seasonCardDiscount}}<span>折</span></p> 
                           </div>
                          </router-link>                     

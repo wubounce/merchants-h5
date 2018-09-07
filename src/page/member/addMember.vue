@@ -1,5 +1,5 @@
 <template>
-<div class="addmember" v-title="title">
+<div class="addmember">
   <div class="add-form">
     <div class="input-group">
       <div class="form-title"><span>手机号码</span></div>
@@ -9,7 +9,7 @@
       <div class="form-title"><span>姓名</span></div>
       <div class="form-input"><input type="text" v-model="username" @blur="validatName" @input="disabledBtn" maxlength="20" placeholder="请输入姓名"></div>
     </div>
-    <div class="input-group"  @click="openShop">
+    <div class="input-group"  @click="shopVisible=true">
       <div class="form-title"><span>负责店铺</span></div>
       <div class="form-input"><span :class="['more',{'more-color':checkshoptxt === ''}]">{{checkshoptxt?checkshoptxt:'请选择店铺'}}</span><span class="forward iconfont icon-nextx"></span></div>
     </div>
@@ -19,17 +19,41 @@
     </div>
   </div>
   <mt-button class="confirm" @click="addmember" :disabled="disabled">提交</mt-button>
+
+  <!-- 选择店铺 -->
+  <mt-popup v-model="shopVisible" position="bottom" :closeOnClickModal="false">
+    <div class="resp-shop">
+      <span class="shop">负责店铺</span>
+    </div>
+    <section class="shop-touch">
+      <div class="all-list">
+        <label class="mint-checklist-label" v-for="(item,index) in shoplist" :key="index">
+          <span class="mint-checkbox is-right">
+            <input type="checkbox" class="mint-checkbox-input" v-model="operateShopIds" :value="item.shopId"> 
+            <span class="mint-checkbox-core"></span>
+          </span> 
+          <p class="mint-checkbox-label shopname">{{item.shopName}}</p>
+          <p class="mint-checkbox-label shopdesc">{{item.address}}</p>
+        </label>
+      </div>
+    </section>
+    <section class="promiss-footer">
+      <span class="can" @click="cancelCheckshop">取消</span>
+      <span class="cifrm" @click="getcheckshop">确定</span>
+    </section>
+  </mt-popup>
+
+
 </div>
 </template>
 <script>
 import { mapState } from 'vuex';
 import { validatPhone, validatName } from '@/utils/validate';
 import { shopListFun, addOperatorFun, permsMenuFun } from '@/service/member';
-import { getTrees} from '@/utils/tool';
+import { getTrees, setMember, getMember, removeMember} from '@/utils/tool';
 export default {
   data() {
     return {
-      title: '新增人员',
       disabled:true,
 
       allmenu:[],
@@ -38,17 +62,20 @@ export default {
       checkpermissionslist: [],
 
       shoplist:[],
+      shopVisible:false,
       operateShopIds:[],
       username:'',
       phone:'',
-     
+      parentIds:[],
       checkshoptxt:'',
+
+      query:{}
     };
   },
   mounted() {
     
   },
-  activated(){
+  created(){
     this.shopListFun();
     this.menuSelect();
   },
@@ -103,48 +130,73 @@ export default {
       let res = await permsMenuFun(); //拼接权限菜单
       this.allmenu = res;
       this.permissionsData = getTrees(res,0);
-      this.addPermissions();
     },
     async shopListFun(){
       let res = await shopListFun();
       this.shoplist = res;
-      this.getcheckshop();
     },
     getcheckshop(){
-      let query = this.$route.query ? this.$route.query :{};
-      this.operateShopIds = query.operateShopIds ? query.operateShopIds.split(','): [];
-
       let checklist = this.shoplist.filter(v=>this.operateShopIds.some(k=>k==v.shopId));
+      this.shopVisible = false;
       this.checkshoptxt = checklist.map(item=>item.shopName).join(',');
     },
-    openPrem(){
-      this.$router.push({name:'premList',query:{checkpermissionslist:this.checkpermissionslist.join(','),operateShopIds:this.operateShopIds.join(',')}});
-    },
-    openShop(){
-      this.$router.push({name:'premshopList',query:{operateShopIds:this.operateShopIds.join(','),checkpermissionslist:this.checkpermissionslist.join(',')}});
+    cancelCheckshop(){
+      let canceIds = this.checkshoptxt ?  this.checkshoptxt.split(',') :[];
+      canceIds = this.shoplist.filter(v=>canceIds.some(k=>k==v.shopName));
+      this.operateShopIds = canceIds.map(item=>item.shopId);
+      this.shopVisible = false;
     },
     addPermissions(){
-      let query = this.$route.query ? this.$route.query :{};
-      this.checkpermissionslist = query.checkpermissionslist ? query.checkpermissionslist.split(','): [];
-
       let checklist = this.allmenu.filter(v=>this.checkpermissionslist.some(k=>k==v.menuId));
       this.permissionsMIdsTxt = checklist.map(item=>item.name).join(',');
+    },
+    openPrem(){
+      this.$router.push({name:'premList',query:{checkpermissionslist:this.checkpermissionslist.join(','),parentIds:this.parentIds.join(',')}});
     },
     async addmember(){
       if (this.validate()) {
         let menshopids = [];
         this.operateShopIds.forEach(item=>menshopids.push(`'${item}'`));
+        let mIds = [...this.checkpermissionslist,...this.parentIds];//权限父级id
+        mIds = Array.from(new Set([...mIds]));//去重
         let payload = {
           username:this.username,
           phone:this.phone,
           operateShopIds:menshopids.join(','),
-          mIds:this.checkpermissionslist.join(',')
+          mIds:mIds.join(',')
         };
         let res = await addOperatorFun(payload);
         this.$toast({message: '新增成功,密码将发送至此手机' });
         this.$router.push({name:'member'});
       }
     }
+  },
+  watch: {
+    $route(to,from)  {
+      if(from.name == 'premList') {
+        this.query = this.$route.query ? this.$route.query :{};
+        this.parentIds = this.query.parentIds ? this.query.parentIds.split(','): []; //权限父级id
+        this.checkpermissionslist = this.query.checkpermissionslist ? this.query.checkpermissionslist.split(','): [];
+        this.addPermissions();
+      }
+      else if(from.name == 'member'){
+        this.parentIds = [];
+        this.checkpermissionslist = [];
+        this.operateShopIds = [];
+        this.username = [];
+        this.phone = [];
+        this.checkshoptxt = '';
+        this.permissionsMIdsTxt = '';
+      }
+      
+    },
+    shopVisible: function () {
+      if (this.shopVisible) {
+        this.ModalHelper.afterOpen();
+      } else {
+        this.ModalHelper.beforeClose();
+      }
+    },
   },
   components:{
   }

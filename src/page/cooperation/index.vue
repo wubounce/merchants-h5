@@ -1,5 +1,5 @@
 <template>
-  <div class="contant" v-title="title">
+  <div class="contant">
     <div class="erweima">
       <img src="../../../static/image/user/logo@2x.png">
     </div>
@@ -14,7 +14,6 @@
   export default {
     data() {
       return {
-        title:'合作热线'
       };
     },
     created(){

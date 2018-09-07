@@ -1,5 +1,5 @@
 <template>
-  <section v-title="title">
+  <section>
       <router-link :to="{name:'changePwd'}">
         <p class="user business">修改密码<span>{{user.password}}</span></p>
       </router-link>
@@ -14,7 +14,6 @@ import { getAliAndStatusFun } from '@/service/setAlipayAndStatus';
 export default {
   data() {
     return {
-      title: '账户设置',
       isBlue:true,
       isStatus:true,
       user:{

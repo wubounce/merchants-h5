@@ -1,5 +1,5 @@
 <template>
-  <div class="main" v-title="'企鹅商家管理平台'">
+  <div class="main">
     <div class="notice-head" @click="openNotice">
       <p>公告：请各运营商提前检测设备是否正常</p>
       <p>更多<i class="iconfont icon-nextx"></i></p>
@@ -118,7 +118,6 @@ export default {
   },
   data() {
     return {
-      title:'首页',
       offlineTip:true,
       barchart: null,
       linechart: null,

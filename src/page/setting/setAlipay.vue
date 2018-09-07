@@ -1,5 +1,5 @@
 <template>
-  <section v-title="title">
+  <section>
     <p class="shopname-p">
       <span>支付宝账号</span><span>
         <input type="text" class='addressInput' v-model="account"  placeholder="请填写支付宝账号" @input="disbaledBtn">
@@ -15,7 +15,6 @@ import { updateOperatorFun } from '@/service/user';
 export default {
   data() {
     return {
-      title: '绑定支付宝',
       account: '',
       disabled: true
     };

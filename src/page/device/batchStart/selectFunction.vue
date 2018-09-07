@@ -1,5 +1,5 @@
 <template>
-  <section class="ss-wrappper" v-title="title">
+  <section class="ss-wrappper">
     <div class="fixedPosition">
       <div class="bat-step">
         <div class="line-bg">
@@ -57,7 +57,6 @@ export default {
         aaa:[],
         date: '',
         isCheck: 'weixuanzhong',
-        title: "批量启动",
         isResult: false,
         functionSetModel: true,
         pickerValue: new Date(),

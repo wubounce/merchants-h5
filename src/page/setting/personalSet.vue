@@ -1,5 +1,5 @@
 <template>
-<section class="marketing" v-title="title">
+<section class="marketing">
   <div class="add-form">
     <div class="input-group">
         <div class="form-title"><span>账号</span><span class="forward">{{item.phone}}</span></div>
@@ -41,7 +41,6 @@ import { updateOperatorFun } from '@/service/user';
 export default {
   data() {
     return {
-      title: '个人信息',
       row:true,
       item: {},
       noRealName:'',

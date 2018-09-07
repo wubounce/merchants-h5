@@ -1,5 +1,5 @@
 <template>
-  <section class="ss-wrappper" v-title="title">
+  <section class="ss-wrappper">
     <div class="fixedPosition">
       <div class="bat-step">
         <div class="line-bg">
@@ -61,7 +61,6 @@
         selectedShop: '',
         keyword: '',
         shopId:'',
-        title: "批量修改",
         stepArr: [
           {
             text: "店铺"

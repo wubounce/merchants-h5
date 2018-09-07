@@ -1,3 +1,7 @@
+import Es6Promise from 'es6-promise';
+Es6Promise.polyfill();
+import 'babel-polyfill';
+
 import Vue from 'vue';
 
 import MintUI from 'mint-ui';
@@ -22,6 +26,8 @@ import VueAwesomeSwiper from 'vue-awesome-swiper';
 import 'swiper/dist/css/swiper.css';
 import filter from '@/utils/filter';
 
+import { Tree } from 'element-ui';
+Vue.use(Tree);
 Vue.use(filter);
 Vue.use(VueAwesomeSwiper);
 Vue.use(MintUI);
@@ -45,9 +51,15 @@ router.beforeEach((to, from, next) => {
   MessageBox.close();
   if (getToken()) {
       next();
-      // 已初始化权限数据，不处理
-      if (store.state.user.menu.length<=0) {
-        store.dispatch('getMenu');
+      if (typeof localStorage === 'object') {
+        try {
+            localStorage.setItem('localStorage', 1);
+            localStorage.removeItem('localStorage');
+        } catch (e) {
+            Storage.prototype._setItem = Storage.prototype.setItem;
+            Storage.prototype.setItem = function() {};
+            alert('您处于无痕浏览');
+        }
       }
   } else {
     if (whiteList.indexOf(to.path) !== -1) {
@@ -55,11 +67,26 @@ router.beforeEach((to, from, next) => {
     } else {
   		next({ 
   			path: '/login', // 未登录则跳转至login页面 
-  			query: {redirect: to.fullPath} // 登陆成功后回到当前页面，这里传值给login页面，to.fullPath为当前点击的页面 
   		}); 
     }
   }
 
+});
+router.afterEach(route => {
+    // 从路由的元信息中获取 title 属性
+    if (route.meta.title) {
+        document.title = route.meta.title;
+        // 如果是 iOS 设备，则使用如下 hack 的写法实现页面标题的更新
+        if (navigator.userAgent.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/)) {
+            const hackIframe = document.createElement('iframe');
+            hackIframe.style.display = 'none';
+            hackIframe.src = '/static/html/fixiosTitle.html?r=' + Math.random();
+            document.body.appendChild(hackIframe);
+            setTimeout(_ => {
+                document.body.removeChild(hackIframe);
+            }, 300);
+        }
+    }
 });
 
 /* eslint-disable no-new */

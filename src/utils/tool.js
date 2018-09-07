@@ -12,15 +12,27 @@ export const getNoticeType = () => Cookies.get(NoticeTypeKey);
 export const setNoticeType = (NoticeType) => Cookies.set(NoticeTypeKey, NoticeType);
 export const removeNoticeType = () => Cookies.remove(NoticeTypeKey);
 
+const menuKey = 'menu';
+export const setMenu = (menu) => localStorage.setItem(menuKey, JSON.stringify(menu));
+export const getMenu = () => JSON.parse(localStorage.getItem(menuKey));
+export const removeMenu = () => localStorage.removeItem(menuKey);
+
 const navTabKey = 'navTabIndex';
 export const setNavTabIndex = (navTab) => sessionStorage.setItem(navTabKey,navTab);
 export const getNavTabIndex = () => sessionStorage.getItem(navTabKey);
 export const removeNavTabIndex = () => sessionStorage.removeItem(navTabKey);
 
 const PhoneKey = 'phone';
-export const setPhone = (navTab) => sessionStorage.setItem(PhoneKey,navTab);
-export const getPhone = () => sessionStorage.getItem(PhoneKey);
-export const removePhone = () => sessionStorage.removeItem(PhoneKey);
+export const setPhone = (navTab) => localStorage.setItem(PhoneKey,JSON.stringify(navTab));
+export const getPhone = () => JSON.parse(localStorage.getItem(PhoneKey));
+export const removePhone = () => localStorage.removeItem(PhoneKey);
+
+
+const MemberKey = 'member';
+export const setMember = (data) => sessionStorage.setItem(MemberKey,JSON.stringify(data));
+export const getMember = () => JSON.parse(sessionStorage.getItem(MemberKey));
+export const removeMember = () => sessionStorage.removeItem(MemberKey);
+
 /**
  * 截流函数
  */
@@ -85,9 +97,9 @@ export const  getDuration = (dateStr) => {
 export const  calMax = (arr) =>{
 	var max = arr[0];
 	for ( var i = 1; i < arr.length; i++) {// 求出一组数组中的最大值
-	if (max < arr[i]) {
-	  max = arr[i];
-	}
+		if (max < arr[i]) {
+		  max = arr[i];
+		}
 	}
 	var maxint = Math.ceil(max / 10);// 向上取整
 	var maxval = maxint * 10;// 最终设置的最大值

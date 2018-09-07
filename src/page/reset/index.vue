@@ -1,5 +1,5 @@
 <template>
-  <div class="reset" v-title="title">
+  <div class="reset">
     <form ref="resetForm" :model="reset" class="rest-form">
     <div class="form-group">
       <input type="text" placeholder="请输入手机号码" v-model="reset.phone" @input="disabledBtn" require>
@@ -24,7 +24,6 @@
   export default {
     data() {
       return {
-        title:'重置密码',
         reset: {
           phone: '',
           code: '',

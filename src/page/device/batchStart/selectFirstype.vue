@@ -1,5 +1,5 @@
 <template>
-  <section class="sf-wrappper" v-title="title">
+  <section class="sf-wrappper">
     <div class="bat-step">
       <div class="line-bg">
         <p v-for="(item,index) in stepArr " :key="index" :class="{active:currIndex==index}">{{item.text}}</p>
@@ -36,7 +36,6 @@ import { getlistParentTypeFun } from '@/service/device';
     data() {
       return {
         firstTypeList: ['洗衣机', '吹风机', '烘干机', '洗鞋机', '充电桩', '其他'],
-        title: "批量启动",
         isResult: false,
         keyword: '',
         selectedFirstype: '',

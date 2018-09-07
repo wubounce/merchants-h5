@@ -1,5 +1,5 @@
 <template>
-<div class="order-wrap" v-title="title">
+<div class="order-wrap">
   <div class="permissions" v-if="$store.getters.has('mer:order:list')">暂无相关页面权限</div>
   <div v-else>
     <div class="search-header">
@@ -45,8 +45,8 @@
               </router-link>
               <section class="listaction" v-if="item.orderStatus === 2"> 
                   <mt-button @click="orderRefund(item.orderNo,item.payPrice)" v-has="'mer:order:refund,mer:order:info'" :disabled="refundDisabled">退款</mt-button>
-                  <mt-button @click="machineBoot(item.id,item.machineName)" v-has="'mer:order:start,mer:order:info'">启动</mt-button>
-                  <mt-button @click="machineReset(item.orderNo,item.machineId,item.machineName)" v-has="'mer:order:reset,mer:order:info'">复位</mt-button>
+                  <mt-button @click="machineBoot(item.id,item.machineName)" v-if="item.isESource === 0" v-has="'mer:order:start,mer:order:info'">启动</mt-button>
+                  <mt-button @click="machineReset(item.orderNo,item.machineId,item.machineName)"  v-if="item.isESource === 0" v-has="'mer:order:reset,mer:order:info'">复位</mt-button>
               </section>
             </div>
          </div>
@@ -64,14 +64,13 @@ import { orderStatus } from '@/utils/mapping';
 import { orderListFun,searchOrderFun, ordeRrefundFun, machineResetFun, machineBootFun } from '@/service/order';
 import { MessageBox } from 'mint-ui';
 import { getDuration } from '@/utils/tool';
-import { validatSearch } from '@/utils/validate';
+import { validatSearch, validatReplace } from '@/utils/validate';
 import PagerMixin from '@/mixins/pagerMixin';
 import Web from '@/utils/Web';
 export default {
   mixins: [PagerMixin],
   data() {
     return {
-      title: '订单管理',
       searchData:'',
       titleArr:[
         {value:'',lable:'全部'},
@@ -114,7 +113,9 @@ export default {
       this.nosearchList = false;
       let payload = null;
       if (this.searchData !== '') {
-         payload = {search:this.searchData,page:this.page,pageSize:this.pageSize};
+         // 去掉转义字符
+        this.searchData = this.searchData.replace(validatReplace, '');
+        payload = {search:this.searchData,page:this.page,pageSize:this.pageSize};
       } else {
         payload = {orderStatus:this.orderStatus,page:this.page,pageSize:this.pageSize};
       }

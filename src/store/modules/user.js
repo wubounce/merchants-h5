@@ -1,4 +1,4 @@
-import { getToken, setToken, setNavTabIndex, removeToken } from '@/utils/tool';
+import { getToken, setToken, setNavTabIndex, setMenu, removeMenu, getMenu, removeToken, removeMember } from '@/utils/tool';
 import { menuSelectFun } from '@/service/member';
 import router from '@/router';
 const user = {
@@ -9,7 +9,7 @@ const user = {
   getters:{
     has: (state) => (value) => {
       let isExist = true;
-      let buttonpermsStr = state.menu;
+      let buttonpermsStr = getMenu();
       if(buttonpermsStr==undefined || buttonpermsStr==null){
         return false;
       }
@@ -39,14 +39,6 @@ const user = {
     // 登录
     login({ commit }, token) {
       setToken(token);
-    },
-    getMenu({ commit, state }){
-      menuSelectFun().then((data) => {
-        commit('setMenu', data);
-        let path = data[0].url;
-        setNavTabIndex('/'+ path);
-        router.push(path);
-      });
     },
     // 前端 登出
     LogOut({ commit }) {

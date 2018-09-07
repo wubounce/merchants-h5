@@ -1,5 +1,5 @@
 <template>
-   <section v-title="title">
+   <section>
        <p class="prompt">请填写支付宝账号 <span>{{ this.$route.query.alipayAccount ? this.$route.query.alipayAccount : '' | replaceAliply }}</span> 实名信息</p>
        <p class="shopname-p margin">
           <span>姓名</span><span>
@@ -34,7 +34,6 @@ import { MessageBox } from 'mint-ui';
 export default {
   data() {
     return {
-      title: '实名认证',
       alipay: '1374862991@qq.com',
       showText:'',
       isDisable: true,

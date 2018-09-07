@@ -1,6 +1,5 @@
 <template>
   <section class="batch">
-   <q-header :title='title'> </q-header>
     <ul class="select">
       <li class="select-item" v-for="(item,index) in list" :key="index">
         <div class="l">
@@ -27,14 +26,12 @@
     device
   } from "@/service/device";
   import Button from "@/components/Button/Button";
-  import QHeader from '@/components/header';
   import { mapState } from "vuex";
   import { MessageBox } from "mint-ui";
 
   export default {
     data() {
       return {
-       title: '功能设置',
         list: [],
         firstTypeId: "",
         subTypeId: "",

@@ -1,5 +1,5 @@
  <template>
-<div class="report" v-title="title">
+<div class="report">
   <section class="tab-title">
     <div v-for="(item,index) in tabtitle" @click="tabclick(index)"><span :class="{tabcurrent:tabindex === index}" >{{item}}</span></div>
   </section>
@@ -25,7 +25,6 @@ export default {
   },
   data() {
     return {
-      title: '报表',
       tabtitle:['收益','退款'],
       tabindex:0,
     };

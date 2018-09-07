@@ -1,5 +1,5 @@
 <template>
-<div class="member page-loadmore-height" v-title="title">
+<div class="member page-loadmore-height">
   <div class="permissions" v-if="$store.getters.has('mer:person:list')">暂无相关页面权限</div>
   <div class="page-loadmore-height" v-else>
     <div class="no-discount-list" v-if="noList">暂无二级管理账号</div>
@@ -17,7 +17,12 @@
                 <div class="right"><mt-switch v-model="item.isLock" class="check-switch" @change="lockOperator(item.id,item.isLock)"></mt-switch></div>
               </div>
             </div>
-            <p class="memberdesc">权限：<span v-for="(items,index) in item.list" :key="index">{{items.name}}<i v-if="index !== (item.list.length-1)">,</i></span></p>
+            <router-link :to="{name:'detailMember',query:{ id:item.id }}">
+              <div class="action-prme">
+                <p class="memberdesc">权限：<span v-for="(items,index) in item.list" :key="index">{{items.name}}<i v-if="index !== (item.list.length-1)">,</i></span></p>
+                <span class="forward iconfont icon-nextx"></span>
+              </div>
+            </router-link>
           </div>
         </div>
         <div v-if="allLoaded" class="nomore-data">没有更多了</div>
@@ -34,12 +39,12 @@
 <script>
 import { operatorListFun, lockOperatorrFun } from '@/service/member';
 import { memberIsLock } from '@/utils/mapping';
+import { getTrees, setMember, removeMember } from '@/utils/tool';
 import PagerMixin from '@/mixins/pagerMixin';
 export default {
   mixins: [PagerMixin],
   data() {
     return {
-      title: '人员管理',
       value: false,
       list:[],
       noList:false,
@@ -49,6 +54,7 @@ export default {
     
   },
   created(){
+    removeMember();//防止点击物理返回键清除localStorage
   },
   methods: {
     async _getList(){
@@ -84,6 +90,17 @@ export default {
 </script>
 <style type="text/css" lang="scss" scoped>
   @import '../../assets/scss/member/member';
+  .action-prme {
+    display: flex;
+  }
+  .memberdesc {
+    width: 9.07rem;
+  }
+  .forward {
+    color: #999;
+    height: 0.8rem;
+    line-height: 0.8rem;
+  }
 </style>
 <style>
   .member .mint-switch-input:checked + .mint-switch-core {

@@ -1,5 +1,5 @@
 <template>
-<div class="addvip" v-title="title">
+<div class="addvip">
   <div class="addvip-header">
     <p @click="shopVisible = true;" style="cursor: pointer;">所属店铺<span class="order-action add-shop-overflow-icon iconfont icon-nextx"></span><span class="addvip-con add-shop-overflow">{{checkshoptxt?checkshoptxt:''}}</span></p>
   </div>
@@ -12,7 +12,7 @@
         <div class="add-card">
           <p>卡售价<span>元</span><input type="number" placeholder="请填写卡售价…" v-model="vipform.yearCardPrice"></p>
           <p>VIP折扣<span>%</span><input type="number" placeholder="请填写折扣数…" v-model="vipform.yearCardDiscount"></p>
-          <p>每日限用次数<span>次</span><input type="text" class="num"  v-model.number="vipform.yearCardLimitTime"></p>
+          <p>{{yearLimitTypeCurrentTag.label}}<i class="iconfont icon-xiangxiajiantou" @click="yearLimitTypeVisble = true;"></i><span>次</span><input type="text" class="num"  v-model.number="vipform.yearCardLimitTime"></p>
         </div>
         <div class="tips">
           <p>提示：</p>
@@ -29,7 +29,7 @@
         <div class="add-card">
           <p>卡售价<span>元</span><input type="number" placeholder="请填写卡售价…" v-model="vipform.halfYearCardPrice"></p>
           <p>VIP折扣<span>%</span><input type="number" placeholder="请填写折扣数…" v-model="vipform.halfYearCardDiscount"></p>
-          <p class="por-border">每日限用次数<span>次</span><input type="text" class="num" v-model.number="vipform.halfYearCardLimitTime"></p>
+          <p class="por-border">{{halfLimitTypeCurrentTag.label}}<i class="iconfont icon-xiangxiajiantou" @click="halfLimitTypeVisble = true;"></i><span>次</span><input type="text" class="num" v-model.number="vipform.halfYearCardLimitTime"></p>
         </div>
         <div class="crrow"></div>
       </div>
@@ -41,7 +41,7 @@
         <div class="add-card">
           <p>卡售价<span>元</span><input type="number" placeholder="请填写卡售价…" v-model="vipform.seasonCardPrice"></p>
           <p>VIP折扣<span>%</span><input type="number" placeholder="请填写折扣数…" v-model="vipform.seasonCardDiscount"></p>
-          <p class="por-border">每日限用次数<span>次</span><input type="text" v-model.number="vipform.seasonCardLimitTime" class="num"></p>
+          <p class="por-border">{{seasonLimitTypeCurrentTag.label}}<i class="iconfont icon-xiangxiajiantou" @click="seasonLimitTypeVisble = true;"></i><span>次</span><input type="text" v-model.number="vipform.seasonCardLimitTime" class="num"></p>
         </div>
         <div class="crrow"></div>
       </div>
@@ -69,6 +69,13 @@
       </div>
     </section>
   </mt-popup>
+  
+  <!-- 年卡限制类型 -->
+  <selectpickr :visible="yearLimitTypeVisble" :slots="LimitTypeSlots"  :title="'限用类型'" :valueKey="keyname" @selectpicker="yearLimitSelectpicker" @onpickstatus="yearLimitSelectpickerstatus"></selectpickr>
+  <!-- 半年限制类型 -->
+  <selectpickr :visible="halfLimitTypeVisble" :slots="LimitTypeSlots"  :title="'限用类型'" :valueKey="keyname" @selectpicker="halfLimitSelectpicker" @onpickstatus="halfLimitSelectpickerstatus"></selectpickr>
+  <!-- 季卡限制类型 -->
+  <selectpickr :visible="seasonLimitTypeVisble" :slots="LimitTypeSlots"  :title="'限用类型'" :valueKey="keyname" @selectpicker="seasonLimitSelectpicker" @onpickstatus="seasonLimitSelectpickerstatus"></selectpickr>
 </div>
 </template>
 <script>
@@ -78,7 +85,6 @@ import { validatDiscount, validatCradPrice, validatVipLimit } from '@/utils/vali
 export default {
   data() {
     return {
-      title: '新增VIP',
       shoplist:[],
       shopVisible:false,
       checkshoptxt:'', //显示店铺名字
@@ -87,6 +93,26 @@ export default {
 
       },
      
+      LimitTypeSlots:[
+        {
+          flex: 1,
+          values: [
+            {label: '每日限用次数',value:1},
+            {label: '每周限用次数',value:2}
+          ],
+          className: 'slot1',
+          textAlign: 'center',
+          defaultIndex:0
+        }
+      ],
+      keyname:'label',
+      yearLimitTypeVisble:false,
+      halfLimitTypeVisble:false,
+      seasonLimitTypeVisble:false,
+      yearLimitTypeCurrentTag:{},
+      halfLimitTypeCurrentTag:{},
+      seasonLimitTypeCurrentTag:{},
+
     };
   },
   mounted() {
@@ -119,7 +145,17 @@ export default {
       this.vipform.halfYearCardLimitTime= res.halfYearCardLimitTime? res.halfYearCardLimitTime: 0;
       this.vipform.seasonCardLimitTime = res.seasonCardLimitTime? res.seasonCardLimitTime:0;
       this.vipform.shopVipId  = res.shopVipId ? res.shopVipId:'';
+      this.yearLimitTypeCurrentTag = this.setLimitPicker(res.yearLimitType||1);
+      this.halfLimitTypeCurrentTag = this.setLimitPicker(res.halfLimitType||1);
+      this.seasonLimitTypeCurrentTag = this.setLimitPicker(res.seasonLimitType||1);
       this.shopListFun(res.shopVipId);
+    },
+    setLimitPicker(value=1){
+
+      let pac = this.LimitTypeSlots[0].values.find(item=>{
+        return item.value === value;
+      });
+      return pac;
     },
     async shopListFun(id){
       let payload = Object.assign({},{shopVipId:id});
@@ -136,6 +172,24 @@ export default {
       canceIds = this.shoplist.filter(v=>canceIds.some(k=>k==v.shopName));
       this.shopIds = canceIds.map(item=>item.shopId);
       this.shopVisible = false;
+    },
+    yearLimitSelectpicker(data){
+      this.yearLimitTypeCurrentTag = data;
+    },
+    yearLimitSelectpickerstatus(data){
+      this.yearLimitTypeVisble = data;
+    },
+    halfLimitSelectpicker(data){
+      this.halfLimitTypeCurrentTag = data;
+    },
+    halfLimitSelectpickerstatus(data){
+      this.halfLimitTypeVisble = data;
+    },
+    seasonLimitSelectpicker(data){
+      this.seasonLimitTypeCurrentTag = data;
+    },
+    seasonLimitSelectpickerstatus(data){
+      this.seasonLimitTypeVisble = data;
     },
     async addvip(){
       if (this.shopIds.length <=0 ) {
@@ -189,6 +243,9 @@ export default {
       paylod.yearCardLimitTime =  paylod.yearCardLimitTime ?  paylod.yearCardLimitTime:0;
       paylod.halfYearCardLimitTime =  paylod.halfYearCardLimitTime ?  paylod.halfYearCardLimitTime:0;
       paylod.seasonCardLimitTime =  paylod.seasonCardLimitTime ?  paylod.seasonCardLimitTime:0;
+      paylod.yearLimitType = this.yearLimitTypeCurrentTag.value;
+      paylod.halfLimitType = this.halfLimitTypeCurrentTag.value;
+      paylod.seasonLimitType = this.seasonLimitTypeCurrentTag.value;
       let res = await addOrUpdateVipFun(paylod);
       this.$toast({message: "修改成功" });
       this.$router.push({name:'marketing',query:{tabindex:1}});

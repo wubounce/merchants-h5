@@ -1,5 +1,5 @@
  <template>
-<div class="marketing-mang-wrap page-loadmore-height" v-title="title">
+<div class="marketing-mang-wrap page-loadmore-height">
   <section class="tab-title">
   	<div v-for="(item,index) in tabtitle" @click="tabclick(index)"><span :class="{tabcurrent:tabindex === index}" >{{item}}</span></div>
   </section>
@@ -25,7 +25,6 @@ export default {
   },
   data() {
     return {
-      title: '营销管理',
       tabtitle:['限时优惠','VIP'],
       tabindex:0,
     };

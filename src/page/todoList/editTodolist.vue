@@ -1,5 +1,5 @@
 <template>
-  <section class="editTodolist" v-title="title">
+  <section class="editTodolist">
     <!-- 第一模块 -->
     <div class="ul-list">
       <p class="personal-item" @click="changemachineFunc"><span>启动模式</span><span>{{item.functionName}}</span></p>
@@ -30,7 +30,6 @@ import moment from 'moment';
   export default {
     data() {
       return {
-        title:'编辑待办事项',
         item:{},
         popupVisible:false,
         index:'',

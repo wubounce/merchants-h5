@@ -1,5 +1,5 @@
 <template>
-<div class="user-wrapper" v-title="'我的'">
+<div class="user-wrapper">
     <header>
         <p class="guide"><a href="../../../static/B-user-guide.pdf" target="_self"><span class="iconfont icon-zhinan"></span>平台指南</a></p>
         <div class="user-info">

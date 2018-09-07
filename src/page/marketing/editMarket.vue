@@ -1,9 +1,13 @@
 <template>
-<div class="addmarket" v-title="title">
+<div class="addmarket">
   <div class="permissions" v-if="$store.getters.has('mer:marketing:update')">暂无相关页面权限</div>
   <div v-else>
     <div class="addvip-header">
       <p @click="shopVisible=true">所属店铺<span class="order-action add-shop-overflow-icon iconfont icon-nextx"></span><span class="addvip-con add-shop-overflow">{{checkshoptxt?checkshoptxt:''}}</span></p>
+
+       <p @click="opencheckedMachine">设备类型<span class="order-action add-shop-overflow-icon iconfont icon-nextx"></span><span class="addvip-con add-shop-overflow">{{machineCurrent?machineCurrent.parentTypeName:''}}</span></p>
+
+
       <p @click="open('picker2')">优惠期开始<span class="addvip-con">{{addmarket.startTime}}<span class="order-action iconfont icon-nextx"></span></span></p>
       <p @click="open('picker3')">优惠期结束<span class="addvip-con">{{addmarket.endTime}}<span class="order-action iconfont icon-nextx"></span></span></p>
       <p @click="activeVisible=true">活动日<span class="order-action add-shop-overflow-icon iconfont icon-nextx"></span><span class="addvip-con add-shop-overflow">{{checkWeeklisttxt.join(',') | week}}</span></p>
@@ -11,23 +15,8 @@
       <p>折扣优惠<span class="addvip-con"><input type="number" placeholder="请输入优惠折扣" class="discount-input" v-model="addmarket.discount">%</span></p>
       <p>是否开放<span class="addvip-con"><mt-switch v-model="addmarket.addstatus" class="check-switch"></mt-switch></span></p>
     </div>
-    <div class="nopay-time">
-      <h6>不可支付时段</h6>
-      <div class="time-chose">
-        <p @click="open('picker4')">不可支付日期开始<span class="addvip-con">{{addmarket.noWorkStart}}<span class="order-action iconfont icon-nextx"></span></span></p>
-         <p @click="open('picker5')">不可支付日期结束<span class="addvip-con">{{addmarket.noWorkEnd}}<span class="order-action iconfont icon-nextx"></span></span></p>
-        <p @click="noWorkVisible = true">每日不可支付时间<span class="addvip-con">{{addmarket.noWorkTime}}<span class="order-action iconfont icon-nextx"></span></span></p>
-      </div>
-    </div>
     <div class="confirm" @click="toaddMaket">确定</div>
-    <!-- 不可支付日期开始 -->
-    <mt-datetime-picker ref="picker4" type="date" @confirm="handleNoWorkTimeStartChange" :startDate="pickerstartDate"></mt-datetime-picker>
-      <!-- 不可支付日期结束 -->
-    <mt-datetime-picker ref="picker5" type="date" @confirm="handleNoWorkTimeEndChange" :startDate="pickerstartDate"></mt-datetime-picker>
-     <!-- 每日不可支付时间 -->
-    <mt-popup v-model="noWorkVisible" position="bottom" class="mint-popup">
-       <mt-picker class="pickerNoWork"  :slots="activeTimeslots" @change="changeNoWorkTime" :showToolbar="true"><p class="toolBar"><span class="timequx" @click="noWorkVisible = false;">取消</span><span class="tiem-picker-title">不可支付时间</span><span @click="confirmNews('pickerNoWork')" class="queding">确定</span></p></mt-picker>
-    </mt-popup> 
+
     <!-- 活动日 -->
     <selectpickr :visible="activeVisible" :slots="activeSlots" :valueKey="label" :title="'活动日'" @selectpicker="activeselectpicker" @onpickstatus="activeselectpickertatus"> </selectpickr>
     <!-- 选择自定义星期-->
@@ -78,6 +67,8 @@
         </div>
       </section>
     </mt-popup>
+     <!-- 设备类型 -->
+    <selectpickr :visible="machineVisible" :slots="machineSlots" :valueKey="machineLable" :title="'设备类型'"  @selectpicker="machineselectpicker" @onpickstatus="machineselectpickertatus"> </selectpickr>
   </div>
 </div>
 </template>
@@ -85,7 +76,7 @@
 import moment from 'moment';
 import selectpickr from '@/components/selectPicker';
 import { shopListFun } from '@/service/report';
-import { addOruPdateFun, detailMarketFun } from '@/service/market';
+import { addOruPdateFun, detailMarketFun, marketlistParentTypeIdFun } from '@/service/market';
 import { validatDiscount } from '@/utils/validate';
 export default {
   data() {
@@ -94,7 +85,6 @@ export default {
       discountEndDate:'',
       pickerstartDate: new Date(),
       pickerEndDate: new Date(),
-      title: '编辑限时优惠',
 
       shopVisible:false,
       checkshoptxt:'',
@@ -116,6 +106,20 @@ export default {
             textAlign: 'center'
           }
       ],
+
+      machineCurrent:{},
+      machineVisible:false,
+      machineLable:'parentTypeName',
+      machineSlots:[
+        {
+            flex: 1,
+            values: [
+            ],
+            className: 'slot1',
+            textAlign: 'center'
+          }
+      ],
+
       weekTitle:[
         {value:'1',label:'周一'},
         {value:'2',label:'周二'},
@@ -135,14 +139,7 @@ export default {
         startTime:'',
         endTime:'',
         discount:'',
-        noWorkStart:null,
-        noWorkEnd:null,
-        noWorkTime:null,
       },
-
-      noWorkVisible:false,
-      noWorkCurrentTags:null,
-
       activeTimeVisible:false,
       activeTimeCurrentTags:null,
       activeTimeslots: [
@@ -216,9 +213,7 @@ export default {
         this.addmarket.addstatus =  detail.status ===  0 ? this.addmarket.addstatus = true  : this.addmarket.addstatus = false;
         this.addmarket.time = detail.noTime;
         this.addmarket.discount = detail.discountVO ? Number(detail.discountVO).toFixed(0) : '';
-        this.addmarket.noWorkStart = detail.noWorkStart ? moment(detail.noWorkStart).format('YYYY-MM-DD') : '';
-        this.addmarket.noWorkEnd = detail.noWorkEnd ? moment(detail.noWorkEnd).format('YYYY-MM-DD') : '';
-        this.addmarket.noWorkTime = detail.noWorkTime;
+        this.machineCurrent = detail.parentTypeMap[0];
         let beshop = [];
         detail.shop.forEach(item=>{
           beshop.push(item.name);
@@ -233,11 +228,27 @@ export default {
       let payload = {timeId:timeid};
       let res = await shopListFun(payload);
       this.shoplist = res;
+      if (this.shopIds.length <= 0) {
+        this.machineCurrent = {};
+      }else{
+        this.marketlistParentTypeIdFun();
+      }
+    },
+    async marketlistParentTypeIdFun(){
+      let payload = {shopIds:this.shopIds.join(',')};
+      let res = await marketlistParentTypeIdFun(payload);
+      this.machineSlots[0].values = res;
     },
     getcheckshop(){
       let checklist = this.shoplist.filter(v=>this.shopIds.some(k=>k==v.shopId));
       this.shopVisible = false;
       this.checkshoptxt = checklist.map(item=>item.shopName).join(',');
+      if (this.shopIds.length <= 0) {
+        this.machineCurrent = {};
+      }else{
+        this.marketlistParentTypeIdFun();
+        this.machineCurrent = {};
+      }
     },
     cancelCheckshop(){
       let canceIds = this.checkshoptxt ?  this.checkshoptxt.split(',') :[];
@@ -268,17 +279,9 @@ export default {
     changeTime(picker, values) {
       this.activeTimeCurrentTags = values[0]+':'+values[1]+'-'+ values[2]+':'+values[3];
     },
-    changeNoWorkTime(picker, values) {
-      this.noWorkCurrentTags = values[0]+':'+values[1]+'-'+ values[2]+':'+values[3];
-    },
     confirmNews(picker){
-      if (picker === 'pickerActiveTimes') {
-        this.activeTimeVisible = false;
-        this.addmarket.time = this.activeTimeCurrentTags;
-      } else if(picker === 'pickerNoWork'){
-        this.noWorkVisible = false;
-        this.addmarket.noWorkTime = this.noWorkCurrentTags;
-      }
+      this.activeTimeVisible = false;
+      this.addmarket.time = this.activeTimeCurrentTags;
     },
     open(picker) {
       this.$refs[picker].open();
@@ -289,15 +292,30 @@ export default {
     handleEndTimeTimeChange(value) {
       this.addmarket.endTime = moment(value).format('YYYY-MM-DD');
     },
-    handleNoWorkTimeStartChange(value) {
-      this.addmarket.noWorkStart = moment(value).format('YYYY-MM-DD');
+    opencheckedMachine(){
+      console.log(243234);
+      if (this.shopIds.length <= 0) {
+        this.$toast({message: "请先选择店铺" });
+        return false;
+      }else{
+        this.machineVisible=true;
+      }
     },
-    handleNoWorkTimeEndChange(value) {
-      this.addmarket.noWorkEnd = moment(value).format('YYYY-MM-DD');
+    machineselectpicker(value) {
+      if (value) {
+       this.machineCurrent = value;
+      }
+    },
+    machineselectpickertatus(value) {
+      this.machineVisible = value;
     },
     async toaddMaket(){
       if (this.shopIds.length<=0) {
         this.$toast({message: "请选择店铺" });
+        return false;
+      }
+      if (!this.machineCurrent.parentTypeId) {
+        this.$toast({message: "请选择设备类型" });
         return false;
       }
       if (!this.addmarket.startTime) {
@@ -332,7 +350,7 @@ export default {
       }
       let status = null;
       this.addmarket.addstatus === true ? status = 0  : status = 1;
-      let payload = Object.assign({},this.addmarket,{week:this.weeklist.join(','),shopIds:this.shopIds.join(','),timeId:this.$route.query.id,status:status});
+      let payload = Object.assign({},this.addmarket,{week:this.weeklist.join(','),shopIds:this.shopIds.join(','),timeId:this.$route.query.id,status:status,parentTypeIds:`'${this.machineCurrent.parentTypeId}'`});
       delete payload.addstatus;
       let res = await addOruPdateFun(payload);
       this.$toast({message: '编辑成功' });
@@ -357,13 +375,6 @@ export default {
     },
     activeTimeVisible: function () {
       if (this.activeTimeVisible) {
-        this.ModalHelper.afterOpen();
-      } else {
-        this.ModalHelper.beforeClose();
-      }
-    },
-    noWorkVisible: function () {
-      if (this.noWorkVisible) {
         this.ModalHelper.afterOpen();
       } else {
         this.ModalHelper.beforeClose();

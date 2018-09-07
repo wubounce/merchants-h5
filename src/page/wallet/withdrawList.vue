@@ -1,5 +1,5 @@
 <template>
-<div class="withdrawList-wrapper page-loadmore-height" v-title="'提现记录'">
+<div class="withdrawList-wrapper page-loadmore-height">
     <div class="no-discount-list" v-if="list.length<=0">暂无提现记录</div>
     <div class="page-loadmore-wrapper" ref="wrapper" :style="{overflowY:scrollShow}">
         <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" @translate-change="translateChange" :auto-fill="false" ref="loadmore">

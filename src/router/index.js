@@ -22,7 +22,7 @@ export default new Router({
           path: '/index',
           name: 'index',
           component: () => import ('@/page/index/index'),
-          meta: {title: '首页'},
+          meta: {title: '企鹅商家管理平台'},
         },
         {
           path: '/report',
@@ -200,7 +200,7 @@ export default new Router({
       path: '/addMember',
       name: 'addMember',
       component: () => import ('@/page/member/addMember'),
-      meta: {title: '人员新增',keepAlive:true},
+      meta: {title: '人员新增', keepAlive:true},
     },
     {
       path: '/detailMember',
@@ -212,19 +212,13 @@ export default new Router({
       path: '/editMember',
       name: 'editMember',
       component: () => import ('@/page/member/editMember'),
-      meta: {title: '人员修改'},
+      meta: {title: '人员编辑', keepAlive:true},
     },
     {
       path: '/premList',
       name: 'premList',
       component: () => import ('@/page/member/premList'),
       meta: {title: '人员权限'},
-    },
-    {
-      path: '/premshopList',
-      name: 'premshopList',
-      component: () => import ('@/page/member/premshopList'),
-      meta: {title: '人员店铺'},
     },
     {
       path: '/order',
@@ -259,14 +253,14 @@ export default new Router({
       path: '/mapSearch',
       name: 'mapSearch',
       component: () => import ('@/page/shop/mapSearch'),
-      meta: {title: '地图搜索'},
+      meta: {title: '新增店铺'},
     },
     {
       path: '/editMap',
       name: 'editMap',
       component: () => import ('@/page/shop/editMap'),
       meta: {
-        title: '地图搜索'
+        title: '编辑店铺'
       },
     },
     {
@@ -299,15 +293,15 @@ export default new Router({
       path: '/editTodolist',
       name: 'editTodolist',
       component: () => import ('@/page/todoList/editTodolist'),
-      meta: {title: '修改事项'},
+      meta: {title: '修改待办事项 '},
     },
 
     //营销管理
     { path: '/marketing', name: 'marketing', component: () => import('@/page/marketing/index'),meta: {title: '营销管理'} },
     { path: '/addvip', name: 'addvip', component: () => import('@/page/marketing/addVIP'),meta: {title: 'VIP卡新增'} },
-    { path: '/addMarket', name: 'addMarket', component: () => import('@/page/marketing/addMarket'),meta: {title: '优惠新增'} },
-    { path: '/detailMarket', name: 'detailMarket', component: () => import('@/page/marketing/detailMarket'),meta: {title: '优惠详情'} },
-    { path: '/editMarket', name: 'editMarket', component: () => import('@/page/marketing/editMarket'),meta: {title: '优惠修改'} },
+    { path: '/addMarket', name: 'addMarket', component: () => import('@/page/marketing/addMarket'),meta: {title: '新增限时优惠'} },
+    { path: '/detailMarket', name: 'detailMarket', component: () => import('@/page/marketing/detailMarket'),meta: {title: '限时优惠详情'} },
+    { path: '/editMarket', name: 'editMarket', component: () => import('@/page/marketing/editMarket'),meta: {title: '修改限时优惠'} },
     { path: '/vipDetail', name: 'vipDetail', component: () => import('@/page/marketing/vipDetail'),meta: {title: 'VIP卡详情'} },
     { path: '/editVip', name: 'editVip', component: () => import('@/page/marketing/editVip'),meta: {title: 'VIP卡修改'} },
     
@@ -331,7 +325,7 @@ export default new Router({
       meta: {title: '账户设置'},
     },
     { path: '/changePwd', name: 'changePwd', component: () => import('@/page/setting/changePwd'),meta: {title: '修改密码'}, },
-    { path: '/setAlipay', name: 'setAlipay', component: () => import('@/page/setting/setAlipay'),meta: {title: '支付宝账户'}, },
+    { path: '/setAlipay', name: 'setAlipay', component: () => import('@/page/setting/setAlipay'),meta: {title: '绑定支付宝账户'}, },
     { path: '/realName', name: 'realName', component: () => import('@/page/setting/realName'),meta: {title: '实名认证'}, },
     { path: '/realNameGet', name: 'realNameGet', component: () => import('@/page/setting/realNameGet'),meta: {title: '实名认证详情'}, },
     { path: '/contact', name: 'contact', component: () => import('@/page/contact/index'),meta: {title: '联系客服'}, },
@@ -360,13 +354,13 @@ export default new Router({
       path: '/withdraw',
       name: 'withdraw',
       component: () => import ('@/page/wallet/withdraw'),
-      meta: {title: '余额 提现'}
+      meta: {title: '余额提现'}
     },
     {
       path: '/withdrawList',
       name: 'withdrawList',
       component: () => import ('@/page/wallet/withdrawList'),
-      meta: {title: '提现明细'}
+      meta: {title: '提现记录'}
     },
     {
       path: '/withdrawResult',

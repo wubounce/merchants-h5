@@ -1,11 +1,11 @@
 <template>
-<div class="addmember" v-title="title">
+<div class="addmember">
   <div class="add-form">
-    <div class="input-group" @click="shopVisible=true">
+    <div class="input-group"  @click="shopVisible=true">
       <div class="form-title"><span>负责店铺</span></div>
       <div class="form-input"><span :class="['more',{'more-color':checkshoptxt === ''}]">{{checkshoptxt?checkshoptxt:'请选择店铺'}}</span><span class="forward iconfont icon-nextx"></span></div>
     </div>
-    <div class="input-group" style="border:none" @click="permissionsVisible=true">
+    <div class="input-group" style="border:none" @click="openPrem">
       <div class="form-title"><span>权限</span></div>
       <div class="form-input"><span :class="['more',{'more-color':permissionsMIdsTxt === ''}]">{{permissionsMIdsTxt?permissionsMIdsTxt:'请选择权限'}}</span><span class="forward iconfont icon-nextx"></span></div>
     </div>
@@ -14,13 +14,14 @@
     <div class="form-title">创建时间</div>
     <div class="form-input">{{createTime}}</div>
   </div>
-  <div class="confirm" @click="updateMember">提交</div>
-  <!-- 选择店铺 -->
+  <mt-button class="confirm" @click="addmember">提交</mt-button>
+
+   <!-- 选择店铺 -->
   <mt-popup v-model="shopVisible" position="bottom" :closeOnClickModal="false">
     <div class="resp-shop">
       <span class="shop">负责店铺</span>
     </div>
-    <section class="resp-shop-wrap">
+    <section class="shop-touch">
       <div class="all-list">
         <label class="mint-checklist-label" v-for="(item,index) in shoplist" :key="index">
           <span class="mint-checkbox is-right">
@@ -37,86 +38,45 @@
       <span class="cifrm" @click="getcheckshop">确定</span>
     </section>
   </mt-popup>
-  <!-- 选择权限 -->
-  <mt-popup v-model="permissionsVisible" position="bottom" :closeOnClickModal="false">
-    <div class="resp-shop">
-      <span class="shop">权限</span>
-    </div>
-    <section class="resp-shop-wrap" style="padding:0;">
-      <div class="all-list">
-        <div class="promisss-child" >
-          <div class="child-slit" v-for="(item,index) in permissionsData">
-            <label class="mint-checklist-label child-prom" style="background:#fff" @click="toggle(item)">
-              <div class="check-prem-list" style="border:none;padding:0.27rem 0.4rem;">
-                <span class="mint-checkbox is-right" v-if="item.name==='首页' || item.name==='报表'">
-                  <input type="checkbox" class="mint-checkbox-input" v-model="checkpermissionslist" :value="item.menuId"> 
-                  <span class="mint-checkbox-core"></span>
-                </span>
-                <span class="mint-checkbox is-right" v-else>
-                  <span class="iconfont icon-xiangxiajiantou"></span>
-                </span>
-                <span class="mint-checkbox-label shopname">{{item.name}}</span>
-              </div>
-            </label>
-            <transition-group name="collapse">
-              <div :class="['animate',{hiddren:item.show}]" :key="index">
-                <div class="promisss-child" v-for="(sitem,index) in item.children" :key="index" style="background:#fff;">
-                  <label class="mint-checklist-label" style="border-bottom: 1px #f9f8ff solid;background:#F8F8F8;">
-                    <div class="check-prem-list">
-                      <span class="mint-checkbox is-right">
-                        <input type="checkbox" class="mint-checkbox-input" v-model="checkpermissionslist" :value="sitem.menuId"> 
-                        <span class="mint-checkbox-core"></span>
-                      </span> 
-                      <span class="mint-checkbox-label shopname">{{sitem.name}}</span>
-                    </div>
-                  </label>
-                </div>
-              </div>
-            </transition-group>
-          </div>
-        </div>
-      </div>
-    </section>
-    <section class="promiss-footer">
-      <span class="can" @click="cancelPermissions">取消</span>
-      <span class="cifrm" @click="addPermissions">确定</span>
-    </section>
-  </mt-popup>
+
 </div>
 </template>
 <script>
-import { validatPhone } from '@/utils/validate';
-import { shopListFun, updateOperatorInfoFun, getOperatorInfoFun, permsMenuFun } from '@/service/member';
-import { getTrees} from '@/utils/tool';
+import { mapState } from 'vuex';
+import { validatPhone, validatName } from '@/utils/validate';
+import { shopListFun, getOperatorInfoFun, updateOperatorInfoFun, permsMenuFun } from '@/service/member';
+import { getTrees, setMember, getMember, removeMember } from '@/utils/tool';
 export default {
-  components: {
-    },
   data() {
     return {
-      title: '编辑人员',
-      shopVisible:false,
-      permissionsVisible:false,
-
       allmenu:[],
       permissionsData:[],
       permissionsMIdsTxt:'',
       checkpermissionslist: [],
 
       shoplist:[],
+      shopVisible:false,
       operateShopIds:[],
+      parentIds:[],
+     
+      eitedid:null,
       checkshoptxt:'',
-      createTime:''
-      
+      createTime:null,
+
+      query:{}
     };
   },
-  mounted() {
-    
-  },
-  created(){
-
+  created() {
+    this.query = this.$route.query ? this.$route.query :{};
+    this.updateOperatorId = this.query.id?this.query.id:this.query.updateOperatorId;
     this.shopListFun();
     this.menuSelect();
-   
+  },
+  mounted() {
+
+  },
+  computed: {
+      
   },
   methods: {
     validate() {
@@ -134,28 +94,36 @@ export default {
       let res = await getOperatorInfoFun({id:id});
         this.createTime = res.createTime;
         this.checkshoptxt = res.operateShopNames;
-
         let updateOperateShopIds = res.operateShopNames ? res.operateShopNames.split(',') :[];
         updateOperateShopIds = this.shoplist.filter(v=>updateOperateShopIds.some(k=>k==v.shopName));
         this.operateShopIds = updateOperateShopIds.map(item=>item.shopId);
         this.checkpermissionslist = res.list.map(item=>item.menuId);
+
+        let max = this.permissionsData[0];
+        for ( let i = 1; i < this.permissionsData.length; i++) {// 求出一组数组中的最大值
+          if (max.menuId < this.permissionsData[i].menuId) {
+            max = this.permissionsData[i].menuId;
+          }
+        }
+        this.parentIds = res.list.filter(item=>item.menuId<=9).map(item=>item.menuId); //在父级id中去掉首页和报表
+        this.checkpermissionslist = this.checkpermissionslist.filter(v=> this.parentIds.indexOf(v) == -1); //取差集
         this.permissionsMIdsTxt = res.list.map(item=>item.name).join(',');
     },
     async menuSelect(){
       let res = await permsMenuFun(); //拼接权限菜单
       this.allmenu = res;
       this.permissionsData = getTrees(res,0);
+      this.addPermissions();
     },
     async shopListFun(){
       let res = await shopListFun();
       this.shoplist = res;
-      let id = this.$route.query ? this.$route.query.id:'';
-      this.getOperatorInfo(id);
+      if (this.$route.query.id) {
+        this.getOperatorInfo(this.updateOperatorId);
+      }
+      this.getcheckshop();
     },
-    toggle:function(item){
-      this.$set(item,'show',this.show=!this.show);
-    },
-    async getcheckshop(){
+    getcheckshop(){
       let checklist = this.shoplist.filter(v=>this.operateShopIds.some(k=>k==v.shopId));
       this.shopVisible = false;
       this.checkshoptxt = checklist.map(item=>item.shopName).join(',');
@@ -167,24 +135,22 @@ export default {
       this.shopVisible = false;
     },
     addPermissions(){
-      this.permissionsVisible=false;
       let checklist = this.allmenu.filter(v=>this.checkpermissionslist.some(k=>k==v.menuId));
       this.permissionsMIdsTxt = checklist.map(item=>item.name).join(',');
     },
-    cancelPermissions(){
-      let canceIds = this.permissionsMIdsTxt ?  this.permissionsMIdsTxt.split(',') :[];
-      canceIds = this.allmenu.filter(v=>canceIds.some(k=>k==v.name));
-      this.checkpermissionslist = canceIds.map(item=>item.menuId);
-      this.permissionsVisible = false;
+    openPrem(){
+      this.$router.push({name:'premList',query:{updateOperatorId:this.updateOperatorId,checkpermissionslist:this.checkpermissionslist.join(','),parentIds:this.parentIds.join(',')}});
     },
-    async updateMember(){
+    async addmember(){
       if (this.validate()) {
         let menshopids = [];
         this.operateShopIds.forEach(item=>menshopids.push(`'${item}'`));
+        let mIds = [...this.checkpermissionslist,... this.parentIds];
+        mIds = Array.from(new Set([...mIds]));//去重
         let payload = {
-          id:this.$route.query.id,
+          id:this.updateOperatorId,
           operateShopIds:menshopids.join(','),
-          mIds:this.checkpermissionslist.join(',')
+          mIds:mIds.join(',')
         };
         let res = await updateOperatorInfoFun(payload);
         this.$toast({message: '修改成功' });
@@ -193,6 +159,19 @@ export default {
     }
   },
   watch: {
+    $route(to,from) {
+      if(from.name === 'premList') {
+        this.query = this.$route.query ? this.$route.query :{};
+        this.parentIds = this.query.parentIds ? this.query.parentIds.split(','): []; //权限父级id
+        this.checkpermissionslist = this.query.checkpermissionslist ? this.query.checkpermissionslist.split(','): [];
+        this.addPermissions();
+      }else if(from.name === 'detailMember'){
+        this.query = this.$route.query ? this.$route.query :{};
+        this.updateOperatorId = this.query.id?this.query.id:this.query.updateOperatorId;
+        this.shopListFun();
+        this.menuSelect();
+      }
+    },
     shopVisible: function () {
       if (this.shopVisible) {
         this.ModalHelper.afterOpen();
@@ -200,14 +179,9 @@ export default {
         this.ModalHelper.beforeClose();
       }
     },
-    permissionsVisible: function () {
-      if (this.permissionsVisible) {
-        this.ModalHelper.afterOpen();
-      } else {
-        this.ModalHelper.beforeClose();
-      }
-    },
   },
+  components:{
+  }
 };
 </script>
 <style type="text/css" lang="scss" scoped>
@@ -228,6 +202,7 @@ export default {
       color: #999;
     }
   }
+
 </style>
 <style lang="scss">
   .addmember .mint-checklist-label {
@@ -248,3 +223,4 @@ export default {
     left: 7px;
   }
 </style>
+

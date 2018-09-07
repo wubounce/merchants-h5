@@ -11,7 +11,7 @@
         <p class="userName">
           <label class="title">账号</label>
           <input type="text" v-model.trim="form.userName" v-on:input="userinputFunc" placeholder="请输入用户名/手机号">
-          <span class="open-eyes eyes iconfont icon-guanbi" @click="form.userName='';disabled=true"></span>
+          <span class="open-eyes eyes iconfont icon-guanbi"  @click="form.userName='';disabled=true"></span>
         </p>
         <div class="passWord">
           <label class="title">密码</label>

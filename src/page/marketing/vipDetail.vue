@@ -1,5 +1,5 @@
 <template>
-<div class="addvip"  v-title="title">
+<div class="addvip">
  <div class="permissions" v-if="$store.getters.has('mer:marketing:vip:info')">暂无相关页面权限</div>
   <div v-else>
     <div class="addvip-header">
@@ -15,7 +15,7 @@
       <div class="add-card">
         <p>卡售价<span>{{detail.yearCardPrice | tofixd}}元</span></p>
         <p>VIP折扣<span>{{detail.yearCardDiscount?detail.yearCardDiscount:''}}%</span></p>
-        <p>每日限用次数<span>{{detail.yearCardLimitTime}}次</span></p>
+        <p>每{{detail.yearLimitType === 2 ? '周':'日'}}限用次数<span>{{detail.yearCardLimitTime}}次</span></p>
       </div>
       <div class="crrow"></div>
     </div>
@@ -25,7 +25,7 @@
       <div class="add-card">
         <p>卡售价<span>{{detail.halfYearCardPrice | tofixd}}元</span></p>
         <p>VIP折扣<span>{{detail.halfYearCardDiscount?detail.halfYearCardDiscount:''}}%</span></p>
-        <p>每日限用次数<span>{{detail.halfYearCardLimitTime}}次</span></p>
+        <p>每{{detail.halfLimitType === 2 ? '周':'日'}}限用次数<span>{{detail.halfYearCardLimitTime}}次</span></p>
       </div>
       <div class="crrow"></div>
     </div>
@@ -35,7 +35,7 @@
       <div class="add-card">
         <p>卡售价<span>{{detail.seasonCardPrice | tofixd}}元</span></p>
         <p>VIP折扣<span>{{detail.seasonCardDiscount?detail.seasonCardDiscount:''}}%</span></p>
-        <p>每日限用次数<span>{{detail.seasonCardLimitTime}}次</span></p>
+        <p>每{{detail.seasonLimitType === 2 ? '周':'日'}}限用次数<span>{{detail.seasonCardLimitTime}}次</span></p>
       </div>
       <div class="crrow"></div>
     </div>
@@ -57,7 +57,6 @@ import { vipDetailFun, delVipFun } from '@/service/market';
 export default {
   data() {
     return {
-      title: 'VIP详情',
       detail:{}
     };
   },

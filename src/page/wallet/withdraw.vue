@@ -1,5 +1,5 @@
 <template>
-<div class="withdraw-wrapper" v-title="'余额提现'">
+<div class="withdraw-wrapper">
     <header>
         <span class="iconfont icon-zhifubao"></span>
         <div>

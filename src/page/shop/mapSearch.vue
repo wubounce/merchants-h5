@@ -1,5 +1,5 @@
 <template>
-	<div class="home-wrap" v-title="title">
+	<div class="home-wrap">
     <div id="container" class="mymap"></div>
     <div class="home-search">
 			<i class=" iconfont icon-IconSearch"></i>
@@ -15,7 +15,6 @@ import { MessageBox,Toast } from 'mint-ui';
 export default {
   data() {
     return {
-      title: '新增店铺',
       special:'',
       isuser:false,
       mapCity:''

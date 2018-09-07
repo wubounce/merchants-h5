@@ -59,7 +59,16 @@
     bottom: 0;
     border-radius: 0;
   }
-  
+    .all-list {
+    -webkit-overflow-scrolling: touch;
+  }
+  .shop-touch {
+    padding: 0 0.4rem;
+    height: 8.43rem;
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
+
+  }
   .resp-shop {
     display: flex;
     height: 1.17rem;
@@ -81,9 +90,6 @@
       text-align:right;
       color: #1890FF;
     }
-  }
-  .resp-shop-wrap {
-    padding-bottom:1.33rem;
   }
   .check-shop {
     margin-top:0.4rem;

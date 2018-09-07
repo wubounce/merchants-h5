@@ -1,5 +1,5 @@
 <template>
-  <div class="withdrawResult-wrapper" v-title="'余额提现'">
+  <div class="withdrawResult-wrapper">
     <div class="status-wrapper">
       <!-- 状态到第三步的时候添加class：third-padding -->
       <div class="withdraw-status third-padding">

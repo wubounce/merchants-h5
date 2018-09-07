@@ -1,5 +1,5 @@
 <template>
-  <section v-title="title" class="page-loadmore-height ">
+  <section class="page-loadmore-height ">
     <div class="permissions" v-if="$store.getters.has('mer:machine:list')">暂无相关页面权限</div>
     <div v-else class="page-loadmore-height ">
       <div class="search-header">
@@ -159,7 +159,6 @@
         selectDeviceTypeIndex: -1,
         selectModelIndex: -1,
         selectCommunicationIndex: -1,
-        title: '设备管理',
         popupShop: '',
         initialParentTypeId: '',
         popupVisible: false,

@@ -1,5 +1,5 @@
 <template>
-  <section class="ss-wrappper" v-title="title">
+  <section class="ss-wrappper">
     <div class="bat-step">
         <div class="line-bg">
           <p v-for="(item,index) in stepArr " :key="index" :class="{active:currIndex==index}">{{item.text}}</p>
@@ -45,7 +45,6 @@ export default {
       return {
         funTypeList: [],
         isShow2: false,
-        title: "批量修改",
         getJsonArr: [],
         selectedFunction: '',
         functionTempletType: '',

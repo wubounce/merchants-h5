@@ -32,7 +32,16 @@ http.interceptors.request.use(config => {
   config.data = filterData(config.data);//格式化参数;
   let token = getToken();
   let _timestamp = (new Date()).getTime();
+  //const whiteList = ['shop/vip/save']; // 解决添加接口表单重复添加问题
   if (token) {
+    // if (whiteList.indexOf(config.url) !== -1) {
+    //   console.log(123123);
+    //   // next();
+    //   // http.post('common/getRequestId', {token:token}).then(res=>{
+    //   //   console.log(res);
+    //   // });
+    // }else {
+    // }
     config.data = config.data ? config.data + `&token=${token}`:`token=${token}`;
     // 添加签名
     let _sign = get_sign(config.data,_timestamp);
