@@ -1,5 +1,5 @@
 <template>
-	<section v-title="title">
+	<section>
     <div class="permissions" v-if="$store.getters.has('mer:shop:list')">暂无相关页面权限</div>
     <div v-else>
       <ul v-if="hasNews">
@@ -47,7 +47,6 @@ export default {
   mixins: [PagerMixin],
   data() {
     return {
-       title:'店铺管理',
        list:[],
        hasNews: true,
        //分页

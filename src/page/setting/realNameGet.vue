@@ -1,5 +1,5 @@
 <template>
-   <section v-title="title">
+   <section>
        <p class="shopname-p">
           <span>姓名</span><span>{{item.cardName}}</span>
        </p>
@@ -19,7 +19,6 @@ import { getRealNameFun } from '@/service/user';
 export default {
   data() {
     return {
-      title: '实名认证详情',
       item:{}
     };
   },

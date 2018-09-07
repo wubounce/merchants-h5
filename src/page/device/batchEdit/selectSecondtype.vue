@@ -1,5 +1,5 @@
 <template>
-  <section class="sf-wrappper" v-title="title">
+  <section class="sf-wrappper">
     <div class="fixedPosition">
       <div class="bat-step">
         <div class="line-bg">
@@ -36,7 +36,6 @@ import { getlistParentTypeFun, getlistSubTypeFun} from '@/service/device';
   export default {
     data() {
       return {
-        title: "批量修改",
         isResult: false,
         keyword: '',
         secondTypeList: [],

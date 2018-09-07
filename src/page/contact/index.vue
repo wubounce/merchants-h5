@@ -1,5 +1,5 @@
 <template>
-  <div class="contant" v-title="title">
+  <div class="contant">
     <div class="erweima">
       <img  :src="imgShow">
     </div>
@@ -16,7 +16,6 @@
   export default {
     data() {
       return {
-        title:'联系客服',
         imgShow:'../../../static/image/user/wechat.png',
         msg:'关注公众号联系“在线客服”',
       };

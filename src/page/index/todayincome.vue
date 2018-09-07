@@ -1,5 +1,5 @@
 <template>
-    <section v-title="title">
+    <section>
         <div class="tableearn">
             <div class="top">
                 <p class='showDate'><span>{{date}}</span><span style="margin-left: 0.35rem;">收益：{{todayMoney}} 元</span></p>
@@ -36,7 +36,6 @@ export default {
     mixins: [PagerMixin],
     data() {
         return {
-            title: '今日收益',
             todayMoney: '',
             date:'',
             data:'',

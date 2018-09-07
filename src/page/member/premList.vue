@@ -1,5 +1,5 @@
 <template>
-<div class="premlist" v-title="title">
+<div class="premlist">
    <section class="resp-shop-wrap">
       <el-tree
         ref="tree"
@@ -26,7 +26,6 @@ import { getTrees, setMember, getMember } from '@/utils/tool';
 export default {
   data() {
     return {
-      title: '选择权限',
       permissionsData:[],
       defaultProps: {
         children: 'children',

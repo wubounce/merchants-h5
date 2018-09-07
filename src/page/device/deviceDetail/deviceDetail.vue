@@ -1,5 +1,5 @@
 <template>
-  <section v-title="title">
+  <section>
     <div class="permissions" v-if="$store.getters.has('mer:machine:info')">暂无相关页面权限</div>
     <div v-else>
       <section>
@@ -111,7 +111,6 @@
         tzjShow: false,
         functionSetListShow: true,
         functionCodeShow: false,
-        title: '设备详情',
         machineState:"",
         tongxin: '',
         fromdata: {

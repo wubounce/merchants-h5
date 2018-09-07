@@ -1,5 +1,5 @@
 <template>
-  <div class="reset" v-title="title">
+  <div class="reset">
     <form ref="resetForm" :model="reset">
     <div class="form-group">
       <input type="password" placeholder="请输入新密码" v-model="reset.password" @input="disabledBtn" autocomplete="off">
@@ -27,7 +27,6 @@ import { validatPwd } from '@/utils/validate';
         timer: null,
         time: 60,
         btn: true,
-        title:'重置密码',
         disabled:true
       };
     },

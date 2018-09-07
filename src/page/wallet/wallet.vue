@@ -1,5 +1,5 @@
 <template>
-<div class="wallet-wrapper" v-title="'钱包'">
+<div class="wallet-wrapper">
     <div class="wallet-content">
         <router-link to="accountList">收支明细</router-link>
         <img src="../../../static/image/user/money@2x.png">

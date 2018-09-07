@@ -1,5 +1,5 @@
 <template>
-    <section v-title="title">
+    <section>
         <div class="tableearn">
             <div class="top">
                 <p class='showDate'>总收益：{{this.allMoney}} 元</p>
@@ -28,7 +28,6 @@ import { balanceLogProfitListFun } from '@/service/index';
 export default {
     data() {
         return {
-            title: '总收益',
             allMoney: '',
             listdata:[]
         };

@@ -1,5 +1,5 @@
 <template>
-  <div class="bind-main" v-title="title">
+  <div class="bind-main">
     <section class="bind-tip">为了您的账户安全，请您绑定手机号</section>
     <form ref="resetForm" :model="bindPhone">
     <div class="form-group">
@@ -33,7 +33,6 @@
         time: 0,
         btn: true,
         disabled:true,
-        title:'绑定手机'
       };
     },
     methods: {

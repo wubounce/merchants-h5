@@ -1,5 +1,5 @@
 <template>
-<div class="order-detail" v-title="title">
+<div class="order-detail">
 <div class="permissions" v-cloak v-if="$store.getters.has('mer:order:info')">暂无相关页面权限</div>
   <div v-else>
     <div class="order-status">{{detail.orderStatus | orserStatus}}</div>
@@ -93,7 +93,6 @@ import { MessageBox } from 'mint-ui';
 export default {
   data() {
     return {
-      title: '订单详情',
       detail:{markPrice:''},
       refundDisabled:false,
     };

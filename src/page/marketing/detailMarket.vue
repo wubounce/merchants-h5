@@ -1,5 +1,5 @@
 <template>
-<div class="addmarket" v-title="title">
+<div class="addmarket">
   <div class="permissions" v-if="$store.getters.has('mer:marketing:info')">暂无相关页面权限</div>
   <div v-else>
     <div class="addvip-header">
@@ -32,7 +32,6 @@ import { delMarketFun, detailMarketFun } from '@/service/market';
 export default {
   data() {
     return {
-      title: '限时优惠详情',
       detail:{},
     };
   },

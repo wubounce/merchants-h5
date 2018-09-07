@@ -1,5 +1,5 @@
 <template>
-<div class="addmarket" v-title="title">
+<div class="addmarket">
   <div class="addvip-header">
     <p @click="shopVisible=true">所属店铺<span class="order-action add-shop-overflow-icon iconfont icon-nextx"></span><span class="addvip-con add-shop-overflow">{{checkshoptxt?checkshoptxt:''}}</span></p>
 
@@ -77,8 +77,6 @@ export default {
   data() {
     return {
       pickerstartDate: new Date(),
-      title: '新增优惠',
-
       shopVisible:false,
       checkshoptxt:'',
       shoplist:[],

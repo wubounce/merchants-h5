@@ -1,5 +1,5 @@
 <template>
-  <div class="change-pwd" v-title="title">
+  <div class="change-pwd">
     <form ref="resetForm" :model="reset">
       <div class="resetForm">
         <div class="form-group">
@@ -32,7 +32,6 @@
           checkpassword:''
         },
         disabled: true,
-        title:'修改密码'
       };
     },
     created(){

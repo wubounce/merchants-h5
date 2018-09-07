@@ -1,5 +1,5 @@
 <template>
-  <section v-title="title">
+  <section>
     <div v-show="modelShow">
       <ul class="device-detail"> 
         <!-- 表单模块部分  -->
@@ -195,7 +195,6 @@
           ['原价', '/元'],
           ['状态']
         ],
-        title: '新增设备',
         fromdata: {
           machineName: "",
           firstClass: "",

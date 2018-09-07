@@ -1,5 +1,5 @@
 <template>
-<div class="marketing" v-title="title">
+<div class="marketing">
   <div class="add-form">
     <div class="input-group">
       <router-link :to="{name:'personalSet'}">
@@ -23,7 +23,6 @@ import { mapActions } from 'vuex';
 export default {
   data() {
     return {
-      title: '设置',
     };
   },
   mounted() {

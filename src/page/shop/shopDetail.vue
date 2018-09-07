@@ -1,5 +1,5 @@
 <template>
-  <section class="personal" v-title="title">
+  <section class="personal">
     <div class="permissions" v-if="$store.getters.has('mer:shop:info')">暂无相关页面权限</div>
     <div v-else>
         <!-- 第一模块 -->
@@ -48,7 +48,6 @@ export default {
   data() {
     return {
       //shopId:this.$route.query.shopId,
-      title: '店铺详情',
       list:[],
       shopdetail:{},
       completeAddress:'',

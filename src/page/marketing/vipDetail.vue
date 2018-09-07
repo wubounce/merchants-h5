@@ -1,5 +1,5 @@
 <template>
-<div class="addvip"  v-title="title">
+<div class="addvip">
  <div class="permissions" v-if="$store.getters.has('mer:marketing:vip:info')">暂无相关页面权限</div>
   <div v-else>
     <div class="addvip-header">
@@ -57,7 +57,6 @@ import { vipDetailFun, delVipFun } from '@/service/market';
 export default {
   data() {
     return {
-      title: 'VIP详情',
       detail:{}
     };
   },

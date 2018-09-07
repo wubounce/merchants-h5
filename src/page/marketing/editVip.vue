@@ -1,5 +1,5 @@
 <template>
-<div class="addvip" v-title="title">
+<div class="addvip">
   <div class="addvip-header">
     <p @click="shopVisible = true;" style="cursor: pointer;">所属店铺<span class="order-action add-shop-overflow-icon iconfont icon-nextx"></span><span class="addvip-con add-shop-overflow">{{checkshoptxt?checkshoptxt:''}}</span></p>
   </div>
@@ -85,7 +85,6 @@ import { validatDiscount, validatCradPrice, validatVipLimit } from '@/utils/vali
 export default {
   data() {
     return {
-      title: '新增VIP',
       shoplist:[],
       shopVisible:false,
       checkshoptxt:'', //显示店铺名字

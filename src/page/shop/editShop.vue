@@ -1,5 +1,5 @@
 <template>
-  <section class="personal" v-title="title">
+  <section class="personal">
     <ul class="personal-list">
       <p class="shopname-p"><span>店铺名称</span><span><input  @change="blur" type="text" class='addressInput' v-model="shopName"  placeholder="请填写店铺名称"></span></p>
       <li v-for="(item,index) in list" :key="index" class="personal-item" @click="toDetail(index)">
@@ -85,7 +85,6 @@ export default {
       machineTypeIdsArray:'',
       orderLimitMinutes:'',
       addBusinessTime:'',
-      title:'编辑店铺',
       arrName:[],
       list: [
         {

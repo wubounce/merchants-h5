@@ -1,5 +1,5 @@
 <template>
-<div class="member page-loadmore-height" v-title="title">
+<div class="member page-loadmore-height">
   <div class="permissions" v-if="$store.getters.has('mer:person:list')">暂无相关页面权限</div>
   <div class="page-loadmore-height" v-else>
     <div class="no-discount-list" v-if="noList">暂无二级管理账号</div>
@@ -45,7 +45,6 @@ export default {
   mixins: [PagerMixin],
   data() {
     return {
-      title: '人员管理',
       value: false,
       list:[],
       noList:false,

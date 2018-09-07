@@ -1,5 +1,5 @@
 <template>
-<div class="order-wrap" v-title="title">
+<div class="order-wrap">
   <div class="permissions" v-if="$store.getters.has('mer:order:list')">暂无相关页面权限</div>
   <div v-else>
     <div class="search-header">
@@ -71,7 +71,6 @@ export default {
   mixins: [PagerMixin],
   data() {
     return {
-      title: '订单管理',
       searchData:'',
       titleArr:[
         {value:'',lable:'全部'},

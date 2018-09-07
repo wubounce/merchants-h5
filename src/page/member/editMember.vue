@@ -1,5 +1,5 @@
 <template>
-<div class="addmember" v-title="title">
+<div class="addmember">
   <div class="add-form">
     <div class="input-group"  @click="shopVisible=true">
       <div class="form-title"><span>负责店铺</span></div>
@@ -49,8 +49,6 @@ import { getTrees, setMember, getMember, removeMember } from '@/utils/tool';
 export default {
   data() {
     return {
-      title: '新增人员',
-
       allmenu:[],
       permissionsData:[],
       permissionsMIdsTxt:'',

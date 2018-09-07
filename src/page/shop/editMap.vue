@@ -1,5 +1,5 @@
 <template>
-	<div class="home-wrap" v-title="title">
+	<div class="home-wrap">
     <div id="container" class="mymap"></div>
     <div class="home-search">
 			<i class=" iconfont icon-IconSearch"></i>
@@ -15,7 +15,6 @@
 export default {
   data() {
     return {
-      title: '编辑店铺',
       shopId:'',
       special:'',
       isuser:false,

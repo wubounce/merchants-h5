@@ -1,5 +1,5 @@
 <template>
-<div class="accountList-wrapper page-loadmore-height" v-title="'收支明细'">
+<div class="accountList-wrapper page-loadmore-height">
     <section class="apply-status">
         <div v-for="(item,index) in titleArr" @click="titleClick(index)"><span :class="{current: titleIndex === index}">{{item.lable}}</span></div>
     </section>

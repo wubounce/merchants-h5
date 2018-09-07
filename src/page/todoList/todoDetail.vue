@@ -1,5 +1,5 @@
 <template>
-  <section class="todolist" v-title="title">
+  <section class="todolist">
   <div class="permissions" v-if="$store.getters.has('mer:schedule:info')">暂无相关页面权限</div>
     <div v-else>
       <!-- 第一模块 -->
@@ -31,7 +31,6 @@ import moment from 'moment';
   export default {
     data() {
       return {
-        title:'待办详情',
         item:{}
       };
     },

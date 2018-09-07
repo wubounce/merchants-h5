@@ -1,5 +1,5 @@
 <template>
-<div class="addmember" v-title="title">
+<div class="addmember">
   <div class="add-form">
     <div class="input-group">
       <div class="form-title"><span>手机号码</span></div>
@@ -54,7 +54,6 @@ import { getTrees, setMember, getMember, removeMember} from '@/utils/tool';
 export default {
   data() {
     return {
-      title: '新增人员',
       disabled:true,
 
       allmenu:[],

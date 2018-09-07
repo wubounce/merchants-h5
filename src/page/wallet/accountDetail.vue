@@ -1,6 +1,6 @@
 <template>
     <!-- 根据类型更换title -->
-	<div class="accountDetail-wrapper" v-title="title">
+	<div class="accountDetail-wrapper">
 		<header>
 			<p class="title">
             <span class="usericon iconfont icon-dianpu" v-if="data.type===1"></span>
@@ -70,7 +70,6 @@ import { getOrderDetailFun } from '@/service/user';
 export default {
   data() {
     return {
-        title:'',
         data:{}
     };
   },

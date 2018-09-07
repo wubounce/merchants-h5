@@ -1,5 +1,5 @@
 <template>
-<div class="login" v-title="'企鹅商家管理平台'">
+<div class="login">
   <div class="header">
     <h1 class="logo">
       <img src="../../static/logo.png"/>
@@ -49,9 +49,19 @@ export default {
     beforeRouteEnter(to, from, next) {
       // 已登录直接返回首页
       if (getToken()) {
-        let localData = getNavTabIndex();
-        localData = localData?localData:'/user';
-        next(localData);
+        if (getNavTabIndex()) {
+          let localData = getNavTabIndex();
+          next(localData);
+        } else {
+          menuSelectFun().then((data) => {
+            store.commit('setMenu', data);
+            setMenu(data);
+            let pac = data.find(item=>item.name === '首页' || item.name === '报表');
+            let path = pac ? pac.url : data[0].url;
+            setNavTabIndex('/'+ path);
+             next(path);
+          });
+        }
         return;
       }
       // 测试环境不验证

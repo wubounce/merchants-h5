@@ -1,5 +1,5 @@
 <template>
-  <section class="ss-wrappper" v-title="title">
+  <section class="ss-wrappper">
     <div class="fixedPosition">
       <div class="bat-step">
         <div class="line-bg">
@@ -57,7 +57,6 @@
         keyword: '',
         address: '',
         shopId:'',
-        title: "批量启动",
         stepArr: [
           {
             text: "店铺",

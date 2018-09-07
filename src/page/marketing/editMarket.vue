@@ -1,5 +1,5 @@
 <template>
-<div class="addmarket" v-title="title">
+<div class="addmarket">
   <div class="permissions" v-if="$store.getters.has('mer:marketing:update')">暂无相关页面权限</div>
   <div v-else>
     <div class="addvip-header">
@@ -85,7 +85,6 @@ export default {
       discountEndDate:'',
       pickerstartDate: new Date(),
       pickerEndDate: new Date(),
-      title: '编辑限时优惠',
 
       shopVisible:false,
       checkshoptxt:'',
