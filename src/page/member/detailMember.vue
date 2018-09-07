@@ -39,7 +39,7 @@
 <script>
 import { MessageBox } from 'mint-ui';
 import { getOperatorInfoFun, delOperatorFun } from '@/service/member';
-import { getTrees} from '@/utils/tool';
+import { getTrees, removeMember} from '@/utils/tool';
 export default {
   data() {
     return {
@@ -49,7 +49,7 @@ export default {
     };
   },
   mounted() {
-    
+    removeMember();//清除localStorage
   },
   created(){
     let query = this.$route.query;

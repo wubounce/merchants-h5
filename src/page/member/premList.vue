@@ -36,7 +36,7 @@ export default {
       parentIds:[],
       maxPid:null,//最大父级id
       allMenu:[],
-      localData:{},
+      query:{},
     };
   },
   mounted() {
@@ -49,9 +49,9 @@ export default {
       let res = await permsMenuFun(); //拼接权限菜单
       this.allMenu = res;
       this.permissionsData = getTrees(res,0);
-      this.localData = getMember() ? getMember() :{};
-      this.checkpermissionslist = this.localData.checkpermissionslist ? this.localData.checkpermissionslist.map(Number): [];
-      this.parentIds = this.localData.parentIds ? this.localData.parentIds.map(Number): [];
+      this.query = this.$route.query ? this.$route.query :{};
+      this.checkpermissionslist = this.query.checkpermissionslist ? this.query.checkpermissionslist.split(',').map(Number): [];
+      this.parentIds = this.query.parentIds ? this.query.parentIds.split(',').map(Number): [];
       this.$refs.tree.setCheckedKeys(this.checkpermissionslist);
     },
     handleCheck() {
@@ -64,24 +64,24 @@ export default {
       this.parentIds = Array.from(new Set([...this.parentIds]));
       this.checkpermissionslist = Array.from(new Set([...this.checkpermissionslist]));
 
-      this.localData.checkpermissionslist = this.checkpermissionslist;
-      this.localData.parentIds = this.parentIds;
-      setMember(this.localData);
+      this.query.checkpermissionslist = this.checkpermissionslist;
+      this.query.parentIds = this.parentIds;
+      setMember(this.query);
 
       let query = this.$route.query;
       if (query.updateOperatorId) {
-        this.$router.push({name:'editMember',query:{updateOperatorId:query.updateOperatorId}});
+        this.$router.push({name:'editMember',query:{updateOperatorId:query.updateOperatorId,checkpermissionslist:this.checkpermissionslist.join(','),parentIds:this.parentIds.join(',')}});
       } else {
-        this.$router.push({name:'addMember'});
+        this.$router.push({name:'addMember',query:{checkpermissionslist:this.checkpermissionslist.join(','),parentIds:this.parentIds.join(',')}});
       }
       
     },
     cancelPermissions(){
       let query = this.$route.query;
       if (query.updateOperatorId) {
-        this.$router.push({name:'editMember',query:{updateOperatorId:query.updateOperatorId}});
+        this.$router.push({name:'editMember',query:{updateOperatorId:query.updateOperatorId,checkpermissionslist:this.checkpermissionslist.join(','),parentIds:this.parentIds.join(',')}});
       }else{
-        this.$router.push({name:'addMember'});
+        this.$router.push({name:'addMember',query:{checkpermissionslist:this.checkpermissionslist.join(','),parentIds:this.parentIds.join(',')}});
       }
       
     },

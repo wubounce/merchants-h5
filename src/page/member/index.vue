@@ -39,6 +39,7 @@
 <script>
 import { operatorListFun, lockOperatorrFun } from '@/service/member';
 import { memberIsLock } from '@/utils/mapping';
+import { getTrees, setMember, removeMember } from '@/utils/tool';
 import PagerMixin from '@/mixins/pagerMixin';
 export default {
   mixins: [PagerMixin],
@@ -54,6 +55,7 @@ export default {
     
   },
   created(){
+    removeMember();//防止点击物理返回键清除localStorage
   },
   methods: {
     async _getList(){

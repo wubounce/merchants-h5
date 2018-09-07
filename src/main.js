@@ -47,9 +47,15 @@ router.beforeEach((to, from, next) => {
   MessageBox.close();
   if (getToken()) {
       next();
-      // 已初始化权限数据，不处理
-      if (store.state.user.menu.length<=0) {
-        store.dispatch('getMenu');
+      if (typeof localStorage === 'object') {
+        try {
+            localStorage.setItem('localStorage', 1);
+            localStorage.removeItem('localStorage');
+        } catch (e) {
+            Storage.prototype._setItem = Storage.prototype.setItem;
+            Storage.prototype.setItem = function() {};
+            alert('您处于无痕浏览');
+        }
       }
   } else {
     if (whiteList.indexOf(to.path) !== -1) {

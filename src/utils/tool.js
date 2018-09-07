@@ -12,6 +12,11 @@ export const getNoticeType = () => Cookies.get(NoticeTypeKey);
 export const setNoticeType = (NoticeType) => Cookies.set(NoticeTypeKey, NoticeType);
 export const removeNoticeType = () => Cookies.remove(NoticeTypeKey);
 
+const menuKey = 'menu';
+export const setMenu = (menu) => localStorage.setItem(menuKey, JSON.stringify(menu));
+export const getMenu = () => JSON.parse(localStorage.getItem(menuKey));
+export const removeMenu = () => localStorage.removeItem(menuKey);
+
 const navTabKey = 'navTabIndex';
 export const setNavTabIndex = (navTab) => sessionStorage.setItem(navTabKey,navTab);
 export const getNavTabIndex = () => sessionStorage.getItem(navTabKey);

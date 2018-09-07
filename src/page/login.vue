@@ -39,7 +39,7 @@
 
 <script>
 import { mapState, mapActions, mapMutations } from 'vuex';
-import { getToken, removeToken, removeNavTabIndex,setNavTabIndex, getNavTabIndex, setPhone, getPhone, removeMember } from '@/utils/tool';
+import { getToken, removeToken, setMenu, removeNavTabIndex,setNavTabIndex, getNavTabIndex, setPhone, getPhone, removeMember } from '@/utils/tool';
 import { login } from '@/service/login';
 import JsEncrypt from 'jsencrypt';
 import { menuSelectFun } from '@/service/member';
@@ -49,7 +49,7 @@ export default {
       // 已登录直接返回首页
       if (getToken()) {
         let localData = getNavTabIndex();
-        localData = localData?localData:'/management';
+        localData = localData?localData:'/user';
         next(localData);
         return;
       }
@@ -120,7 +120,13 @@ export default {
          if(res.code === 8002){
             this.$router.push({name:'bindPhone'});     
           }else {
-            this.getMenu();
+            menuSelectFun().then((data) => {
+              this.setMenu(data);
+              setMenu(data);
+              let path = data[0].url;
+              setNavTabIndex('/'+ path);
+              this.$router.push(path);
+            });
           }
         }
       },

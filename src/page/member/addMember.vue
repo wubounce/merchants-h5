@@ -9,7 +9,7 @@
       <div class="form-title"><span>姓名</span></div>
       <div class="form-input"><input type="text" v-model="username" @blur="validatName" @input="disabledBtn" maxlength="20" placeholder="请输入姓名"></div>
     </div>
-    <div class="input-group"  @click="openShop">
+    <div class="input-group"  @click="shopVisible=true">
       <div class="form-title"><span>负责店铺</span></div>
       <div class="form-input"><span :class="['more',{'more-color':checkshoptxt === ''}]">{{checkshoptxt?checkshoptxt:'请选择店铺'}}</span><span class="forward iconfont icon-nextx"></span></div>
     </div>
@@ -19,6 +19,31 @@
     </div>
   </div>
   <mt-button class="confirm" @click="addmember" :disabled="disabled">提交</mt-button>
+
+  <!-- 选择店铺 -->
+  <mt-popup v-model="shopVisible" position="bottom" :closeOnClickModal="false">
+    <div class="resp-shop">
+      <span class="shop">负责店铺</span>
+    </div>
+    <section class="shop-touch">
+      <div class="all-list">
+        <label class="mint-checklist-label" v-for="(item,index) in shoplist" :key="index">
+          <span class="mint-checkbox is-right">
+            <input type="checkbox" class="mint-checkbox-input" v-model="operateShopIds" :value="item.shopId"> 
+            <span class="mint-checkbox-core"></span>
+          </span> 
+          <p class="mint-checkbox-label shopname">{{item.shopName}}</p>
+          <p class="mint-checkbox-label shopdesc">{{item.address}}</p>
+        </label>
+      </div>
+    </section>
+    <section class="promiss-footer">
+      <span class="can" @click="cancelCheckshop">取消</span>
+      <span class="cifrm" @click="getcheckshop">确定</span>
+    </section>
+  </mt-popup>
+
+
 </div>
 </template>
 <script>
@@ -38,13 +63,14 @@ export default {
       checkpermissionslist: [],
 
       shoplist:[],
+      shopVisible:false,
       operateShopIds:[],
       username:'',
       phone:'',
       parentIds:[],
       checkshoptxt:'',
 
-      localData:{}
+      query:{}
     };
   },
   mounted() {
@@ -53,13 +79,6 @@ export default {
   created(){
     this.shopListFun();
     this.menuSelect();
-    this.localData = getMember() ? getMember() :{};
-    this.username = this.localData.username;
-    this.phone = this.localData.phone;
-    this.phone || this.username ? this.disabled = false:this.disabled = true;
-    this.parentIds = this.localData.parentIds ? this.localData.parentIds:[];
-    this.operateShopIds = this.localData.operateShopIds ? this.localData.operateShopIds: [];
-    this.checkpermissionslist = this.localData.checkpermissionslist ? this.localData.checkpermissionslist: [];
   },
   computed: {
       
@@ -112,38 +131,28 @@ export default {
       let res = await permsMenuFun(); //拼接权限菜单
       this.allmenu = res;
       this.permissionsData = getTrees(res,0);
-       this.addPermissions();
     },
     async shopListFun(){
       let res = await shopListFun();
       this.shoplist = res;
-      this.getcheckshop();
     },
     getcheckshop(){
       let checklist = this.shoplist.filter(v=>this.operateShopIds.some(k=>k==v.shopId));
+      this.shopVisible = false;
       this.checkshoptxt = checklist.map(item=>item.shopName).join(',');
+    },
+    cancelCheckshop(){
+      let canceIds = this.checkshoptxt ?  this.checkshoptxt.split(',') :[];
+      canceIds = this.shoplist.filter(v=>canceIds.some(k=>k==v.shopName));
+      this.operateShopIds = canceIds.map(item=>item.shopId);
+      this.shopVisible = false;
     },
     addPermissions(){
       let checklist = this.allmenu.filter(v=>this.checkpermissionslist.some(k=>k==v.menuId));
       this.permissionsMIdsTxt = checklist.map(item=>item.name).join(',');
     },
     openPrem(){
-      setMember(this.setMemberdata());
-      this.$router.push({name:'premList'});
-    },
-    openShop(){
-      setMember(this.setMemberdata());
-      this.$router.push({name:'premshopList'});
-    },
-    setMemberdata(){
-      let setData = {
-        username:this.username,
-        phone:this.phone,
-        operateShopIds:this.operateShopIds,
-        checkpermissionslist:this.checkpermissionslist,
-        parentIds:this.parentIds,
-      };
-      return setData;
+      this.$router.push({name:'premList',query:{checkpermissionslist:this.checkpermissionslist.join(','),parentIds:this.parentIds.join(',')}});
     },
     async addmember(){
       if (this.validate()) {
@@ -160,9 +169,23 @@ export default {
         let res = await addOperatorFun(payload);
         this.$toast({message: '新增成功,密码将发送至此手机' });
         this.$router.push({name:'member'});
-        removeMember();//新增成功清楚localhostStorage
       }
     }
+  },
+  watch: {
+    $route(to,from)  {
+      this.query = this.$route.query ? this.$route.query :{};
+      this.parentIds = this.query.parentIds ? this.query.parentIds.split(','): []; //权限父级id
+      this.checkpermissionslist = this.query.checkpermissionslist ? this.query.checkpermissionslist.split(','): [];
+      this.addPermissions();
+    },
+    shopVisible: function () {
+      if (this.shopVisible) {
+        this.ModalHelper.afterOpen();
+      } else {
+        this.ModalHelper.beforeClose();
+      }
+    },
   },
   components:{
   }
