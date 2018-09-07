@@ -213,7 +213,7 @@ export default {
     getThreeArea(msg) {
       if(msg) {
         let param = msg.split(',');
-        console.log(param);
+        //console.log(param);
         this.areaValue = param[0];
         this.provinceId = param[1];
         this.cityId = param[2];
@@ -329,7 +329,7 @@ export default {
     sureShopType() {
       this.popupVisible = false;
       this.shopTypeName = this.shopTypeString;
-      console.log(this.shopType);
+      //console.log(this.shopType);
     },
     cancelShopType() {
       this.popupVisible = false;
@@ -362,7 +362,7 @@ export default {
     changeTime(picker, values) {
       this.shopTime.startTime = values[0].slice(0,2) + ':' +values[1].slice(0,2);
       this.shopTime.endTime = values[2].slice(0,2) + ':' +values[3].slice(0,2);
-      console.log('values[0]:',values[0]);
+      //console.log('values[0]:',values[0]);
     },
     chooseDay() {
       // 点击全天直接获取全天并且退出弹框
@@ -407,12 +407,12 @@ export default {
 
     // 提交按钮
     async submit() {
-      console.log(this.lng);
+      //console.log(this.lng);
       if(this.shopName!=false && this.shopType!=false && this.provinceId != false && this.cityId !=false && this.provinceId != false && this.address != false && this.lat !=false && this.lng != false && this.lat !=undefined && this.lng != undefined && this.addBusinessTime != false) {
         if(this.orderLimitMinutes) {
           //在判断
           let reg=/^[1-9]+\d*$/;
-          console.log(reg.test(this.orderLimitMinutes));
+          //console.log(reg.test(this.orderLimitMinutes));
           if(reg.test(this.orderLimitMinutes) &&parseInt(this.orderLimitMinutes) >0 && parseInt(this.orderLimitMinutes) <10) {
             //传值
             let changeisReserve = (this.isReserve==true)? 0 :1;
