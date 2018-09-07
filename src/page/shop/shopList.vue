@@ -63,9 +63,6 @@ export default {
     };
   },
   methods: {
-    moreOrthen() {
-      return (this.allLoaded && this.lessTen);
-    },
     toAddShop() {
       this.$router.push({
         name:'addShop'
