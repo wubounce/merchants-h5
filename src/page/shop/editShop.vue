@@ -63,8 +63,7 @@
 </template>
 
 <script>
-import UploadImg from "@/components/UploadImg/UploadImg";
-import { shopDetailFun , addOrEditShopFun , areaListFun , listParentTypeFun , uploadFileFun , manageListFun } from '@/service/shop';
+import { shopDetailFun , addOrEditShopFun , areaListFun , listParentTypeFun  , manageListFun } from '@/service/shop';
 import { MessageBox } from 'mint-ui';
 export default {
   data() {
@@ -778,6 +777,8 @@ export default {
       }
       else if(from.name == 'shopDetail'){
         location.reload();
+        //this.getShopDetail();
+        //console.log(this.addBusinessTime);
       }
     },
     popupVisible: function () {

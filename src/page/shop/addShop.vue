@@ -63,11 +63,7 @@
 
 <script>
 import { MessageBox } from 'mint-ui';
-import { addOrEditShopFun } from '@/service/shop';
-import { areaListFun } from '@/service/shop';
-import { listParentTypeFun } from '@/service/shop';
-import { uploadFileFun } from '@/service/shop';
-import { manageListFun } from '@/service/shop';
+import { addOrEditShopFun , areaListFun , listParentTypeFun , manageListFun } from '@/service/shop';
 export default {
   data() {
     return {
@@ -234,6 +230,24 @@ export default {
     };
   },
   methods:{
+    //置空
+    setNull() {
+      this.shopName = '';
+      this.shopType = '';
+      this.list[0].value = '';
+      this.list[1].value = '';
+      this.list[2].value = '';
+      this.provinceId = '';
+      this.cityId = '';
+      this.districtI = '';
+      this.address = '';
+      this.lat = '';
+      this.lng = '';
+      this.isReserve = false;
+      this.orderLimitMinutes = '';
+      this.addBusinessTime = '';
+      this.organization = '';
+    },
     disbaledBtn() {
       this.buttonHide = false;
     },
@@ -692,6 +706,8 @@ export default {
       }
       else if(from.name == 'shopList'){
         location.reload();
+        //置空，解决keepAlive造成的保留上次
+        //this.setNull();  
       }
     },
     popupVisible: function () {
