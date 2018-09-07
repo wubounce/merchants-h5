@@ -28,7 +28,7 @@ const listByNameOrlmei = '/machine/listByNameOrImei'; //设备搜索
 const batchStartOn = '/batchExecutePlan/add'; //批量启动
 const shopSearch = '/shop/listShop'; //店铺模糊查询 
 const typeList = '/machine/typeList'; //通信类型（串口或者脉冲）
-const listSubTypeBy = '/machine/listSubTypeBy';
+const listSubTypeBy = '/machine/listSubTypeBy'; 
 const stateMachine = '/machine/statisticsMachine';
 const listSubTypeAll = '/machine/listSubTypeAll';
 

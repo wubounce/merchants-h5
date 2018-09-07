@@ -9,10 +9,12 @@
     <form ref="loginForm" :model="form">
       <div class="form-group input">
         <p class="userName">
+          <label class="title">账号</label>
           <input type="text" v-model.trim="form.userName" v-on:input="userinputFunc" placeholder="请输入用户名/手机号">
-          <span class="open-eyes eyes iconfont icon-guanbi" v-if="isuser" @click="form.userName='';isuser=false;disabled=true"></span>
+          <span class="open-eyes eyes iconfont icon-guanbi" @click="form.userName='';disabled=true"></span>
         </p>
         <div class="passWord">
+          <label class="title">密码</label>
           <input type="text" v-model.trim="form.password" v-if="typepwd" v-on:input="pwdinputFunc" autocomplete="off">
           <input type="password" v-model.trim="form.password" v-on:input="pwdinputFunc" placeholder="请输入密码" autocomplete="off" v-else>
           <div @click="openpwd" class="open-eyes">
@@ -63,7 +65,6 @@ export default {
           userName: getPhone()? getPhone():'',
           password: ''
         },
-        isuser:false,
         typepwd:false,
         disabled:true
       };
@@ -122,7 +123,6 @@ export default {
 
       },
       userinputFunc(){
-        this.isuser = true;
         if (!this.form.userName || !this.form.password) {
           this.disabled = true;
         } else {
@@ -176,10 +176,18 @@ export default {
     .form-group {
       background: #fff;
       .userName , .passWord {
-        height:1.55rem;
-        border-bottom:1px solid rgba(229,229,229,1);
+        display: flex;
+        height: 1.55rem;
+        font-size: 0.43rem;
+        border-bottom: 1px solid rgba(229,229,229,1);
+        .title {
+          flex-grow: 1;
+          width: 1.92rem;
+          line-height: 1.55rem;
+        }
         input {
-          width: 90%;
+          width: auto;
+          flex-grow: 1;
           padding-top: 0.49rem;
           padding-bottom: 0.48rem;
           height:1.55rem;

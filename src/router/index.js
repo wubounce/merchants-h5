@@ -83,6 +83,12 @@ export default new Router({
       meta: {title: '注册账号'},
     },
     {
+      path: '/referee',
+      name: 'referee',
+      component: () => import ('@/page/register/referee'),
+      meta: {title: '推荐'},
+    },
+    {
       path: '/confimPwd',
       name: 'confimPwd',
       component: () => import ('@/page/reset/confimPwd'),
