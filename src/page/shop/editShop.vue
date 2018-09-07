@@ -9,7 +9,6 @@
       <p class="shopname-p"><span>详细地址</span><span><input  type="text" class='addressInput' v-model="address"  placeholder="请填写详细地址"></span></p>
     </ul>
     <div class="second">
-      <!-- <li class="device business" @click="addDevice">设备类型<span>{{machineName}}</span></li> -->
       <p class="isReserve device">
         <span>预约功能</span>
         <span>
@@ -72,7 +71,6 @@ export default {
       index:'',
       shopId:'',
       isbgc:false,
-      deviceDetail:false,
       shopName:'',
       oldName:'',
       noEdit: false,
@@ -789,13 +787,6 @@ export default {
     },
     placeVisible: function () {
       if (this.placeVisible) {
-        this.ModalHelper.afterOpen();
-      } else {
-        this.ModalHelper.beforeClose();
-      }
-    },
-    deviceDetail: function () {
-      if (this.deviceDetail) {
         this.ModalHelper.afterOpen();
       } else {
         this.ModalHelper.beforeClose();

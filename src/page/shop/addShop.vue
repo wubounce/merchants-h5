@@ -46,9 +46,6 @@ export default {
     return {
       areaValue: '',
       buttonHide:true,
-      index:'',
-      isbgc:false,
-      deviceDetail:false,
       shopName:'',
       shopTypeName:'',
       school:'',
@@ -369,7 +366,6 @@ export default {
       this.addBusinessTime = '00:00-23:59';
     },
     chooseTime() {
-      this.index = 4;
       this.timeVisible = true;
       this.isClass = true;
     },
@@ -469,7 +465,6 @@ export default {
             address: this.address,
             lat:this.lat,
             lng:this.lng,
-            //machineTypeIds: this.machineTypeIdsArray,
             isReserve: changeisReserve,
             orderLimitMinutes: this.orderLimitMinutes,
             workTime: this.addBusinessTime,
@@ -571,13 +566,6 @@ export default {
     },
     placeVisible: function () {
       if (this.placeVisible) {
-        this.ModalHelper.afterOpen();
-      } else {
-        this.ModalHelper.beforeClose();
-      }
-    },
-    deviceDetail: function () {
-      if (this.deviceDetail) {
         this.ModalHelper.afterOpen();
       } else {
         this.ModalHelper.beforeClose();
