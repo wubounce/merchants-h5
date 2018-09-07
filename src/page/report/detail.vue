@@ -69,7 +69,7 @@ export default {
     },
   },
   beforeRouteLeave(to, from, next) {
-    if (to.name === 'report') {
+    if (to.path== '/report') {
       to.meta.keepAlive = true;
     } 
     next();

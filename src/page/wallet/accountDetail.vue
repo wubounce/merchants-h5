@@ -34,9 +34,6 @@
                 <div><p>设备名称</p><p>{{data.machineName}}</p></div>
                 <div><p>IMEI号</p><p>{{data.imei}}</p></div>
             </li>
-            <li>
-                <div class="remarks"><p>备注</p><p>{{data.content.replace(',null','')}}</p></div>    
-            </li>
 		</ul>
         <ul class="record" v-if="data.type===3">
             <li>

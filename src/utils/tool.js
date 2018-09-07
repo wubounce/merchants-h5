@@ -18,9 +18,9 @@ export const getMenu = () => JSON.parse(localStorage.getItem(menuKey));
 export const removeMenu = () => localStorage.removeItem(menuKey);
 
 const navTabKey = 'navTabIndex';
-export const setNavTabIndex = (navTab) => sessionStorage.setItem(navTabKey,navTab);
-export const getNavTabIndex = () => sessionStorage.getItem(navTabKey);
-export const removeNavTabIndex = () => sessionStorage.removeItem(navTabKey);
+export const setNavTabIndex = (navTab) => localStorage.setItem(navTabKey,navTab);
+export const getNavTabIndex = () => localStorage.getItem(navTabKey);
+export const removeNavTabIndex = () => localStorage.removeItem(navTabKey);
 
 const PhoneKey = 'phone';
 export const setPhone = (navTab) => localStorage.setItem(PhoneKey,JSON.stringify(navTab));

@@ -101,12 +101,12 @@ export default {
         this.operateShopIds = updateOperateShopIds.map(item=>item.shopId);
         this.checkpermissionslist = res.list.map(item=>item.menuId);
 
-        // let max = this.permissionsData[0];
-        // for ( let i = 1; i < this.permissionsData.length; i++) {// 求出一组数组中的最大值
-        //   if (max.menuId < this.permissionsData[i].menuId) {
-        //     max = this.permissionsData[i].menuId;
-        //   }
-        // }
+        let max = this.permissionsData[0];
+        for ( let i = 1; i < this.permissionsData.length; i++) {// 求出一组数组中的最大值
+          if (max.menuId < this.permissionsData[i].menuId) {
+            max = this.permissionsData[i].menuId;
+          }
+        }
         this.parentIds = res.list.filter(item=>item.menuId<=9).map(item=>item.menuId); //在父级id中去掉首页和报表
         this.checkpermissionslist = this.checkpermissionslist.filter(v=> this.parentIds.indexOf(v) == -1); //取差集
         this.permissionsMIdsTxt = res.list.map(item=>item.name).join(',');
@@ -141,7 +141,7 @@ export default {
       this.permissionsMIdsTxt = checklist.map(item=>item.name).join(',');
     },
     openPrem(){
-      this.$router.push({name:'premList',query:{updateOperatorId:this.updateOperatorId,checkpermissionslist:this.checkpermissionslist.join(',')}});
+      this.$router.push({name:'premList',query:{updateOperatorId:this.updateOperatorId,checkpermissionslist:this.checkpermissionslist.join(','),parentIds:this.parentIds.join(',')}});
     },
     async addmember(){
       if (this.validate()) {

@@ -64,7 +64,7 @@ import { orderStatus } from '@/utils/mapping';
 import { orderListFun,searchOrderFun, ordeRrefundFun, machineResetFun, machineBootFun } from '@/service/order';
 import { MessageBox } from 'mint-ui';
 import { getDuration } from '@/utils/tool';
-import { validatSearch } from '@/utils/validate';
+import { validatSearch, validatReplace } from '@/utils/validate';
 import PagerMixin from '@/mixins/pagerMixin';
 import Web from '@/utils/Web';
 export default {
@@ -114,7 +114,9 @@ export default {
       this.nosearchList = false;
       let payload = null;
       if (this.searchData !== '') {
-         payload = {search:this.searchData,page:this.page,pageSize:this.pageSize};
+         // 去掉转义字符
+        this.searchData = this.searchData.replace(validatReplace, '');
+        payload = {search:this.searchData,page:this.page,pageSize:this.pageSize};
       } else {
         payload = {orderStatus:this.orderStatus,page:this.page,pageSize:this.pageSize};
       }

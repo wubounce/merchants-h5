@@ -38,8 +38,9 @@
 </template>
 
 <script>
+import store from '@/store';
 import { mapState, mapActions, mapMutations } from 'vuex';
-import { getToken, removeToken, setMenu, removeNavTabIndex,setNavTabIndex, getNavTabIndex, setPhone, getPhone, removeMember } from '@/utils/tool';
+import { getToken, removeToken, setMenu, removeMenu, removeNavTabIndex,setNavTabIndex, getNavTabIndex, setPhone, getPhone, removeMember } from '@/utils/tool';
 import { login } from '@/service/login';
 import JsEncrypt from 'jsencrypt';
 import { menuSelectFun } from '@/service/member';
@@ -79,6 +80,7 @@ export default {
       removeToken();
       removeNavTabIndex();
       removeMember();
+      removeMenu();
       this.form.userName = getPhone() ? getPhone()[0]:''; //最新一个用户名
     },
      computed: {
@@ -123,7 +125,8 @@ export default {
             menuSelectFun().then((data) => {
               this.setMenu(data);
               setMenu(data);
-              let path = data[0].url;
+              let pac = data.find(item=>item.name === '首页' || item.name === '报表');
+              let path = pac ? pac.url : data[0].url;
               setNavTabIndex('/'+ path);
               this.$router.push(path);
             });
