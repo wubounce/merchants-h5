@@ -85,11 +85,6 @@ export default {
       this.$router.push({name:'addMember'});
     }
   },
-  beforeRouteLeave(to, from, next) {
-    // 设置下一个路由的 meta
-    to.meta.keepAlive = false; // C 跳转到 A 时让 A 不缓存，即刷新
-    next();
-  },
   components:{
   }
 };

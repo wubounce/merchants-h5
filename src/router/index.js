@@ -194,7 +194,7 @@ export default new Router({
       path: '/addMember',
       name: 'addMember',
       component: () => import ('@/page/member/addMember'),
-      meta: {title: '人员新增',keepAlive:true},
+      meta: {title: '人员新增', keepAlive:true},
     },
     {
       path: '/detailMember',
@@ -206,19 +206,13 @@ export default new Router({
       path: '/editMember',
       name: 'editMember',
       component: () => import ('@/page/member/editMember'),
-      meta: {title: '人员修改',keepAlive:true},
+      meta: {title: '人员修改', keepAlive:true},
     },
     {
       path: '/premList',
       name: 'premList',
       component: () => import ('@/page/member/premList'),
       meta: {title: '人员权限'},
-    },
-    {
-      path: '/premshopList',
-      name: 'premshopList',
-      component: () => import ('@/page/member/premshopList'),
-      meta: {title: '人员店铺'},
     },
     {
       path: '/order',

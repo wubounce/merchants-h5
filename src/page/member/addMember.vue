@@ -174,10 +174,22 @@ export default {
   },
   watch: {
     $route(to,from)  {
-      this.query = this.$route.query ? this.$route.query :{};
-      this.parentIds = this.query.parentIds ? this.query.parentIds.split(','): []; //权限父级id
-      this.checkpermissionslist = this.query.checkpermissionslist ? this.query.checkpermissionslist.split(','): [];
-      this.addPermissions();
+      if(from.name == 'premList') {
+        this.query = this.$route.query ? this.$route.query :{};
+        this.parentIds = this.query.parentIds ? this.query.parentIds.split(','): []; //权限父级id
+        this.checkpermissionslist = this.query.checkpermissionslist ? this.query.checkpermissionslist.split(','): [];
+        this.addPermissions();
+      }
+      else if(from.name == 'member'){
+        this.parentIds = [];
+        this.checkpermissionslist = [];
+        this.operateShopIds = [];
+        this.username = [];
+        this.phone = [];
+        this.checkshoptxt = '';
+        this.permissionsMIdsTxt = '';
+      }
+      
     },
     shopVisible: function () {
       if (this.shopVisible) {

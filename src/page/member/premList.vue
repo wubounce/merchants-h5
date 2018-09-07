@@ -74,14 +74,13 @@ export default {
       } else {
         this.$router.push({name:'addMember',query:{checkpermissionslist:this.checkpermissionslist.join(','),parentIds:this.parentIds.join(',')}});
       }
-      
     },
     cancelPermissions(){
       let query = this.$route.query;
       if (query.updateOperatorId) {
-        this.$router.push({name:'editMember',query:{updateOperatorId:query.updateOperatorId,checkpermissionslist:this.checkpermissionslist.join(','),parentIds:this.parentIds.join(',')}});
+        this.$router.push({name:'editMember',query:{updateOperatorId:query.updateOperatorId,checkpermissionslist:query.checkpermissionslist,parentIds:query.parentIds}});
       }else{
-        this.$router.push({name:'addMember',query:{checkpermissionslist:this.checkpermissionslist.join(','),parentIds:this.parentIds.join(',')}});
+        this.$router.push({name:'addMember',query:{checkpermissionslist:query.checkpermissionslist,parentIds:query.parentIds}});
       }
       
     },
