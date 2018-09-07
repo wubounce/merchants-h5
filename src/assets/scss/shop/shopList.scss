@@ -72,22 +72,44 @@ section {
       padding-top: 4rem;
     }
     .circle {
+      width:1.49rem;
+      height:1.49rem;
+      background:#1890FF;
       border-radius: 50%;
-      background-color: #1890FF;
-      width: 1.5rem;
-      height: 1.5rem;
-      position: fixed;
-      bottom: 1rem;
-      right: 1rem;
+      font-size:12px;
+      font-family:PingFangSC-Regular;
+      color:rgba(255,255,255,1);
       text-align: center;
-      div {
-        color:#fff;
-        &:first-child {
-          font-size: 25px;
-        }
-      }
-      .iconShop {
-        font-size: 0.4rem;
+      -moz-box-shadow: 0 0.05rem 0.23rem 0 rgba(24, 144, 255, 0.7);
+      -webkit-box-shadow: 0 0.05rem 0.23rem 0 rgba(24, 144, 255, 0.7);
+      box-shadow: 0 0.05rem 0.23rem 0 rgba(24, 144, 255, 0.7);
+      position: fixed;
+      bottom:0.55rem;
+      right: 0.64rem;
+      .order-action {
+        display: inline-block;
+        margin-top: 0.2rem;
+        font-size: 16px;
+        color: #fff;
       }
     }
+    // .circle {
+    //   border-radius: 50%;
+    //   background-color: #1890FF;
+    //   width: 1.5rem;
+    //   height: 1.5rem;
+    //   position: fixed;
+    //   bottom: 1rem;
+    //   right: 1rem;
+    //   text-align: center;
+    //   div {
+    //     color:#fff;
+    //     &:first-child {
+    //       font-size: 25px;
+    //     }
+    //   }
+    //   .iconShop {
+    //     font-size: 0.4rem;
+    //   }
+    // }
   }

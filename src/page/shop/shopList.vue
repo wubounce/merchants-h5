@@ -37,8 +37,8 @@
       </ul>
       <p v-else class="noShop">暂无店铺, 可点击右下角进行添加</p>
       <div class="circle" @click="toAddShop" v-has="'mer:shop:add'">
-        <div>+</div>
-        <div class="iconShop">店铺</div>
+        <span class="order-action iconfont icon-tianjia"></span><br>
+        <span>店铺</span>
       </div>
     </div>
 	</section>
