@@ -20,16 +20,7 @@ export default {
   props: {
     area: {
       type: String
-    },
-    // provinceId1: {
-    //   type: String
-    // },
-    // cityId1: {
-    //   type: String
-    // },
-    // districtId1: {
-    //   type: String
-    // }
+    }
   },
  data() {
   return {
@@ -110,7 +101,6 @@ export default {
       this.$emit('chooseArea',this.message); 
     },
     async addressChange(picker,values) {
-      //console.log(1);
       let obj = { parentId: '0' };
       let res = await areaListFun(obj);
       this.provinceArray = res;
@@ -119,14 +109,12 @@ export default {
       });
       picker.setSlotValues(0, choosePro); //设置省
 
-      //console.log(values[0]);
       for(let i=0;i<this.provinceArray.length;i++) {
         if( values[0] === this.provinceArray[i].areaName ) {
           let city = { parentId: this.provinceArray[i].areaId };
           this.provinceId = this.provinceArray[i].areaId;
           let resCity = await areaListFun(city);
           this.cityArray = resCity;
-          //console.log(this.cityArray);
           let chooseCity = resCity.map((c)=> {
             return c.areaName;
           });
@@ -134,7 +122,6 @@ export default {
         }
       }
 
-      //console.log(values[1]);
       //根据市，找出与之对应的区
       for(let j=0;j<this.cityArray.length;j++) {
         if(values[1] == this.cityArray[j].areaName) {
@@ -155,12 +142,9 @@ export default {
           this.districtId = this.districtArray[j].areaId;
         }
       }
-
       this.provinceName = values[0];
       this.cityName = values[1];
       this.districtName = values[2];
-
-
     }
   },
   watch: {
@@ -174,7 +158,6 @@ export default {
   }
 };
 </script>
-
 
 <style lang="scss" scoped >
 section {
@@ -224,4 +207,3 @@ section {
   }
 }
 </style>
-
