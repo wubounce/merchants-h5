@@ -2,14 +2,12 @@
   <section class="personal">
     <ul class="personal-list">
       <p class="shopname-p"><span>店铺名称</span><span><input  @change="blur" type="text" class='addressInput' v-model="shopName"  placeholder="请填写店铺名称"></span></p>
-      <li v-for="(item,index) in list" :key="index" class="personal-item" @click="toDetail(index)">
-        {{item.title}}
-        <span>{{item.value == ''|| item.value==null? '' : item.value}}</span>
-      </li>
+      <li class="personal-item" @click="chooseShopType">店铺类型<span>{{shopTypeName}}</span></li>
+      <place :area='areaValue' @chooseArea='getThreeArea'></place>
+      <li class="personal-item" @click="chooseMap">小区/大厦/学校<span>{{school}}</span></li>
       <p class="shopname-p"><span>详细地址</span><span><input  type="text" class='addressInput' v-model="address"  placeholder="请填写详细地址"></span></p>
     </ul>
     <div class="second">
-      <!-- <li class="device business" @click="addDevice">设备类型<span>{{machineName}}</span></li> -->
       <p class="isReserve device">
         <span>预约功能</span>
         <span><mt-switch class="check-switch" v-model="isReserve" @change="editTime(isReserve)"></mt-switch></span>
@@ -20,58 +18,40 @@
           <input  v-model="orderLimitMinutes" :disabled="noEdit" :placeholder="placeholdercontent"  maxlength='1'>
         </span>
       </p>
-      <!-- 先注释掉，下个版本做营业时间 -->
       <li class="business" @click="chooseTime">营业时间<span>{{addBusinessTime}}</span></li>
     </div>
     <p class="blank"></p>
     <button class="submit" @click="submit">提交</button>
-
     <!-- 店铺类型 -->
     <mt-popup v-model="popupVisible" position="bottom" class="mint-popup">
       <div class="prop-bd">
         <div class="page-picker-wrapper">
-          <mt-picker class="picker" :slots="slots" @change="valuesChange" :showToolbar="true" ><p class="toolBar"><span @click="cancel">取消</span><span>店铺类型</span><span @click="confirmNews">确定</span></p></mt-picker>
+          <mt-picker class="picker" :slots="slots" @change="valuesChange" :showToolbar="true" ><p class="toolBar"><span @click="cancelShopType">取消</span><span>店铺类型</span><span @click="sureShopType">确定</span></p></mt-picker>
         </div>
       </div>
     </mt-popup>
-    
-    <!-- 所在地区 -->
-    <mt-popup v-model="placeVisible" position="bottom" class="mint-popup">
-      <div class="prop-bd">
-        <div class="page-picker-wrapper">
-          <mt-picker :slots="addressSlots" @change="onAddressChange" :showToolbar="true"><p class="toolBar"><span @click="cancel">取消</span><span>所在地区</span><span @click="confirmNews">确定</span></p></mt-picker>
-        </div>
-      </div>
-    </mt-popup>
-
-    
-    <!-- 设备类型 -->
-    <!-- <mt-popup v-model='deviceDetail' position="bottom" class="mint-popup">
-      <p class="toolBarMachine"><span @click="cancel">取消</span><span>设备类型</span><span @click="confirmNews">确定</span></p>
-      <div class='resp-shop-wrap'>
-        <mt-checklist align="right" :options="options" v-model="machine"></mt-checklist>
-      </div>
-    </mt-popup> -->
-
     <!-- 营业时间 -->
     <mt-popup v-model="timeVisible" position="bottom" class="mint-popup">
-       <mt-picker class="picker"  :slots="slotsTime" @change="changeTime" :showToolbar="true"><p class="toolBar"><span @click="cancel">取消</span><span @click="chooseDay" id="allDay">全天</span><span @click="confirmNews">确定</span></p></mt-picker>
+       <mt-picker class="picker"  :slots="slotsTime" @change="changeTime" :showToolbar="true"><p class="toolBar"><span @click="cancelWorkTime">取消</span><span @click="chooseDay" id="allDay">全天</span><span @click="sureWorkTime">确定</span></p></mt-picker>
     </mt-popup>
-
   </section>
 </template>
 
 <script>
+import place from '@/components/Area/Area';
 import { MessageBox } from 'mint-ui';
 import { addOrEditShopFun , areaListFun , listParentTypeFun , manageListFun } from '@/service/shop';
 export default {
   data() {
     return {
+      areaValue: '',
       buttonHide:true,
       index:'',
       isbgc:false,
       deviceDetail:false,
       shopName:'',
+      shopTypeName:'',
+      school:'',
       arrName:[],
       address:'',
       machineName:'',
@@ -229,6 +209,23 @@ export default {
     };
   },
   methods:{
+    getThreeArea(msg) {
+      if(msg) {
+        let param = msg.split(',');
+        console.log(param);
+        this.areaValue = param[0];
+        this.provinceId = param[1];
+        this.cityId = param[2];
+        this.districtId = param[3];
+        this.mapCity = param[5];
+        //清空小区...，详细地址的信息
+        this.lat = '';
+        this.lng = '';
+        this.school = '';
+        this.organization = '';
+        this.address = '';
+      }
+    },
     //置空
     setNull() {
       this.shopName = '';
@@ -266,7 +263,6 @@ export default {
             duration: 3000
           });
       }
-      
       //校验重名
       for(let i=0; i<this.arrName.length; i++) {
         if(e.target.value == this.arrName[i]) {
@@ -323,31 +319,32 @@ export default {
           break;
       }
     },
-    toDetail(value) {
-      this.index = value;
-      switch (value) {
-        case 0:
-          this.popupVisible = true;
-          this.isClass = true;
-          break;
-        case 1:
-          this.placeVisible = true;
-          this.getArea();
-          break;
-        case 2:{
-          if(this.list[1].value) {
-            this.goMap("mapSearch",this.mapCity);
-            this.mapVisible = true;
-          }
-          else {
-            this.$toast({
-              message: '请您先选择所在地区，再选择小区/大厦/学校',
-              position: 'middle',
-              duration: 3000
-            });
-          }
-          break;
-        }
+
+    // 选择店铺类型
+    chooseShopType() {
+      this.popupVisible = true;
+      this.isClass = true;
+    },
+    sureShopType() {
+      this.popupVisible = false;
+      this.shopTypeName = this.shopTypeString;
+      console.log(this.shopType);
+    },
+    cancelShopType() {
+      this.popupVisible = false;
+    },
+
+    // 选择小区/大厦/学校
+    chooseMap() {
+      if(this.areaValue) {
+        this.goMap("mapSearch",this.mapCity);
+      }
+      else {
+        this.$toast({
+          message: '请您先选择所在地区，再选择小区/大厦/学校',
+          position: 'middle',
+          duration: 3000
+        });
       }
     },
    //跳转传值
@@ -359,177 +356,8 @@ export default {
         }
       });
     },
-    //确认按钮
-    confirmNews() {
-      this.isClass = false;
-      switch(this.index) {
-        case 0:
-          this.popupVisible = false;
-          this.list[0].value = this.shopTypeString;
-          break;
-        case 1:
-          this.placeVisible = false;
-          this.mapCity = this.cityName;
-          console.log(this.provinceId,this.cityId,this.districtId);
-          if(!this.districtName) {
-            this.districtName = '';
-            this.districtId = this.cityId;
-          }
-          console.log(this.provinceId,this.cityId,this.districtId);
-          if( this.cityName != '' && this.cityName != null && this.cityName != undefined ) {
-            if(this.provinceName == this.cityName.slice(0,2)) {
-              this.list[1].value = this.cityName + this.districtName;
-            }
-            else {
-              this.list[1].value = this.provinceName + this.cityName + this.districtName;
-            }
-          }
-          if(this.list[1].value) {
-            this.list[1].value = this.list[1].value.length>10? this.list[1].value.slice(0,10)+'...' : this.list[1].value;
-          }
-          this.lat = '';
-          this.lng = '';
-          this.list[2].value = '';
-          this.address = '';
-          break;
-        //经纬度 
-        case 2:
-          break;
-        //设备管理修改
-        case 3: {
-          this.deviceDetail = false;
-          this.isbgc = false;
-          if(this.machine.join(' , ').length > 20 ) {
-            this.machineName = this.machine.join(' , ').slice(0,20) + '...';
-          }
-          else {
-            this.machineName = this.machine.join(' , ');   
-          }
-          this.lastMachine = [].concat(this.machine); // 修改bug
-          // console.log('last',this.lastMachine);
-          let arr = [];
-          for(let i=0;i<this.machine.length;i++) {
-            for(let j=0;j<this.machineArray.length;j++) {
-              if(this.machine[i] == this.machineArray[j].name) {
-                arr.push(this.machineArray[j].id);
-              }
-            }
-          }
-          this.machineTypeIdsArray = arr.join(',');
-          break;
-        }
-        case 4:
-          this.timeVisible = false;
-          if(parseInt(this.shopTime.startTime.slice(0,2)) < parseInt(this.shopTime.endTime.slice(0,2))) {
-            this.addBusinessTime = this.shopTime.startTime + '-' + this.shopTime.endTime;
-            // 点击直接跳转出去
-            // this.slotsTime[0].defaultIndex = 4;
-            // this.slotsTime[2].defaultIndex = 30;
-            // this.slotsTime[4].defaultIndex = 20;
-            // this.slotsTime[6].defaultIndex = 30;
-          }
-          else {
-            if(parseInt(this.shopTime.startTime.slice(0,2)) == parseInt(this.shopTime.endTime.slice(0,2))) {
-              if(parseInt(this.shopTime.startTime.slice(3,5)) < parseInt(this.shopTime.endTime.slice(3,5))) {
-                this.addBusinessTime = this.shopTime.startTime + '-' + this.shopTime.endTime;
-              }
-              else {
-                this.$toast({
-                  message: '营业的开始时间不得小于结束时间',
-                  position: "middle",
-                  duration: 3000
-                });
-              }
-            }
-            else {
-              this.$toast({
-                message: '营业的开始时间不得小于结束时间',
-                position: "middle",
-                duration: 3000
-              });
-            }
-          }
-          break;
-      }
-    },
-    cancel() {
-      this.isClass = false;
-      switch(this.index) {
-        case 0:
-          this.popupVisible = false;
-          break;
-        case 1:
-          this.placeVisible = false;
-          break;
-        case 2:
-          break;
-        case 3:
-          this.isbgc = false;
-          this.deviceDetail = false;
-          this.machine = [].concat(this.lastMachine); // 修改bug
-          // console.log('取消：',this.machine); // 修改bug
-          break;
-        case 4:
-          this.timeVisible = false;
-          break;
-      }
-    },
-    async  onAddressChange(picker, values) {
-      //根据省，找出与之对应的市
-      for(let i=0;i<this.provinceArray.length;i++) {
-        if(values[0] == this.provinceArray[i].areaName) {
-          let city = { parentId: this.provinceArray[i].areaId };
-          this.provinceId = this.provinceArray[i].areaId;
-          let res = await areaListFun(city);
-          let chooseCity = res.map((c)=> {
-            return c.areaName;
-          });
-          this.cityArray = res;
-          picker.setSlotValues(1, chooseCity); //设置市
-        }
-      }
 
-      //根据市，找出与之对应的区
-      for(let j=0;j<this.cityArray.length;j++) {
-        if(values[1] == this.cityArray[j].areaName) {
-          let district = { parentId: this.cityArray[j].areaId };
-          this.cityId = this.cityArray[j].areaId;
-          let resDistrict = await areaListFun(district);
-          let chooseDistrict = resDistrict.map((d)=> {
-            return d.areaName;
-          });
-
-          this.districtArray = resDistrict;
-          picker.setSlotValues(2, chooseDistrict); //设置市
-        }
-      }
-
-      for(let j=0;j<this.districtArray.length;j++) {
-        if(values[2] == this.districtArray[j].areaName) {
-          this.districtId = this.districtArray[j].areaId;
-        }
-      }
-      this.provinceName = values[0];
-      this.cityName = values[1];
-      this.districtName = values[2];
-    },
-    async addDevice() {
-      this.index = 3;
-      this.isClass = true;
-      this.isbgc = true;
-      this.deviceDetail = true;
-      let obj = {
-        //onlyMine: false
-      };
-      let res = await listParentTypeFun(obj);
-      this.machineArray = res;
-      let arr = [];
-      arr = JSON.parse(JSON.stringify(res).replace(/name/g,"label"));
-      this.options = JSON.parse(JSON.stringify(arr).replace(/id/g,"value"));
-      for(let i=0;i<this.options.length;i++) {
-        this.options[i]['value'] = this.options[i]['label'];
-      }
-    },
+    // 营业时间
     changeTime(picker, values) {
       this.shopTime.startTime = values[0].slice(0,2) + ':' +values[1].slice(0,2);
       this.shopTime.endTime = values[2].slice(0,2) + ':' +values[3].slice(0,2);
@@ -539,13 +367,44 @@ export default {
       // 点击全天直接获取全天并且退出弹框
       this.timeVisible = false;
       this.addBusinessTime = '00:00-23:59';
-
     },
     chooseTime() {
       this.index = 4;
       this.timeVisible = true;
       this.isClass = true;
     },
+    sureWorkTime() {
+      this.timeVisible = false;
+      if(parseInt(this.shopTime.startTime.slice(0,2)) < parseInt(this.shopTime.endTime.slice(0,2))) {
+        this.addBusinessTime = this.shopTime.startTime + '-' + this.shopTime.endTime;
+      }
+      else {
+        if(parseInt(this.shopTime.startTime.slice(0,2)) == parseInt(this.shopTime.endTime.slice(0,2))) {
+          if(parseInt(this.shopTime.startTime.slice(3,5)) < parseInt(this.shopTime.endTime.slice(3,5))) {
+            this.addBusinessTime = this.shopTime.startTime + '-' + this.shopTime.endTime;
+          }
+          else {
+            this.$toast({
+              message: '营业的开始时间不得小于结束时间',
+              position: "middle",
+              duration: 3000
+            });
+          }
+        }
+        else {
+          this.$toast({
+            message: '营业的开始时间不得小于结束时间',
+            position: "middle",
+            duration: 3000
+          });
+        }
+      }
+    },
+    cancelWorkTime() {
+      this.timeVisible = false;
+    },
+
+    // 提交按钮
     async submit() {
       console.log(this.lng);
       if(this.shopName!=false && this.shopType!=false && this.provinceId != false && this.cityId !=false && this.provinceId != false && this.address != false && this.lat !=false && this.lng != false && this.lat !=undefined && this.lng != undefined && this.addBusinessTime != false) {
@@ -631,7 +490,13 @@ export default {
             });
         }
         
-      }else if(!this.list[0].value) {
+      }else if(!this.shopName) {
+        this.$toast({
+            message: '请填写店铺名称',
+            position: 'middle',
+            duration: 3000
+          });
+      }else if(!this.shopTypeName) {
         this.$toast({
             message: '请填写店铺类型',
             position: 'middle',
@@ -670,18 +535,6 @@ export default {
           });
       }
     },
-    //submit
-    //省市区联动
-    async getArea() {
-      let obj = { parentId: 0 };
-      let res = await areaListFun(obj);
-      this.provinceArray = res;
-     
-      for(let i=0;i<res.length;i++) {
-        this.addressSlots[0].values.push(res[i].areaName);
-      }
-      
-    },
     async getShoplist() {
       let res = await manageListFun();
       this.arrName = res.items.map((i) => {
@@ -697,7 +550,7 @@ export default {
     $route(to,from) {
       if(from.name == 'mapSearch') {
         if(this.$route.query.special) {
-          this.list[2].value = this.$route.query.special.length >9 ? this.$route.query.special.slice(0,10) +'...' : this.$route.query.special;
+          this.school = this.$route.query.special.length >9 ? this.$route.query.special.slice(0,10) +'...' : this.$route.query.special;
           this.organization = this.$route.query.special;
           this.lng = this.$route.query.lng;
           this.lat = this.$route.query.lat;
@@ -737,6 +590,9 @@ export default {
         this.ModalHelper.beforeClose();
       }
     }
+  },
+  components: {
+    place
   }
 };
 </script>
