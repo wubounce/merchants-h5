@@ -114,6 +114,7 @@
         // 传给父组件的值由地址，省ID，市ID，区ID,省名，市名，区名拼接而成，以逗号分割，例如：'河北省石家庄市长安区,130000,130100,130102'
         this.message = this.place + ',' + this.provinceId + ',' + this.cityId + ',' + this.districtId + ',' + this.provinceName + ',' + this.cityName + ',' + this.districtName;
         this.chooseArea = this.place; 
+        sessionStorage.setItem('placeArea',this.place);
       },
       async addressChange(picker,values) {
         let obj = { parentId: '0' };
@@ -209,7 +210,14 @@
         } else {
           this.ModalHelper.beforeClose();
         }
-    }
+    },
+    
+    created() {
+      let area = sessionStorage.getItem('placeArea'); // => 返回testKey对应的值
+      console.log(area);
+      this.chooseArea = area;
+    },
+    
   }
   };
 </script>
