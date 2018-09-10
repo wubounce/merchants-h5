@@ -113,8 +113,11 @@
 
         // 传给父组件的值由地址，省ID，市ID，区ID,省名，市名，区名拼接而成，以逗号分割，例如：'河北省石家庄市长安区,130000,130100,130102'
         this.message = this.place + ',' + this.provinceId + ',' + this.cityId + ',' + this.districtId + ',' + this.provinceName + ',' + this.cityName + ',' + this.districtName;
-        this.chooseArea = this.place; 
-        sessionStorage.setItem('placeArea',this.place);
+        this.chooseArea = this.place;
+        sessionStorage.setItem('placeArea',this.chooseArea);
+        sessionStorage.setItem('provinceId',this.provinceId);
+        sessionStorage.setItem('cityId',this.cityId);
+        sessionStorage.setItem('districtId',this.districtId);
       },
       async addressChange(picker,values) {
         let obj = { parentId: '0' };
@@ -161,23 +164,18 @@
         this.cityName = values[1];
         this.districtName = values[2];
       },
-      validatePhone() { //验证手机
-        if(!validatPhone(this.referee.phone)) {
-          this.$toast({message: "请输入正确的手机号码" });
-          return false;
-        } 
-          return true;
-      }, 
-      validateName() {  //验证用户名
-        if(!validatName(this.referee.name)) {
-          this.$toast({message: "用户名2-20个字符，支持中文和英文" });
-          return false;
-        }
-          return true;
-      },
+
       async goToNext() {
         if(this.chooseArea === '选择所在区域') {
           this.$toast({message: "请选择您所在的区域地址" });
+          return false;
+        }
+        if(this.referee.phone && !validatPhone(this.referee.phone)) {
+          this.$toast({message: "请输入正确的手机号码" });
+          return false;
+        }
+        if(this.referee.name && !validatName(this.referee.name)) {
+          this.$toast({message: "推荐人用户名2-20个字符，支持中文和英文" });
           return false;
         }
         let query = this.$route.query;
@@ -185,7 +183,7 @@
           phone: query.phone,
           name: query.name,
           password: query.password,
-          address: this.place,
+          address: this.chooseArea,
           provinceId: this.provinceId,
           cityId: this.cityId,
           districtId: this.districtId,
@@ -203,6 +201,7 @@
         }, 2000);   
       },
     },
+
     watch: {
       placeVisible: function () {
         if (this.placeVisible) {
@@ -210,15 +209,15 @@
         } else {
           this.ModalHelper.beforeClose();
         }
+      },
+    },
+    mounted() {
+      this.chooseArea = sessionStorage.getItem('placeArea');
+      this.provinceId = sessionStorage.getItem('provinceId');
+      this.cityId = sessionStorage.getItem('cityId');
+      this.districtId = sessionStorage.getItem('districtId');
     },
     
-    created() {
-      let area = sessionStorage.getItem('placeArea'); // => 返回testKey对应的值
-      console.log(area);
-      this.chooseArea = area;
-    },
-    
-  }
   };
 </script>
 <style lang="scss" scoped>

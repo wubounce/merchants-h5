@@ -193,9 +193,9 @@
         if(this.selectIndex != index) {
           this.selectIndex = index;
           this.popShopId = this.popupShop[index].shopId;
-          let payload = {shopId: this.popShopId};
-          this.getlistParentType(payload);
-          this.deviceModelArr = [];
+          let payload = {shopId: this.popShopId}; //得到shopid
+          this.getlistParentType(payload); //获取设备类型
+          this.deviceModelArr = [];  
           this.deviceModelArrAll = [];
           this.selectDeviceTypeIndex = -1;
           this.popDeviceTypeId = '';
@@ -204,6 +204,20 @@
           this.selectModelIndex = -1;
           this.selectCommunicationIndex = -1;
           this.getlistSubTypeAll(this.subFlag,payload);
+        }else {
+          this.selectIndex = -1;
+          this.popShopId = '';
+          this.selectDeviceTypeIndex = -1;
+          this.selectModelIndex = -1;
+          this.selectCommunicationIndex = -1;
+          this.popShopId = '';
+          this.popDeviceTypeId = '';
+          this.popDeviceModelId = '';
+          this.popCommunicationType = '';
+          this.deviceModelArr = [];  
+          this.deviceModelArrAll = [];
+          this.getlistParentType({onlyMine: true});
+          this.getlistSubTypeAll(this.subFlag);
         }
       },
       selectDeviceTypeClick(index) {
@@ -216,7 +230,15 @@
           this.selectCommunicationIndex = -1;
           this.popDeviceModelId = '';
           this.popCommunicationType = '';
-       }
+        }else {
+          this.selectDeviceTypeIndex = -1;
+          this.popDeviceTypeId = '';
+          this.selectModelIndex = -1;
+          this.selectCommunicationIndex = -1;
+          this.popDeviceModelId = '';
+          this.popCommunicationType = '';
+          this.getlistSubTypeAll(this.subFlag);
+        }
       },
       selectModelClick(index) {
         if(this.selectModelIndex != index){
@@ -224,15 +246,25 @@
           this.popDeviceModelId = this.deviceModelArr[index].id;
           this.selectCommunicationIndex = -1;
           this.popCommunicationType = '';
+        }else{
+          this.selectModelIndex = -1;
+          this.popDeviceModelId = '';
+          this.selectCommunicationIndex = -1;
+          this.popCommunicationType = '';
         }
       },
       selectCommunicationClick(index) {
-        this.selectCommunicationIndex = index;
-        let arr= [].concat(JSON.parse(JSON.stringify(this.communicationArr))); 
-        arr.forEach(item=>{
-          return item.type=item.type === "脉冲"?0:1;
-        });
-        this.popCommunicationType = arr[index].type;      
+        if(this.selectCommunicationIndex != index) {
+          this.selectCommunicationIndex = index;
+          let arr= [].concat(JSON.parse(JSON.stringify(this.communicationArr))); 
+          arr.forEach(item=>{
+            return item.type=item.type === "脉冲"?0:1;
+          });
+          this.popCommunicationType = arr[index].type;
+        }else {
+          this.selectCommunicationIndex = -1;
+          this.popCommunicationType = '';
+        }    
       },
       popCancal() {
         this.selectIndex = -1;
@@ -339,7 +371,7 @@
         this.deviceTypeArr = res;
         this.initialParentTypeId = res[0]?res[0].id:"";
       },
-      async getlistSubTypeAll(flag,object) {
+      async getlistSubTypeAll(flag,object) { 
         let res = await listSubTypeAllFun(object);
         this.deviceModelArrAll = res;
         this.deviceModelArr = flag?res.slice(0,4):res;
