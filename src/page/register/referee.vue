@@ -191,8 +191,15 @@
           refereeName:  this.referee.name,
           refereePhone: this.referee.phone
         };
-        let res = await saveRegisterInfoFun(object);
-        this.$router.push({name: 'login'});
+        let res = await saveRegisterInfoFun(payload);
+        let instance = this.$toast({
+          message: '注册成功',
+          iconClass: 'mint-toast-icon mintui mintui-success'
+        });
+        setTimeout(() => {
+          instance.close();
+           this.$router.push({name: 'login'});
+        }, 2000);   
       },
     },
     watch: {
