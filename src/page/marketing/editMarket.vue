@@ -203,11 +203,11 @@ export default {
   },
   methods: {
      async getDetail(){
-      let query = this.$route.query;
-      let payload = {timeId:query.id};
-      let res = await detailMarketFun(payload);
-      this.shopListFun(query.id);
-        let detail = res;
+        let query = this.$route.query;
+        let payload = {timeId:query.id};
+        let res = await detailMarketFun(payload);
+        this.shopListFun(query.id);
+        let detail = res? res:{};
         this.addmarket.startTime = detail.noDiscountStart ? moment(detail.noDiscountStart).format('YYYY-MM-DD') : '';
         this.addmarket.endTime = detail.noDiscountEnd ? moment(detail.noDiscountEnd).format('YYYY-MM-DD'): '';
         this.addmarket.addstatus =  detail.status ===  0 ? this.addmarket.addstatus = true  : this.addmarket.addstatus = false;
