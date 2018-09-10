@@ -50,7 +50,7 @@
       <section class="fun-item-bd funlist">
         <div v-for="(item,index) in functionList" :key="index">
           <span class="fun-list-item">{{item.functionName}}</span>
-          <input type="tel" class="fun-list-item" v-model="item.needMinutes"  min=0/>
+          <input type="tel" class="fun-list-item" v-model="item.needMinutes"  v-if="this.fromdata.secondType.name !=='通用脉冲充电桩' " min=0/>
           <input type="number" class="fun-list-item" v-model="item.functionPrice"  min=0/>
           <input type="tel" class="fun-list-item" v-model="item.functionCode" v-if="isShow2"  min=0/>
           <p class="fun-list-item">
@@ -131,10 +131,12 @@
             id:""
           },
           firstType: {
+            id: "",
             name: "",
             value: ""
           },
           secondType: {
+            id:"",
             name: "",
             value: ""
           },
@@ -217,6 +219,7 @@
         this.fromdata.shopType.id = res.shopId;
         this.fromdata.firstType.id = res.parentTypeId;
         this.fromdata.secondType.id = res.subTypeId;
+        this.fromdata.secondType.name = res.subTypeName;
         this.fromdata.functionTempletType = res.functionTempletType;
         this.fromdata.company = res.company;
         this.fromdata.ver = res.ver;

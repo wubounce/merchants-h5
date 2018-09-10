@@ -57,7 +57,7 @@
     <section class="fun-item-bd funlist" style="-webkit-overflow-scrolling:touch;overflow-y:scroll;">
       <div v-for="(item,index) in functionSetList" :key="index">
         <span class="fun-list-item">{{item.functionName}}</span>
-        <input type="number" class="fun-list-item" v-model="item.needMinutes"  min=0/>
+        <input type="number" class="fun-list-item" v-model="item.needMinutes"  v-if="this.fromdata.secondType.name !== '通用脉冲充电桩'" min=0/>
         <input type="number" class="fun-list-item" v-model="item.functionPrice"  min=0/>
         <input type="number" class="fun-list-item" v-model="item.functionCode" v-if="isShow2"  min=0/>
         <p class="fun-list-item">
