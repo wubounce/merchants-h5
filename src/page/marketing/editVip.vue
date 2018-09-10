@@ -202,28 +202,28 @@ export default {
       }
       
       if ((this.vipform.yearCardPrice&& !validatCradPrice(this.vipform.yearCardPrice))) {
-        this.$toast({message: "年卡售价请输入1-999之间" });
+        this.$toast({message: "年卡售价请输入1-999之间的整数" });
         return false;
       }
       if ((this.vipform.halfYearCardPrice && !validatCradPrice(this.vipform.halfYearCardPrice))) {
-        this.$toast({message: "半年卡售价请输入1-999之间" });
+        this.$toast({message: "半年卡售价请输入1-999之间的整数" });
         return false;
       }
       if ((this.vipform.seasonCardPrice && !validatCradPrice(this.vipform.seasonCardPrice))) {
-        this.$toast({message: "季卡售价请输入1-999之间" });
+        this.$toast({message: "季卡售价请输入1-999之间的整数" });
         return false;
       }
 
       if ((this.vipform.yearCardDiscount&& !validatDiscount(this.vipform.yearCardDiscount))) {
-        this.$toast({message: "年卡折扣优惠请输入1-100之间" });
+        this.$toast({message: "年卡折扣优惠请输入1-100之间的整数" });
         return false;
       }
       if ((this.vipform.halfYearCardDiscount && !validatDiscount(this.vipform.halfYearCardDiscount))) {
-        this.$toast({message: "半年卡折扣优惠请输入1-100之间" });
+        this.$toast({message: "半年卡折扣优惠请输入1-100之间的整数" });
         return false;
       }
       if ((this.vipform.seasonCardDiscount && !validatDiscount(this.vipform.seasonCardDiscount))) {
-        this.$toast({message: "季卡折扣优惠请输入1-100之间" });
+        this.$toast({message: "季卡折扣优惠请输入1-100之间的整数" });
         return false;
       }
 
