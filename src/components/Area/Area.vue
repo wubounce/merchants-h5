@@ -18,6 +18,9 @@
 import { areaListFun } from '@/service/shop';
 export default {
   props: {
+    areaName: {
+      type: String
+    },
     area: {
       type: String
     }

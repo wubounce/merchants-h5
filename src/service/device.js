@@ -31,6 +31,7 @@ const typeList = '/machine/typeList'; //通信类型（串口或者脉冲）
 const listSubTypeBy = '/machine/listSubTypeBy'; 
 const stateMachine = '/machine/statisticsMachine';
 const listSubTypeAll = '/machine/listSubTypeAll';
+const saveRegisterInfo = '/operator/saveRegisterInfo';
 
 
 export const device = (payload) => fetch.get(deviceApi, {params: payload}); //登录
@@ -57,6 +58,7 @@ export const typeListFun= (payload) => fetch.post(typeList,payload); //通信类
 export const listSubTypeByFun= (payload) => fetch.post(listSubTypeBy,payload); 
 export const stateMachineFun= (payload) => fetch.post(stateMachine,payload); 
 export const listSubTypeAllFun= (payload) => fetch.post(listSubTypeAll,payload); 
+export const saveRegisterInfoFun= (payload) => fetch.post(saveRegisterInfo,payload); //注册信息
 
 
 

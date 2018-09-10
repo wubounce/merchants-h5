@@ -45,7 +45,7 @@ v: '1.4.4'
 Vue.config.productionTip = true;
 Vue.config.devtools = true;
 
-const whiteList = ['/login','/reset','/confimPwd','/register','/referee']; // 不重定向白名单
+const whiteList = ['/login','/reset','/confimPwd','/register','/referee','/userAgreement']; // 不重定向白名单
 router.beforeEach((to, from, next) => {
   // 切换之前，把弹出框都关掉
   MessageBox.close();

@@ -42,6 +42,13 @@ export default new Router({
           component: () => import ('@/page/user/user'),
           meta: {title: '我的'},
         },
+        {
+          path: '/userAgreement',
+          name: 'userAgreement',
+          component: () => import ('@/page/user/userAgreement'),
+          meta: {title: '用户注册协议'},
+        },
+
       ]
     },
     //首页头部收益相关
