@@ -14,7 +14,7 @@
         <input type="text" placeholder="推荐人手机（选填）" v-model="referee.phone" required="required">
       </div>
       <div class="clickBtn">
-        <mt-button type="primary" class="btn-blue" @click.prevent="goToNext">申请注册</mt-button>
+        <mt-button type="primary" class="btn-blue" @click.prevent="goToNext" :disabled="chooseArea === '选择所在区域'">申请注册</mt-button>
       </div>
       <router-link to="/userAgreement">
         <p class="agreeRule">注册表示已同意<span class="rule">《用户协议》</span></p>
@@ -192,7 +192,7 @@
         };
         let res = await saveRegisterInfoFun(payload);
         let instance = this.$toast({
-          message: '注册成功',
+          message: '申请成功，我们将在1个工作日内反馈结果，请留意手机短信',
           iconClass: 'mint-toast-icon mintui mintui-success'
         });
         setTimeout(() => {
@@ -212,10 +212,11 @@
       },
     },
     mounted() {
-      this.chooseArea = sessionStorage.getItem('placeArea');
-      this.provinceId = sessionStorage.getItem('provinceId');
-      this.cityId = sessionStorage.getItem('cityId');
-      this.districtId = sessionStorage.getItem('districtId');
+      if(sessionStorage.getItem('placeArea')) this.chooseArea = sessionStorage.getItem('placeArea');  
+      if(sessionStorage.getItem('provinceId')) this.provinceId = sessionStorage.getItem('provinceId');
+      if(sessionStorage.getItem('cityId')) this.cityId = sessionStorage.getItem('cityId');
+      if(sessionStorage.getItem('districtId')) this.districtId = sessionStorage.getItem('districtId');
+
     },
     
   };
