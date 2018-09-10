@@ -42,8 +42,9 @@ http.interceptors.request.use(config => {
     //   // });
     // }else {
     // }
+    // 阻止转义
     config.data = config.data ? config.data + `&token=${token}`:`token=${token}`;
-    if(config.url == '/batchExecutePlan/updateBatchStart') {
+    if(config.url == '/batchExecutePlan/updateBatchStart' || config.url == 'batchExecutePlan/add' ) {
       config.data = config.data.split('+').join(' ');
     }
     // 添加签名
