@@ -52,6 +52,7 @@
 <script type="text/javascript">
 import Api from '@/utils/Api';
 import Web from '@/utils/Web';
+import { validatReplace } from '@/utils/validate';
 import { listByNameOrlmeiFun,deviceListFun } from '@/service/device';
   /* eslint-disable */
 import {delay } from "@/utils/tool";
@@ -115,7 +116,8 @@ import {delay } from "@/utils/tool";
         this.$router.go(-1);
       },
       fetchData(e) {
-        let keywords = this.keyword;
+        validatReplace
+        let keywords = this.keyword.replace(validatReplace, '');
         this.search(keywords);
       },
       async search(name) {

@@ -42,15 +42,17 @@
     <div v-show="setModelShow">
       <section class="fun-item-hd">
         <div>
-          <p v-for="(item,index) in functionListTitle2 " :key="index">
-            <span v-for="(it,idx) in item " :key="idx">{{it}}</span>
-          </p>
+          <p><span>功能</span></p>
+          <p v-if="fromdata.secondType.name !== '通用脉冲充电桩'"><span>耗时</span><span>/分</span></p>
+          <p><span>原价</span><span>/元</span></p>
+          <p v-if="Number(this.fromdata.communicateType) === 0"><span>脉冲数</span></p>
+          <p><span>状态</span></p>
         </div>
       </section>
       <section class="fun-item-bd funlist">
         <div v-for="(item,index) in functionList" :key="index">
           <span class="fun-list-item">{{item.functionName}}</span>
-          <input type="tel" class="fun-list-item" v-model="item.needMinutes"  v-if="this.fromdata.secondType.name !=='通用脉冲充电桩' " min=0/>
+          <input type="tel" class="fun-list-item" v-model="item.needMinutes"  v-if="fromdata.secondType.name !=='通用脉冲充电桩' " min=0/>
           <input type="number" class="fun-list-item" v-model="item.functionPrice"  min=0/>
           <input type="tel" class="fun-list-item" v-model="item.functionCode" v-if="isShow2"  min=0/>
           <p class="fun-list-item">
@@ -331,6 +333,7 @@
           let item = this.functionList[i];
           if(item.ifOpen === false){
             count++;
+            break;
           } 
           if(!reg.test(Number(item.needMinutes))){
             this.$toast("耗时填写格式错误，请填写非0的非空正整数");

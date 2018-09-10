@@ -1,9 +1,5 @@
 <template>
   <div class="main">
-    <div class="notice-head" @click="openNotice">
-      <p>公告：请各运营商提前检测设备是否正常</p>
-      <p>更多<i class="iconfont icon-nextx"></i></p>
-    </div>
     <div class="earnings-wrap">
       <router-link :to="{ name: 'totalincome', query:{allMoney: allMoney } }">
         <div class="earning-type">
@@ -60,30 +56,11 @@
       </div>
       <div class="offline-tip" v-if="offlineTip"><span class="iconfont icon-guanbi1" @click="offlineTip=false;"></span>  离线：连续30分钟未在线的设备数量。可能由于断电，信号不稳定，模块、设备损坏等原因引起，请自行检查或联系客服报备。</div>
     </div>
-    <div class="notice-wrapper" v-if="noticeShow">
-      <div class="notice">
-        <div class="notice-body">
-          <img src="../../assets/img/notice/notice.png" class="noticePic" />
-          <img src="../../assets/img/notice/feather.png" class="feather" />
-          <img src="../../assets/img/notice/handLeft.png" class="handLeft" />
-          <img src="../../assets/img/notice/handRight.png" class="handRight" />
-          <div class="notice-content">                     
-            <p>大家好，马上就要迎来开学季，为了让学生可以如期使用洗衣机，<span>希望运营商伙伴们提前检测一下设备是否正常。</span><p>
-            <p><span>检测步骤：</span>1、重新通电 2、查看信号是否正常 3、扫码支付或后台桶自洁查看设备是否正常启动。</p>
-            <p><span>反馈机制：</span>如果信号，模块，设备正常，设备无法正常启动，请联系客服，提供设备二维码清晰照片/设备名称、账号、问题现象，以便更好解决问题。（联系方式：我的-联系客服）</p>                    
-            <p class="time">2018-08-21</p>
-          </div>         
-        </div>
-      </div>
-      <div class="icon-wrapper" @click="closeNotice">
-        <img src="../../assets/img/notice/del.png" />
-      </div>       
-    </div>
   </div>
   
 </template>
 <script>
-import { getNoticeType, setNoticeType, removeNoticeType, calMax, calMin } from '@/utils/tool';
+import { calMax, calMin } from '@/utils/tool';
 // 引入 ECharts 主模块
 import echarts from 'echarts/lib/echarts';
 // 引入折线图
@@ -188,13 +165,6 @@ export default {
     this.getThisDay();
   },
   methods: { 
-    async openNotice(){
-      this.noticeShow = true;
-    },
-    async closeNotice(){
-      this.noticeShow = false;
-      setNoticeType(1);
-    },
     //获取本月
     getThisMonth() {
       let date = new Date();
@@ -205,11 +175,6 @@ export default {
       let date = new Date();
       this.thisDay = moment(date).format('YYYY-MM-DD');
       this.fromMonth = false;
-      if(getNoticeType() != 1) {
-          this.noticeShow = true;
-      }else{
-          this.noticeShow = false;       
-      }
     }, 
     async ParentTypeFun(){ //获取设备类型
         let res = await ParentTypeFun({onlyMine:true});

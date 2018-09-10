@@ -60,7 +60,7 @@
       </div>
     </section>
     <div v-if="detail.orderStatus === 5">
-        <section class="detail-list">
+        <section class="detail-list" v-if="detail.refundName">
           <div>
             <span class="title">退款人：</span><span class="content">{{detail.refundName}}</span>
           </div>

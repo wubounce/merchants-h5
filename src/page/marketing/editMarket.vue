@@ -344,7 +344,7 @@ export default {
         return false;
       }
       if (!validatDiscount(this.addmarket.discount)) {
-        this.$toast({message: "折扣优惠请输入1-100之间" });
+        this.$toast({message: "折扣优惠请输入1-100之间的整数" });
         return false;
       }
       let status = null;

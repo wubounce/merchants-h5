@@ -44,6 +44,7 @@
 <script>
   /* eslint-disable */ 
   import {delay} from "@/utils/tool";
+  import { validatReplace } from '@/utils/validate';
   import { getShopFun,shopSearchFun } from '@/service/device';
   export default {
     data() {
@@ -87,7 +88,7 @@
 
     methods: {
       async fetchData(e) {
-        let keywords = this.keyword;
+        let keywords = this.keyword.replace(validatReplace, '');
         let payload = {shopName: keywords,hasMachine: true};
         let res = await shopSearchFun(payload);
         this.shopList= data; 

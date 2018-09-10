@@ -57,7 +57,7 @@
                 <div class="remarks"><p>备注</p><p>{{data.content.replace(',null','')}}</p></div>    
             </li>
             <li>
-                <div><p>退款人</p><p>{{data.refundName}}</p></div>
+                <div v-if="data.refundName"><p>退款人</p><p>{{data.refundName}}</p></div>
                 <div><p>退款时间</p><p>{{data.refundTime}}</p></div>
             </li>
         </ul>
