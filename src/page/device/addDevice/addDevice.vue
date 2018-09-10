@@ -52,7 +52,7 @@
         <p><span>功能</span></p>
         <p v-if="fromdata.secondType.name !== '通用脉冲充电桩'"><span>耗时</span><span>/分</span></p>
         <p><span>原价</span><span>/元</span></p>
-        <p v-if="Number(this.fromdata.smCommunicateType) === 0"><span>脉冲数</span></p>
+        <p v-if="Number(fromdata.communicateType) === 0"><span>脉冲数</span></p>
         <p><span>状态</span></p>
       </div>
     </section>
@@ -61,7 +61,7 @@
         <span class="fun-list-item">{{item.functionName}}</span>
         <input type="number" class="fun-list-item" v-model="item.needMinutes"  v-if="fromdata.secondType.name !== '通用脉冲充电桩'" min=0/>
         <input type="number" class="fun-list-item" v-model="item.functionPrice"  min=0/>
-        <input type="number" class="fun-list-item" v-model="item.functionCode" v-if="isShow2"  min=0/>
+        <input type="number" class="fun-list-item" v-model="item.functionCode" v-if="Number(fromdata.communicateType) === 0"  min=0/>
         <p class="fun-list-item">
           <mt-switch v-model="item.ifOpen"></mt-switch>
         </p>
@@ -127,7 +127,7 @@
     data() {
       return {
         setModelShow: false,
-        isShow2: false,
+        isShow2: true,
         modelShow: true,
         companyVisible: false,
         parentType: false,    
@@ -440,7 +440,7 @@
             }else{
               this.$toast("您扫描的NQT和选择的设备型号不一致");
               return;
-            }        
+            }      
           }else {      
             this.setModelShow= true;
             this.modelShow = false;
