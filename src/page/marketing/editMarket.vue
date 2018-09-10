@@ -293,7 +293,6 @@ export default {
       this.addmarket.endTime = moment(value).format('YYYY-MM-DD');
     },
     opencheckedMachine(){
-      console.log(243234);
       if (this.shopIds.length <= 0) {
         this.$toast({message: "请先选择店铺" });
         return false;
