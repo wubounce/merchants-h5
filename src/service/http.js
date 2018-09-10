@@ -44,9 +44,11 @@ http.interceptors.request.use(config => {
     // }
     // 阻止转义
     config.data = config.data ? config.data + `&token=${token}`:`token=${token}`;
-    if(config.url == '/batchExecutePlan/updateBatchStart' || config.url == 'batchExecutePlan/add' ) {
+    //console.log(config.url);
+    if(config.url == '/batchExecutePlan/updateBatchStart' || config.url == '/batchExecutePlan/add' ) {
       config.data = config.data.split('+').join(' ');
     }
+    console.log(config.data);
     // 添加签名
     let _sign = get_sign(config.data,_timestamp);
     config.data = config.data + `&_sign=${_sign}`+`&_timestamp=${_timestamp}`;
