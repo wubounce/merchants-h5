@@ -1,7 +1,7 @@
 <template>
     <section>
       <li class="personal-item" @click='open()'>
-        所在地区
+        {{areaName}}
         <span>{{area}}</span>
       </li>
       <!-- 弹窗 -->
@@ -18,6 +18,9 @@
 import { areaListFun } from '@/service/shop';
 export default {
   props: {
+    areaName: {
+      type: String
+    },
     area: {
       type: String
     }
