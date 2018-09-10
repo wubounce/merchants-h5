@@ -213,7 +213,7 @@ export default {
         this.addmarket.addstatus =  detail.status ===  0 ? this.addmarket.addstatus = true  : this.addmarket.addstatus = false;
         this.addmarket.time = detail.noTime;
         this.addmarket.discount = detail.discountVO ? Number(detail.discountVO).toFixed(0) : '';
-        this.machineCurrent = detail.parentTypeMap[0];
+        this.machineCurrent = detail.parentTypeMap?detail.parentTypeMap[0]:{};
         let beshop = [];
         detail.shop.forEach(item=>{
           beshop.push(item.name);
