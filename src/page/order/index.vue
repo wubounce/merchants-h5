@@ -23,7 +23,7 @@
     <div class="page-top" :style="{ 'padding-top': hiddenPageHeight + 'rem' }">
        <div class="page-loadmore-wrapper" ref="wrapper" :style="{overflowY:scrollShow}">
          <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore">
-         <div class="ios"  :style="{'margin-bottom:':iosHeight}">
+         <div class="ios">
            <div class="alllist" v-for="(item,index) in list" :key="index">
               <section class="ordermun">
                 <span class="odernmu-phone">{{item.phone}}<span style="padding:0 0.186667rem;color:#999999">|</span>{{item.createTime}}</span>
@@ -66,11 +66,11 @@ import { MessageBox } from 'mint-ui';
 import { getDuration } from '@/utils/tool';
 import { validatSearch, validatReplace } from '@/utils/validate';
 import PagerMixin from '@/mixins/pagerMixin';
-import Web from '@/utils/Web';
 export default {
   mixins: [PagerMixin],
   data() {
     return {
+      pageSize:20,
       searchData:'',
       titleArr:[
         {value:'',lable:'全部'},
@@ -87,16 +87,12 @@ export default {
       hiddenTab:true,
       hiddenPageHeight:2.88,
       refundDisabled:false,
-      iosHeight:0,
     };
   },
   mounted() {
     
   },
   created(){
-    if(Web.getAppUA) {
-        this.iosHeight = '2.67rem';
-    }
   },
   methods: {
     titleClick: function(index) {
@@ -113,9 +109,9 @@ export default {
       this.nosearchList = false;
       let payload = null;
       if (this.searchData !== '') {
-         // 去掉转义字符
-        this.searchData = this.searchData.replace(validatReplace, '');
-        payload = {search:this.searchData,page:this.page,pageSize:this.pageSize};
+         // 去掉特殊字符和空格
+        let searchData = this.searchData.replace(validatReplace, '');
+        payload = {search:searchData,page:this.page,pageSize:this.pageSize};
       } else {
         payload = {orderStatus:this.orderStatus,page:this.page,pageSize:this.pageSize};
       }

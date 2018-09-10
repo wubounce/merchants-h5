@@ -43,7 +43,6 @@ http.interceptors.request.use(config => {
     // }else {
     // }
     config.data = config.data ? config.data + `&token=${token}`:`token=${token}`;
-    
     if(config.url == '/batchExecutePlan/updateBatchStart') {
       config.data = config.data.split('+').join(' ');
     }
