@@ -70,4 +70,4 @@ export const validatVipLimit = (str) => {
 };
 
 /*去掉特殊字符*/
-export const validatReplace = /[\'\"\\\/\b\f\n\r\t\@\#\$\%\^\&\*\(\)\{\}\:\"\L\<\>\?\[\]]/g;  
+export const validatReplace = /[\'\"\\\/\b\f\s\n\r\t\@\#\$\%\^\&\*\(\)\{\}\:\"\L\<\>\?\[\]]/g;  

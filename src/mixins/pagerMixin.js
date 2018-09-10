@@ -6,7 +6,7 @@ export default {
     return {
       list: [],                                           // 列表展示
       page: 1,//页码
-      pageSize:10,
+      pageSize:50,
       total:null,
       allLoaded: false,//数据是否加载完毕
       wrapperHeight: 0,//容器高度

@@ -43,6 +43,9 @@ http.interceptors.request.use(config => {
     // }else {
     // }
     config.data = config.data ? config.data + `&token=${token}`:`token=${token}`;
+    if(config.url == '/batchExecutePlan/updateBatchStart') {
+      config.data = config.data.split('+').join(' ');
+    }
     // 添加签名
     let _sign = get_sign(config.data,_timestamp);
     config.data = config.data + `&_sign=${_sign}`+`&_timestamp=${_timestamp}`;

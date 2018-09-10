@@ -1,7 +1,7 @@
 <template>
     <section>
       <li class="personal-item" @click='open()'>
-        {{areaName}}
+        所在地区
         <span>{{area}}</span>
       </li>
       <!-- 弹窗 -->

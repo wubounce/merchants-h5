@@ -3,7 +3,7 @@
     <ul class="personal-list">
       <p class="shopname-p"><span>店铺名称</span><span><input  @change="blur" type="text" class='addressInput' v-model="shopName"  placeholder="请填写店铺名称"></span></p>
       <li class="personal-item" @click="chooseShopType">店铺类型<span>{{shopTypeName}}</span></li>
-      <place  :areaName='areaName2' :area='areaValue' @chooseArea='getThreeArea'></place>
+      <place :area='areaValue' @chooseArea='getThreeArea'></place>
       <li class="personal-item" @click="chooseMap">小区/大厦/学校<span>{{school}}</span></li>
       <p class="shopname-p"><span>详细地址</span><span><input  type="text" class='addressInput' v-model="address"  placeholder="请填写详细地址"></span></p>
     </ul>
@@ -44,7 +44,6 @@ import { addOrEditShopFun , areaListFun , listParentTypeFun , manageListFun } fr
 export default {
   data() {
     return {
-      areaName2:'所在区域',
       areaValue: '',
       buttonHide:true,
       shopName:'',
