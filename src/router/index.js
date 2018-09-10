@@ -41,13 +41,7 @@ export default new Router({
           name: 'user',
           component: () => import ('@/page/user/user'),
           meta: {title: '我的'},
-        },
-        {
-          path: '/userAgreement',
-          name: 'userAgreement',
-          component: () => import ('@/page/user/userAgreement'),
-          meta: {title: '用户注册协议'},
-        },
+        }
 
       ]
     },
@@ -94,6 +88,12 @@ export default new Router({
       name: 'referee',
       component: () => import ('@/page/register/referee'),
       meta: {title: '推荐'},
+    },
+    {
+      path: '/userAgreement',
+      name: 'userAgreement',
+      component: () => import ('@/page/register/userAgreement'),
+      meta: {title: '用户注册协议'},
     },
     {
       path: '/confimPwd',
