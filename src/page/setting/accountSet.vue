@@ -33,7 +33,7 @@ export default {
       }
       else {
         if( this.user.status == "未认证" || this.user.status == "未通过" || this.user.status == "审核中" ) {
-          this.$router.push({
+          this.$router.replace({
             name: 'realName',
             query:{
               alipayAccount: this.user.alipayAccount,

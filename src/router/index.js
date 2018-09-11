@@ -254,7 +254,15 @@ export default new Router({
       meta: {
         title: '店铺新增',
         keepAlive:true
-      }
+      },
+      // children: [
+      //   {
+      //     path: 'test',
+      //     name: 'test',
+      //     component: () => import ('@/page/shop/test/test'),
+      //     //meta: {title: '新增店铺'},
+      //   }
+      // ]
     },
     {
       path: '/mapSearch',
@@ -337,7 +345,12 @@ export default new Router({
     { path: '/realNameGet', name: 'realNameGet', component: () => import('@/page/setting/realNameGet'),meta: {title: '实名认证详情'}, },
     { path: '/contact', name: 'contact', component: () => import('@/page/contact/index'),meta: {title: '联系客服'}, },
     { path: '/cooperation', name: 'cooperation', component: () => import('@/page/cooperation/index'),meta: {title: '合作热线'}, },
-    
+    {
+      path: '/success',
+      name: 'success',
+      component: () => import ('@/page/setting/success'),
+      meta: {title: '实名认证'},
+    },
     //钱包
     {
       path: '/wallet',

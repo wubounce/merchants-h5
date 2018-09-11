@@ -115,13 +115,13 @@ export default {
         IDCardImg: this.imgChange.c
       };
       let res =await confirmOperatorFun(obj);
-      this.$toast({
-        message: '已申请实名认证，请耐心等待审核',
-        position: 'middle',
-        duration: 3000
-      });
-      this.$router.push({
-        name:'accountSet'
+      // this.$toast({
+      //   message: '已申请实名认证，请耐心等待审核',
+      //   position: 'middle',
+      //   duration: 3000
+      // });
+      this.$router.replace({
+        name:'success'
       });
     },
     async getRealName() {
