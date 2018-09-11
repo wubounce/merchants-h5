@@ -96,6 +96,12 @@ export default new Router({
       meta: {title: '用户注册协议'},
     },
     {
+      path: '/successTip',
+      name: 'sunccessTip',
+      component: () => import ('@/page/register/successTip'),
+      meta: {title: '注册'},
+    },
+    {
       path: '/confimPwd',
       name: 'confimPwd',
       component: () => import ('@/page/reset/confimPwd'),

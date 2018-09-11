@@ -245,7 +245,7 @@
         MessageBox.confirm('是否确认桶自洁此设备?').then(async () => {
           let res = await tzjDeviceFun({machineId: this.$route.query.machineId});
           let instance = this.$toast({
-            message: '筒自洁成功',
+            message: '桶自洁成功',
             iconClass: 'mint-toast-icon mintui mintui-success'
           });
           setTimeout(() => {

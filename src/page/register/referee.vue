@@ -197,7 +197,7 @@
         });
         setTimeout(() => {
           instance.close();
-           this.$router.push({name: 'login'});
+           this.$router.push({name: 'successTip'});
         }, 2000);   
       },
     },
