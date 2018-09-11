@@ -57,7 +57,8 @@ export default {
             store.commit('setMenu', data);
             setMenu(data);
             let pac = data.find(item=>item.name === '首页' || item.name === '报表');
-            let path = pac ? pac.url : data[0].url;
+            let url = data.length >0 ? data[0].url:'user';
+            let path = pac ? pac.url : url;
             setNavTabIndex('/'+ path);
              next(path);
           });
@@ -136,7 +137,7 @@ export default {
               this.setMenu(data);
               setMenu(data);
               let pac = data.find(item=>item.name === '首页' || item.name === '报表');
-              let url = data?data[0].url:'user';
+              let url = data.length >0 ? data[0].url:'user';
               let path = pac ? pac.url : url;
               setNavTabIndex('/'+ path);
               this.$router.push(path);

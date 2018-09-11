@@ -44,7 +44,6 @@ http.interceptors.request.use(config => {
     // }
     // 阻止转义
     config.data = config.data ? config.data + `&token=${token}`:`token=${token}`;
-    //console.log(config.url);
     if(config.url == '/batchExecutePlan/updateBatchStart' || config.url == '/batchExecutePlan/add' ) {
       config.data = config.data.split('+').join(' ');
     }
