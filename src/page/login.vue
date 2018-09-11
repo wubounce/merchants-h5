@@ -13,7 +13,7 @@
           <span class="open-eyes eyes iconfont icon-guanbi"  v-show="isuser" @click="form.userName='';isuser=false;disabled=true;searchPhone=false"></span>
         </div>
         <div class="passWord">
-          <label class="title">密码</label><input type="text" v-model.trim="form.password" v-if="typepwd" v-on:input="pwdinputFunc" autocomplete="off">
+          <label class="title">密码</label><input type="text" v-model.trim="form.password" v-if="typepwd" v-on:input="pwdinputFunc" placeholder="请输入密码" autocomplete="off">
           <input type="password" v-model.trim="form.password" v-on:input="pwdinputFunc" placeholder="请输入密码" autocomplete="off" v-else>
           <div @click="openpwd" class="open-eyes">
             <span  class="eyes iconfont icon-yanjing" v-if="typepwd"></span>
