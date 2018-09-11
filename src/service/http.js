@@ -3,6 +3,7 @@ import { Indicator, MessageBox, Toast } from 'mint-ui';
 import store from '../store';
 import { getToken, filterData, get_sign } from '@/utils/tool';
 import qs from 'qs';
+import router from '@/router';
 const baseUrl = process.env.NODE_ENV === 'production' ? 'http://192.168.5.10:8089/merchant/' : 'http://192.168.5.10:8089/merchant/'; 
 // 创建axios实例
 const http = axios.create({
@@ -51,8 +52,14 @@ http.interceptors.request.use(config => {
     let _sign = get_sign(config.data,_timestamp);
     config.data = config.data + `&_sign=${_sign}`+`&_timestamp=${_timestamp}`;
   }else{
-    let _sign = get_sign(config.data,_timestamp);
-    config.data =  config.data + `&_sign=${_sign}` + `&_timestamp=${_timestamp}`;
+    if(router.currentRoute.name !== 'login'){ //在非登录页面，token异常丢失
+      store.dispatch('LogOut').then(() => {
+        location.reload();
+      });
+    }else {
+      let _sign = get_sign(config.data,_timestamp);
+      config.data =  config.data + `&_sign=${_sign}` + `&_timestamp=${_timestamp}`;
+    }
   }
   return config;
 
