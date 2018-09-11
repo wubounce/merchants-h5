@@ -23,7 +23,7 @@ export default {
   },
   methods: {
     getLatLng(x,shopId,y,z,p) {
-      this.$router.push({
+      this.$router.replace({
         name:x,
         query: {
           shopId: shopId,

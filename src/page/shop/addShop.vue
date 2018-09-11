@@ -346,7 +346,7 @@ export default {
     },
    //跳转传值
     goMap(x,mapCity) {
-      this.$router.push({
+      this.$router.replace({
         name:x,
         query:{
           mapCity:mapCity

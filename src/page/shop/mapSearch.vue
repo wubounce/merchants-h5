@@ -22,7 +22,7 @@ export default {
   },
   methods: {
     getLatLng(x,y,z,p) {
-      this.$router.push({
+      this.$router.replace({
         name:x,
         query: {
           lat:y,

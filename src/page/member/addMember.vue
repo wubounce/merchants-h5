@@ -151,7 +151,7 @@ export default {
       this.permissionsMIdsTxt = checklist.map(item=>item.name).join(',');
     },
     openPrem(){
-      this.$router.push({name:'premList',query:{checkpermissionslist:this.checkpermissionslist.join(','),parentIds:this.parentIds.join(',')}});
+      this.$router.replace({name:'premList',query:{checkpermissionslist:this.checkpermissionslist.join(','),parentIds:this.parentIds.join(',')}});
     },
     async addmember(){
       if (this.validate()) {
