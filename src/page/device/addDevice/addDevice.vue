@@ -577,7 +577,7 @@
           let item = this.functionSetList[i];
           if(item.ifOpen === false){
             count++;
-            break;
+            continue;
           } 
           if(this.fromdata.secondType.name !== '通用脉冲充电桩' && !reg.test(Number(item.needMinutes))){
             this.$toast("耗时填写格式错误，请填写非0的非空正整数");
@@ -609,14 +609,12 @@
             flag3 = false;
             this.$toast("脉冲填写格式错误，请填写非0非空正整数");
             break;
-          }
-          if(count == len){
-            flag4 = false;
-            this.$toast("请至少开启1个设备功能");
-            break;
-          }                   
-               
+          }                             
         }
+        if(count == len){
+          flag4 = false;
+          this.$toast("请至少开启1个设备功能");
+        }   
         if(flag1 && flag2 && flag3 && flag4){
           this.fromdata.functionType.name = "已设置";
           this.setModelShow= false;
