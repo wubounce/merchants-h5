@@ -10,7 +10,7 @@
           <div class="orderpic"><img :src="detail.imageId" alt=""></div>
           <div class="content">
               <p class="con-title">{{detail.machineName}}</p>
-              <p class="con-type">{{detail.machineFunctionName}}<span style="padding:0 0.346667rem">|</span>时长{{detail.markMinutes}}分钟</p>
+              <p class="con-type">{{detail.machineFunctionName}}<span style="padding:0 0.346667rem" v-if="detail.isESource === 0">|</span><span v-if="detail.isESource === 0">时长{{detail.markMinutes}}分钟</span></p>
               <p class="con-price" v-cloak v-if="detail.orderType !== 2 && detail.orderStatus !==1 || detail.orderType !==2 && detail.orderStatus !==0">{{'¥'+ detail.markPrice}}</p>
           </div>
           <div class="order-action" v-cloak v-if="detail.isReserve === 1">预约</div>

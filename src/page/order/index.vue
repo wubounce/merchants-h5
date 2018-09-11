@@ -36,7 +36,7 @@
                     <div class="orderpic"><img :src="item.imageId" alt=""></div>
                     <div class="content">
                         <p class="con-title">{{item.machineName}}</p>
-                        <p class="con-type">{{item.machineFunctionName}}<span style="padding-left:0.35rem;padding-right:0.27rem">|</span>时长{{item.markMinutes}}分钟</p>
+                        <p class="con-type">{{item.machineFunctionName}}<span style="padding-left:0.35rem;padding-right:0.27rem" v-if="item.isESource === 0">|</span><span v-if="item.isESource === 0">时长{{item.markMinutes}}分钟</span></p>
                         <p class="con-price" v-if="item.orderType !== 2 && item.orderStatus !==1 || item.orderType !==2 && item.orderStatus !==0">{{'¥'+item.payPrice}}</p>
                     </div>
                     <div class="order-action" v-if="item.isReserve === 1">预约</div>
@@ -96,16 +96,16 @@ export default {
   },
   methods: {
     titleClick: function(index) {
-      this.list = [];
       this.searchData = '';
       this.titleIndex = index;
       this.orderStatus = this.titleArr[this.titleIndex].value;
       this.page = 1; //从第一页起
       this.allLoaded = false;//下拉刷新时解除上拉加载的禁用
+      this.list = [];
       this._getList();
     },
     async _getList(){
-      let res = null;
+      
       this.nosearchList = false;
       let payload = null;
       if (this.searchData !== '') {
@@ -115,7 +115,7 @@ export default {
       } else {
         payload = {orderStatus:this.orderStatus,page:this.page,pageSize:this.pageSize};
       }
-      res = await orderListFun(payload);
+      let res = await orderListFun(payload);
       this.list = res.items?[...this.list,...res.items]:[];  //分页添加
       this.list.length <= 0 ? this.noOrderList = true:this.noOrderList = false;
       this.total = res.total;

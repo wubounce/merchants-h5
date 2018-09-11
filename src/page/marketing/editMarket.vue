@@ -69,6 +69,21 @@
     </mt-popup>
      <!-- 设备类型 -->
     <selectpickr :visible="machineVisible" :slots="machineSlots" :valueKey="machineLable" :title="'设备类型'"  @selectpicker="machineselectpicker" @onpickstatus="machineselectpickertatus"> </selectpickr>
+
+      <!-- 暂无设备类型 -->
+  <div class="noMachine-wrap">
+      <mt-popup v-model="noMachineVisible" position="bottom" >
+        <section class="shoppicker">
+          <div class="picker-toolbar">
+              <span class="quxi"  @click="noMachineVisible=false">取消</span> 
+              <span class="shop">设备类型</span> 
+              <span class="qued" @click="noMachineVisible=false">确定</span>
+           </div>
+          <div class="noMachine-tip">已选店铺下无相同的设备类型</div>
+        </section>
+      </mt-popup>
+  </div>
+
   </div>
 </div>
 </template>
@@ -119,6 +134,7 @@ export default {
             textAlign: 'center'
           }
       ],
+      noMachineVisible:false,
 
       weekTitle:[
         {value:'1',label:'周一'},
@@ -297,7 +313,7 @@ export default {
         this.$toast({message: "请先选择店铺" });
         return false;
       }else{
-        this.machineVisible=true;
+        this.machineSlots[0].values.length<=0 ? this.noMachineVisible = true : this.machineVisible=true;
       }
     },
     machineselectpicker(value) {
@@ -353,7 +369,7 @@ export default {
       delete payload.addstatus;
       let res = await addOruPdateFun(payload);
       this.$toast({message: '编辑成功' });
-      this.$router.push({name:'marketing'});
+      this.$router.replace({name:'marketing'});
      
     }
   },
