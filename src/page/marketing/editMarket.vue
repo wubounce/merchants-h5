@@ -369,7 +369,7 @@ export default {
       delete payload.addstatus;
       let res = await addOruPdateFun(payload);
       this.$toast({message: '编辑成功' });
-      this.$router.push({name:'marketing'});
+      this.$router.replace({name:'marketing'});
      
     }
   },

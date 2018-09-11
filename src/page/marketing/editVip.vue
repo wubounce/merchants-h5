@@ -248,7 +248,7 @@ export default {
       paylod.seasonLimitType = this.seasonLimitTypeCurrentTag.value;
       let res = await addOrUpdateVipFun(paylod);
       this.$toast({message: "修改成功" });
-      this.$router.push({name:'marketing',query:{tabindex:1}});
+      this.$router.replace({name:'marketing',query:{tabindex:1}});
     }
   },
   watch: {
