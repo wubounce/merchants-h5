@@ -136,7 +136,7 @@ export default {
               this.setMenu(data);
               setMenu(data);
               let pac = data.find(item=>item.name === '首页' || item.name === '报表');
-              let url = data?data[0].url:'user'
+              let url = data?data[0].url:'user';
               let path = pac ? pac.url : url;
               setNavTabIndex('/'+ path);
               this.$router.push(path);

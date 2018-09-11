@@ -2,16 +2,16 @@
   <section v-title="title" class="register">
     <div ref="registerForm" :model="register" class="register-form">
     <div class="form-group">
-        <input type="number" placeholder="请输入手机号" v-model="register.phone" @input="disabledBtn" @blur="validatePhone" required>
+        <input type="number" placeholder="请输入手机号" v-model="register.phone" @input="disabledBtn" required>
     </div>
     <div class="form-group">
-        <input type="text" placeholder="请输入姓名" v-model="register.name" @input="disabledBtn" @blur="validateName" required>
+        <input type="text" placeholder="请输入姓名" v-model="register.name" @input="disabledBtn" required>
     </div>
     <div class="form-group">
-        <input type="password" placeholder="请输入密码（6-20位）" v-model="register.code" @blur="validateCode" @input="disabledBtn" required>
+        <input type="password" placeholder="请输入密码（6-20位）" v-model="register.code" @input="disabledBtn" required>
     </div>
     <div class="form-group">
-        <input type="password" placeholder="请再次输入密码" v-model="register.sureCode"  @blur="validateSureCode" @input="disabledBtn" required>
+        <input type="password" placeholder="请再次输入密码" v-model="register.sureCode" @input="disabledBtn" required>
     </div>
     </div>
     <div class="clickBtn">
