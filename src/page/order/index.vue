@@ -36,7 +36,7 @@
                     <div class="orderpic"><img :src="item.imageId" alt=""></div>
                     <div class="content">
                         <p class="con-title">{{item.machineName}}</p>
-                        <p class="con-type">{{item.machineFunctionName}}<span style="padding-left:0.35rem;padding-right:0.27rem">|</span>时长{{item.markMinutes}}分钟</p>
+                        <p class="con-type">{{item.machineFunctionName}}<span style="padding-left:0.35rem;padding-right:0.27rem" v-if="item.isESource === 0">|</span><span v-if="item.isESource === 0">时长{{item.markMinutes}}分钟</span></p>
                         <p class="con-price" v-if="item.orderType !== 2 && item.orderStatus !==1 || item.orderType !==2 && item.orderStatus !==0">{{'¥'+item.payPrice}}</p>
                     </div>
                     <div class="order-action" v-if="item.isReserve === 1">预约</div>
