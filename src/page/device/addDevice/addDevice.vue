@@ -579,12 +579,12 @@
             count++;
             break;
           } 
-          if(!reg.test(Number(item.needMinutes))){
+          if(this.fromdata.secondType.name !== '通用脉冲充电桩' && !reg.test(Number(item.needMinutes))){
             this.$toast("耗时填写格式错误，请填写非0的非空正整数");
             flag1 = false;
             break;
           }
-          if(String(item.needMinutes).indexOf('.')>-1){
+          if(this.fromdata.secondType.name !== '通用脉冲充电桩' && String(item.needMinutes).indexOf('.')>-1){
             this.$toast("耗时填写格式错误，请填写非0的非空正整数");
             flag1 = false;
             break;
