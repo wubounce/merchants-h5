@@ -1,5 +1,5 @@
 <template>
-  <section v-title="title" class="referee">
+  <section class="referee">
     <div ref="refereeForm" :model="referee" class="referee-form">
       <div class="form-group">
         <p class="area" @click='open()'>
@@ -39,7 +39,6 @@
   export default{
     data() {
       return {
-        title:'推荐',
         referee: {
           phone: '',
           name: '',
