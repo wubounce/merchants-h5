@@ -214,7 +214,7 @@ export default {
     async marketlistParentTypeIdFun(){
       let payload = {shopIds:this.shopIds.join(',')};
       let res = await marketlistParentTypeIdFun(payload);
-      this.machineSlots[0].values = res;
+      this.machineSlots[0].values = res.length>0 ? [{parentTypeId:'',parentTypeName:'全部'},...res]:[];
     },
     getcheckshop(){
       let checklist = this.shoplist.filter(v=>this.shopIds.some(k=>k==v.shopId));
@@ -291,7 +291,7 @@ export default {
         this.$toast({message: "请选择店铺" });
         return false;
       }
-      if (!this.machineCurrent.parentTypeId) {
+      if (!this.machineCurrent.parentTypeId&&this.machineCurrent.parentTypeName !== '全部') {
         this.$toast({message: "请选择设备类型" });
         return false;
       }
@@ -327,7 +327,8 @@ export default {
       }
       let status = null;
       this.addmarket.addstatus === true ? status = 0  : status = 1;
-      let payload = Object.assign({},this.addmarket,{week:this.weeklist.join(','),shopIds:this.shopIds.join(','),status:status,parentTypeIds:`'${this.machineCurrent.parentTypeId}'`});
+      let parentTypeIds = this.machineCurrent.parentTypeId ? `'${this.machineCurrent.parentTypeId}'` : null;
+      let payload = Object.assign({},this.addmarket,{week:this.weeklist.join(','),shopIds:this.shopIds.join(','),status:status,parentTypeIds:parentTypeIds});
       delete payload.addstatus;
       let res = await addOruPdateFun(payload);
       this.$toast({message: '新增成功' });

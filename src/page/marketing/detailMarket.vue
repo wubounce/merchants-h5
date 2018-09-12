@@ -5,7 +5,10 @@
     <div class="addvip-header">
       <p>所属店铺<span class="add-market-shop"><span v-for="(item,index) in detail.shop" :key="index">{{item.name}}<i v-if="index !== (detail.shop.length-1)">,</i></span></span></p>
       
-      <p>设备类型<span class="addvip-con" v-for="(item,index) in detail.parentTypeMap" :key="index">{{item.parentTypeName}}</span></p>
+     
+
+      <p v-if="detail.parentTypeIds ===''">设备类型<span class="addvip-con">全部</span></p>
+      <p v-else>设备类型<span class="addvip-con" v-for="(item,index) in detail.parentTypeMap" :key="index">{{item.parentTypeName}}</span></p>
 
       <p>优惠期<span class="addvip-con">{{detail.noDiscountStart}}<span v-if="detail.noDiscountStart&&detail.noDiscountEnd">~</span>{{detail.noDiscountEnd}}</span></p>
       <p>活动日<span class="addvip-con">{{detail.noWeek | week}}</span></p>
