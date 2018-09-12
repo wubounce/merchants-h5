@@ -1,5 +1,5 @@
 <template>
-  <section v-title="title" class="register">
+  <section class="register">
     <div ref="registerForm" :model="register" class="register-form">
     <div class="form-group">
         <input type="number" placeholder="请输入手机号" v-model="register.phone" @input="disabledBtn" required>
@@ -25,7 +25,6 @@
   export default{
     data() {
       return {
-        title:'注册',
         register: {
           phone: '',
           name: '',
