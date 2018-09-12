@@ -52,7 +52,7 @@ http.interceptors.request.use(config => {
     let _sign = get_sign(config.data,_timestamp);
     config.data = config.data + `&_sign=${_sign}`+`&_timestamp=${_timestamp}`;
   }else{
-    if(router.currentRoute.name !== 'referee'){ //在非登录页面，token异常丢失
+    if(router.currentRoute.name !== 'login' && router.currentRoute.name !== 'referee'){ //在非登录页面，token异常丢失
       store.dispatch('LogOut').then(() => {
         location.reload();
       });
