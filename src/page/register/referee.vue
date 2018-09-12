@@ -11,7 +11,7 @@
         <input type="text" placeholder="推荐人姓名（选填）" v-model="referee.name" required="required">
       </div>
       <div class="form-group">
-        <input type="text" placeholder="推荐人手机（选填）" v-model="referee.phone" required="required">
+        <input type="text" placeholder="推荐人手机号码（选填）" v-model="referee.phone" required="required">
       </div>
       <div class="clickBtn">
         <mt-button type="primary" class="btn-blue" @click.prevent="goToNext" :disabled="chooseArea === '选择所在区域'">申请注册</mt-button>
