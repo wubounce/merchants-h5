@@ -270,6 +270,7 @@ export default {
   font-size:14px;
   color:#999;
   margin-top: 5.0rem;
+  margin-bottom: 0.53rem;
 }
 .form-group button {
   height: 1.17rem;
