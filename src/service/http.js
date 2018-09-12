@@ -52,14 +52,9 @@ http.interceptors.request.use(config => {
     let _sign = get_sign(config.data,_timestamp);
     config.data = config.data + `&_sign=${_sign}`+`&_timestamp=${_timestamp}`;
   }else{
-    if(router.currentRoute.name !== 'login' && router.currentRoute.name !== 'referee'){ //在非登录页面，token异常丢失
-      store.dispatch('LogOut').then(() => {
-        location.reload();
-      });
-    }else {
-      let _sign = get_sign(config.data,_timestamp);
-      config.data =  config.data + `&_sign=${_sign}` + `&_timestamp=${_timestamp}`;
-    }
+    let _sign = get_sign(config.data,_timestamp);
+    config.data =  config.data + `&_sign=${_sign}` + `&_timestamp=${_timestamp}`; 
+    
   }
   return config;
 
@@ -92,8 +87,15 @@ http.interceptors.response.use(
           location.reload();
         });
     }else {
-      Toast(response.data.msg);
-      return Promise.reject(response.data);
+      if (response.data.code === 10) {
+        store.dispatch('LogOut').then(() => {
+          location.reload();
+        });
+      } else {
+        Toast(response.data.msg);
+        return Promise.reject(response.data);
+      }
+
     }
   },
   error => {
