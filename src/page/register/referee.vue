@@ -191,14 +191,7 @@
           refereePhone: this.referee.phone
         };
         let res = await saveRegisterInfoFun(payload);
-        let instance = this.$toast({
-          message: '申请成功，我们将在1个工作日内反馈结果，请留意手机短信',
-          iconClass: 'mint-toast-icon mintui mintui-success'
-        });
-        setTimeout(() => {
-          instance.close();
-           this.$router.push({name: 'successTip'});
-        }, 2000);   
+        this.$router.push({name:'successTip'});
       },
     },
 

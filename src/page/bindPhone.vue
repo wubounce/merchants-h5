@@ -71,7 +71,7 @@
           }
           let payload = Object.assign({},this.bindPhone);
           let res = await bindPhoneFun(payload);        
-            this.$router.push({name:'index'});
+            this.$router.push({name:'successTip'});
         }
       },
       disbaledBtn(){

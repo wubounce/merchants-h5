@@ -97,7 +97,7 @@ export default new Router({
     },
     {
       path: '/successTip',
-      name: 'sunccessTip',
+      name: 'successTip',
       component: () => import ('@/page/register/successTip'),
       meta: {title: '注册'},
     },
