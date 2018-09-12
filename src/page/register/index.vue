@@ -92,12 +92,19 @@
           if(!this.validateName()) return false;
           if(!this.validateCode()) return false;
           if(!this.validateSureCode()) return false;
+          sessionStorage.setItem('registerPhone',this.register.phone);
+          sessionStorage.setItem('registerName',this.register.name);
           this.$router.push({
             name: "referee",
             query: ({phone:this.register.phone, name:this.register.name, password:this.register.code})
           });
         }
-    }
+    },
+      mounted() {
+      if(sessionStorage.getItem('registerPhone')) this.register.phone = sessionStorage.getItem('registerPhone');  
+      if(sessionStorage.getItem('registerName')) this.register.name = sessionStorage.getItem('registerName');
+
+    },
   };
 </script>
 <style lang="scss" scoped>
