@@ -368,6 +368,10 @@ export default {
     chooseTime() {
       this.timeVisible = true;
       this.isClass = true;
+      this.slotsTime[0].defaultIndex = parseInt(this.addBusinessTime.slice(0,2));
+      this.slotsTime[2].defaultIndex = parseInt(this.addBusinessTime.slice(3,5));
+      this.slotsTime[4].defaultIndex = parseInt(this.addBusinessTime.slice(6,8));
+      this.slotsTime[6].defaultIndex = parseInt(this.addBusinessTime.slice(9,11));
     },
     sureWorkTime() {
       this.timeVisible = false;
