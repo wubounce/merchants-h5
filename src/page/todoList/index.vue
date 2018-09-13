@@ -1,12 +1,15 @@
 <template>
   <section class="todolist">
-	
   <div class="permissions" v-if="$store.getters.has('mer:schedule:list')">暂无相关页面权限</div>
-  <div v-else>
-		<p class="shop-item title">批量定时启动设备</p>
-		<p v-show="noData" class="noTodoList">暂无待办事项</p>
-		<ul>
+  <div v-else class="page-loadmore-height">
+		<div class="top">
+				<p class="shop-item title" >批量定时启动设备</p>
+				<p class="black"></p>
+		</div>
+		<p v-if="noData" class="noTodoList">暂无待办事项</p>
+		<div class='page-top' v-else>
 			<div class="page-loadmore-wrapper" ref="wrapper" :style="{overflowY:scrollShow}">
+				<p class="shop-item title" v-show="noData" >批量定时启动设备</p>
 				<mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" @translate-change="translateChange" :auto-fill="false" ref="loadmore">
 					<li class="list" v-for="(item,index) in list" :key="index"> 
 						<router-link :to="{ name: 'todoDetail', query:{id:item.id}}">
@@ -21,7 +24,7 @@
 					<div v-if="allLoaded" class="nomore-data">没有更多了</div>
 				</mt-loadmore>
 			</div>
-		</ul>
+		</div>
 	</div>
   </section>
 </template>
@@ -60,6 +63,7 @@ import PagerMixin from '@/mixins/pagerMixin';
 				else {
 					this.list = res.items?[...this.list,...res.items]:[];  //分页添加
 					this.total = res.total;
+					this.noData = false;
 				}
       }
     },

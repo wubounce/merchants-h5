@@ -1,5 +1,8 @@
 section {
-    ul {
+  height:100%;
+  .page-top {
+      height: 100%;
+      box-sizing: border-box;
       .page-loadmore-wrapper {
         overflow: scroll;
         .list {
