@@ -20,7 +20,7 @@
             <span  class="eyes iconfont icon-biyanjing" v-else></span>
           </div>
         </div>
-        <div class="phone-list" v-if="searchPhone">
+        <div class="phone-list" v-if="searchPhone&&searchPhoneList.length>0">
           <p v-for="(item,index) in searchPhoneList" :key="index" @click="checkPhone(item)">{{item}}</p>
         </div>
       </div>
