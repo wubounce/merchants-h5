@@ -78,7 +78,7 @@
     <selectpickr :visible="parentType" :slots="slotsFirst" :valueKey="firstname" @selectpicker="machineselectpickerFirst" @onpickstatus="machineselectpickertatusFirst" :title="'设备类型'"> </selectpickr>
     <selectpickr :visible="subType" :slots="slotsFun" :valueKey="firstname" @selectpicker="machineselectpickerFun" @onpickstatus="machineselectpickertatusFun" :title="'设备型号'"> </selectpickr>
     <!--型号-->
-    <mt-popup v-model="subType2" position="bottom" :closeOnClickModal="false">
+    <mt-popup v-model="subType2" position="bottom" :closeOnClickModal="true">
       <div class="resp-shop">
         <span class="quxi" @click="cancle">取消</span>
         <span class="shop">设备型号</span>
