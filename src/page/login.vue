@@ -231,7 +231,7 @@ export default {
         }
       }
       .open-eyes {
-        width: 0.37rem;
+        width: 0.6rem;
         float: right;
       }
       .eyes {
@@ -269,7 +269,7 @@ export default {
   text-align: center;
   font-size:14px;
   color:#999;
-  margin-top: 5.0rem;
+  margin-top: 4.0rem;
   margin-bottom: 0.53rem;
 }
 .form-group button {
@@ -280,12 +280,15 @@ export default {
   border-radius:0.13rem;
 }
 .phone-list {
-  width: 6.37rem;
+  width: 6.24rem;
   position: absolute;
   z-index: 2;
   background: #fff;
-  left: 1.92rem;
+  padding-left: 1.92rem;
   top:1.6rem;
+  min-height: 6.67rem;
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
   p {
     font-size: 16px;
     color: #999;

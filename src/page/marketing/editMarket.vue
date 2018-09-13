@@ -79,7 +79,7 @@
               <span class="shop">设备类型</span> 
               <span class="qued" @click="noMachineVisible=false">确定</span>
            </div>
-          <div class="noMachine-tip">已选店铺下无相同的设备类型</div>
+          <div class="noMachine-tip">{{noMachineTip}}</div>
         </section>
       </mt-popup>
   </div>
@@ -122,6 +122,7 @@ export default {
           }
       ],
 
+      noMachineTip:'',
       machineCurrent:{},
       machineVisible:false,
       machineLable:'parentTypeName',
@@ -313,7 +314,17 @@ export default {
         this.$toast({message: "请先选择店铺" });
         return false;
       }else{
-        this.machineSlots[0].values.length<=0 ? this.noMachineVisible = true : this.machineVisible=true;
+        if(this.machineSlots[0].values.length<=0 && this.shopIds.length>1){
+          console.log(this.shopIds);
+          this.noMachineTip = '已选店铺下无相同的设备类型';
+          this.noMachineVisible = true;
+        }else if(this.machineSlots[0].values.length<=0 && this.shopIds.length<=1) {
+          console.log(this.shopIds);
+          this.noMachineVisible = true;
+          this.noMachineTip = '此店铺下暂无设备';
+        }else {
+          this.machineVisible=true;
+        }
       }
     },
     machineselectpicker(value) {
