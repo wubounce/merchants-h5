@@ -1,13 +1,25 @@
 section {
-	.title {
-		font-size: 16px;
-		font-weight: bold;
-		padding-top: 0.53rem;
-        padding-bottom: 0.53rem;
-		border: 1px solid #F8F8F8;
-		background-color: #fff; 
-		color: #333333;
-		padding-left: 0.25rem;
+	height: 100%;
+	.top {
+		position: fixed;
+		top: 0;
+		left: 0;
+		z-index: 999;
+		width:100%;
+		.title {
+			font-size: 16px;
+			font-weight: bold;
+			padding-top: 0.53rem;
+			padding-bottom: 0.53rem;
+			border: 1px solid #F8F8F8;
+			background-color: #fff; 
+			color: #333333;
+			padding-left: 0.25rem;
+		}
+		.black {
+			height: 0.3rem;
+            background-color: #efeff4;
+		}
 	}
 	.noTodoList {
 	text-align: center;
@@ -15,10 +27,13 @@ section {
     font-size: 16px;
     padding-top: 4rem;
 	}
-	ul {
+	.page-top {
+		padding-top: 1.6rem;
+	   height: 100%;
+       box-sizing: border-box;
 		margin-top: 0.3rem;
 		.page-loadmore-wrapper {
-      overflow: scroll;
+			overflow: scroll;
 			.list {
 				background-color: #fff;
 				margin-bottom: 0.3rem;
