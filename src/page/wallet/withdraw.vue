@@ -185,5 +185,5 @@ export default {
             font-size: .3733rem;
             margin-top: .5333rem;
         }
-    }
+    } 
 </style>
