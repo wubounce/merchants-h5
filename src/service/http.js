@@ -101,10 +101,6 @@ http.interceptors.response.use(
     }
   },
   error => {
-    alert(error);
-   alert(error.response.data);
-     alert(error.response.status);
-     alert(error.response.headers);
     Indicator.close();
     if (error.message.includes('timeout')) {
       MessageBox.alert('请求超时，请重新操作', '提示', {type: 'warning'});
