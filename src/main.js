@@ -1,5 +1,5 @@
 import 'babel-polyfill';
-
+import 'url-search-params-polyfill';
 import Vue from 'vue';
 
 import MintUI from 'mint-ui';

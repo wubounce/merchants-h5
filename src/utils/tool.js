@@ -1,6 +1,7 @@
 import Cookies from 'js-cookie';
 import moment from 'moment';
 import store from '@/store';
+import qs from 'qs';
 
 const TokenKey = 'Token';
 export const getToken = () => Cookies.get(TokenKey);
@@ -115,6 +116,7 @@ export const calMin = (arr) => {
 };
 
 export const filterData = (data)=>{
+	console.log(data);
 	let params = new URLSearchParams();
 	for (let i in data) {
 	   if (data[i] === null || data[i] === undefined || data[i] === '') continue;
