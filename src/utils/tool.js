@@ -116,7 +116,6 @@ export const calMin = (arr) => {
 };
 
 export const filterData = (data)=>{
-	console.log(data);
 	let params = new URLSearchParams();
 	for (let i in data) {
 	   if (data[i] === null || data[i] === undefined || data[i] === '') continue;
