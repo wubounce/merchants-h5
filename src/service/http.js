@@ -57,7 +57,6 @@ http.interceptors.request.use(config => {
     config.data =  config.data + `&_sign=${_sign}` + `&_timestamp=${_timestamp}`; 
     
   }
-  console.log(config);
   return config;
 
 }, error => {
