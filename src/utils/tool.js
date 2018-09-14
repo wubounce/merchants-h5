@@ -116,7 +116,7 @@ export const calMin = (arr) => {
 };
 
 export const filterData = (data)=>{
-	let params = {};
+	let params = {};  
 	for (let i in data) {
 	   if (data[i] === null || data[i] === undefined || data[i] === '') continue;
 	   params[i]=data[i];
