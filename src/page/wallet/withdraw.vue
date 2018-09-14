@@ -1,5 +1,6 @@
 <template>
 <div class="withdraw-wrapper">
+    <section class="alipay-tip">温馨提示：9月15日活动原因，当天提现将延迟到48小时内到账，给您带来的不便，敬请谅解。</section>
     <header>
         <span class="iconfont icon-zhifubao"></span>
         <div>
@@ -184,6 +185,13 @@ export default {
             color: $first-color;
             font-size: .3733rem;
             margin-top: .5333rem;
+        }
+        .alipay-tip {
+            background:rgba(253,252,236,1);
+            font-size: 12px;
+            color: #FF5F5F;
+            line-height:0.53rem;
+            padding:0.19rem 0.4rem;
         }
     } 
 </style>
