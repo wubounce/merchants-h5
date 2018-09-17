@@ -193,5 +193,6 @@ export default {
             line-height:0.53rem;
             padding:0.19rem 0.4rem;
         }
+
     } 
 </style>

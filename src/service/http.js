@@ -4,13 +4,10 @@ import store from '../store';
 import { getToken, filterData, get_sign } from '@/utils/tool';
 import qs from 'qs';
 import router from '@/router';
- const baseUrl = process.env.NODE_ENV === 'production' ? 'http://192.168.5.10:8089/merchant/' : 'http://192.168.5.10:8089/merchant/'; 
-
-//const baseUrl = process.env.NODE_ENV === 'production' ? 'https://api.qiekj.com/merchant/' : 'http://192.168.5.10:8089/merchant/'; 
 
 // 创建axios实例
 const http = axios.create({
-  baseURL: baseUrl, // api的base_url
+  baseURL: process.env.API_URL, // api的base_url
   timeout: 30000, // 请求超时时间
   paramsSerializer: (params) => {
     return qs.stringify(params, { arrayFormat: 'brackets' });
