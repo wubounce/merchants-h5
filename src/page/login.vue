@@ -25,11 +25,12 @@
         </div>
       </div>
       <div class="form-group">
+        <p @click="goToReset" class="reset">忘记密码?</p>
         <mt-button type="primary" class="btn-blue" @click.prevent ="handleSubmit" :disabled="disabled">登录</mt-button>
-        <div class="handleBox">      
+       <!--  <div class="handleBox">      
           <p @click="goToReset" class="reset">忘记密码?</p>
           <p @click="goToRegister" class="register">立即注册</p>
-        </div>
+        </div> -->
       </div>
     </form>
   </div>
@@ -241,26 +242,35 @@ export default {
       .btn-blue {
         margin-top: 0.67rem;
       }
-      .handleBox {
-        display: flex;
-        .reset {
-          flex: 1;
-          font-size: 14px;
-          line-height: 1;
-          color: #666666;
-          margin-top: 0.67rem;
-          margin-bottom: 0.67rem;
-        }
-        .register {
-          flex: 1;
-          font-size: 14px;
-          line-height: 1;
-          color: #666666;
-          margin-top: 0.67rem;
-          margin-bottom: 0.67rem;
-          text-align: right;
-        }
+      .reset {
+        font-size: 14px;
+        line-height: 1;
+        color: #999;
+        margin-top: 0.27rem;
+        margin-bottom: 0.67rem;
+        text-align: right;
       }
+
+      // .handleBox {
+      //   display: flex;
+      //   .reset {
+      //     flex: 1;
+      //     font-size: 14px;
+      //     line-height: 1;
+      //     color: #666666;
+      //     margin-top: 0.67rem;
+      //     margin-bottom: 0.67rem;
+      //   }
+      //   .register {
+      //     flex: 1;
+      //     font-size: 14px;
+      //     line-height: 1;
+      //     color: #666666;
+      //     margin-top: 0.67rem;
+      //     margin-bottom: 0.67rem;
+      //     text-align: right;
+      //   }
+      // }
     }
   }
 }
