@@ -91,7 +91,7 @@
         let keywords = this.keyword.replace(validatReplace, '');
         let payload = {shopName: keywords,hasMachine: true};
         let res = await shopSearchFun(payload);
-        this.shopList= data; 
+        this.shopList= res; 
         this.shopList.forEach(item=>{
         this.provinceName = item.province;
         this.cityName = item.city;
