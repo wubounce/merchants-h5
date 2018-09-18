@@ -76,6 +76,7 @@ export default {
         pageSize: this.pageSize
       };
       let res = await manageListFun(payload);
+      this.total = res.total;
       // console.log(res);
       if(res.items == null || res.items == "") {
           this.hasNews = false;
