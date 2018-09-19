@@ -6,7 +6,7 @@
       <section class="sarch-wrap">
         <div class="search">
             <form action="" target="frameFile" v-on:submit.prevent="">
-              <span class="iconfont icon-IconSearch"></span><input type="text" value='搜索' v-model.trim="searchData" @keyup.enter="searchOrder" @input="clearSearch" placeholder="请输入用户手机号/订单号查询" class="serch">
+              <span class="iconfont icon-IconSearch"></span><input type="text" value='搜索' v-model.trim="searchData" @keyup.enter="searchOrder" @input="clearSearch" placeholder="请输入用户手机号/订单号/设备名称" class="serch">
               <iframe name='frameFile' style="display: none;"></iframe>
               <span class="select-back" @click="searchOrder">搜索</span>
             </form>
@@ -31,16 +31,9 @@
               </section>
               <router-link :to="{ name: 'orderdetail', query:{orderNo:item.orderNo,orderType:item.orderType}}"> 
               <section class="order-list">  
-                  <div class="title"><span class="ovh-shop">{{item.shopName}}</span><span class="go iconfont icon-nextx"></span></div>
-                  <div class="detail">  
-                    <div class="orderpic"><img :src="item.imageId" alt=""></div>
-                    <div class="content">
-                        <p class="con-title">{{item.machineName}}</p>
-                        <p class="con-type">{{item.machineFunctionName}}<span style="padding-left:0.35rem;padding-right:0.27rem" v-if="item.isESource === 0">|</span><span v-if="item.isESource === 0">时长{{item.markMinutes}}分钟</span></p>
-                        <p class="con-price" v-if="item.orderType !== 2 && item.orderStatus !==1 || item.orderType !==2 && item.orderStatus !==0">{{'¥'+item.payPrice}}</p>
-                    </div>
-                    <div class="order-action" v-if="item.isReserve === 1">预约</div>
-                  </div>
+                <div class="title"><span class="ovh-shop">{{item.shopName}}</span><span class="go iconfont icon-nextx"></span></div>
+                <div class="machine-name"><span class="ovh-shop">{{item.machineName}}</span><span class="con-price" v-if="item.orderType !== 2 && item.orderStatus !==1 || item.orderType !==2 && item.orderStatus !==0">{{'¥'+item.payPrice}}</span></div>
+                <div class="con-type">{{item.machineFunctionName}}<span style="padding-left:0.13rem;padding-right:0.19rem" v-if="item.isESource === 0">|</span><span v-if="item.isESource === 0">时长{{item.markMinutes}}分钟</span><div class="order-action" v-if="item.isReserve === 1">预约</div></div>
               </section>
               </router-link>
               <section class="listaction" v-if="item.orderStatus === 2"> 

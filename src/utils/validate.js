@@ -71,3 +71,9 @@ export const validatVipLimit = (str) => {
 
 /*去掉特殊字符*/
 export const validatReplace = /[\'\"\\\/\b\f\s\n\r\t\@\#\$\%\^\&\*\(\)\{\}\:\"\L\<\>\?\[\]]/g;  
+
+
+export const validatEmail = (str)=>{
+  const reg = /^([A-Za-z0-9_\-\.\u4e00-\u9fa5])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,8})$/;
+  return reg.test(str);
+};

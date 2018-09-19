@@ -285,3 +285,17 @@ body.dialog-open {
   transform: translateY(-55%);
   width: 100%;
 }
+
+// 导出弹框
+.mint-msgbox-header .mint-msgbox-title {
+  font-weight: normal !important;
+  color: #333 !important;
+}
+.mint-msgbox-input input{
+    color: #1890FF;
+    height: 0.91rem;
+}
+.mint-msgbox-btns .mint-msgbox-confirm, .mint-msgbox-btns .mint-msgbox-cancel {
+  font-size: 16px;
+  color: #333;
+}

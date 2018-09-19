@@ -375,6 +375,7 @@
         }
       }
       .device-detail-ft {
+        font-size: 12px;
         padding: 0.13rem 0.4rem;
         margin: .4rem 0;
         background: rgba(255, 255, 255, 1);

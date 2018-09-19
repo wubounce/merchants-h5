@@ -2,6 +2,15 @@
 <div class="member page-loadmore-height">
   <div class="permissions" v-if="$store.getters.has('mer:person:list')">暂无相关页面权限</div>
   <div class="page-loadmore-height" v-else>
+    <section class="sarch-wrap">
+        <div class="search">
+            <form action="" target="frameFile">
+              <span class="iconfont icon-IconSearch"></span><input type="text" placeholder="请输入人员姓名/账号" class="serch">
+              <iframe name='frameFile' style="display: none;"></iframe>
+              <span class="select-back">搜索</span>
+            </form>
+        </div>
+      </section>
     <div class="no-discount-list" v-if="noList">暂无二级管理账号</div>
     <div class="page-loadmore-wrapper" ref="wrapper" :style="{overflowY:scrollShow}">
      <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" @translate-change="translateChange" :auto-fill="false" ref="loadmore">

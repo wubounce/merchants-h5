@@ -591,7 +591,7 @@
           padding: .1rem 0;
           height: 1rem;
           line-height: 1rem;
-          border-bottom: 0.01rem solid rgba(223, 230, 255, 1);
+          border-bottom: 1px solid #f9f8ff;
           &:nth-child(3) {
             border: none;
           }
@@ -638,7 +638,7 @@
               flex: 1;
               text-align: center;
               justify-content: flex-end;
-              border-left: 0.01rem solid rgba(223, 230, 255, 1);
+              border-left: 1px solid #f9f8ff;
             }
             span {
               display: inline-block;
