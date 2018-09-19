@@ -23,7 +23,7 @@
     </div>
   </div>
   <div class="export">
-     <span @click="exportExls"><i class="iconfont icon-xiangxiajiantou"></i>导出</span>
+     <span @click="exportExls"><i class="iconfont icon-daochu"></i>导出</span>
   </div>
   <div class="tabledata">
     <div class="tableearn">
