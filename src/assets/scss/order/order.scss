@@ -89,12 +89,15 @@
 .alllist {
    padding-bottom: 0.266667rem;
 }
-
 .order-list {
-  padding:0.43rem 0.4rem 0.48rem;
-  background:rgba(248,252,255,1);
+  padding:0.25rem 0.4rem;
+  background:#fff;
+  border-bottom: 1px solid #f9f8ff;
+  border-top: 1px solid #f9f8ff;
   .title {
-    font-size: 16px;
+    font-size: 12px;
+    color: #666;
+    line-height: 0.44rem;
     display: flex;
   }
   .ovh-shop {
@@ -108,52 +111,41 @@
     float: right;
     color: #D1D1D6;
   }
-  .detail {
+  .machine-name {
     display: flex;
-    padding-top:0.373333rem; 
+    font-size: 16px;
+    font-weight: 600;
+    color: #1890FF;
+    line-height: 0.6rem;
+    padding:0.17rem 0;
   }
-  .orderpic {
-    width:1.84rem;
-    height:1.79rem;
-    border-radius:0.133333rem;
-    background: #ccc;
-    img {
-      display: block;
-      width: 100%;
-      height: 100%;
-      border-radius: 0.133333rem;
-    }
+  .con-price{
+    font-size: 18px;
+    color: #FF5F5F;
+    float: right;
+    font-weight: normal;
   }
-  .content {
-    width: 6.293333rem;
-    height:1.79rem;
-    padding-left: 0.266667rem; 
-    .con-title {
-      font-size: 14px;
-    }
-    .con-type{
-        font-size: 12px;
-        color: #999999;
-        padding-top: 0.106667rem;
-        padding-bottom: 0.266667rem;
-    }
-    .con-price{
-      font-size: 18px;
-      color: #FF5F5F
-    }
+  .con-type {
+    font-size: 12px;
+    line-height: 0.6rem;
+    line-height: 0.44rem;
+    color: #666;
   }
+  .order-action {
+    float: right;
+    width:1.066667rem;
+    height:0.453333rem;
+    line-height:0.453333rem;
+    background:rgba(236,245,255,1);
+    border-radius:0.053333rem;
+    border:1px solid rgba(179,217,255,1);
+    font-size: 12px;
+    color: #3F9EFF;
+    text-align: center;
+  }
+  
 }
-.order-action {
-  width:1.066667rem;
-  height:0.453333rem;
-  line-height:0.453333rem;
-  background:rgba(236,245,255,1);
-  border-radius:0.053333rem;
-  border:1px solid rgba(179,217,255,1);
-  font-size: 12px;
-  color: #3F9EFF;
-  text-align: center;
-}
+
 .listaction {
   background: #fff;
   overflow: hidden;

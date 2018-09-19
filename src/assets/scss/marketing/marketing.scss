@@ -1,6 +1,6 @@
   .discoun-list {
     margin-top: 0.29rem;
-    padding:0.29rem 0.4rem 0;
+    padding:0 0.4rem;
     background: #fff;
     position: relative;
     .discountag {
@@ -20,7 +20,6 @@
       font-size: 14px;
       height: 1.17rem;
       line-height: 1.17rem;
-      border-bottom:1px solid #f9f8ff;
       span {
         font-size: 16px;
         color: #1890FF;
@@ -32,35 +31,60 @@
     }
   }
   .discoun-content {
-    display: flex;
-    text-align: center;
-    padding: 0.55rem 0;
+    a {
+      display: block;
+    }
     .dis-con-title {
-      flex: 1;
-      width: 50%;
+      line-height: 0.6rem;
       color: #999999;
       font-size: 14px;
-    }
-    .dis-con-title:first-child {
-      border-right:  1px solid #f9f8ff;
-    }
-
-    .dis-con-shop {
-      font-size: 16px;
-      color: #1890FF;
-      .more-shop {
+      padding:0.29rem 0;
+      border-bottom:1px solid #f9f8ff;
+      border-top:1px solid #f9f8ff;
+      display: flex;
+      .shop-name {
+        width: 1.2rem;
+      }
+      .dis-con-shop {
+        width: 8.19rem;
         font-size: 16px;
+        color: #1890FF;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+       font-size: 16px;
+       color:#333;
       }
-      span {
-        font-size: 12px;
-      }
-
     }
-    .overflow-shop {
-      width: 100%;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
+    .dis-con-machine {
+      padding:0.27rem 0;
+      display: flex;
+      >div {
+        line-height: 0.6rem;
+        width:50%;
+      }
+      .machine {
+        font-size: 14px;
+        color:#999;
+      }
+      .machine-type {
+        padding-left: 0.27rem;
+        font-size: 16px;
+        color: #333;
+      }
+      .discount {
+        text-align: center;
+        border-left: 1px solid #f9f8ff;
+      }
+      .discount-num {
+        padding-left: 0.27rem;
+        font-size: 16px;
+        color: #1890FF;
+        i {
+          font-style: normal;
+          font-size: 12px;
+        }
+      }
     }
   }
   .addmember {

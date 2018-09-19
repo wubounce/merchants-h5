@@ -15,6 +15,39 @@
       line-height: 0.6rem
     }
   }
+  .sarch-wrap{
+    background: #ffffff;
+    padding: 0.27rem;
+    .search {
+      -webkit-box-shadow: 0px 0.053333rem 0.133333rem 0px rgba(186, 192, 210, 0.3);
+      box-shadow: 0px 0.053333rem 0.133333rem 0px rgba(186, 192, 210, 0.3);
+      border-radius: 0.133333rem;
+      font-size: 16px;
+      height: 1.17rem;
+      display: flex;
+      form {
+        display: inline-block;
+        width: 100%;
+      }
+      input {
+        width: 6.8rem;
+        font-size: 16px;
+        height:1.17rem;
+      }
+      .icon-IconSearch {
+        color: #999999;
+        padding-left: 0.4rem;
+        padding-right: 0.27rem;
+      }
+      .select-back {
+        line-height: 1.17rem;
+        padding-right: 0.27rem;
+        padding-left: 0.27rem;
+        color: #1890FF;
+        border-left:1px solid rgba(216,216,216,1);
+      }
+    }
+  }
   .name{
     width: 75%;
     float: left;

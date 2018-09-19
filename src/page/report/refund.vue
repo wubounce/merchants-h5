@@ -22,6 +22,9 @@
       <div  class="order"><i style="background:#FACC14"></i>总订单数量<span class="totalOrder">({{totalCount}})</span></div>
     </div>
   </div>
+  <div class="export">
+     <span><i class="iconfont icon-xiangxiajiantou"></i>导出</span>
+  </div>
   <div class="tabledata">
     <div class="tableearn">
        <div class="listcon table-header">
