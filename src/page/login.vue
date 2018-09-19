@@ -7,9 +7,9 @@
   </div>
   <div class="form">
     <form ref="loginForm" :model="form">
-      <div class="form-group input">
+      <div class="form-group input" v-if="loginPwd">
         <div class="userName">
-          <label class="title">账号</label><input type="text" v-model.trim="form.userName" v-on:input="userinputFunc" placeholder="请输入用户名/手机号">
+          <label class="title">账号</label><input type="text" v-model.trim="form.userName" v-on:input="userinputFunc" placeholder="请输入用户名">
           <span class="open-eyes eyes iconfont icon-guanbi"  v-show="isuser" @click="form.userName='';isuser=false;disabled=true;searchPhone=false"></span>
         </div>
         <div class="passWord">
@@ -24,17 +24,41 @@
           <p v-for="(item,index) in searchPhoneList" :key="index" @click="checkPhone(item)">{{item}}</p>
         </div>
       </div>
+      <div class="form-group input" v-if="!loginPwd">
+        <div class="userName">
+          <label class="title">手机号</label>
+          <input type="text" v-model.trim="form.phone" placeholder="请输入手机号">
+        </div>
+        <div class="passWord relative">
+          <label class="title">验证码</label>
+          <input type="text" v-model.trim="form.code" placeholder="请输入验证码" autocomplete="off">
+        </div>
+        <div class="verificode">
+          <p class="countdown" v-if="!btn">{{time}}s后重新获取</p>
+          <p class="sendcode" @click="sendcode" v-if="btn">获取验证码</p>
+        </div>
+      </div>
       <div class="form-group">
-        <p @click="goToReset" class="reset">忘记密码?</p>
-        <mt-button type="primary" class="btn-blue" @click.prevent ="handleSubmit" :disabled="disabled">登录</mt-button>
-       <!--  <div class="handleBox">      
-          <p @click="goToReset" class="reset">忘记密码?</p>
-          <p @click="goToRegister" class="register">立即注册</p>
-        </div> -->
+        <p class="rememberPwd" @click="isRemember" v-if="loginPwd">
+          <span class="iconfont" :class="isCheckCLass"></span>
+          <span class="rememberText">记住密码</span>
+        </p>
+        <mt-button type="primary" class="btn-blue" @click.prevent ="handleSubmit" :disabled="disabled" v-if="loginPwd">登录</mt-button>
+        <mt-button type="primary" class="btn-validate" @click.prevent ="checkoutLogin" v-if="loginPwd">账号密码登录</mt-button>
+        <mt-button type="primary" class="btn-blue" @click.prevent ="handleSubmit" :disabled="!(form.phone&&form.code)" v-if="!loginPwd">登录</mt-button>
+        <mt-button type="primary" class="btn-validate" @click.prevent ="checkoutLogin" v-if="!loginPwd">短信验证码登录</mt-button>
+        
       </div>
     </form>
   </div>
-  <footer class="company">企鹅商家管理平台</footer>
+  <footer class="company">
+    <div class="handleBox">      
+      <span @click="goToReset" class="reset">忘记密码?</span>
+      <span class="between">|</span>
+      <span @click="goToRegister" class="register">立即注册</span>
+    </div>
+    <p class="company-name"> 企鹅商家管理平台</p>
+  </footer>
 </div>
 </template>
 
@@ -45,6 +69,8 @@ import { getToken, removeToken, setMenu, removeMenu, removeNavTabIndex,setNavTab
 import { login } from '@/service/login';
 import JsEncrypt from 'jsencrypt';
 import { menuSelectFun } from '@/service/member';
+import { smscodeFun} from '@/service/resetPwd';
+import { validatPhone } from '@/utils/validate';
 export default {
     name: 'page-login',
     beforeRouteEnter(to, from, next) {
@@ -77,11 +103,18 @@ export default {
       return {
         form: {
           userName: '',
-          password: ''
+          password: '',
+          phone: '',
+          code: ''
         },
+        loginPwd: true,
+        btn: true,
+        time: 0,
+        isCheckCLass: 'icon-weixuan',
         isuser:false,
         typepwd:false,
         disabled:true,
+        disabledCode:true,
         phoneArray: getPhone()? getPhone():[],
         searchPhone:false,
         searchPhoneList:[],
@@ -107,6 +140,40 @@ export default {
       ...mapMutations([ 
           'setMenu',
       ]),
+      checkoutLogin() {
+        this.loginPwd = !this.loginPwd;
+      },
+      validatePhone() {
+        if (this.form.phone === '') {
+          this.$toast({message: "请输入手机号码" });
+          return false;
+        }else if (!validatPhone(this.form.phone)) {
+          this.$toast({message: "请输入正确的手机号码" });
+          return false;
+        } 
+        return true;
+      },          
+      async sendcode() {
+        if (this.validatePhone()) {
+          let res = await smscodeFun({phone:this.form.phone,mark:true});
+              this.time = 60;
+              this.btn = false;
+              this.countdown();
+        }
+      },
+      countdown() {
+        this.btn = false;
+        this.timer = setInterval(() => {
+          if (--this.time <= 0) {
+            clearInterval(this.timer);
+            this.btn = true;
+          }
+        }, 1000);
+      },
+      isRemember() { //是否记住密码
+        console.log(this.isCheckCLass === 'icon-weixuan');
+        this.isCheckCLass = this.isCheckCLass === 'icon-weixuan'?'icon-yixuan':'icon-weixuan';
+      },
       validate() {
         if (this.form.userName === '') {
           this.$toast({message: "请输入用户名" });
@@ -214,6 +281,9 @@ export default {
     .form-group {
       background: #fff;
       position: relative;
+      .relative {
+        position: relative;
+      }
       .userName , .passWord {
         font-size: 0.43rem;
         border-bottom: 1px solid rgba(229,229,229,1);
@@ -222,12 +292,31 @@ export default {
           display: inline-block;
           line-height: 1.55rem;
         }
+       
         input {
           width: 5rem;
           height: 1.55rem;
           padding-top: 0.49rem;
           padding-bottom: 0.48rem;
           font-size: 16px;
+          color: #1890FF;
+        }
+      }
+      .verificode {
+        position: absolute;
+        right: 0rem;
+        top: 2.0rem;
+        p {
+          font-size: 12px;
+          border: 1px solid #1890FF;
+          padding: 0.15rem;
+          border-radius: 5px
+        }
+        .countdown {
+          border: 1px solid #999;
+          color: #999;
+        }
+        .sendcode {
           color: #1890FF;
         }
       }
@@ -242,6 +331,12 @@ export default {
       .btn-blue {
         margin-top: 0.67rem;
       }
+      .btn-validate {
+        margin-top:.4rem;
+        background-color: #ffffff;
+        color: rgba(24, 144, 255, 1);
+        border: 1px solid #1890ff;
+      }
       .reset {
         font-size: 14px;
         line-height: 1;
@@ -250,37 +345,41 @@ export default {
         margin-bottom: 0.67rem;
         text-align: right;
       }
-
-      // .handleBox {
-      //   display: flex;
-      //   .reset {
-      //     flex: 1;
-      //     font-size: 14px;
-      //     line-height: 1;
-      //     color: #666666;
-      //     margin-top: 0.67rem;
-      //     margin-bottom: 0.67rem;
-      //   }
-      //   .register {
-      //     flex: 1;
-      //     font-size: 14px;
-      //     line-height: 1;
-      //     color: #666666;
-      //     margin-top: 0.67rem;
-      //     margin-bottom: 0.67rem;
-      //     text-align: right;
-      //   }
-      // }
+      .rememberPwd {    
+        line-height: 1;
+        margin-top: 0.27rem;
+        margin-bottom: 0.67rem;
+        text-align: right;
+        color: rgba(24, 144, 255, 1);
+        .icon-weixuan {     
+          font-size: 12px;
+          margin-right: -5px;
+        }
+        .icon-yixuan {
+          font-size: 12px;
+          margin-right: -5px;
+        }
+        .rememberText {
+          font-size: 12px;
+        }
+      }
+      
     }
   }
 }
 .company {
   background: #fff;
   text-align: center;
-  font-size:14px;
+  font-size:12px;
   color:#999;
-  margin-top: 4.0rem;
+  margin-top: 2.81rem;
   margin-bottom: 0.53rem;
+  .between {
+    margin: 0 0.32rem;
+  }
+  .company-name {
+    margin-top: 0.67rem;
+  }
 }
 .form-group button {
   height: 1.17rem;
