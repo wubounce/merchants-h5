@@ -11,15 +11,38 @@ section {
                 height: 0.3rem;
                 background-color: #efeff4;
             }
-            .showDate {
-                background-color: #fff;
-                box-sizing: border-box;
-                color: #999999;
-                display: -ms-flexbox;
+            .earnings-title {
                 font-size: 14px;
-                height: 1.04rem;
-                line-height: 1.04rem;
-                padding: 0 .4rem;
+                color: #1890FF;
+                padding: 0.27rem 0.4rem;
+                background: #fff;
+                display: flex;
+                .earning {
+                    width: 8.4rem;
+                    .month {
+                        padding-bottom: 0.13rem;
+                        color: #333;
+                    } 
+                }
+                .export-wrap {
+                    width: 0.8rem;
+                    .icon-daochu , .export {
+                        float: right;
+                        color: #1890FF;
+                        padding-bottom: 0.07rem;
+                    }
+                    .export {
+                        font-size: 12px;
+                    }
+                    .icon-daochu{
+                        margin-right: 3px;
+                    }
+                }
+                p {
+                    width: 100%;
+                    overflow: hidden;
+                    line-height: 0.53rem;
+                }
             }
             .listcon {
                 align-items: center;
@@ -76,7 +99,7 @@ section {
         }
         .bottom {
             height: 100%;
-            padding-top: 2.3rem;    
+            padding-top: 3.07rem;    
             box-sizing: border-box;
             overflow: scroll;
             overflow-y: auto;

@@ -109,7 +109,6 @@ export default {
       }
       let res = await orderListFun(payload);
       this.list = res.items?[...this.list,...res.items]:[];  //分页添加
-      this.list.length <= 0 ? this.noOrderList = true:this.noOrderList = false;
       this.total = res.total;
       if (this.searchData) {
         this.hiddenTab = false;

@@ -2,42 +2,46 @@
 <div class="member page-loadmore-height">
   <div class="permissions" v-if="$store.getters.has('mer:person:list')">暂无相关页面权限</div>
   <div class="page-loadmore-height" v-else>
-    <section class="sarch-wrap">
+    <div class="search-header">
+      <section class="sarch-wrap">
         <div class="search">
             <form action="" target="frameFile">
-              <span class="iconfont icon-IconSearch"></span><input type="text" placeholder="请输入人员姓名/账号" class="serch">
+              <span class="iconfont icon-IconSearch"></span><input type="text" value='搜索' v-model.trim="searchData" @keyup.enter="searchMember" @input="clearSearch" placeholder="请输入人员姓名/账号" class="serch">
               <iframe name='frameFile' style="display: none;"></iframe>
-              <span class="select-back">搜索</span>
+              <span class="select-back" @click="searchMember">搜索</span>
             </form>
         </div>
       </section>
-    <div class="no-discount-list" v-if="noList">暂无二级管理账号</div>
-    <div class="page-loadmore-wrapper" ref="wrapper" :style="{overflowY:scrollShow}">
-     <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" @translate-change="translateChange" :auto-fill="false" ref="loadmore">
-       <div class="page-member-pull">
-         <div class="meber-list" v-for="(item,index) in list" :key="index">
-            <div class="momber-wrap">
-              <div class="name">
-                <router-link :to="{name:'detailMember',query:{ id:item.id }}">
-                  <p>{{item.userName}}</p><p class="phonenum">{{item.phone}}</p>
-                </router-link>
-              </div>
-              <div class="phone">
-                <div class="right"><mt-switch v-model="item.isLock" class="check-switch" @change="lockOperator(item.id,item.isLock)"></mt-switch></div>
-              </div>
-            </div>
-            <router-link :to="{name:'detailMember',query:{ id:item.id }}">
-              <div class="action-prme">
-                <p class="memberdesc">权限：<span v-for="(items,index) in item.list" :key="index">{{items.name}}<i v-if="index !== (item.list.length-1)">,</i></span></p>
-                <span class="forward iconfont icon-nextx"></span>
-              </div>
-            </router-link>
-          </div>
-        </div>
-        <div v-if="allLoaded" class="nomore-data">没有更多了</div>
-      </mt-loadmore>
     </div>
-
+    <div class="no-member-list" v-if="noList">暂无二级管理账号</div>
+    <!-- <div class="no-member-list"><p>未找到符合的结果</p></div> -->
+    <div class="page-top">
+      <div class="page-loadmore-wrapper" ref="wrapper" :style="{overflowY:scrollShow}">
+      <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" @translate-change="translateChange" :auto-fill="false" ref="loadmore">
+        <div class="page-member-pull">
+          <div class="meber-list" v-for="(item,index) in list" :key="index">
+              <div class="momber-wrap">
+                <div class="name">
+                  <router-link :to="{name:'detailMember',query:{ id:item.id }}">
+                    <p>{{item.userName}}</p><p class="phonenum">{{item.phone}}</p>
+                  </router-link>
+                </div>
+                <div class="phone">
+                  <div class="right"><mt-switch v-model="item.isLock" class="check-switch" @change="lockOperator(item.id,item.isLock)"></mt-switch></div>
+                </div>
+              </div>
+              <router-link :to="{name:'detailMember',query:{ id:item.id }}">
+                <div class="action-prme">
+                  <p class="memberdesc">权限：<span v-for="(items,index) in item.list" :key="index">{{items.name}}<i v-if="index !== (item.list.length-1)">,</i></span></p>
+                  <span class="forward iconfont icon-nextx"></span>
+                </div>
+              </router-link>
+            </div>
+          </div>
+          <div v-if="allLoaded" class="nomore-data">没有更多了</div>
+        </mt-loadmore>
+      </div>
+    </div>
     <div class="addmember" @click="addmemeber" v-has="'mer:person:add'">
       <span class="order-action iconfont icon-tianjia"></span><br>
       <span>人员</span>
@@ -57,6 +61,8 @@ export default {
       value: false,
       list:[],
       noList:false,
+      searchData:'',
+      nosearchList:false,
     };
   },
   mounted() {
@@ -70,8 +76,12 @@ export default {
       let payload = {page:this.page,pageSize:this.pageSize};
       let res = await operatorListFun(payload);
       this.list = res.items?[...this.list,...res.items]:[];  //分页添加
-      this.list.length <= 0 ? this.noList = true:this.noList = false;
       this.total = res.total;
+      if (this.searchData) {
+        this.nosearchList = this.list.length<= 0 ? true: false;
+      } else {
+        this.noList = this.list.length<= 0 ? true: false;
+      }
       this.list.forEach((item)=>{
         if (item.isLock === 0) {
           item.isLock = true;
@@ -88,6 +98,23 @@ export default {
         }
       let payload = Object.assign({},{id:id,isLock:isLock});
       let res = await lockOperatorrFun(payload);
+    },
+    async searchMember(e){ //搜索
+      this.list = [];
+      this.page = 1;
+      this.allLoaded = false;//下拉刷新时解除上拉加载的禁用
+      var keyCode = window.event? e.keyCode:e.which;
+      if(keyCode =='13'){
+        this._getList();
+        document.activeElement.blur();
+      }else {
+        this._getList();
+      }
+    },
+    clearSearch(){ //清楚搜索
+      if(this.searchData.length <= 0 ){
+        this._getList();
+      }
     },
     addmemeber(){
       this.$router.push({name:'addMember'});

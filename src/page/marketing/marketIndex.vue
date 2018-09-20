@@ -6,25 +6,24 @@
     <div class="page-loadmore-wrapper" ref="wrapper" :style="{overflowY:scrollShow}">
       <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" @translate-change="translateChange" :auto-fill="false" ref="loadmore">
     		<div class="discoun-list" v-for="(item,index) in list" :key="index">
-              <span class="discountag" v-if="item.status === 2"><img src="../../../static/image/market/overdue@2x.png"></span>
-              <span class="discountag" v-if="item.status === 1"><img src="../../../static/image/market/makretStop@2x.png"></span>
-              <p class="time">优惠期<span :class="{'stop-discount':item.status === 1 || item.status === 2 }">{{item.noDiscountStart}}</span>至<span :class="{'stop-discount':item.status === 1|| item.status === 2}">{{item.noDiscountEnd}}</span>
-                <mt-switch  class="check-switch"></mt-switch>
+              <span class="discountag" v-if="item.expired === 2"><img src="../../../static/image/market/overdue@2x.png"></span>
+              <p class="time">优惠期<span :class="{'expired-discount':item.expired === 2 }">{{item.noDiscountStart}}</span>至<span :class="{'expired-discount':item.expired === 2}">{{item.noDiscountEnd}}</span>
+                <mt-switch class="check-switch" v-model="item.status" @change="updataeStatus(item.id,item.status)" v-if="item.expired !== 2"></mt-switch>
               </p>
               <div class="discoun-content">
                 <router-link :to="{name:'detailMarket', query:{id:item.id}}">
                   <div class="dis-con-title">
                     <p class="shop-name">店铺</p>
-                    <p :class="['dis-con-shop',{'stop-discount':item.status === 1|| item.status === 2}]"><span class="more-shop" v-for="(items,index) in item.shop" :key="index">{{items.name}}<i v-if="index !== (item.shop.length-1)">,</i></span></p>
+                    <p :class="['dis-con-shop',{'expired-discount':item.expired === 2}]"><span class="more-shop" v-for="(items,index) in item.shop" :key="index">{{items.name}}<i v-if="index !== (item.shop.length-1)">,</i></span></p>
                   </div>
                   <div class="dis-con-machine">
                     <div class="machine">
                       <span>类型</span>
-                      <span :class="['machine-type', {'stop-discount':item.status === 1|| item.status === 2}]">洗衣机</span>
+                      <span :class="['machine-type', {'expired-discount':item.expired === 2},{'stop-discount':item.expired !== 2&&item.status === 1}]">{{item.parentTypeName}}</span>
                     </div>
                     <div class="machine discount">
                       <span>折扣优惠</span>
-                      <span :class="['discount-num', {'stop-discount':item.status === 1|| item.status === 2}]">{{item.discountVO?item.discountVO :'0'  | tofixd}}<i>折</i></span>
+                      <span :class="['discount-num', {'expired-discount':item.expired === 2}]">{{item.discountVO?item.discountVO :'0'  | tofixd}}<i>折</i></span>
                     </div>
                   </div>
                 </router-link>
@@ -41,7 +40,7 @@
 </div>
 </template>
 <script>
-import { timeMarketListFun } from '@/service/market';
+import { timeMarketListFun, updataeStatusFun } from '@/service/market';
 import moment from 'moment';
 import PagerMixin from '@/mixins/pagerMixin';
 export default {
@@ -70,7 +69,17 @@ export default {
       res.items.forEach((item)=>{
           item.noDiscountStart = item.noDiscountStart ? moment(item.noDiscountStart).format('YYYY-MM-DD') : '';
           item.noDiscountEnd = item.noDiscountEnd ? moment(item.noDiscountEnd).format('YYYY-MM-DD'): '';
+          item.status === 0 ? item.status = true: item.status = false;
       });
+    },
+    async updataeStatus(id,status){
+      if (status === true) {
+          status = 0;
+        } else {
+          status = 1;
+        }
+      let payload = Object.assign({},{id:id,status:status});
+      let res = await updataeStatusFun(payload);
     },
     goaddMarket(){
       this.$router.push({name:'addMarket'});

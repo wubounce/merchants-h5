@@ -2,7 +2,16 @@
     <section>
         <div class="tableearn">
             <div class="top">
-                <p class='showDate'><span>{{date}}</span><span style="margin-left: 0.35rem;">收益：{{monthMoney}} 元</span></p>
+                <div class='earnings-title'>
+                    <div class="earning">
+                        <p class="month"><span>{{date}}</span></p> 
+                        <p><span>收益：{{monthMoney}} 元</span></p>
+                    </div>
+                    <div class="export-wrap">
+                        <p><i class="iconfont icon-daochu"></i></p> 
+                        <p><span class="export ">导出</span></p>
+                    </div>
+                </div>
                 <p class="black"></p>
                 <div class="table-header">
                     <span class="report-table-date">时间</span>
