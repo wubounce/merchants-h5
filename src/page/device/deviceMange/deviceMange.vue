@@ -68,7 +68,7 @@
                     <span>类型</span>
                     <span>{{item.machineTypeName}}</span>
                   </p>
-                  <p class="item-ft-right">
+                  <p class="item-ft-right" @click.stop="revenueBill">
                     <span>总收益</span>
                     <span>{{item.profit | keepTwoNum}}</span>
                     <span class="iconfont icon-nextx"></span>
