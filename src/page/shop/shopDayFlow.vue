@@ -20,7 +20,7 @@
             </div>
             <div class="bottom">
                 <div class="listcon tableearn-list" v-for="(item,index) in  listdata" :key="index">
-                    <router-link :to="{ name: 'shopOrderFlow', query:{time:item.time, allMoney: allMoney,shopId:shopId,shopName:shopName} }">
+                    <router-link :to="{ name: 'shopOrderFlow', query:{time:item.time, allMoney: item.money,shopId:shopId,shopName:shopName} }">
                         <div class="detail">
                             <span class="listtime report-table-date">{{item.time}}</span>
                             <span  class="report-table-money">{{item.money | tofixd}}</span>
