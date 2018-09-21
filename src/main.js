@@ -3,7 +3,7 @@ import 'url-search-params-polyfill';
 import Vue from 'vue';
 
 import MintUI from 'mint-ui';
-import { MessageBox } from 'mint-ui';
+import {Indicator, MessageBox } from 'mint-ui';
 import Vant from 'vant';
 import 'vant/lib/vant-css/index.css';
 import './assets/iconfont/iconfont.css';
@@ -47,6 +47,7 @@ const whiteList = ['/login','/reset','/confimPwd','/register','/referee','/userA
 router.beforeEach((to, from, next) => {
   // 切换之前，把弹出框都关掉
   MessageBox.close();
+  Indicator.close();
   if (getToken()) {
       next();
       if (typeof localStorage === 'object') {

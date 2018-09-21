@@ -59,7 +59,8 @@ http.interceptors.request.use(config => {
   return config;
 
 }, error => {
-  MessageBox.alert('加载超时');
+  Indicator.close();
+  MessageBox.alert('请求超时，请重新操作', '提示', {type: 'warning'});
   Promise.reject(error);
 });
 

@@ -29,6 +29,11 @@ export const setMember = (data) => sessionStorage.setItem(MemberKey,JSON.stringi
 export const getMember = () => JSON.parse(sessionStorage.getItem(MemberKey));
 export const removeMember = () => sessionStorage.removeItem(MemberKey);
 
+const EmailKey = 'email';
+export const setEmail = (data) => localStorage.setItem(EmailKey,data);
+export const getEmail = () => localStorage.getItem(EmailKey);
+export const removeEmail = () => localStorage.removeItem(EmailKey);
+
 /**
  * 截流函数
  */
