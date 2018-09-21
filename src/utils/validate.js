@@ -40,7 +40,16 @@ export const validatPwd = (str) => {
   const reg = /^[a-zA-Z0-9]{6,20}$/;
   return reg.test(str);
 };
-
+/* 邀请码 */
+export const validatInviteCode = (str) => {
+  const reg = /^[a-zA-Z0-9]{4}$/;
+  return reg.test(str);
+};
+/* 短信验证码 */
+export const validatMessageCode = (str) => {
+  const reg = /^[0-9]{6}$/;
+  return reg.test(str);
+};
 /* 搜索 */
 export const validatSearch = (str) => {
   const reg = /^[a-zA-Z0-9]{0,}$/; 

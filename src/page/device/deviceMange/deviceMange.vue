@@ -68,9 +68,10 @@
                     <span>类型</span>
                     <span>{{item.machineTypeName}}</span>
                   </p>
-                  <p class="item-ft-right">
-                    <span>收益</span>
+                  <p class="item-ft-right" @click.stop="revenueBill">
+                    <span>总收益</span>
                     <span>{{item.profit | keepTwoNum}}</span>
+                    <span class="iconfont icon-nextx"></span>
                   </p>
                 </section>
               </router-link>
@@ -632,6 +633,10 @@
         }
         .item-ft {
           display: flex;
+          .icon-nextx {
+            float: right;
+            color: rgba(204, 204, 204, 1);
+          }
           p {
             flex: 1;
             &:nth-child(2) {
