@@ -4,8 +4,8 @@
             <div class="top">
                 <div class='earnings-title'>
                     <div class="earning">
-                        <p class="month"><span>{{date}}</span></p> 
-                        <p><span>收益：{{monthMoney | tofixd}} 元</span></p>
+                        <p class="month"><span>{{shopName}}</span></p> 
+                        <p><span>{{date}}<span style="padding:0 0.11rem">/</span>收益：{{allMoney | tofixd}} 元</span></p>
                     </div>
                     <div class="export-wrap">
                         <p><i class="iconfont icon-daochu"></i></p> 
@@ -20,9 +20,9 @@
             </div>
             <div class="bottom">
                 <div class="listcon tableearn-list" v-for="(item,index) in  listdata" :key="index">
-                    <router-link :to="{ name: 'todayincome', query:{dateName:item.dateName ,todayMoney:item.money } }">
+                    <router-link :to="{ name: 'shopOrderFlow', query:{time:item.time, allMoney: allMoney,shopId:shopId,shopName:shopName} }">
                         <div class="detail">
-                            <span class="listtime report-table-date">{{item.dateName}}</span>
+                            <span class="listtime report-table-date">{{item.time}}</span>
                             <span  class="report-table-money">{{item.money | tofixd}}</span>
                         </div>
                     </router-link>
@@ -33,30 +33,33 @@
     </section>
 </template>
 <script>
-import { balanceLogProfitListFun } from '@/service/index';
+import { dayFloweFun } from '@/service/shop';
 export default {
     data() {
         return {
-            monthMoney: '',
-            listdata:[]
+            allMoney: '',
+            listdata:[],
+            shopName:'',
+            shopId:'',
+            date:'',
         };
     },
     methods: {
         async getMonthIncome() {
             let obj = {
-                dateTime: this.$route.query.dateName,
-                isDay: false
+                time: this.$route.query.time,
+                shopId: this.$route.query.shopId
             };
-            let res = await balanceLogProfitListFun(obj);
-            
-            this.listdata = res.items;
-
+            let res = await dayFloweFun(obj);
+            this.listdata = res;
         },
     },
     created() {
+        this.allMoney = this.$route.query ? this.$route.query.allMoney : '';
+        this.shopName =  this.$route.query ? this.$route.query.shopName : '';
+        this.shopId = this.$route.query ? this.$route.query.shopId : '';
+        this.date = this.$route.query ? this.$route.query.time:'';
         this.getMonthIncome();
-        this.monthMoney = this.$route.query ? this.$route.query.monthMoney : '';
-        this.date = this.$route.query.dateName;
     }
 };
 </script>

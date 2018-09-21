@@ -10,6 +10,9 @@ const addOrEditShopApi = '/shop/addOrEdit'; //新增或编辑店铺 method 'post
 const deleteShopApi = '/shop/deleteShop'; //删除店铺 method 'post'
 const listParentTypeApi = '/machine/listParentType'; //获取一级类型 method 'post'
 const uploadFileApi = '/common/uploadFile'; //上传图片 method 'post'
+const monthFloweApi = 'operatorBalanceLog/monthFlow'; //店铺或设备-月流水
+const dayFloweApi = 'operatorBalanceLog/dayFlow'; //店铺或设备-日流水
+const orderFlowApi = 'operatorBalanceLog/orderFlow'; //店铺或设备-订单流水'
 
 export const areaListFun = (payload) => fetch.post(areaListApi, payload); //获取区域列表
 export const manageListFun = (payload) => fetch.post(manageListApi, payload); //店铺列表
@@ -18,3 +21,6 @@ export const addOrEditShopFun = (payload) => fetch.post(addOrEditShopApi, payloa
 export const deleteShopFun = (payload) => fetch.post(deleteShopApi, payload); //删除店铺
 export const listParentTypeFun = (payload) => fetch.post(listParentTypeApi, payload); //获取区域列表
 export const uploadFileFun = (payload) => fetch.post(uploadFileApi, payload); //上传图片
+export const monthFloweFun = (payload) => fetch.post(monthFloweApi, payload); //店铺或设备-月流水
+export const dayFloweFun = (payload) => fetch.post(dayFloweApi, payload); //店铺或设备-日流水
+export const orderFlowFun = (payload) => fetch.post(orderFlowApi, payload); //店铺或设备-订单流水'

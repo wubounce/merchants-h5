@@ -46,6 +46,13 @@ section {
               .text {
                 color: #999999;
                 font-size: 14px;
+                line-height: 0.53rem;
+                position: relative;
+                .order-action {
+                  position: absolute;
+                  top: 0.01rem;
+                  margin-left: 0.13rem;
+                }
               }
               .text-value { 
                 color:#1890FF;     

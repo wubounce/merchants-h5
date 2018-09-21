@@ -6,7 +6,7 @@
       <section class="sarch-wrap">
         <div class="search">
             <form action="" target="frameFile">
-              <span class="iconfont icon-IconSearch"></span><input type="text" value='搜索' v-model.trim="searchData" @keyup.enter="searchMember" @input="clearSearch" placeholder="请输入人员姓名/账号" class="serch">
+              <span class="iconfont icon-IconSearch"></span><input type="text" @click="searchMember"  placeholder="请输入人员姓名/账号" class="serch">
               <iframe name='frameFile' style="display: none;"></iframe>
               <span class="select-back" @click="searchMember">搜索</span>
             </form>
@@ -14,7 +14,6 @@
       </section>
     </div>
     <div class="no-member-list" v-if="noList">暂无二级管理账号</div>
-    <!-- <div class="no-member-list"><p>未找到符合的结果</p></div> -->
     <div class="page-top">
       <div class="page-loadmore-wrapper" ref="wrapper" :style="{overflowY:scrollShow}">
       <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" @translate-change="translateChange" :auto-fill="false" ref="loadmore">
@@ -53,6 +52,7 @@
 import { operatorListFun, lockOperatorrFun } from '@/service/member';
 import { memberIsLock } from '@/utils/mapping';
 import { getTrees, setMember, removeMember } from '@/utils/tool';
+import { validatReplace } from '@/utils/validate';
 import PagerMixin from '@/mixins/pagerMixin';
 export default {
   mixins: [PagerMixin],
@@ -61,7 +61,6 @@ export default {
       value: false,
       list:[],
       noList:false,
-      searchData:'',
       nosearchList:false,
     };
   },
@@ -73,6 +72,7 @@ export default {
   },
   methods: {
     async _getList(){
+      this.nosearchList = false;
       let payload = {page:this.page,pageSize:this.pageSize};
       let res = await operatorListFun(payload);
       this.list = res.items?[...this.list,...res.items]:[];  //分页添加
@@ -100,21 +100,7 @@ export default {
       let res = await lockOperatorrFun(payload);
     },
     async searchMember(e){ //搜索
-      this.list = [];
-      this.page = 1;
-      this.allLoaded = false;//下拉刷新时解除上拉加载的禁用
-      var keyCode = window.event? e.keyCode:e.which;
-      if(keyCode =='13'){
-        this._getList();
-        document.activeElement.blur();
-      }else {
-        this._getList();
-      }
-    },
-    clearSearch(){ //清楚搜索
-      if(this.searchData.length <= 0 ){
-        this._getList();
-      }
+      this.$router.push({name:'memeberSearch'});
     },
     addmemeber(){
       this.$router.push({name:'addMember'});

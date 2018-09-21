@@ -8,7 +8,7 @@
     		<div class="discoun-list" v-for="(item,index) in list" :key="index">
               <span class="discountag" v-if="item.expired === 2"><img src="../../../static/image/market/overdue@2x.png"></span>
               <p class="time">优惠期<span :class="{'expired-discount':item.expired === 2 }">{{item.noDiscountStart}}</span>至<span :class="{'expired-discount':item.expired === 2}">{{item.noDiscountEnd}}</span>
-                <mt-switch class="check-switch" v-model="item.status" @change="updataeStatus(item.id,item.status)" v-if="item.expired !== 2"></mt-switch>
+                <mt-switch class="check-switch" v-model="item.status" @change="updataeStatus(item.id,item.status,item)" v-if="item.expired !== 2"></mt-switch>
               </p>
               <div class="discoun-content">
                 <router-link :to="{name:'detailMarket', query:{id:item.id}}">
@@ -19,7 +19,7 @@
                   <div class="dis-con-machine">
                     <div class="machine">
                       <span>类型</span>
-                      <span :class="['machine-type', {'expired-discount':item.expired === 2},{'stop-discount':item.expired !== 2&&item.status === 1}]">{{item.parentTypeName}}</span>
+                      <span :class="['machine-type', {'expired-discount':item.expired === 2},{'stop-discount':item.expired !== 2&&item.changeStatus === false}]">{{item.parentTypeName}}</span>
                     </div>
                     <div class="machine discount">
                       <span>折扣优惠</span>
@@ -69,17 +69,24 @@ export default {
       res.items.forEach((item)=>{
           item.noDiscountStart = item.noDiscountStart ? moment(item.noDiscountStart).format('YYYY-MM-DD') : '';
           item.noDiscountEnd = item.noDiscountEnd ? moment(item.noDiscountEnd).format('YYYY-MM-DD'): '';
-          item.status === 0 ? item.status = true: item.status = false;
+          if(item.status === 0){
+             item.status = true;
+             this.$set(item,'changeStatus',true);
+          }else {
+            item.status = false;
+            this.$set(item,'changeStatus',false);
+          }
       });
     },
-    async updataeStatus(id,status){
+    async updataeStatus(id,status,item){
       if (status === true) {
           status = 0;
         } else {
           status = 1;
         }
-      let payload = Object.assign({},{id:id,status:status});
+      let payload = Object.assign({},{timeId:id,status:status});
       let res = await updataeStatusFun(payload);
+      item.changeStatus=!item.changeStatus;
     },
     goaddMarket(){
       this.$router.push({name:'addMarket'});

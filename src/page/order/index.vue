@@ -97,7 +97,6 @@ export default {
       this._getList();
     },
     async _getList(){
-      
       this.nosearchList = false;
       let payload = null;
       if (this.searchData !== '') {
