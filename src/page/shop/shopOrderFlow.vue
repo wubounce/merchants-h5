@@ -4,8 +4,8 @@
             <div class="top">
                 <div class='earnings-title'>
                     <div class="earning">
-                        <p class="month"><span>{{date}}</span></p> 
-                        <p><span>收益：{{todayMoney | tofixd}} 元</span></p>
+                        <p class="month"><span>{{shopName}}</span></p> 
+                        <p><span>{{date}}<span style="padding:0 0.11rem">/</span>收益：{{allMoney | tofixd}} 元</span></p>
                     </div>
                     <div class="export-wrap">
                         <p><i class="iconfont icon-daochu"></i></p> 
@@ -39,32 +39,30 @@
 </template>
 <script>
 import moment from 'moment';
-import { balanceLogProfitListFun } from '@/service/index';
+import { orderFlowFun } from '@/service/shop';
 import PagerMixin from '@/mixins/pagerMixin';
 export default {
     mixins: [PagerMixin],
     data() {
         return {
-            todayMoney: '',
-            date:'',
-            data:'',
+            allMoney: '',
             listdata:[],
+            shopName:'',
+            shopId:'',
+            date:'',
             pageSize:50,
             total:''
         };
     },
     methods: {
-        showTime() {
-            this.date = this.$route.query.dateName;
-        },
         async _getList() {
             let obj = {
-                dateTime: this.$route.query.dateName,
-                isDay: true,
+                time: this.$route.query.time,
+                shopId: this.$route.query.shopId,
                 page: this.page,
                 pageSize: this.pageSize
             };
-            let res = await balanceLogProfitListFun(obj);
+            let res = await orderFlowFun(obj);
             if(res.total != 0) {
                 this.listdata = res.items?[...this.listdata,...res.items]:[];  //分页添加
                 this.total = res.total;
@@ -80,8 +78,10 @@ export default {
         }
     },
     created() {
-        this.showTime();
-        this.todayMoney = this.$route.query ? this.$route.query.todayMoney : '';
+        this.allMoney = this.$route.query ? this.$route.query.allMoney : '';
+        this.shopName =  this.$route.query ? this.$route.query.shopName : '';
+        this.shopId = this.$route.query ? this.$route.query.shopId : '';
+        this.date = this.$route.query ? this.$route.query.time:'';
     }
 };
 </script>

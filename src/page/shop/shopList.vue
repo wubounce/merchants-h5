@@ -7,30 +7,36 @@
           <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore">
             <div>
               <li class="list" v-for="(item,index) in list" :key="index">
-                  <router-link :to="{ name: 'shopDetail', query:{shopId:item.shopId}}">
-                <p class="top">
-                  <span>{{item.shopName.length>15 ? item.shopName.slice(0,15) + '...' : item.shopName }}</span>
-                  <span>
-                    <img src="../../../static/image/shop/vip@2x.png" alt="vip" v-if='item.hasVip' style='width: 0.4rem;vertical-align: middle;'>
-                    <img src="../../../static/image/shop/discount@2x.png" alt="discount" v-if='item.isDiscount' style='width: 0.4rem;vertical-align: middle;'>
-                    <img src="../../../static/image/shop/reserve@2x.png" alt="reserve" v-if='!item.isReserve' style='width: 0.4rem;vertical-align: middle;'>
-                  </span>
-                </p>
+                <router-link :to="{ name: 'shopDetail', query:{shopId:item.shopId}}">
+                  <p class="top">
+                    <span>{{item.shopName.length>15 ? item.shopName.slice(0,15) + '...' : item.shopName }}</span>
+                    <span>
+                      <img src="../../../static/image/shop/vip@2x.png" alt="vip" v-if='item.hasVip' style='width: 0.4rem;vertical-align: middle;'>
+                      <img src="../../../static/image/shop/discount@2x.png" alt="discount" v-if='item.isDiscount' style='width: 0.4rem;vertical-align: middle;'>
+                      <img src="../../../static/image/shop/reserve@2x.png" alt="reserve" v-if='!item.isReserve' style='width: 0.4rem;vertical-align: middle;'>
+                    </span>
+                  </p>
+                </router-link>
                 <div class="bottom">
                   <div class="kindof">
-                    <div class="text">分类</div>
-                    <div class="text-value">{{item.shopType}}</div>
+                    <router-link :to="{ name: 'shopDetail', query:{shopId:item.shopId}}">
+                      <div class="text">分类</div>
+                      <div class="text-value">{{item.shopType}}</div>
+                    </router-link>
                   </div>
                   <div class="kindof">
-                    <div class="text">设备</div>
-                    <div class="text-value">{{item.machineCount}}<span class="little-font">台</span></div>
+                    <router-link :to="{ name: 'shopDetail', query:{shopId:item.shopId}}">
+                      <div class="text">设备</div>
+                      <div class="text-value">{{item.machineCount}}<span class="little-font">台</span></div>
+                    </router-link>
                   </div>
                   <div class="kindof">
-                    <div class="text">收益</div>
-                    <div class="text-value">{{ item.profit }}<span class="little-font">元</span></div>
+                    <router-link :to="{ name: 'shopMonthFlow', query:{allMoney:item.profit,shopId:item.shopId,shopName:item.shopName}}">
+                      <div class="text">总收益<span class="order-action iconfont icon-nextx"></span></div>
+                      <div class="text-value">{{ item.profit }}<span class="little-font">元</span></div>
+                    </router-link>
                   </div>
                 </div>
-                </router-link>
               </li>
             </div>
             <div v-if="allLoaded" class="nomore-data">没有更多了</div>

@@ -42,6 +42,29 @@
       color: #1890FF;
       border-left:1px solid rgba(216,216,216,1);
     }
+    input::-webkit-input-placeholder {
+      /* WebKit, Blink, Edge */
+      color: #999;
+      font-size: 14px;
+    }
+    
+    input:-moz-placeholder {
+      /* Mozilla Firefox 4 to 18 */
+      color: #999;
+      font-size: 14px;
+    }
+    
+    input::-moz-placeholder {
+      /* Mozilla Firefox 19+ */
+      color: #999;
+      font-size: 14px;
+    }
+    
+    input :-ms-input-placeholder {
+      /* Internet Explorer 10-11 */
+      color: #999;
+      font-size: 14px;
+    }
   }
 }
 
@@ -143,6 +166,11 @@
     color: #3F9EFF;
     text-align: center;
   }
+  .iconfont {
+    margin-right: 0.28rem;
+    color: #999;
+    font-weight: normal;
+  }
   
 }
 
@@ -181,3 +209,4 @@
   overflow: scroll;
   -webkit-overflow-scrolling: touch;
 }
+
