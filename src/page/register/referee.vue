@@ -180,14 +180,13 @@
         let query = this.$route.query;
         let payload = {
           phone: query.phone,
-          name: query.name,
+          name: this.referee.name,
           password: query.password,
           address: this.chooseArea,
           provinceId: this.provinceId,
           cityId: this.cityId,
           districtId: this.districtId,
-          refereeName:  this.referee.name,
-          refereePhone: this.referee.phone
+          invitationCode: this.referee.code,
         };
         let res = await saveRegisterInfoFun(payload);
         this.$router.push({name:'successTip'});

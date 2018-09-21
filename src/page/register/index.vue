@@ -27,7 +27,7 @@
 </template>
 
 <script>
-  import { smscodeFun, validateCodeFun} from '@/service/resetPwd';
+  import { smscodeFun, checkRegInfoFun} from '@/service/resetPwd';
   import { validatPhone , validatName , validatPwd } from '@/utils/validate';
   export default{
     data() {
@@ -114,16 +114,20 @@
         return true;
       },
 
-      goToNext() {
+      async goToNext() {
         if(!this.validatePhone()) return false;
-        if(!this.validateName()) return false;
         if(!this.validateCode()) return false;
         if(!this.validateSureCode()) return false;
         sessionStorage.setItem('registerPhone',this.register.phone);
         sessionStorage.setItem('registerName',this.register.name);
+        let payload = {
+          phone: this.register.phone,
+          code: this.register.vcode,
+        };
+        let res = await checkRegInfoFun(payload);
         this.$router.push({
           name: "referee",
-          query: ({phone:this.register.phone, name:this.register.name, password:this.register.code})
+          query: ({phone:this.register.phone,password:this.register.code})
         });
       }
     },

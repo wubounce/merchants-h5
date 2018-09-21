@@ -44,9 +44,9 @@
           <span class="rememberText">记住密码</span>
         </p>
         <mt-button type="primary" class="btn-blue" @click.prevent ="handleSubmit" :disabled="disabled" v-if="loginPwd">登录</mt-button>
-        <mt-button type="primary" class="btn-validate" @click.prevent ="checkoutLogin" v-if="loginPwd">账号密码登录</mt-button>
-        <mt-button type="primary" class="btn-blue" @click.prevent ="handleSubmit" :disabled="!(form.phone&&form.code)" v-if="!loginPwd">登录</mt-button>
-        <mt-button type="primary" class="btn-validate" @click.prevent ="checkoutLogin" v-if="!loginPwd">短信验证码登录</mt-button>
+        <mt-button type="primary" class="btn-validate" @click.prevent ="checkoutLogin" v-if="loginPwd">短信验证码登录</mt-button>
+        <mt-button type="primary" class="btn-blue" @click.prevent ="phoneHandleSubmit" :disabled="!(form.phone&&form.code)" v-if="!loginPwd">登录</mt-button>
+        <mt-button type="primary" class="btn-validate" @click.prevent ="checkoutLogin" v-if="!loginPwd">账号密码登录</mt-button>
         
       </div>
     </form>
@@ -66,11 +66,11 @@
 import store from '@/store';
 import { mapState, mapActions, mapMutations } from 'vuex';
 import { getToken, removeToken, setMenu, removeMenu, removeNavTabIndex,setNavTabIndex, getNavTabIndex, setPhone, getPhone, removeMember } from '@/utils/tool';
-import { login } from '@/service/login';
+import { login, codeLogin} from '@/service/login';
 import JsEncrypt from 'jsencrypt';
 import { menuSelectFun } from '@/service/member';
 import { smscodeFun} from '@/service/resetPwd';
-import { validatPhone } from '@/utils/validate';
+import { validatPhone, validatMessageCode} from '@/utils/validate';
 export default {
     name: 'page-login',
     beforeRouteEnter(to, from, next) {
@@ -143,6 +143,7 @@ export default {
       checkoutLogin() {
         this.loginPwd = !this.loginPwd;
       },
+      //验证手机号
       validatePhone() {
         if (this.form.phone === '') {
           this.$toast({message: "请输入手机号码" });
@@ -152,7 +153,7 @@ export default {
           return false;
         } 
         return true;
-      },          
+      },      
       async sendcode() {
         if (this.validatePhone()) {
           let res = await smscodeFun({phone:this.form.phone,mark:true});
@@ -171,7 +172,6 @@ export default {
         }, 1000);
       },
       isRemember() { //是否记住密码
-        console.log(this.isCheckCLass === 'icon-weixuan');
         this.isCheckCLass = this.isCheckCLass === 'icon-weixuan'?'icon-yixuan':'icon-weixuan';
       },
       validate() {
@@ -185,6 +185,36 @@ export default {
         }
         return true;
       },
+      //手机验证码登录
+      async phoneHandleSubmit() {
+        if(this.validatePhone()) {
+            let phone = this.form.phone;
+            let code = this.form .code;
+            let payload = {
+            userName: phone,
+            code: code
+            };
+            let res = await codeLogin(payload);
+            this.login(res.token);
+            this.phoneArray = [this.form.userName,...this.phoneArray];
+            this.phoneArray = Array.from(new Set([...this.phoneArray]));//去重
+            setPhone(this.phoneArray); //保存登录过的手机号
+            if(res.code === 8002){
+              this.$router.push({name:'bindPhone'});     
+            }else {
+              menuSelectFun().then((data) => {
+                this.setMenu(data);
+                setMenu(data);
+                let pac = data.find(item=>item.name === '首页' || item.name === '报表');
+                let url = data.length >0 ? data[0].url:'user';
+                let path = pac ? pac.url : url;
+                setNavTabIndex('/'+ path);
+                this.$router.push(path);
+              });
+            }
+          }
+      },
+      //账号密码登录
       async handleSubmit () {
         if (this.validate()) {
           let userName = this.encryptSend(this.form.userName);
