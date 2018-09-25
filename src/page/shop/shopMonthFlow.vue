@@ -41,7 +41,6 @@ export default {
     },
     methods: {
         async getTotalIncome() {
-            console.log(this.shopId);
             let obj = { shopId: this.shopId };
             let res = await monthFloweFun(obj);
             this.listdata = res;

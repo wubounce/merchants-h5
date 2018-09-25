@@ -12,6 +12,7 @@ const lockOperatorApi = 'operatorManager/lockOperatorManager';                  
 const shopListApi = 'shop/listShop';                                                               // 店铺列表 method 'post'
 const menuSelectApi = 'mer/select';                                                                //获取所有菜单列表
 const permsMenuApi = 'mer/perms';                                                                  //分配权限
+const searchListApi = 'operatorManager/searchOperator';                                            //搜索管理员列表
       
 // 获取管理员列表 
 export const operatorListFun = (payload) => fetch.post(operatorListApi, payload);
@@ -39,4 +40,7 @@ export const menuSelectFun = (payload) => fetch.post(menuSelectApi, payload);
 
 //分配权限菜单
 export const permsMenuFun = (payload) => fetch.post(permsMenuApi, payload);
+
+//搜索管理员列表
+export const searchListFun = (payload) => fetch.post(searchListApi, payload);
 

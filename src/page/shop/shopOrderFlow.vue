@@ -7,7 +7,7 @@
                         <p class="month"><span>{{shopName}}</span></p> 
                         <p><span>{{date}}<span style="padding:0 0.11rem">/</span>收益：{{allMoney | tofixd}} 元</span></p>
                     </div>
-                    <div class="export-wrap">
+                    <div class="export-wrap" @click="exportExls">
                         <p><i class="iconfont icon-daochu"></i></p> 
                         <p><span class="export ">导出</span></p>
                     </div>
@@ -39,7 +39,10 @@
 </template>
 <script>
 import moment from 'moment';
-import { orderFlowFun } from '@/service/shop';
+import { MessageBox } from 'mint-ui';
+import { orderFlowFun, excelOrderFlowlFun } from '@/service/shop';
+import { setEmail, getEmail } from '@/utils/tool';
+import { validatEmail } from '@/utils/validate';
 import PagerMixin from '@/mixins/pagerMixin';
 export default {
     mixins: [PagerMixin],
@@ -68,6 +71,27 @@ export default {
                 this.total = res.total;
             }
         },
+        exportExls(){
+            MessageBox.prompt(' ', `确定导出${this.date}流水明细？`, {
+                inputPlaceholder:'请填写导出表格的邮箱地址',
+                inputValue:getEmail()?getEmail():null,
+                inputValidator: (val) => {
+                    if (val === null) {
+                        return false;//初始化的值为null，不做处理的话，刚打开MessageBox就会校验出错，影响用户体验
+                    }
+                    return validatEmail(val);
+                }, 
+                inputErrorMessage: '请输入正确的邮箱地址'
+            }).then(async (val) => {
+                    setEmail(val.value);
+                    let payload = {shopId:this.shopId,time:this.date,email:val.value};
+                    await excelOrderFlowlFun(payload);
+                }, (error) => {
+                    // document.getElementsByClassName("mint-msgbox-errormsg")[0].style.visibility = 'hidden';
+                    // document.getElementsByClassName("invalid")[0].style.borderColor = '#dedede';
+                    
+            });
+        }
     },
     filters: {
         momentTime: function (value) {

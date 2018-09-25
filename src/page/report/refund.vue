@@ -23,7 +23,7 @@
     </div>
   </div>
   <div class="export">
-     <span><i class="iconfont icon-daochu"></i>导出</span>
+     <span @click="exportExls"><i class="iconfont icon-daochu"></i>导出</span>
   </div>
   <div class="tabledata">
     <div class="tableearn">
@@ -69,6 +69,8 @@ import selectpickr from '@/components/selectPicker';
 import { dayReportFun, shopListFun } from '@/service/report';
 import { calMax, calMin } from '@/utils/tool';
 import calendar from '@/components/vue-calendar/calendar.vue';
+import { MessageBox } from 'mint-ui';
+import { validatEmail } from '@/utils/validate';
 
 export default {
   name:'report-eaning',
@@ -250,6 +252,32 @@ export default {
         this.$router.push({name:'reportShopDetail', query:{date:date,type:3,dateLevel:this.dateLevel}});
       }
       
+    },
+    exportExls(){
+      MessageBox.prompt(' ', '确定导出 2018-09-06 流水明细？', {
+            inputPlaceholder:'请填写导出表格的邮箱地址',
+            inputValue:'18311017120@qq.com',
+          inputValidator: (val) => {
+            if (val === null) {
+              return true;//初始化的值为null，不做处理的话，刚打开MessageBox就会校验出错，影响用户体验
+            }
+            return validatEmail(val);
+          }, inputErrorMessage: '请输入正确的邮箱地址'
+        }).then(async (val) => {
+          let shopId = this.currentTags?this.currentTags.shopId:null;
+          let payload = Object.assign({},{
+            startDate:this.startDate.join('-'),
+            endDate:this.endDate.join('-'),
+            type:1,
+            shopId:shopId,
+            dateLevel:this.dateLevel,
+            excel:true,
+            email:val.value
+          });
+          let res = await dayReportFun(payload);
+        }, () => {
+          
+        });
     }
   },
   computed:{

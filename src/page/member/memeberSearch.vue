@@ -5,15 +5,22 @@
       <section class="sarch-wrap">
         <div class="search">
             <form action="" target="frameFile">
-              <span class="iconfont icon-IconSearch"></span><input type="text" v-model.trim="searchData" @input="searchMember" placeholder="请输入人员姓名/账号" class="serch" ref="inputText">
+              <span class="iconfont icon-IconSearch"></span><input type="text" v-model.trim="searchData"  placeholder="请输入人员姓名/账号" class="serch" ref="inputText">
               <iframe name='frameFile' style="display: none;"></iframe>
-              <span class="select-back">返回</span>
+              <span class="select-back" @click="goback">返回</span>
             </form>
         </div>
       </section>
     </div>
+    <div class="search-select" v-show="isSelectShow">
+      <ul>
+        <li v-for="(item,index) in searchList" class="search-select-option search-select-list" @click="selectClick(item.phone)"
+        :key="index">{{item.userName}}
+        </li>
+      </ul>
+    </div>
     <div class="no-member-list" v-if="nosearchList">未找到符合的结果</div>
-    <div class="page-top">
+    <div class="page-top"v-show="isListShow">
       <div class="page-member-pull">
         <div class="meber-list" v-for="(item,index) in list" :key="index">
             <div class="momber-wrap">
@@ -40,7 +47,7 @@
 </template>
 
 <script type="text/javascript">
-import { operatorListFun, lockOperatorrFun } from '@/service/member';
+import { operatorListFun, lockOperatorrFun, searchListFun } from '@/service/member';
 import { memberIsLock } from '@/utils/mapping';
 import { getTrees, setMember, removeMember } from '@/utils/tool';
 import { validatReplace } from '@/utils/validate';
@@ -53,7 +60,10 @@ import {delay } from "@/utils/tool";
         nosearchList:false,
         list:[],
         page:1,
-        pageSize:9999
+        pageSize:9999,
+        isSelectShow:true,
+        isListShow:false,
+        searchList:[]
       };
     },
     computed: {
@@ -63,17 +73,29 @@ import {delay } from "@/utils/tool";
       this.$refs.inputText.focus();
     },
     created() {
-
     },
     methods: {
-      async _getList(){
-        this.nosearchList = false;
-        // 去掉特殊字符和空格
-        let payload = {search:this.searchData,page:this.page,pageSize:this.pageSize};
+      async search(name) {
+        let payload = {search:this.searchData};
+        let res = await searchListFun(payload);
+        this.searchList = res.items?res.items:[];  //分页添加
+        if(this.searchList.length<= 0){
+          this.nosearchList = true;
+          this.isSelectShow = false;
+        }else {
+          this.nosearchList = false;
+          this.isSelectShow = true;
+        }
+      },
+      selectClick: function (phone) {
+        this.isSelectShow = false;
+        this._getList(phone);
+      },
+      async _getList(phone){
+        let payload = {search:phone,page:this.page,pageSize:this.pageSize};
         let res = await operatorListFun(payload);
+        this.isListShow = true;
         this.list = res.items?res.items:[];  //分页添加
-        console.log(res);
-        this.list.length<= 0 ? this.nosearchList = true: this.nosearchList = false;
         this.list.forEach((item)=>{
           if (item.isLock === 0) {
             item.isLock = true;
@@ -91,16 +113,19 @@ import {delay } from "@/utils/tool";
         let payload = Object.assign({},{id:id,isLock:isLock});
         let res = await lockOperatorrFun(payload);
       },
-      searchMember(){}
+      goback(){
+        this.$router.replace({name:'member'});
+      }
     },
     watch: {
       searchData: function (newVal) {
         if (newVal) {
           delay(() => {
-            this._getList();
+            this.isListShow = false;
+            this.search();
           }, 200);
         }else {
-          this._getList();
+          this.search();
         }
       },
     },
@@ -124,6 +149,29 @@ import {delay } from "@/utils/tool";
     height: 0.8rem;
     line-height: 0.8rem;
   }
+  .search-select {
+    height: 100%;
+    padding-top:1.44rem;
+    box-sizing: border-box;
+    background: #fff;
+    .noData {
+      text-align: center;
+    }
+    li {
+      color:rgba(51, 51, 51, 1);
+      width: 100%;
+      font-size: 0.43rem;
+    }
+    .search-select-option {
+      box-sizing: border-box;
+      background: url("../../assets/img/device/devic_search_icon.png") no-repeat 0.27rem;
+      background-size: 0.43rem;
+      padding: 0.29rem 0 0.29rem 1.07rem;
+      border-radius: 0.13rem;
+      font-size: 16px;
+    }
+      
+   }
 </style>
 <style>
   .member .mint-switch-input:checked + .mint-switch-core {

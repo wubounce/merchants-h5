@@ -71,6 +71,7 @@ import { calMax, calMin } from '@/utils/tool';
 import calendar from '@/components/vue-calendar/calendar.vue';
 import { MessageBox } from 'mint-ui';
 import { validatEmail } from '@/utils/validate';
+
 export default {
   name:'report-eaning', 
   props: {
@@ -261,12 +262,20 @@ export default {
             }
             return validatEmail(val);
           }, inputErrorMessage: '请输入正确的邮箱地址'
-        }).then((val) => {
-          console.log(val);
-          
-          console.info('confirm,value is' + val.value);
+        }).then(async (val) => {
+          let shopId = this.currentTags?this.currentTags.shopId:null;
+          let payload = Object.assign({},{
+            startDate:this.startDate.join('-'),
+            endDate:this.endDate.join('-'),
+            type:1,
+            shopId:shopId,
+            dateLevel:this.dateLevel,
+            excel:true,
+            email:val.value
+          });
+          let res = await dayReportFun(payload);
         }, () => {
-          console.info('cancel');
+          
         });
     }
   },

@@ -17,13 +17,14 @@ const http = axios.create({
 // request拦截器
 http.interceptors.request.use(config => {
   //由于省市区三级联动调用三次接口，避免闪屏现象，如下操作
-  if(config.url != 'area/list' && config.url != '/common/uploadFile' && config.url !='operator/updateOperator') {
+  let urlWhite = [ 'area/list','/common/uploadFile','operator/updateOperator','operatorBalanceLog/excelMonthFlow','operatorBalanceLog/excelDayFlow','operatorBalanceLog/excelOrderFlow','operatorBalanceLog/balanceLogProfitList'];
+  if(urlWhite.indexOf(config.url) === -1) {
     Indicator.open({
       text: "加载中",
       spinnerType: "fading-circle"
     });
   }
-  if( config.url == '/common/uploadFile') {
+  if(config.url == '/common/uploadFile') {
     Indicator.open({
       text: "图片上传中",
       spinnerType: "fading-circle"
@@ -33,16 +34,7 @@ http.interceptors.request.use(config => {
   config.data = filterData(config.data);//格式化参数;
   let token = getToken();
   let _timestamp = (new Date()).getTime();
-  //const whiteList = ['shop/vip/save']; // 解决添加接口表单重复添加问题
   if (token) {
-    // if (whiteList.indexOf(config.url) !== -1) {
-    //   console.log(123123);
-    //   // next();
-    //   // http.post('common/getRequestId', {token:token}).then(res=>{
-    //   //   console.log(res);
-    //   // });
-    // }else {
-    // }
     // 阻止转义
     config.data = config.data ? config.data + `&token=${token}`:`token=${token}`;
     if(config.url == '/batchExecutePlan/updateBatchStart' || config.url == '/batchExecutePlan/add' ) {

@@ -147,7 +147,6 @@ export default {
       checkWeeklisttxt:[],
       
       addmarket:{
-        status:true,
         time:null,
         startTime:'',
         endTime:'',

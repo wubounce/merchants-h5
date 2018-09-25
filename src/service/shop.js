@@ -30,4 +30,4 @@ export const orderFlowFun = (payload) => fetch.post(orderFlowApi, payload); //�
 export const excelDayFlowFun = (payload) => fetch.post(excelDayFlowApi,  payload);
 
 // 订单流水导出excel
-export const excelOrderFlowlFun = (payload) => fetch.post(excelOrderFlowlApi, { params: payload });
+export const excelOrderFlowlFun = (payload) => fetch.post(excelOrderFlowlApi, payload);
