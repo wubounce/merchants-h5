@@ -69,6 +69,7 @@ export default {
                 }, 
                 inputErrorMessage: '请输入正确的邮箱地址'
             }).then(async (val) => {
+                    setEmail(val.value);
                     let payload = {shopId:this.shopId,time:this.date,email:val.value};
                     await excelDayFlowFun(payload);
                 }, (error) => {
