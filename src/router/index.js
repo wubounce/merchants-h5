@@ -128,6 +128,24 @@ export default new Router({
       meta: {title: '设备管理'},
     },
     {
+      path: '/deviceMonthFlow',
+      name: 'deviceMonthFlow',
+      component: () => import ('@/page/device/deviceMange/deviceMonthFlow'),
+      meta: {title: '设备明细'},
+    },
+    {
+      path: '/deviceDayFlow',
+      name: 'deviceDayFlow',
+      component: () => import ('@/page/device/deviceMange/deviceDayFlow'),
+      meta: {title: '设备明细'},
+    },
+    {
+      path: '/deviceOrderFlow',
+      name: 'deviceOrderFlow',
+      component: () => import ('@/page/device/deviceMange/deviceOrderFlow'),
+      meta: {title: '设备明细'},
+    },
+    {
       path: '/deviceSearch',
       name: 'deviceSearch',
       component: () => import ('@/page/device/deviceMange/deviceSearch'),

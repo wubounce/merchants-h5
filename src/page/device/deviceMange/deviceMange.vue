@@ -68,11 +68,11 @@
                     <span>类型</span>
                     <span>{{item.machineTypeName}}</span>
                   </p>
-                  <p class="item-ft-right" @click.stop="revenueBill">
+                  <router-link tag="p" class="item-ft-right" :to="{ name: 'deviceMonthFlow', query:{allMoney:item.profit,machineId:item.machineId,machineName:item.machineName,}}">
                     <span>总收益</span>
                     <span>{{item.profit | keepTwoNum}}</span>
                     <span class="iconfont icon-nextx"></span>
-                  </p>
+                  </router-link>
                 </section>
               </router-link>
             </div>
@@ -321,6 +321,13 @@
       offlineTipClick() {
         this.offlineTip = false;
         this.hiddenPageHeight = 3.5;
+      },
+      revenueBill(index) { //设备收益
+        console.log(index);
+        this.$router.push({
+          name: "deviceSearch",
+          query: ({imei:nqt})
+        }); 
       },
       wxScan() { //微信扫码
         Web.scanQRCode(res => {

@@ -89,7 +89,6 @@
       </ul>
       <div style="width:100%;height:1.73rem;"></div>
       <div class="about-button">
-        <Button btn-type="small" btn-color="spe" class="ft-btn active" @click.native="deviceDele" v-has="'mer:machine:delete'">删除</Button>
         <Button btn-type="small" btn-color="spe" class="ft-btn active" @click.native="deviceTZJ" v-show="tzjShow" v-has="'mer:machine:clean'">桶自洁</Button>
         <Button btn-type="small" btn-color="spe" class="ft-btn active" @click.native="deviceRest" v-show="(machineState==='运行' && deviceDetail.subTypeName !== '通用脉冲充电桩') || (machineState==='空闲' && deviceDetail.subTypeName !== '通用脉冲充电桩')" v-has="'mer:machine:reset'">复位</Button>
         <Button btn-type="small" btn-color="spe" class="ft-btn active" @click.native="deviceEdit" v-has="'mer:machine:update'">编辑</Button>
@@ -226,34 +225,6 @@
       }, 
       functionSetListShowClick() {
         this.functionSetListShow =!this.functionSetListShow;
-      },
-      deviceDele() {  //删除
-        MessageBox.confirm('是否确认删除此设备?').then(async () => {
-          let res = await deleteDeviceFun({machineId: this.$route.query.machineId});
-          let instance = this.$toast({
-            message: '删除设备成功',
-            iconClass: 'mint-toast-icon mintui mintui-success'
-          });
-          setTimeout(() => {
-            instance.close();
-            this.$router.push({name:'deviceMange'});
-          }, 2000);
-        });   
-        
-      },
-      deviceTZJ() {  //桶自洁
-        MessageBox.confirm('是否确认桶自洁此设备?').then(async () => {
-          let res = await tzjDeviceFun({machineId: this.$route.query.machineId});
-          let instance = this.$toast({
-            message: '桶自洁成功',
-            iconClass: 'mint-toast-icon mintui mintui-success'
-          });
-          setTimeout(() => {
-            instance.close();
-            this.$router.push({name:'deviceMange'});
-          }, 2000);
-        });
-        
       },
       deviceRest() {  //复位
         MessageBox.confirm('是否确认复位此设备?').then(async ()=> {
