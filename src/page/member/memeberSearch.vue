@@ -14,8 +14,8 @@
     </div>
     <div class="search-select" v-show="isSelectShow">
       <ul>
-        <li v-for="(item,index) in searchList" class="search-select-option search-select-list" @click="selectClick(item.phone)"
-        :key="index">{{item.userName}}
+        <li v-for="(item,index) in searchList" class="search-select-option search-select-list" @click="selectClick(item.id)"
+        :key="index">{{item.searchValue}}
         </li>
       </ul>
     </div>
@@ -78,7 +78,7 @@ import {delay } from "@/utils/tool";
       async search(name) {
         let payload = {search:this.searchData};
         let res = await searchListFun(payload);
-        this.searchList = res.items?res.items:[];  //分页添加
+        this.searchList = res?res:[];  //分页添加
         if(this.searchList.length<= 0){
           this.nosearchList = true;
           this.isSelectShow = false;
