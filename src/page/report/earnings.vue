@@ -70,6 +70,7 @@ import { dayReportFun, shopListFun } from '@/service/report';
 import { calMax, calMin } from '@/utils/tool';
 import calendar from '@/components/vue-calendar/calendar.vue';
 import { MessageBox } from 'mint-ui';
+import { setEmail, getEmail } from '@/utils/tool';
 import { validatEmail } from '@/utils/validate';
 
 export default {
@@ -255,7 +256,7 @@ export default {
     exportExls(){
       MessageBox.prompt(' ', '确定导出 2018-09-06 流水明细？', {
             inputPlaceholder:'请填写导出表格的邮箱地址',
-            inputValue:'18311017120@qq.com',
+            inputValue:getEmail()?getEmail():null,
           inputValidator: (val) => {
             if (val === null) {
               return true;//初始化的值为null，不做处理的话，刚打开MessageBox就会校验出错，影响用户体验

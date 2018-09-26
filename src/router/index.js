@@ -320,6 +320,12 @@ export default new Router({
       component: () => import ('@/page/shop/shopOrderFlow'),
       meta: {title: '店铺明细'},
     },
+    {
+      path: '/shopSearch',
+      name: 'shopSearch',
+      component: () => import ('@/page/shop/shopSearch'),
+      meta: {title: '店铺搜索'},
+    },
 
     //待办事项
     {

@@ -2,10 +2,21 @@
 	<section>
     <div class="permissions" v-if="$store.getters.has('mer:shop:list')">暂无相关页面权限</div>
     <div v-else class="page-loadmore-height">
+      <div class="search-header">
+        <section class="sarch-wrap">
+          <div class="search">
+              <form action="" target="frameFile">
+                <span class="iconfont icon-IconSearch"></span><input type="text" @click="searchMember"  placeholder="请输入店铺名称" class="serch">
+                <iframe name='frameFile' style="display: none;"></iframe>
+                <span class="select-back" @click="searchMember">搜索</span>
+              </form>
+          </div>
+        </section>
+      </div>
       <div class="page-top" v-if="hasNews">
         <div class="page-loadmore-wrapper" ref="wrapper" :style="{overflowY:scrollShow}" >
           <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore">
-            <div>
+            <ul>
               <li class="list" v-for="(item,index) in list" :key="index">
                 <router-link :to="{ name: 'shopDetail', query:{shopId:item.shopId}}">
                   <p class="top">
@@ -33,12 +44,12 @@
                   <div class="kindof">
                     <router-link :to="{ name: 'shopMonthFlow', query:{allMoney:item.profit,shopId:item.shopId,shopName:item.shopName}}">
                       <div class="text">总收益<span class="order-action iconfont icon-nextx"></span></div>
-                      <div class="text-value">{{ item.profit }}<span class="little-font">元</span></div>
+                      <div class="text-value">{{ item.profit | tofixd }}<span class="little-font">元</span></div>
                     </router-link>
                   </div>
                 </div>
               </li>
-            </div>
+            </ul>
             <div v-if="allLoaded" class="nomore-data">没有更多了</div>
           </mt-loadmore>
         </div>
@@ -61,12 +72,6 @@ export default {
     return {
        list:[],
        hasNews: true,
-      //  //分页
-      //  wrapperHeight: 0,//容器高度
-      //  page: 1,//页码
-      //  pageSize:10,
-      //  total:null,
-      //  allLoaded: false,//数据是否加载完毕
        lessTen:true
     };
   },
@@ -83,37 +88,16 @@ export default {
       };
       let res = await manageListFun(payload);
       this.total = res.total;
-      // console.log(res);
       if(res.items == null || res.items == "") {
-          this.hasNews = false;
-        }
-        else {
-          this.list = res.items?[...this.list,...res.items]:[];  //分页添加
-          //判断是否超过10条
-        
-          //格式化收益
-          for(let i=0;i<this.list.length; i++) {
-            //判断是否为0 
-            if(this.list[i].profit) {
-              //将number类型的数据转化成string
-              this.list[i].profit = this.list[i].profit+'';
-              //判断是不是'5'
-              if(this.list[i].profit.split('.').length == 1) {
-                this.list[i].profit = this.list[i].profit + '.00';
-              }
-              else {
-                //判断是不是'5.0'
-                if(this.list[i].profit.split('.')[1].length ==1) {
-                  this.list[i].profit = this.list[i].profit + '0';
-                }
-              }
-            }
-            else {
-              this.list[i].profit = '0.00';
-            }
-          }
-        }
-    }
+        this.hasNews = false;
+      }
+      else {
+        this.list = res.items?[...this.list,...res.items]:[];  //分页添加
+      }
+    },
+    async searchMember(e){ //搜索
+      this.$router.push({name:'shopSearch'});
+    },
   },
   created() {
   },

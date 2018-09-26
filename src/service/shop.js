@@ -13,8 +13,9 @@ const uploadFileApi = '/common/uploadFile';                                     
 const monthFloweApi = 'operatorBalanceLog/monthFlow';                            //店铺或设备-月流水
 const dayFloweApi = 'operatorBalanceLog/dayFlow';                                //店铺或设备-日流水
 const orderFlowApi = 'operatorBalanceLog/orderFlow';                             //店铺或设备-订单流水'
-const excelDayFlowApi = 'operatorBalanceLog/excelDayFlow';                       // 登录 method 'post'
-const excelOrderFlowlApi = 'operatorBalanceLog/excelOrderFlow';                  // 登录 method 'post'
+const excelDayFlowApi = 'operatorBalanceLog/excelDayFlow';                       // 日流水导出excel method 'post'
+const excelOrderFlowlApi = 'operatorBalanceLog/excelOrderFlow';                  // 订单流水导出excel method 'post'
+const listByShopNameApi = 'shop/listByShopName';                                // 店铺名称模糊搜索 method 'post'
 
 export const areaListFun = (payload) => fetch.post(areaListApi, payload); //获取区域列表
 export const manageListFun = (payload) => fetch.post(manageListApi, payload); //店铺列表
@@ -31,3 +32,6 @@ export const excelDayFlowFun = (payload) => fetch.post(excelDayFlowApi,  payload
 
 // 订单流水导出excel
 export const excelOrderFlowlFun = (payload) => fetch.post(excelOrderFlowlApi, payload);
+
+// 店铺名称模糊搜索
+export const listByShopNameFun = (payload) => fetch.post(listByShopNameApi, payload);
