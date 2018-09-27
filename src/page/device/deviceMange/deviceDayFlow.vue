@@ -73,6 +73,7 @@ export default {
           setEmail(val.value);
           let payload = {machineId:this.machineId,time:this.date,email:val.value};
           await excelDayFlowFun(payload);
+          this.$toast({message: '操作成功',iconClass: 'mint-toast-icon mintui mintui-success'});
         }, (error) => {          
       });
     }

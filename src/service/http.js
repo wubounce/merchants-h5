@@ -17,7 +17,7 @@ const http = axios.create({
 // request拦截器
 http.interceptors.request.use(config => {
   //由于省市区三级联动调用三次接口，避免闪屏现象，如下操作
-  let urlWhite = [ 'area/list','/common/uploadFile','operator/updateOperator','operatorBalanceLog/excelMonthFlow','operatorBalanceLog/excelDayFlow','operatorBalanceLog/excelOrderFlow','operatorBalanceLog/balanceLogProfitList','operatorBalanceLog/dayReport'];
+  let urlWhite = [ 'area/list','/common/uploadFile','operator/updateOperator',];
   if(urlWhite.indexOf(config.url) === -1) {
     Indicator.open({
       text: "加载中",

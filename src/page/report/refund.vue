@@ -276,7 +276,8 @@ export default {
             excel:true,
             email:val.value
           });
-          let res = await dayReportFun(payload);
+          await dayReportFun(payload);
+          this.$toast({message: '操作成功',iconClass: 'mint-toast-icon mintui mintui-success'});
         }, () => {
           
         });

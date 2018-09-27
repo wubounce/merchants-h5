@@ -73,6 +73,7 @@ export default {
                     setEmail(val.value);
                     let payload = {shopId:this.shopId,time:this.date,email:val.value};
                     await excelDayFlowFun(payload);
+                    this.$toast({message: '操作成功',iconClass: 'mint-toast-icon mintui mintui-success'});
                 }, (error) => {
                     // document.getElementsByClassName("mint-msgbox-errormsg")[0].style.visibility = 'hidden';
                     // document.getElementsByClassName("invalid")[0].style.borderColor = '#dedede';
