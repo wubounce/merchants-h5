@@ -29,6 +29,7 @@
       width: 6.8rem;
       font-size: 16px;
       height:1.17rem;
+      line-height: 1.17rem;
     }
     .icon-IconSearch {
       color: #999999;
@@ -43,25 +44,21 @@
       border-left:1px solid rgba(216,216,216,1);
     }
     input::-webkit-input-placeholder {
-      /* WebKit, Blink, Edge */
       color: #999;
       font-size: 14px;
     }
     
     input:-moz-placeholder {
-      /* Mozilla Firefox 4 to 18 */
       color: #999;
       font-size: 14px;
     }
     
     input::-moz-placeholder {
-      /* Mozilla Firefox 19+ */
       color: #999;
       font-size: 14px;
     }
     
     input :-ms-input-placeholder {
-      /* Internet Explorer 10-11 */
       color: #999;
       font-size: 14px;
     }

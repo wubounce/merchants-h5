@@ -12,7 +12,6 @@
         </p>
       </div>
     </div>
-
     <div class="search-select" v-show="isSelectItem">
       <ul>
         <li v-for="(item,index) in searchList" :class="{selectback:index==now}" class="search-select-option search-select-list" @click="selectClick(index)"
@@ -123,7 +122,7 @@ import {delay } from "@/utils/tool";
       async search(name) {
         let payload = {nameOrImei: name};
         let res = await listByNameOrlmeiFun(payload);
-        this.message = "未找到相关结果"
+        this.message = "未找到符合的结果"
         this.searchList = res;  
       },
       selectClick: function (index) {
@@ -362,5 +361,4 @@ import {delay } from "@/utils/tool";
       background: #efeff4;
     }
   }
-  
 </style>
