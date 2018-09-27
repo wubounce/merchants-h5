@@ -178,6 +178,7 @@ export default {
           let item = this.funTypeList[i];
           if(item.ifOpen === false){
             count++;
+            continue;
           } 
           if(!reg.test(Number(item.needMinutes))){
             this.$toast("耗时填写格式错误，请填写非0的非空正整数");
@@ -191,7 +192,12 @@ export default {
           } 
           if(item.functionPrice==='' || !reg1.test(Number(item.functionPrice))){
             this.$toast("原价填写格式错误，请输入非空正整数，最多2位小数");
-             flag2 = false;
+            flag2 = false;
+            break;
+          }
+          if(Number(item.functionPrice)> 99){
+            this.$toast("价格需为0-99");
+            flag2 = false;
             break;
           }
           if(Number(this.communicateType) === 0 && !reg.test(Number(item.functionCode))){

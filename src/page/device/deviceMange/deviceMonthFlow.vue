@@ -5,7 +5,7 @@
             <div class='earnings-title'>
               <div class="earning">
                 <p class="month"><span>{{machineName}}</span></p> 
-                <p><span>收益：{{allMoney | tofixd}} 元</span></p>
+                <p><span>总收益：{{allMoney | tofixd}} 元</span></p>
               </div>
             </div>
             <p class="black"></p>

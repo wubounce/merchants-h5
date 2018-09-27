@@ -38,10 +38,11 @@
             <span>类型</span>
             <span>{{item.machineTypeName}}</span>
           </p>
-          <p class="item-ft-right">
-            <span>收益</span>
+          <router-link tag="p" class="item-ft-right" :to="{ name: 'deviceMonthFlow', query:{allMoney:item.profit,machineId:item.machineId,machineName:item.machineName,}}">
+            <span>总收益</span>
             <span>{{item.profit | keepTwoNum}}</span>
-          </p>
+            <span class="iconfont icon-nextx"></span>
+          </router-link>
         </section>
         <div class="line"></div>
       </router-link>    
@@ -332,6 +333,10 @@ import {delay } from "@/utils/tool";
       }
       .item-ft {
         display: flex;
+        .icon-nextx {
+          float: right;
+          color: rgba(204, 204, 204, 1);
+         }
         p {
           flex: 1;
           &:nth-child(2) {

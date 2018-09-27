@@ -213,7 +213,8 @@
           },
           secondType: {
             name: "",
-            id: ""
+            id: "",
+            communicateType: ""
           },
           functionType: {
             name: "未设置",
@@ -252,6 +253,7 @@
           this.fromdata.firstType.name = data.name;
           this.fromdata.secondType.name = '';
           this.fromdata.secondType.id = '';
+          this.fromdata.secondType.communicateType = '';
           this.functionSetList = [];
           this.keepFunctionArr = [];
           this.fromdata.functionType.name = "未设置";
@@ -284,19 +286,31 @@
         this.selectIndex2 = -1;
         this.selectIndex = index;
         this.fromdata.secondType.id = this.secondOnTypeList[index].id;
+        this.fromdata.secondType.communicateType = this.secondOnTypeList[index].communicateType;
         this.subTypeName = this.secondOnTypeList[index].name;
+        if(this.fromdata.smCommunicateType && Number(this.fromdata.smCommunicateType) !== Number(this.fromdata.secondType.communicateType)){
+          this.$toast({message: "NQT与设备型号通信类型不符" });
+          return false;
+        } else {
         this.functionSetList = [];
         this.keepFunctionArr = [];
         this.fromdata.functionType.name = "未设置";
+        }
       },
       selectNoOftenClick: function (index,name) { //不常用选中
         this.selectIndex = -1;
         this.selectIndex2 = index;
         this.fromdata.secondType.id = this.secondOffTypeList[index].id;
         this.subTypeName = this.secondOffTypeList[index].name;
+        this.fromdata.secondType.communicateType = this.secondOnTypeList[index].communicateType;
+         if(this.fromdata.smCommunicateType && Number(this.fromdata.smCommunicateType) !== Number(this.fromdata.secondType.communicateType)){
+          this.$toast({message: "NQT与设备型号通信类型不符" });
+          return false;
+        } else {
         this.functionSetList = [];
         this.keepFunctionArr = [];
         this.fromdata.functionType.name = "未设置";
+        }
       },
       cancle() {
         this.subType2 = false;
@@ -340,12 +354,19 @@
         if(this.fromdata.secondType.name !== this.funList[this.selectedIndex].name){
           this.fromdata.secondType.name = this.funList[this.selectedIndex].name;
           this.fromdata.secondType.id = this.funList[this.selectedIndex].id;
+          this.fromdata.secondType.communicateType = this.funList[this.selectedIndex].communicateType;
+          if(this.fromdata.smCommunicateType && Number(this.fromdata.smCommunicateType) !== Number(this.fromdata.secondType.communicateType)){
+            this.$toast({message: "NQT与设备型号通信类型不符" });
+            return false;
+          } else {
           this.functionSetList = [];
           this.fromdata.functionType.name = "未设置";
+          }
           
         }else{
           this.fromdata.secondType.name = this.funList[this.selectedIndex].name;
           this.fromdata.secondType.id = this.funList[this.selectedIndex].id;
+          this.fromdata.secondType.communicateType = this.funList[this.selectedIndex].communicateType;
         }
         this.subType = false;
       },
@@ -355,13 +376,22 @@
           let parameter = url.substring(0,4);
           if(parameter == "http"){           
             let object = url.split("?")[1];
-            this.fromdata.nqt = this.getUrlParam(object,"NQT");
-            this.fromdata.company = this.getUrlParam(object,"Company");
-            this.fromdata.smCommunicateType = this.getUrlParam(object,"CommunicateType");
-            this.fromdata.ver = this.getUrlParam(object,"Ver")?this.getUrlParam(object,"Ver"):0;
-            if(Number(this.fromdata.smCommunicateType) === 0){
+            let nqt = this.getUrlParam(object,"NQT");
+            let company = this.getUrlParam(object,"Company");
+            let smCommunicateType = this.getUrlParam(object,"CommunicateType");
+            let ver = this.getUrlParam(object,"Ver")?this.getUrlParam(object,"Ver"):0;
+            if(Number(smCommunicateType) === 0){
               this.functionListTitle2 = this.functionListTitle;
               this.isShow2 = true;
+            }
+            if(this.fromdata.secondType.communicateType && Number(smCommunicateType) !== Number(this.fromdata.secondType.communicateType)){
+              this.$toast({message: "NQT与设备型号通信类型不符" });
+              return false;
+            }else {
+              this.fromdata.nqt = nqt;
+              this.fromdata.company = company;
+              this.fromdata.smCommunicateType = communicateType;
+              this.fromdata.ver = ver;
             }
           }else{
             this.fromdata.imei= res;
@@ -427,20 +457,16 @@
             let payload = {subTypeId: this.fromdata.secondType.id,shopId: this.fromdata.shopType.id} ;     
             let res = await getFunctionSetListFun(payload);
             this.fromdata.communicateType = res.communicateType;
-            if(Number(this.fromdata.communicateType)=== Number(this.fromdata.smCommunicateType)){
-              this.functionTempletType = res.functionTempletType; 
-              this.functionSetList = res.list;
-              this.functionSetList.forEach(item=>{
-                item.ifOpen=item.ifOpen === 0?(!item.ifOpen) : (!!item.ifOpen);
-              });
-              this.keepFunctionArr= [].concat(JSON.parse(JSON.stringify(res.list)));
-              this.setModelShow= true;
-              this.modelShow = false;
-              this.title = "功能列表";
-            }else{
-              this.$toast("您扫描的NQT和选择的设备型号不一致");
-              return;
-            }      
+            this.functionTempletType = res.functionTempletType; 
+            this.functionSetList = res.list;
+            this.functionSetList.forEach(item=>{
+              item.ifOpen=item.ifOpen === 0?(!item.ifOpen) : (!!item.ifOpen);
+            });
+            this.keepFunctionArr= [].concat(JSON.parse(JSON.stringify(res.list)));
+            this.setModelShow= true;
+            this.modelShow = false;
+            this.title = "功能列表";
+                
           }else {      
             this.setModelShow= true;
             this.modelShow = false;
@@ -593,6 +619,11 @@
           if(item.functionPrice==='' || !reg1.test(Number(item.functionPrice))){          
             this.$toast("原价填写格式错误，请输入非空正整数，最多2位小数");
              flag2 = false;
+            break;
+          }
+          if(Number(item.functionPrice)> 99){
+            this.$toast("价格需为0-99");
+            flag2 = false;
             break;
           }
           if(Number(this.fromdata.communicateType)=== 0 && !reg.test(Number(item.functionCode))){

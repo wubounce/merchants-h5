@@ -226,6 +226,20 @@
       functionSetListShowClick() {
         this.functionSetListShow =!this.functionSetListShow;
       },
+      deviceTZJ() {  //桶自洁
+        MessageBox.confirm('是否确认桶自洁此设备?').then(async () => {
+          let res = await tzjDeviceFun({machineId: this.$route.query.machineId});
+          let instance = this.$toast({
+            message: '桶自洁成功',
+            iconClass: 'mint-toast-icon mintui mintui-success'
+          });
+          setTimeout(() => {
+            instance.close();
+            this.$router.push({name:'deviceMange'});
+          }, 2000);
+        });
+        
+      },
       deviceRest() {  //复位
         MessageBox.confirm('是否确认复位此设备?').then(async ()=> {
           let res = await manageResetDeviceFun({machineId: this.$route.query.machineId});
