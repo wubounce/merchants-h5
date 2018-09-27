@@ -229,9 +229,7 @@ export default {
             password:remPassword,
             userName:this.form.userName
           };
-          console.log(this.phoneArray);
           this.phoneArray = [obj,...this.phoneArray];
-          console.log(this.phoneArray);
           let hash = {};
           this.phoneArray = this.phoneArray.reduce(function(item, next) {
             hash[next.userName] ? '' : hash[next.userName] = true && item.push(next);
