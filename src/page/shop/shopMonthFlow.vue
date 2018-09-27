@@ -5,12 +5,12 @@
                  <div class='earnings-title'>
                     <div class="earning">
                         <p class="month"><span>{{shopName}}</span></p> 
-                        <p><span>收益：{{allMoney | tofixd}} 元</span></p>
+                        <p><span>总收益：{{allMoney | tofixd}} 元</span></p>
                     </div>
                 </div>
                 <p class="black"></p>
                 <div class="table-header">
-                    <span class="report-table-date">月份</span>
+                    <span class="report-table-date">日期</span>
                     <span class="report-table-money">订单金额</span>
                 </div>
             </div>

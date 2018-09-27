@@ -32,6 +32,7 @@ const listSubTypeBy = '/machine/listSubTypeBy';
 const stateMachine = '/machine/statisticsMachine';
 const listSubTypeAll = '/machine/listSubTypeAll';
 const saveRegisterInfo = '/operator/saveRegisterInfo';
+const listShopBatchStart = '/shop/listShopBatchStart'; //批量启动店铺列表
 
 
 export const device = (payload) => fetch.get(deviceApi, {params: payload}); //登录
@@ -59,6 +60,7 @@ export const listSubTypeByFun= (payload) => fetch.post(listSubTypeBy,payload);
 export const stateMachineFun= (payload) => fetch.post(stateMachine,payload); 
 export const listSubTypeAllFun= (payload) => fetch.post(listSubTypeAll,payload); 
 export const saveRegisterInfoFun= (payload) => fetch.post(saveRegisterInfo,payload); //注册信息
+export const listShopBatchStartFun= (payload) => fetch.post(listShopBatchStart,payload); //批量启动店铺列表
 
 
 

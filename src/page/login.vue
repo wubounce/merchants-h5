@@ -43,7 +43,7 @@
           <span class="iconfont" :class="isCheckCLass"></span>
           <span class="rememberText">记住密码</span>
         </p>
-        <mt-button type="primary" class="btn-blue" @click.prevent ="handleSubmit" :disabled="disabled" v-if="loginPwd">登录</mt-button>
+        <mt-button type="primary" class="btn-blue" @click.prevent ="handleSubmit" :disabled="!(form.userName&&form.password)" v-if="loginPwd">登录</mt-button>
         <mt-button type="primary" class="btn-validate" @click.prevent ="checkoutLogin" v-if="loginPwd">短信验证码登录</mt-button>
         <mt-button type="primary" class="btn-blue" @click.prevent ="phoneHandleSubmit" :disabled="!(form.phone&&form.code)" v-if="!loginPwd">登录</mt-button>
         <mt-button type="primary" class="btn-validate" @click.prevent ="checkoutLogin" v-if="!loginPwd">账号密码登录</mt-button>
@@ -65,7 +65,7 @@
 <script>
 import store from '@/store';
 import { mapState, mapActions, mapMutations } from 'vuex';
-import { getToken, removeToken, setMenu, removeMenu, removeNavTabIndex,setNavTabIndex, getNavTabIndex, setPhone, getPhone, removeMember } from '@/utils/tool';
+import { getToken, removeToken, setMenu, removeMenu, removeNavTabIndex,setNavTabIndex, getNavTabIndex, setPhone, getPhone, getIsRemember, setIsRemember, getUserNameKey, setUserNameKey, removeMember } from '@/utils/tool';
 import { login, codeLogin} from '@/service/login';
 import JsEncrypt from 'jsencrypt';
 import { menuSelectFun } from '@/service/member';
@@ -115,7 +115,7 @@ export default {
         typepwd:false,
         disabled:true,
         disabledCode:true,
-        phoneArray: getPhone()? getPhone():[],
+        phoneArray: getUserNameKey()? getUserNameKey():[],
         searchPhone:false,
         searchPhoneList:[],
       };
@@ -126,8 +126,9 @@ export default {
       removeNavTabIndex();
       removeMember();
       removeMenu();
-      this.form.userName = getPhone() ? getPhone()[0].userName:''; //最新一个用户名
-      this.form.password = getPhone() ? getPhone()[0].password:'';
+      this.form.userName = getUserNameKey() ? getUserNameKey()[0].userName:''; //最新一个用户名
+      this.form.password = getUserNameKey() ? getUserNameKey()[0].password:'';
+      this.isCheckCLass = getIsRemember() ? getIsRemember(): 'icon-weixuan';
     },
      computed: {
         ...mapState({
@@ -229,8 +230,13 @@ export default {
             userName:this.form.userName
           };
           this.phoneArray = [obj,...this.phoneArray];
-          this.phoneArray = Array.from(new Set([...this.phoneArray]));//去重
-          setPhone(this.phoneArray); //保存登录过的手机号
+          let hash = {};
+          this.phoneArray = this.phoneArray.reduce(function(item, next) {
+            hash[next.userName] ? '' : hash[next.userName] = true && item.push(next);
+            return item;
+          }, []);
+          setIsRemember(this.isCheckCLass);
+          setUserNameKey(this.phoneArray); //保存登录过的手机号
          if(res.code === 8002){
             this.$router.push({name:'bindPhone'});     
           }else {
@@ -256,20 +262,15 @@ export default {
       userinputFunc(){
         this.isuser = true;
         this.form.userName ? this.searchPhone = true:this.searchPhone = false;
-        this.searchPhoneList = this.phoneArray.filter(item => item.startsWith(this.form.userName));
-        if (!this.form.userName || !this.form.password) {
-          this.disabled = true;
-        } else {
-          this.disabled = false;
+        this.searchPhoneList = this.phoneArray.filter(item => {
+          item.userName.startsWith(this.form.userName);
+          });
+        if(this.form.userName.length<1) {
+          this.form.password = '';
         }
       },
       pwdinputFunc(){
         this.ispwd = true;
-        if (!this.form.userName || !this.form.password) {
-          this.disabled = true;
-        } else {
-          this.disabled = false;
-        }
       },
       checkPhone(item){
         this.form.userName = item;
@@ -386,11 +387,9 @@ export default {
         color: rgba(24, 144, 255, 1);
         .icon-weixuan {     
           font-size: 12px;
-          margin-right: -5px;
         }
         .icon-yixuan {
           font-size: 12px;
-          margin-right: -5px;
         }
         .rememberText {
           font-size: 12px;

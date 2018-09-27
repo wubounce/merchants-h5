@@ -45,7 +45,7 @@
   /* eslint-disable */ 
   import {delay} from "@/utils/tool";
   import { validatReplace } from '@/utils/validate';
-  import { getShopFun,shopSearchFun } from '@/service/device';
+  import { listShopBatchStartFun } from '@/service/device';
   export default {
     data() {
       return {
@@ -89,8 +89,8 @@
     methods: {
       async fetchData(e) {
         let keywords = this.keyword.replace(validatReplace, '');
-        let payload = {shopName: keywords,hasMachine: true};
-        let res = await shopSearchFun(payload);
+        let payload = {shopName: keywords};
+        let res = await listShopBatchStartFun(payload);
         this.shopList= res; 
         this.shopList.forEach(item=>{
         this.provinceName = item.province;
@@ -128,8 +128,7 @@
         }
       },
       async checkShopSelect() { //获取店铺
-        let payload = {hasMachine: true};
-        let res = await getShopFun(payload);
+        let res = await listShopBatchStartFun();
         this.shopList= res; 
         this.shopList.forEach(item=>{
         this.provinceName = item.province;
