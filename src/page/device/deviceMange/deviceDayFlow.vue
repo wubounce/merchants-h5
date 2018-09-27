@@ -8,8 +8,8 @@
             <p><span>{{date}}<span style="padding:0 0.11rem">/</span>收益：{{allMoney | tofixd}} 元</span></p>
           </div>
           <div class="export-wrap" @click="exportExls">
-            <p><i class="iconfont icon-daochu"></i></p> 
-            <p><span class="export ">导出</span></p>
+            <p><i :class="['iconfont icon-daochu', {'export-disable':listdata.length<=0}]"></i></p> 
+            <p><span :class="['export', {'export-disable':listdata.length<=0}]">导出</span></p>
           </div>
         </div>
         <p class="black"></p>
@@ -58,6 +58,7 @@ export default {
       this.listdata = res;
     },
     exportExls(){
+      if(this.listdata.length<=0) return false;
       MessageBox.prompt(' ', `确定导出${this.date}流水明细？`, {
         inputPlaceholder:'请填写导出表格的邮箱地址',
         inputValue:getEmail()?getEmail():null,

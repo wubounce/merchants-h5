@@ -22,7 +22,7 @@
       <div  class="order"><i style="background:#FACC14"></i>总订单数量<span class="totalOrder">({{totalCount}})</span></div>
     </div>
   </div>
-  <div class="export">
+  <div :class="['export', {'export-disable':listdata.length<=0}]">
      <span @click="exportExls"><i class="iconfont icon-daochu"></i>导出</span>
   </div>
   <div class="tabledata">
@@ -32,14 +32,14 @@
         <span class="report-table-order">订单数量</span>
         <span class="report-table-order">退款金额</span>
        </div>
-      <div class="listcon tableearn-list" v-for="(item,index) in  lsitdata" :key="index" @click="goDetail(item.date)">
+      <div class="listcon tableearn-list" v-for="(item,index) in  listdata" :key="index" @click="goDetail(item.date)">
          <div class="detail">
           <span class="listtime report-table-date">{{item.date}}</span>
           <span  class="report-table-order">{{item.count}}</span>
           <span  class="report-table-order">{{item.money | tofixd}}</span>
         </div>
       </div>
-      <div class="nodata" v-if="lsitdata.length <= 0">暂无数据</div>
+      <div class="nodata" v-if="listdata.length <= 0">暂无数据</div>
     </div>
   </div>
 
@@ -124,7 +124,7 @@ export default {
       dateCurrentTag:null,
       dateLevel:null,
 
-      lsitdata:[],
+      listdata:[],
       popupVisible:false,
       currentTags:null,
       reportDate:[],
@@ -199,8 +199,8 @@ export default {
       this.moneyMax = calMax(this.reportMoney)>0 ? calMax(this.reportMoney) : 1;//金额Y轴最大值
       this.orderMin = calMin(this.reportCount);//订单Y轴最大值
       this.moneyMin = calMin(this.reportMoney);//金额Y轴最大值
-      this.lsitdata = res.list;
-      this.lsitdata.sort(this.ortId); //表格时间倒序
+      this.listdata = res.list;
+      this.listdata.sort(this.ortId); //表格时间倒序
       this.totalMoney = res.totalMoney;
       this.totalCount = res.totalCount;
 
@@ -255,6 +255,7 @@ export default {
       
     },
     exportExls(){
+      if(this.listdata.length<=0) return false;
       MessageBox.prompt(' ', '确定导出 2018-09-06 流水明细？', {
             inputPlaceholder:'请填写导出表格的邮箱地址',
             inputValue:getEmail()?getEmail():null,

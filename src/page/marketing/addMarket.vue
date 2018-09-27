@@ -7,7 +7,7 @@
      <p @click="open('picker3')">优惠期结束<span class="addvip-con">{{addmarket.endTime}}<span class="order-action iconfont icon-nextx"></span></span></p>
     <p @click="activeVisible=true">活动日<span class="order-action add-shop-overflow-icon iconfont icon-nextx"></span><span class="addvip-con add-shop-overflow">{{checkWeeklisttxt.join(',') | week}}</span></p>
     <p @click="activeTimeVisible = true">每日活动时段<span class="addvip-con">{{addmarket.time}}<span class="order-action iconfont icon-nextx"></span></span></p>
-    <p>折扣优惠<span class="addvip-con"><input type="number" placeholder="请输入优惠折扣" class="discount-input" v-model="addmarket.discount">%</span></p>
+    <p>折扣优惠<span class="addvip-con"><input type="number" pattern="\d*" placeholder="请输入优惠折扣" class="discount-input" v-model="addmarket.discount">%</span></p>
   </div>
    <div class="confirm" @click="toaddMaket">确定</div>
   <!-- 活动日 -->
