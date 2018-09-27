@@ -65,7 +65,7 @@
 <script>
 import store from '@/store';
 import { mapState, mapActions, mapMutations } from 'vuex';
-import { getToken, removeToken, setMenu, removeMenu, removeNavTabIndex,setNavTabIndex, getNavTabIndex, setPhone, getPhone, removeMember } from '@/utils/tool';
+import { getToken, removeToken, setMenu, removeMenu, removeNavTabIndex,setNavTabIndex, getNavTabIndex, setPhone, getPhone,setPassword, getPassword, removeMember } from '@/utils/tool';
 import { login, codeLogin} from '@/service/login';
 import JsEncrypt from 'jsencrypt';
 import { menuSelectFun } from '@/service/member';
@@ -126,7 +126,9 @@ export default {
       removeNavTabIndex();
       removeMember();
       removeMenu();
-      this.form.userName = getPhone() ? getPhone()[0]:''; //最新一个用户名
+      this.form.userName = getPhone() ? getPhone()[0].userName:''; //最新一个用户名
+      this.form.password = getPhone() ? getPhone()[0].password:'';
+
     },
      computed: {
         ...mapState({
@@ -196,7 +198,12 @@ export default {
             };
             let res = await codeLogin(payload);
             this.login(res.token);
-            this.phoneArray = [this.form.userName,...this.phoneArray];
+            let obj = {};
+            obj = {
+              userName: this.form.userName,
+              passWord: this.form.password
+            };
+            this.phoneArray = [obj,...this.phoneArray];
             this.phoneArray = Array.from(new Set([...this.phoneArray]));//去重
             setPhone(this.phoneArray); //保存登录过的手机号
             if(res.code === 8002){
@@ -383,11 +390,9 @@ export default {
         color: rgba(24, 144, 255, 1);
         .icon-weixuan {     
           font-size: 12px;
-          margin-right: -5px;
         }
         .icon-yixuan {
           font-size: 12px;
-          margin-right: -5px;
         }
         .rememberText {
           font-size: 12px;

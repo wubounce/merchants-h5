@@ -193,11 +193,14 @@
             let company = this.getUrlParam(object,"Company");
             let communicateType= this.getUrlParam(object,"CommunicateType");
             let ver = this.getUrlParam(object,"Ver")?this.getUrlParam(object,"Ver"):0;
-            this.fromdata.nqt = nqt;
-            this.fromdata.company = company;
-            this.fromdata.smCommunicateType = communicateType;
-            this.fromdata.ver = ver;
-
+            if(Number(communicateType) === Number(this.fromdata.communicateType)){
+              this.fromdata.nqt = nqt;
+              this.fromdata.company = company;
+              this.fromdata.smCommunicateType = communicateType;
+              this.fromdata.ver = ver;
+            }else {
+              this.$toast({message: "NQT与设备型号通信类型不符" });
+            }
           }else{
             this.fromdata.imei= res;
           } 

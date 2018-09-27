@@ -319,6 +319,10 @@
         color: rgba(51, 51, 51, 1);
         box-sizing: border-box;
         display: flex;
+        border-bottom: 1px solid #f9f8ff;
+        &:last-child {
+          border-bottom: none;
+        }
         div {
           &:nth-child(1) {
             width: 90%;

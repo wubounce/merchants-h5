@@ -239,6 +239,10 @@ import { getlistParentTypeFun } from '@/service/device';
           background: rgba(255, 255, 255, 1);
           font-size: 0.4rem;
           color: rgba(51, 51, 51, 1);
+          border-bottom: 1px solid #f9f8ff;
+          &:last-child {
+            border-bottom: none;
+          }
           div {
             &:nth-child(1) {
               width: 10%;
