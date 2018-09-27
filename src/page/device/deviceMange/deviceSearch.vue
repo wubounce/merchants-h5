@@ -124,7 +124,7 @@ import {delay } from "@/utils/tool";
       async search(name) {
         let payload = {nameOrImei: name};
         let res = await listByNameOrlmeiFun(payload);
-        this.message = "未找到相关结果"
+        this.message = "未找到符合的结果"
         this.searchList = res;  
       },
       selectClick: function (index) {
@@ -266,6 +266,13 @@ import {delay } from "@/utils/tool";
       background: #fff;
       .noData {
         text-align: center;
+        font-size: 14px;
+        color: #999;
+        text-align: center;
+        background: #fff;
+        height: 100%;
+        line-height: 100%;
+        padding-top: 4rem;
       }
       li {
         color:rgba(51, 51, 51, 1);
