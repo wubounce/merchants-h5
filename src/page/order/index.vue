@@ -6,7 +6,7 @@
       <section class="sarch-wrap">
         <div class="search">
             <form action="" target="frameFile" v-on:submit.prevent="">
-              <span class="iconfont icon-IconSearch"></span><input type="text" value='搜索' v-model.trim="searchData" @keyup.enter="searchOrder" @input="clearSearch" placeholder="请输入用户手机号/订单号/设备名称" class="serch">
+              <span class="iconfont icon-IconSearch"></span><input type="text" value='搜索' v-model.trim="searchData" @keyup.enter="searchOrder" @input="clearSearch" placeholder="请输入用户手机号/订单号/设备名" class="serch">
               <iframe name='frameFile' style="display: none;"></iframe>
               <span class="select-back" @click="searchOrder">搜索</span>
             </form>
@@ -192,4 +192,27 @@ export default {
 </script>
 <style lang="scss" scoped>
  @import "../../assets/scss/order/order.scss";
+</style>
+<style>
+  @media screen and (max-width: 360px) {
+    input::-webkit-input-placeholder {
+      color: #999;
+      font-size: 12px;
+    }
+    
+    input:-moz-placeholder {
+      color: #999;
+      font-size: 12px;
+    }
+    
+    input::-moz-placeholder {
+      color: #999;
+      font-size: 12px;
+    }
+    
+    input :-ms-input-placeholder {
+      color: #999;
+      font-size: 12px;
+    }
+  }
 </style>

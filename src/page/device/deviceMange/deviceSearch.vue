@@ -12,7 +12,6 @@
         </p>
       </div>
     </div>
-
     <div class="search-select" v-show="isSelectItem">
       <ul>
         <li v-for="(item,index) in searchList" :class="{selectback:index==now}" class="search-select-option search-select-list" @click="selectClick(index)"
@@ -374,5 +373,4 @@ import {delay } from "@/utils/tool";
       background: #efeff4;
     }
   }
-  
 </style>

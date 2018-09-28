@@ -255,7 +255,7 @@ export default new Router({
       path: '/memeberSearch',
       name: 'memeberSearch',
       component: () => import ('@/page/member/memeberSearch'),
-      meta: {title: '人员权限'},
+      meta: {title: '人员搜索'},
     },
     {
       path: '/order',

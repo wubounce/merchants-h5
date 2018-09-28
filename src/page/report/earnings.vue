@@ -255,7 +255,7 @@ export default {
     },
     exportExls(){
       if(this.listdata.length<=0) return false;
-      MessageBox.prompt(' ', '确定导出 2018-09-06 流水明细？', {
+      MessageBox.prompt(' ', `确定导出${this.startDate.join('-')}~${this.endDate.join('-')}流水明细？`, {
             inputPlaceholder:'请填写导出表格的邮箱地址',
             inputValue:getEmail()?getEmail():null,
           inputValidator: (val) => {
