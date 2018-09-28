@@ -839,6 +839,7 @@
     z-index: 999;
     div {
       display: flex;
+      padding: 0 0.4rem;
       p {
         flex: 2.19;
         text-align: center;
@@ -870,9 +871,12 @@
     font-size: 0.37rem;
     color: #333333;
     background: #fff;
-    padding-top: 1.6rem;
+    padding: 1.6rem 0.4rem 0 0.4rem;
     div {
-      display: flex; // justify-content: space-between;
+      display: flex; // justify-content: space-between;border-bottom: 1px solid #f9f8ff;
+      &:last-child {
+        border-bottom: none;
+      }
       input {
         text-decoration: underline;
       }

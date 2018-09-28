@@ -518,11 +518,12 @@
     z-index: 999;
     div {
       display: flex;
+      padding: 0 0.4rem;
       p {
         flex: 2.19;
         text-align: center;
         position: relative;
-        border-right: rgb(24, 144, 255) .03rem solid;
+        border-right: #E2F0FF .03rem solid;
         box-sizing: border-box;
         &:nth-child(1) {
           flex: 3.32;
@@ -549,9 +550,13 @@
     font-size: 0.37rem;
     color: #333333;
     background: #fff;
-    padding-top: 1.6rem;
+    padding: 1.6rem 0.4rem 0 0.4rem;
     div {
       display: flex; // justify-content: space-between;
+      border-bottom: 1px solid #f9f8ff;
+      &:last-child {
+        border-bottom: none;
+      }
       input {
         text-decoration: underline;
       }

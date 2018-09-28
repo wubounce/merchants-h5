@@ -293,7 +293,6 @@
     .device-detail {
       font-size: 0.43rem;
       color: rgba(51, 51, 51, 1);
-      border-top: rgb(229, 232, 235) solid 1px;
       li.device-detail-item {
         background: #fff;
         border-radius: 0.05rem;
