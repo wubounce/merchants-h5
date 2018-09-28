@@ -23,11 +23,26 @@ export const setPhone = (navTab) => localStorage.setItem(PhoneKey,JSON.stringify
 export const getPhone = () => JSON.parse(localStorage.getItem(PhoneKey));
 export const removePhone = () => localStorage.removeItem(PhoneKey);
 
+const UserNameKey = 'userName';
+export const setUserNameKey = (navTab) => localStorage.setItem(UserNameKey,JSON.stringify(navTab));
+export const getUserNameKey = () => JSON.parse(localStorage.getItem(UserNameKey));
+export const removeUserName = () => localStorage.removeItem(UserNameKey);
+
+const IsRememberKey = 'isRemember';
+export const setIsRemember = (navTab) => localStorage.setItem(IsRememberKey,JSON.stringify(navTab));
+export const getIsRemember  = () => JSON.parse(localStorage.getItem(IsRememberKey));
+export const removeIsRemember  = () => localStorage.removeItem(IsRememberKey);
+
 
 const MemberKey = 'member';
 export const setMember = (data) => sessionStorage.setItem(MemberKey,JSON.stringify(data));
 export const getMember = () => JSON.parse(sessionStorage.getItem(MemberKey));
 export const removeMember = () => sessionStorage.removeItem(MemberKey);
+
+const EmailKey = 'email';
+export const setEmail = (data) => localStorage.setItem(EmailKey,data);
+export const getEmail = () => localStorage.getItem(EmailKey);
+export const removeEmail = () => localStorage.removeItem(EmailKey);
 
 /**
  * 截流函数

@@ -1,13 +1,14 @@
 section {
   height:100%;
   .page-top {
-      height: 100%;
-      box-sizing: border-box;
+    padding-top: 1.44rem;
+    height: 100%;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
       .page-loadmore-wrapper {
         overflow: scroll;
         .list {
           width:100%;
-          height:4rem;
           background:rgba(255,255,255,1);
           margin-bottom:0.23rem;
           .top {
@@ -16,7 +17,8 @@ section {
             border-bottom: 1px solid #F8F8F8;
             background-color: #fff; 
             font-size: 16px;
-            line-height: 1.3rem;
+            height: 1.17rem;
+            line-height: 1.17rem;
             width: 90%;
             margin: auto;
             font-weight: 500; 
@@ -31,10 +33,9 @@ section {
           .bottom {
             width: 100%;
             border-radius:0.1rem;
-            //margin: 0.4rem auto;
+            padding:0.51rem 0;
             display: flex;
             justify-content: center;
-            height: 2.7rem;
             .kindof {
               width: 35%;
               text-align: center;
@@ -45,9 +46,15 @@ section {
                 }
               }
               .text {
-                margin-top: 0.73rem;
                 color: #999999;
                 font-size: 14px;
+                line-height: 0.53rem;
+                position: relative;
+                .order-action {
+                  position: absolute;
+                  top: 0.01rem;
+                  margin-left: 0.13rem;
+                }
               }
               .text-value { 
                 color:#1890FF;     
@@ -116,3 +123,44 @@ section {
     //   }
     // }
   }
+
+.search-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 999;
+}
+.sarch-wrap{
+  background: #ffffff;
+  padding: 0.27rem;
+  .search {
+    -webkit-box-shadow: 0px 0.053333rem 0.133333rem 0px rgba(186, 192, 210, 0.3);
+    box-shadow: 0px 0.053333rem 0.133333rem 0px rgba(186, 192, 210, 0.3);
+    border-radius: 0.133333rem;
+    font-size: 16px;
+    height: 1.17rem;
+    display: flex;
+    form {
+      display: inline-block;
+      width: 100%;
+    }
+    input {
+      width: 6.8rem;
+      font-size: 16px;
+      height:1.17rem;
+    }
+    .icon-IconSearch {
+      color: #999999;
+      padding-left: 0.4rem;
+      padding-right: 0.27rem;
+    }
+    .select-back {
+      line-height: 1.17rem;
+      padding-right: 0.27rem;
+      padding-left: 0.27rem;
+      color: #1890FF;
+      border-left:1px solid rgba(216,216,216,1);
+    }
+  }
+}

@@ -12,7 +12,6 @@
         </p>
       </div>
     </div>
-
     <div class="search-select" v-show="isSelectItem">
       <ul>
         <li v-for="(item,index) in searchList" :class="{selectback:index==now}" class="search-select-option search-select-list" @click="selectClick(index)"
@@ -38,10 +37,11 @@
             <span>类型</span>
             <span>{{item.machineTypeName}}</span>
           </p>
-          <p class="item-ft-right">
-            <span>收益</span>
+          <router-link tag="p" class="item-ft-right" :to="{ name: 'deviceMonthFlow', query:{allMoney:item.profit,machineId:item.machineId,machineName:item.machineName,}}">
+            <span>总收益</span>
             <span>{{item.profit | keepTwoNum}}</span>
-          </p>
+            <span class="iconfont icon-nextx"></span>
+          </router-link>
         </section>
         <div class="line"></div>
       </router-link>    
@@ -123,7 +123,7 @@ import {delay } from "@/utils/tool";
       async search(name) {
         let payload = {nameOrImei: name};
         let res = await listByNameOrlmeiFun(payload);
-        this.message = "未找到相关结果"
+        this.message = "未找到符合的结果"
         this.searchList = res;  
       },
       selectClick: function (index) {
@@ -265,6 +265,13 @@ import {delay } from "@/utils/tool";
       background: #fff;
       .noData {
         text-align: center;
+        font-size: 14px;
+        color: #999;
+        text-align: center;
+        background: #fff;
+        height: 100%;
+        line-height: 100%;
+        padding-top: 4rem;
       }
       li {
         color:rgba(51, 51, 51, 1);
@@ -291,7 +298,7 @@ import {delay } from "@/utils/tool";
         padding: .1rem 0;
         height: 1rem;
         line-height: 1rem;
-        border-bottom: 0.01rem solid rgba(223, 230, 255, 1);
+        border-bottom: 1px solid #f9f8ff;
         &:nth-child(3) {
           border: none;
         }
@@ -332,13 +339,17 @@ import {delay } from "@/utils/tool";
       }
       .item-ft {
         display: flex;
+        .icon-nextx {
+          float: right;
+          color: rgba(204, 204, 204, 1);
+         }
         p {
           flex: 1;
           &:nth-child(2) {
             flex: 1;
             text-align: center;
             justify-content: flex-end;
-            border-left: 0.01rem solid rgba(223, 230, 255, 1);
+            border-left: 1px solid #f9f8ff;
           }
           span {
             display: inline-block;
@@ -362,5 +373,4 @@ import {delay } from "@/utils/tool";
       background: #efeff4;
     }
   }
-  
 </style>

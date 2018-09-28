@@ -193,11 +193,15 @@
             let company = this.getUrlParam(object,"Company");
             let communicateType= this.getUrlParam(object,"CommunicateType");
             let ver = this.getUrlParam(object,"Ver")?this.getUrlParam(object,"Ver"):0;
-            this.fromdata.nqt = nqt;
-            this.fromdata.company = company;
-            this.fromdata.smCommunicateType = communicateType;
-            this.fromdata.ver = ver;
-
+            if(Number(communicateType) === Number(this.fromdata.communicateType)){
+              this.fromdata.nqt = nqt;
+              this.fromdata.company = company;
+              this.fromdata.smCommunicateType = communicateType;
+              this.fromdata.ver = ver;
+            }else {
+              this.$toast({message: "NQT与设备型号通信类型不符" });
+              return false;
+            }
           }else{
             this.fromdata.imei= res;
           } 
@@ -347,7 +351,12 @@
           } 
           if(item.functionPrice==='' || !reg1.test(Number(item.functionPrice))){
             this.$toast("原价填写格式错误，请输入非空正整数，最多2位小数");
-             flag2 = false;
+            flag2 = false;
+            break;
+          }
+          if(Number(item.functionPrice)> 99){
+            this.$toast("价格需为0-99");
+            flag2 = false;
             break;
           }
           if(Number(this.fromdata.communicateType)=== 0 && !reg.test(Number(item.functionCode))){
@@ -509,11 +518,12 @@
     z-index: 999;
     div {
       display: flex;
+      padding: 0 0.4rem;
       p {
         flex: 2.19;
         text-align: center;
         position: relative;
-        border-right: rgb(24, 144, 255) .03rem solid;
+        border-right: #E2F0FF .03rem solid;
         box-sizing: border-box;
         &:nth-child(1) {
           flex: 3.32;
@@ -540,9 +550,13 @@
     font-size: 0.37rem;
     color: #333333;
     background: #fff;
-    padding-top: 1.6rem;
+    padding: 1.6rem 0.4rem 0 0.4rem;
     div {
       display: flex; // justify-content: space-between;
+      border-bottom: 1px solid #f9f8ff;
+      &:last-child {
+        border-bottom: none;
+      }
       input {
         text-decoration: underline;
       }

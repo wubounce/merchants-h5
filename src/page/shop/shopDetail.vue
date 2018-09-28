@@ -3,7 +3,7 @@
     <div class="permissions" v-if="$store.getters.has('mer:shop:info')">暂无相关页面权限</div>
     <div v-else>
         <!-- 第一模块 -->
-        <p class="shop-item title"><span>累计收益</span><span>{{shopdetail.profit}} 元</span></p>
+        <p class="shop-item title"><span>累计收益</span><span>{{shopdetail.profit | tofixd}} 元</span></p>
 
         <!-- 第二模块 -->
         <p class="shop-item second-p"><span>店铺名称</span><span>{{shopdetail.shopName}}</span></p>
@@ -108,24 +108,6 @@ export default {
       this.lat = res.lat;
       //累计收益
       this.shopdetail.profit = res.profit;
-      if(this.shopdetail.profit) {
-        //将number类型的数据转化成string
-        this.shopdetail.profit = this.shopdetail.profit+'';
-        //判断是不是'5'
-        if(this.shopdetail.profit.split('.').length == 1) {
-          this.shopdetail.profit = this.shopdetail.profit + '.00';
-        }
-        else {
-          //判断是不是'5.0'
-          if(this.shopdetail.profit.split('.')[1].length ==1) {
-            this.shopdetail.profit = this.shopdetail.profit + '0';
-          }
-        }
-      }
-      else {
-        this.shopdetail.profit = '0.00';
-      }
-      
       //店铺类型
       this.shopdetail.shopType = res.shopTypeName;
       //店铺地址

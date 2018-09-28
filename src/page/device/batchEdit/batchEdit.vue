@@ -338,6 +338,10 @@
         box-sizing: border-box;
         display: flex;
         position: relative;
+        border-bottom: 1px solid #f9f8ff;
+        &:last-child {
+          border-bottom: none;
+        }
         .boxItem {
           width: 100%;
           .content {

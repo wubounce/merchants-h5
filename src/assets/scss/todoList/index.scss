@@ -8,17 +8,12 @@ section {
 		width:100%;
 		.title {
 			font-size: 16px;
-			font-weight: bold;
-			padding-top: 0.53rem;
-			padding-bottom: 0.53rem;
-			border: 1px solid #F8F8F8;
+			font-weight: 600;
+			line-height: 1.17rem;
+			border: 1px solid #f9f8ff;
 			background-color: #fff; 
 			color: #333333;
 			padding-left: 0.25rem;
-		}
-		.black {
-			height: 0.3rem;
-            background-color: #efeff4;
 		}
 	}
 	.noTodoList {
@@ -28,19 +23,20 @@ section {
     padding-top: 4rem;
 	}
 	.page-top {
-		padding-top: 1.6rem;
 	   height: 100%;
        box-sizing: border-box;
-		margin-top: 0.3rem;
 		.page-loadmore-wrapper {
 			overflow: scroll;
+			.todolist-wrap {
+				padding-top: 1.44rem;
+			}
 			.list {
 				background-color: #fff;
-				margin-bottom: 0.3rem;
+				margin-bottom: 0.27rem;
 				.time {
-					padding-top: 0.53rem;
-					padding-bottom: 0.53rem;
-					border-bottom: 1px solid #F8F8F8;
+					line-height: 0.67rem;
+					padding: 0.19rem 0;
+					border-bottom: 1px solid #f9f8ff;
 					span {
 						&:first-child {
 							font-size: 14px;
@@ -60,7 +56,7 @@ section {
 					}
 					div {
 						&:first-child {
-							border-right: 1px solid #DFE6FF;
+							border-right: 1px solid #f9f8ff;
 						}
 						&:last-child {
 							//margin-left: 1rem;
@@ -71,6 +67,9 @@ section {
 					display: flex;
 					.type {
 						width: 50%;
+					}
+					.mode {
+						text-align: center;
 					}
 				}
 			}

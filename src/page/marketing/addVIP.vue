@@ -11,8 +11,8 @@
         <div class="add-card-header"></div>
         <div class="add-card">
           <p>卡售价<span>元</span><input type="number" placeholder="请填写卡售价…" v-model="vipform.yearCardPrice"></p>
-          <p>VIP折扣<span>%</span><input type="number" placeholder="请填写折扣数…" v-model="vipform.yearCardDiscount"></p>
-          <p>{{yearLimitTypeCurrentTag.label}}<i class="iconfont icon-xiangxiajiantou" @click="yearLimitTypeVisble = true;"></i><span>次</span><input type="text" class="num"  v-model.number="vipform.yearCardLimitTime"></p>
+          <p>VIP折扣<span>%</span><input type="number" pattern="\d*" placeholder="请填写折扣数…" v-model="vipform.yearCardDiscount"></p>
+          <p>{{yearLimitTypeCurrentTag.label}}<i class="iconfont icon-xiangxiajiantou" @click="yearLimitTypeVisble = true;"></i><span>次</span><input type="number" pattern="\d*" class="num"  v-model.number="vipform.yearCardLimitTime"></p>
         </div>
         <div class="tips">
           <p>提示：</p>
@@ -28,8 +28,8 @@
         <div class="add-card-header"></div>
         <div class="add-card">
           <p>卡售价<span>元</span><input type="number" placeholder="请填写卡售价…" v-model="vipform.halfYearCardPrice"></p>
-          <p>VIP折扣<span>%</span><input type="number" placeholder="请填写折扣数…" v-model="vipform.halfYearCardDiscount"></p>
-          <p class="por-border">{{halfLimitTypeCurrentTag.label}}<i class="iconfont icon-xiangxiajiantou" @click="halfLimitTypeVisble = true;"></i><span>次</span><input type="text" class="num" v-model.number="vipform.halfYearCardLimitTime"></p>
+          <p>VIP折扣<span>%</span><input type="number" pattern="\d*" placeholder="请填写折扣数…" v-model="vipform.halfYearCardDiscount"></p>
+          <p class="por-border">{{halfLimitTypeCurrentTag.label}}<i class="iconfont icon-xiangxiajiantou" @click="halfLimitTypeVisble = true;"></i><span>次</span><input type="number" pattern="\d*" class="num" v-model.number="vipform.halfYearCardLimitTime"></p>
         </div>
         <div class="crrow"></div>
       </div>
@@ -40,8 +40,8 @@
         <div class="add-card-header"></div>
         <div class="add-card">
           <p>卡售价<span>元</span><input type="number" placeholder="请填写卡售价…" v-model="vipform.seasonCardPrice"></p>
-          <p>VIP折扣<span>%</span><input type="number" placeholder="请填写折扣数…" v-model="vipform.seasonCardDiscount"></p>
-          <p class="por-border">{{seasonLimitTypeCurrentTag.label}}<i class="iconfont icon-xiangxiajiantou" @click="seasonLimitTypeVisble = true;"></i><span>次</span><input type="text" v-model.number="vipform.seasonCardLimitTime" class="num"></p>
+          <p>VIP折扣<span>%</span><input type="number" pattern="\d*" placeholder="请填写折扣数…" v-model="vipform.seasonCardDiscount"></p>
+          <p class="por-border">{{seasonLimitTypeCurrentTag.label}}<i class="iconfont icon-xiangxiajiantou" @click="seasonLimitTypeVisble = true;"></i><span>次</span><input type="number" pattern="\d*" v-model.number="vipform.seasonCardLimitTime" class="num"></p>
         </div>
         <div class="crrow"></div>
       </div>

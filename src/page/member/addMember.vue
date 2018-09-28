@@ -3,7 +3,7 @@
   <div class="add-form">
     <div class="input-group">
       <div class="form-title"><span>手机号码</span></div>
-      <div class="form-input"><input type="number" v-model="phone" @blur="validatPhone" @input="disabledBtn" placeholder="请输入手机号"></div>
+      <div class="form-input"><input type="number" pattern="\d*" v-model="phone" @blur="validatPhone" @input="disabledBtn" placeholder="请输入手机号"></div>
     </div>
     <div class="input-group">
       <div class="form-title"><span>姓名</span></div>
