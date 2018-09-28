@@ -7,7 +7,8 @@ const smscodeApi = 'operator/smsCode';                                        //
 const updatePwdApi = 'operator/updatePwd';                                    // 个人中心 修改密码  method 'post'
 const validateCodeApi = 'operator/validateCode';                              // 忘记密码模块 验证验证码  method 'post'
 const forgetPwdApi = 'operator/changePwd';                                    // 忘记密码模块 修改密码  method 'post'
-const bindPhoneApi = 'operator/bindPhone';                                     // 绑定手机  method 'post'
+const bindPhoneApi = 'operator/bindPhone';                                    // 绑定手机  method 'post'
+const checkRegInfoApi = 'operator/checkRegInfo';                              // 验证注册短信验证码 method 'post'
 
 // 忘记密码模块发送模版消息
 export const smscodeFun = (payload) => fetch.post(smscodeApi, payload);
@@ -23,3 +24,6 @@ export const forgetPwdFun = (payload) => fetch.post(forgetPwdApi, payload);
 
 //  绑定手机
 export const bindPhoneFun = (payload) => fetch.post(bindPhoneApi, payload);
+
+//  验证注册短信验证码
+export const checkRegInfoFun = (payload) => fetch.post(checkRegInfoApi, payload);

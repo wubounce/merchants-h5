@@ -22,6 +22,9 @@
       <div  class="order"><i style="background:#FACC14"></i>总订单数量<span class="totalOrder">({{totalCount}})</span></div>
     </div>
   </div>
+  <div :class="['export', {'export-disable':listdata.length<=0}]">
+     <span @click="exportExls"><i class="iconfont icon-daochu"></i>导出</span>
+  </div>
   <div class="tabledata">
     <div class="tableearn">
        <div class="listcon table-header">
@@ -29,14 +32,14 @@
         <span class="report-table-order">订单数量</span>
         <span class="report-table-order">订单金额</span>
        </div>
-      <div class="listcon tableearn-list" v-for="(item,index) in  lsitdata" :key="index" @click="goDetail(item.date)">
+      <div class="listcon tableearn-list" v-for="(item,index) in  listdata" :key="index" @click="goDetail(item.date)">
          <div class="detail">
           <span class="listtime report-table-date">{{item.date}}</span>
           <span  class="report-table-order">{{item.count}}</span>
           <span  class="report-table-order">{{item.money | tofixd}}</span>
         </div>
       </div>
-      <div class="nodata" v-if="lsitdata.length <= 0">暂无数据</div>
+      <div class="nodata" v-if="listdata.length <= 0">暂无数据</div>
     </div>
   </div>
 
@@ -66,9 +69,12 @@ import selectpickr from '@/components/selectPicker';
 import { dayReportFun, shopListFun } from '@/service/report';
 import { calMax, calMin } from '@/utils/tool';
 import calendar from '@/components/vue-calendar/calendar.vue';
+import { MessageBox } from 'mint-ui';
+import { setEmail, getEmail } from '@/utils/tool';
+import { validatEmail } from '@/utils/validate';
 
 export default {
-  name:'report-eaning',
+  name:'report-eaning', 
   props: {
     className: {
       type: String,
@@ -118,7 +124,7 @@ export default {
       dateCurrentTag:null,
       dateLevel:null,
 
-      lsitdata:[],
+      listdata:[],
       popupVisible:false,
       currentTags:null,
       reportDate:[],
@@ -193,8 +199,8 @@ export default {
       this.moneyMax = calMax(this.reportMoney)>0 ? calMax(this.reportMoney) : 1;//金额Y轴最大值
       this.orderMin = calMin(this.reportCount);//订单Y轴最大值
       this.moneyMin = calMin(this.reportMoney);//金额Y轴最大值
-      this.lsitdata = res.list;
-      this.lsitdata.sort(this.ortId); //表格时间倒序
+      this.listdata = res.list;
+      this.listdata.sort(this.ortId); //表格时间倒序
       this.totalMoney = res.totalMoney;
       this.totalCount = res.totalCount;
       this.chart.setOption(this.chartOption);
@@ -246,6 +252,34 @@ export default {
         this.$router.push({name:'reportShopDetail', query:{date:date,type:1,dateLevel:this.dateLevel}});
       }
       
+    },
+    exportExls(){
+      if(this.listdata.length<=0) return false;
+      MessageBox.prompt(' ', `确定导出${this.startDate.join('-')}~${this.endDate.join('-')}流水明细？`, {
+            inputPlaceholder:'请填写导出表格的邮箱地址',
+            inputValue:getEmail()?getEmail():null,
+          inputValidator: (val) => {
+            if (val === null) {
+              return true;//初始化的值为null，不做处理的话，刚打开MessageBox就会校验出错，影响用户体验
+            }
+            return validatEmail(val);
+          }, inputErrorMessage: '请输入正确的邮箱地址'
+        }).then(async (val) => {
+          let shopId = this.currentTags?this.currentTags.shopId:null;
+          let payload = Object.assign({},{
+            startDate:this.startDate.join('-'),
+            endDate:this.endDate.join('-'),
+            type:1,
+            shopId:shopId,
+            dateLevel:this.dateLevel,
+            excel:true,
+            email:val.value
+          });
+          await dayReportFun(payload);
+          this.$toast({message: '操作成功',iconClass: 'mint-toast-icon mintui mintui-success'});
+        }, () => {
+          
+        });
     }
   },
   computed:{
@@ -433,7 +467,7 @@ export default {
   },
   components:{
     selectpickr,
-    calendar
+    calendar,
   }
 };
 </script>

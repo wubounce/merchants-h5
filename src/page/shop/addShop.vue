@@ -261,16 +261,16 @@ export default {
           });
       }
       //校验重名
-      for(let i=0; i<this.arrName.length; i++) {
-        if(e.target.value == this.arrName[i]) {
-          e.target.value = '';
-          this.$toast({
-            message: '该店铺名称已存在，请您换一个店铺名称输入',
-            position: 'top',
-            duration: 3000
-          });
-        }
-      }
+      // for(let i=0; i<this.arrName.length; i++) {
+      //   if(e.target.value == this.arrName[i]) {
+      //     e.target.value = '';
+      //     this.$toast({
+      //       message: '该店铺名称已存在，请您换一个店铺名称输入',
+      //       position: 'top',
+      //       duration: 3000
+      //     });
+      //   }
+      // }
     },
     //设置预约相关
     editTime(i) {
@@ -534,15 +534,15 @@ export default {
           });
       }
     },
-    async getShoplist() {
-      let res = await manageListFun();
-      this.arrName = res.items.map((i) => {
-        return i.shopName;
-      });
-    }
+    // async getShoplist() {
+    //   let res = await manageListFun();
+    //   this.arrName = res.items.map((i) => {
+    //     return i.shopName;
+    //   });
+    // }
   },
   created() {
-    this.getShoplist();
+    //this.getShoplist();
   },
   // 背景滚动
   watch: {

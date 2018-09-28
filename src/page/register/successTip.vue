@@ -2,8 +2,7 @@
   <section>
     <div class="content">
       <p><span class="iconfont icon-chenggong"></span></p>
-      <p class="successMsg">提交成功</p>
-      <P class="tipsMsg">预计1个工作日内反馈申请结果<br/>请留意手机短信</p>
+      <p class="successMsg">注册成功</p>
       <router-link to="/login">
         <Button btn-type="small" btn-color="spe" class="ft-btn active" @click.native="successTo">完成</Button>
       </router-link>

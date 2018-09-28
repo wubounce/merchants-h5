@@ -2,19 +2,19 @@
   <section class="referee">
     <div ref="refereeForm" :model="referee" class="referee-form">
       <div class="form-group">
+        <input type="text" placeholder="请输入姓名" v-model="referee.name" required="required">
+      </div>
+      <div class="form-group">
         <p class="area" @click='open()'>
           <span class="chooseArea" :class="{'black':chooseArea !== '选择所在区域' }">{{chooseArea}}</span>
           <span class="forward iconfont icon-nextx"></span>
         </p>      
       </div>
       <div class="form-group">
-        <input type="text" placeholder="推荐人姓名（选填）" v-model="referee.name" required="required">
-      </div>
-      <div class="form-group">
-        <input type="text" placeholder="推荐人手机号码（选填）" v-model="referee.phone" required="required">
+        <input type="text" placeholder="邀请码" v-model="referee.code" required="required">
       </div>
       <div class="clickBtn">
-        <mt-button type="primary" class="btn-blue" @click.prevent="goToNext" :disabled="chooseArea === '选择所在区域'">申请注册</mt-button>
+        <mt-button type="primary" class="btn-blue" @click.prevent="goToNext" :disabled="!(chooseArea!== '选择所在区域' && referee.name && referee.code) ">申请注册</mt-button>
       </div>
       <router-link to="/userAgreement">
         <p class="agreeRule">注册表示已同意<span class="rule">《用户协议》</span></p>
@@ -33,14 +33,14 @@
 
 <script>
   import place from '@/components/Area/Area';
-  import { validatPhone , validatName } from '@/utils/validate';
+  import { validatInviteCode, validatName } from '@/utils/validate';
   import { areaListFun } from '@/service/shop';
   import { saveRegisterInfoFun } from '@/service/device';
   export default{
     data() {
       return {
         referee: {
-          phone: '',
+          code: '',
           name: '',
         },
         chooseArea: '选择所在区域',
@@ -165,29 +165,28 @@
       },
 
       async goToNext() {
+        if(this.referee.name && !validatName(this.referee.name)) {
+          this.$toast({message: "用户名2-20个字符，支持中文和英文" });
+          return false;
+        }
         if(this.chooseArea === '选择所在区域') {
           this.$toast({message: "请选择您所在的区域地址" });
           return false;
         }
-        if(this.referee.phone && !validatPhone(this.referee.phone)) {
-          this.$toast({message: "请输入正确的手机号码" });
-          return false;
-        }
-        if(this.referee.name && !validatName(this.referee.name)) {
-          this.$toast({message: "推荐人用户名2-20个字符，支持中文和英文" });
+        if(this.referee.code && !validatInviteCode(this.referee.code)) {
+          this.$toast({message: "请输入正确的邀请码" });
           return false;
         }
         let query = this.$route.query;
         let payload = {
           phone: query.phone,
-          name: query.name,
+          name: this.referee.name,
           password: query.password,
           address: this.chooseArea,
           provinceId: this.provinceId,
           cityId: this.cityId,
           districtId: this.districtId,
-          refereeName:  this.referee.name,
-          refereePhone: this.referee.phone
+          invitationCode: this.referee.code,
         };
         let res = await saveRegisterInfoFun(payload);
         this.$router.push({name:'successTip'});

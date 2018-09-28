@@ -68,10 +68,11 @@
                     <span>类型</span>
                     <span>{{item.machineTypeName}}</span>
                   </p>
-                  <p class="item-ft-right">
-                    <span>收益</span>
+                  <router-link tag="p" class="item-ft-right" :to="{ name: 'deviceMonthFlow', query:{allMoney:item.profit,machineId:item.machineId,machineName:item.machineName,}}">
+                    <span>总收益</span>
                     <span>{{item.profit | keepTwoNum}}</span>
-                  </p>
+                    <span class="iconfont icon-nextx"></span>
+                  </router-link>
                 </section>
               </router-link>
             </div>
@@ -320,6 +321,13 @@
       offlineTipClick() {
         this.offlineTip = false;
         this.hiddenPageHeight = 3.5;
+      },
+      revenueBill(index) { //设备收益
+        console.log(index);
+        this.$router.push({
+          name: "deviceSearch",
+          query: ({imei:nqt})
+        }); 
       },
       wxScan() { //微信扫码
         Web.scanQRCode(res => {
@@ -591,7 +599,7 @@
           padding: .1rem 0;
           height: 1rem;
           line-height: 1rem;
-          border-bottom: 0.01rem solid rgba(223, 230, 255, 1);
+          border-bottom: 1px solid #f9f8ff;
           &:nth-child(3) {
             border: none;
           }
@@ -632,13 +640,17 @@
         }
         .item-ft {
           display: flex;
+          .icon-nextx {
+            float: right;
+            color: rgba(204, 204, 204, 1);
+          }
           p {
             flex: 1;
             &:nth-child(2) {
               flex: 1;
               text-align: center;
               justify-content: flex-end;
-              border-left: 0.01rem solid rgba(223, 230, 255, 1);
+              border-left: 1px solid #f9f8ff;
             }
             span {
               display: inline-block;

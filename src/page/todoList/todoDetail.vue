@@ -71,9 +71,8 @@ import moment from 'moment';
             id: this.$route.query.id
           };
           let res = await batchStartNowFun(obj);
-         
           this.$toast({
-              message: res.msg,
+              message: '全部启动成功',
               position: "middle",
               duration: 3000
             });
