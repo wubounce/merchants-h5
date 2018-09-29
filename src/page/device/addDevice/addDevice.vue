@@ -267,9 +267,14 @@
         this.parentType = data;
       },
       machineselectpickerFun(data){ //获取二级类型
+       if(this.fromdata.smCommunicateType && Number(this.fromdata.smCommunicateType) !== Number(data.communicateType)){
+          this.$toast({message: "NQT与设备型号通信类型不符" });
+          return false;
+        } else {
         if(this.fromdata.secondType.name !== data.name){
           this.fromdata.secondType.id = data.id;
           this.fromdata.secondType.name = data.name;
+          this.fromdata.secondType.communicateType = data.communicateType;
           this.functionSetList = [];
           this.keepFunctionArr = [];
           this.fromdata.functionType.name = "未设置";
@@ -277,6 +282,8 @@
         }else {
           this.fromdata.secondType.id = data.id;
           this.fromdata.secondType.name = data.name;
+          this.fromdata.secondType.communicateType = data.communicateType;
+        }
         }
       },
       machineselectpickertatusFun(data){
@@ -285,13 +292,13 @@
       selectOftenClick: function (index,name) { //常用选中
         this.selectIndex2 = -1;
         this.selectIndex = index;
-        this.fromdata.secondType.id = this.secondOnTypeList[index].id;
-        this.fromdata.secondType.communicateType = this.secondOnTypeList[index].communicateType;
-        this.subTypeName = this.secondOnTypeList[index].name;
-        if(this.fromdata.smCommunicateType && Number(this.fromdata.smCommunicateType) !== Number(this.fromdata.secondType.communicateType)){
+        if(this.fromdata.smCommunicateType && Number(this.fromdata.smCommunicateType) !== Number(this.secondOnTypeList[index].communicateType)){
           this.$toast({message: "NQT与设备型号通信类型不符" });
           return false;
         } else {
+        this.fromdata.secondType.id = this.secondOnTypeList[index].id;
+        this.fromdata.secondType.communicateType = this.secondOnTypeList[index].communicateType;
+        this.subTypeName = this.secondOnTypeList[index].name;
         this.functionSetList = [];
         this.keepFunctionArr = [];
         this.fromdata.functionType.name = "未设置";
@@ -300,13 +307,13 @@
       selectNoOftenClick: function (index,name) { //不常用选中
         this.selectIndex = -1;
         this.selectIndex2 = index;
-        this.fromdata.secondType.id = this.secondOffTypeList[index].id;
-        this.subTypeName = this.secondOffTypeList[index].name;
-        this.fromdata.secondType.communicateType = this.secondOnTypeList[index].communicateType;
-         if(this.fromdata.smCommunicateType && Number(this.fromdata.smCommunicateType) !== Number(this.fromdata.secondType.communicateType)){
+        if(this.fromdata.smCommunicateType && Number(this.fromdata.smCommunicateType) !== Number(this.secondOffTypeList[index].communicateType)){
           this.$toast({message: "NQT与设备型号通信类型不符" });
           return false;
         } else {
+        this.fromdata.secondType.id = this.secondOffTypeList[index].id;
+        this.subTypeName = this.secondOffTypeList[index].name;
+        this.fromdata.secondType.communicateType = this.secondOffTypeList[index].communicateType;
         this.functionSetList = [];
         this.keepFunctionArr = [];
         this.fromdata.functionType.name = "未设置";
@@ -384,13 +391,13 @@
               this.functionListTitle2 = this.functionListTitle;
               this.isShow2 = true;
             }
-            if(this.fromdata.secondType.communicateType && Number(smCommunicateType) !== Number(this.fromdata.secondType.communicateType)){
+            if(this.fromdata.secondType.communicateType !=="" && (Number(smCommunicateType) !== Number(this.fromdata.secondType.communicateType))){
               this.$toast({message: "NQT与设备型号通信类型不符" });
               return false;
             }else {
               this.fromdata.nqt = nqt;
               this.fromdata.company = company;
-              this.fromdata.smCommunicateType = communicateType;
+              this.fromdata.smCommunicateType = smCommunicateType;
               this.fromdata.ver = ver;
             }
           }else{
@@ -450,8 +457,7 @@
           let arr = [].concat(JSON.parse(JSON.stringify(this.keepFunctionArr))); 
           this.functionSetList = arr;
           this.setModelShow= true;
-          this.modelShow = false;
-          this.title = "功能列表";       
+          this.modelShow = false;      
         }else{         
           if(this.functionSetList.length === 0){
             let payload = {subTypeId: this.fromdata.secondType.id,shopId: this.fromdata.shopType.id} ;     
@@ -459,18 +465,15 @@
             this.fromdata.communicateType = res.communicateType;
             this.functionTempletType = res.functionTempletType; 
             this.functionSetList = res.list;
+            this.setModelShow= true;
+            this.modelShow = false; 
             this.functionSetList.forEach(item=>{
               item.ifOpen=item.ifOpen === 0?(!item.ifOpen) : (!!item.ifOpen);
             });
-            this.keepFunctionArr= [].concat(JSON.parse(JSON.stringify(res.list)));
-            this.setModelShow= true;
-            this.modelShow = false;
-            this.title = "功能列表";
-                
+            this.keepFunctionArr= [].concat(JSON.parse(JSON.stringify(res.list)));           
           }else {      
             this.setModelShow= true;
             this.modelShow = false;
-            this.title = "功能列表";
           }
         }
       },
@@ -538,7 +541,7 @@
             }, 2000);
           return false;
         }
-        if(Number(this.fromdata.communicateType)!== Number(this.fromdata.smCommunicateType)){
+        if(Number(this.fromdata.secondType.communicateType)!== Number(this.fromdata.smCommunicateType)){
           let instance = this.$toast({
             message: '您扫描的NQT和选择的设备型号不一致'
           });

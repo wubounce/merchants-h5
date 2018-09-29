@@ -9,8 +9,8 @@
     <form ref="loginForm" :model="form">
       <div class="form-group input" v-if="loginPwd">
         <div class="userName">
-          <label class="title">账号</label><input type="text" v-model.trim="form.userName" v-on:input="userinputFunc" placeholder="请输入用户名">
-          <span class="open-eyes eyes iconfont icon-guanbi"  v-show="isuser" @click="form.userName='';isuser=false;disabled=true;form.password='';searchPhone=false"></span>
+          <label class="title">账号</label><input type="text" v-model.trim="form.userName" v-on:input="userinputFunc" @focus="isuser=true" placeholder="请输入用户名">
+          <span class="open-eyes eyes iconfont icon-guanbi"  v-show="isuser"  @click="form.userName='';isuser=false;disabled=true;form.password='';searchPhone=false"></span>
         </div>
         <div class="passWord">
           <label class="title">密码</label><input type="text" v-model.trim="form.password" v-if="typepwd" v-on:input="pwdinputFunc" placeholder="请输入密码" autocomplete="off">
@@ -265,7 +265,6 @@ export default {
 
       },
       userinputFunc(){
-        this.isuser = true;
         this.form.userName ? this.searchPhone = true:this.searchPhone = false;
         this.searchPhoneList = this.phoneArray.filter(item => {
           item.userName.startsWith(this.form.userName);
