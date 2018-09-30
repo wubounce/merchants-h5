@@ -65,7 +65,7 @@
 <script>
 import store from '@/store';
 import { mapState, mapActions, mapMutations } from 'vuex';
-import { getToken, removeToken, setMenu, removeMenu, removeNavTabIndex,setNavTabIndex, getNavTabIndex, setPhone, getPhone, getIsRemember, setIsRemember, getUserNameKey, setUserNameKey, removeMember } from '@/utils/tool';
+import { getToken, removeToken, setMenu, removeMenu, removeNavTabIndex,setNavTabIndex, getNavTabIndex, setPhoneCode, getPhoneCode, getIsRemember, setIsRemember, getUserNameKey, setUserNameKey, removeMember } from '@/utils/tool';
 import { login, codeLogin} from '@/service/login';
 import JsEncrypt from 'jsencrypt';
 import { menuSelectFun } from '@/service/member';
@@ -116,7 +116,7 @@ export default {
         disabled:true,
         disabledCode:true,
         phoneArray: getUserNameKey()? getUserNameKey():[],
-        iphoneArr: getPhone()? getPhone():[],
+        iphoneArr: getPhoneCode()? getPhoneCode():[],
         searchPhone:false,
         searchPhoneList:[],
       };
@@ -130,7 +130,7 @@ export default {
       this.form.userName = getUserNameKey() ? getUserNameKey()[0].userName:''; //最新一个用户名
       this.form.password = getUserNameKey() ? getUserNameKey()[0].password:'';
       this.isCheckCLass = getIsRemember() ? getIsRemember(): 'icon-weixuan';
-      this.form.phone = getPhone() ? getPhone()[0]:'';
+      this.form.phone = getPhoneCode() ? getPhoneCode()[0]:'';
     },
      computed: {
         ...mapState({
@@ -202,7 +202,7 @@ export default {
             this.login(res.token);
             this.iphoneArr = [this.form.phone,...this.iphoneArr];
             this.iphoneArr = Array.from(new Set([...this.iphoneArr]));//去重
-            setPhone(this.iphoneArr); //保存登录过的手机号
+            setPhoneCode(this.iphoneArr); //保存登录过的手机号
             if(res.code === 8002){
               this.$router.push({name:'bindPhone'});     
             }else {
