@@ -80,8 +80,8 @@
 
      <section class="listaction" v-cloak v-if="detail.orderStatus === 2"> 
       <mt-button @click="orderRefund(detail.orderNo,detail.payPrice)" v-has="'mer:order:refund,mer:order:info'" :disabled="refundDisabled">退款</mt-button>
-      <mt-button @click="machineBoot(detail.id)" v-has="'mer:order:start,mer:order:info'" v-if="detail.isESource === 0&&detail.isESource !== null">启动</mt-button>
-      <mt-button @click="machineReset(detail.orderNo,detail.machineId)" v-has="'mer:order:reset,mer:order:info'" v-if="detail.isESource === 0&&detail.isESource !== null">复位</mt-button>
+      <mt-button @click="machineBoot(detail.id)" v-has="'mer:order:start,mer:order:info'" v-if="detail.isESource === 0 || detail.isESource === null">启动</mt-button>
+      <mt-button @click="machineReset(detail.orderNo,detail.machineId)" v-has="'mer:order:reset,mer:order:info'" v-if="detail.isESource === 0 || detail.isESource === null">复位</mt-button>
     </section>
   </div>
 </div>
