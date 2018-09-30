@@ -261,7 +261,7 @@ export default {
             inputValue:getEmail()?getEmail():null,
           inputValidator: (val) => {
             if (val === null) {
-              return true;//初始化的值为null，不做处理的话，刚打开MessageBox就会校验出错，影响用户体验
+              return false;//初始化的值为null，不做处理的话，刚打开MessageBox就会校验出错，影响用户体验
             }
             return validatEmail(val);
           }, inputErrorMessage: '请输入正确的邮箱地址'
