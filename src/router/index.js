@@ -179,46 +179,46 @@ export default new Router({
       path: '/batchStart',
       name: 'batchStart',
       component: () => import ('@/page/device/batchStart/batchStart'),
-      meta: {title: '批量启动-1'} //1-选择店铺
+      meta: {title: '批量启动'} //1-选择店铺
     },
 
     {
       path: '/selectFirstype',
       name: 'selectFirstype',
       component: () => import ('@/page/device/batchStart/selectFirstype'),
-      meta: {title: '批量启动-2'} //2-选择设备
+      meta: {title: '批量启动'} //2-选择设备
     },
     {
       path: '/selectFunction',
       name: 'selectFunction',
       component: () => import ('@/page/device/batchStart/selectFunction'),
-      meta: {title: '批量启动-3'} //3-选择功能
+      meta: {title: '批量启动'} //3-选择功能
     },
 
     {
       path: '/batchEdit',
       name: 'batchEdit',
       component: () => import ('@/page/device/batchEdit/batchEdit'),
-      meta: {title: '批量编辑-1'} //1-选择店铺
+      meta: {title: '批量编辑'} //1-选择店铺
     },
 
     {
       path: '/selectFirstypeEdit',
       name: 'selectFirstypeEdit',
       component: () => import ('@/page/device/batchEdit/selectFirstype'),
-      meta: {title: '批量编辑-2'} //2-选择设备
+      meta: {title: '批量编辑'} //2-选择设备
     },
     {
       path: '/selectSecondtypeEdit',
       name: 'selectSecondtypeEdit',
       component: () => import ('@/page/device/batchEdit/selectSecondtype'),
-      meta: {title: '批量编辑-3'} //3-选择功能
+      meta: {title: '批量编辑'} //3-选择功能
     },
     {
       path: '/selectFunctionEdit',
       name: 'selectFunctionEdit',
       component: () => import ('@/page/device/batchEdit/selectFunction'),
-      meta: {title: '批量编辑-4'} //4-设置功能列表
+      meta: {title: '批量编辑'} //4-设置功能列表
     },
 
     {
