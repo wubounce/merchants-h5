@@ -647,16 +647,13 @@
           p {
             flex: 1;
             &:nth-child(2) {
-              flex: 1;
+              flex: 1.5;
               text-align: center;
               justify-content: flex-end;
               border-left: 1px solid #f9f8ff;
             }
             span {
               display: inline-block;
-              &:nth-child(1) {
-                width: 1.125rem;
-            }
             }
 
           }
@@ -664,6 +661,7 @@
             &:nth-child(2) {
               color: #1890FF;
               font-size: 0.43rem;
+              margin-left: 0.15rem;
             }
           }
         }
