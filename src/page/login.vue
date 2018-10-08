@@ -66,10 +66,9 @@
 import store from '@/store';
 import { mapState, mapActions, mapMutations } from 'vuex';
 import { getToken, removeToken, setMenu, removeMenu, removeNavTabIndex,setNavTabIndex, getNavTabIndex, setPhoneCode, getPhoneCode, getIsRemember, setIsRemember, getUserNameKey, setUserNameKey, removeMember } from '@/utils/tool';
-import { login, codeLogin} from '@/service/login';
+import { login, codeLogin, sendLoginCodeFun} from '@/service/login';
 import JsEncrypt from 'jsencrypt';
 import { menuSelectFun } from '@/service/member';
-import { smscodeFun} from '@/service/resetPwd';
 import { validatPhone, validatMessageCode} from '@/utils/validate';
 export default {
     name: 'page-login',
@@ -160,7 +159,7 @@ export default {
       },      
       async sendcode() {
         if (this.validatePhone()) {
-          let res = await smscodeFun({phone:this.form.phone,mark:true});
+          let res = await sendLoginCodeFun({phone:this.form.phone});
               this.time = 60;
               this.btn = false;
               this.countdown();
