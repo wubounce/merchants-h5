@@ -14,7 +14,7 @@
         </div>
         <p class="black"></p>
         <div class="table-header">
-          <span class="report-table-date">时间</span>
+          <span class="report-table-date">日期</span>
           <span class="report-table-money">订单金额</span>
         </div>
       </div>

@@ -23,6 +23,11 @@ export const setPhone = (navTab) => localStorage.setItem(PhoneKey,JSON.stringify
 export const getPhone = () => JSON.parse(localStorage.getItem(PhoneKey));
 export const removePhone = () => localStorage.removeItem(PhoneKey);
 
+const PhoneCodeKey = 'phoneCode';
+export const setPhoneCode = (navTab) => localStorage.setItem(PhoneCodeKey,JSON.stringify(navTab));
+export const getPhoneCode = () => JSON.parse(localStorage.getItem(PhoneCodeKey));
+export const removePhoneCode = () => localStorage.removeItem(PhoneCodeKey);
+
 const UserNameKey = 'userName';
 export const setUserNameKey = (navTab) => localStorage.setItem(UserNameKey,JSON.stringify(navTab));
 export const getUserNameKey = () => JSON.parse(localStorage.getItem(UserNameKey));
