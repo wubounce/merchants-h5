@@ -52,9 +52,9 @@
       <section class="fun-item-bd funlist">
         <div v-for="(item,index) in functionList" :key="index">
           <span class="fun-list-item">{{item.functionName}}</span>
-          <input type="number" class="fun-list-item" v-model="item.needMinutes"  v-if="fromdata.secondType.name !=='通用脉冲充电桩' " />
-          <input type="number" class="fun-list-item" v-model="item.functionPrice"/>
-          <input type="number" @keypress="userinputFunc" class="fun-list-item" v-model="item.functionCode" v-if="Number(fromdata.communicateType) === 0"/>
+          <input type="text" pattern="\d*" @keypress="userinputFunc" class="fun-list-item" v-model="item.needMinutes"  v-if="fromdata.secondType.name !=='通用脉冲充电桩' " />
+          <input type="text" class="fun-list-item" v-model="item.functionPrice"/>
+          <input type="text" @keypress="userinputFunc" pattern="\d*" class="fun-list-item" v-model="item.functionCode" v-if="Number(fromdata.communicateType) === 0"/>
           <p class="fun-list-item">
             <mt-switch v-model="item.ifOpen"></mt-switch>
           </p>

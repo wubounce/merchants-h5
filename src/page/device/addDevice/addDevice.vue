@@ -59,9 +59,9 @@
     <section class="fun-item-bd funlist" style="-webkit-overflow-scrolling:touch;overflow-y:scroll;">
       <div v-for="(item,index) in functionSetList" :key="index">
         <span class="fun-list-item">{{item.functionName}}</span>
-        <input type="number" @keypress="userinputFunc" class="fun-list-item" v-model="item.needMinutes"  v-if="fromdata.secondType.name !== '通用脉冲充电桩'" min=0/>
-        <input type="number" class="fun-list-item" v-model="item.functionPrice"  min=0/>
-        <input type="number" @keypress="userinputFunc" class="fun-list-item" v-model="item.functionCode" v-if="Number(fromdata.communicateType) === 0"  min=0/>
+        <input type="text" pattern="\d*" @keypress="userinputFunc" class="fun-list-item" v-model="item.needMinutes"  v-if="fromdata.secondType.name !== '通用脉冲充电桩'" min=0/>
+        <input type="text" class="fun-list-item" v-model="item.functionPrice"  min=0/>
+        <input type="text" pattern="\d*" @keypress="userinputFunc" class="fun-list-item" v-model="item.functionCode" v-if="Number(fromdata.communicateType) === 0"  min=0/>
         <p class="fun-list-item">
           <mt-switch v-model="item.ifOpen"></mt-switch>
         </p>
@@ -232,14 +232,7 @@
       };
     },
     methods: {
-       userinputFunc() {  //只能输入数字
-        var keyCode = event.keyCode; 
-        if (keyCode >= 48 && keyCode <= 57) { 
-          event.returnValue = true; 
-        }else { 
-          event.returnValue = false; 
-        }
-      },
+      
       machineselectpickerShop(data){ //获取店铺
         if(this.fromdata.shopType.name !== data.shopName) {
           this.fromdata.shopType.id = data.shopId;
