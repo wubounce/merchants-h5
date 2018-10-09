@@ -8,7 +8,6 @@
             <form action="" target="frameFile">
               <span class="iconfont icon-IconSearch"></span><input type="text" @click="searchMember"  placeholder="请输入人员姓名/账号" class="serch">
               <iframe name='frameFile' style="display: none;"></iframe>
-              <span class="select-back" @click="searchMember">搜索</span>
             </form>
         </div>
       </section>
