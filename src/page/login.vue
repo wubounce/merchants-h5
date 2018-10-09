@@ -423,9 +423,8 @@ export default {
   text-align: center;
   font-size:12px;
   color:#999;
-  position: absolute;
-  width: 100%;
-  bottom: 0.4rem;
+  margin-top: 2.0rem;
+  margin-bottom: 0.53rem;
   .between {
     margin: 0 0.32rem;
   }
