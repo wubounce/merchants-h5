@@ -21,9 +21,9 @@
     <section class="fun-item-bd funlist">
       <div v-for="(item,index) in funTypeList" :key="index">
         <span class="fun-list-item">{{item.functionName}}</span>
-        <input type="number" pattern="\d*"  class="fun-list-item" v-model="item.needMinutes"  min=0/>
+        <input type="number" @keypress="userinputFunc"  class="fun-list-item" v-model="item.needMinutes"  min=0/>
         <input type="number" class="fun-list-item" v-model="item.functionPrice"  min=0/>
-        <input type="number" pattern="\d*"  class="fun-list-item" v-model="item.functionCode" v-if="isShow2"  min=0/>
+        <input type="number" @keypress="userinputFunc" class="fun-list-item" v-model="item.functionCode" v-if="isShow2"  min=0/>
         <p class="fun-list-item">
           <mt-switch v-model="item.ifOpen"></mt-switch>
         </p>
@@ -91,6 +91,14 @@ export default {
       };
     },
     methods: {
+       userinputFunc() {  //只能输入数字
+        var keyCode = event.keyCode; 
+        if (keyCode >= 48 && keyCode <= 57) { 
+          event.returnValue = true; 
+        }else { 
+          event.returnValue = false; 
+        }
+      },
       checkData(val,index,name,flag) {
         let reg = /^\+?[1-9][0-9]*$/;  //验证非0整数
         let reg1 = /^[0-9]+([.]{1}[0-9]{1,2})?$/;  //验证非0正整数和带一位小数字非0正整数
@@ -477,5 +485,11 @@ export default {
   }
   .default {
     opacity: 0.6;
+  }
+</style>
+<style>
+  .mint-switch-input:checked + .mint-switch-core {
+    border-color: #4DD865;
+    background-color: #4DD865;
   }
 </style>

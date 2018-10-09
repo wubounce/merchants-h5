@@ -52,9 +52,9 @@
       <section class="fun-item-bd funlist">
         <div v-for="(item,index) in functionList" :key="index">
           <span class="fun-list-item">{{item.functionName}}</span>
-          <input type="number" pattern="\d*" class="fun-list-item" v-model="item.needMinutes"  v-if="fromdata.secondType.name !=='通用脉冲充电桩' " min=0/>
-          <input type="number" class="fun-list-item" v-model="item.functionPrice"  min=0/>
-          <input type="number" pattern="\d*" class="fun-list-item" v-model="item.functionCode" v-if="Number(fromdata.communicateType) === 0"  min=0/>
+          <input type="number" @keypress="userinputFunc" class="fun-list-item" v-model="item.needMinutes"  v-if="fromdata.secondType.name !=='通用脉冲充电桩' " />
+          <input type="number" class="fun-list-item" v-model="item.functionPrice"/>
+          <input type="number" @keypress="userinputFunc" class="fun-list-item" v-model="item.functionCode" v-if="Number(fromdata.communicateType) === 0"/>
           <p class="fun-list-item">
             <mt-switch v-model="item.ifOpen"></mt-switch>
           </p>
@@ -170,6 +170,14 @@
       },
       checkItem(index) {
         this.selectedIndex = index;
+      },
+      userinputFunc() {  //只能输入数字
+        var keyCode = event.keyCode; 
+        if (keyCode >= 48 && keyCode <= 57) { 
+          event.returnValue = true; 
+        }else { 
+          event.returnValue = false; 
+        }
       },
       getCheckShop() {
         if(this.fromdata.shopType.name !== this.selectListA[this.selectedIndex].shopName){
@@ -413,7 +421,6 @@
       margin: 0.2rem 0.55rem;
     }
   }
-
   .device-detail {
     font-size: 0.43rem;
     color: rgba(51, 51, 51, 1);
@@ -564,6 +571,12 @@
         flex: 2.19;
         text-align: center;
         line-height: 1.6rem;
+        .mint-switch-input:checked + .mint-switch-core {
+          border-color: #4DD865;
+          background-color: #4DD865;
+          width: 1.09rem;
+          height: 0.67rem;
+        }
         &:nth-child(1) {
           flex: 3.32;
         }
@@ -576,10 +589,6 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        .mint-switch-input:checked+.mint-switch-core {
-          border-color: #4DD865;
-          background-color: #4DD865;
-        }
       }
     }
   }
@@ -654,5 +663,12 @@
         background-color: rgba(14, 14, 255, 0.05);
       }
     }
+  }
+  
+</style>
+<style>
+  .mint-switch-input:checked + .mint-switch-core {
+    border-color: #4DD865;
+    background-color: #4DD865;
   }
 </style>

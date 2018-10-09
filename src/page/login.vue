@@ -270,6 +270,7 @@ export default {
           });
         if(this.form.userName.length<1) {
           this.form.password = '';
+          this.isuser = false;
         }
       },
       pwdinputFunc(){
@@ -398,6 +399,21 @@ export default {
           font-size: 12px;
         }
       }
+
+      input::-webkit-input-placeholder {
+        font-size: 0.43rem;
+        line-height: 0.78rem;
+      }
+    
+      input::-moz-placeholder {
+        font-size: 0.43rem;
+        line-height: 0.78rem;
+      }
+    
+      input :-ms-input-placeholder {
+        font-size: 0.43rem;
+        line-height: 0.78rem;
+      }
       
     }
   }
@@ -407,8 +423,9 @@ export default {
   text-align: center;
   font-size:12px;
   color:#999;
-  margin-top: 2.81rem;
-  margin-bottom: 0.53rem;
+  position: absolute;
+  width: 100%;
+  bottom: 0.4rem;
   .between {
     margin: 0 0.32rem;
   }
