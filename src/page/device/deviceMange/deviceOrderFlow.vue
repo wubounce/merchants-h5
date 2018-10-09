@@ -109,5 +109,9 @@ export default {
 </script>
 <style type="text/css" lang="scss" scoped>
  @import '../../../assets/scss/index/todayincome';
+  section .tableearn .bottom .listcon .report-table-date {
+    width: 2.0rem;
+    color: #333;
+}
 </style>
 

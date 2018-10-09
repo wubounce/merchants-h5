@@ -10,11 +10,11 @@
       <div class="form-group input" v-if="loginPwd">
         <div class="userName">
           <label class="title">账号</label><input type="text" v-model.trim="form.userName" v-on:input="userinputFunc" @focus="isuser=true" placeholder="请输入用户名">
-          <span class="open-eyes eyes iconfont icon-guanbi"  v-show="isuser"  @click="form.userName='';isuser=false;disabled=true;form.password='';searchPhone=false"></span>
+          <span class="open-eyes eyes iconfont icon-guanbi" v-show="isuser"  @click="form.userName='';isuser=false;disabled=true;form.password='';searchPhone=false"></span>
         </div>
         <div class="passWord">
-          <label class="title">密码</label><input type="text" v-model.trim="form.password" v-if="typepwd" v-on:input="pwdinputFunc" placeholder="请输入密码" autocomplete="off">
-          <input type="password" v-model.trim="form.password" v-on:input="pwdinputFunc" placeholder="请输入密码" autocomplete="off" v-else>
+          <label class="title">密码</label><input type="text" v-model.trim="form.password" v-if="typepwd" v-on:input="pwdinputFunc" @focus="isuser=false"  placeholder="请输入密码" autocomplete="off">
+          <input type="password" v-model.trim="form.password" v-on:input="pwdinputFunc" placeholder="请输入密码" @focus="isuser=false" autocomplete="off" v-else>
           <div @click="openpwd" class="open-eyes">
             <span  class="eyes iconfont icon-yanjing" v-if="typepwd"></span>
             <span  class="eyes iconfont icon-biyanjing" v-else></span>
