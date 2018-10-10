@@ -91,8 +91,9 @@
         selectedIndex: -1,
         itemName:["functionName","needMinutes","functionPrice","ifOpen"],
         functionSetList: [],
-        jsonArr:[],
-        getJsonArr:[],
+        jsonArr: [],
+        getJsonArr: [],
+        keepInitializationArr: [],
         keepFunctionArr: [],
         slotsShop: [
         {
@@ -240,11 +241,12 @@
         this.fromdata.communicateType = res.communicateType;
         this.fromdata.nqt = res.nqt?res.nqt:"点击扫描设备上二维码";
         this.fromdata.imei = res.imei?res.imei:"点击扫描模块上二维码";
-        this.functionList = res.functionList;
+        this.functionList = res.functionList;       
         this.functionList.forEach(item=>{
           item.ifOpen=item.ifOpen === "0"?(!!item.ifOpen) : (!item.ifOpen);
         });
         this.keepFunctionArr= [].concat(JSON.parse(JSON.stringify(this.functionList)));
+        this.keepInitializationArr = [].concat(JSON.parse(JSON.stringify(this.functionList)));
       }, 
       async checkDeviceSelect() { //获取店铺
         let res = await getShopFun();
@@ -328,8 +330,7 @@
           this.functionList = arr;       
         } 
         this.setModelShow= true;
-        this.modelShow = false;
-        this.title = "功能列表";           
+        this.modelShow = false;          
       },
       goNext(){ //功能列表确认
         let flag1 = true;
@@ -345,6 +346,9 @@
           let item = this.functionList[i];
           if(item.ifOpen === false){
             count=count+1;
+            item.needMinutes = this.keepInitializationArr[i].needMinutes;
+            item.functionPrice = this.keepInitializationArr[i].functionPrice;
+            item.functionCode = this.keepInitializationArr[i].functionCode;
             continue;
           } 
           if(this.fromdata.secondType.name !== '通用脉冲充电桩' && !reg.test(Number(item.needMinutes))){

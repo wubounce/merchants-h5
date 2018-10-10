@@ -144,6 +144,7 @@
         secondTypeList: [],
         secondOnTypeList: [],
         secondOffTypeList: [],
+        keepInitializationArr: [],
         keepFunctionArr: [],
         ok: true,
         isDisable: false,
@@ -471,7 +472,8 @@
             this.functionSetList.forEach(item=>{
               item.ifOpen=item.ifOpen === 0?(!item.ifOpen) : (!!item.ifOpen);
             });
-            this.keepFunctionArr= [].concat(JSON.parse(JSON.stringify(res.list)));           
+            this.keepFunctionArr= [].concat(JSON.parse(JSON.stringify(res.list))); 
+            this.keepInitializationArr = [].concat(JSON.parse(JSON.stringify(res.list)));          
           }else {      
             this.setModelShow= true;
             this.modelShow = false;
@@ -607,6 +609,9 @@
           let item = this.functionSetList[i];
           if(item.ifOpen === false){
             count++;
+            item.needMinutes = this.keepInitializationArr[i].needMinutes;
+            item.functionPrice = this.keepInitializationArr[i].functionPrice;
+            item.functionCode = this.keepInitializationArr[i].functionCode;
             continue;
           } 
           if(this.fromdata.secondType.name !== '通用脉冲充电桩' && !reg.test(Number(item.needMinutes))){

@@ -49,6 +49,7 @@ export default {
         selectedFunction: '',
         functionTempletType: '',
         communicateType: null,
+        keepInitializationArr: [],
         isDisable: false,
         nullDisable: false,
         timeIsDisable: false,
@@ -169,7 +170,8 @@ export default {
         res.list.forEach(item=>{
           item.ifOpen=item.ifOpen === "0"?(!!item.ifOpen) : (!item.ifOpen);
         });
-        this.funTypeList = res.list;         
+        this.funTypeList = res.list;  
+        this.keepInitializationArr = [].concat(JSON.parse(JSON.stringify(res.list)));       
       },  
      
       async goNext() {
@@ -186,6 +188,9 @@ export default {
           let item = this.funTypeList[i];
           if(item.ifOpen === false){
             count++;
+            item.needMinutes = this.keepInitializationArr[i].needMinutes;
+            item.functionPrice = this.keepInitializationArr[i].functionPrice;
+            item.functionCode = this.keepInitializationArr[i].functionCode;
             continue;
           } 
           if(!reg.test(Number(item.needMinutes))){
