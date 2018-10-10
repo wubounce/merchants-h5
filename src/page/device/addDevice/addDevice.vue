@@ -233,7 +233,14 @@
       };
     },
     methods: {
-      
+       userinputFunc() {  //只能输入数字
+        let keyCode = event.keyCode; 
+        if (keyCode >= 48 && keyCode <= 57) { 
+          event.returnValue = true; 
+        }else { 
+          event.returnValue = false; 
+        }
+      },
       machineselectpickerShop(data){ //获取店铺
         if(this.fromdata.shopType.name !== data.shopName) {
           this.fromdata.shopType.id = data.shopId;
