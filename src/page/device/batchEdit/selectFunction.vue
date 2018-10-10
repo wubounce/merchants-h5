@@ -13,21 +13,25 @@
     </ul>
     <section class="fun-item-hd">
       <div>
-        <p v-for="(item,index) in functionListTitle2 " :key="index">
-          <span v-for="(it,idx) in item " :key="idx">{{it}}</span>
-        </p>
+        <p><span>功能</span></p>
+        <p v-if="fromdata.secondType.name !== '通用脉冲充电桩' && fromdata.firstType.name !== '饮水机'"><span>耗时</span><span>/分</span></p>
+        <p v-if="fromdata.firstType.name === '饮水机'"><span>水量</span><span>/ml</span></p>
+        <p><span>原价</span><span>/元</span></p>
+        <p v-if="Number(fromdata.communicateType) === 0"><span>脉冲数</span></p>
+        <p><span>状态</span></p>
       </div>
     </section>
     <section class="fun-item-bd funlist">
-      <div v-for="(item,index) in funTypeList" :key="index">
+       <div v-for="(item,index) in funTypeList" :key="index">
         <span class="fun-list-item">{{item.functionName}}</span>
-        <input type="text" pattern="\d*" @keypress="userinputFunc" class="fun-list-item" v-model="item.needMinutes"  min=0/>
+        <input type="text" pattern="\d*" @keypress="userinputFunc" class="fun-list-item" v-model="item.needMinutes"  v-if="fromdata.secondType.name !=='通用脉冲充电桩' && fromdata.firstType.name !== '饮水机'" />
+        <span class="fun-list-item">{{item.needMinutes}}</span>
         <input type="text" class="fun-list-item" v-model="item.functionPrice"  min=0/>
-        <input type="text" pattern="\d*" @keypress="userinputFunc" class="fun-list-item" v-model="item.functionCode" v-if="isShow2"  min=0/>
+        <input type="text" pattern="\d*" @keypress="userinputFunc" class="fun-list-item" v-model="item.functionCode" v-if="Number(fromdata.communicateType) === 0"  min=0/>
         <p class="fun-list-item">
           <mt-switch v-model="item.ifOpen"></mt-switch>
         </p>
-      </div>
+      </div>  
     </section>
     <div class="searchNoItem" v-show="funTypeList.length<=0">暂无功能列表</div>
     <div style="width:100%;height:1.73rem;"></div>
@@ -55,6 +59,22 @@ export default {
         timeIsDisable: false,
         priceIsDisable: false,
         codeIsDisable: false,
+        fromdata: {
+          shopType: {
+            name:"",
+            id:""
+          },
+          firstType: {
+            id: "",
+            name: "",
+            value: ""
+          },
+          secondType: {
+            id:"",
+            name: "",
+            value: ""
+          },
+        },
         hdTitleArr: [
           "1.请选择相应店铺",
           "2.请选择设备类型",
@@ -76,19 +96,6 @@ export default {
           }
         ],
         currIndex: 3,
-        functionListTitle: [
-          ['功能'],
-          ['耗时', '/分'],
-          ['原价', '/元'],
-          ['脉冲数'],
-          ['状态']
-        ],
-        functionListTitle2: [
-          ['功能'],
-          ['耗时', '/分'],
-          ['原价', '/元'],
-          ['状态']
-        ]
       };
     },
     methods: {
@@ -152,6 +159,8 @@ export default {
           subTypeId: query.subTypeId,
           shopId: query.shopId,
         };
+        this.fromdata.firstType.name = query.parentTypeName;
+        this.fromdata.secondType.name = query.subTypeName;
         let res = await batchEditMachineListFun(obj);
         this.getFunctionSetList();
       },
@@ -163,10 +172,6 @@ export default {
         this.getJsonArr = res.list;
         this.functionTempletType = res.functionTempletType;
         this.communicateType = res.communicateType;
-        if(this.communicateType !== 1){
-          this.functionListTitle2 = this.functionListTitle;
-          this.isShow2 = true;
-        }
         res.list.forEach(item=>{
           item.ifOpen=item.ifOpen === "0"?(!!item.ifOpen) : (!item.ifOpen);
         });

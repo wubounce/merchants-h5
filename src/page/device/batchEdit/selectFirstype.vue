@@ -71,6 +71,7 @@ import { getlistParentTypeFun } from '@/service/device';
         this.selectIndex = index;
         this.parentTypeId= this.parentTypeList[index].id;
         this.selectedFirstype= name;
+        console.log(this.selectedFirstype);
       },
       async checkFirstClass() { //获取一级列表
         let query = this.$route.query;
@@ -86,7 +87,7 @@ import { getlistParentTypeFun } from '@/service/device';
         if(this.parentTypeId){
           this.$router.push({
             name: "selectSecondtypeEdit",
-            query: ({shopId:query.shopId, parentTypeId:this.parentTypeId})
+            query: ({shopId:query.shopId, parentTypeId:this.parentTypeId, parentTypeName: this.selectedFirstype})
           });
         }else{
           this.$toast("请先选择类型");

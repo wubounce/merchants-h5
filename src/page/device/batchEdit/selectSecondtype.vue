@@ -86,7 +86,7 @@ import { getlistParentTypeFun, getlistSubTypeFun} from '@/service/device';
         if(this.subTypeId){
           this.$router.push({
             name: "selectFunctionEdit",
-            query: ({shopId:query.shopId, parentTypeId:query.parentTypeId, subTypeId:this.subTypeId})
+            query: ({shopId:query.shopId, parentTypeId:query.parentTypeId, parentTypeName:query.parentTypeName, subTypeId:this.subTypeId, subTypeName:this.selectedSecondType})
           });
         }else{
           this.$toast("请先选择型号");

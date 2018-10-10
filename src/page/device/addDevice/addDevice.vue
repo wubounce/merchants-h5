@@ -50,7 +50,8 @@
     <section class="fun-item-hd">
       <div>
         <p><span>功能</span></p>
-        <p v-if="fromdata.secondType.name !== '通用脉冲充电桩'"><span>耗时</span><span>/分</span></p>
+        <p v-if="fromdata.secondType.name !== '通用脉冲充电桩' && fromdata.firstType.name !== '饮水机'"><span>耗时</span><span>/分</span></p>
+        <p v-if="fromdata.firstType.name === '饮水机'"><span>水量</span><span>/ml</span></p>
         <p><span>原价</span><span>/元</span></p>
         <p v-if="Number(fromdata.communicateType) === 0"><span>脉冲数</span></p>
         <p><span>状态</span></p>
@@ -59,14 +60,14 @@
     <section class="fun-item-bd funlist" style="-webkit-overflow-scrolling:touch;overflow-y:scroll;">
       <div v-for="(item,index) in functionSetList" :key="index">
         <span class="fun-list-item">{{item.functionName}}</span>
-        <input type="text" pattern="\d*" @keypress="userinputFunc" class="fun-list-item" v-model="item.needMinutes"  v-if="fromdata.secondType.name !== '通用脉冲充电桩'" min=0/>
+        <input type="text" pattern="\d*" @keypress="userinputFunc" class="fun-list-item" v-model="item.needMinutes"  v-if="fromdata.secondType.name !=='通用脉冲充电桩' && fromdata.firstType.name !== '饮水机'" />
+        <span class="fun-list-item">{{item.needMinutes}}</span>
         <input type="text" class="fun-list-item" v-model="item.functionPrice"  min=0/>
         <input type="text" pattern="\d*" @keypress="userinputFunc" class="fun-list-item" v-model="item.functionCode" v-if="Number(fromdata.communicateType) === 0"  min=0/>
         <p class="fun-list-item">
           <mt-switch v-model="item.ifOpen"></mt-switch>
         </p>
-      </div>
-      
+      </div>   
     </section>
     <div style="width:100%;height:1.73rem;"></div>
     <section class="promiss-footer">
@@ -185,19 +186,6 @@
         ],
         shopname: "shopName",
         firstname: 'name',
-        functionListTitle: [
-          ['功能'],
-          ['耗时', '/分'],
-          ['原价', '/元'],
-          ['脉冲数'],
-          ['状态']
-        ],
-        functionListTitle2: [
-          ['功能'],
-          ['耗时', '/分'],
-          ['原价', '/元'],
-          ['状态']
-        ],
         fromdata: {
           machineName: "",
           firstClass: "",
@@ -396,10 +384,6 @@
             let company = this.getUrlParam(object,"Company");
             let smCommunicateType = this.getUrlParam(object,"CommunicateType");
             let ver = this.getUrlParam(object,"Ver")?this.getUrlParam(object,"Ver"):0;
-            if(Number(smCommunicateType) === 0){
-              this.functionListTitle2 = this.functionListTitle;
-              this.isShow2 = true;
-            }
             if(this.fromdata.secondType.communicateType !=="" && (Number(smCommunicateType) !== Number(this.fromdata.secondType.communicateType))){
               this.$toast({message: "NQT与设备型号通信类型不符" });
               return false;
@@ -476,6 +460,9 @@
             this.functionSetList = res.list;
             this.setModelShow= true;
             this.modelShow = false; 
+            if(this.fromdata.firstType.name == "饮水机") {
+              this.functionListTitle2 = this.functionListTitle3;
+            }
             this.functionSetList.forEach(item=>{
               item.ifOpen=item.ifOpen === 0?(!item.ifOpen) : (!!item.ifOpen);
             });
