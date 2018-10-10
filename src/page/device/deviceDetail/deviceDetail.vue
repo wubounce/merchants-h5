@@ -90,7 +90,7 @@
       <div style="width:100%;height:1.73rem;"></div>
       <div class="about-button">
         <Button btn-type="small" btn-color="spe" class="ft-btn active" @click.native="deviceTZJ" v-show="tzjShow" v-has="'mer:machine:clean'">桶自洁</Button>
-        <Button btn-type="small" btn-color="spe" class="ft-btn active" @click.native="deviceRest" v-show="(machineState==='运行' && deviceDetail.subTypeName !== '通用脉冲充电桩') || (machineState==='空闲' && deviceDetail.subTypeName !== '通用脉冲充电桩')" v-has="'mer:machine:reset'">复位</Button>
+        <Button btn-type="small" btn-color="spe" class="ft-btn active" @click.native="deviceRest" v-show="(machineState==='运行' && hasReset) || (machineState==='空闲' && hasReset)" v-has="'mer:machine:reset'">复位</Button>
         <Button btn-type="small" btn-color="spe" class="ft-btn active" @click.native="deviceEdit" v-has="'mer:machine:update'">编辑</Button>
       </div>
       </section>
@@ -108,6 +108,7 @@
       return {
         deviceDetail: [],
         tzjShow: false,
+        hasReset: false,
         functionSetListShow: true,
         functionCodeShow: false,
         machineState:"",
@@ -182,6 +183,11 @@
           this.tzjShow = true;
         }else {
           this.tzjShow = false;
+        }
+        if(res.hasReset) { //判断是否有复位功能
+          this.hasReset = true;
+        }else {
+          this.hasReset = false;
         }
         if(res.communicateType === 1){
           this.tongxin = "串口";
