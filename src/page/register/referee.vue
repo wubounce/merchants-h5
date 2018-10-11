@@ -184,8 +184,9 @@
           districtId: this.districtId,
           invitationCode: this.referee.code,
         };
-        let res = await saveRegisterInfoFun(payload);
-        this.$router.push({name:'successTip'});
+        saveRegisterInfoFun(payload).then(() => {
+          this.$router.push({name:'successTip'});
+        });   
       },
     },
 
