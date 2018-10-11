@@ -43,7 +43,8 @@
       <section class="fun-item-hd">
         <div>
           <p><span>功能</span></p>
-          <p v-if="fromdata.secondType.name !== '通用脉冲充电桩'"><span>耗时</span><span>/分</span></p>
+          <p v-if="fromdata.secondType.name !== '通用脉冲充电桩' && fromdata.firstType.name !== '饮水机'"><span>耗时</span><span>/分</span></p>
+          <p v-if="fromdata.firstType.name === '饮水机'"><span>水量</span><span>/ml</span></p>
           <p><span>原价</span><span>/元</span></p>
           <p v-if="Number(fromdata.communicateType) === 0"><span>脉冲数</span></p>
           <p><span>状态</span></p>
@@ -52,7 +53,8 @@
       <section class="fun-item-bd funlist">
         <div v-for="(item,index) in functionList" :key="index">
           <span class="fun-list-item">{{item.functionName}}</span>
-          <input type="text" pattern="\d*" @keypress="userinputFunc" class="fun-list-item" v-model="item.needMinutes"  v-if="fromdata.secondType.name !=='通用脉冲充电桩' " />
+          <input type="text" pattern="\d*" @keypress="userinputFunc" class="fun-list-item" v-model="item.needMinutes"  v-if="fromdata.secondType.name !=='通用脉冲充电桩' && fromdata.firstType.name !== '饮水机'" />
+          <span class="fun-list-item">{{item.needMinutes}}</span>
           <input type="text" class="fun-list-item" v-model="item.functionPrice"/>
           <input type="text" @keypress="userinputFunc" pattern="\d*" class="fun-list-item" v-model="item.functionCode" v-if="Number(fromdata.communicateType) === 0"/>
           <p class="fun-list-item">
@@ -106,19 +108,6 @@
         }
         ],
         shopname: "shopName",
-        functionListTitle: [
-          ['功能'],
-          ['耗时', '/分'],
-          ['原价', '/元'],
-          ['脉冲数'],
-          ['状态']
-        ],
-        functionListTitle2: [
-          ['功能'],
-          ['耗时', '/分'],
-          ['原价', '/元'],
-          ['状态']
-        ],
         title: '编辑设备',
         fromdata: {
           machineId: "",
@@ -224,15 +213,12 @@
       async getDetailDevice() {  //获取数据
         let payload = { machineId: this.$route.query.machineId} ;     
         let res = await detailDeviceListFun(payload);
-        if(Number(res.communicateType) !== 1){
-          this.functionListTitle2 = this.functionListTitle;
-          this.isShow2 = true;
-        }
         this.fromdata.machineName = res.machineName;
         this.fromdata.machineId = res.machineId;
         this.fromdata.shopType.name = res.shopName;
         this.fromdata.shopType.id = res.shopId;
         this.fromdata.firstType.id = res.parentTypeId;
+        this.fromdata.firstType.name = res.parentTypeName;
         this.fromdata.secondType.id = res.subTypeId;
         this.fromdata.secondType.name = res.subTypeName;
         this.fromdata.functionTempletType = res.functionTempletType;
