@@ -87,7 +87,7 @@ export default new Router({
       path: '/referee',
       name: 'referee',
       component: () => import ('@/page/register/referee'),
-      meta: {title: '注册',keepAlive: true},
+      meta: {title: '注册'},
     },
     {
       path: '/userAgreement',

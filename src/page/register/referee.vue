@@ -198,7 +198,8 @@
           sessionStorage.removeItem('cityId');
           sessionStorage.removeItem('districtId');
           sessionStorage.removeItem('invitationCode');
-        }); 
+       }); 
+         
       },
     },
 
@@ -212,23 +213,23 @@
       },
     },
     created() {
-        if(sessionStorage.setItem('refeeName',this.referee.name)){
-          this.referee.name = sessionStorage.setItem('refeeName',this.referee.name);
+        if(sessionStorage.getItem('refeeName')){
+          this.referee.name = sessionStorage.getItem('refeeName');
         }
-        if(sessionStorage.setItem('address',this.chooseArea)){
-          this.chooseArea = sessionStorage.setItem('address',this.chooseArea);
+        if(sessionStorage.getItem('address')){
+          this.chooseArea = sessionStorage.getItem('address');
         }
-        if(sessionStorage.setItem('provinceId',this.provinceId)){
-          this.provinceId = sessionStorage.setItem('provinceId',this.provinceId);
+        if(sessionStorage.getItem('provinceId')){
+          this.provinceId = sessionStorage.getItem('provinceId');
         }
-        if(sessionStorage.setItem('cityId',this.cityId)){
-          this.cityId = sessionStorage.setItem('cityId',this.cityId);
+        if(sessionStorage.getItem('cityId')){
+          this.cityId = sessionStorage.getItem('cityId');
         }
-        if(sessionStorage.setItem('districtId',this.districtId)){
-          this.districtId = sessionStorage.setItem('districtId',this.districtId);
+        if(sessionStorage.getItem('districtId')){
+          this.districtId = sessionStorage.getItem('districtId');
         }
-        if(sessionStorage.setItem('invitationCode',this.invitationCode)){
-          this.referee.code = sessionStorage.setItem('invitationCode',this.invitationCode);
+        if(sessionStorage.getItem('invitationCode')){
+          this.referee.code = sessionStorage.getItem('invitationCode');
         }
     }
     
