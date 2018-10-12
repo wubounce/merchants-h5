@@ -737,6 +737,13 @@ export default {
       } else {
         this.ModalHelper.beforeClose();
       }
+    },
+    noticeShow: function () {
+      if (this.noticeShow) {
+        this.ModalHelper.afterOpen();
+      } else {
+        this.ModalHelper.beforeClose();
+      }
     }
   },
   components:{
