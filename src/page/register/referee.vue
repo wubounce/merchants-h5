@@ -16,9 +16,7 @@
       <div class="clickBtn">
         <mt-button type="primary" class="btn-blue" @click.prevent="goToNext" :disabled="!(chooseArea!== '选择所在区域' && referee.name && referee.code) ">申请注册</mt-button>
       </div>
-      <router-link to="/userAgreement">
-        <p class="agreeRule">注册表示已同意<span class="rule">《用户协议》</span></p>
-      </router-link>
+      <p class="agreeRule" @click="keepMsg">注册表示已同意<span class="rule">《用户协议》</span></p>
     </div>
     <!-- 弹窗 -->
       <mt-popup v-model="placeVisible" position="bottom" class="mint-popup">
@@ -159,8 +157,16 @@
         this.cityName = values[1];
         this.districtName = values[2];
       },
-
-      async goToNext() {
+      keepMsg() { //缓存信息
+        sessionStorage.setItem('refeeName',this.referee.name);
+        sessionStorage.setItem('address',this.chooseArea);
+        sessionStorage.setItem('provinceId',this.provinceId);
+        sessionStorage.setItem('cityId',this.cityId);
+        sessionStorage.setItem('districtId',this.districtId);
+        sessionStorage.setItem('invitationCode',this.referee.code);
+        this.$router.push({name:'userAgreement'});
+      },
+      async goToNext() {  //提交
         if(this.referee.name && !validatName(this.referee.name)) {
           this.$toast({message: "用户名2-20个字符，支持中文和英文" });
           return false;
@@ -184,8 +190,15 @@
           districtId: this.districtId,
           invitationCode: this.referee.code,
         };
-        let res = await saveRegisterInfoFun(payload);
-        this.$router.push({name:'successTip'});
+        saveRegisterInfoFun(payload).then(() => {
+          this.$router.push({name:'successTip'});
+          sessionStorage.removeItem('refeeName');
+          sessionStorage.removeItem('address');
+          sessionStorage.removeItem('provinceId');
+          sessionStorage.removeItem('cityId');
+          sessionStorage.removeItem('districtId');
+          sessionStorage.removeItem('invitationCode');
+        }); 
       },
     },
 
@@ -198,8 +211,26 @@
         }
       },
     },
-    mounted() {
-    },
+    created() {
+        if(sessionStorage.setItem('refeeName',this.referee.name)){
+          this.referee.name = sessionStorage.setItem('refeeName',this.referee.name);
+        }
+        if(sessionStorage.setItem('address',this.chooseArea)){
+          this.chooseArea = sessionStorage.setItem('address',this.chooseArea);
+        }
+        if(sessionStorage.setItem('provinceId',this.provinceId)){
+          this.provinceId = sessionStorage.setItem('provinceId',this.provinceId);
+        }
+        if(sessionStorage.setItem('cityId',this.cityId)){
+          this.cityId = sessionStorage.setItem('cityId',this.cityId);
+        }
+        if(sessionStorage.setItem('districtId',this.districtId)){
+          this.districtId = sessionStorage.setItem('districtId',this.districtId);
+        }
+        if(sessionStorage.setItem('invitationCode',this.invitationCode)){
+          this.referee.code = sessionStorage.setItem('invitationCode',this.invitationCode);
+        }
+    }
     
   };
 </script>
