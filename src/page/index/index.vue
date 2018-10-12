@@ -1,5 +1,8 @@
 <template>
   <div class="main">
+    <div class="notice-head" @click="openNotice">
+        <img src="../../../static/image/activity/apply@2x.png" alt="">
+    </div>
     <div class="earnings-wrap">
       <router-link :to="{ name: 'totalincome', query:{allMoney: allMoney } }">
         <div class="earning-type">
@@ -56,6 +59,20 @@
       </div>
       <div class="offline-tip" v-if="offlineTip"><span class="iconfont icon-guanbi1" @click="offlineTip=false;"></span>  离线：连续30分钟未在线的设备数量。可能由于断电，信号不稳定，模块、设备损坏等原因引起，请自行检查或联系客服报备。</div>
     </div>
+    <div class="activity-wrap" v-if="noticeShow">
+      <div class="activity">
+        <div class="pic">
+          <img src="../../../static/image/activity/activity@2x.png" alt="">
+        </div>
+        <div class="apply">
+            <span class="apply-btn" @click="goApply">立即报名</span>
+            <span class="apply-btn shadow">立即报名</span>
+        </div>
+        <div class="icon-wrapper" @click="closeNotice">
+          <img src="../../../static/image/activity/del@2x.png" alt="">
+        </div>  
+      </div>
+    </div>
   </div>
   
 </template>
@@ -74,6 +91,7 @@ import selectpickr from '@/components/selectPicker';
 import { ParentTypeFun, countMachineFun, totalProfitFun, timeProfitFun, typeProfitFun } from '@/service/index';
 import { MachineStatus, communicateType } from '@/utils/mapping';
 import moment from 'moment';
+import { getNoticeType, setNoticeType, removeNoticeType } from '@/utils/tool';
 export default {
   props: {
     width: {
@@ -95,6 +113,7 @@ export default {
   },
   data() {
     return {
+      noticeShow:false,
       offlineTip:true,
       barchart: null,
       linechart: null,
@@ -108,7 +127,6 @@ export default {
       equipmentcurrentTags:null,
       distributioncurrentTags:null,
       distributionVisible:false,
-      noticeShow:false,
       equipmentSlots:[ //设备类型
         {
             flex: 1,
@@ -163,8 +181,25 @@ export default {
     this.ProfitDate();
     this.getThisMonth();
     this.getThisDay();
+    if(getNoticeType() != 1) {
+        this.noticeShow = true;
+    }else{
+      this.noticeShow = false;       
+    }   
   },
   methods: { 
+    openNotice(){
+      this.noticeShow = true;
+    },
+    goApply(){
+      this.noticeShow = false;
+      setNoticeType(1);
+      this.$router.push({name:'activity'});
+    },
+    closeNotice(){
+      this.noticeShow = false;
+      setNoticeType(1);
+    },
     //获取本月
     getThisMonth() {
       let date = new Date();
@@ -710,5 +745,77 @@ export default {
 };
 </script>
 <style type="text/css" lang="scss" scoped>
- @import '../../assets/scss/index/index';
+@import '../../assets/scss/index/index';
+  .notice-head{
+    height: 1.33rem;
+    a,img {
+      display: block;
+      width: 100%;
+    }
+  }
+
+.activity-wrap{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,.5);
+  z-index: 19999999;
+  padding-top: 1.33rem;
+  .activity{
+    width: 8.67rem;
+    margin: 0 auto;
+  }
+  .apply {
+    width: 100%;
+    height: 3.47rem;
+    background:#fff;
+    position: relative;
+    border-bottom-left-radius: 0.27rem;
+    border-bottom-right-radius: 0.27rem;
+  }
+  .pic {
+    width: 100%;
+    height: 8.53rem;
+    img {
+      display: block;
+      width: 100%;
+    }
+  }
+  .apply-btn {
+    display: block;
+    width:5.69rem;
+    height:1.21rem;
+    text-align: center;
+    line-height:1.21rem;
+    font-size:0.48rem;
+    font-weight:500;
+    color:#fff;
+    background:linear-gradient(360deg,rgba(255,71,70,1) 0%,rgba(255,146,101,1) 100%);
+    position: absolute; 
+    top: 50%; 
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius:0.6rem;
+    z-index: 19999999;
+  }
+  .shadow {
+    z-index: 88;
+    background:rgba(255,29,29,1);
+    box-shadow:0px 0.03rem 0.07rem 0px rgba(255,95,95,1);
+    margin-top: 0.11rem;
+  }
+  .icon-wrapper{
+    width: .8533rem;
+    height: .8533rem;
+    margin: .4133rem auto 0;
+    text-align: center;
+    img{
+        width: 100%;
+        height: 100%;
+    }
+  }
+
+}
 </style>

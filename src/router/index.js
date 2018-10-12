@@ -45,6 +45,12 @@ export default new Router({
 
       ]
     },
+    {
+      path: '/activity',
+      name: 'activity',
+      component: () => import ('@/page/activity'),
+      meta: {title: '运营活动'},
+    },
     //首页头部收益相关
     {
       path: '/index/totalincome',
