@@ -2,8 +2,8 @@ import 'babel-polyfill';
 import 'url-search-params-polyfill';
 // import Vue from 'vue';
 
-// import MintUI from 'mint-ui';
-// import {Indicator, MessageBox } from 'mint-ui';
+import MintUI from 'mint-ui';
+import {Indicator, MessageBox } from 'mint-ui';
 // import Vant from 'vant';
 // import 'vant/lib/vant-css/index.css';
 import './assets/iconfont/iconfont.css';
@@ -28,13 +28,7 @@ import { Tree } from 'element-ui';
 Vue.use(Tree);
 Vue.use(filter);
 Vue.use(VueAwesomeSwiper);
-<<<<<<< HEAD
-// Vue.use(MintUI);
-// Vue.use(Vant);
-=======
 Vue.use(MintUI);
-Vue.use(DatetimePicker);
->>>>>>> dev-2.3
 // 初始化vue-amap
 VueAMap.initAMapApiLoader({
 // 高德的key
