@@ -28,8 +28,13 @@ import { Tree } from 'element-ui';
 Vue.use(Tree);
 Vue.use(filter);
 Vue.use(VueAwesomeSwiper);
+<<<<<<< HEAD
 // Vue.use(MintUI);
 // Vue.use(Vant);
+=======
+Vue.use(MintUI);
+Vue.use(DatetimePicker);
+>>>>>>> dev-2.3
 // 初始化vue-amap
 VueAMap.initAMapApiLoader({
 // 高德的key
