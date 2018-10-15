@@ -92,10 +92,11 @@ http.interceptors.response.use(
     }
   },
   error => {
-    MessageBox.alert(error);
     Indicator.close();
     if (error.message.includes('timeout')) {
       MessageBox.alert('请求超时，请重新操作', '提示', {type: 'warning'});
+    }else if(error.message.includes('Network Error')){
+      MessageBox.alert("网络不给力，试试看刷新页面", '提示', {type: 'warning'});
     }else {
       MessageBox.alert("服务器开小差了", '错误', {type: 'error'});
     }
