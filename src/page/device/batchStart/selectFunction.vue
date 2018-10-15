@@ -48,7 +48,6 @@
 <script>
 import { MessageBox } from 'mint-ui';
 import { batchFunctionSetListFun,batchStartOnFun } from '@/service/device';
-import moment from 'moment';
 
 export default {
     data() {

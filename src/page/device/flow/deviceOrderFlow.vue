@@ -38,7 +38,7 @@
   </section>
 </template>
 <script>
-import moment from 'moment';
+
 import { orderFlowFun } from '@/service/shop';
 import PagerMixin from '@/mixins/pagerMixin';
 export default {

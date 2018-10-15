@@ -1,5 +1,4 @@
 import Cookies from 'js-cookie';
-import moment from 'moment';
 import store from '@/store';
 import qs from 'qs';
 

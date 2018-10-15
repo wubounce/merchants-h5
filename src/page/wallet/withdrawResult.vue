@@ -53,7 +53,6 @@
   </div>
 </template>
 <script>
-import moment from 'moment';
 import { getMoneySubmitDetailFun } from '@/service/user';
 export default {
   data() {

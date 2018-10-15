@@ -60,9 +60,9 @@
 
 </template>
 <script>
+import 'swiper/dist/css/swiper.css';
 import { swiper, swiperSlide } from 'vue-awesome-swiper';  
 import { vipListFun } from '@/service/market';
-import moment from 'moment';
 import PagerMixin from '@/mixins/pagerMixin';
 export default {
   name:'market-vip',

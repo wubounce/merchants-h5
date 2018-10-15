@@ -78,7 +78,6 @@
 </div>
 </template>
 <script>
-import moment from 'moment';
 import selectpickr from '@/components/selectPicker';
 import { shopListFun } from '@/service/report';
 import { addOruPdateFun, marketlistParentTypeIdFun } from '@/service/market';

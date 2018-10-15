@@ -29,9 +29,7 @@
 </template>
 <script>
 import { MessageBox } from 'mint-ui';
-import moment from 'moment';
 import { delMarketFun, detailMarketFun } from '@/service/market';
-
 export default {
   data() {
     return {

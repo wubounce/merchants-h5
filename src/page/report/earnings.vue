@@ -56,15 +56,6 @@
 </div>
 </template>
 <script>
-
-// import moment from 'moment';
-// // 引入 ECharts 主模块
-// import echarts from 'echarts/lib/echarts';
-// // 引入折线图
-// import 'echarts/lib/chart/line';
-// // 引入提示框和图例组件
-// import 'echarts/lib/component/tooltip';
-// import 'echarts/lib/component/legendScroll';
 import selectpickr from '@/components/selectPicker';
 import { dayReportFun, shopListFun } from '@/service/report';
 import { calMax, calMin } from '@/utils/tool';

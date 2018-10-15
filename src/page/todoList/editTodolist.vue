@@ -26,7 +26,6 @@
 import { getBatchStartFun , updateBatchStartFun , getFunctionListFun } from '@/service/todoList';
 import Button from "@/components/Button/Button";
 import { MessageBox } from 'mint-ui';
-import moment from 'moment';
   export default {
     data() {
       return {

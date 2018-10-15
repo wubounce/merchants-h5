@@ -38,7 +38,6 @@
     </section>
 </template>
 <script>
-import moment from 'moment';
 import { balanceLogProfitListFun } from '@/service/index';
 import { MessageBox } from 'mint-ui';
 import { setEmail, getEmail } from '@/utils/tool';

@@ -38,7 +38,6 @@
     </section>
 </template>
 <script>
-import moment from 'moment';
 import { MessageBox } from 'mint-ui';
 import { orderFlowFun, excelOrderFlowlFun } from '@/service/shop';
 import { setEmail, getEmail } from '@/utils/tool';

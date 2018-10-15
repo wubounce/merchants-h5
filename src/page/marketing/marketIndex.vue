@@ -41,7 +41,6 @@
 </template>
 <script>
 import { timeMarketListFun, updataeStatusFun } from '@/service/market';
-import moment from 'moment';
 import PagerMixin from '@/mixins/pagerMixin';
 export default {
   name:'market-market',
