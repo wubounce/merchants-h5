@@ -1,15 +1,15 @@
 import 'babel-polyfill';
 import 'url-search-params-polyfill';
-import Vue from 'vue';
+// import Vue from 'vue';
 
-import MintUI from 'mint-ui';
-import {Indicator, MessageBox } from 'mint-ui';
-import Vant from 'vant';
-import 'vant/lib/vant-css/index.css';
+// import MintUI from 'mint-ui';
+// import {Indicator, MessageBox } from 'mint-ui';
+// import Vant from 'vant';
+// import 'vant/lib/vant-css/index.css';
 import './assets/iconfont/iconfont.css';
 import './assets/iconfont/indexfont.css';
-import 'normalize.css';
-import 'mint-ui/lib/style.css';
+// import 'normalize.css';
+// import 'mint-ui/lib/style.css';
 
 import 'lib-flexible';
 
@@ -28,8 +28,8 @@ import { Tree } from 'element-ui';
 Vue.use(Tree);
 Vue.use(filter);
 Vue.use(VueAwesomeSwiper);
-Vue.use(MintUI);
-Vue.use(Vant);
+// Vue.use(MintUI);
+// Vue.use(Vant);
 // 初始化vue-amap
 VueAMap.initAMapApiLoader({
 // 高德的key
