@@ -4,7 +4,7 @@ import Vue from 'vue';
 
 import MintUI from 'mint-ui';
 import {Indicator, MessageBox } from 'mint-ui';
-import Vant from 'vant';
+import { DatetimePicker } from 'vant';
 import 'vant/lib/vant-css/index.css';
 import './assets/iconfont/iconfont.css';
 import './assets/iconfont/indexfont.css';
@@ -29,7 +29,7 @@ Vue.use(Tree);
 Vue.use(filter);
 Vue.use(VueAwesomeSwiper);
 Vue.use(MintUI);
-Vue.use(Vant);
+Vue.use(DatetimePicker);
 // 初始化vue-amap
 VueAMap.initAMapApiLoader({
 // 高德的key

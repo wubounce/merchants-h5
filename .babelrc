@@ -15,8 +15,10 @@
         "libraryName": "element-ui",
         "styleLibraryName": "theme-chalk"
       }
-    ]
+    ],
+    ["import",{"libraryName":"vant","style":true}]
   ],
+  
   "env": {
     "test": {
       "presets": ["env", "stage-2"],
