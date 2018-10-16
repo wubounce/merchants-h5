@@ -270,7 +270,7 @@ export default {
           let payload = Object.assign({},{
             startDate:this.startDate.join('-'),
             endDate:this.endDate.join('-'),
-            type:1,
+            type:3,
             shopId:shopId,
             dateLevel:this.dateLevel,
             excel:true,

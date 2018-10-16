@@ -18,8 +18,6 @@ import router from './router';
 import store from './store';
 
 import { getToken } from '@/utils/tool';
-import VueAMap from 'vue-amap';
-Vue.use(VueAMap);
 import VueAwesomeSwiper from 'vue-awesome-swiper';
 import 'swiper/dist/css/swiper.css';
 import filter from '@/utils/filter';
@@ -30,15 +28,6 @@ Vue.use(filter);
 Vue.use(VueAwesomeSwiper);
 Vue.use(MintUI);
 Vue.use(DatetimePicker);
-// 初始化vue-amap
-VueAMap.initAMapApiLoader({
-// 高德的key
-key: 'c6456d57a6cac4a772d3ef0f25cceccb',
-// 插件集合
-plugin: ['AMap.Autocomplete', 'AMap.PlaceSearch', 'AMap.Scale', 'AMap.OverView', 'AMap.ToolBar', 'AMap.MapType', 'AMap.PolyEditor', 'AMap.CircleEditor'],
-// 高德 sdk 版本，默认为 1.4.4
-v: '1.4.4'
-});
 
 Vue.config.productionTip = true;
 Vue.config.devtools = true;
