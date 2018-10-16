@@ -2,15 +2,12 @@
 <div class="addmarket">
   <div class="addvip-header">
     <p @click="shopVisible=true">所属店铺<span class="order-action add-shop-overflow-icon iconfont icon-nextx"></span><span class="addvip-con add-shop-overflow">{{checkshoptxt?checkshoptxt:''}}</span></p>
-
     <p @click="opencheckedMachine">设备类型<span class="order-action add-shop-overflow-icon iconfont icon-nextx"></span><span class="addvip-con add-shop-overflow">{{machineCurrent?machineCurrent.parentTypeName:''}}</span></p>
-
     <p @click="open('picker2')">优惠期开始<span class="addvip-con">{{addmarket.startTime}}<span class="order-action iconfont icon-nextx"></span></span></p>
      <p @click="open('picker3')">优惠期结束<span class="addvip-con">{{addmarket.endTime}}<span class="order-action iconfont icon-nextx"></span></span></p>
     <p @click="activeVisible=true">活动日<span class="order-action add-shop-overflow-icon iconfont icon-nextx"></span><span class="addvip-con add-shop-overflow">{{checkWeeklisttxt.join(',') | week}}</span></p>
     <p @click="activeTimeVisible = true">每日活动时段<span class="addvip-con">{{addmarket.time}}<span class="order-action iconfont icon-nextx"></span></span></p>
-    <p>折扣优惠<span class="addvip-con"><input type="number" placeholder="请输入优惠折扣" class="discount-input" v-model="addmarket.discount">%</span></p>
-    <p>是否开放<span class="addvip-con"><mt-switch v-model="addmarket.addstatus" class="check-switch"></mt-switch></span></p>
+    <p>折扣优惠<span class="addvip-con"><input type="number" pattern="\d*" placeholder="请输入优惠折扣" class="discount-input" v-model="addmarket.discount">%</span></p>
   </div>
    <div class="confirm" @click="toaddMaket">确定</div>
   <!-- 活动日 -->
@@ -139,7 +136,6 @@ export default {
       checkWeeklisttxt:[],
       
       addmarket:{
-        addstatus:true,
         time:null,
         startTime:'',
         endTime:'',
@@ -335,10 +331,8 @@ export default {
         return false;
       }
       let status = null;
-      this.addmarket.addstatus === true ? status = 0  : status = 1;
       let parentTypeIds = this.machineCurrent.parentTypeId ? `'${this.machineCurrent.parentTypeId}'` : null;
-      let payload = Object.assign({},this.addmarket,{week:this.weeklist.join(','),shopIds:this.shopIds.join(','),status:status,parentTypeIds:parentTypeIds});
-      delete payload.addstatus;
+      let payload = Object.assign({},this.addmarket,{week:this.weeklist.join(','),shopIds:this.shopIds.join(','),parentTypeIds:parentTypeIds});
       let res = await addOruPdateFun(payload);
       this.$toast({message: '新增成功' });
       this.$router.push({name:'marketing'});

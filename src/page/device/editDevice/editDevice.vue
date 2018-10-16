@@ -52,9 +52,9 @@
       <section class="fun-item-bd funlist">
         <div v-for="(item,index) in functionList" :key="index">
           <span class="fun-list-item">{{item.functionName}}</span>
-          <input type="tel" class="fun-list-item" v-model="item.needMinutes"  v-if="fromdata.secondType.name !=='通用脉冲充电桩' " min=0/>
-          <input type="number" class="fun-list-item" v-model="item.functionPrice"  min=0/>
-          <input type="tel" class="fun-list-item" v-model="item.functionCode" v-if="Number(fromdata.communicateType) === 0"  min=0/>
+          <input type="text" pattern="\d*" @keypress="userinputFunc" class="fun-list-item" v-model="item.needMinutes"  v-if="fromdata.secondType.name !=='通用脉冲充电桩' " />
+          <input type="text" class="fun-list-item" v-model="item.functionPrice"/>
+          <input type="text" @keypress="userinputFunc" pattern="\d*" class="fun-list-item" v-model="item.functionCode" v-if="Number(fromdata.communicateType) === 0"/>
           <p class="fun-list-item">
             <mt-switch v-model="item.ifOpen"></mt-switch>
           </p>
@@ -91,8 +91,9 @@
         selectedIndex: -1,
         itemName:["functionName","needMinutes","functionPrice","ifOpen"],
         functionSetList: [],
-        jsonArr:[],
-        getJsonArr:[],
+        jsonArr: [],
+        getJsonArr: [],
+        keepInitializationArr: [],
         keepFunctionArr: [],
         slotsShop: [
         {
@@ -171,6 +172,14 @@
       checkItem(index) {
         this.selectedIndex = index;
       },
+      userinputFunc() {  //只能输入数字
+        let keyCode = event.keyCode; 
+        if (keyCode >= 48 && keyCode <= 57) { 
+          event.returnValue = true; 
+        }else { 
+          event.returnValue = false; 
+        }
+      },
       getCheckShop() {
         if(this.fromdata.shopType.name !== this.selectListA[this.selectedIndex].shopName){
           this.fromdata.shopType.name = this.selectListA[this.selectedIndex].shopName;
@@ -193,11 +202,15 @@
             let company = this.getUrlParam(object,"Company");
             let communicateType= this.getUrlParam(object,"CommunicateType");
             let ver = this.getUrlParam(object,"Ver")?this.getUrlParam(object,"Ver"):0;
-            this.fromdata.nqt = nqt;
-            this.fromdata.company = company;
-            this.fromdata.smCommunicateType = communicateType;
-            this.fromdata.ver = ver;
-
+            if(Number(communicateType) === Number(this.fromdata.communicateType)){
+              this.fromdata.nqt = nqt;
+              this.fromdata.company = company;
+              this.fromdata.smCommunicateType = communicateType;
+              this.fromdata.ver = ver;
+            }else {
+              this.$toast({message: "NQT与设备型号通信类型不符" });
+              return false;
+            }
           }else{
             this.fromdata.imei= res;
           } 
@@ -228,11 +241,12 @@
         this.fromdata.communicateType = res.communicateType;
         this.fromdata.nqt = res.nqt?res.nqt:"点击扫描设备上二维码";
         this.fromdata.imei = res.imei?res.imei:"点击扫描模块上二维码";
-        this.functionList = res.functionList;
+        this.functionList = res.functionList;       
         this.functionList.forEach(item=>{
           item.ifOpen=item.ifOpen === "0"?(!!item.ifOpen) : (!item.ifOpen);
         });
         this.keepFunctionArr= [].concat(JSON.parse(JSON.stringify(this.functionList)));
+        this.keepInitializationArr = [].concat(JSON.parse(JSON.stringify(this.functionList)));
       }, 
       async checkDeviceSelect() { //获取店铺
         let res = await getShopFun();
@@ -316,8 +330,7 @@
           this.functionList = arr;       
         } 
         this.setModelShow= true;
-        this.modelShow = false;
-        this.title = "功能列表";           
+        this.modelShow = false;          
       },
       goNext(){ //功能列表确认
         let flag1 = true;
@@ -333,6 +346,9 @@
           let item = this.functionList[i];
           if(item.ifOpen === false){
             count=count+1;
+            item.needMinutes = this.keepInitializationArr[i].needMinutes;
+            item.functionPrice = this.keepInitializationArr[i].functionPrice;
+            item.functionCode = this.keepInitializationArr[i].functionCode;
             continue;
           } 
           if(this.fromdata.secondType.name !== '通用脉冲充电桩' && !reg.test(Number(item.needMinutes))){
@@ -347,7 +363,12 @@
           } 
           if(item.functionPrice==='' || !reg1.test(Number(item.functionPrice))){
             this.$toast("原价填写格式错误，请输入非空正整数，最多2位小数");
-             flag2 = false;
+            flag2 = false;
+            break;
+          }
+          if(Number(item.functionPrice)> 99){
+            this.$toast("价格需为0-99");
+            flag2 = false;
             break;
           }
           if(Number(this.fromdata.communicateType)=== 0 && !reg.test(Number(item.functionCode))){
@@ -404,7 +425,6 @@
       margin: 0.2rem 0.55rem;
     }
   }
-
   .device-detail {
     font-size: 0.43rem;
     color: rgba(51, 51, 51, 1);
@@ -509,11 +529,12 @@
     z-index: 999;
     div {
       display: flex;
+      padding: 0 0.4rem;
       p {
         flex: 2.19;
         text-align: center;
         position: relative;
-        border-right: rgb(24, 144, 255) .03rem solid;
+        border-right: #E2F0FF .03rem solid;
         box-sizing: border-box;
         &:nth-child(1) {
           flex: 3.32;
@@ -540,9 +561,13 @@
     font-size: 0.37rem;
     color: #333333;
     background: #fff;
-    padding-top: 1.6rem;
+    padding: 1.6rem 0.4rem 0 0.4rem;
     div {
       display: flex; // justify-content: space-between;
+      border-bottom: 1px solid #f9f8ff;
+      &:last-child {
+        border-bottom: none;
+      }
       input {
         text-decoration: underline;
       }
@@ -550,6 +575,12 @@
         flex: 2.19;
         text-align: center;
         line-height: 1.6rem;
+        .mint-switch-input:checked + .mint-switch-core {
+          border-color: #4DD865;
+          background-color: #4DD865;
+          width: 1.09rem;
+          height: 0.67rem;
+        }
         &:nth-child(1) {
           flex: 3.32;
         }
@@ -562,10 +593,6 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        .mint-switch-input:checked+.mint-switch-core {
-          border-color: #4DD865;
-          background-color: #4DD865;
-        }
       }
     }
   }
@@ -640,5 +667,12 @@
         background-color: rgba(14, 14, 255, 0.05);
       }
     }
+  }
+  
+</style>
+<style>
+  .mint-switch-input:checked + .mint-switch-core {
+    border-color: #4DD865;
+    background-color: #4DD865;
   }
 </style>

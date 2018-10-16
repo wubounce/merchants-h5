@@ -45,6 +45,12 @@ export default new Router({
 
       ]
     },
+    {
+      path: '/activity',
+      name: 'activity',
+      component: () => import ('@/page/activity'),
+      meta: {title: '运营活动'},
+    },
     //首页头部收益相关
     {
       path: '/index/totalincome',
@@ -87,7 +93,7 @@ export default new Router({
       path: '/referee',
       name: 'referee',
       component: () => import ('@/page/register/referee'),
-      meta: {title: '推荐'},
+      meta: {title: '注册',keepAlive: true},
     },
     {
       path: '/userAgreement',
@@ -126,6 +132,24 @@ export default new Router({
       name: 'deviceMange',
       component: () => import ('@/page/device/deviceMange/deviceMange'),
       meta: {title: '设备管理'},
+    },
+    {
+      path: '/deviceMonthFlow',
+      name: 'deviceMonthFlow',
+      component: () => import ('@/page/device/deviceMange/deviceMonthFlow'),
+      meta: {title: '设备明细'},
+    },
+    {
+      path: '/deviceDayFlow',
+      name: 'deviceDayFlow',
+      component: () => import ('@/page/device/deviceMange/deviceDayFlow'),
+      meta: {title: '设备明细'},
+    },
+    {
+      path: '/deviceOrderFlow',
+      name: 'deviceOrderFlow',
+      component: () => import ('@/page/device/deviceMange/deviceOrderFlow'),
+      meta: {title: '设备明细'},
     },
     {
       path: '/deviceSearch',
@@ -234,6 +258,12 @@ export default new Router({
       meta: {title: '人员权限'},
     },
     {
+      path: '/memeberSearch',
+      name: 'memeberSearch',
+      component: () => import ('@/page/member/memeberSearch'),
+      meta: {title: '人员搜索'},
+    },
+    {
       path: '/order',
       name: 'order',
       component: () => import ('@/page/order/index'),
@@ -295,6 +325,30 @@ export default new Router({
       name: 'editShop',
       component: () => import ('@/page/shop/editShop'),
       meta: {title: '店铺修改',keepAlive:true},
+    },
+    {
+      path: '/shopMonthFlow',
+      name: 'shopMonthFlow',
+      component: () => import ('@/page/shop/shopMonthFlow'),
+      meta: {title: '店铺明细'},
+    },
+    {
+      path: '/shopDayFlow',
+      name: 'shopDayFlow',
+      component: () => import ('@/page/shop/shopDayFlow'),
+      meta: {title: '店铺明细'},
+    },
+    {
+      path: '/shopOrderFlow',
+      name: 'shopOrderFlow',
+      component: () => import ('@/page/shop/shopOrderFlow'),
+      meta: {title: '店铺明细'},
+    },
+    {
+      path: '/shopSearch',
+      name: 'shopSearch',
+      component: () => import ('@/page/shop/shopSearch'),
+      meta: {title: '店铺搜索'},
     },
 
     //待办事项

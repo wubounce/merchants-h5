@@ -2,7 +2,16 @@
     <section>
         <div class="tableearn">
             <div class="top">
-                <p class='showDate'><span>{{date}}</span><span style="margin-left: 0.35rem;">收益：{{todayMoney}} 元</span></p>
+                <div class='earnings-title'>
+                    <div class="earning">
+                        <p class="month"><span>{{date}}</span></p> 
+                        <p><span>收益：{{todayMoney | tofixd}} 元</span></p>
+                    </div>
+                    <div class="export-wrap" @click="exportExls">
+                        <p><i :class="['iconfont icon-daochu', {'export-disable':listdata.length<=0}]"></i></p> 
+                        <p><span :class="['export', {'export-disable':listdata.length<=0}]">导出</span></p>
+                    </div>
+                </div>
                 <p class="black"></p>
                 <div class="listcon table-header">
                     <span class="report-table-date" >时间</span>
@@ -17,7 +26,7 @@
                             <div class="detail">
                                 <span class="report-table-date">{{item.createTime | momentTime}}</span>
                                 <span class="report-table-count">{{item.orderNo}}</span>
-                                <span class="report-table-money">{{ item.type | showNegative }}{{item.money}}</span>
+                                <span class="report-table-money">{{ item.type | showNegative }}{{item.money | tofixd}}</span>
                             </div>
                         </div>
                         <div v-if="allLoaded" class="nomore-data">没有更多了</div>
@@ -31,6 +40,9 @@
 <script>
 import moment from 'moment';
 import { balanceLogProfitListFun } from '@/service/index';
+import { MessageBox } from 'mint-ui';
+import { setEmail, getEmail } from '@/utils/tool';
+import { validatEmail } from '@/utils/validate';
 import PagerMixin from '@/mixins/pagerMixin';
 export default {
     mixins: [PagerMixin],
@@ -44,30 +56,11 @@ export default {
             total:''
         };
     },
+    created() {
+        this.date = this.$route.query.dateName;
+        this.todayMoney = this.$route.query ? this.$route.query.todayMoney : '';
+    },
     methods: {
-        change(i) {
-            if(i) {
-              //将number类型的数据转化成string
-              i = i+'';
-              //判断是不是'5'
-              if(i.split('.').length == 1) {
-                i = i + '.00';
-              }
-              else {
-                //判断是不是'5.0'
-                if(i.split('.')[1].length ==1) {
-                  i = i + '0';
-                }
-              }
-            }
-            else {
-              i = '0.00';
-            }
-            return i;
-        },
-        showTime() {
-            this.date = this.$route.query.dateName;
-        },
         async _getList() {
             let obj = {
                 dateTime: this.$route.query.dateName,
@@ -81,6 +74,36 @@ export default {
                 this.total = res.total;
             }
         },
+        exportExls(){
+            if(this.listdata.length<=0) return false;
+            MessageBox.prompt(' ', `确定导出${this.date}流水明细？`, {
+                inputPlaceholder:'请填写导出表格的邮箱地址',
+                inputValue:getEmail()?getEmail():null,
+                inputValidator: (val) => {
+                    if (val === null) {
+                        return false;//初始化的值为null，不做处理的话，刚打开MessageBox就会校验出错，影响用户体验
+                    }
+                    return validatEmail(val);
+                }, 
+                inputErrorMessage: '请输入正确的邮箱地址'
+            }).then(async (val) => {
+                    setEmail(val.value);
+                    let payload = {
+                        dateTime: this.$route.query.dateName,
+                        isDay: true,
+                        page: this.page,
+                        pageSize: this.pageSize,
+                        excel:true,
+                        email:val.value
+                    };
+                    await balanceLogProfitListFun(payload);
+                    this.$toast({message: '操作成功',iconClass: 'mint-toast-icon mintui mintui-success'});
+                }, (error) => {
+                    // document.getElementsByClassName("mint-msgbox-errormsg")[0].style.visibility = 'hidden';
+                    // document.getElementsByClassName("invalid")[0].style.borderColor = '#dedede';
+                    
+            });
+        }
     },
     filters: {
         momentTime: function (value) {
@@ -90,10 +113,6 @@ export default {
             return val == 3 ? '-' : '';
         }
     },
-    created() {
-        this.showTime();
-        this.todayMoney = this.change(this.$route.query.todayMoney);
-    }
 };
 </script>
 <style type="text/css" lang="scss" scoped>

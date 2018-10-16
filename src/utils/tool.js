@@ -8,6 +8,12 @@ export const getToken = () => Cookies.get(TokenKey);
 export const setToken = (token) => Cookies.set(TokenKey, token);
 export const removeToken = () => Cookies.remove(TokenKey);
 
+const NoticeTypeKey = 'NoticeType';
+export const getNoticeType = () => Cookies.get(NoticeTypeKey);
+export const setNoticeType = (NoticeType) => Cookies.set(NoticeTypeKey, NoticeType);
+export const removeNoticeType = () => Cookies.remove(NoticeTypeKey);
+
+
 const menuKey = 'menu';
 export const setMenu = (menu) => localStorage.setItem(menuKey, JSON.stringify(menu));
 export const getMenu = () => JSON.parse(localStorage.getItem(menuKey));
@@ -23,11 +29,31 @@ export const setPhone = (navTab) => localStorage.setItem(PhoneKey,JSON.stringify
 export const getPhone = () => JSON.parse(localStorage.getItem(PhoneKey));
 export const removePhone = () => localStorage.removeItem(PhoneKey);
 
+const PhoneCodeKey = 'phoneCode';
+export const setPhoneCode = (navTab) => localStorage.setItem(PhoneCodeKey,JSON.stringify(navTab));
+export const getPhoneCode = () => JSON.parse(localStorage.getItem(PhoneCodeKey));
+export const removePhoneCode = () => localStorage.removeItem(PhoneCodeKey);
+
+const UserNameKey = 'userName';
+export const setUserNameKey = (navTab) => localStorage.setItem(UserNameKey,JSON.stringify(navTab));
+export const getUserNameKey = () => JSON.parse(localStorage.getItem(UserNameKey));
+export const removeUserName = () => localStorage.removeItem(UserNameKey);
+
+const IsRememberKey = 'isRemember';
+export const setIsRemember = (navTab) => localStorage.setItem(IsRememberKey,JSON.stringify(navTab));
+export const getIsRemember  = () => JSON.parse(localStorage.getItem(IsRememberKey));
+export const removeIsRemember  = () => localStorage.removeItem(IsRememberKey);
+
 
 const MemberKey = 'member';
 export const setMember = (data) => sessionStorage.setItem(MemberKey,JSON.stringify(data));
 export const getMember = () => JSON.parse(sessionStorage.getItem(MemberKey));
 export const removeMember = () => sessionStorage.removeItem(MemberKey);
+
+const EmailKey = 'email';
+export const setEmail = (data) => localStorage.setItem(EmailKey,data);
+export const getEmail = () => localStorage.getItem(EmailKey);
+export const removeEmail = () => localStorage.removeItem(EmailKey);
 
 /**
  * 截流函数

@@ -2,7 +2,7 @@
     <section>
         <div class="tableearn">
             <div class="top">
-                <p class='showDate'>总收益：{{this.allMoney}} 元</p>
+                <p class='showDate'>总收益：{{this.allMoney | tofixd}} 元</p>
                 <p class="black"></p>
                 <div class="table-header">
                     <span class="report-table-date">时间</span>
@@ -14,7 +14,7 @@
                     <router-link :to="{ name: 'monthincome', query:{dateName:item.dateName, monthMoney: item.money} }">
                         <div class="detail">
                             <span class="listtime report-table-date">{{item.dateName}}</span>
-                            <span  class="report-table-money">{{item.money}}</span>
+                            <span  class="report-table-money">{{item.money | tofixd}}</span>
                         </div>
                     </router-link>
                 </div>
@@ -39,31 +39,11 @@ export default {
             };
             let res = await balanceLogProfitListFun(obj);
             this.listdata = res.items;
-        },
-        change(i) {
-            if(i) {
-              //将number类型的数据转化成string
-              i = i+'';
-              //判断是不是'5'
-              if(i.split('.').length == 1) {
-                i = i + '.00';
-              }
-              else {
-                //判断是不是'5.0'
-                if(i.split('.')[1].length ==1) {
-                  i = i + '0';
-                }
-              }
-            }
-            else {
-              i = '0.00';
-            }
-            return i;
         }
     },
     created() {
         this.getTotalIncome();
-        this.allMoney = this.change(this.$route.query.allMoney);
+        this.allMoney = this.$route.query ? this.$route.query.allMoney : '';
     }
 };
 </script>

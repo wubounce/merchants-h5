@@ -6,7 +6,7 @@
       <section class="sarch-wrap">
         <div class="search">
             <form action="" target="frameFile" v-on:submit.prevent="">
-              <span class="iconfont icon-IconSearch"></span><input type="text" value='搜索' v-model.trim="searchData" @keyup.enter="searchOrder" @input="clearSearch" placeholder="请输入用户手机号/订单号查询" class="serch">
+              <span class="iconfont icon-IconSearch"></span><input type="text" value='搜索' v-model.trim="searchData" @keyup.enter="searchOrder" @input="clearSearch" placeholder="请输入用户手机号/订单号/设备名" class="serch">
               <iframe name='frameFile' style="display: none;"></iframe>
               <span class="select-back" @click="searchOrder">搜索</span>
             </form>
@@ -22,36 +22,28 @@
     <div class="no-order" v-if="noOrderList"><p>暂无订单</p></div> 
     <div class="page-top" :style="{ 'padding-top': hiddenPageHeight + 'rem' }">
        <div class="page-loadmore-wrapper" ref="wrapper" :style="{overflowY:scrollShow}">
-         <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore">
-         <div class="ios">
-           <div class="alllist" v-for="(item,index) in list" :key="index">
-              <section class="ordermun">
-                <span class="odernmu-phone">{{item.phone}}<span style="padding:0 0.186667rem;color:#999999">|</span>{{item.createTime}}</span>
-                <span class="ordernum-status">{{item.orderStatus | orserStatus}}</span>
-              </section>
-              <router-link :to="{ name: 'orderdetail', query:{orderNo:item.orderNo,orderType:item.orderType}}"> 
-              <section class="order-list">  
-                  <div class="title"><span class="ovh-shop">{{item.shopName}}</span><span class="go iconfont icon-nextx"></span></div>
-                  <div class="detail">  
-                    <div class="orderpic"><img :src="item.imageId" alt=""></div>
-                    <div class="content">
-                        <p class="con-title">{{item.machineName}}</p>
-                        <p class="con-type">{{item.machineFunctionName}}<span style="padding-left:0.35rem;padding-right:0.27rem" v-if="item.isESource === 0">|</span><span v-if="item.isESource === 0">时长{{item.markMinutes}}分钟</span></p>
-                        <p class="con-price" v-if="item.orderType !== 2 && item.orderStatus !==1 || item.orderType !==2 && item.orderStatus !==0">{{'¥'+item.payPrice}}</p>
-                    </div>
-                    <div class="order-action" v-if="item.isReserve === 1">预约</div>
-                  </div>
-              </section>
-              </router-link>
-              <section class="listaction" v-if="item.orderStatus === 2"> 
-                  <mt-button @click="orderRefund(item.orderNo,item.payPrice)" v-has="'mer:order:refund,mer:order:info'" :disabled="refundDisabled">退款</mt-button>
-                  <mt-button @click="machineBoot(item.id,item.machineName)" v-if="item.isESource === 0" v-has="'mer:order:start,mer:order:info'">启动</mt-button>
-                  <mt-button @click="machineReset(item.orderNo,item.machineId,item.machineName)"  v-if="item.isESource === 0" v-has="'mer:order:reset,mer:order:info'">复位</mt-button>
-              </section>
+          <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore">
+          <div class="ios">
+              <div class="alllist" v-for="(item,index) in list" :key="index">
+                  <section class="ordermun">
+                    <span class="odernmu-phone">{{item.phone}}<span style="padding:0 0.186667rem;color:#999999">|</span>{{item.createTime}}</span>
+                    <span class="ordernum-status">{{item.orderStatus | orserStatus}}</span>
+                  </section>
+                  <router-link :to="{ name: 'orderdetail', query:{orderNo:item.orderNo,orderType:item.orderType}}"> 
+                  <section class="order-list">  
+                    <div class="title"><span class="iconfont icon-dianpu2"></span><span class="ovh-shop">{{item.shopName}}</span><span class="go iconfont icon-nextx"></span></div>
+                    <div class="machine-name"><span class="iconfont icon-xiyiji1"></span><span class="ovh-shop">{{item.machineName}}</span><span class="con-price" v-if="item.orderType !== 2 && item.orderStatus !==1 || item.orderType !==2 && item.orderStatus !==0">{{'¥'+item.payPrice}}</span></div>
+                    <div class="con-type"><span class="iconfont icon-iconfontmoshi"></span>{{item.machineFunctionName}}<span style="padding-left:0.13rem;padding-right:0.19rem" v-if="item.isESource === 0">|</span><span v-if="item.isESource === 0">时长{{item.markMinutes}}分钟</span><div class="order-action" v-if="item.isReserve === 1">预约</div></div>
+                  </section>
+                  </router-link>
+                  <section class="listaction" v-if="item.orderStatus === 2"> 
+                      <mt-button @click="orderRefund(item.orderNo,item.payPrice)" v-has="'mer:order:refund,mer:order:info'" :disabled="refundDisabled">退款</mt-button>
+                      <mt-button @click="machineBoot(item.id,item.machineName)" v-if="item.isESource === 0 || item.isESource === null" v-has="'mer:order:start,mer:order:info'">启动</mt-button>
+                      <mt-button @click="machineReset(item.orderNo,item.machineId,item.machineName)"  v-if="item.isESource === 0 || item.isESource === null" v-has="'mer:order:reset,mer:order:info'">复位</mt-button>
+                  </section>
+                </div>
             </div>
-         </div>
-            
-            <div v-if="allLoaded" class="nomore-data">没有更多了</div>
+          <div v-if="allLoaded" class="nomore-data">没有更多了</div>
           </mt-loadmore>
         </div>
     </div>
@@ -105,7 +97,6 @@ export default {
       this._getList();
     },
     async _getList(){
-      
       this.nosearchList = false;
       let payload = null;
       if (this.searchData !== '') {
@@ -117,7 +108,6 @@ export default {
       }
       let res = await orderListFun(payload);
       this.list = res.items?[...this.list,...res.items]:[];  //分页添加
-      this.list.length <= 0 ? this.noOrderList = true:this.noOrderList = false;
       this.total = res.total;
       if (this.searchData) {
         this.hiddenTab = false;
@@ -202,4 +192,27 @@ export default {
 </script>
 <style lang="scss" scoped>
  @import "../../assets/scss/order/order.scss";
+</style>
+<style>
+  @media screen and (max-width: 360px) {
+    input::-webkit-input-placeholder {
+      color: #999;
+      font-size: 12px;
+    }
+    
+    input:-moz-placeholder {
+      color: #999;
+      font-size: 12px;
+    }
+    
+    input::-moz-placeholder {
+      color: #999;
+      font-size: 12px;
+    }
+    
+    input :-ms-input-placeholder {
+      color: #999;
+      font-size: 12px;
+    }
+  }
 </style>

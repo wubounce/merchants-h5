@@ -89,7 +89,6 @@
       </ul>
       <div style="width:100%;height:1.73rem;"></div>
       <div class="about-button">
-        <Button btn-type="small" btn-color="spe" class="ft-btn active" @click.native="deviceDele" v-has="'mer:machine:delete'">删除</Button>
         <Button btn-type="small" btn-color="spe" class="ft-btn active" @click.native="deviceTZJ" v-show="tzjShow" v-has="'mer:machine:clean'">桶自洁</Button>
         <Button btn-type="small" btn-color="spe" class="ft-btn active" @click.native="deviceRest" v-show="(machineState==='运行' && deviceDetail.subTypeName !== '通用脉冲充电桩') || (machineState==='空闲' && deviceDetail.subTypeName !== '通用脉冲充电桩')" v-has="'mer:machine:reset'">复位</Button>
         <Button btn-type="small" btn-color="spe" class="ft-btn active" @click.native="deviceEdit" v-has="'mer:machine:update'">编辑</Button>
@@ -227,20 +226,6 @@
       functionSetListShowClick() {
         this.functionSetListShow =!this.functionSetListShow;
       },
-      deviceDele() {  //删除
-        MessageBox.confirm('是否确认删除此设备?').then(async () => {
-          let res = await deleteDeviceFun({machineId: this.$route.query.machineId});
-          let instance = this.$toast({
-            message: '删除设备成功',
-            iconClass: 'mint-toast-icon mintui mintui-success'
-          });
-          setTimeout(() => {
-            instance.close();
-            this.$router.push({name:'deviceMange'});
-          }, 2000);
-        });   
-        
-      },
       deviceTZJ() {  //桶自洁
         MessageBox.confirm('是否确认桶自洁此设备?').then(async () => {
           let res = await tzjDeviceFun({machineId: this.$route.query.machineId});
@@ -308,7 +293,6 @@
     .device-detail {
       font-size: 0.43rem;
       color: rgba(51, 51, 51, 1);
-      border-top: rgb(229, 232, 235) solid 1px;
       li.device-detail-item {
         background: #fff;
         border-radius: 0.05rem;
@@ -375,6 +359,7 @@
         }
       }
       .device-detail-ft {
+        font-size: 12px;
         padding: 0.13rem 0.4rem;
         margin: .4rem 0;
         background: rgba(255, 255, 255, 1);

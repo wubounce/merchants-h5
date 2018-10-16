@@ -21,9 +21,9 @@
     <section class="fun-item-bd funlist">
       <div v-for="(item,index) in funTypeList" :key="index">
         <span class="fun-list-item">{{item.functionName}}</span>
-        <input type="tel" class="fun-list-item" v-model="item.needMinutes"  min=0/>
-        <input type="number" class="fun-list-item" v-model="item.functionPrice"  min=0/>
-        <input type="tel" class="fun-list-item" v-model="item.functionCode" v-if="isShow2"  min=0/>
+        <input type="text" pattern="\d*" @keypress="userinputFunc" class="fun-list-item" v-model="item.needMinutes"  min=0/>
+        <input type="text" class="fun-list-item" v-model="item.functionPrice"  min=0/>
+        <input type="text" pattern="\d*" @keypress="userinputFunc" class="fun-list-item" v-model="item.functionCode" v-if="isShow2"  min=0/>
         <p class="fun-list-item">
           <mt-switch v-model="item.ifOpen"></mt-switch>
         </p>
@@ -49,6 +49,7 @@ export default {
         selectedFunction: '',
         functionTempletType: '',
         communicateType: null,
+        keepInitializationArr: [],
         isDisable: false,
         nullDisable: false,
         timeIsDisable: false,
@@ -91,6 +92,14 @@ export default {
       };
     },
     methods: {
+       userinputFunc() {  //只能输入数字
+        var keyCode = event.keyCode; 
+        if (keyCode >= 48 && keyCode <= 57) { 
+          event.returnValue = true; 
+        }else { 
+          event.returnValue = false; 
+        }
+      },
       checkData(val,index,name,flag) {
         let reg = /^\+?[1-9][0-9]*$/;  //验证非0整数
         let reg1 = /^[0-9]+([.]{1}[0-9]{1,2})?$/;  //验证非0正整数和带一位小数字非0正整数
@@ -161,7 +170,8 @@ export default {
         res.list.forEach(item=>{
           item.ifOpen=item.ifOpen === "0"?(!!item.ifOpen) : (!item.ifOpen);
         });
-        this.funTypeList = res.list;         
+        this.funTypeList = res.list;  
+        this.keepInitializationArr = [].concat(JSON.parse(JSON.stringify(res.list)));       
       },  
      
       async goNext() {
@@ -178,6 +188,10 @@ export default {
           let item = this.funTypeList[i];
           if(item.ifOpen === false){
             count++;
+            item.needMinutes = this.keepInitializationArr[i].needMinutes;
+            item.functionPrice = this.keepInitializationArr[i].functionPrice;
+            item.functionCode = this.keepInitializationArr[i].functionCode;
+            continue;
           } 
           if(!reg.test(Number(item.needMinutes))){
             this.$toast("耗时填写格式错误，请填写非0的非空正整数");
@@ -191,7 +205,12 @@ export default {
           } 
           if(item.functionPrice==='' || !reg1.test(Number(item.functionPrice))){
             this.$toast("原价填写格式错误，请输入非空正整数，最多2位小数");
-             flag2 = false;
+            flag2 = false;
+            break;
+          }
+          if(Number(item.functionPrice)> 99){
+            this.$toast("价格需为0-99");
+            flag2 = false;
             break;
           }
           if(Number(this.communicateType) === 0 && !reg.test(Number(item.functionCode))){
@@ -471,5 +490,11 @@ export default {
   }
   .default {
     opacity: 0.6;
+  }
+</style>
+<style>
+  .mint-switch-input:checked + .mint-switch-core {
+    border-color: #4DD865;
+    background-color: #4DD865;
   }
 </style>

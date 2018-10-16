@@ -4,23 +4,23 @@
   <div v-else class="page-loadmore-height">
 		<div class="top">
 				<p class="shop-item title" >批量定时启动设备</p>
-				<p class="black"></p>
 		</div>
 		<p v-if="noData" class="noTodoList">暂无待办事项</p>
 		<div class='page-top' v-else>
 			<div class="page-loadmore-wrapper" ref="wrapper" :style="{overflowY:scrollShow}">
-				<p class="shop-item title" v-show="noData" >批量定时启动设备</p>
 				<mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" @translate-change="translateChange" :auto-fill="false" ref="loadmore">
-					<li class="list" v-for="(item,index) in list" :key="index"> 
-						<router-link :to="{ name: 'todoDetail', query:{id:item.id}}">
-							<p class="time"><span>时间</span><span class="time-blue">{{item.beginTime}}</span></p>
-							<p class="time"><span>店铺</span><span class="text">{{item.shopName.length>15 ? item.shopName.slice(0,15) + '...' : item.shopName }}</span></p>
-							<div class="time display-flex">
-								<div class='type'><span>类型</span><span class="text">{{item.machineTypeName}}</span></div>
-								<div class='type'><span>模式</span><span class="text">{{item.functionName}}</span></div>
-							</div>
-						</router-link>
-					</li>
+					<ul class="todolist-wrap">
+						<li class="list" v-for="(item,index) in list" :key="index"> 
+							<router-link :to="{ name: 'todoDetail', query:{id:item.id}}">
+								<p class="time"><span>时间</span><span class="time-blue">{{item.beginTime}}</span></p>
+								<p class="time"><span>店铺</span><span class="text">{{item.shopName.length>15 ? item.shopName.slice(0,15) + '...' : item.shopName }}</span></p>
+								<div class="time display-flex">
+									<div class='type'><span>类型</span><span class="text">{{item.machineTypeName}}</span></div>
+									<div class='type mode'><span>模式</span><span class="text">{{item.functionName}}</span></div>
+								</div>
+							</router-link>
+						</li>
+					</ul>
 					<div v-if="allLoaded" class="nomore-data">没有更多了</div>
 				</mt-loadmore>
 			</div>

@@ -1,81 +1,124 @@
-  .meber-list {
-    padding:0 0.4rem;
-    background: #fff;
-    margin-bottom: 0.21rem;
+.meber-list {
+  padding:0 0.4rem;
+  background: #fff;
+  margin-bottom: 0.21rem;
+}
+.momber-wrap {
+  font-size: 16px;
+  color: #333;
+  background: #fff;
+  padding-top: 0.21rem;
+  padding-bottom: 0.19rem;
+  overflow: hidden;
+  p{
+    height: 0.6rem;
+    line-height: 0.6rem
   }
-  .momber-wrap {
-    font-size: 16px;
-    color: #333;
-    background: #fff;
-    padding-top: 0.21rem;
-    padding-bottom: 0.19rem;
-    overflow: hidden;
-    p{
-      height: 0.6rem;
-      line-height: 0.6rem
-    }
-  }
-  .name{
-    width: 75%;
-    float: left;
-     a {
-      color: #333;
-      display: block;
-    }
-  }
-  .phone {
-    float: right;
-  }
-  .phonenum {
-    font-size: 16px;
-    color: #999;
-    margin-top: 0.08rem;
-  }
-  .memberdesc {
-    border-top:1px solid #f9f8ff;
-    font-size: 12px;
-    color: #999;
-    height: 0.8rem;
-    line-height: 0.8rem;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-  .check-switch {
-    margin-top: 0.16rem;
-    margin-left: 0.27rem;
-  }
-  .addmember {
-    width:1.49rem;
-    height:1.49rem;
-    background:#1890FF;
-    border-radius: 50%;
-    font-size:12px;
-    font-family:PingFangSC-Regular;
-    color:rgba(255,255,255,1);
-    text-align: center;
-    -moz-box-shadow: 0 0.05rem 0.23rem 0 rgba(24, 144, 255, 0.7);
-    -webkit-box-shadow: 0 0.05rem 0.23rem 0 rgba(24, 144, 255, 0.7);
-    box-shadow: 0 0.05rem 0.23rem 0 rgba(24, 144, 255, 0.7);
+}
+.search-header {
     position: fixed;
-    bottom:0.55rem;
-    right: 0.64rem;
-    .order-action {
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 999;
+}
+.sarch-wrap{
+  background: #ffffff;
+  padding: 0.27rem;
+  .search {
+    -webkit-box-shadow: 0px 0.053333rem 0.133333rem 0px rgba(186, 192, 210, 0.3);
+    box-shadow: 0px 0.053333rem 0.133333rem 0px rgba(186, 192, 210, 0.3);
+    border-radius: 0.133333rem;
+    font-size: 16px;
+    height: 1.17rem;
+    display: flex;
+    form {
       display: inline-block;
-      margin-top: 0.2rem;
+      width: 100%;
+    }
+    input {
+      width: 6.8rem;
       font-size: 16px;
-      color: #fff;
+      height:1.17rem;
+    }
+    .icon-IconSearch {
+      color: #999999;
+      padding-left: 0.4rem;
+      padding-right: 0.27rem;
+    }
+    .select-back {
+      line-height: 1.17rem;
+      padding-right: 0.27rem;
+      padding-left: 0.27rem;
+      color: #1890FF;
+      border-left:1px solid rgba(216,216,216,1);
     }
   }
-  .no-discount-list {
-    text-align: center;
-    font-size: 14px;
-    padding-top: 4rem;
-    color: #999;
+}
+.name{
+  width: 75%;
+  float: left;
+    a {
+    color: #333;
+    display: block;
   }
-  .nomore-data {
-    text-align: center;
-    color: #999;
-    font-size: 12px;
-    margin-bottom: 0.266667rem;
+}
+.phone {
+  float: right;
+}
+.phonenum {
+  font-size: 16px;
+  color: #999;
+  margin-top: 0.08rem;
+}
+.memberdesc {
+  border-top:1px solid #f9f8ff;
+  font-size: 12px;
+  color: #999;
+  height: 0.8rem;
+  line-height: 0.8rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.check-switch {
+  margin-top: 0.16rem;
+  margin-left: 0.27rem;
+}
+.addmember {
+  width:1.49rem;
+  height:1.49rem;
+  background:#1890FF;
+  border-radius: 50%;
+  font-size:12px;
+  font-family:PingFangSC-Regular;
+  color:rgba(255,255,255,1);
+  text-align: center;
+  -moz-box-shadow: 0 0.05rem 0.23rem 0 rgba(24, 144, 255, 0.7);
+  -webkit-box-shadow: 0 0.05rem 0.23rem 0 rgba(24, 144, 255, 0.7);
+  box-shadow: 0 0.05rem 0.23rem 0 rgba(24, 144, 255, 0.7);
+  position: fixed;
+  bottom:0.55rem;
+  right: 0.64rem;
+  .order-action {
+    display: inline-block;
+    margin-top: 0.2rem;
+    font-size: 16px;
+    color: #fff;
   }
+}
+.page-top {
+  padding-top: 1.44rem;
+  height: 100%;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+}
+.no-member-list {
+  font-size: 14px;
+  color: #999;
+  text-align: center;
+  background: #fff;
+  height: 100%;
+  line-height: 100%;
+  padding-top: 4rem;
+}

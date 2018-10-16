@@ -2,23 +2,21 @@
   <section class="referee">
     <div ref="refereeForm" :model="referee" class="referee-form">
       <div class="form-group">
+        <input type="text" placeholder="请输入姓名" v-model="referee.name" required="required">
+      </div>
+      <div class="form-group">
         <p class="area" @click='open()'>
           <span class="chooseArea" :class="{'black':chooseArea !== '选择所在区域' }">{{chooseArea}}</span>
           <span class="forward iconfont icon-nextx"></span>
         </p>      
       </div>
       <div class="form-group">
-        <input type="text" placeholder="推荐人姓名（选填）" v-model="referee.name" required="required">
-      </div>
-      <div class="form-group">
-        <input type="text" placeholder="推荐人手机号码（选填）" v-model="referee.phone" required="required">
+        <input type="text" placeholder="邀请码" v-model="referee.code" required="required">
       </div>
       <div class="clickBtn">
-        <mt-button type="primary" class="btn-blue" @click.prevent="goToNext" :disabled="chooseArea === '选择所在区域'">申请注册</mt-button>
+        <mt-button type="primary" class="btn-blue" @click.prevent="goToNext" :disabled="!(chooseArea!== '选择所在区域' && referee.name && referee.code) ">申请注册</mt-button>
       </div>
-      <router-link to="/userAgreement">
-        <p class="agreeRule">注册表示已同意<span class="rule">《用户协议》</span></p>
-      </router-link>
+      <p class="agreeRule" @click="keepMsg">注册表示已同意<span class="rule">《用户协议》</span></p>
     </div>
     <!-- 弹窗 -->
       <mt-popup v-model="placeVisible" position="bottom" class="mint-popup">
@@ -33,14 +31,14 @@
 
 <script>
   import place from '@/components/Area/Area';
-  import { validatPhone , validatName } from '@/utils/validate';
+  import { validatInviteCode, validatName } from '@/utils/validate';
   import { areaListFun } from '@/service/shop';
   import { saveRegisterInfoFun } from '@/service/device';
   export default{
     data() {
       return {
         referee: {
-          phone: '',
+          code: '',
           name: '',
         },
         chooseArea: '选择所在区域',
@@ -113,10 +111,6 @@
         // 传给父组件的值由地址，省ID，市ID，区ID,省名，市名，区名拼接而成，以逗号分割，例如：'河北省石家庄市长安区,130000,130100,130102'
         this.message = this.place + ',' + this.provinceId + ',' + this.cityId + ',' + this.districtId + ',' + this.provinceName + ',' + this.cityName + ',' + this.districtName;
         this.chooseArea = this.place;
-        sessionStorage.setItem('placeArea',this.chooseArea);
-        sessionStorage.setItem('provinceId',this.provinceId);
-        sessionStorage.setItem('cityId',this.cityId);
-        sessionStorage.setItem('districtId',this.districtId);
       },
       async addressChange(picker,values) {
         let obj = { parentId: '0' };
@@ -163,34 +157,48 @@
         this.cityName = values[1];
         this.districtName = values[2];
       },
-
-      async goToNext() {
+      keepMsg() { //缓存信息
+        sessionStorage.setItem('refeeName',this.referee.name);
+        sessionStorage.setItem('address',this.chooseArea);
+        sessionStorage.setItem('provinceId',this.provinceId);
+        sessionStorage.setItem('cityId',this.cityId);
+        sessionStorage.setItem('districtId',this.districtId);
+        sessionStorage.setItem('invitationCode',this.referee.code);
+        this.$router.push({name:'userAgreement'});
+      },
+      async goToNext() {  //提交
+        if(this.referee.name && !validatName(this.referee.name)) {
+          this.$toast({message: "用户名2-20个字符，支持中文和英文" });
+          return false;
+        }
         if(this.chooseArea === '选择所在区域') {
           this.$toast({message: "请选择您所在的区域地址" });
           return false;
         }
-        if(this.referee.phone && !validatPhone(this.referee.phone)) {
-          this.$toast({message: "请输入正确的手机号码" });
-          return false;
-        }
-        if(this.referee.name && !validatName(this.referee.name)) {
-          this.$toast({message: "推荐人用户名2-20个字符，支持中文和英文" });
+        if(this.referee.code && !validatInviteCode(this.referee.code)) {
+          this.$toast({message: "请输入正确的邀请码" });
           return false;
         }
         let query = this.$route.query;
         let payload = {
           phone: query.phone,
-          name: query.name,
+          name: this.referee.name,
           password: query.password,
           address: this.chooseArea,
           provinceId: this.provinceId,
           cityId: this.cityId,
           districtId: this.districtId,
-          refereeName:  this.referee.name,
-          refereePhone: this.referee.phone
+          invitationCode: this.referee.code,
         };
-        let res = await saveRegisterInfoFun(payload);
-        this.$router.push({name:'successTip'});
+        saveRegisterInfoFun(payload).then(() => {
+          this.$router.push({name:'successTip'});
+          sessionStorage.removeItem('refeeName');
+          sessionStorage.removeItem('address');
+          sessionStorage.removeItem('provinceId');
+          sessionStorage.removeItem('cityId');
+          sessionStorage.removeItem('districtId');
+          sessionStorage.removeItem('invitationCode');
+        }); 
       },
     },
 
@@ -203,13 +211,26 @@
         }
       },
     },
-    mounted() {
-      if(sessionStorage.getItem('placeArea')) this.chooseArea = sessionStorage.getItem('placeArea');  
-      if(sessionStorage.getItem('provinceId')) this.provinceId = sessionStorage.getItem('provinceId');
-      if(sessionStorage.getItem('cityId')) this.cityId = sessionStorage.getItem('cityId');
-      if(sessionStorage.getItem('districtId')) this.districtId = sessionStorage.getItem('districtId');
-
-    },
+    created() {
+        if(sessionStorage.setItem('refeeName',this.referee.name)){
+          this.referee.name = sessionStorage.setItem('refeeName',this.referee.name);
+        }
+        if(sessionStorage.setItem('address',this.chooseArea)){
+          this.chooseArea = sessionStorage.setItem('address',this.chooseArea);
+        }
+        if(sessionStorage.setItem('provinceId',this.provinceId)){
+          this.provinceId = sessionStorage.setItem('provinceId',this.provinceId);
+        }
+        if(sessionStorage.setItem('cityId',this.cityId)){
+          this.cityId = sessionStorage.setItem('cityId',this.cityId);
+        }
+        if(sessionStorage.setItem('districtId',this.districtId)){
+          this.districtId = sessionStorage.setItem('districtId',this.districtId);
+        }
+        if(sessionStorage.setItem('invitationCode',this.invitationCode)){
+          this.referee.code = sessionStorage.setItem('invitationCode',this.invitationCode);
+        }
+    }
     
   };
 </script>
