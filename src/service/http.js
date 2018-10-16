@@ -79,6 +79,10 @@ http.interceptors.response.use(
         store.dispatch('LogOut').then(() => {
           location.reload();
         });
+    }else if (response.status === 200 && response.data.code === 8002) {  //11:运营商不存在;
+      store.dispatch('LogOut').then(() => {
+        location.reload();
+      });
     }else {
       if (response.data.code === 10) {
         store.dispatch('LogOut').then(() => {
