@@ -1,8 +1,5 @@
 <template>
   <div class="main">
-    <div class="notice-head" @click="openNotice">
-        <img src="../../../static/image/activity/apply@2x.png" alt="">
-    </div>
     <div class="earnings-wrap">
       <router-link :to="{ name: 'totalincome', query:{allMoney: allMoney } }">
         <div class="earning-type">
@@ -58,20 +55,6 @@
         <div class="bar" id="bar" :style="{height:height,width:width}" ref="bar"></div>
       </div>
       <div class="offline-tip" v-if="offlineTip"><span class="iconfont icon-guanbi1" @click="offlineTip=false;"></span>  离线：连续30分钟未在线的设备数量。可能由于断电，信号不稳定，模块、设备损坏等原因引起，请自行检查或联系客服报备。</div>
-    </div>
-    <div class="activity-wrap" v-if="noticeShow">
-      <div class="activity">
-        <div class="pic">
-          <img src="../../../static/image/activity/activity@2x.png" alt="">
-        </div>
-        <div class="apply">
-            <span class="apply-btn" @click="goApply">立即报名</span>
-            <span class="apply-btn shadow">立即报名</span>
-        </div>
-        <div class="icon-wrapper" @click="closeNotice">
-          <img src="../../../static/image/activity/del@2x.png" alt="">
-        </div>  
-      </div>
     </div>
   </div>
   
@@ -171,25 +154,8 @@ export default {
     this.ProfitDate();
     this.getThisMonth();
     this.getThisDay();
-    if(getNoticeType() != 1) {
-        this.noticeShow = true;
-    }else{
-      this.noticeShow = false;       
-    }   
   },
   methods: { 
-    openNotice(){
-      this.noticeShow = true;
-    },
-    goApply(){
-      this.noticeShow = false;
-      setNoticeType(1);
-      this.$router.push({name:'activity'});
-    },
-    closeNotice(){
-      this.noticeShow = false;
-      setNoticeType(1);
-    },
     //获取本月
     getThisMonth() {
       let date = new Date();
@@ -725,13 +691,6 @@ export default {
         this.ModalHelper.beforeClose();
       }
     },
-    noticeShow: function () {
-      if (this.noticeShow) {
-        this.ModalHelper.afterOpen();
-      } else {
-        this.ModalHelper.beforeClose();
-      }
-    }
   },
   components:{
     selectpickr
