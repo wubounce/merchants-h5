@@ -5,46 +5,48 @@
     </section>
     <div class="no-discount-list" v-if="list.length<=0">暂无相关明细</div>
     <!-- 记录为收益类，增加class：add -->
-    <div class="page-loadmore-wrapper" ref="wrapper" :style="{overflowY:scrollShow}"  v-else>
-        <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" @translate-change="translateChange" :auto-fill="false" ref="loadmore">
-            <div class="apply--list-wrap">
-                <div class="all-list">
-                    <div class="all" v-for="(item,index) in list" :key="index" >
-                        <div class="list add" v-if="item.type === 1 "> 
-                            <router-link :to="{name:'accountDetail', query:{balanceLogId:item.id,type:item.type}}">
-                                <div class="icon-type"> 
-                                    <span class="usericon iconfont icon-dianpu"></span>
-                                </div>
-                                <div class="accountList-content clearfix">
-                                    <div class="left">
-                                        <p class="title">{{item.shopName}}</p>
-                                        <p class="status">交易成功</p>
-                                        <p class="time">{{item.createTime}}</p>
+    <div class="page-top" v-else>
+        <div class="page-loadmore-wrapper" ref="wrapper" :style="{overflowY:scrollShow}">
+            <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" @translate-change="translateChange" :auto-fill="false" ref="loadmore">
+                <div class="apply--list-wrap">
+                    <div class="all-list" ref="all">
+                        <div class="all" v-for="(item,index) in list" :key="index" >
+                            <div class="list add" v-if="item.type === 1 "> 
+                                <router-link :to="{name:'accountDetail', query:{balanceLogId:item.id,type:item.type}}">
+                                    <div class="icon-type"> 
+                                        <span class="usericon iconfont icon-dianpu"></span>
                                     </div>
-                                    <p class="price">+{{item.price}}</p>
-                                </div>
-                            </router-link>                
-                        </div>
-                        <div class="list" v-if="item.type === 3">
-                            <router-link :to="{name:'accountDetail', query:{balanceLogId:item.id}}">
-                                <div class="icon-type"> 
-                                    <span class="usericon iconfont icon-tuikuan">  </span>
-                                </div>
-                                <div class="accountList-content clearfix">
-                                    <div class="left">
-                                        <p class="title">退款订单</p>
-                                        <p class="status">交易成功</p>
-                                        <p class="time">{{item.createTime}}</p>
+                                    <div class="accountList-content clearfix">
+                                        <div class="left">
+                                            <p class="title">{{item.shopName}}</p>
+                                            <p class="status">交易成功</p>
+                                            <p class="time">{{item.createTime}}</p>
+                                        </div>
+                                        <p class="price">+{{item.price}}</p>
+                                    </div>
+                                </router-link>                
+                            </div>
+                            <div class="list" v-if="item.type === 3">
+                                <router-link :to="{name:'accountDetail', query:{balanceLogId:item.id}}">
+                                    <div class="icon-type"> 
+                                        <span class="usericon iconfont icon-tuikuan">  </span>
+                                    </div>
+                                    <div class="accountList-content clearfix">
+                                        <div class="left">
+                                            <p class="title">退款订单</p>
+                                            <p class="status">交易成功</p>
+                                            <p class="time">{{item.createTime}}</p>
+                                        </div> 
+                                        <p class="price">-{{item.price}}</p>
                                     </div> 
-                                    <p class="price">-{{item.price}}</p>
-                                </div> 
-                            </router-link>                
-                        </div> 
-                    </div>   
+                                </router-link>                
+                            </div> 
+                        </div>   
+                    </div>
+                    <p class="info" v-if="accountOnlySix">只展示近6个月记录</p>  
                 </div>
-                <p class="info" v-if="accountOnlySix">只展示近6个月记录</p>  
-            </div>
-        </mt-loadmore>
+            </mt-loadmore>
+        </div>
     </div>
 </div>
 </template>
@@ -74,14 +76,14 @@ export default {
   },
   methods: {
     titleClick: function(index) {
-      this.titleIndex = index;
-      this.type = this.titleArr[this.titleIndex].value;
-      this.page = 1; //从第一页起
-      this.allLoaded = false;//下拉刷新时解除上拉加载的禁用
-      this.list = [];
-      this._getList(this.type);
+        this.titleIndex = index;
+        this.type = this.titleArr[this.titleIndex].value;
+        this.page = 1; //从第一页起
+        this.allLoaded = false;//下拉刷新时解除上拉加载的禁用
+        this.list = [];
+        this._getList();
     },
-    async _getList(type){
+    async _getList(){
         let payload = {page:this.page,pageSize: this.pageSize,type:this.type};
         let res = await getApplyListFun(payload);
         this.list = res.items?[...this.list,...res.items]:[];  //分页添加
@@ -102,10 +104,14 @@ export default {
 </script>
 <style lang="scss" scoped>
     @import "../../assets/scss/common";
-    
     .accountList-wrapper{
-        padding-top: 1.17rem;
-        box-sizing:border-box;
+        height: 100%;
+        .page-top {
+            height: 100%;
+            padding-top: 1.17rem;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+        }
         .apply-status {
             width: 100%;
             display: flex;
