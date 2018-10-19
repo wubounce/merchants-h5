@@ -269,6 +269,12 @@ export default new Router({
       component: () => import ('@/page/order/orderDetail'),
       meta: {title: '订单详情'},
     },
+    {
+      path: '/compensate',
+      name: 'compensate',
+      component: () => import ('@/page/order/compensate'),
+      meta: {title: '补偿券'},
+    },
 
     //店铺管理
     {
@@ -284,15 +290,7 @@ export default new Router({
       meta: {
         title: '店铺新增',
         keepAlive:true
-      },
-      // children: [
-      //   {
-      //     path: 'test',
-      //     name: 'test',
-      //     component: () => import ('@/page/shop/test/test'),
-      //     //meta: {title: '新增店铺'},
-      //   }
-      // ]
+      },     
     },
     {
       path: '/mapSearch',
