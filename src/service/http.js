@@ -61,16 +61,7 @@ http.interceptors.response.use(
   response => {
     Indicator.close();
     if (response.status === 200 && response.data.code===0) {
-      // 时间验证 & 把时间放到vuex中
-      if (response.data.t > 0) {
-        let offset = response.data.t - new Date().getTime();
-        if (Math.abs(offset) > 10 * 60 * 1000) {
-          MessageBox.alert('客户端时间不合法，会影响正常业务使用[t: ' + offset + ']', '注意');
-        }
-        store.commit('setServerTimeOffset', parseInt(offset / 1000));
-      }
       return Promise.resolve(response.data.data);
-
     }else if (response.status === 200 && response.data.code === 11) { //11:Token 过期了;
       store.dispatch('LogOut').then(() => {
         location.reload();
