@@ -19,7 +19,19 @@
    <!-- 选择店铺 -->
   <mt-popup v-model="shopVisible" position="bottom" :closeOnClickModal="false">
     <div class="resp-shop">
+      <span class="quxi" @click="cancelCheckshop">取消</span>
       <span class="shop">负责店铺</span>
+      <span class="qued" @click="getcheckshop">确定</span>
+    </div>
+    <div class="search-header">
+      <section class="sarch-wrap">
+        <div class="search">
+            <form action="" target="frameFile">
+              <span class="iconfont icon-IconSearch"></span><input type="text" placeholder="请输入相关店铺名称" class="serch">
+              <iframe name='frameFile' style="display: none;"></iframe>
+            </form>
+        </div>
+      </section>
     </div>
     <section class="shop-touch">
       <div class="all-list">
@@ -32,10 +44,6 @@
           <p class="mint-checkbox-label shopdesc">{{item.address}}</p>
         </label>
       </div>
-    </section>
-    <section class="promiss-footer">
-      <span class="can" @click="cancelCheckshop">取消</span>
-      <span class="cifrm" @click="getcheckshop">确定</span>
     </section>
   </mt-popup>
 

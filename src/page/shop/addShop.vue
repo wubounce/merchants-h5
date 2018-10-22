@@ -276,7 +276,7 @@ export default {
     editTime(i) {
       if(i) {
         this.noEdit =false;
-        this.placeholdercontent = "请填个位数的时长";
+        this.placeholdercontent = "请输入1-9的数字";
       }
       else {
         this.noEdit =true;

@@ -10,9 +10,9 @@
               <span class="select-back" @click="searchOrder">搜索</span>
             </form>
         </div>
-        <div class="coupon-date"><span class="iconfont icon-zhifubao"></span></div>
+        <div class="coupon-date"><span class="iconfont icon-rili"></span></div>
       </section>
-      <div class="hidden-tab"  v-if="hiddenTab">  
+      <div class="hidden-tab">  
         <section class="order-status">
           <div v-for="(item,index) in titleArr" @click="titleClick(index)"><span :class="{current: titleIndex === index}">{{item.lable}}</span></div>
         </section>
@@ -24,17 +24,29 @@
         <span class="current">6499</span>
       </div>
       <div>
-        <p>运行</p>
+        <p>未使用</p>
         <span>9999</span>
       </div>
       <div> 
-        <p>空闲</p>
+        <p>已使用</p>
         <span>999</span>
       </div>
       <div>
-        <p>故障</p>
+        <p>已过期</p>
         <span>999</span>
       </div>
+    </div>
+    <div class="coupon-content">
+      <ul>
+        <li class="list">
+          <div class="price-content">
+            
+          </div>
+          <div class="rules-conten">
+
+          </div>
+        </li>
+      </ul>
     </div>
   </div>
    
@@ -113,6 +125,10 @@
     font-size: 20px;
     padding-left: 0.48rem;
   }
+  .icon-rili {
+    color: #1890FF; 
+    font-size: 20px;
+  }
 }
 .device-status {
   display: flex;
@@ -150,6 +166,11 @@
       color: #fff;
       background: rgba(24, 144, 255, 1);
     }
+  }
+}
+.coupon-content {
+  .list {
+   
   }
 }
 </style>
