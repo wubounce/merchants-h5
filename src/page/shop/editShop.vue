@@ -561,9 +561,7 @@ export default {
             setTimeout(() => {
               instance.close();
               }, 1000);
-              this.$router.push({
-                name:'shopList'
-              });
+              this.$router.go(-2);
             //上面是传值
           }
           else {
@@ -604,9 +602,7 @@ export default {
           setTimeout(() => {
             instance.close();
             }, 1000);
-            this.$router.push({
-              name:'shopList'
-            });
+            this.$router.go(-2);
         }
         
       }else if(!this.list[0].value) {

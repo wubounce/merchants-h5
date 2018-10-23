@@ -441,10 +441,7 @@ export default {
             setTimeout(() => {
               instance.close();
               }, 1000);
-              this.$router.push({
-                name:'shopList'
-              });
-           
+              this.$router.go(-1);
             //上面是传值
           }
           else {
@@ -484,11 +481,8 @@ export default {
           setTimeout(() => {
             instance.close();
             }, 1000);
-            this.$router.push({
-              name:'shopList'
-            });
+            this.$router.go(-1);
         }
-        
       }else if(!this.shopName) {
         this.$toast({
             message: '请填写店铺名称',
@@ -555,10 +549,11 @@ export default {
           this.lat = this.$route.query.lat;
         }
       }
-      else if(from.name == 'shopList'){
+      else if(from.name === 'shopList'){
         location.reload();
         //置空，解决keepAlive造成的保留上次
         //this.setNull();  
+        
       }
     },
     popupVisible: function () {
