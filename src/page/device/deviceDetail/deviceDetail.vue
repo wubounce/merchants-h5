@@ -91,6 +91,7 @@
       <div class="about-button">
         <Button btn-type="small" btn-color="spe" class="ft-btn active" @click.native="deviceTZJ" v-show="tzjShow" v-has="'mer:machine:clean'">桶自洁</Button>
         <Button btn-type="small" btn-color="spe" class="ft-btn active" @click.native="deviceRest" v-show="(machineState==='运行' && deviceDetail.subTypeName !== '通用脉冲充电桩') || (machineState==='空闲' && deviceDetail.subTypeName !== '通用脉冲充电桩')" v-has="'mer:machine:reset'">复位</Button>
+        <Button btn-type="small" btn-color="spe" class="ft-btn active" @click.native="deviceStart" v-show="deviceDetail.parentTypeName!=='充电桩'">启动</Button>
         <Button btn-type="small" btn-color="spe" class="ft-btn active" @click.native="deviceEdit" v-has="'mer:machine:update'">编辑</Button>
       </div>
       </section>
@@ -252,7 +253,6 @@
             this.$router.push({name:'deviceMange'});
           }, 2000);
         });
-
       },
       deviceEdit() {
         this.$router.push({
@@ -262,12 +262,21 @@
           }
         });
       },
+      // 进入启动页
+      deviceStart() {
+        this.$router.push({
+          name: 'deviceStart',
+          query:{
+            machineId: this.$route.query.machineId 
+          }
+        });
+      }
     },
     created() {
       this.getDetailDevice();
     },
     components: {
-      Button,
+      Button
     }
   };
 
