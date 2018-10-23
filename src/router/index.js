@@ -371,6 +371,7 @@ export default new Router({
     { path: '/editMarket', name: 'editMarket', component: () => import('@/page/marketing/editMarket'),meta: {title: '修改限时优惠'} },
     { path: '/vipDetail', name: 'vipDetail', component: () => import('@/page/marketing/vipDetail'),meta: {title: 'VIP卡详情'} },
     { path: '/editVip', name: 'editVip', component: () => import('@/page/marketing/editVip'),meta: {title: 'VIP卡修改'} },
+    { path: '/couponDetail', name: 'couponDetail', component: () => import('@/page/marketing/couponDetail'),meta: {title: '优惠券详情'} },
     
     //设置
     {
