@@ -24,7 +24,7 @@
 </template>
 <script>
 import { MessageBox } from 'mint-ui';
-import {detailDeviceListFun } from '@/service/device';
+import {detailDeviceListFun,machineStartFun } from '@/service/device';
 export default {
     data () {
         return {
@@ -66,9 +66,17 @@ export default {
        startMachine(index) {
            //console.log(this.functionList[index].functionName);
             MessageBox.confirm('启动模式: '+this.functionList[index].functionName,'确定要启动'+this.fromdata.machineName+'?').then(async () => {
+                let payload = {
+                  machineId: this.fromdata.machineId,
+                  functionId: this.functionList[index].functionId
+                };
+                let res = await machineStartFun(payload);
                 this.$router.go(-1);
-                // let payload = {shopId: id};
-                // let res = await deleteShopFun(payload);
+                this.$toast({
+                  message: '启动成功',
+                  position: "middle",
+                  duration: 3000
+                });
             });
        },
       // 获取数据
