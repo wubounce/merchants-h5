@@ -258,11 +258,7 @@ export default {
     editTime(i) {
       if(i) {
         this.noEdit =false;
-<<<<<<< HEAD
         this.placeholdercontent = "请填写1到9的数字";
-=======
-        this.placeholdercontent = "请输入1-9的数字";
->>>>>>> 2.4
       }
       else {
         this.noEdit =true;
