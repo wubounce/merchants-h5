@@ -81,8 +81,26 @@ export const validatVipLimit = (str) => {
 /*去掉特殊字符*/
 export const validatReplace = /[\'\"\\\/\b\f\s\n\r\t\@\#\$\%\^\&\*\(\)\{\}\:\"\L\<\>\?\[\]]/g;  
 
-
+// 邮箱
 export const validatEmail = (str)=>{
   const reg = /^([A-Za-z0-9_\-\.\u4e00-\u9fa5])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,8})$/;
+  return reg.test(str);
+};
+
+/**
+ * 订单补偿券的面额
+ * 
+ */
+export const validatCouponPrice = (str)=>{
+  const reg = /^[1-9]{1}\d*(\.\d{1,2})?$/;
+  return reg.test(str);
+};
+
+/**
+ * 订单补偿券的满减
+ * 
+ */
+export const validatFullDiscount = (str)=>{
+  const reg = /^[0-9]{1}\d*(\.\d{1,2})?$/;
   return reg.test(str);
 };

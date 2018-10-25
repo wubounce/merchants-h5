@@ -9,6 +9,7 @@ const machineResetApi = 'machine/reset';                                        
 const machineBootApi = 'machine/boot';                                                // 订单列表，启动 method 'post'
 const searchOrderApi= 'order/listSearchOrder';                                        //搜索订单
 const orderDetailApi = 'order/getOrderManagerDetail';                                 // 获取订单详情
+const compensateApi = 'voucher/compensate';                                            //订单补偿
       
 // 订单列表
 export const orderListFun = (payload) => fetch.post(orderListApi, payload);
@@ -27,5 +28,8 @@ export const searchOrderFun = (payload) => fetch.post(searchOrderApi, payload);
 
 // 获取订单详情
 export const orderDetailFun = (payload) => fetch.post(orderDetailApi, payload);
+
+// 获取订单详情
+export const compensateFun = (payload) => fetch.post(compensateApi, payload);
 
 
