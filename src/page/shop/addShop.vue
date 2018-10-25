@@ -58,8 +58,8 @@ export default {
       machineTypeIdsArray:'',
       orderLimitMinutes:'',
       addBusinessTime:'',
-      noEdit:true,
-      placeholdercontent:'开启预约功能后可填',
+      noEdit:false,
+      placeholdercontent:'请填写1到9的数字',
       list: [
         {
           title: "店铺类型",
@@ -198,7 +198,7 @@ export default {
       ],
       timeVisible: false,
       isTime:true,
-      isReserve:false,
+      isReserve:true,
       lat:'',
       lng:'',
       mapCity:'',
@@ -276,7 +276,7 @@ export default {
     editTime(i) {
       if(i) {
         this.noEdit =false;
-        this.placeholdercontent = "请输入1-9的数字";
+        this.placeholdercontent = "请填写1到9的数字";
       }
       else {
         this.noEdit =true;
@@ -450,7 +450,7 @@ export default {
           else {
             //提示
             this.$toast({
-              message:'请输入个位数的时长',
+              message:'请填写1到9的数字',
               position:'middle',
               duration:3000
             });
