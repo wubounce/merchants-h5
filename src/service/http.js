@@ -8,7 +8,7 @@ import router from '@/router';
 // 创建axios实例
 const http = axios.create({
   baseURL: process.env.API_URL, // api的base_url
-  timeout: 90000, // 请求超时时间
+  timeout: 30000, // 请求超时时间
   paramsSerializer: (params) => {
     return qs.stringify(params, { arrayFormat: 'brackets' });
   }
