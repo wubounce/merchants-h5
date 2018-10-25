@@ -290,7 +290,6 @@ export default {
       this.machineVisible = value;
     },
     async toaddMaket(){
-      console.log();
       if (this.shopIds.length<=0) {
         this.$toast({message: "请选择店铺" });
         return false;

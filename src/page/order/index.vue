@@ -38,7 +38,7 @@
                   </router-link>
                   <section class="listaction" v-if="item.orderStatus === 2"> 
                       <mt-button @click="orderRefund(item.orderNo,item.payPrice)" v-has="'mer:order:refund,mer:order:info'" :disabled="refundDisabled">退款</mt-button>
-                      <mt-button @click="gocompensate(item.orderNo)">补偿</mt-button>
+                      <mt-button @click="gocompensate(item.orderNo,item.phone,item.shopName,item.shopId,item.parentTypeName,item.markPrice)">补偿</mt-button>
                       <mt-button @click="machineBoot(item.id,item.machineName)" v-if="item.isESource === 0 || item.isESource === null" v-has="'mer:order:start,mer:order:info'">启动</mt-button>
                       <mt-button @click="machineReset(item.orderNo,item.machineId,item.machineName)"  v-if="item.isESource === 0 || item.isESource === null" v-has="'mer:order:reset,mer:order:info'">复位</mt-button>
                   </section>
@@ -181,8 +181,8 @@ export default {
          this.refundDisabled = false;
       });
     },
-    gocompensate(orderno){
-      this.$router.push({name:'compensate'});
+    gocompensate(orderno,phone,shopName,shopId,parentTypeName,markPrice){
+      this.$router.push({name:'compensate',query:{orderno:orderno,phone:phone,shopName:shopName,shopId:shopId,parentTypeName:parentTypeName,markPrice:markPrice}});
     }
   },
   filters: {
