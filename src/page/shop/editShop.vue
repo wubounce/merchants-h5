@@ -263,7 +263,7 @@ export default {
     editTime(i) {
       if(i) {
         this.noEdit =false;
-        this.placeholdercontent = "请填个位数的时长";
+        this.placeholdercontent = "请填写1到9的数字";
       }
       else {
         this.noEdit =true;
@@ -567,7 +567,7 @@ export default {
           else {
             //提示
             this.$toast({
-              message:'请输入个位数的时长',
+              message:'请填写1到9的数字',
               position:'middle',
               duration:3000
             });
@@ -700,13 +700,17 @@ export default {
       }           
       //预约功能
       this.isReserve = res.isReserve == 0 ? true : false;
+      if(this.isReserve) {
+        this.placeholdercontent = '请填写1到9的数字';
+      }
+      else {
+        this.placeholdercontent = '开启预约功能后可填';
+      }
       this.noEdit = res.isReserve == 0 ? false :true;
       //预约时长
       this.orderLimitMinutes = res.orderLimitMinutes;
       //营业时间
       this.addBusinessTime = res.workTime;      
-
-      
       if(res.organization) {
         if(res.organization.length>5) {
           this.list[2].value = res.organization.slice(0,5) + '...';
