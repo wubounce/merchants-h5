@@ -723,21 +723,7 @@ export default {
       this.provinceName = res.provinceName;
       this.cityName = res.cityName;
       this.districtName = res.districtName;
-      //console.log('created:',this.provinceId);
-
-
       
-      // 省
-      // let objPro = { parentId: 0 };
-      // let resPro = await areaListFun(objPro);
-      // //console.log('省：',resPro.length);
-      // for(let x=0;x<resPro.length;x++) {
-      //   if(res.provinceName == resPro[x].areaName) {
-      //     this.proIndex = x;
-      //     console.log(x);
-      //     //this.addressSlots[0].defaultIndex = parseInt(x);
-      //   }
-      // }
       //设备类型
       let resMachine = await listParentTypeFun();
         let arrmachine = res.machineTypeNames.split(',');
@@ -768,10 +754,13 @@ export default {
           this.lat = this.$route.query.lat;
         }
       }
-      else if(from.name == 'shopDetail'){
-        location.reload();
-        //this.getShopDetail();
-        //console.log(this.addBusinessTime);
+      else if(from.name === 'shopDetail'){
+        if(to.name === 'shopList') {
+          this.$destroy();
+        }
+        else {
+          this.getShopDetail();
+        }
       }
     },
     popupVisible: function () {
