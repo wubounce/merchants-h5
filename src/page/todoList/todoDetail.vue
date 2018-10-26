@@ -46,9 +46,7 @@ import { batchStartNowFun , getBatchStartFun , delBatchStartFun } from '@/servic
           setTimeout(() => {
             instance.close();
           }, 1000);
-          this.$router.push({
-            name:'todolist'
-          });
+          this.$router.go(-1);
 	      }
 	     );
       },
@@ -75,7 +73,7 @@ import { batchStartNowFun , getBatchStartFun , delBatchStartFun } from '@/servic
               position: "middle",
               duration: 3000
             });
-          this.$router.push({name:'todolist'});
+          this.$router.go(-1);
 	      },
 	      action => {
 	      }

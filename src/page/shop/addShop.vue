@@ -223,24 +223,6 @@ export default {
         this.address = '';
       }
     },
-    //置空
-    setNull() {
-      this.shopName = '';
-      this.shopType = '';
-      this.list[0].value = '';
-      this.list[1].value = '';
-      this.list[2].value = '';
-      this.provinceId = '';
-      this.cityId = '';
-      this.districtI = '';
-      this.address = '';
-      this.lat = '';
-      this.lng = '';
-      this.isReserve = false;
-      this.orderLimitMinutes = '';
-      this.addBusinessTime = '';
-      this.organization = '';
-    },
     disbaledBtn() {
       this.buttonHide = false;
     },
@@ -359,6 +341,9 @@ export default {
       this.shopTime.startTime = values[0].slice(0,2) + ':' +values[1].slice(0,2);
       this.shopTime.endTime = values[2].slice(0,2) + ':' +values[3].slice(0,2);
       //console.log('values[0]:',values[0]);
+      if(this.shopTime.endTime === '00:00') {
+        this.shopTime.endTime = '23:59';
+      }
     },
     chooseDay() {
       // 点击全天直接获取全天并且退出弹框
@@ -441,10 +426,7 @@ export default {
             setTimeout(() => {
               instance.close();
               }, 1000);
-              this.$router.push({
-                name:'shopList'
-              });
-           
+              this.$router.go(-1);
             //上面是传值
           }
           else {
@@ -484,11 +466,8 @@ export default {
           setTimeout(() => {
             instance.close();
             }, 1000);
-            this.$router.push({
-              name:'shopList'
-            });
+            this.$router.go(-1);
         }
-        
       }else if(!this.shopName) {
         this.$toast({
             message: '请填写店铺名称',
@@ -533,16 +512,10 @@ export default {
             duration: 3000
           });
       }
-    },
-    // async getShoplist() {
-    //   let res = await manageListFun();
-    //   this.arrName = res.items.map((i) => {
-    //     return i.shopName;
-    //   });
-    // }
+    }
   },
   created() {
-    //this.getShoplist();
+    
   },
   // 背景滚动
   watch: {
@@ -555,10 +528,26 @@ export default {
           this.lat = this.$route.query.lat;
         }
       }
-      else if(from.name == 'shopList'){
-        location.reload();
-        //置空，解决keepAlive造成的保留上次
-        //this.setNull();  
+      else if(from.name === 'shopList'){
+        this.shopName = ''; // 姓名
+        this.shopType = ''; // 店铺类型
+        this.shopTypeName = ''; 
+        this.areaValue = ''; // 所在地区
+        this.provinceId = '';
+        this.cityId = '';
+        this.districtId = '';
+        this.school = ''; // 小区大厦学校
+        this.organization = '';
+        this.lat = '';
+        this.lng = '';
+        this.address = ''; // 详细地址
+        this.isReserve = true; // 预约功能
+        this.orderLimitMinutes = ''; // 预约时间
+        this.addBusinessTime = ''; // 营业时间
+        this.slotsTime[0].defaultIndex = 0;
+        this.slotsTime[2].defaultIndex = 0;
+        this.slotsTime[4].defaultIndex = 23;
+        this.slotsTime[6].defaultIndex = 59;
       }
     },
     popupVisible: function () {

@@ -97,9 +97,7 @@ import { MessageBox } from 'mint-ui';
         setTimeout(() => {
           instance.close();
         }, 1000);
-        this.$router.push({
-          name:'todolist'
-        });
+        this.$router.go(-2);
       },
       valuesChange(picker, values) {
         this.machineFunction = values[0];

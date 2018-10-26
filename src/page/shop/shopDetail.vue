@@ -84,7 +84,7 @@ export default {
         let payload = {shopId: id};
         let res = await deleteShopFun(payload);
         this.$toast({message: '删除成功' });
-        this.$router.push({name:'shopList'});
+        this.$router.go(-1);
       });
     },
     goShopEdit() {
