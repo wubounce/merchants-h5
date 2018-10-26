@@ -26,15 +26,19 @@
             </li>
             <li>
               <span class="field-title">NQT</span>
-              <p class="select-2" @click="wxScan">
+              <p class="select-2" @click="wxScanNqt">
                 <span class="fontColor">{{fromdata.nqt}}</span>
               </p>
             </li>
             <li>
               <span class="field-title">IMEI</span>
-              <p class="select-2" @click="wxScan">
+              <p class="select-2" @click="wxScanImei">
                 <span class="fontColor">{{fromdata.imei}}</span>
               </p>
+            </li>
+             <li @click="waterLevelSeting" v-show="waterLevelShow">
+              <span class="field-title">水位设置</span>
+              <p class="select"><span>{{fromdata.waterLevel}}</span></p>
             </li>
             <li @click="toFunctionSeting">
               <span class="field-title">功能设置</span>
@@ -43,7 +47,7 @@
           </ul>
         </li>
       </ul>
-    <button class="submitBtn" @click="submit" :class="{'default':!fromdata.machineName}" :disabled="!fromdata.machineName">提交</button>
+    <Button1 class="submitBtn" @click="submit" :class="{'default':!fromdata.machineName}" :disabled="!fromdata.machineName">提交</Button1>
     </div>
     <!--功能列表-->
     <div v-show="setModelShow">
@@ -74,9 +78,11 @@
       <span class="cifrm" @click="goNext" :class="{'default':isDisable}" :disabled="isDisable">确认</span>
     </section>
     </div>
-    <selectpickr :visible="companyVisible" :slots="slotsShop" :valueKey="shopname" @selectpicker="machineselectpickerShop" @onpickstatus="machineselectpickertatusShop" :title="'选店铺'"> </selectpickr>
+    <selectpickr :visible="companyVisible" :slots="slotsShop" :valueKey="shopname" @selectpicker="machineselectpickerShop" @onpickstatus="machineselectpickertatusShop" :title="'选择店铺'"> </selectpickr>
     <selectpickr :visible="parentType" :slots="slotsFirst" :valueKey="firstname" @selectpicker="machineselectpickerFirst" @onpickstatus="machineselectpickertatusFirst" :title="'设备类型'"> </selectpickr>
     <selectpickr :visible="subType" :slots="slotsFun" :valueKey="firstname" @selectpicker="machineselectpickerFun" @onpickstatus="machineselectpickertatusFun" :title="'设备型号'"> </selectpickr>
+     <!-- 水位-->
+    <selectpickr :visible="waterLevelVisible" :slots="slotsWaterLevel" :valueKey="shopname" @selectpicker="machineselectpickerWaterLevel" @onpickstatus="machineselectpickertatusWaterLevel" :title="'水位设置'"> </selectpickr> 
     <!--型号-->
     <mt-popup v-model="subType2" position="bottom" :closeOnClickModal="true">
       <div class="resp-shop">
@@ -119,7 +125,7 @@
   import Api from '@/utils/Api';
   import Web from '@/utils/Web';
   import { MessageBox } from 'mint-ui';
-  import Button from "@/components/Button/Button";
+  import Button1 from "@/components/Button/Button";
   import selectpickr from '@/components/selectPicker';
   import { getWxconfigFun,getShopFun,getlistParentTypeFun,listSubTypeByFun,deviceAddorEditFun,getFunctionSetListFun } from '@/service/device';
  
@@ -133,6 +139,8 @@
         parentType: false,    
         subType: false,
         subType2: false,
+        waterLevelVisible: false,
+        waterLevelShow: false,
         functionTempletType: null,
         selectedIndex: -1,
         selectIndex: -1,
@@ -170,7 +178,7 @@
           className: 'shop-type',
           textAlign: 'center',
           position:'bottom',
-          name:'店铺类型'
+          name:'设备类型'
         }
         ],
          slotsFun: [
@@ -180,30 +188,29 @@
           className: 'shop-type',
           textAlign: 'center',
           position:'bottom',
-          name:'店铺类型'
+          name:'设备型号'
+        }
+        ],
+        slotsWaterLevel: [
+        {
+          flex: 1,
+          values: ['极地水位','低水位','中水位','高水位'],
+          className: 'shop-type',
+          textAlign: 'center',
+          position:'bottom',
+          name:'水位设置'
         }
         ],
         shopname: "shopName",
         firstname: 'name',
-        functionListTitle: [
-          ['功能'],
-          ['耗时', '/分'],
-          ['原价', '/元'],
-          ['脉冲数'],
-          ['状态']
-        ],
-        functionListTitle2: [
-          ['功能'],
-          ['耗时', '/分'],
-          ['原价', '/元'],
-          ['状态']
-        ],
+        
         fromdata: {
           machineName: "",
           firstClass: "",
           secondClass: "",
           communicateType: "",
           smCommunicateType: "",
+          waterLevel: "中水位",
           shopType: {
             name:"",
             id:""
@@ -267,6 +274,7 @@
           this.keepFunctionArr = [];
           this.fromdata.functionType.name = "未设置";
           this.subTypeName = "";
+          this.waterLevelShow = false;
         }else{
           this.fromdata.firstType.id = data.id;
           this.fromdata.firstType.name = data.name;
@@ -288,11 +296,13 @@
           this.keepFunctionArr = [];
           this.fromdata.functionType.name = "未设置";
           this.subTypeName = "";
+          this.waterLevelShow = false;
         }else {
           this.fromdata.secondType.id = data.id;
           this.fromdata.secondType.name = data.name;
           this.fromdata.secondType.communicateType = data.communicateType;
         }
+        this.waterLevelShow = data.name == "海尔5/6/7公斤波轮SXB60-51U7/SXB70-51U7"?true:false;
         }
       },
       machineselectpickertatusFun(data){
@@ -307,6 +317,7 @@
         } else {
         this.fromdata.secondType.id = this.secondOnTypeList[index].id;
         this.fromdata.secondType.communicateType = this.secondOnTypeList[index].communicateType;
+        this.waterLevelShow = this.secondOnTypeList[index].name === "海尔5/6/7公斤波轮SXB60-51U7/SXB70-51U7"?true:false;
         this.subTypeName = this.secondOnTypeList[index].name;
         this.functionSetList = [];
         this.keepFunctionArr = [];
@@ -320,13 +331,21 @@
           this.$toast({message: "NQT与设备型号通信类型不符" });
           return false;
         } else {
-        this.fromdata.secondType.id = this.secondOffTypeList[index].id;
-        this.subTypeName = this.secondOffTypeList[index].name;
-        this.fromdata.secondType.communicateType = this.secondOffTypeList[index].communicateType;
-        this.functionSetList = [];
-        this.keepFunctionArr = [];
-        this.fromdata.functionType.name = "未设置";
+          this.fromdata.secondType.id = this.secondOffTypeList[index].id;
+          this.subTypeName = this.secondOffTypeList[index].name;
+          this.waterLevelShow = this.secondOnTypeList[index].name === "海尔5/6/7公斤波轮SXB60-51U7/SXB70-51U7"?true:false;
+          this.fromdata.secondType.communicateType = this.secondOffTypeList[index].communicateType;
+          this.functionSetList = [];
+          this.keepFunctionArr = [];
+          this.fromdata.functionType.name = "未设置";
         }
+      },
+      machineselectpickerWaterLevel(data) {
+        this.fromdata.waterLevel = data;
+      },
+
+      machineselectpickertatusWaterLevel(data) {
+        this.waterLevelVisible = data;
       },
       cancle() {
         this.subType2 = false;
@@ -386,7 +405,7 @@
         }
         this.subType = false;
       },
-      wxScan(name) { //微信扫码
+      wxScanNqt() { //微信扫码NQT
         Web.scanQRCode(res => {
           let url = res;
           let parameter = url.substring(0,4);
@@ -410,10 +429,25 @@
               this.fromdata.ver = ver;
             }
           }else{
-            this.fromdata.imei= res;
+            this.$toast({message: "请扫描正确的NQT码" });
+            return false;
           } 
 				});       
       },
+
+      wxScanImei() { //微信扫码Imei
+        Web.scanQRCode(res => {
+          let url = res;
+          let parameter = url.substring(0,4);
+          if(parameter !== "http"){           
+            this.fromdata.imei = url;
+          }else{
+            this.$toast({message: "请扫描正确的IMEI码" });
+            return false;
+          } 
+				});       
+      },
+
       getUrlParam(url,name) {
         let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
         let r = url.match(reg);  //匹配目标参数
@@ -542,6 +576,15 @@
             }, 2000);
           return false;
         }
+        if(this.waterLevelShow && this,fromdata.waterLevel === "未设置") {
+          let instance = this.$toast({
+            message: '请设置水位'
+          });
+          setTimeout(() => {
+            instance.close();
+            }, 2000);
+          return false;
+        }
         if(this.fromdata.functionType.name === "未设置") {
           let instance = this.$toast({
             message: '请设置功能列表'
@@ -575,7 +618,8 @@
           ver: this.fromdata.ver,
           imei: this.fromdata.imei,
           functionTempletType: this.functionTempletType,
-          functionJson: JSON.stringify(arr)
+          functionJson: JSON.stringify(arr),
+          waterLevel: this.fromdata.waterLevel
         };
         let res = await deviceAddorEditFun(obj);
         let instance = this.$toast({
@@ -601,6 +645,9 @@
           return false;
         }
         this.getFunctionSetList();   
+      },
+      waterLevelSeting() {
+        this.waterLevelVisible = true;
       },
       goNext(){ //功能列表确认
         let flag1 = true;
@@ -723,7 +770,7 @@
 
     },
     components: {
-      Button,
+      Button1,
       selectpickr
     }
   };

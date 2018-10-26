@@ -9,6 +9,7 @@ const validateCodeApi = 'operator/validateCode';                              //
 const forgetPwdApi = 'operator/changePwd';                                    // 忘记密码模块 修改密码  method 'post'
 const bindPhoneApi = 'operator/bindPhone';                                    // 绑定手机  method 'post'
 const checkRegInfoApi = 'operator/checkRegInfo';                              // 验证注册短信验证码 method 'post'
+const checkPhone = 'operator/checkPhone';                                      //注册验证填写的手机号是否被注册
 
 // 忘记密码模块发送模版消息
 export const smscodeFun = (payload) => fetch.post(smscodeApi, payload);
@@ -27,3 +28,6 @@ export const bindPhoneFun = (payload) => fetch.post(bindPhoneApi, payload);
 
 //  验证注册短信验证码
 export const checkRegInfoFun = (payload) => fetch.post(checkRegInfoApi, payload);
+
+//注册验证填写的手机号是否被注册
+export const checkPhoneFun = (payload) => fetch.post(checkPhone, payload);

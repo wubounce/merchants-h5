@@ -3,7 +3,9 @@
     <div class="fixedPosition">
       <div class="bat-step">
         <div class="line-bg">
-          <p v-for="(item,index) in stepArr " :key="index" :class="{active:currIndex==index}">{{item.text}}</p>
+          <p v-for="(item,index) in stepArr " :key="index">
+            <span :class="{active:currIndex==index}">{{item.text}}</span>
+          </p>
         </div>
       </div>
       <ul>
@@ -123,19 +125,21 @@ import { getlistParentTypeFun } from '@/service/device';
         .line-bg {
           width: 100%;
           margin: 0 0.83rem;
+          display: flex;
           p {
-            margin: 0.72rem 1.3rem 0.72rem 0;
-            background-color: #ffffff;
-            display: inline-block;
+            flex: 1;
             text-align: center;
-            width: 1.11rem;
-            height: 0.64rem;
-            line-height: 0.64rem;
-            box-shadow: 0rem 0.03rem 0.05rem 0rem rgba(179, 218, 255, 1);
-            border-radius: 0.39rem;
-            border: 0rem solid rgba(255, 255, 255, 1);
-            &:nth-child(4) {
-              margin-right: 0;
+            span {
+              display: inline-block;
+              width: 1.11rem;
+              height: 0.64rem;
+              line-height: 0.64rem;
+              box-shadow: 0rem 0.03rem 0.05rem 0rem rgba(179, 218, 255, 1);
+              border-radius: 0.39rem;
+              background-color: #ffffff;
+              border: 0rem solid rgba(255, 255, 255, 1);
+              color: #1890ff;
+              margin: 0.72rem 0;
             }
 
           }
@@ -150,7 +154,7 @@ import { getlistParentTypeFun } from '@/service/device';
         justify-content: space-between;
         align-items: center;
         padding: 0 0.4rem;
-        margin-bottom: 0.13rem;
+        margin-bottom: 0.27rem;
         font-size: 0.43rem;
         height: 1.6rem;
         color: rgba(51, 51, 51, 1);
@@ -238,7 +242,7 @@ import { getlistParentTypeFun } from '@/service/device';
       }
     }
     .sf-bd {
-      padding-top: 3.81rem;
+      padding-top: 3.95rem;
       ul {
         width:100%;
         li {
@@ -250,9 +254,6 @@ import { getlistParentTypeFun } from '@/service/device';
           font-size: 0.4rem;
           color: rgba(51, 51, 51, 1);
           border-bottom: 1px solid #f9f8ff;
-          &:last-child {
-            border-bottom: none;
-          }
           div {
             &:nth-child(1) {
               width: 10%;
@@ -272,8 +273,8 @@ import { getlistParentTypeFun } from '@/service/device';
           }
         }
         .selected {
-              background-color:rgba(24, 144, 255, 0.05);
-            }
+          background-color:rgba(24, 144, 255, 0.05);
+        }
       }
       
     }

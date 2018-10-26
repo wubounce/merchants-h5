@@ -2,7 +2,7 @@
   <section class="register">
     <div ref="registerForm" :model="register" class="register-form">
     <div class="form-group">
-      <input type="number" placeholder="请输入手机号" v-model="register.phone" @input="disabledBtn" required>
+      <input type="number" placeholder="请输入手机号" v-model="register.phone" @input="disabledBtn" @blur="checkPhone" required>
     </div>
     <div class="form-group">
       <div> 
@@ -27,8 +27,9 @@
 </template>
 
 <script>
-  import { smscodeFun, checkRegInfoFun} from '@/service/resetPwd';
+  import { smscodeFun, checkRegInfoFun, checkPhoneFun} from '@/service/resetPwd';
   import { validatPhone , validatName , validatPwd } from '@/utils/validate';
+  import { sendLoginCodeFun} from '@/service/login';
   export default{
     data() {
       return {
@@ -45,15 +46,20 @@
       };
     },
     methods: {
-      async sendcode() {
+      async sendcode() {  //发送验证码
         if (this.validatePhone()) {
           let res = await smscodeFun({phone:this.register.phone,mark:true});
-              this.time = 60;
-              this.btn = false;
-              this.countdown();
+            this.time = 60;
+            this.btn = false;
+            this.countdown();
         }
       },
-      countdown() {
+      async checkPhone() {
+        if (this.validatePhone()) {
+          let res = await checkPhoneFun({phone:this.register.phone});
+        }
+      },
+      countdown() { //重新发送验证码倒计时
         this.btn = false;
         this.timer = setInterval(() => {
           if (--this.time <= 0) {
@@ -114,7 +120,7 @@
         return true;
       },
 
-      async goToNext() {
+      async goToNext() {  //提交
         if(!this.validatePhone()) return false;
         if(!this.validateCode()) return false;
         if(!this.validateSureCode()) return false;

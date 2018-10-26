@@ -142,7 +142,7 @@ import { getlistParentTypeFun } from '@/service/device';
       justify-content: space-between;
       align-items: center;
       padding: 0 0.4rem;
-      margin-bottom: 0.13rem;
+      margin-bottom: 0.27rem;
       font-size: 0.43rem;
       height: 1.6rem;
       color: rgba(51, 51, 51, 1);

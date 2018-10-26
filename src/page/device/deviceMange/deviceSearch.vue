@@ -263,6 +263,9 @@ import {delay } from "@/utils/tool";
     }
     .search-select {
       background: #fff;
+      position: absolute;
+      width: 100%;
+      z-index: 100;
       .noData {
         text-align: center;
         font-size: 14px;

@@ -250,7 +250,7 @@ export default {
       justify-content: space-between;
       align-items: center;
       padding: 0 0.4rem;
-      margin-bottom: 0.13rem;
+      margin-bottom: 0.27rem;
       font-size: 0.43rem;
       height: 1.6rem;
       color: rgba(51, 51, 51, 1);
@@ -351,7 +351,7 @@ export default {
     }
   }
    .sf-bd {
-      padding-top: 3.81rem;
+      padding-top: 3.95rem;
       .searchNoItem {
         font-size: 14px;
         color: #999;
@@ -407,7 +407,7 @@ export default {
     height: 40px;
     line-height: 40px;
     background: #ffffff;
-    margin-bottom: 0.13rem;
+    margin-bottom: 0.27rem;
     padding: .2rem 0;
     font-size: 16px;
     span {

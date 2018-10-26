@@ -56,6 +56,10 @@
                 </p>
               </li>
               <li>
+                <span class="field-title">水位置设置</span>
+                <p>低水位</p>
+              </li>
+              <li>
                 <span class="field-title">功能设置</span>
                 <p>已设置</p>
                 <span class="iconfont icon-xiangshangjiantou" :class="{'rotate': !functionSetListShow}" @click="functionSetListShowClick"></span>
@@ -89,9 +93,9 @@
       </ul>
       <div style="width:100%;height:1.73rem;"></div>
       <div class="about-button">
-        <Button btn-type="small" btn-color="spe" class="ft-btn active" @click.native="deviceTZJ" v-show="tzjShow" v-has="'mer:machine:clean'">桶自洁</Button>
-        <Button btn-type="small" btn-color="spe" class="ft-btn active" @click.native="deviceRest" v-show="(machineState==='运行' && deviceDetail.subTypeName !== '通用脉冲充电桩') || (machineState==='空闲' && deviceDetail.subTypeName !== '通用脉冲充电桩')" v-has="'mer:machine:reset'">复位</Button>
-        <Button btn-type="small" btn-color="spe" class="ft-btn active" @click.native="deviceEdit" v-has="'mer:machine:update'">编辑</Button>
+        <Button1 btn-type="small" btn-color="spe" class="ft-btn active" @click.native="deviceTZJ" v-show="tzjShow" v-has="'mer:machine:clean'">桶自洁</Button1>
+        <Button1 btn-type="small" btn-color="spe" class="ft-btn active" @click.native="deviceRest" v-show="(machineState==='运行' && deviceDetail.subTypeName !== '通用脉冲充电桩') || (machineState==='空闲' && deviceDetail.subTypeName !== '通用脉冲充电桩')" v-has="'mer:machine:reset'">复位</Button1>
+        <Button1 btn-type="small" btn-color="spe" class="ft-btn active" @click.native="deviceEdit" v-has="'mer:machine:update'">编辑</Button1>
       </div>
       </section>
 
@@ -100,7 +104,7 @@
 </template>
 
 <script>
-  import Button from "@/components/Button/Button";
+  import Button1 from "@/components/Button/Button";
   import { MessageBox } from 'mint-ui';
   import { detailDeviceListFun,deleteDeviceFun,manageResetDeviceFun,tzjDeviceFun } from '@/service/device';
   export default {
@@ -267,7 +271,7 @@
       this.getDetailDevice();
     },
     components: {
-      Button,
+      Button1,
     }
   };
 

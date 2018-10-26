@@ -2,7 +2,9 @@
   <section class="ss-wrappper">
     <div class="bat-step">
         <div class="line-bg">
-          <p v-for="(item,index) in stepArr " :key="index" :class="{active:currIndex==index}">{{item.text}}</p>
+          <p v-for="(item,index) in stepArr " :key="index">
+            <span :class="{active:currIndex==index}">{{item.text}}</span>
+          </p>
         </div>
     </div>
     <ul>
@@ -55,11 +57,18 @@ export default {
         timeIsDisable: false,
         priceIsDisable: false,
         codeIsDisable: false,
-        hdTitleArr: [
+         hdTitleArr: [
           "1.请选择相应店铺",
           "2.请选择设备类型",
           "3.请选择设备型号",
           "4.请选择设备相应功能"
+        ],
+        hdTitleArr1: [
+          "1.请选择相应店铺",
+          "2.请选择设备类型",
+          "3.请选择设备型号",
+          "4.请选择需要批量修改的功能",
+          "5.请设置设备相应功能"
         ],
         stepArr: [
           {
@@ -73,6 +82,23 @@ export default {
           },
           {
             text: "功能"
+          }
+        ],
+        stepArr1: [
+          {
+            text: "店铺"
+          },
+          {
+            text: "类型"
+          },
+          {
+            text: "型号"
+          },
+          {
+            text: "功能"
+          },
+          {
+            text: "设置"
           }
         ],
         currIndex: 3,
@@ -152,6 +178,11 @@ export default {
           subTypeId: query.subTypeId,
           shopId: query.shopId,
         };
+        if(query.flag) {
+          this.stepArr = this.stepArr1;
+          this.hdTitleArr = this.hdTitleArr1;
+          this.currIndex = query.flag?4:3;
+        }
         let res = await batchEditMachineListFun(obj);
         this.getFunctionSetList();
       },
@@ -285,21 +316,22 @@ export default {
     .line-bg {
       width: 100%;
       margin: 0 0.83rem;
+      display: flex;
       p {
-        margin: 0.72rem 1.3rem 0.72rem 0;
-        background-color: #ffffff;
-        display: inline-block;
+        flex: 1;
         text-align: center;
-        width: 1.11rem;
-        height: 0.64rem;
-        line-height: 0.64rem;
-        box-shadow: 0rem 0.03rem 0.05rem 0rem rgba(179, 218, 255, 1);
-        border-radius: 0.39rem;
-        border: 0rem solid rgba(255, 255, 255, 1);
-        &:nth-child(4) {
-          margin-right: 0;
+        span {
+          display: inline-block;
+          width: 1.11rem;
+          height: 0.64rem;
+          line-height: 0.64rem;
+          box-shadow: 0rem 0.03rem 0.05rem 0rem rgba(179, 218, 255, 1);
+          border-radius: 0.39rem;
+          background-color: #ffffff;
+          border: 0rem solid rgba(255, 255, 255, 1);
+          color: #1890ff;
+          margin: 0.72rem 0;
         }
-
       }
       .active {
         color: #fff;
@@ -312,13 +344,13 @@ export default {
     justify-content: space-between;
     align-items: center;
     padding: 0 0.4rem;
-    margin-bottom: 0.13rem;
+    margin-bottom: 0.27rem;
     font-size: 0.43rem;
     height: 1.6rem;
     color: rgba(51, 51, 51, 1);
     background: #fff;
     span {
-          width: 50%;
+      width: 80%;
     }
     div {
       flex-grow: 1;

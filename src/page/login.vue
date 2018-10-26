@@ -21,7 +21,7 @@
           </div>
         </div>
         <div class="phone-list" v-if="searchPhone&&searchPhoneList.length>0">
-          <p v-for="(item,index) in searchPhoneList" :key="index" @click="checkPhone(item)">{{item}}</p>
+          <p v-for="(item,index) in searchPhoneList" :key="index" @click="checkPhone(item.userName)">{{item.userName}}</p>
         </div>
       </div>
       <div class="form-group input" v-if="!loginPwd">
@@ -117,7 +117,7 @@ export default {
         phoneArray: getUserNameKey()? getUserNameKey():[],
         iphoneArr: getPhoneCode()? getPhoneCode():[],
         searchPhone:false,
-        searchPhoneList:[],
+        searchPhoneList: [],
       };
     },
     created () {
@@ -265,9 +265,7 @@ export default {
       },
       userinputFunc(){
         this.form.userName ? this.searchPhone = true:this.searchPhone = false;
-        this.searchPhoneList = this.phoneArray.filter(item => {
-          item.userName.startsWith(this.form.userName);
-          });
+        this.searchPhoneList = this.phoneArray.filter(item => item.userName.startsWith(this.form.userName));
         if(this.form.userName.length<1) {
           this.form.password = '';
           this.isuser = false;

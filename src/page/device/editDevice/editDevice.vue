@@ -18,15 +18,19 @@
             </li>
             <li>
               <span class="field-title">NQT</span>
-              <p class="select-2" @click="wxScan">
+              <p class="select-2" @click="wxScanNqt">
                 <span>{{fromdata.nqt}}</span>
               </p>
             </li>
             <li>
               <span class="field-title">IMEI</span>
-              <p class="select-2" @click="wxScan">
+              <p class="select-2" @click="wxScanImei">
                 <span>{{fromdata.imei}}</span>
               </p>
+            </li>
+             <li @click="checkWaterLevel" v-show="waterLevelShow">
+              <span class="field-title">水位设置</span>
+              <p class="select"><span>{{fromdata.waterLevel}}</span></p>
             </li>
             <li @click="toFunctionSeting">
               <span class="field-title">功能设置</span>
@@ -36,7 +40,7 @@
         </li>
 
       </ul>
-    <button class="submitBtn" @click="submit">提交</button>
+    <Button1 class="submitBtn" @click="submit">提交</Button1>
     </div>
     <!--功能列表-->
     <div v-show="setModelShow">
@@ -67,7 +71,9 @@
       </section>
     </div>
     <!-- 店铺-->
-    <selectpickr :visible="companyVisible" :slots="slotsShop" :valueKey="shopname" @selectpicker="machineselectpickerShop" @onpickstatus="machineselectpickertatusShop"> </selectpickr>
+    <selectpickr :visible="companyVisible" :slots="slotsShop" :valueKey="shopname" @selectpicker="machineselectpickerShop" @onpickstatus="machineselectpickertatusShop" :title="'选择店铺'"> </selectpickr>
+    <!-- 水位-->
+    <selectpickr :visible="waterLevelVisible" :slots="slotsWaterLevel" :valueKey="shopname" @selectpicker="machineselectpickerWaterLevel" @onpickstatus="machineselectpickertatusWaterLevel" :title="'水位设置'"> </selectpickr> 
   </section>
 </template>
 
@@ -75,7 +81,7 @@
   import Api from '@/utils/Api';
   import Web from '@/utils/Web';
   import { MessageBox } from 'mint-ui';
-  import Button from "@/components/Button/Button";
+  import Button1 from "@/components/Button/Button";
   import selectpickr from '@/components/selectPicker';
   import {getWxconfigFun,detailDeviceListFun,getShopFun,deviceAddorEditFun } from '@/service/device';
   export default {
@@ -85,6 +91,8 @@
         isShow2: false,
         modelShow: true,
         companyVisible: false,
+        waterLevelVisible: false,
+        waterLevelShow: false,
         parentType: false,    
         subType: false,
         functionTempletType: null,
@@ -95,6 +103,7 @@
         getJsonArr: [],
         keepInitializationArr: [],
         keepFunctionArr: [],
+        title: '编辑设备',
         slotsShop: [
         {
           flex: 1,
@@ -105,21 +114,17 @@
           name:'店铺类型'
         }
         ],
+        slotsWaterLevel: [
+        {
+          flex: 1,
+          values: ['极地水位','低水位','中水位','高水位'],
+          className: 'shop-type',
+          textAlign: 'center',
+          position:'bottom',
+          name:'水位设置'
+        }
+        ],
         shopname: "shopName",
-        functionListTitle: [
-          ['功能'],
-          ['耗时', '/分'],
-          ['原价', '/元'],
-          ['脉冲数'],
-          ['状态']
-        ],
-        functionListTitle2: [
-          ['功能'],
-          ['耗时', '/分'],
-          ['原价', '/元'],
-          ['状态']
-        ],
-        title: '编辑设备',
         fromdata: {
           machineId: "",
           functionTempletType: "",
@@ -129,6 +134,7 @@
           company: "",
           communicateType: "",
           ver: "",
+          waterLevel: "未设置",
           shopType: {
             name:"",
             id:""
@@ -162,6 +168,11 @@
       };
     },
     methods: {
+      async checkDeviceSelect() { //获取店铺数据
+        let res = await getShopFun();
+        this.slotsShop[0].values = res;
+        this.companyVisible = true;
+      },
       machineselectpickerShop(data){ //获取店铺
         this.fromdata.shopType.id = data.shopId;
         this.fromdata.shopType.name = data.shopName;
@@ -169,8 +180,14 @@
       machineselectpickertatusShop(data){
         this.companyVisible = data;
       },
-      checkItem(index) {
-        this.selectedIndex = index;
+      async checkWaterLevel() {
+        this.waterLevelVisible = true;
+      },
+      machineselectpickerWaterLevel(data){ //获取水位
+        this.fromdata.waterLevel = data;
+      },
+      machineselectpickertatusWaterLevel(data){ 
+        this.waterLevelVisible = data;
       },
       userinputFunc() {  //只能输入数字
         let keyCode = event.keyCode; 
@@ -180,19 +197,7 @@
           event.returnValue = false; 
         }
       },
-      getCheckShop() {
-        if(this.fromdata.shopType.name !== this.selectListA[this.selectedIndex].shopName){
-          this.fromdata.shopType.name = this.selectListA[this.selectedIndex].shopName;
-          this.fromdata.shopType.id = this.selectListA[this.selectedIndex].shopId;
-          this.functionList = [];
-          this.fromdata.functionType.name = "未设置";
-        }else{
-          this.fromdata.shopType.name = this.selectListA[this.selectedIndex].shopName;
-          this.fromdata.shopType.id = this.selectListA[this.selectedIndex].shopId;
-        }
-        this.companyVisible = false;
-      },
-      wxScan() { //微信扫码
+      wxScanNqt() { //微信扫码NQT
          Web.scanQRCode(res => {
           let url = res;
           let parameter = url.substring(0,4);
@@ -212,9 +217,23 @@
               return false;
             }
           }else{
-            this.fromdata.imei= res;
+            this.$toast({message: "请扫描正确的NQT码" });
+            return false;
           } 
 				});
+      },
+
+      wxScanImei() { //微信扫码Imei
+        Web.scanQRCode(res => {
+          let url = res;
+          let parameter = url.substring(0,4);
+          if(parameter !== "http"){           
+            this.fromdata.imei = url;
+          }else{
+            this.$toast({message: "请扫描正确的IMEI码" });
+            return false;
+          } 
+				});       
       },
        getUrlParam(url,name) {
         let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
@@ -241,18 +260,16 @@
         this.fromdata.communicateType = res.communicateType;
         this.fromdata.nqt = res.nqt?res.nqt:"点击扫描设备上二维码";
         this.fromdata.imei = res.imei?res.imei:"点击扫描模块上二维码";
-        this.functionList = res.functionList;       
+        this.functionList = res.functionList;
+        this.waterLevelShow = res.subTypeName === "海尔5/6/7公斤波轮SXB60-51U7/SXB70-51U7"?true:false;
+        this.fromdata.waterLevel = res.waterLevel?res.waterLevel:"未设置";     
         this.functionList.forEach(item=>{
           item.ifOpen=item.ifOpen === "0"?(!!item.ifOpen) : (!item.ifOpen);
         });
         this.keepFunctionArr= [].concat(JSON.parse(JSON.stringify(this.functionList)));
         this.keepInitializationArr = [].concat(JSON.parse(JSON.stringify(this.functionList)));
+
       }, 
-      async checkDeviceSelect() { //获取店铺
-        let res = await getShopFun();
-        this.slotsShop[0].values = res;
-        this.companyVisible = true;
-      },
 
       async submit() {  //提交
         if(!this.fromdata.machineName) {
@@ -285,6 +302,15 @@
         if(this.fromdata.imei== "点击扫描模块上二维码") {
           let instance = this.$toast({
             message: '请扫描模块上的IMEI码'
+          });
+          setTimeout(() => {
+            instance.close();
+            }, 2000);
+          return false;
+        }
+        if(this.waterLevelShow && this,fromdata.waterLevel === "未设置") {
+          let instance = this.$toast({
+            message: '请设置水位'
           });
           setTimeout(() => {
             instance.close();
@@ -405,7 +431,7 @@
       this.getDetailDevice();
     },
     components: {
-      Button,
+      Button1,
       selectpickr
     }
   };

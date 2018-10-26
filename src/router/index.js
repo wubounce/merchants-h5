@@ -215,6 +215,18 @@ export default new Router({
       meta: {title: '批量编辑'} //3-选择功能
     },
     {
+      path: '/functionChoice',
+      name: 'functionChoice',
+      component: () => import ('@/page/device/batchEdit/functionChoice'),
+      meta: {title: '批量编辑'} //
+    },
+    {
+      path: '/waterLevelSet',
+      name: 'waterLevelSet',
+      component: () => import ('@/page/device/batchEdit/waterLevelSet'),
+      meta: {title: '批量编辑'} //水位设置
+    },
+    {
       path: '/selectFunctionEdit',
       name: 'selectFunctionEdit',
       component: () => import ('@/page/device/batchEdit/selectFunction'),
