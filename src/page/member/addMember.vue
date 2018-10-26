@@ -176,7 +176,7 @@ export default {
         };
         let res = await addOperatorFun(payload);
         this.$toast({message: '新增成功,密码将发送至此手机' });
-        this.$router.push({name:'member'});
+        this.$router.go(-1);
       }
     }
   },

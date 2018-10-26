@@ -166,7 +166,7 @@ export default {
         };
         let res = await updateOperatorInfoFun(payload);
         this.$toast({message: '修改成功' });
-        this.$router.push({name:'member'});
+        this.$router.go(-2);
       }
     }
   },
