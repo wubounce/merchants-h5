@@ -116,6 +116,7 @@ import {delay } from "@/utils/tool";
         this.$router.go(-1);
       },
       fetchData(e) {
+        this.isSelectItem = true;
         validatReplace
         let keywords = this.keyword.replace(validatReplace, '');
         this.search(keywords);
