@@ -759,10 +759,7 @@ export default {
         }
       }
       else if(from.name === 'shopDetail'){
-        if(to.name === 'shopList') {
-          this.$destroy();
-        }
-        else {
+        if(to.name !== 'shopList') {
           this.getShopDetail();
         }
       }
