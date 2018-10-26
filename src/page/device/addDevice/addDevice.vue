@@ -47,7 +47,7 @@
           </ul>
         </li>
       </ul>
-    <Button1 class="submitBtn" @click="submit" :class="{'default':!fromdata.machineName}" :disabled="!fromdata.machineName">提交</Button1>
+    <button class="submitBtn" @click="submit" :class="{'default':!fromdata.machineName}" :disabled="!fromdata.machineName">提交</button>
     </div>
     <!--功能列表-->
     <div v-show="setModelShow">
@@ -125,7 +125,6 @@
   import Api from '@/utils/Api';
   import Web from '@/utils/Web';
   import { MessageBox } from 'mint-ui';
-  import Button1 from "@/components/Button/Button";
   import selectpickr from '@/components/selectPicker';
   import { getWxconfigFun,getShopFun,getlistParentTypeFun,listSubTypeByFun,deviceAddorEditFun,getFunctionSetListFun } from '@/service/device';
  
@@ -770,7 +769,6 @@
 
     },
     components: {
-      Button1,
       selectpickr
     }
   };

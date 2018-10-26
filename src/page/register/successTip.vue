@@ -4,13 +4,12 @@
       <p><span class="iconfont icon-chenggong"></span></p>
       <p class="successMsg">注册成功</p>
       <router-link to="/login">
-        <Button btn-type="small" btn-color="spe" class="ft-btn active" @click.native="successTo">完成</Button>
+        <button btn-type="small" btn-color="spe" class="ft-btn active" @click.native="successTo">完成</button>
       </router-link>
     </div>
   </section>
 </template>
 <script>
-  import Button from "@/components/Button/Button";
   export default {
   };
 </script>

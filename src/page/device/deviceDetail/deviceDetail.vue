@@ -93,10 +93,10 @@
       </ul>
       <div style="width:100%;height:1.73rem;"></div>
       <div class="about-button">
-        <Button btn-type="small" btn-color="spe" class="ft-btn active" @click.native="deviceTZJ" v-show="tzjShow && machineState==='空闲'" v-has="'mer:machine:clean'">桶自洁</Button>
-        <Button btn-type="small" btn-color="spe" class="ft-btn active" @click.native="deviceRest" v-show="(machineState==='运行' && deviceDetail.subTypeName !== '通用脉冲充电桩')" v-has="'mer:machine:reset'">复位</Button>
-        <Button btn-type="small" btn-color="spe" class="ft-btn active" @click.native="deviceStart" v-show="machineState==='空闲' && deviceDetail.subTypeName !== '通用脉冲充电桩'">启动</Button>
-        <Button btn-type="small" btn-color="spe" class="ft-btn active" @click.native="deviceEdit" v-has="'mer:machine:update'">编辑</Button>
+        <button btn-type="small" btn-color="spe" class="ft-btn active" @click="deviceTZJ" v-show="tzjShow && machineState==='空闲'" v-has="'mer:machine:clean'">桶自洁</button>
+        <button btn-type="small" btn-color="spe" class="ft-btn active" @click="deviceRest" v-show="(machineState==='运行' && deviceDetail.subTypeName !== '通用脉冲充电桩')" v-has="'mer:machine:reset'">复位</button>
+        <button btn-type="small" btn-color="spe" class="ft-btn active" @click="deviceStart" v-show="machineState==='空闲' && deviceDetail.subTypeName !== '通用脉冲充电桩'">启动</button>
+        <button btn-type="small" btn-color="spe" class="ft-btn active" @click="deviceEdit" v-has="'mer:machine:update'">编辑</button>
       </div>
       </section>
 
@@ -105,7 +105,6 @@
 </template>
 
 <script>
-  import Button from "@/components/Button/Button";
   import { MessageBox } from 'mint-ui';
   import { detailDeviceListFun,deleteDeviceFun,manageResetDeviceFun,tzjDeviceFun } from '@/service/device';
   export default {
@@ -273,7 +272,6 @@
       this.getDetailDevice();
     },
     components: {
-      Button
     }
   };
 
@@ -456,6 +454,7 @@
         color: #1890FF;
         border-color: #1890FF;
         font-size: 14px;
+        background-color: #ffffff;
       }
     }
   }

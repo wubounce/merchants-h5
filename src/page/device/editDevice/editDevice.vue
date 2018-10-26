@@ -40,7 +40,7 @@
         </li>
 
       </ul>
-    <Button1 class="submitBtn" @click="submit">提交</Button1>
+    <button class="submitBtn" @click.prevent="submit">提交</button>
     </div>
     <!--功能列表-->
     <div v-show="setModelShow">
@@ -81,7 +81,6 @@
   import Api from '@/utils/Api';
   import Web from '@/utils/Web';
   import { MessageBox } from 'mint-ui';
-  import Button1 from "@/components/Button/Button";
   import selectpickr from '@/components/selectPicker';
   import {getWxconfigFun,detailDeviceListFun,getShopFun,deviceAddorEditFun } from '@/service/device';
   export default {
@@ -272,6 +271,7 @@
       }, 
 
       async submit() {  //提交
+        console.log("11");
         if(!this.fromdata.machineName) {
           let instance = this.$toast({
             message: '请填写机器名称'
@@ -308,15 +308,7 @@
             }, 2000);
           return false;
         }
-        if(this.waterLevelShow && this,fromdata.waterLevel === "未设置") {
-          let instance = this.$toast({
-            message: '请设置水位'
-          });
-          setTimeout(() => {
-            instance.close();
-            }, 2000);
-          return false;
-        }
+
         let arr= [].concat(JSON.parse(JSON.stringify(this.functionList))); 
         arr.forEach(item=>{
           return item.ifOpen=item.ifOpen?0:1;
@@ -431,7 +423,6 @@
       this.getDetailDevice();
     },
     components: {
-      Button1,
       selectpickr
     }
   };
