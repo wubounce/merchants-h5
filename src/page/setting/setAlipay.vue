@@ -35,9 +35,7 @@ export default {
         };
         let res = await updateOperatorFun(obj);
         
-          this.$router.push({
-            name: 'accountSet'
-          });
+          this.$router.go(-1);
           let instance = this.$toast({
             message: '操作成功',
             iconClass: 'mint-toast-icon mintui mintui-success'

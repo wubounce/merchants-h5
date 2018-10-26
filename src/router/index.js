@@ -176,6 +176,12 @@ export default new Router({
       meta: {title: '设备详情'},
     },
     {
+      path: '/deviceStart',
+      name: 'deviceStart',
+      component: () => import ('@/page/device/deviceStart/deviceStart'),
+      meta: {title: '设备启动'},
+    },
+    {
       path: '/batchStart',
       name: 'batchStart',
       component: () => import ('@/page/device/batchStart/batchStart'),
