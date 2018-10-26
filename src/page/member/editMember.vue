@@ -53,7 +53,7 @@
 import { mapState } from 'vuex';
 import { validatPhone, validatName } from '@/utils/validate';
 import { shopListFun, getOperatorInfoFun, updateOperatorInfoFun, permsMenuFun } from '@/service/member';
-import { getTrees, setMember, getMember, removeMember } from '@/utils/tool';
+import { getTrees, setMember, getMember, removeMember, delay } from '@/utils/tool';
 export default {
   data() {
     return {
@@ -71,7 +71,8 @@ export default {
       checkshoptxt:'',
       createTime:null,
 
-      query:{}
+      query:{},
+      searchData:''
     };
   },
   created() {
@@ -124,7 +125,8 @@ export default {
       this.addPermissions();
     },
     async shopListFun(){
-      let res = await shopListFun();
+      let payload = {shopName:this.searchData};
+      let res = await shopListFun(payload);
       this.shoplist = res;
       if (this.$route.query.id) {
         this.getOperatorInfo(this.updateOperatorId);
@@ -135,12 +137,14 @@ export default {
       let checklist = this.shoplist.filter(v=>this.operateShopIds.some(k=>k==v.shopId));
       this.shopVisible = false;
       this.checkshoptxt = checklist.map(item=>item.shopName).join(',');
+      this.searchData = '';
     },
     cancelCheckshop(){
       let canceIds = this.checkshoptxt ?  this.checkshoptxt.split(',') :[];
       canceIds = this.shoplist.filter(v=>canceIds.some(k=>k==v.shopName));
       this.operateShopIds = canceIds.map(item=>item.shopId);
       this.shopVisible = false;
+      this.searchData = '';
     },
     addPermissions(){
       let checklist = this.allmenu.filter(v=>this.checkpermissionslist.some(k=>k==v.menuId));
@@ -185,6 +189,15 @@ export default {
         this.ModalHelper.afterOpen();
       } else {
         this.ModalHelper.beforeClose();
+      }
+    },
+    searchData: function (newVal) {
+      if (newVal) {
+        delay(() => {
+        this.shopListFun();
+        }, 200);
+      }else {
+        this.shopListFun();
       }
     },
   },

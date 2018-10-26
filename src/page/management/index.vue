@@ -23,7 +23,7 @@
                 <div class="orderpic"><img src="../../../static/image/management/machine@2x.png" alt=""></div>
                 <div class="content">
                     <p class="con-title">设备管理</p>
-                    <p class="con-type">新增、删除、修改设备及对应设备功能</p>
+                    <p class="con-type">新增、修改设备及对应设备功能</p>
                 </div>
                 <div class="order-action iconfont icon-nextx"></div>
               </div>

@@ -88,7 +88,7 @@ export default {
   created(){
   },
   methods: {
-    titleClick: function(index) {
+    titleClick(index) {
       this.searchData = '';
       this.titleIndex = index;
       this.orderStatus = this.titleArr[this.titleIndex].value;

@@ -82,7 +82,7 @@
       }
       span {
         display: inline-block;
-        width: 0.73rem;
+        padding:0 0.27rem;
         line-height: 0.45rem;
         height: 0.43rem;
         margin-top: 0.1rem;
@@ -103,11 +103,23 @@
       }
     }
   }
+  .discountCoupon-head {
+    position: fixed;
+    top:1.33rem;
+    width:100%;
+    z-index: 999;
+  }
+  .page-top {
+    padding-top: 3.13rem;
+    height: 100%;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box
+  }
   .coupon-content {
-    padding:0 0.4rem;
+    padding:0.27rem 0.39rem 0 0.39rem;
     .list a{
       background: #fff;
-      margin-top:0.27rem;
+      margin-bottom:0.27rem;
       border-radius:0.13rem;
       padding:0.33rem 0 0.17rem 0;
       display: flex;
@@ -117,8 +129,8 @@
         text-align: center;
         height: 1.12rem;
         margin-top:0.13rem;
-        padding-left:0.73rem;
-        padding-right: 0.53rem;
+        padding-left: 0.6rem;
+        padding-right: 0.5rem;
         span {
           color: #F04864;
         }

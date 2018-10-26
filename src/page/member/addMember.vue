@@ -31,8 +31,7 @@
       <section class="sarch-wrap">
         <div class="search">
             <form action="" target="frameFile">
-              <span class="iconfont icon-IconSearch"></span><input type="text" placeholder="请输入相关店铺名称" class="serch">
-              <iframe name='frameFile' style="display: none;"></iframe>
+              <span class="iconfont icon-IconSearch"></span><input type="text" v-model.trim="searchData" placeholder="请输入相关店铺名称" class="serch">
             </form>
         </div>
       </section>
@@ -50,15 +49,13 @@
       </div>
     </section>
   </mt-popup>
-
-
 </div>
 </template>
 <script>
 import { mapState } from 'vuex';
 import { validatPhone, validatName } from '@/utils/validate';
 import { shopListFun, addOperatorFun, permsMenuFun } from '@/service/member';
-import { getTrees, setMember, getMember, removeMember} from '@/utils/tool';
+import { getTrees, setMember, getMember, removeMember, delay } from '@/utils/tool';
 export default {
   data() {
     return {
@@ -77,7 +74,8 @@ export default {
       parentIds:[],
       checkshoptxt:'',
 
-      query:{}
+      query:{},
+      searchData:''
     };
   },
   mounted() {
@@ -140,19 +138,22 @@ export default {
       this.permissionsData = getTrees(res,0);
     },
     async shopListFun(){
-      let res = await shopListFun();
+      let payload = {shopName:this.searchData};
+      let res = await shopListFun(payload);
       this.shoplist = res;
     },
     getcheckshop(){
       let checklist = this.shoplist.filter(v=>this.operateShopIds.some(k=>k==v.shopId));
       this.shopVisible = false;
       this.checkshoptxt = checklist.map(item=>item.shopName).join(',');
+      this.searchData = '';
     },
     cancelCheckshop(){
       let canceIds = this.checkshoptxt ?  this.checkshoptxt.split(',') :[];
       canceIds = this.shoplist.filter(v=>canceIds.some(k=>k==v.shopName));
       this.operateShopIds = canceIds.map(item=>item.shopId);
       this.shopVisible = false;
+      this.searchData = '';
     },
     addPermissions(){
       let checklist = this.allmenu.filter(v=>this.checkpermissionslist.some(k=>k==v.menuId));
@@ -203,6 +204,15 @@ export default {
         this.ModalHelper.afterOpen();
       } else {
         this.ModalHelper.beforeClose();
+      }
+    },
+    searchData: function (newVal) {
+      if (newVal) {
+        delay(() => {
+        this.shopListFun();
+        }, 200);
+      }else {
+        this.shopListFun();
       }
     },
   },
