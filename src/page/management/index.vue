@@ -37,7 +37,7 @@
                 <div class="orderpic"><img src="../../../static/image/management/order@2x.png" alt=""></div>
                 <div class="content">
                     <p class="con-title">订单管理</p>
-                    <p class="con-type">顾客订单信息，退款，启动、复位设备</p>
+                    <p class="con-type">顾客订单信息，退款、补偿、启动、复位设备</p>
                 </div>
                 <div class="order-action iconfont icon-nextx"></div>
               </div>
@@ -58,14 +58,14 @@
           </section>
         </router-link>
       </div>
-      <div class="alllist" v-if="!$store.getters.has('mer:marketing:list') || !$store.getters.has('mer:marketing:vip:list')">
+      <div class="alllist" v-if="!$store.getters.has('mer:marketing:list') || !$store.getters.has('mer:marketing:vip:list') || !$store.getters.has('mer:voucher')">
         <router-link :to="{ name: 'marketing'}">
           <section class="order-list">  
               <div class="detail">  
                 <div class="orderpic"><img src="../../../static/image/management/market@2x.png" alt=""></div>
                 <div class="content">
                     <p class="con-title">营销管理</p>
-                    <p class="con-type">店铺活动、VIP卡相关管理</p>
+                    <p class="con-type">店铺活动、VIP卡、优惠券相关管理</p>
                 </div>
                 <div class="order-action iconfont icon-nextx"></div>
               </div>
