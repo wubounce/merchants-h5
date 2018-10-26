@@ -89,9 +89,9 @@
       </ul>
       <div style="width:100%;height:1.73rem;"></div>
       <div class="about-button">
-        <Button btn-type="small" btn-color="spe" class="ft-btn active" @click.native="deviceTZJ" v-show="tzjShow" v-has="'mer:machine:clean'">桶自洁</Button>
-        <Button btn-type="small" btn-color="spe" class="ft-btn active" @click.native="deviceRest" v-show="(machineState==='运行' && deviceDetail.subTypeName !== '通用脉冲充电桩') || (machineState==='空闲' && deviceDetail.subTypeName !== '通用脉冲充电桩')" v-has="'mer:machine:reset'">复位</Button>
-        <Button btn-type="small" btn-color="spe" class="ft-btn active" @click.native="deviceStart" v-show="deviceDetail.parentTypeName!=='充电桩'">启动</Button>
+        <Button btn-type="small" btn-color="spe" class="ft-btn active" @click.native="deviceTZJ" v-show="tzjShow && machineState==='空闲'" v-has="'mer:machine:clean'">桶自洁</Button>
+        <Button btn-type="small" btn-color="spe" class="ft-btn active" @click.native="deviceRest" v-show="(machineState==='运行' && deviceDetail.subTypeName !== '通用脉冲充电桩')" v-has="'mer:machine:reset'">复位</Button>
+        <Button btn-type="small" btn-color="spe" class="ft-btn active" @click.native="deviceStart" v-show="machineState==='空闲' && deviceDetail.subTypeName !== '通用脉冲充电桩'">启动</Button>
         <Button btn-type="small" btn-color="spe" class="ft-btn active" @click.native="deviceEdit" v-has="'mer:machine:update'">编辑</Button>
       </div>
       </section>
@@ -234,12 +234,8 @@
             message: '桶自洁成功',
             iconClass: 'mint-toast-icon mintui mintui-success'
           });
-          setTimeout(() => {
-            instance.close();
-            this.$router.push({name:'deviceMange'});
-          }, 2000);
+          this.getDetailDevice();
         });
-        
       },
       deviceRest() {  //复位
         MessageBox.confirm('是否确认复位此设备?').then(async ()=> {
@@ -248,10 +244,7 @@
             message: '复位成功',
             iconClass: 'mint-toast-icon mintui mintui-success'
           });
-          setTimeout(() => {
-            instance.close();
-            this.$router.push({name:'deviceMange'});
-          }, 2000);
+          this.getDetailDevice();
         });
       },
       deviceEdit() {
