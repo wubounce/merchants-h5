@@ -100,6 +100,21 @@ export const memberIsLock = (ststus)=>{
 };
 
 
+// 优惠券类型
+export const CouponType = (ststus)=>{
+	switch (ststus){
+		case 1:
+			return '普通券 ';
+		case 2:
+		  	return '免费体验券';
+		case 3:
+		 	 return '补偿券 ';
+		default:
+  			return ststus;
+	}
+};
+
+
 
 
 

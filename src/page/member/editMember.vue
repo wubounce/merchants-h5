@@ -19,7 +19,19 @@
    <!-- 选择店铺 -->
   <mt-popup v-model="shopVisible" position="bottom" :closeOnClickModal="false">
     <div class="resp-shop">
+      <span class="quxi" @click="cancelCheckshop">取消</span>
       <span class="shop">负责店铺</span>
+      <span class="qued" @click="getcheckshop">确定</span>
+    </div>
+    <div class="search-header">
+      <section class="sarch-wrap">
+        <div class="search">
+            <form action="" target="frameFile">
+              <span class="iconfont icon-IconSearch"></span><input type="text" placeholder="请输入相关店铺名称" class="serch">
+              <iframe name='frameFile' style="display: none;"></iframe>
+            </form>
+        </div>
+      </section>
     </div>
     <section class="shop-touch">
       <div class="all-list">
@@ -33,10 +45,6 @@
         </label>
       </div>
     </section>
-    <section class="promiss-footer">
-      <span class="can" @click="cancelCheckshop">取消</span>
-      <span class="cifrm" @click="getcheckshop">确定</span>
-    </section>
   </mt-popup>
 
 </div>
@@ -45,7 +53,7 @@
 import { mapState } from 'vuex';
 import { validatPhone, validatName } from '@/utils/validate';
 import { shopListFun, getOperatorInfoFun, updateOperatorInfoFun, permsMenuFun } from '@/service/member';
-import { getTrees, setMember, getMember, removeMember } from '@/utils/tool';
+import { getTrees, setMember, getMember, removeMember, delay } from '@/utils/tool';
 export default {
   data() {
     return {
@@ -63,7 +71,8 @@ export default {
       checkshoptxt:'',
       createTime:null,
 
-      query:{}
+      query:{},
+      searchData:''
     };
   },
   created() {
@@ -116,7 +125,8 @@ export default {
       this.addPermissions();
     },
     async shopListFun(){
-      let res = await shopListFun();
+      let payload = {shopName:this.searchData};
+      let res = await shopListFun(payload);
       this.shoplist = res;
       if (this.$route.query.id) {
         this.getOperatorInfo(this.updateOperatorId);
@@ -127,12 +137,14 @@ export default {
       let checklist = this.shoplist.filter(v=>this.operateShopIds.some(k=>k==v.shopId));
       this.shopVisible = false;
       this.checkshoptxt = checklist.map(item=>item.shopName).join(',');
+      this.searchData = '';
     },
     cancelCheckshop(){
       let canceIds = this.checkshoptxt ?  this.checkshoptxt.split(',') :[];
       canceIds = this.shoplist.filter(v=>canceIds.some(k=>k==v.shopName));
       this.operateShopIds = canceIds.map(item=>item.shopId);
       this.shopVisible = false;
+      this.searchData = '';
     },
     addPermissions(){
       let checklist = this.allmenu.filter(v=>this.checkpermissionslist.some(k=>k==v.menuId));
@@ -177,6 +189,15 @@ export default {
         this.ModalHelper.afterOpen();
       } else {
         this.ModalHelper.beforeClose();
+      }
+    },
+    searchData: function (newVal) {
+      if (newVal) {
+        delay(() => {
+        this.shopListFun();
+        }, 200);
+      }else {
+        this.shopListFun();
       }
     },
   },

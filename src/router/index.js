@@ -281,6 +281,12 @@ export default new Router({
       component: () => import ('@/page/order/orderDetail'),
       meta: {title: '订单详情'},
     },
+    {
+      path: '/compensate',
+      name: 'compensate',
+      component: () => import ('@/page/order/compensate'),
+      meta: {title: '补偿券'},
+    },
 
     //店铺管理
     {
@@ -296,15 +302,7 @@ export default new Router({
       meta: {
         title: '店铺新增',
         keepAlive:true
-      },
-      // children: [
-      //   {
-      //     path: 'test',
-      //     name: 'test',
-      //     component: () => import ('@/page/shop/test/test'),
-      //     //meta: {title: '新增店铺'},
-      //   }
-      // ]
+      },     
     },
     {
       path: '/mapSearch',
@@ -385,6 +383,7 @@ export default new Router({
     { path: '/editMarket', name: 'editMarket', component: () => import('@/page/marketing/editMarket'),meta: {title: '修改限时优惠'} },
     { path: '/vipDetail', name: 'vipDetail', component: () => import('@/page/marketing/vipDetail'),meta: {title: 'VIP卡详情'} },
     { path: '/editVip', name: 'editVip', component: () => import('@/page/marketing/editVip'),meta: {title: 'VIP卡修改'} },
+    { path: '/couponDetail', name: 'couponDetail', component: () => import('@/page/marketing/couponDetail'),meta: {title: '优惠券详情'} },
     
     //设置
     {

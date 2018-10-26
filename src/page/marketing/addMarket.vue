@@ -290,7 +290,6 @@ export default {
       this.machineVisible = value;
     },
     async toaddMaket(){
-      console.log();
       if (this.shopIds.length<=0) {
         this.$toast({message: "请选择店铺" });
         return false;
@@ -334,7 +333,8 @@ export default {
       let payload = Object.assign({},this.addmarket,{week:this.weeklist.join(','),shopIds:this.shopIds.join(','),parentTypeIds:parentTypeIds});
       let res = await addOruPdateFun(payload);
       this.$toast({message: '新增成功' });
-      this.$router.push({name:'marketing'});
+      // this.$router.push({name:'marketing'});
+      this.$router.go(-1);
     }
   },
   watch: {

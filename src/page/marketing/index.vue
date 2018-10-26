@@ -12,20 +12,25 @@
   	<div class="VIP-wrap page-loadmore-height"  v-if="tabindex === 1">
       <vip></vip>
   	</div>
+    <div class="VIP-wrap page-loadmore-height"  v-if="tabindex === 2">
+      <discountCoupon></discountCoupon>
+  	</div>
   </section>
 </div>
 </template>
 <script>
 import market from './marketIndex';
 import vip from './vipIndex';
+import discountCoupon from './discountCoupon';
 export default {
   components:{
     market,
-    vip
+    vip,
+    discountCoupon
   },
   data() {
     return {
-      tabtitle:['限时优惠','VIP'],
+      tabtitle:['限时优惠','VIP','优惠券记录'],
       tabindex:0,
     };
   },
