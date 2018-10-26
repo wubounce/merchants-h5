@@ -37,10 +37,10 @@
                   </section>
                   </router-link>
                   <section class="listaction" v-if="item.orderStatus === 2"> 
-                      <mt-button @click="orderRefund(item.orderNo,item.payPrice)" v-has="'mer:order:refund,mer:order:info'" :disabled="refundDisabled">退款</mt-button>
-                      <mt-button @click="gocompensate(item.orderNo,item.phone,item.shopName,item.shopId,item.parentTypeName,item.markPrice)">补偿</mt-button>
-                      <mt-button @click="machineBoot(item.id,item.machineName)" v-if="item.isESource === 0 || item.isESource === null" v-has="'mer:order:start,mer:order:info'">启动</mt-button>
-                      <mt-button @click="machineReset(item.orderNo,item.machineId,item.machineName)"  v-if="item.isESource === 0 || item.isESource === null" v-has="'mer:order:reset,mer:order:info'">复位</mt-button>
+                      <mt-button @click="orderRefund(item.orderNo,item.payPrice)" v-has="'mer:order:refund'" :disabled="refundDisabled">退款</mt-button>
+                      <mt-button @click="gocompensate(item.orderNo,item.phone,item.shopName,item.shopId,item.parentTypeName,item.markPrice)" v-has="'mer:order:compensate'">补偿</mt-button>
+                      <mt-button @click="machineBoot(item.id,item.machineName)" v-if="item.isESource === 0 || item.isESource === null" v-has="'mer:order:start'">启动</mt-button>
+                      <mt-button @click="machineReset(item.orderNo,item.machineId,item.machineName)"  v-if="item.isESource === 0 || item.isESource === null" v-has="'mer:order:reset'">复位</mt-button>
                   </section>
                 </div>
             </div>

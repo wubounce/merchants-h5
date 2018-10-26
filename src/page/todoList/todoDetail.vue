@@ -15,16 +15,16 @@
 
       <!-- 第三模块 -->
       <p class="about-button">
-        <Button btn-type="small" btn-color="spe" class="common-button" @confirm="isDeleteOrNot(item.id)" v-has="'mer:schedule:delete'">删除</Button>
-  			<Button btn-type="small" btn-color="spe" class="common-button" @confirm="goTodoDetailEdit(item.id,item.machineParentTypeId,item.shopId)" v-has="'mer:schedule:update'">编辑</Button>
-        <Button btn-type="small" btn-color="spe" class="common-button" @confirm="goStart()" v-has="'mer:schedule:start'">立即启动</Button>
+        <Buttonbottom btn-type="small" btn-color="spe" class="common-button" @confirm="isDeleteOrNot(item.id)" v-has="'mer:schedule:delete'">删除</Buttonbottom>
+  			<Buttonbottom btn-type="small" btn-color="spe" class="common-button" @confirm="goTodoDetailEdit(item.id,item.machineParentTypeId,item.shopId)" v-has="'mer:schedule:update'">编辑</Buttonbottom>
+        <Buttonbottom btn-type="small" btn-color="spe" class="common-button" @confirm="goStart()" v-has="'mer:schedule:start'">立即启动</Buttonbottom>
       </p>
     </div>
   </section>
 </template>
 
 <script>
-import Button from "@/components/Button/Button";
+import Buttonbottom from "@/components/Button/Button";
 import { MessageBox } from 'mint-ui';
 import { batchStartNowFun , getBatchStartFun , delBatchStartFun } from '@/service/todoList';
   export default {
@@ -101,7 +101,7 @@ import { batchStartNowFun , getBatchStartFun , delBatchStartFun } from '@/servic
       this.getBatchStart();
     },
     components: {
-      Button
+      Buttonbottom
     }
   };
 </script>

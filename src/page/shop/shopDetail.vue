@@ -49,14 +49,14 @@
 
         <!-- 第五模块 -->
         <p class="about-button">
-          <Button btn-type="small" btn-color="spe" id="delete" @confirm="isDeleteOrNot(shopdetail.shopId)" v-has="'mer:shop:delete'">删除</Button>
-    			<Button btn-type="small" btn-color="spe" id="edit" @confirm="goShopEdit()" v-has="'mer:shop:update'">编辑</Button>
+          <Buttonbottom btn-type="small" btn-color="spe" id="delete" @confirm="isDeleteOrNot(shopdetail.shopId)" v-has="'mer:shop:delete'">删除</Buttonbottom>
+    			<Buttonbottom btn-type="small" btn-color="spe" id="edit" @confirm="goShopEdit()" v-has="'mer:shop:update'">编辑</Buttonbottom>
         </p>
    </div>
   </section>
 </template>
 <script>
-import Button from "@/components/Button/Button";
+import Buttonbottom from "@/components/Button/Button";
 import { MessageBox } from 'mint-ui';
 import { shopDetailFun } from '@/service/shop';
 import { deleteShopFun } from '@/service/shop';
@@ -146,7 +146,7 @@ export default {
   mounted() {
   },
   components:{
-    Button
+    Buttonbottom
   }
 };
 </script>

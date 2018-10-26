@@ -134,6 +134,9 @@ export default {
       if(!validatFullDiscount(this.fullDiscount)){
         this.$toast({message: "满减金额必须等于或大于0，最多带两位小数"});
       }
+      if(Number(this.fullDiscount).toFixed(2)<this.couponPirce){
+        this.$toast({message: "满减金额不能小于补偿面额"});
+      }
     },
     confirmcompensate(){
       if (!this.machineCurrent.id) {
@@ -148,8 +151,11 @@ export default {
         this.$toast({message: "满减金额必须等于或大于0，最多带两位小数"});
          return false;
       }
+      if(Number(this.fullDiscount).toFixed(2)<this.couponPirce){
+        this.$toast({message: "满减金额不能小于补偿面额"});
+         return false;
+      }
       this.confirmVisible = true;
-     
     },
     async todocompensate(){
        let payload = {

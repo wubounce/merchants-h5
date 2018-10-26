@@ -24,7 +24,6 @@
 
 <script>
 import { getBatchStartFun , updateBatchStartFun , getFunctionListFun } from '@/service/todoList';
-import Button from "@/components/Button/Button";
 import { MessageBox } from 'mint-ui';
   export default {
     data() {
@@ -146,9 +145,6 @@ import { MessageBox } from 'mint-ui';
     created() {
       this.getBatchStart();
       this.getFunctionList();
-    },
-    components: {
-      Button
     },
     watch: {
       popupVisible: function () {

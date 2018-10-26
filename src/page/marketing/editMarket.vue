@@ -372,8 +372,7 @@ export default {
       let payload = Object.assign({},this.addmarket,{week:this.weeklist.join(','),shopIds:this.shopIds.join(','),timeId:this.$route.query.id,parentTypeIds:parentTypeIds});
       let res = await addOruPdateFun(payload);
       this.$toast({message: '编辑成功' });
-      // this.$router.replace({name:'marketing'});
-      this.$router.go(-1);
+      this.$router.go(-2);
     }
   },
   watch: {

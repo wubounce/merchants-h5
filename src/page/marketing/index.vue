@@ -1,14 +1,14 @@
  <template>
 <div class="marketing-mang-wrap page-loadmore-height">
   <section class="tab-title">
-  	<div v-for="(item,index) in tabtitle" @click="tabclick(index)"><span :class="{tabcurrent:tabindex === index}" >{{item}}</span></div>
+  	<div @click="tabclick(0)" v-if="!$store.getters.has('mer:marketing:list')"><span :class="{tabcurrent:tabindex === 0}" >限时优惠</span></div>
+    <div @click="tabclick(1)" v-if="!$store.getters.has('mer:marketing:vip:list')"><span :class="{tabcurrent:tabindex === 1}" >VIP</span></div>
+    <div @click="tabclick(2)" v-if="!$store.getters.has('mer:voucher')"><span :class="{tabcurrent:tabindex === 2}" >优惠券记录</span></div>
   </section>
   <section class="tab-contont page-loadmore-height">
-
   	<div class="discount-wrap page-loadmore-height" v-if="tabindex === 0">
       <market></market>
   	</div>
-
   	<div class="VIP-wrap page-loadmore-height"  v-if="tabindex === 1">
       <vip></vip>
   	</div>
@@ -44,7 +44,7 @@ export default {
   methods: {
     tabclick(index){
     	this.tabindex = index;
-      this.$router.push({query: {tabindex:this.tabindex}});
+      this.$router.replace({query: {tabindex:this.tabindex}});
     },
   },
 };

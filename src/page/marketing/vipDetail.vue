@@ -78,7 +78,7 @@ export default {
         let payload = {shopVipId:this.detail.shopVipId};
         let res = await delVipFun(payload);
         this.$toast({message: '删除成功'});
-        this.$router.push({name:'marketing',query:{tabindex:1}});
+        this.$router.go(-1);
       });
     }
   },

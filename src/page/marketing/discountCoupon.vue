@@ -1,77 +1,80 @@
 <template>
 <section class="discountCoupon  page-loadmore-height">
-  <div class="discountCoupon-head">
-    <div class="search-header">
-      <section class="sarch-wrap">
-        <div class="search">
-            <form action="" target="frameFile" v-on:submit.prevent="">
-              <span class="iconfont icon-IconSearch"></span><input type="text" value='搜索'v-model.trim="searchData" @keyup.enter="searchVoucher" @input="clearSearch" placeholder="请输入用户手机号" class="serch">
-              <iframe name='frameFile' style="display: none;"></iframe>
-              <span class="select-back" @click="searchVoucher">搜索</span>
-            </form>
+  <div class="permissions" v-if="$store.getters.has('mer:voucher')">暂无相关页面权限</div>
+  <div class="page-loadmore-height" v-else>
+    <div class="discountCoupon-head">
+      <div class="search-header">
+        <section class="sarch-wrap">
+          <div class="search">
+              <form action="" target="frameFile" v-on:submit.prevent="">
+                <span class="iconfont icon-IconSearch"></span><input type="text" value='搜索'v-model.trim="searchData" @keyup.enter="searchVoucher" @input="clearSearch" placeholder="请输入用户手机号" class="serch">
+                <iframe name='frameFile' style="display: none;"></iframe>
+                <span class="select-back" @click="searchVoucher">搜索</span>
+              </form>
+          </div>
+          <div class="coupon-date" @click="openByDialog"><span class="iconfont icon-rili"></span></div>
+        </section>
+      </div>
+      <div class="device-status">
+        <div  @click="titleClick(null)">
+          <p :class="{current:titleIndex === null}">全部</p>
+          <span :class="{current:titleIndex === null}">{{titleArr.all}}</span>
         </div>
-        <div class="coupon-date" @click="openByDialog"><span class="iconfont icon-rili"></span></div>
-      </section>
-    </div>
-    <div class="device-status">
-      <div  @click="titleClick(null)">
-        <p :class="{current:titleIndex === null}">全部</p>
-        <span :class="{current:titleIndex === null}">{{titleArr.all}}</span>
-      </div>
-      <div @click="titleClick(0)">
-        <p :class="{current: titleIndex === 0}">未使用</p>
-        <span :class="{current: titleIndex === 0}">{{titleArr.notUse}}</span>
-      </div>
-      <div @click="titleClick(1)">
-        <p :class="{current: titleIndex === 1}">已使用</p>
-        <span :class="{current: titleIndex === 1}">{{titleArr.used}}</span>
-      </div>
-      <div @click="titleClick(2)">
-        <p :class="{current: titleIndex === 2}">已过期</p>
-        <span :class="{current: titleIndex === 2}">{{titleArr.expired}}</span>
+        <div @click="titleClick(0)">
+          <p :class="{current: titleIndex === 0}">未使用</p>
+          <span :class="{current: titleIndex === 0}">{{titleArr.notUse}}</span>
+        </div>
+        <div @click="titleClick(1)">
+          <p :class="{current: titleIndex === 1}">已使用</p>
+          <span :class="{current: titleIndex === 1}">{{titleArr.used}}</span>
+        </div>
+        <div @click="titleClick(2)">
+          <p :class="{current: titleIndex === 2}">已过期</p>
+          <span :class="{current: titleIndex === 2}">{{titleArr.expired}}</span>
+        </div>
       </div>
     </div>
+    <div class="no-order" v-if="nosearchList"><p>未找到符合的结果</p></div>
+    <div class="no-order" v-if="noOrderList"><p>暂无相关记录</p></div> 
+    <div class="page-top">
+      <div class="page-loadmore-wrapper" ref="wrapper" :style="{overflowY:scrollShow}">
+        <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore">
+          <div class="coupon-content">
+            <ul>
+              <li class="list" v-for="(item,index) in list" :key="index">
+                <router-link :to="{name:'couponDetail',query:{id:item.id}}">
+                  <div class="price-content">
+                    <span :class="['yang',{'expieed':item.status ===2}]">¥</span><span :class="['inter',{'expieed':item.status ===2}]">{{item.firstMOney}}</span><span :class="['float',{'expieed':item.status ===2}]">.{{item.secondMOney}}</span>
+                  </div>
+                  <div class="rules-content">
+                    <p class="title">{{item.type | CouponType}}</p>
+                    <p>限手机号{{item.phone}}使用</p>
+                    <p>发放时间{{item.createTime}}</p>
+                  </div>
+                  <span class="tag" v-if="item.status===2"><img src="../../../static/image/market/exirped@.png" alt=""></span>
+                </router-link>
+              </li>
+            </ul>
+          </div>
+          <div v-if="allLoaded" class="nomore-data">没有更多了</div>
+        </mt-loadmore>
+      </div>
+    </div>
+    <!-- 日历选择 -->
+    <mt-popup v-model="calendar.show" position="bottom" class="mint-popup">
+      <div class="calendar-dialog-body" v-if="isreset">
+          <calendar :range="calendar.range" :zero="calendar.zero" :lunar="calendar.lunar" :begin="calendar.begin" :end="calendar.end" :type="calendar.type" :value="calendar.value"  @select="calendar.select"></calendar>
+          <div class="footer">
+            <div>
+                <mt-button class="ca-coupon-btn" @click="selectDateCom">确定</mt-button>
+            </div>
+            <div>
+              <mt-button class="ca-coupon-btn reset" @click="resetDate">重置</mt-button>
+            </div>
+          </div>
+      </div>
+    </mt-popup>
   </div>
-  <div class="no-order" v-if="nosearchList"><p>未找到符合的结果</p></div>
-  <div class="no-order" v-if="noOrderList"><p>暂无相关记录</p></div> 
-  <div class="page-top">
-    <div class="page-loadmore-wrapper" ref="wrapper" :style="{overflowY:scrollShow}">
-      <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" :auto-fill="false" ref="loadmore">
-        <div class="coupon-content">
-          <ul>
-            <li class="list" v-for="(item,index) in list" :key="index">
-              <router-link :to="{name:'couponDetail',query:{id:item.id}}">
-                <div class="price-content">
-                  <span :class="['yang',{'expieed':item.status ===2}]">¥</span><span :class="['inter',{'expieed':item.status ===2}]">{{item.firstMOney}}</span><span :class="['float',{'expieed':item.status ===2}]">.{{item.secondMOney}}</span>
-                </div>
-                <div class="rules-content">
-                  <p class="title">{{item.type | CouponType}}</p>
-                  <p>限手机号{{item.phone}}使用</p>
-                  <p>发放时间{{item.createTime}}</p>
-                </div>
-                <span class="tag" v-if="item.status===2"><img src="../../../static/image/market/exirped@.png" alt=""></span>
-              </router-link>
-            </li>
-          </ul>
-        </div>
-        <div v-if="allLoaded" class="nomore-data">没有更多了</div>
-      </mt-loadmore>
-    </div>
-</div>
-  <!-- 日历选择 -->
-  <mt-popup v-model="calendar.show" position="bottom" class="mint-popup">
-     <div class="calendar-dialog-body" v-if="isreset">
-        <calendar :range="calendar.range" :zero="calendar.zero" :lunar="calendar.lunar" :begin="calendar.begin" :end="calendar.end" :type="calendar.type" :value="calendar.value"  @select="calendar.select"></calendar>
-        <div class="footer">
-          <div>
-              <mt-button class="ca-coupon-btn" @click="selectDateCom">确定</mt-button>
-          </div>
-          <div>
-            <mt-button class="ca-coupon-btn reset" @click="resetDate">重置</mt-button>
-          </div>
-        </div>
-    </div>
-  </mt-popup>
 </section>
 </template>
 

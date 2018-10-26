@@ -66,7 +66,7 @@ export default {
         let payload = {id:query.id};
         let res = await delOperatorFun(payload);
         this.$toast({message: '删除成功' });
-        this.$router.push({name:'member'});
+        this.$router.go(-1);
       });
     }
   },
