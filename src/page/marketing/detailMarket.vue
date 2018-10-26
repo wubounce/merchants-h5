@@ -59,7 +59,6 @@ export default {
         let payload = {timeId:query.id};
         let res = await delMarketFun(payload);
         this.$toast('删除成功');
-        // this.$router.push({name:'marketing'});
         this.$router.go(-1);
       });
     }
