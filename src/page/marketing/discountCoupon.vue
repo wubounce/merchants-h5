@@ -80,7 +80,7 @@
   import PagerMixin from '@/mixins/pagerMixin';
   import { CouponType } from '@/utils/mapping';
   import calendar from '@/components/vue-calendar/calendar.vue';
-import { fstat } from 'fs';
+  import { validatReplace } from '@/utils/validate';
   export default {
     mixins: [PagerMixin],
     data () {
@@ -127,21 +127,27 @@ import { fstat } from 'fs';
         this.titleArr = res;
       },
       async _getList() {
+        if (this.searchData !== '') {
+           // 去掉特殊字符和空格
+          this.searchData = this.searchData.replace(validatReplace, '');
+        }
         let payload =  {status:this.status,phone:this.searchData,startDate:this.startDate.join('-'),endDate:this.endDate.join('-'),page:this.page,pageSize:this.pageSize};
         let res = await voucherListFun(payload);
         this.list = res.items?[...this.list,...res.items]:[];  //分页添加
-        if ((this.searchData) || this.startDate.length > 0 && this.endDate.length > 0) {
-          console.log(13123);
-          this.nosearchList = this.list.length<= 0 ? true: false;
-        }else {
-          this.noOrderList = this.list.length<= 0 ? true: false;
-        }
+        this.total = res.total;
         this.list.forEach(item => {
           let temp = item.faceValue.split('.');
           item['firstMOney'] = temp[0];
           item['secondMOney'] = temp[1];
         });
-        this.total = res.total;
+        if (this.searchData || (this.startDate.length > 0 && this.endDate.length > 0)) {
+          this.noOrderList = false;
+          this.nosearchList = this.list.length<= 0 ? true: false;
+        }else {
+          this.nosearchList = false;
+          this.noOrderList = this.list.length<= 0 ? true: false;
+        }
+        
       },
       openByDialog(){
         this.calendar.show=true;
@@ -149,6 +155,10 @@ import { fstat } from 'fs';
       },
       selectDateCom(){
         this.calendar.show=false;
+        this.noOrderList = false;
+        this.list = [];
+        this.page = 1;
+        this.allLoaded = false;//下拉刷新时解除上拉加载的禁用
         this._getList();
       },
       resetDate(){
@@ -156,6 +166,10 @@ import { fstat } from 'fs';
         this.startDate = [],
         this.endDate = [],
         this.isreset=false;
+        this.noOrderList = false;
+        this.list = [];
+        this.page = 1;
+        this.allLoaded = false;//下拉刷新时解除上拉加载的禁用
         this._getList();
       },
       async searchVoucher(e){ //搜索

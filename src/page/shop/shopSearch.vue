@@ -74,7 +74,7 @@ import {delay } from "@/utils/tool";
         nosearchList:false,
         list:[],
         page:1,
-        pageSize:9999,
+        pageSize:99,
         isSelectShow:true,
         isListShow:false,
         searchList:[]
