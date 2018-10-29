@@ -448,11 +448,11 @@
         border-radius: 5px;
         margin-right: 0.3rem;
         color: #333333;
-        border-color: #D8D8D8;
+        border-color:1px solid #D8D8D8;
       }
       .active {
         color: #1890FF;
-        border-color: #1890FF;
+        border-color: 1px solid #1890FF;
         font-size: 14px;
         background-color: #ffffff;
       }
