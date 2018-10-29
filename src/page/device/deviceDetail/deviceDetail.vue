@@ -93,10 +93,10 @@
       </ul>
       <div style="width:100%;height:1.73rem;"></div>
       <div class="about-button">
-        <span v-has="'mer:machine:clean'"><button btn-type="small" btn-color="spe" class="ft-btn active" @click="deviceTZJ" v-show="tzjShow && machineState==='空闲'">桶自洁</button></span>
-        <span v-has="'mer:machine:reset'"><button btn-type="small" btn-color="spe" class="ft-btn active" @click="deviceRest" v-show="(machineState==='运行' && deviceDetail.subTypeName !== '通用脉冲充电桩')">复位</button></span>
-        <span v-has="'mer:machine:start'"><button btn-type="small" btn-color="spe" class="ft-btn active" @click="deviceStart" v-show="machineState==='空闲' && deviceDetail.subTypeName !== '通用脉冲充电桩'">启动</button></span>
-        <span v-has="'mer:machine:update'"><button btn-type="small" btn-color="spe" class="ft-btn active" @click="deviceEdit">编辑</button></span>
+        <span v-has="'mer:machine:clean'"><button btn-type="small" btn-color="spe" class="ft-btn" @click="deviceTZJ" v-show="tzjShow && machineState==='空闲'">桶自洁</button></span>
+        <span v-has="'mer:machine:reset'"><button btn-type="small" btn-color="spe" class="ft-btn" @click="deviceRest" v-show="(machineState==='运行' && deviceDetail.subTypeName !== '通用脉冲充电桩')">复位</button></span>
+        <span v-has="'mer:machine:start'"><button btn-type="small" btn-color="spe" class="ft-btn" @click="deviceStart" v-show="machineState==='空闲' && deviceDetail.subTypeName !== '通用脉冲充电桩'">启动</button></span>
+        <span v-has="'mer:machine:update'"><button btn-type="small" btn-color="spe" class="ft-btn" @click="deviceEdit">编辑</button></span>
       </div>
       </section>
 
@@ -447,14 +447,10 @@
         height: 0.9rem;
         border-radius: 5px;
         margin-right: 0.3rem;
-        color: #333333;
-        border-color:1px solid #D8D8D8;
-      }
-      .active {
         color: #1890FF;
-        border-color: 1px solid #1890FF;
         font-size: 14px;
         background-color: #ffffff;
+        border: 1px solid #1890FF;  
       }
     }
   }
