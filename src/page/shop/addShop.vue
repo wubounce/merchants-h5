@@ -40,13 +40,14 @@
 <script>
 import place from '@/components/Area/Area';
 import { MessageBox } from 'mint-ui';
-import { addOrEditShopFun , areaListFun , listParentTypeFun , manageListFun } from '@/service/shop';
+import { addOrEditShopFun , shopTypeListFun , areaListFun , listParentTypeFun , manageListFun } from '@/service/shop';
 export default {
   data() {
     return {
       areaValue: '',
       buttonHide:true,
       shopName:'',
+      shopTypeList: [],
       shopTypeName:'',
       school:'',
       arrName:[],
@@ -82,7 +83,7 @@ export default {
       slots: [
         {
           flex: 1,
-          values: ['学校', '公寓', '流动人口社区', '酒店', '医院', '养老院','工厂','浴场','其他'],
+          values: [], // '学校', '公寓', '流动人口社区', '酒店', '医院', '养老院','工厂','浴场','其他'
           className: 'shop-type',
           textAlign: 'center',
           position:'bottom',
@@ -242,17 +243,6 @@ export default {
             duration: 3000
           });
       }
-      //校验重名
-      // for(let i=0; i<this.arrName.length; i++) {
-      //   if(e.target.value == this.arrName[i]) {
-      //     e.target.value = '';
-      //     this.$toast({
-      //       message: '该店铺名称已存在，请您换一个店铺名称输入',
-      //       position: 'top',
-      //       duration: 3000
-      //     });
-      //   }
-      // }
     },
     //设置预约相关
     editTime(i) {
@@ -268,46 +258,36 @@ export default {
     },
     valuesChange(picker, values) {
       this.shopTypeString = values[0];
-      switch(values[0]) {
-        case '学校':
-          this.shopType = 1;
-          break;
-        case '公寓':
-          this.shopType = 2;
-          break;
-        case '流动人口社区':
-          this.shopType = 3;
-          break;
-        case '酒店':
-          this.shopType = 4;
-          break;
-          case '医院':
-          this.shopType = 5;
-          break;
-        case '养老院':
-          this.shopType = 6;
-          break;
-          case '工厂':
-          this.shopType = 7;
-          break;
-        case '浴场':
-          this.shopType = 8;
-          break;
-        case '其他':
-          this.shopType = 9;
-          break;
+      for(let i=0;i<this.shopTypeList.length;i++) {
+        if(values[0] === this.shopTypeList[i].name) {
+          this.shopType = this.shopTypeList[i].id;
+        }
       }
     },
 
     // 选择店铺类型
-    chooseShopType() {
+    async chooseShopType() {
       this.popupVisible = true;
       this.isClass = true;
+      let obj = {};
+      let res = await shopTypeListFun(obj);
+      this.shopTypeList = res;
+      let arr = [];
+      for(let i=0;i<this.shopTypeList.length;i++) {
+        arr.push(this.shopTypeList[i].name);
+      }
+      this.slots[0].values = arr;
     },
     sureShopType() {
       this.popupVisible = false;
       this.shopTypeName = this.shopTypeString;
-      //console.log(this.shopType);
+      if(!this.shopType) {
+        for(let i=0;i<this.shopTypeList.length;i++) {
+          if(this.shopTypeName === this.shopTypeList[i].name) {
+            this.shopType = this.shopTypeList[i].id;
+          }
+        }
+      }
     },
     cancelShopType() {
       this.popupVisible = false;
@@ -474,7 +454,7 @@ export default {
             position: 'middle',
             duration: 3000
           });
-      }else if(!this.shopTypeName) {
+      }else if(!this.shopType) {
         this.$toast({
             message: '请填写店铺类型',
             position: 'middle',
@@ -532,6 +512,8 @@ export default {
         this.shopName = ''; // 姓名
         this.shopType = ''; // 店铺类型
         this.shopTypeName = ''; 
+        this.noEdit = false;
+        this.placeholdercontent = '请填写1到9的数字';
         this.areaValue = ''; // 所在地区
         this.provinceId = '';
         this.cityId = '';

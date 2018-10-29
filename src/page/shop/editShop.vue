@@ -44,15 +44,6 @@
         </div>
       </div>
     </mt-popup>
-    
-    <!-- 设备类型 -->
-    <!-- <mt-popup v-model='deviceDetail' position="bottom" class="mint-popup">
-      <p class="toolBar"><span @click="cancel">取消</span><span>设备类型</span><span @click="confirmNews">确定</span></p>
-      <div class='resp-shop-wrap'>
-        <mt-checklist align="right" :options="options" v-model="machine"></mt-checklist>
-      </div>
-    </mt-popup> -->
-
     <!-- 营业时间 -->
     <mt-popup v-model="timeVisible" position="bottom" class="mint-popup">
        <mt-picker class="picker"  :slots="slotsTime"  @change="changeTime" :showToolbar="true"><p class="toolBar"><span @click="cancel">取消</span><span @click="chooseDay" id="allDay">全天</span><span @click="confirmNews">确定</span></p></mt-picker>
@@ -62,7 +53,7 @@
 </template>
 
 <script>
-import { shopDetailFun , addOrEditShopFun , areaListFun , listParentTypeFun  , manageListFun } from '@/service/shop';
+import { shopDetailFun , addOrEditShopFun , shopTypeListFun , areaListFun   , manageListFun } from '@/service/shop';
 import { MessageBox } from 'mint-ui';
 export default {
   data() {
@@ -72,6 +63,7 @@ export default {
       shopId:'',
       isbgc:false,
       shopName:'',
+      shopTypeList: [],
       oldName:'',
       noEdit: false,
       placeholdercontent:'开启预约功能后可填',
@@ -108,7 +100,7 @@ export default {
       slots: [
         {
           flex: 1,
-          values: ['学校', '公寓', '流动人口社区', '酒店', '医院', '养老院','工厂','浴场','其他'],
+          values: [], //'学校', '公寓', '流动人口社区', '酒店', '医院', '养老院','工厂','浴场','其他'
           className: 'shop-type',
           textAlign: 'center',
           position:'bottom',
@@ -273,34 +265,10 @@ export default {
     },
     valuesChange(picker, values) {
       this.shopTypeString = values[0];
-      switch(values[0]) {
-        case '学校':
-          this.shopType = 1;
-          break;
-        case '公寓':
-          this.shopType = 2;
-          break;
-        case '流动人口社区':
-          this.shopType = 3;
-          break;
-        case '酒店':
-          this.shopType = 4;
-          break;
-          case '医院':
-          this.shopType = 5;
-          break;
-        case '养老院':
-          this.shopType = 6;
-          break;
-          case '工厂':
-          this.shopType = 7;
-          break;
-        case '浴场':
-          this.shopType = 8;
-          break;
-        case '其他':
-          this.shopType = 9;
-          break;
+      for(let i=0;i<this.shopTypeList.length;i++) {
+        if(values[0] === this.shopTypeList[i].name) {
+          this.shopType = this.shopTypeList[i].id;
+        }
       }
     },
     async toDetail(value) {
@@ -492,21 +460,6 @@ export default {
       this.districtName = values[2];
 
     },
-    async addDevice() {
-      this.index = 3;
-      this.isClass = true;
-      this.isbgc = true;
-      this.deviceDetail = true;
-      let res = await listParentTypeFun();
-      this.machineArray = res;
-      let arr = [];
-      arr = JSON.parse(JSON.stringify(res).replace(/name/g,"label"));
-      this.options = JSON.parse(JSON.stringify(arr).replace(/id/g,"value"));
-      for(let i=0;i<this.options.length;i++) {
-        this.options[i]['value'] = this.options[i]['label'];
-      }
-    },
-  
     changeTime(picker, values) {
       this.shopTime.startTime = values[0].slice(0,2) + ':' +values[1].slice(0,2);
       this.shopTime.endTime = values[2].slice(0,2) + ':' +values[3].slice(0,2);
@@ -652,6 +605,16 @@ export default {
         this.addressSlots[0].values.push(res[i].areaName);
       }
     },
+    async setShopTypeList() {
+      let obj = {};
+      let res = await shopTypeListFun(obj);
+      this.shopTypeList = res;
+      let arr = [];
+      for(let i=0;i<this.shopTypeList.length;i++) {
+        arr.push(this.shopTypeList[i].name);
+      }
+      this.slots[0].values = arr;
+    },
     async getShopDetail() {
       let payload = { shopId: this.$route.query.shopId };
       let res = await shopDetailFun(payload);
@@ -659,8 +622,8 @@ export default {
       this.mapCity = res.cityName;  //初始的传到地图界面的城市的值
       this.shopName = res.shopName; //店铺名称
       this.oldName = res.shopName; //旧店铺名称
-      this.slots[0].defaultIndex = res.shopTypeId-1;
       this.list[0].value = res.shopTypeName;
+      this.shopType = res.shopTypeId;
       //判断区是否存在
       if(res.cityName == res.districtName) {
         res.districtName = '';
@@ -727,22 +690,10 @@ export default {
       this.provinceName = res.provinceName;
       this.cityName = res.cityName;
       this.districtName = res.districtName;
-      
-      //设备类型
-      let resMachine = await listParentTypeFun();
-        let arrmachine = res.machineTypeNames.split(',');
-        let arr = [];
-        for(let i=0;i<arrmachine.length;i++) {
-          for(let j=0;j<resMachine.length;j++) {
-            if(arrmachine[i] == resMachine[j].name) {
-              arr.push(resMachine[j].id);
-            }
-          }
-        this.machineTypeIdsArray = arr.join(',');
-      }
     }
   },
   created() {
+    this.setShopTypeList();
     this.getShopDetail();
   },
   mounted() {

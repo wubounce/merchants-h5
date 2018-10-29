@@ -5,6 +5,7 @@ import { fetch } from './baseService';
 
 const areaListApi = 'area/list';                                                 //获取区域列表 method 'post'
 const manageListApi = '/shop/manageList';                                        //店铺列表，店铺名称  method 'post'
+const shopTypeListApi = '/shop/shopTypeList';                                    //店铺类型
 const detailApi = '/shop/detail';                                                //店铺详情  method 'post'
 const addOrEditShopApi = '/shop/addOrEdit';                                      //新增或编辑店铺 method 'post'
 const deleteShopApi = '/shop/deleteShop';                                        //删除店铺 method 'post'
@@ -19,6 +20,7 @@ const listByShopNameApi = 'shop/listByShopName';                                
 
 export const areaListFun = (payload) => fetch.post(areaListApi, payload); //获取区域列表
 export const manageListFun = (payload) => fetch.post(manageListApi, payload); //店铺列表
+export const shopTypeListFun = (payload) => fetch.post(shopTypeListApi, payload); //店铺类型
 export const shopDetailFun = (payload) => fetch.post(detailApi, payload); //店铺详情
 export const addOrEditShopFun = (payload) => fetch.post(addOrEditShopApi, payload); //新增或编辑店铺
 export const deleteShopFun = (payload) => fetch.post(deleteShopApi, payload); //删除店铺
