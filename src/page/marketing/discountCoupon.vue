@@ -7,7 +7,7 @@
         <section class="sarch-wrap">
           <div class="search">
               <form action="" target="frameFile" v-on:submit.prevent="">
-                <span class="iconfont icon-IconSearch"></span><input type="text" value='搜索'v-model.trim="searchData" @keyup.enter="searchVoucher" @input="clearSearch" placeholder="请输入用户手机号" class="serch">
+                <span class="iconfont icon-IconSearch"></span><input type="number" value='搜索'v-model.trim="searchData" @keyup.enter="searchVoucher" @input="clearSearch" placeholder="请输入用户手机号" class="serch">
                 <iframe name='frameFile' style="display: none;"></iframe>
                 <span class="select-back" @click="searchVoucher">搜索</span>
               </form>
@@ -105,9 +105,12 @@
             zero:true,
             type:'datetime',
             value:[], //默认日期
+            begin:this.startDate, //可选开始日期
+            end:[], //可选结束日期
             select:(begin,end)=>{
               this.startDate = begin;
               this.endDate = end;
+              this.calendar.end = moment(this.startDate).add('months',5).format('YYYY-MM-DD').split('-');
             }
         },
         isreset:true,

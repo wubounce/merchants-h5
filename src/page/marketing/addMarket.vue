@@ -6,7 +6,7 @@
     <p @click="open('picker2')">优惠期开始<span class="addvip-con">{{addmarket.startTime}}<span class="order-action iconfont icon-nextx"></span></span></p>
      <p @click="open('picker3')">优惠期结束<span class="addvip-con">{{addmarket.endTime}}<span class="order-action iconfont icon-nextx"></span></span></p>
     <p @click="activeVisible=true">活动日<span class="order-action add-shop-overflow-icon iconfont icon-nextx"></span><span class="addvip-con add-shop-overflow">{{checkWeeklisttxt.join(',') | week}}</span></p>
-    <p @click="activeTimeVisible = true">每日活动时段<span class="addvip-con">{{addmarket.time}}<span class="order-action iconfont icon-nextx"></span></span></p>
+    <p @click="chooseTime()">每日活动时段<span class="addvip-con">{{addmarket.time}}<span class="order-action iconfont icon-nextx"></span></span></p>
     <p>折扣优惠<span class="addvip-con"><input type="number" pattern="\d*" placeholder="请输入优惠折扣" class="discount-input" v-model="addmarket.discount">%</span></p>
   </div>
    <div class="confirm" @click="toaddMaket">确定</div>
@@ -33,7 +33,13 @@
   </mt-popup>
   <!-- 每日活动时段 -->
   <mt-popup v-model="activeTimeVisible" position="bottom" class="mint-popup">
-     <mt-picker :slots="activeTimeslots" @change="changeTime" :showToolbar="true"><p class="toolBar"><span class="timequx" @click="activeTimeVisible = false;">取消</span><span class="tiem-picker-title">每日活动时段</span><span @click="confirmNews('pickerActiveTimes')" class="queding">确定</span></p></mt-picker>
+     <mt-picker :slots="activeTimeslots" @change="changeTime" :showToolbar="true">
+       <p class="toolBar">
+         <span class="timequx" @click="activeTimeVisible = false;">取消</span>
+         <span @click="chooseDay" id="allDay">全天</span>
+         <span @click="confirmNews('pickerActiveTimes')" class="queding">确定</span>
+        </p>
+      </mt-picker>
   </mt-popup>
 
   <!-- 优惠期开始 -->
@@ -256,6 +262,20 @@ export default {
       this.activeTimeVisible = false;
       this.addmarket.time = this.activeTimeCurrentTags;
     },
+    chooseDay() {
+      // 点击全天直接获取全天并且退出弹框
+      this.activeTimeVisible = false;
+      this.addmarket.time = '00:00-23:59';
+    },
+    chooseTime() {
+      this.activeTimeVisible = true;
+      if(this.addmarket.time){
+        this.activeTimeslots[0].defaultIndex = parseInt(this.addmarket.time.slice(0,2));
+        this.activeTimeslots[2].defaultIndex = parseInt(this.addmarket.time.slice(3,5));
+        this.activeTimeslots[4].defaultIndex = parseInt(this.addmarket.time.slice(6,8));
+        this.activeTimeslots[6].defaultIndex = parseInt(this.addmarket.time.slice(9,11));
+      }
+    },
     open(picker) {
       this.$refs[picker].open();
     },
@@ -373,6 +393,21 @@ export default {
 </script>
 <style type="text/css" lang="scss" scoped>
    @import '../../assets/scss/marketing/addmaket';
+   .toolBar #allDay{
+    color: #666666;
+    background-color: rgba(24, 144, 255, 0.05);
+    font-size: 16px;
+    padding: 0 0.25rem;
+    padding-top: -1rem;
+    border: 1px solid rgba(24, 144, 255, 0.1);
+    display: inline-block;
+    height: 0.65rem;
+    line-height: 0.65rem;
+    margin: 0.1;
+    margin-top: 0.2rem;
+    border-radius: 4px;
+    flex: none;
+  }
 </style>
 <style>
   .addmarket .mint-checklist-label {

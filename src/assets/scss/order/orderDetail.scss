@@ -117,7 +117,12 @@
       }
     }
   }
-    
+  .company-coupon {
+    border-bottom:1px solid #f9f8ff;
+  }
+  .coupon-noborder {
+    border:none;
+  } 
   .money-wrap {
     text-align: right;
     background: #fff;
@@ -189,7 +194,7 @@
     box-sizing: border-box;
     button {
       float: right;
-      width:2.133333rem;
+      width:1.7rem;
       height:0.8rem;
       border-radius:0.106667rem;
       border:0.026667rem solid rgba(216,216,216,1);

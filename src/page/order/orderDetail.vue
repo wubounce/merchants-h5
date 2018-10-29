@@ -22,17 +22,33 @@
         <div class="vip"><span class="viptag"><img src="../../../static/image/vip/VIP@2x.png" alt=""></span>VIP会员卡</div>
         <div class="discount">-¥{{detail.discountPrice}}</div>
       </div>
-      <div class="total-border" v-cloak v-if="detail.discountType===2&&detail.discountPrice>0 || detail.discountType===null&&detail.discountPrice>0">
+      <div  class="total-border" v-cloak v-if="detail.discountType===2&&detail.discountPrice>0 || detail.discountType===null&&detail.discountPrice>0">
         <div class="vip"><span class="viptag"><img src="../../../static/image/vip/discount@2x.png" alt=""></span>限时优惠</div>
         <div class="discount">-¥{{detail.discountPrice}}</div>
       </div>
-      <div class="total-border"  v-cloak v-if="detail.voucherType===0&&detail.voucherPrice>0">
-        <div class="vip"><span class="viptag"><img src="../../../static/image/vip/coupons@2x.png" alt=""></span>通用优惠券</div>
-        <div class="discount" style="color:#333">¥{{detail.voucherPrice}}</div>
+      <div class="company-coupon" v-cloak v-if="detail.voucherType===1&&detail.voucherPrice>0 ||detail.voucherType===2&&detail.voucherPrice>0">
+        <div class="total-border coupon-noborder" style="padding-bottom:0.27rem">
+          <div class="vip"><span class="viptag"><img src="../../../static/image/vip/coupons@2x.png" alt=""></span>平台优惠券</div>
+          <div class="discount" style="color:#333">¥{{detail.voucherPrice}}</div>
+        </div>
+        <div class="total-border coupon-noborder" style="padding-top:0">
+          <div class="vip" style="color:#999;"><span class="viptag"></span>平台承担</div>
+          <div class="discount" style="color:#333">¥{{detail.voucherPrice*(detail.platformRatio/100) | tofixd}}</div>
+        </div>
+        <div class="total-border coupon-noborder" style="padding-top:0">
+          <div class="vip" style="color:#999;"><span class="viptag"></span>商家优惠券</div>
+          <div class="discount" style="color:#333">¥{{detail.voucherPrice - (detail.voucherPrice*(detail.platformRatio/100)) | tofixd}}</div>
+        </div>
       </div>
-      <div class="total-border"  v-cloak v-if="detail.voucherType===1&&detail.voucherPrice>0">
-        <div class="vip"><span class="viptag"><img src="../../../static/image/vip/coupons@2x.png" alt=""></span>店铺优惠券</div>
-        <div class="discount">-¥{{detail.voucherPrice}}</div>
+      <div class="company-coupon" v-cloak v-if="detail.voucherType===3&&detail.voucherPrice>0">
+        <div  class="total-border coupon-noborder" style="padding-bottom:0.27rem">
+          <div class="vip"><span class="viptag"><img src="../../../static/image/vip/coupons@2x.png" alt=""></span>商家优惠券</div>
+          <div class="discount">-¥{{detail.voucherPrice}}</div>
+        </div>
+        <div  class="total-border coupon-noborder" style="padding-top:0">
+          <div class="vip" style="color:#999;"><span class="viptag"></span>平台承担</div>
+          <div class="discount">-¥{{detail.voucherPrice*(detail.platformRatio/100) | tofixd}}</div>
+        </div>
       </div>
     </section>
     <section class="money-wrap"  v-cloak v-if="detail.orderType !== 2 && detail.orderStatus !==1 || detail.orderType !==2 && detail.orderStatus !==0">
@@ -80,6 +96,7 @@
 
      <section class="listaction" v-cloak v-if="detail.orderStatus === 2"> 
       <mt-button @click="orderRefund(detail.orderNo,detail.payPrice)" v-has="'mer:order:refund,mer:order:info'" :disabled="refundDisabled">退款</mt-button>
+      <mt-button @click="gocompensate(detail.orderNo,detail.phone,detail.shopName,detail.shopId,detail.parentTypeName,detail.markPrice)" v-has="'mer:order:compensate'">补偿</mt-button>
       <mt-button @click="machineBoot(detail.id)" v-has="'mer:order:start,mer:order:info'" v-if="detail.isESource === 0 || detail.isESource === null">启动</mt-button>
       <mt-button @click="machineReset(detail.orderNo,detail.machineId)" v-has="'mer:order:reset,mer:order:info'" v-if="detail.isESource === 0 || detail.isESource === null">复位</mt-button>
     </section>
@@ -144,6 +161,9 @@ export default {
          this.refundDisabled = false;
       });
     },
+    gocompensate(orderno,phone,shopName,shopId,parentTypeName,markPrice){//补偿
+      this.$router.push({name:'compensate',query:{orderno:orderno,phone:phone,shopName:shopName,shopId:shopId,parentTypeName:parentTypeName,markPrice:markPrice}});
+    }
   },
   filters: {
     orserStatus: function (value) {
