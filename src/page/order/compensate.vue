@@ -144,7 +144,7 @@ export default {
         return false;
       }
       if(!validatCouponPrice(this.couponPirce)){
-        this.$toast({message: "券面额必须大于0,最多带两位小数"});
+        this.$toast({message: "券面额需大于0，支持两位小数"});
         return false;
       }
       if(!validatFullDiscount(this.fullDiscount)){
