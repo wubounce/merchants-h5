@@ -126,7 +126,7 @@ export default {
       this.machineVisible = value;
     },
     checkCouponPirce(){
-      if(!validatCouponPrice(this.couponPirce)||this.couponPirce == 0){
+      if(!validatCouponPrice(this.couponPirce) || Number(this.couponPirce) === 0){
         this.$toast({message: "券面额必须大于0,最多带两位小数"});
       }
     },
@@ -143,7 +143,7 @@ export default {
         this.$toast({message: "请选择设备类型" });
         return false;
       }
-      if(!validatCouponPrice(this.couponPirce)||this.couponPirce == 0){
+      if(!validatCouponPrice(this.couponPirce) || Number(this.couponPirce) === 0){
         this.$toast({message: "券面额需大于0，支持两位小数"});
         return false;
       }

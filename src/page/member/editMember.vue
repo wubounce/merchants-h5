@@ -78,6 +78,9 @@ export default {
     this.query = this.$route.query ? this.$route.query :{};
     this.updateOperatorId = this.query.id?this.query.id:this.query.updateOperatorId;
     this.shopListFun();
+    if (this.$route.query.id) {
+      this.getOperatorInfo(this.updateOperatorId);
+    }
     this.menuSelect();
   },
   mounted() {
@@ -127,10 +130,6 @@ export default {
       let payload = {shopName:this.searchData};
       let res = await shopListFun(payload);
       this.shoplist = res;
-      if (this.$route.query.id) {
-        this.getOperatorInfo(this.updateOperatorId);
-      }
-      this.getcheckshop();
     },
     getcheckshop(){
       let checklist = this.shoplist.filter(v=>this.operateShopIds.some(k=>k==v.shopId));

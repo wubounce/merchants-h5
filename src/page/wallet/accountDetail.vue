@@ -42,7 +42,7 @@
             </li>
 		</ul>
         <ul class="record" v-if="data.type===3">
-            <li>
+            <!-- <li>
                 <div><p>付款金额</p><p>{{data.payPrice}}</p></div> 
                 <div class="discounts"><p>退款金额</p><p><span >-</span>{{data.price}}</p></div>            
                  <section v-if="data.voucherType===1&&data.voucherPrice>0 ||data.voucherType===2&&data.voucherPrice>0">
@@ -52,7 +52,7 @@
                 <section v-if="data.voucherType===3&&data.voucherPrice>0">
                     <div class="discounts" ><p>商家优惠券</p><p><span>-</span>{{data.voucherPrice}}</p></div> 
                 </section>
-            </li>   
+            </li>    -->
             <li>
                 <div><p>用户账号</p><p>{{data.userPhone}}</p></div>
                 <div><p>创建时间</p><p>{{data.createTime}}</p></div>
