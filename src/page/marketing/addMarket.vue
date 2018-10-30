@@ -393,21 +393,6 @@ export default {
 </script>
 <style type="text/css" lang="scss" scoped>
    @import '../../assets/scss/marketing/addmaket';
-   .toolBar #allDay{
-    color: #666666;
-    background-color: rgba(24, 144, 255, 0.05);
-    font-size: 16px;
-    padding: 0 0.25rem;
-    padding-top: -1rem;
-    border: 1px solid rgba(24, 144, 255, 0.1);
-    display: inline-block;
-    height: 0.65rem;
-    line-height: 0.65rem;
-    margin: 0.1;
-    margin-top: 0.2rem;
-    border-radius: 4px;
-    flex: none;
-  }
 </style>
 <style>
   .addmarket .mint-checklist-label {
