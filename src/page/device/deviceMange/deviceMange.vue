@@ -149,7 +149,7 @@
   import Api from '@/utils/Api';
   import Web from '@/utils/Web';
   import PagerMixin from '@/mixins/pagerMixin';
-  import { deviceListFun , countDeviceFun , getShopFun , getlistParentTypeFun , getlistSubTypeFun , typeListFun , stateMachineFun , listSubTypeAllFun } from '@/service/device';
+  import { deviceListFun , countDeviceFun , getShopFun , getlistParentTypeFun , getlistSubTypeFun , typeListFun , listSubTypeAllFun } from '@/service/device';
   export default {
     mixins: [PagerMixin],
     data() {
@@ -158,6 +158,7 @@
         isShow2: false,
         selectIndex: -1,
         selectDeviceTypeIndex: -1,
+        pageSize: 10,
         selectModelIndex: -1,
         selectCommunicationIndex: -1,
         popupShop: '',
@@ -284,7 +285,6 @@
         this.getPopupShop(this.shopFlag);
         this.getlistParentType({onlyMine: true});
         this.getlistSubTypeAll(this.subFlag);
-        this.getStateDevice();
         this._getList();
       },
       popSure() {
@@ -293,7 +293,6 @@
         this.list = [];
         this.popupVisible = false;
         this._getList(this.payload);
-        this.getStateDevice(this.payload);
       },
       titleClick(index) {
         this.list = [];
@@ -362,10 +361,6 @@
         let r = url.match(reg);  //匹配目标参数
         if (r != null) return unescape(r[2]); return null; //返回参数值
       },
-      async getStateDevice(payload){      
-        let res = await stateMachineFun(payload);
-        this.titleArr= res; 
-      }, 
       async getPopupShop(flag) {  //获取店铺
         let res = await getShopFun();
         this.popupShop = flag?res.slice(0,4):res;
@@ -396,8 +391,9 @@
       async _getList(object)  { //获取设备
         let payload = object ? object : {machineState: this.index,page:this.page,pageSize: this.pageSize};
         let res = await deviceListFun(payload);
-        this.list = res.items?[...this.list,...res.items]:[];
-        this.total = res.total;
+        this.titleArr = res.count;
+        this.list = res.page.items?[...this.list,...res.page.items]:[];
+        this.total = res.page.total;
         this.hasNoData = this.list.length<= 0 ? true: false;
         this.noMore = this.page>1?true: false;
         this.list.forEach(item=>{
@@ -434,7 +430,6 @@
       },
     },
     created() {
-      this.getStateDevice();
     },
     
     components: {

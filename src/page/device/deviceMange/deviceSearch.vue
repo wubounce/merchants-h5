@@ -79,7 +79,7 @@ import {delay } from "@/utils/tool";
         let machineState = null;
         let payload = {machineState:machineState ,machineId: id};
         let res = await deviceListFun(payload);
-        this.list = res.items;
+        this.list = res.page.items;
         this.list.forEach(item=>{
           switch(item.machineState){
           case 1:
