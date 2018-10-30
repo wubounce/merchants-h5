@@ -55,9 +55,9 @@
                   {{deviceDetail.imei}}
                 </p>
               </li>
-              <li>
+              <li v-show="waterLevelShow">
                 <span class="field-title">水位置设置</span>
-                <p>低水位</p>
+                <p>waterLevel</p>
               </li>
               <li>
                 <span class="field-title">功能设置</span>
@@ -114,6 +114,8 @@
         tzjShow: false,
         functionSetListShow: true,
         functionCodeShow: false,
+        waterLevelShow: false,
+        waterLevel: '',
         machineState:"",
         tongxin: '',
         fromdata: {
@@ -179,6 +181,10 @@
         this.deviceDetail= res;
         this.functionList = res.functionList;
         let comment = res.comment;
+        if(res.waterLevel) {
+          this.waterLevelShow = true;
+          this.waterLevel = es.waterLevel;
+        }
         if(comment) {
           this.$toast("设备功能不存在，请删除设备重新绑定");
         }

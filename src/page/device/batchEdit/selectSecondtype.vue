@@ -86,7 +86,7 @@ import { getlistParentTypeFun, getlistSubTypeFun} from '@/service/device';
       },
       goNext(){
         let query = this.$route.query;
-        let urlName = this.selectedSecondType !== "海尔5/6/7公斤波轮SXB60-51U7/SXB70-51U7"?"functionChoice":"selectFunctionEdit";
+        let urlName = this.selectedSecondType === "海尔5/6/7公斤波轮SXB60-51U7/SXB70-51U7"?"functionChoice":"selectFunctionEdit";
         if(this.subTypeId){
           this.$router.push({
             name: urlName,

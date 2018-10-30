@@ -193,10 +193,11 @@
         slotsWaterLevel: [
         {
           flex: 1,
-          values: ['极地水位','低水位','中水位','高水位'],
+          values: ['极低水位','低水位','中水位','高水位'],
           className: 'shop-type',
           textAlign: 'center',
           position:'bottom',
+          defaultIndex: 2,
           name:'水位设置'
         }
         ],
