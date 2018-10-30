@@ -232,6 +232,7 @@
           this.machineState = "超时未工作";
           break;
         }
+        return Promise.resolve();
       }, 
       functionSetListShowClick() {
         this.functionSetListShow =!this.functionSetListShow;
@@ -266,10 +267,37 @@
       },
       // 进入启动页
       deviceStart() {
-        this.$router.push({
-          name: 'deviceStart',
-          query:{
-            machineId: this.$route.query.machineId 
+        this.getDetailDevice().then( data =>{
+          switch(this.machineState) {
+            case '空闲': 
+              this.$router.push({
+                name: 'deviceStart',
+                query:{
+                  machineId: this.$route.query.machineId 
+                }
+              });
+            break;
+            case '运行':
+              this.$toast({
+                message: '设备运行中，请先复位',
+                position: "middle",
+                duration: 3000
+              });
+            break;
+            case '故障':
+              this.$toast({
+                message: '设备故障，启动失败',
+                position: "middle",
+                duration: 3000
+              });
+            break;
+            case '离线':
+              this.$toast({
+                message: '设备离线，启动失败',
+                position: "middle",
+                duration: 3000
+              });
+            break;
           }
         });
       }
