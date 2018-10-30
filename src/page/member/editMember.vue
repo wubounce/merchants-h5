@@ -62,6 +62,7 @@ export default {
       checkpermissionslist: [],
 
       shoplist:[],
+      allshoplist:[],
       shopVisible:false,
       operateShopIds:[],
       parentIds:[],
@@ -78,9 +79,6 @@ export default {
     this.query = this.$route.query ? this.$route.query :{};
     this.updateOperatorId = this.query.id?this.query.id:this.query.updateOperatorId;
     this.shopListFun();
-    if (this.$route.query.id) {
-      this.getOperatorInfo(this.updateOperatorId);
-    }
     this.menuSelect();
   },
   mounted() {
@@ -127,22 +125,30 @@ export default {
       this.addPermissions();
     },
     async shopListFun(){
+      let res = await shopListFun();
+      this.allshoplist = res;
+      this.shoplist = res;
+      if (this.$route.query.id) {
+        this.getOperatorInfo(this.updateOperatorId);
+      }
+    },
+    async serachshopListFun(){
       let payload = {shopName:this.searchData};
       let res = await shopListFun(payload);
       this.shoplist = res;
     },
     getcheckshop(){
-      let checklist = this.shoplist.filter(v=>this.operateShopIds.some(k=>k==v.shopId));
+      this.searchData = '';
+      let checklist = this.allshoplist.filter(v=>this.operateShopIds.some(k=>k==v.shopId));
       this.shopVisible = false;
       this.checkshoptxt = checklist.map(item=>item.shopName).join(',');
-      this.searchData = '';
     },
     cancelCheckshop(){
+      this.searchData = '';
       let canceIds = this.checkshoptxt ?  this.checkshoptxt.split(',') :[];
-      canceIds = this.shoplist.filter(v=>canceIds.some(k=>k==v.shopName));
+      canceIds = this.allshoplist.filter(v=>canceIds.some(k=>k==v.shopName));
       this.operateShopIds = canceIds.map(item=>item.shopId);
       this.shopVisible = false;
-      this.searchData = '';
     },
     addPermissions(){
       let checklist = this.allmenu.filter(v=>this.checkpermissionslist.some(k=>k==v.menuId));
@@ -190,13 +196,12 @@ export default {
       }
     },
     searchData: function (newVal) {
-      console.log(135464);
       if (newVal) {
         delay(() => {
-        this.shopListFun();
+        this.serachshopListFun();
         }, 200);
       }else {
-        this.shopListFun();
+        this.serachshopListFun();
       }
     },
   },
