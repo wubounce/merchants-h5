@@ -13,6 +13,7 @@
       form {
         display: inline-block;
         width: 100%;
+        position: relative;
       }
       input {
         display: inline-block;
@@ -34,6 +35,13 @@
         padding-left: 0.27rem;
         color: #1890FF;
         border-left:1px solid rgba(216,216,216,1);
+      }
+      .guanbi {
+        position: absolute;
+        font-size: 16px;
+        color: #999;
+        right: 1.52rem;
+        top: 0.36rem;
       }
     }
     .coupon-date {

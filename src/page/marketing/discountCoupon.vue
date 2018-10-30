@@ -7,7 +7,9 @@
         <section class="sarch-wrap">
           <div class="search">
               <form action="" target="frameFile" v-on:submit.prevent="">
-                <span class="iconfont icon-IconSearch"></span><input type="number" value='搜索'v-model.trim="searchData" @keyup.enter="searchVoucher" @input="clearSearch" placeholder="请输入用户手机号" class="serch">
+                <span class="iconfont icon-IconSearch"></span>
+                <input type="number" value='搜索'v-model.trim="searchData" @keyup.enter="searchVoucher" @input="clearSearch" placeholder="请输入用户手机号" class="serch">
+                <span class="guanbi iconfont icon-guanbi" v-if="iscolsed" @click="doclearSearch"></span>
                 <iframe name='frameFile' style="display: none;"></iframe>
                 <span class="select-back" @click="searchVoucher">搜索</span>
               </form>
@@ -22,7 +24,7 @@
         </div>
         <div @click="titleClick(0)">
           <p :class="{current: titleIndex === 0}">未使用</p>
-          <span :class="{current: titleIndex === 0}">{{titleArr.notUse}}</span>
+          <span :class="{current: titleIndex === 0}">{{titleArr.notUse+titleArr.locked}}</span>
         </div>
         <div @click="titleClick(1)">
           <p :class="{current: titleIndex === 1}">已使用</p>
@@ -47,7 +49,7 @@
                     <span :class="['yang',{'expieed':item.status ===2||item.status ===1}]">¥</span><span :class="['inter',{'expieed':item.status ===2||item.status ===1}]">{{item.firstMOney}}</span><span :class="['float',{'expieed':item.status ===2||item.status ===1}]">.{{item.secondMOney}}</span>
                   </div>
                   <div class="rules-content">
-                    <p class="title">{{item.type | CouponType}}</p>
+                    <p class="title">{{item.merchantType | CouponType}}</p>
                     <p>限手机号{{item.phone}}使用</p>
                     <p>发放时间{{item.createTime}}</p>
                   </div>
@@ -80,7 +82,7 @@
 </template>
 
 <script>
-  import { voucherListFun, voucherCountFun } from '@/service/voucher';
+  import { voucherListFun } from '@/service/voucher';
   import PagerMixin from '@/mixins/pagerMixin';
   import { CouponType } from '@/utils/mapping';
   import calendar from '@/components/vue-calendar/calendar.vue';
@@ -97,6 +99,7 @@
         status:'',//状态
         noOrderList:false,
         nosearchList:false,
+        iscolsed:false,
         startDate:[],
         endDate: [],
         calendar:{
@@ -128,10 +131,6 @@
         this.list = [];
         this._getList();
       },
-      async voucherCount(payload) {
-        let res = await voucherCountFun(payload);
-        this.titleArr = res;
-      },
       async _getList() {
         if (this.searchData !== '') {
            // 去掉特殊字符和空格
@@ -139,9 +138,10 @@
         }
         let payload =  {status:this.status,phone:this.searchData,startDate:this.startDate.join('-'),endDate:this.endDate.join('-'),page:this.page,pageSize:this.pageSize};
         let res = await voucherListFun(payload);
-        this.voucherCount(payload);
-        this.list = res.items?[...this.list,...res.items]:[];  //分页添加
-        this.total = res.total;
+        console.log(res);
+        this.titleArr = res.count;
+        this.list = res.page?[...this.list,...res.page.items]:[];  //分页添加
+        this.total = res.page.total;
         this.list.forEach(item => {
           let temp = item.faceValue.split('.');
           item['firstMOney'] = temp[0];
@@ -154,7 +154,6 @@
           this.nosearchList = false;
           this.noOrderList = this.list.length<= 0 ? true: false;
         }
-        
       },
       openByDialog(){
         this.calendar.show=true;
@@ -193,9 +192,16 @@
         }
       },
       clearSearch(){ //清楚搜索
+        this.iscolsed = true;
         if(this.searchData.length <= 0 ){
+          this.iscolsed = false;
           this._getList();
         }
+      },
+      doclearSearch(){
+        this.searchData = '';
+        this.iscolsed = false;
+        this._getList();
       }
     },
     filters: {

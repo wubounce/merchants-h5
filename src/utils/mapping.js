@@ -104,11 +104,7 @@ export const memberIsLock = (ststus)=>{
 export const CouponType = (ststus)=>{
 	switch (ststus){
 		case 1:
-			return '普通券 ';
-		case 2:
-		  	return '免费体验券';
-		case 3:
-		 	 return '补偿券 ';
+			return '补偿券 ';
 		default:
   			return ststus;
 	}
