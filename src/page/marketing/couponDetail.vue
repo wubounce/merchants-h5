@@ -22,7 +22,7 @@
     </div>
     <section class="detail-wrap">
       <p><span class="title">补偿订单号：</span><span class="content">{{data.fromOrderNo}}</span></p>
-      <p v-if="data.status === 2"><span class="title">使用订单号：</span><span class="content">{{data.orderNo}}</span></p>
+      <p v-if="data.status === 1"><span class="title">使用订单号：</span><span class="content">{{data.orderNo}}</span></p>
       <p><span class="title">发放人：</span><span class="content">{{data.realName?data.realName:data.userName}}</span></p>
     </section>
   </section>

@@ -89,7 +89,7 @@ export default {
     async machinelist(){
       let payload = {shopId:this.query.shopId};
       let res = await getlistParentTypeFun(payload);
-      this.machineSlots[0].values =res;
+      this.machineSlots[0].values = res.length>0 ? [{id:'',name:'全部'},...res]:[];
       this.machineSlots[0].values.forEach((el,index) => {
         if(el.name === this.query.parentTypeName){
           this.machineSlots[0].defaultIndex = index;
@@ -139,7 +139,7 @@ export default {
       }
     },
     confirmcompensate(){
-      if (!this.machineCurrent.id) {
+      if (!this.machineCurrent.id&&this.machineCurrent.name !== '全部') {
         this.$toast({message: "请选择设备类型" });
         return false;
       }

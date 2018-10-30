@@ -118,7 +118,6 @@
       };
     },
     created() {
-      this.voucherCount();
     },
     methods:{
       titleClick(index=null) {
@@ -129,8 +128,8 @@
         this.list = [];
         this._getList();
       },
-      async voucherCount() {
-        let res = await voucherCountFun();
+      async voucherCount(payload) {
+        let res = await voucherCountFun(payload);
         this.titleArr = res;
       },
       async _getList() {
@@ -140,6 +139,7 @@
         }
         let payload =  {status:this.status,phone:this.searchData,startDate:this.startDate.join('-'),endDate:this.endDate.join('-'),page:this.page,pageSize:this.pageSize};
         let res = await voucherListFun(payload);
+        this.voucherCount(payload);
         this.list = res.items?[...this.list,...res.items]:[];  //分页添加
         this.total = res.total;
         this.list.forEach(item => {
