@@ -29,26 +29,16 @@
       <div class="company-coupon" v-cloak v-if="detail.voucherType===1&&detail.voucherPrice>0 ||detail.voucherType===2&&detail.voucherPrice>0">
         <div class="total-border coupon-noborder" style="padding-bottom:0.27rem">
           <div class="vip"><span class="viptag"><img src="../../../static/image/vip/coupons@2x.png" alt=""></span>平台优惠券</div>
-          <div class="discount" style="color:#333">¥{{detail.voucherPrice}}</div>
-        </div>
-        <div class="total-border coupon-noborder" style="padding-top:0">
-          <div class="vip" style="color:#999;"><span class="viptag"></span>平台承担</div>
-          <div class="discount" style="color:#333">¥{{detail.voucherPrice*(detail.platformRatio/100) | tofixd}}</div>
-        </div>
-        <div class="total-border coupon-noborder" style="padding-top:0">
-          <div class="vip" style="color:#999;"><span class="viptag"></span>商家优惠券</div>
-          <div class="discount" style="color:#333">¥{{detail.voucherPrice - (detail.voucherPrice*(detail.platformRatio/100)) | tofixd}}</div>
-        </div>
-      </div>
-      <div class="company-coupon" v-cloak v-if="detail.voucherType===3&&detail.voucherPrice>0">
-        <div  class="total-border coupon-noborder" style="padding-bottom:0.27rem">
-          <div class="vip"><span class="viptag"><img src="../../../static/image/vip/coupons@2x.png" alt=""></span>商家优惠券</div>
           <div class="discount">-¥{{detail.voucherPrice}}</div>
         </div>
-        <div  class="total-border coupon-noborder" style="padding-top:0">
-          <div class="vip" style="color:#999;"><span class="viptag"></span>平台承担</div>
-          <div class="discount">-¥{{detail.voucherPrice*(detail.platformRatio/100) | tofixd}}</div>
+        <div class="total-border coupon-noborder" style="padding-top:0" v-if="detail.voucherPrice*(detail.platformRatio/100) > 0">
+          <div class="vip" style="color:#999;margin-left:1.07rem;">平台承担</div>
+          <div class="discount">+¥{{detail.voucherPrice*(detail.platformRatio/100) | tofixd}}</div>
         </div>
+      </div>
+      <div class="total-border" v-cloak v-if="detail.voucherType===3&&detail.voucherPrice>0">
+        <div class="vip"><span class="viptag"><img src="../../../static/image/vip/coupons@2x.png" alt=""></span>商家优惠券</div>
+        <div class="discount">-¥{{detail.voucherPrice}}</div>
       </div>
     </section>
     <section class="money-wrap"  v-cloak v-if="detail.orderType !== 2 && detail.orderStatus !==1 || detail.orderType !==2 && detail.orderStatus !==0">
