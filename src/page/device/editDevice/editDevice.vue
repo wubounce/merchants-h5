@@ -261,7 +261,7 @@
         this.fromdata.nqt = res.nqt?res.nqt:"点击扫描设备上二维码";
         this.fromdata.imei = res.imei?res.imei:"点击扫描模块上二维码";
         this.functionList = res.functionList;
-        this.waterLevelShow = res.subTypeName === "海尔5/6/7公斤波轮SXB60-51U7/SXB70-51U7"?true:false;
+        /* this.waterLevelShow = res.subTypeName === "海尔5/6/7公斤波轮SXB60-51U7/SXB70-51U7"?true:false; */ //水位功能隐藏
         this.fromdata.waterLevel = res.waterLevel?res.waterLevel:"未设置";     
         this.functionList.forEach(item=>{
           item.ifOpen=item.ifOpen === "0"?(!!item.ifOpen) : (!item.ifOpen);

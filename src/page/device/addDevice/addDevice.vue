@@ -302,7 +302,7 @@
           this.fromdata.secondType.name = data.name;
           this.fromdata.secondType.communicateType = data.communicateType;
         }
-        this.waterLevelShow = data.name == "海尔5/6/7公斤波轮SXB60-51U7/SXB70-51U7"?true:false;
+        /* this.waterLevelShow = data.name == "海尔5/6/7公斤波轮SXB60-51U7/SXB70-51U7"?true:false;  */ //水位功能隐藏
         }
       },
       machineselectpickertatusFun(data){
@@ -317,7 +317,7 @@
         } else {
         this.fromdata.secondType.id = this.secondOnTypeList[index].id;
         this.fromdata.secondType.communicateType = this.secondOnTypeList[index].communicateType;
-        this.waterLevelShow = this.secondOnTypeList[index].name === "海尔5/6/7公斤波轮SXB60-51U7/SXB70-51U7"?true:false;
+        /* this.waterLevelShow = this.secondOnTypeList[index].name === "海尔5/6/7公斤波轮SXB60-51U7/SXB70-51U7"?true:false; */ //水位功能隐藏
         this.subTypeName = this.secondOnTypeList[index].name;
         this.functionSetList = [];
         this.keepFunctionArr = [];
@@ -333,7 +333,7 @@
         } else {
           this.fromdata.secondType.id = this.secondOffTypeList[index].id;
           this.subTypeName = this.secondOffTypeList[index].name;
-          this.waterLevelShow = this.secondOnTypeList[index].name === "海尔5/6/7公斤波轮SXB60-51U7/SXB70-51U7"?true:false;
+          /* this.waterLevelShow = this.secondOnTypeList[index].name === "海尔5/6/7公斤波轮SXB60-51U7/SXB70-51U7"?true:false; */ //水位功能隐藏
           this.fromdata.secondType.communicateType = this.secondOffTypeList[index].communicateType;
           this.functionSetList = [];
           this.keepFunctionArr = [];
