@@ -8,7 +8,7 @@
     <p @click="opencheckedMachine">适用类型<span class="order-action add-shop-overflow-icon iconfont icon-nextx"></span><span class="addvip-con add-shop-overflow">{{machineCurrent.name}}</span></p>
     <p>补偿面额(元)<span class="addvip-con"><input type="number" v-model="couponPirce"  @blur="checkCouponPirce" placeholder="补偿面额(元)" class="discount-input"></span></p>
     <p class="nomore-boder">满减金额(元)<span class="addvip-con"><input type="number" v-model="fullDiscount" @blur="checkFullDiscount" placeholder="满减金额(元)" class="discount-input"></span></p>
-    <div class="full-discount">满减{{couponPirce}}元可用</div>
+    <div class="full-discount">满减{{fullDiscount}}元可用</div>
     <p class="nomore-boder">有效期（天）<span class="addvip-con"><span :class="['suctract','iconfont','icon-jian',{'suctract-current':expiredDate <= 1}]" @click="suctractExpired"></span><span class="conpenates">{{expiredDate}}</span><span @click="addExpired" :class="['suctract','iconfont','icon-jia',{'suctract-current':expiredDate === 999}]"></span></span></p>
     <div class="full-discount">发放日起</div>
     <p>发放数量（张）<span class="addvip-con"><span :class="['suctract','iconfont','icon-jian',{'suctract-current':couponNum <= 1}]" @click="suctractCouponNum"></span><span class="conpenates">{{couponNum}}</span><span @click="addCouponNum" :class="['suctract','iconfont','icon-jia',{'suctract-current':couponNum === 999}]"></span></span></p>
