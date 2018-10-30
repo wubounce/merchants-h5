@@ -308,6 +308,11 @@ export default {
         case 0:
           this.popupVisible = false;
           this.list[0].value = this.shopTypeString;
+          for(let i=0;i<this.shopTypeList.length;i++) {
+            if(this.shopTypeString === this.shopTypeList[i].name) {
+              this.shopType = this.shopTypeList[i].id;
+            }
+          }
           break;
         case 1:
           this.placeVisible = false;
