@@ -138,7 +138,6 @@
         }
         let payload =  {status:this.status,phone:this.searchData,startDate:this.startDate.join('-'),endDate:this.endDate.join('-'),page:this.page,pageSize:this.pageSize};
         let res = await voucherListFun(payload);
-        console.log(res);
         this.titleArr = res.count;
         this.list = res.page?[...this.list,...res.page.items]:[];  //分页添加
         this.total = res.page.total;
