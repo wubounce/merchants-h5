@@ -92,7 +92,7 @@ export const validatEmail = (str)=>{
  * 
  */
 export const validatCouponPrice = (str)=>{
-  const reg = /^[1-9]{1}\d*(\.\d{1,2})?$/;
+  const reg = /^[0-9]{1}\d*(\.\d{1,2})?$/;
   return reg.test(str);
 };
 

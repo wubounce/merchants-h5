@@ -27,8 +27,7 @@
       <section class="sarch-wrap">
         <div class="search">
             <form action="" target="frameFile">
-              <span class="iconfont icon-IconSearch"></span><input type="text" placeholder="请输入相关店铺名称" class="serch">
-              <iframe name='frameFile' style="display: none;"></iframe>
+              <span class="iconfont icon-IconSearch"></span><input type="text" v-model.trim="searchData" placeholder="请输入相关店铺名称" class="serch">
             </form>
         </div>
       </section>
@@ -192,6 +191,7 @@ export default {
       }
     },
     searchData: function (newVal) {
+      console.log(135464);
       if (newVal) {
         delay(() => {
         this.shopListFun();
