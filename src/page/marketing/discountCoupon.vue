@@ -44,7 +44,7 @@
               <li class="list" v-for="(item,index) in list" :key="index">
                 <router-link :to="{name:'couponDetail',query:{id:item.id}}">
                   <div class="price-content">
-                    <span :class="['yang',{'expieed':item.status ===2}]">¥</span><span :class="['inter',{'expieed':item.status ===2}]">{{item.firstMOney}}</span><span :class="['float',{'expieed':item.status ===2}]">.{{item.secondMOney}}</span>
+                    <span :class="['yang',{'expieed':item.status ===2||item.status ===1}]">¥</span><span :class="['inter',{'expieed':item.status ===2||item.status ===1}]">{{item.firstMOney}}</span><span :class="['float',{'expieed':item.status ===2||item.status ===1}]">.{{item.secondMOney}}</span>
                   </div>
                   <div class="rules-content">
                     <p class="title">{{item.type | CouponType}}</p>
@@ -52,6 +52,7 @@
                     <p>发放时间{{item.createTime}}</p>
                   </div>
                   <span class="tag" v-if="item.status===2"><img src="../../../static/image/market/exirped@.png" alt=""></span>
+                  <span class="tag" v-if="item.status===1"><img src="../../../static/image/market/used.png" alt=""></span>
                 </router-link>
               </li>
             </ul>
@@ -117,7 +118,6 @@
       };
     },
     created() {
-      this.voucherCount();
     },
     methods:{
       titleClick(index=null) {
@@ -128,8 +128,8 @@
         this.list = [];
         this._getList();
       },
-      async voucherCount() {
-        let res = await voucherCountFun();
+      async voucherCount(payload) {
+        let res = await voucherCountFun(payload);
         this.titleArr = res;
       },
       async _getList() {
@@ -139,6 +139,7 @@
         }
         let payload =  {status:this.status,phone:this.searchData,startDate:this.startDate.join('-'),endDate:this.endDate.join('-'),page:this.page,pageSize:this.pageSize};
         let res = await voucherListFun(payload);
+        this.voucherCount(payload);
         this.list = res.items?[...this.list,...res.items]:[];  //分页添加
         this.total = res.total;
         this.list.forEach(item => {

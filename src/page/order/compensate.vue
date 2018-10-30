@@ -89,7 +89,7 @@ export default {
     async machinelist(){
       let payload = {shopId:this.query.shopId};
       let res = await getlistParentTypeFun(payload);
-      this.machineSlots[0].values =res;
+      this.machineSlots[0].values = res.length>0 ? [{id:'',name:'全部'},...res]:[];
       this.machineSlots[0].values.forEach((el,index) => {
         if(el.name === this.query.parentTypeName){
           this.machineSlots[0].defaultIndex = index;
@@ -126,7 +126,7 @@ export default {
       this.machineVisible = value;
     },
     checkCouponPirce(){
-      if(!validatCouponPrice(this.couponPirce)||this.couponPirce == 0){
+      if(!validatCouponPrice(this.couponPirce) || Number(this.couponPirce) === 0){
         this.$toast({message: "券面额必须大于0,最多带两位小数"});
       }
     },
@@ -139,11 +139,11 @@ export default {
       }
     },
     confirmcompensate(){
-      if (!this.machineCurrent.id) {
+      if (!this.machineCurrent.id&&this.machineCurrent.name !== '全部') {
         this.$toast({message: "请选择设备类型" });
         return false;
       }
-      if(!validatCouponPrice(this.couponPirce)||this.couponPirce == 0){
+      if(!validatCouponPrice(this.couponPirce) || Number(this.couponPirce) === 0){
         this.$toast({message: "券面额需大于0，支持两位小数"});
         return false;
       }
