@@ -57,6 +57,9 @@
       async checkPhone() {
         if (this.validatePhone()) {
           let res = await checkPhoneFun({phone:this.register.phone});
+          if(res.exist) {
+            this.$toast({message: "该号码已注册，请更换手机号" });
+          }
         }
       },
       countdown() { //重新发送验证码倒计时
