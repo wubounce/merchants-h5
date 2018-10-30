@@ -575,15 +575,6 @@
             }, 2000);
           return false;
         }
-        if(this.waterLevelShow && this,fromdata.waterLevel === "未设置") {
-          let instance = this.$toast({
-            message: '请设置水位'
-          });
-          setTimeout(() => {
-            instance.close();
-            }, 2000);
-          return false;
-        }
         if(this.fromdata.functionType.name === "未设置") {
           let instance = this.$toast({
             message: '请设置功能列表'
@@ -752,6 +743,13 @@
       },
       companyVisible: function () {
         if (this.companyVisible) {
+          this.ModalHelper.afterOpen();
+        } else {
+          this.ModalHelper.beforeClose();
+        }
+      },
+      waterLevelVisible: function () {
+        if (this.waterLevelVisible) {
           this.ModalHelper.afterOpen();
         } else {
           this.ModalHelper.beforeClose();
