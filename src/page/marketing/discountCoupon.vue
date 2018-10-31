@@ -217,41 +217,33 @@
 
 <style lang='scss' scoped type='text/css'>
   @import '../../assets/scss/marketing/discountCoupon';
-  .no-order {
-    font-size: 14px;
-    color: #999;
-    text-align: center;
-    background: #fff;
-    height: 100%;
-    line-height: 100%;
-    padding-top: 4rem;
-  }
-  .calendar-dialog-body .footer{
-    display: flex;
-    padding: 0.4rem 0;
-    >div {
-      width: 50%;
-      text-align: center;
-    }
-    .ca-coupon-btn {
-      display: inline-block;
-      padding: 0;
-      width:2.13rem;
-      height:0.8rem;  
-      background:rgba(24,144,255,1);
-      border-radius:0.11rem;
-      font-size: 14px;
-      color: #fff;
-      text-align: center;
-      line-height: 0.8rem;
-    }
-    .reset {
-      background: #fff;
-      border:1px solid #ddd;
+</style>
+<style>
+  @media screen and (max-width: 360px) {
+    input::-webkit-input-placeholder {
       color: #999;
+      font-size: 14px;
     }
-    .mint-button--default {
-      box-shadow: none;
+    
+    input:-moz-placeholder {
+      color: #999;
+      font-size: 14px;
+    }
+    
+    input::-moz-placeholder {
+      color: #999;
+      font-size: 14px;
+    }
+    
+    input :-ms-input-placeholder {
+      color: #999;
+      font-size: 14px;
+    }
+    .sarch-wrap .search input[data-v-7291fb72] {
+      width: 5.4rem;
+    }
+    .select-back {
+      font-size: 14px;
     }
   }
 </style>
