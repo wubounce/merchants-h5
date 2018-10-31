@@ -20,19 +20,19 @@
       <div class="device-status">
         <div  @click="titleClick(null)">
           <p :class="{current:titleIndex === null}">全部</p>
-          <span :class="{current:titleIndex === null}">{{titleArr.all?titleArr.all:''}}</span>
+          <span :class="{current:titleIndex === null}">{{titleArr.all}}</span>
         </div>
         <div @click="titleClick(0)">
           <p :class="{current: titleIndex === 0}">未使用</p>
-          <span :class="{current: titleIndex === 0}">{{titleArr.notUse+titleArr.locked?titleArr.notUse+titleArr.locked:''}}</span>
+          <span :class="{current: titleIndex === 0}">{{titleArr.notUse+titleArr.locked}}</span>
         </div>
         <div @click="titleClick(1)">
           <p :class="{current: titleIndex === 1}">已使用</p>
-          <span :class="{current: titleIndex === 1}">{{titleArr.used?titleArr.used:''}}</span>
+          <span :class="{current: titleIndex === 1}">{{titleArr.used}}</span>
         </div>
         <div @click="titleClick(2)">
           <p :class="{current: titleIndex === 2}">已过期</p>
-          <span :class="{current: titleIndex === 2}">{{titleArr.expired?titleArr.expired:''}}</span>
+          <span :class="{current: titleIndex === 2}">{{titleArr.expired}}</span>
         </div>
       </div>
     </div>
@@ -65,6 +65,7 @@
     </div>
     <!-- 日历选择 -->
     <mt-popup v-model="calendar.show" position="bottom" class="mint-popup">
+      <div v-if="tooltip" class="ivu-tooltip-inner">{{tooltip}}</div>
       <div class="calendar-dialog-body" v-if="isreset">
           <calendar :range="calendar.range" :zero="calendar.zero" :lunar="calendar.lunar" :begin="calendar.begin" :end="calendar.end" :type="calendar.type" :value="calendar.value"  @select="calendar.select"></calendar>
           <div class="footer">
@@ -94,7 +95,13 @@
         pageSize:20,
         list:[],
         searchData:'',
-        titleArr:{},
+        titleArr:{
+          all:'',
+          notUse:'',
+          locked:'',
+          used:'',
+          expired:''
+        },
         titleIndex:null,
         status:'',//状态
         noOrderList:false,
@@ -102,6 +109,7 @@
         iscolsed:false,
         startDate:[],
         endDate: [],
+        tooltip:'',
         calendar:{
             range:true,
             lunar:false, //显示农历
@@ -109,12 +117,9 @@
             zero:true,
             type:'datetime',
             value:[], //默认日期
-            begin:this.startDate, //可选开始日期
-            end:[], //可选结束日期
             select:(begin,end)=>{
               this.startDate = begin;
               this.endDate = end;
-              this.calendar.end = moment(this.startDate).add('months',5).format('YYYY-MM-DD').split('-');
             }
         },
         isreset:true,
@@ -160,6 +165,18 @@
         this.isreset=true;
       },
       selectDateCom(){
+        let startTime = this.startDate.join('');  
+        let temp =  moment(this.startDate).add('months',5).format('YYYYMMDD');  //从开始时间起六个月间隔
+        let endTime =  this.endDate.join('');  
+        if(endTime>temp){
+          this.tooltip = '只支持查询跨度6个月内记录';
+          setTimeout(()=>{
+            this.tooltip = '';
+          },3000);
+          return false;
+        }else {
+          this.tooltip = '';
+        }
         this.calendar.show=false;
         this.noOrderList = false;
         this.list = [];
@@ -217,6 +234,22 @@
 
 <style lang='scss' scoped type='text/css'>
   @import '../../assets/scss/marketing/discountCoupon';
+  .ivu-tooltip-inner {
+      padding: 0.2rem 0.4rem;
+      color: #fff;
+      text-align: left;
+      text-decoration: none;
+      background: rgba(0, 0, 0, 0.65);
+      border-radius: 0.08rem;
+      word-wrap: break-word;
+      word-break: break-all;
+      font-size: 14px;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%,-50%);
+      width: 55%;
+  }
 </style>
 <style>
   @media screen and (max-width: 360px) {
