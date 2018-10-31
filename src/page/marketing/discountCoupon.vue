@@ -20,19 +20,19 @@
       <div class="device-status">
         <div  @click="titleClick(null)">
           <p :class="{current:titleIndex === null}">全部</p>
-          <span :class="{current:titleIndex === null}">{{titleArr.all}}</span>
+          <span :class="{current:titleIndex === null}">{{titleArr.all?titleArr.all:''}}</span>
         </div>
         <div @click="titleClick(0)">
           <p :class="{current: titleIndex === 0}">未使用</p>
-          <span :class="{current: titleIndex === 0}">{{titleArr.notUse+titleArr.locked}}</span>
+          <span :class="{current: titleIndex === 0}">{{titleArr.notUse+titleArr.locked?titleArr.notUse+titleArr.locked:''}}</span>
         </div>
         <div @click="titleClick(1)">
           <p :class="{current: titleIndex === 1}">已使用</p>
-          <span :class="{current: titleIndex === 1}">{{titleArr.used}}</span>
+          <span :class="{current: titleIndex === 1}">{{titleArr.used?titleArr.used:''}}</span>
         </div>
         <div @click="titleClick(2)">
           <p :class="{current: titleIndex === 2}">已过期</p>
-          <span :class="{current: titleIndex === 2}">{{titleArr.expired}}</span>
+          <span :class="{current: titleIndex === 2}">{{titleArr.expired?titleArr.expired:''}}</span>
         </div>
       </div>
     </div>

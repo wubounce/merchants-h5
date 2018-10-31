@@ -47,6 +47,9 @@
         let temp = this.data.faceValue.split('.');
         this.data['firstMOney'] = temp[0];
         this.data['secondMOney'] = temp[1];
+        this.data.startDate = moment(res.startDate).format('YYYY.MM.DD');
+        this.data.endDate = moment(res.endDate).format('YYYY.MM.DD');
+        this.data.createTime = moment(res.createTime).format('YYYY.MM.DD  HH:mm:ss');
       }
     }
   };
