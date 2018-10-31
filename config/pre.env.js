@@ -4,5 +4,5 @@ const prodEnv = require('./prod.env')
 
 module.exports = merge(prodEnv, {
   NODE_ENV: '"preview"',
-  API_URL: '"http://pre-bmapi.qiekj.com/"'
+  API_URL: '"https://pre-bmapi.qiekj.com/"'
 })
