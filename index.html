@@ -2,7 +2,27 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" /> <!-- 指示IE以目前可用的最高模式显示内容 -->  
+    <meta name ="viewport" content ="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no">  
+    <meta name="apple-mobile-web-app-title" content=""><!-- 添加到主屏后的标题（iOS 6 新增） -->  
+    <meta name="apple-mobile-web-app-capable" content="yes" /><!-- 是否启用 WebApp 全屏模式 -->  
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" /><!-- 设置状态栏的背景颜色  --> 
+    <!-- 只有在 "apple-mobile-web-app-capable" content="yes" 时生效  
+        content 参数：  
+        default 默认值。  
+        black 状态栏背景是黑色。  
+        black-translucent 状态栏背景是黑色半透明。  
+        设置为 default 或 black ,网页内容从状态栏底部开始。  
+        设置为 black-translucent ,网页内容充满整个屏幕，顶部会被状态栏遮挡。 -->
+
+    <!-- apple-touch-icon 图片自动处理成圆角和高光等效果。apple-touch-icon-precomposed 禁止系统自动添加效果，直接显示设计原图。 --> 
+    <!-- QQ浏览器私有 -->
+    <!-- 全屏模式 -->
+    <meta name="x5-fullscreen" content="true">
+    <!-- UC浏览器私有 -->
+    <!-- 全屏模式 -->
+    <meta name="full-screen" content="yes">
+
     <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=no" />
     <link href="https://unpkg.com/normalize.css@8.0.0/normalize.css" rel="stylesheet">
     <link href="https://unpkg.com/vant@1.1.16/lib/vant-css/index.css" rel="stylesheet">

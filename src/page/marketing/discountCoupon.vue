@@ -8,7 +8,7 @@
           <div class="search">
               <form action="" target="frameFile" v-on:submit.prevent="">
                 <span class="iconfont icon-IconSearch"></span>
-                <input type="number" value='搜索'v-model.trim="searchData" @keyup.enter="searchVoucher" @input="clearSearch" placeholder="请输入用户手机号" class="serch">
+                <input type="number" pattern="\d*" value='搜索'v-model.trim="searchData" @keyup.enter="searchVoucher" @input="clearSearch" placeholder="请输入用户手机号" class="serch">
                 <span class="guanbi iconfont icon-guanbi" v-if="iscolsed" @click="doclearSearch"></span>
                 <iframe name='frameFile' style="display: none;"></iframe>
                 <span class="select-back" @click="searchVoucher">搜索</span>
@@ -120,6 +120,18 @@
             select:(begin,end)=>{
               this.startDate = begin;
               this.endDate = end;
+              let startTime = this.startDate.join('');  
+              let temp =  moment(this.startDate).add('months',5).format('YYYYMMDD');  //从开始时间起六个月间隔
+              let endTime =  this.endDate.join('');  
+              if(endTime>temp){
+                this.tooltip = '只支持查询跨度6个月内记录';
+                setTimeout(()=>{
+                  this.tooltip = '';
+                },3000);
+                return false;
+              }else {
+                this.tooltip = '';
+              }
             }
         },
         isreset:true,
@@ -131,9 +143,12 @@
       titleClick(index=null) {
         this.titleIndex = index;
         this.status = index;
-        this.page = 1; //从第一页起
-        this.allLoaded = false;//下拉刷新时解除上拉加载的禁用
+        this.repeatlist();
+      },
+      repeatlist(){
         this.list = [];
+        this.page = 1;
+        this.allLoaded = false;//下拉刷新时解除上拉加载的禁用
         this._getList();
       },
       async _getList() {
@@ -179,10 +194,7 @@
         }
         this.calendar.show=false;
         this.noOrderList = false;
-        this.list = [];
-        this.page = 1;
-        this.allLoaded = false;//下拉刷新时解除上拉加载的禁用
-        this._getList();
+        this. repeatlist();
       },
       resetDate(){
         this.calendar.show=false;
@@ -190,35 +202,29 @@
         this.endDate = [],
         this.isreset=false;
         this.noOrderList = false;
-        this.list = [];
-        this.page = 1;
-        this.allLoaded = false;//下拉刷新时解除上拉加载的禁用
-        this._getList();
+        this. repeatlist();
       },
       async searchVoucher(e){ //搜索
         this.noOrderList = false;
-        this.list = [];
-        this.page = 1;
-        this.allLoaded = false;//下拉刷新时解除上拉加载的禁用
         var keyCode = window.event? e.keyCode:e.which;
         if(keyCode =='13'){
-          this._getList();
+          this. repeatlist();
           document.activeElement.blur();
         }else {
-          this._getList();
+          this. repeatlist();
         }
       },
-      clearSearch(){ //清楚搜索
+      clearSearch(){ //清除搜索
         this.iscolsed = true;
         if(this.searchData.length <= 0 ){
           this.iscolsed = false;
-          this._getList();
+          this. repeatlist();
         }
       },
       doclearSearch(){
         this.searchData = '';
         this.iscolsed = false;
-        this._getList();
+        this. repeatlist();
       }
     },
     filters: {
