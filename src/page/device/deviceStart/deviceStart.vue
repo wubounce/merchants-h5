@@ -28,6 +28,7 @@ import {detailDeviceListFun,machineStartFun } from '@/service/device';
 export default {
     data () {
         return {
+            machineState:'',
             fromdata: {
                 machineId: "",
                 functionTempletType: "",
@@ -65,19 +66,53 @@ export default {
         // 开启机器
        startMachine(index) {
            //console.log(this.functionList[index].functionName);
-            MessageBox.confirm('启动模式: '+this.functionList[index].functionName,'确定要启动'+this.fromdata.machineName+'?').then(async () => {
-                let payload = {
-                  machineId: this.fromdata.machineId,
-                  functionId: this.functionList[index].functionId
-                };
-                let res = await machineStartFun(payload);
-                this.$router.go(-1);
+           this.getDetailDevice().then( data => {
+             switch(this.machineState) {
+              case '空闲': 
+                MessageBox.confirm('启动模式: '+this.functionList[index].functionName,'确定要启动'+this.fromdata.machineName+'?').then(async () => {
+                    let payload = {
+                      machineId: this.fromdata.machineId,
+                      functionId: this.functionList[index].functionId
+                    };
+                    let res = await machineStartFun(payload);
+                    this.$router.go(-1);
+                    this.$toast({
+                      message: '启动成功',
+                      position: "middle",
+                      duration: 3000
+                    });
+                });
+              break;
+              case '运行':
                 this.$toast({
-                  message: '启动成功',
+                  message: '设备运行中，请先复位',
                   position: "middle",
                   duration: 3000
                 });
-            });
+              break;
+              case '预约':
+                this.$toast({
+                  message: '设备已被预约，请先复位',
+                  position: "middle",
+                  duration: 3000
+                });
+              break;
+              case '故障':
+                this.$toast({
+                  message: '设备故障，启动失败',
+                  position: "middle",
+                  duration: 3000
+                });
+              break;
+              case '离线':
+                this.$toast({
+                  message: '设备离线，启动失败',
+                  position: "middle",
+                  duration: 3000
+                });
+              break;
+            }
+           });
        },
       // 获取数据
       async getDetailDevice() {  //获取数据
@@ -106,6 +141,36 @@ export default {
         });
         this.keepFunctionArr= [].concat(JSON.parse(JSON.stringify(this.functionList)));
         this.keepInitializationArr = [].concat(JSON.parse(JSON.stringify(this.functionList)));
+        switch(res.machineState){
+          case 1:
+          this.machineState = "空闲";
+          break;
+          case 2:
+          this.machineState = "运行";
+          break;
+          case 3:
+          this.machineState = "预约";
+          break;
+          case 4:
+          this.machineState = "故障";
+          break;
+          case 5:
+          this.machineState = "参数设置";
+          break;
+          case 6:
+          this.machineState = "自检";
+          break;
+          case 7:
+          this.machineState = "预约";
+          break;
+          case 8:
+          this.machineState = "离线";
+          break;
+          case 16:
+          this.machineState = "超时未工作";
+          break;
+        }
+        return Promise.resolve();
       }
     },
     created() {
