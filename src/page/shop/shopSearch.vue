@@ -23,7 +23,7 @@
     <div class="page-top"v-show="isListShow">
       <ul>
         <li class="list" v-for="(item,index) in list" :key="index">
-          <router-link :to="{ name: 'shopDetail', query:{shopId:item.shopId}}">
+          <router-link :to="{ name: 'shopDetail', query:{shopId:item.shopId,issearch:true}}">
             <p class="top">
               <span>{{item.shopName.length>15 ? item.shopName.slice(0,15) + '...' : item.shopName }}</span>
               <span>
@@ -35,13 +35,13 @@
           </router-link>
           <div class="bottom">
             <div class="kindof">
-              <router-link :to="{ name: 'shopDetail', query:{shopId:item.shopId}}">
+              <router-link :to="{ name: 'shopDetail', query:{shopId:item.shopId,issearch:true}}">
                 <div class="text">分类</div>
                 <div class="text-value">{{item.shopType}}</div>
               </router-link>
             </div>
             <div class="kindof">
-              <router-link :to="{ name: 'shopDetail', query:{shopId:item.shopId}}">
+              <router-link :to="{ name: 'shopDetail', query:{shopId:item.shopId,issearch:true}}">
                 <div class="text">设备</div>
                 <div class="text-value">{{item.machineCount}}<span class="little-font">台</span></div>
               </router-link>

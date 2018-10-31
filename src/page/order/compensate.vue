@@ -95,6 +95,10 @@ export default {
           this.machineSlots[0].defaultIndex = index;
           this.machineSlots[0].value = el.name;
           this.machineCurrent = el;
+        }else {
+          this.machineSlots[0].defaultIndex = 0;
+          this.machineSlots[0].value = '全部';
+          this.machineCurrent = {id:'',name:'全部'};
         }
       });
     },

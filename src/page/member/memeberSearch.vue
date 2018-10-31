@@ -25,7 +25,7 @@
         <div class="meber-list" v-for="(item,index) in list" :key="index">
             <div class="momber-wrap">
               <div class="name">
-                <router-link :to="{name:'detailMember',query:{ id:item.id }}">
+                <router-link :to="{name:'detailMember',query:{ id:item.id,issearch:true }}">
                   <p>{{item.userName}}</p><p class="phonenum">{{item.phone}}</p>
                 </router-link>
               </div>
@@ -33,7 +33,7 @@
                 <div class="right"><mt-switch v-model="item.isLock" class="check-switch" @change="lockOperator(item.id,item.isLock)"></mt-switch></div>
               </div>
             </div>
-            <router-link :to="{name:'detailMember',query:{ id:item.id }}">
+            <router-link :to="{name:'detailMember',query:{ id:item.id,issearch:true }}">
               <div class="action-prme">
                 <p class="memberdesc">权限：<span v-for="(items,index) in item.list" :key="index">{{items.name}}<i v-if="index !== (item.list.length-1)">,</i></span></p>
                 <span class="forward iconfont icon-nextx"></span>

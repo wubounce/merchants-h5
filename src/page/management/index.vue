@@ -37,7 +37,7 @@
                 <div class="orderpic"><img src="../../../static/image/management/order@2x.png" alt=""></div>
                 <div class="content">
                     <p class="con-title">订单管理</p>
-                    <p class="con-type">顾客订单信息，退款、补偿、启动、复位设备</p>
+                    <p class="con-type order-mang">顾客订单信息，退款、补偿、启动、复位设备</p>
                 </div>
                 <div class="order-action iconfont icon-nextx"></div>
               </div>
@@ -111,5 +111,7 @@ export default {
 </script>
 <style type="text/css" lang="scss" scoped>
   @import "../../assets/scss/management";
-
+  .order-mang {
+    bottom: -0.27rem !important;
+  }
 </style>

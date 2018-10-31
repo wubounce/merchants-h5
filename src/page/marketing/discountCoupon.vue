@@ -65,6 +65,7 @@
     </div>
     <!-- 日历选择 -->
     <mt-popup v-model="calendar.show" position="bottom" class="mint-popup">
+      <div v-if="tooltip" class="ivu-tooltip-inner">{{tooltip}}</div>
       <div class="calendar-dialog-body" v-if="isreset">
           <calendar :range="calendar.range" :zero="calendar.zero" :lunar="calendar.lunar" :begin="calendar.begin" :end="calendar.end" :type="calendar.type" :value="calendar.value"  @select="calendar.select"></calendar>
           <div class="footer">
@@ -94,7 +95,13 @@
         pageSize:20,
         list:[],
         searchData:'',
-        titleArr:{},
+        titleArr:{
+          all:'',
+          notUse:'',
+          locked:'',
+          used:'',
+          expired:''
+        },
         titleIndex:null,
         status:'',//状态
         noOrderList:false,
@@ -102,6 +109,7 @@
         iscolsed:false,
         startDate:[],
         endDate: [],
+        tooltip:'',
         calendar:{
             range:true,
             lunar:false, //显示农历
@@ -109,12 +117,9 @@
             zero:true,
             type:'datetime',
             value:[], //默认日期
-            begin:this.startDate, //可选开始日期
-            end:[], //可选结束日期
             select:(begin,end)=>{
               this.startDate = begin;
               this.endDate = end;
-              this.calendar.end = moment(this.startDate).add('months',5).format('YYYY-MM-DD').split('-');
             }
         },
         isreset:true,
@@ -138,7 +143,6 @@
         }
         let payload =  {status:this.status,phone:this.searchData,startDate:this.startDate.join('-'),endDate:this.endDate.join('-'),page:this.page,pageSize:this.pageSize};
         let res = await voucherListFun(payload);
-        console.log(res);
         this.titleArr = res.count;
         this.list = res.page?[...this.list,...res.page.items]:[];  //分页添加
         this.total = res.page.total;
@@ -146,6 +150,7 @@
           let temp = item.faceValue.split('.');
           item['firstMOney'] = temp[0];
           item['secondMOney'] = temp[1];
+          item.createTime = moment(item.createTime).format('YYYY.MM.DD  HH:mm:ss');
         });
         if (this.searchData || (this.startDate.length > 0 && this.endDate.length > 0)) {
           this.noOrderList = false;
@@ -160,6 +165,18 @@
         this.isreset=true;
       },
       selectDateCom(){
+        let startTime = this.startDate.join('');  
+        let temp =  moment(this.startDate).add('months',5).format('YYYYMMDD');  //从开始时间起六个月间隔
+        let endTime =  this.endDate.join('');  
+        if(endTime>temp){
+          this.tooltip = '只支持查询跨度6个月内记录';
+          setTimeout(()=>{
+            this.tooltip = '';
+          },3000);
+          return false;
+        }else {
+          this.tooltip = '';
+        }
         this.calendar.show=false;
         this.noOrderList = false;
         this.list = [];
@@ -217,41 +234,49 @@
 
 <style lang='scss' scoped type='text/css'>
   @import '../../assets/scss/marketing/discountCoupon';
-  .no-order {
-    font-size: 14px;
-    color: #999;
-    text-align: center;
-    background: #fff;
-    height: 100%;
-    line-height: 100%;
-    padding-top: 4rem;
-  }
-  .calendar-dialog-body .footer{
-    display: flex;
-    padding: 0.4rem 0;
-    >div {
-      width: 50%;
-      text-align: center;
-    }
-    .ca-coupon-btn {
-      display: inline-block;
-      padding: 0;
-      width:2.13rem;
-      height:0.8rem;  
-      background:rgba(24,144,255,1);
-      border-radius:0.11rem;
-      font-size: 14px;
+  .ivu-tooltip-inner {
+      padding: 0.2rem 0.4rem;
       color: #fff;
-      text-align: center;
-      line-height: 0.8rem;
-    }
-    .reset {
-      background: #fff;
-      border:1px solid #ddd;
+      text-align: left;
+      text-decoration: none;
+      background: rgba(0, 0, 0, 0.65);
+      border-radius: 0.08rem;
+      word-wrap: break-word;
+      word-break: break-all;
+      font-size: 14px;
+      position: absolute;
+      left: 50%;
+      top: 50%;
+      transform: translate(-50%,-50%);
+      width: 55%;
+  }
+</style>
+<style>
+  @media screen and (max-width: 360px) {
+    input::-webkit-input-placeholder {
       color: #999;
+      font-size: 14px;
     }
-    .mint-button--default {
-      box-shadow: none;
+    
+    input:-moz-placeholder {
+      color: #999;
+      font-size: 14px;
+    }
+    
+    input::-moz-placeholder {
+      color: #999;
+      font-size: 14px;
+    }
+    
+    input :-ms-input-placeholder {
+      color: #999;
+      font-size: 14px;
+    }
+    .sarch-wrap .search input[data-v-7291fb72] {
+      width: 5.4rem;
+    }
+    .select-back {
+      font-size: 14px;
     }
   }
 </style>

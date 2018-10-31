@@ -94,7 +94,7 @@
       <div style="width:100%;height:1.73rem;"></div>
       <div class="about-button">
         <span v-has="'mer:machine:clean'"><button btn-type="small" btn-color="spe" class="ft-btn" @click="deviceTZJ" v-show="tzjShow && machineState==='空闲'">桶自洁</button></span>
-        <span v-has="'mer:machine:reset'"><button btn-type="small" btn-color="spe" class="ft-btn" @click="deviceRest" v-show="(machineState==='运行' && deviceDetail.subTypeName !== '通用脉冲充电桩')">复位</button></span>
+        <span v-has="'mer:machine:reset'"><button btn-type="small" btn-color="spe" class="ft-btn" @click="deviceRest" v-show="(machineState==='运行' && deviceDetail.subTypeName !== '通用脉冲充电桩') || (machineState==='预约' && deviceDetail.subTypeName !== '通用脉冲充电桩')">复位</button></span>
         <span v-has="'mer:machine:start'"><button btn-type="small" btn-color="spe" class="ft-btn" @click="deviceStart" v-show="machineState==='空闲' && deviceDetail.subTypeName !== '通用脉冲充电桩'">启动</button></span>
         <span v-has="'mer:machine:update'"><button btn-type="small" btn-color="spe" class="ft-btn" @click="deviceEdit">编辑</button></span>
       </div>
@@ -232,6 +232,7 @@
           this.machineState = "超时未工作";
           break;
         }
+        return Promise.resolve();
       }, 
       functionSetListShowClick() {
         this.functionSetListShow =!this.functionSetListShow;
@@ -266,10 +267,44 @@
       },
       // 进入启动页
       deviceStart() {
-        this.$router.push({
-          name: 'deviceStart',
-          query:{
-            machineId: this.$route.query.machineId 
+        this.getDetailDevice().then( data =>{
+          switch(this.machineState) {
+            case '空闲': 
+              this.$router.push({
+                name: 'deviceStart',
+                query:{
+                  machineId: this.$route.query.machineId 
+                }
+              });
+            break;
+            case '运行':
+              this.$toast({
+                message: '设备运行中，请先复位',
+                position: "middle",
+                duration: 3000
+              });
+            break;
+            case '预约':
+              this.$toast({
+                message: '设备已被预约，请先复位',
+                position: "middle",
+                duration: 3000
+              });
+            break;
+            case '故障':
+              this.$toast({
+                message: '设备故障，启动失败',
+                position: "middle",
+                duration: 3000
+              });
+            break;
+            case '离线':
+              this.$toast({
+                message: '设备离线，启动失败',
+                position: "middle",
+                duration: 3000
+              });
+            break;
           }
         });
       }

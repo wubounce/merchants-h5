@@ -6,7 +6,7 @@
         <p class="shop-item title"><span>累计收益</span><span>{{shopdetail.profit | tofixd}} 元</span></p>
 
         <!-- 第二模块 -->
-        <p class="shop-item second-p"><span>店铺名称</span><span>{{shopdetail.shopName}}</span></p>
+        <p class="shop-item second-p"><span class='shopName'>店铺名称</span><span>{{shopdetail.shopName}}</span></p>
         <p class="shop-item"><span>店铺类型</span><span>{{shopdetail.shopType}}</span></p>
         <p class="shop-address">
           <span>店铺地址</span><br>
@@ -84,7 +84,7 @@ export default {
         let payload = {shopId: id};
         let res = await deleteShopFun(payload);
         this.$toast({message: '删除成功' });
-        this.$router.go(-1);
+        this.$route.query.issearch == true ? this.$router.go(-2) : this.$router.go(-1);
       });
     },
     goShopEdit() {
@@ -92,7 +92,8 @@ export default {
       this.$router.push({
         name:'editShop',
         query:{
-          shopId: this.$route.query.shopId
+          shopId: this.$route.query.shopId,
+          issearch:this.$route.query.issearch
         }
       });
     },

@@ -32,7 +32,7 @@
         </div>
       </section>
     </div>
-    <section class="shop-touch">
+    <section class="shop-touch" :style="{'height': isOriginHei + 'rem' }">
       <div class="all-list">
         <label class="mint-checklist-label" v-for="(item,index) in shoplist" :key="index">
           <span class="mint-checkbox is-right">
@@ -72,17 +72,25 @@ export default {
       createTime:null,
 
       query:{},
-      searchData:''
+      searchData:'',
+      isOriginHei:8.43,
+      screenHeight: document.body.clientHeight,        //此处也可能是其他获取方法
+      originHeight: document.body.clientHeight,
     };
+  },
+  mounted() {
+      const that = this;
+      window.onresize = function() {
+          return (function(){
+              that.screenHeight = document.body.clientHeight;
+          })();
+      };
   },
   created() {
     this.query = this.$route.query ? this.$route.query :{};
     this.updateOperatorId = this.query.id?this.query.id:this.query.updateOperatorId;
     this.shopListFun();
     this.menuSelect();
-  },
-  mounted() {
-
   },
   computed: {
       
@@ -170,7 +178,7 @@ export default {
         };
         let res = await updateOperatorInfoFun(payload);
         this.$toast({message: '修改成功' });
-        this.$router.go(-2);
+        this.$route.query.issearch == true ? this.$router.go(-3) : this.$router.go(-2);
       }
     }
   },
@@ -204,6 +212,16 @@ export default {
         this.serachshopListFun();
       }
     },
+    screenHeight (val) {
+      if(this.originHeight != val) {        //加100为了兼容华为的返回键
+        var isAndroid = navigator.userAgent.indexOf('Android') > -1 || navigator.userAgent.indexOf('Adr') > -1;
+        if (isAndroid){//如果是安卓手机的浏览器
+            this.isOriginHei = 1;
+        }
+      }else{
+          this.isOriginHei = 8.43;
+      }
+    }
   },
   components:{
   }

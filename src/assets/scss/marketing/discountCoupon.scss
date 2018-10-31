@@ -168,3 +168,40 @@
         }
     }
   }
+  .no-order {
+    font-size: 14px;
+    color: #999;
+    text-align: center;
+    background: #fff;
+    height: 100%;
+    line-height: 100%;
+    padding-top: 4rem;
+  }
+  .calendar-dialog-body .footer{
+    display: flex;
+    padding: 0.4rem 0;
+    >div {
+      width: 50%;
+      text-align: center;
+    }
+    .ca-coupon-btn {
+      display: inline-block;
+      padding: 0;
+      width:2.13rem;
+      height:0.8rem;  
+      background:rgba(24,144,255,1);
+      border-radius:0.11rem;
+      font-size: 14px;
+      color: #fff;
+      text-align: center;
+      line-height: 0.8rem;
+    }
+    .reset {
+      background: #fff;
+      border:1px solid #ddd;
+      color: #999;
+    }
+    .mint-button--default {
+      box-shadow: none;
+    }
+  }
