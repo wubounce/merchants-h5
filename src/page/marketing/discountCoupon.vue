@@ -120,6 +120,18 @@
             select:(begin,end)=>{
               this.startDate = begin;
               this.endDate = end;
+              let startTime = this.startDate.join('');  
+              let temp =  moment(this.startDate).add('months',5).format('YYYYMMDD');  //从开始时间起六个月间隔
+              let endTime =  this.endDate.join('');  
+              if(endTime>temp){
+                this.tooltip = '只支持查询跨度6个月内记录';
+                setTimeout(()=>{
+                  this.tooltip = '';
+                },3000);
+                return false;
+              }else {
+                this.tooltip = '';
+              }
             }
         },
         isreset:true,
