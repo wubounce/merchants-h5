@@ -90,17 +90,30 @@ export default {
       let payload = {shopId:this.query.shopId};
       let res = await getlistParentTypeFun(payload);
       this.machineSlots[0].values = res.length>0 ? [{id:'',name:'全部'},...res]:[];
-      this.machineSlots[0].values.forEach((el,index) => {
-        if(el.name === this.query.parentTypeName){
-          this.machineSlots[0].defaultIndex = index;
-          this.machineSlots[0].value = el.name;
-          this.machineCurrent = el;
-        }else {
-          this.machineSlots[0].defaultIndex = 0;
-          this.machineSlots[0].value = '全部';
-          this.machineCurrent = {id:'',name:'全部'};
+      let falg = false;
+      let index = null;
+      let name = null;
+      let current = null;
+      this.machineSlots[0].values.every((item,index) => {
+        if(item.name === this.query.parentTypeName){
+          falg = true;
+          index = item.index;
+          name = item.name;
+          current = item;
+          return false;
+        }else{
+          return true;
         }
       });
+      if(falg === true){
+        this.machineSlots[0].defaultIndex = index;
+        this.machineSlots[0].value = name;
+        this.machineCurrent = current;
+      }else {
+        this.machineSlots[0].defaultIndex = 0;
+        this.machineSlots[0].value = '全部';
+        this.machineCurrent = {id:'',name:'全部'};
+      }
     },
     addExpired(){
       if(this.expiredDate>=999) return false;
