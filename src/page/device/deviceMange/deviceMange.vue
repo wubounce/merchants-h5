@@ -191,7 +191,7 @@
       }
     },
     methods: {
-      selectShopClick(index) {
+      selectShopClick(index) { //筛选店铺选中
         if(this.selectIndex != index) {
           this.selectIndex = index;
           this.popShopId = this.popupShop[index].shopId;
@@ -222,7 +222,7 @@
           this.getlistSubTypeAll(this.subFlag);
         }
       },
-      selectDeviceTypeClick(index) {
+      selectDeviceTypeClick(index) { //筛选设备类型点击
         if(this.selectDeviceTypeIndex != index){
           this.selectDeviceTypeIndex = index;
           this.popDeviceTypeId = this.deviceTypeArr[index].id;
@@ -239,10 +239,11 @@
           this.selectCommunicationIndex = -1;
           this.popDeviceModelId = '';
           this.popCommunicationType = '';
-          this.getlistSubTypeAll(this.subFlag);
+          let payload = {shopId: this.popShopId};
+          this.getlistSubTypeAll(this.subFlag,payload);
         }
       },
-      selectModelClick(index) {
+      selectModelClick(index) { //筛选设备型号选中
         if(this.selectModelIndex != index){
           this.selectModelIndex = index;
           this.popDeviceModelId = this.deviceModelArr[index].id;
@@ -255,7 +256,7 @@
           this.popCommunicationType = '';
         }
       },
-      selectCommunicationClick(index) {
+      selectCommunicationClick(index) { //通讯类型选中脉冲？串口
         if(this.selectCommunicationIndex != index) {
           this.selectCommunicationIndex = index;
           let arr= [].concat(JSON.parse(JSON.stringify(this.communicationArr))); 
@@ -268,7 +269,7 @@
           this.popCommunicationType = '';
         }    
       },
-      popCancal() {
+      popCancal() { //筛选取消
         this.selectIndex = -1;
         this.selectDeviceTypeIndex = -1;
         this.selectModelIndex = -1;
@@ -287,14 +288,14 @@
         this.getlistSubTypeAll(this.subFlag);
         this._getList();
       },
-      popSure() {
+      popSure() { //筛选确定
         this.page = 1;
         this.payload = {machineState:this.index,shopId:this.popShopId,parentTypeId:this.popDeviceTypeId,subTypeId:this.popDeviceModelId,communicateType:this.popCommunicationType,page:this.page,pageSize: this.pageSize};
         this.list = [];
         this.popupVisible = false;
         this._getList(this.payload);
       },
-      titleClick(index) {
+      titleClick(index) { //顶部状态选择
         this.list = [];
         this.page = 1; //从第一页起 
         this.allLoaded = false;//下拉刷新时解除上拉加载的禁用
@@ -303,21 +304,21 @@
         this._getList(this.payload);
 
       },
-      toAddItem() {
+      toAddItem() { //右下按钮点击弹出
         this.isShow = !this.isShow;
         this.isShow2 = !this.isShow2;
       },
-      toCloseItem() {
+      toCloseItem() {  //右下关闭
         this.isShow2 = !this.isShow2;
         this.isShow = !this.isShow;
       },
-      rightPopup() {
+      rightPopup() {  //筛选框弹出
         this.getPopupShop(this.shopFlag);
         if(!this.popDeviceTypeId && !this.popShopId) this.getlistParentType({onlyMine: true});
         if(!this.popDeviceModelId && !this.popDeviceTypeId && !this.popShopId) this.getlistSubTypeAll(this.subFlag);
         this.popupVisible = true;
       },
-      offlineTipClick() {
+      offlineTipClick() { //红字提示语关闭
         this.offlineTip = false;
         this.hiddenPageHeight = 3.5;
       },
@@ -356,7 +357,7 @@
           }
 				});
       }, 
-      getUrlParam(url,name) {
+      getUrlParam(url,name) { 
         let reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
         let r = url.match(reg);  //匹配目标参数
         if (r != null) return unescape(r[2]); return null; //返回参数值
@@ -374,12 +375,12 @@
         this.deviceTypeArr = res;
         this.initialParentTypeId = res[0]?res[0].id:"";
       },
-      async getlistSubTypeAll(flag,object) { 
+      async getlistSubTypeAll(flag,object) { //获取所有设备型号（与设备型号无关）
         let res = await listSubTypeAllFun(object);
         this.deviceModelArrAll = res;
         this.deviceModelArr = flag?res.slice(0,4):res;
       },
-      async getlistSubType(payload,flag) {
+      async getlistSubType(payload,flag) { //该类型下的设备型号
         let res= await getlistSubTypeFun(payload);
         this.deviceModelArrAll = res;
         this.deviceModelArr = flag?res.slice(0,4):res;
