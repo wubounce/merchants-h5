@@ -131,9 +131,12 @@
       titleClick(index=null) {
         this.titleIndex = index;
         this.status = index;
-        this.page = 1; //从第一页起
-        this.allLoaded = false;//下拉刷新时解除上拉加载的禁用
+        this.repeatlist();
+      },
+      repeatlist(){
         this.list = [];
+        this.page = 1;
+        this.allLoaded = false;//下拉刷新时解除上拉加载的禁用
         this._getList();
       },
       async _getList() {
@@ -179,10 +182,7 @@
         }
         this.calendar.show=false;
         this.noOrderList = false;
-        this.list = [];
-        this.page = 1;
-        this.allLoaded = false;//下拉刷新时解除上拉加载的禁用
-        this._getList();
+        this. repeatlist();
       },
       resetDate(){
         this.calendar.show=false;
@@ -190,35 +190,29 @@
         this.endDate = [],
         this.isreset=false;
         this.noOrderList = false;
-        this.list = [];
-        this.page = 1;
-        this.allLoaded = false;//下拉刷新时解除上拉加载的禁用
-        this._getList();
+        this. repeatlist();
       },
       async searchVoucher(e){ //搜索
         this.noOrderList = false;
-        this.list = [];
-        this.page = 1;
-        this.allLoaded = false;//下拉刷新时解除上拉加载的禁用
         var keyCode = window.event? e.keyCode:e.which;
         if(keyCode =='13'){
-          this._getList();
+          this. repeatlist();
           document.activeElement.blur();
         }else {
-          this._getList();
+          this. repeatlist();
         }
       },
-      clearSearch(){ //清楚搜索
+      clearSearch(){ //清除搜索
         this.iscolsed = true;
         if(this.searchData.length <= 0 ){
           this.iscolsed = false;
-          this._getList();
+          this. repeatlist();
         }
       },
       doclearSearch(){
         this.searchData = '';
         this.iscolsed = false;
-        this._getList();
+        this. repeatlist();
       }
     },
     filters: {
