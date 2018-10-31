@@ -6,7 +6,7 @@
         <p class="shop-item title"><span>累计收益</span><span>{{shopdetail.profit | tofixd}} 元</span></p>
 
         <!-- 第二模块 -->
-        <p class="shop-item second-p"><span>店铺名称</span><span>{{shopdetail.shopName}}</span></p>
+        <p class="shop-item second-p"><span class='shopName'>店铺名称</span><span>{{shopdetail.shopName}}</span></p>
         <p class="shop-item"><span>店铺类型</span><span>{{shopdetail.shopType}}</span></p>
         <p class="shop-address">
           <span>店铺地址</span><br>
