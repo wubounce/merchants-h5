@@ -170,7 +170,7 @@ export default {
         };
         let res = await updateOperatorInfoFun(payload);
         this.$toast({message: '修改成功' });
-        this.$router.go(-2);
+        this.$route.query.issearch == true ? this.$router.go(-3) : this.$router.go(-2);
       }
     }
   },

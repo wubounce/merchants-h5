@@ -145,6 +145,7 @@
           let temp = item.faceValue.split('.');
           item['firstMOney'] = temp[0];
           item['secondMOney'] = temp[1];
+          item.createTime = moment(item.createTime).format('YYYY.MM.DD  HH:mm:ss');
         });
         if (this.searchData || (this.startDate.length > 0 && this.endDate.length > 0)) {
           this.noOrderList = false;

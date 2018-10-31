@@ -29,8 +29,11 @@
       <div class="form-title">创建时间</div>
       <div class="form-input">{{detail.createTime}}</div>
     </div>
+    <!--充当占位符的div块，无实质内容 -->
+    <div style="height:1.73rem"></div> 
+
     <div class="footer">
-      <span class="edit"  v-has="'mer:person:update,mer:person:info'"><router-link :to="{name:'editMember',query:{ id:detail.id }}">编辑</router-link></span>
+      <span class="edit"  v-has="'mer:person:update,mer:person:info'"><router-link :to="{name:'editMember',query:{ id:detail.id,issearch:$route.query.issearch  }}">编辑</router-link></span>
       <span class="del" @click="deldelMember(detail.id)" v-has="'mer:person:delete,mer:person:info'">删除</span>
     </div>
   </div>
@@ -66,7 +69,7 @@ export default {
         let payload = {id:query.id};
         let res = await delOperatorFun(payload);
         this.$toast({message: '删除成功' });
-        this.$router.go(-1);
+        this.$route.query.issearch == true ? this.$router.go(-2) : this.$router.go(-1);
       });
     }
   },

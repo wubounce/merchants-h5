@@ -84,7 +84,7 @@ export default {
         let payload = {shopId: id};
         let res = await deleteShopFun(payload);
         this.$toast({message: '删除成功' });
-        this.$router.go(-1);
+        this.$route.query.issearch == true ? this.$router.go(-2) : this.$router.go(-1);
       });
     },
     goShopEdit() {
@@ -92,7 +92,8 @@ export default {
       this.$router.push({
         name:'editShop',
         query:{
-          shopId: this.$route.query.shopId
+          shopId: this.$route.query.shopId,
+          issearch:this.$route.query.issearch
         }
       });
     },

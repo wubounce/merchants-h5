@@ -560,7 +560,7 @@ export default {
           setTimeout(() => {
             instance.close();
             }, 1000);
-            this.$router.go(-2);
+            this.$route.query.issearch == true ? this.$router.go(-3) : this.$router.go(-2);
         }
         
       }else if(!this.list[0].value) {
