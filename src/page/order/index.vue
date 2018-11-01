@@ -6,12 +6,12 @@
       <section class="sarch-wrap">
         <div class="search">
             <form action="" target="frameFile" v-on:submit.prevent="">
-              <span class="iconfont icon-IconSearch"></span><input type="text" value='搜索' v-model.trim="searchData" @keyup.enter="searchOrder" @input="clearSearch" placeholder="请输入用户手机号/订单号/设备名" class="serch">
+              <span class="iconfont icon-IconSearch"></span><input type="text" value='搜索' v-model.trim="searchData" @keyup.enter="searchOrder" @input="clearSearch" placeholder="输入用户手机号/订单号/设备名" class="serch">
               <iframe name='frameFile' style="display: none;"></iframe>
               <span class="select-back" @click="searchOrder">搜索</span>
             </form>
         </div>
-        <div class="coupon-date" @click="historyVisible=true"><span class="iconfont icon-rili"></span></div>
+        <div class="coupon-date" @click="historyVisible=true"><p class="iconfont icon-rili" ></p><p class="history-txt">{{historyCurrent.title | historyMonth}}</p></div>
       </section>
       <div class="hidden-tab"  v-if="hiddenTab">  
         <section class="order-status">
@@ -52,13 +52,13 @@
         </div>
     </div>
     <!-- 设备类型 -->
-    <selectpickr :visible="historyVisible" :slots="historySlots" :valueKey="historyLable" :title="'历史订单'"  @selectpicker="machineselectpicker" @onpickstatus="machineselectpickertatus"></selectpickr>
+    <selectpickr :visible="historyVisible" :slots="historySlots" :valueKey="historyLable" :title="'历史订单'"  @selectpicker="historyPicker" @onpickstatus="historyPickertatus"></selectpickr>
   </div>
 </div>
 </template>
 <script>
 import { orderStatus } from '@/utils/mapping';
-import { orderListFun,searchOrderFun, ordeRrefundFun, machineResetFun, machineBootFun } from '@/service/order';
+import { orderListFun,searchOrderFun, ordeRrefundFun, machineResetFun, machineBootFun, historySelectFun } from '@/service/order';
 import { MessageBox } from 'mint-ui';
 import { getDuration } from '@/utils/tool';
 import { validatSearch, validatReplace } from '@/utils/validate';
@@ -88,7 +88,7 @@ export default {
 
       historyCurrent:{}, //历史订单
       historyVisible:false,
-      historyLable:'name',
+      historyLable:'title',
       historySlots:[
         {
             flex: 1,
@@ -103,6 +103,7 @@ export default {
     
   },
   created(){
+    this.historylist();
   },
   methods: {
     titleClick(index) {
@@ -116,14 +117,11 @@ export default {
     },
     async _getList(){
       this.nosearchList = false;
-      let payload = null;
       if (this.searchData !== '') {
-         // 去掉特殊字符和空格
-        let searchData = this.searchData.replace(validatReplace, '');
-        payload = {search:searchData,page:this.page,pageSize:this.pageSize};
-      } else {
-        payload = {orderStatus:this.orderStatus,page:this.page,pageSize:this.pageSize};
-      }
+           // 去掉特殊字符和空格
+          this.searchData = this.searchData.replace(validatReplace, '');
+        }
+      let payload = {orderStatus:this.orderStatus,search:this.searchData,tableId:this.historyCurrent.id,page:this.page,pageSize:this.pageSize}; 
       let res = await orderListFun(payload);
       this.list = res.items?[...this.list,...res.items]:[];  //分页添加
       this.total = res.total;
@@ -135,6 +133,10 @@ export default {
         this.hiddenTab = true;
         this.noOrderList = this.list.length<= 0 ? true: false;
       }
+    },
+    async historylist(){
+      let res = await historySelectFun();
+      this.historySlots[0].values = res.length>0 ? [{id:'',title:'近三个月'},...res]:[];
     },
     async searchOrder(e){ //搜索
       this.hiddenTab = false;
@@ -159,12 +161,16 @@ export default {
         this.hiddenPageHeight = 2.88;
       }
     },
-    machineselectpicker(value) {
+    historyPicker(value) {
       if (value) {
-       this.historyCurrent = value;
+        this.historyCurrent = value;
+        this.list = [];
+        this.page = 1;
+        this.allLoaded = false;//下拉刷新时解除上拉加载的禁用
+        this._getList();
       }
     },
-    machineselectpickertatus(value) {
+    historyPickertatus(value) {
       this.historyVisible = value;
     },
     godetail(oederno,machineId){
@@ -211,9 +217,16 @@ export default {
     }
   },
   filters: {
-    orserStatus: function (value) {
+    orserStatus: (value)=>{
       return orderStatus(value);
     },
+    historyMonth: (value)=>{
+      if(value&&value.startsWith('2017')){
+        return '2017';
+      }else{
+        return value&&value !== '近三个月' ? value.replace('年','.').replace('月',''):'近三个月';
+      }
+    }
   },
   components:{
     selectpickr
@@ -243,6 +256,15 @@ export default {
     input :-ms-input-placeholder {
       color: #999;
       font-size: 12px;
+    }
+    .sarch-wrap .search{
+      width: 8rem !important;
+    }
+    .sarch-wrap .search input {
+      width: 5.4rem !important;
+    }
+    .sarch-wrap .coupon-date {
+      width: 1.6rem !important;
     }
     .listaction button {
       font-size: 12px !important;

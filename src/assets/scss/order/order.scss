@@ -11,60 +11,6 @@
     width: 100%;
     z-index: 999;
 }
-// .sarch-wrap{
-//   background: #ffffff;
-//   padding: 0.27rem;
-//   .search {
-//     -webkit-box-shadow: 0px 0.053333rem 0.133333rem 0px rgba(186, 192, 210, 0.3);
-//     box-shadow: 0px 0.053333rem 0.133333rem 0px rgba(186, 192, 210, 0.3);
-//     border-radius: 0.133333rem;
-//     font-size: 16px;
-//     height: 1.17rem;
-//     display: flex;
-//     form {
-//       display: inline-block;
-//       width: 100%;
-//     }
-//     input {
-//       width: 6.8rem;
-//       font-size: 14px;
-//       height:1.17rem;
-//       padding-top: 0.4rem;
-//       padding-bottom: 0.3rem;
-//     }
-//     .icon-IconSearch {
-//       color: #999999;
-//       padding-left: 0.4rem;
-//       padding-right: 0.27rem;
-//     }
-//     .select-back {
-//       line-height: 1.17rem;
-//       padding-right: 0.27rem;
-//       padding-left: 0.27rem;
-//       color: #1890FF;
-//       border-left:1px solid rgba(216,216,216,1);
-//     }
-//     input::-webkit-input-placeholder {
-//       color: #999;
-//       font-size: 14px;
-//     }
-    
-//     input:-moz-placeholder {
-//       color: #999;
-//       font-size: 14px;
-//     }
-    
-//     input::-moz-placeholder {
-//       color: #999;
-//       font-size: 14px;
-//     }
-    
-//     input :-ms-input-placeholder {
-//       color: #999;
-//       font-size: 14px;
-//     }
-//   }
-// }
 .sarch-wrap{
   background: #ffffff;
   padding: 0.27rem 0 0.27rem 0.27rem;
@@ -81,6 +27,25 @@
       display: inline-block;
       width: 100%;
       position: relative;
+    }
+    input::-webkit-input-placeholder {
+      color: #999;
+      font-size: 14px;
+    }
+    
+    input:-moz-placeholder {
+      color: #999;
+      font-size: 14px;
+    }
+    
+    input::-moz-placeholder {
+      color: #999;
+      font-size: 14px;
+    }
+    
+    input :-ms-input-placeholder {
+      color: #999;
+      font-size: 14px;
     }
     input {
       display: inline-block;
@@ -106,16 +71,22 @@
   }
   .coupon-date {
     float: left;
-    width: 0.52rem;
-    height: 1.17rem;
-    line-height: 1.17rem;
-    font-size: 20px;
-    padding-left: 0.48rem;
+    width: 1.3rem;
+    .history-txt {
+      font-size: 12px;
+      color: #1890FF;
+      transform: scale(0.8);
+      -webkit-transform: scale(0.8);
+      text-align: center;
+    }
+    .icon-rili {
+      color: #1890FF; 
+      font-size: 20px;
+      padding-left: 0.4rem;
+      padding-top: 0.1rem;
+    }
   }
-  .icon-rili {
-    color: #1890FF; 
-    font-size: 20px;
-  }
+  
 }
 .order-status {
   display: flex;

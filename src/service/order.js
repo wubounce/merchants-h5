@@ -9,7 +9,8 @@ const machineResetApi = 'machine/reset';                                        
 const machineBootApi = 'machine/boot';                                                // 订单列表，启动 method 'post'
 const searchOrderApi= 'order/listSearchOrder';                                        //搜索订单
 const orderDetailApi = 'order/getOrderManagerDetail';                                 // 获取订单详情
-const compensateApi = 'voucher/compensate';                                            //订单补偿
+const compensateApi = 'voucher/compensate';                                           //订单补偿
+const historySelectApi = 'order/history/select';                                        //订单历史月份
       
 // 订单列表
 export const orderListFun = (payload) => fetch.post(orderListApi, payload);
@@ -31,5 +32,8 @@ export const orderDetailFun = (payload) => fetch.post(orderDetailApi, payload);
 
 // 获取订单详情
 export const compensateFun = (payload) => fetch.post(compensateApi, payload);
+
+// 订单历史月份
+export const historySelectFun = (payload) => fetch.post(historySelectApi, payload);
 
 
