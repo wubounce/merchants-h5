@@ -88,19 +88,10 @@ export const validatEmail = (str)=>{
 };
 
 /**
- * 订单补偿券的面额
+ * 订单补偿券
  * 
  */
-export const validatCouponPrice = (str)=>{
-  const reg = /^[0-9]{1}\d*(\.\d{1,2})?$/;
-  return reg.test(str);
-};
-
-/**
- * 订单补偿券的满减
- * 
- */
-export const validatFullDiscount = (str)=>{
+export const validatPrice = (str)=>{
   const reg = /^[0-9]{1}\d*(\.\d{1,2})?$/;
   return reg.test(str);
 };
