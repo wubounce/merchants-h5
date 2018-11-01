@@ -278,7 +278,7 @@
       color: #999;
       font-size: 14px;
     }
-    .sarch-wrap .search input[data-v-7291fb72] {
+    .sarch-wrap .search input {
       width: 5.4rem;
     }
     .select-back {

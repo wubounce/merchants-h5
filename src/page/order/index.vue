@@ -11,6 +11,7 @@
               <span class="select-back" @click="searchOrder">搜索</span>
             </form>
         </div>
+        <div class="coupon-date" @click="historyVisible=true"><span class="iconfont icon-rili"></span></div>
       </section>
       <div class="hidden-tab"  v-if="hiddenTab">  
         <section class="order-status">
@@ -50,7 +51,8 @@
           </mt-loadmore>
         </div>
     </div>
-   
+    <!-- 设备类型 -->
+    <selectpickr :visible="historyVisible" :slots="historySlots" :valueKey="historyLable" :title="'历史订单'"  @selectpicker="machineselectpicker" @onpickstatus="machineselectpickertatus"></selectpickr>
   </div>
 </div>
 </template>
@@ -61,6 +63,7 @@ import { MessageBox } from 'mint-ui';
 import { getDuration } from '@/utils/tool';
 import { validatSearch, validatReplace } from '@/utils/validate';
 import PagerMixin from '@/mixins/pagerMixin';
+import selectpickr from '@/components/selectPicker';
 export default {
   mixins: [PagerMixin],
   data() {
@@ -82,6 +85,18 @@ export default {
       hiddenTab:true,
       hiddenPageHeight:2.88,
       refundDisabled:false,
+
+      historyCurrent:{}, //历史订单
+      historyVisible:false,
+      historyLable:'name',
+      historySlots:[
+        {
+            flex: 1,
+            values: [],
+            className: 'slot1',
+            textAlign: 'center'
+          }
+      ],
     };
   },
   mounted() {
@@ -144,6 +159,14 @@ export default {
         this.hiddenPageHeight = 2.88;
       }
     },
+    machineselectpicker(value) {
+      if (value) {
+       this.historyCurrent = value;
+      }
+    },
+    machineselectpickertatus(value) {
+      this.historyVisible = value;
+    },
     godetail(oederno,machineId){
       this.$router.push({name: 'orderdetail',query:{orderNo:oederno}});
     },
@@ -193,6 +216,7 @@ export default {
     },
   },
   components:{
+    selectpickr
   }
 };
 </script>
@@ -222,6 +246,9 @@ export default {
     }
     .listaction button {
       font-size: 12px !important;
+    }
+    .select-back {
+      font-size: 14px;
     }
   }
 </style>
