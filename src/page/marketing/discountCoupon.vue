@@ -51,7 +51,7 @@
                   <div class="rules-content">
                     <p class="title">{{item.merchantType | CouponType}}</p>
                     <p>限手机号{{item.phone}}使用</p>
-                    <p>发放时间{{item.createTime}}</p>
+                    <p>发放时间{{item.createTime?item.createTime:''}}</p>
                   </div>
                   <span class="tag" v-if="item.status===2"><img src="../../../static/image/market/exirped@.png" alt=""></span>
                   <span class="tag" v-if="item.status===1"><img src="../../../static/image/market/used.png" alt=""></span>
