@@ -279,7 +279,7 @@
       font-size: 14px;
     }
     .sarch-wrap .search input {
-      width: 5.4rem;
+      width: 5.4rem !important;
     }
     .select-back {
       font-size: 14px;
