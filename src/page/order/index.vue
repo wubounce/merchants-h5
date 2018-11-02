@@ -30,7 +30,7 @@
                     <span class="odernmu-phone">{{item.phone}}<span style="padding:0 0.186667rem;color:#999999">|</span>{{item.createTime}}</span>
                     <span class="ordernum-status">{{item.orderStatus | orserStatus}}</span>
                   </section>
-                  <router-link :to="{ name: 'orderdetail', query:{orderNo:item.orderNo,orderType:item.orderType}}"> 
+                  <router-link :to="{ name: 'orderdetail', query:{orderNo:item.orderNo,searchData:searchData,tableId:historyCurrent.id,tableIdtitle:historyCurrent.title,orderStatus:orderStatus,titleIndex:titleIndex}}"> 
                   <section class="order-list">  
                     <div class="title"><span class="iconfont icon-dianpu2"></span><span class="ovh-shop">{{item.shopName}}</span><span class="go iconfont icon-nextx"></span></div>
                     <div class="machine-name"><span class="iconfont icon-xiyiji1"></span><span class="ovh-shop">{{item.machineName}}</span><span class="con-price" v-if="item.orderType !== 2 && item.orderStatus !==1 || item.orderType !==2 && item.orderStatus !==0">{{'¥'+item.payPrice}}</span></div>
@@ -103,7 +103,20 @@ export default {
     
   },
   created(){
+    let query = this.$route.query?this.$route.query:{};
+    this.searchData = query.searchData?query.searchData:'';
+    this.historyCurrent.id = query.tableId?query.tableId:'';
+    this.historyCurrent.title = query.tableIdtitle?query.tableIdtitle:'近三个月';
+    this.orderStatus = query.orderStatus?query.orderStatus:'';
+    this.titleIndex = query.titleIndex? Number(query.titleIndex):0;
+    if (this.searchData) {
+        this.hiddenTab = false;
+        this.hiddenPageHeight = 1.71;
+      } else {
+        this.hiddenTab = true;
+      }
     this.historylist();
+    this._getList();
   },
   methods: {
     titleClick(index) {

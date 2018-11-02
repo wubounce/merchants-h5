@@ -102,14 +102,15 @@ export default {
     return {
       detail:{markPrice:''},
       refundDisabled:false,
+      query:{},
     };
   },
   mounted() {
     
   },
   created(){
-    let query = this.$route.query?this.$route.query:{};
-    this.getDetail(query.orderNo);
+    this.query = this.$route.query?this.$route.query:{};
+    this.getDetail(this.query.orderNo);
   },
   methods: {
     async getDetail(orderNo){
@@ -119,7 +120,6 @@ export default {
     },
     machineReset(orderNo,machineId){ //设备复位
       MessageBox.confirm(`您确定要复位${this.detail.machineName}？`,'').then(async () => {
-          let query = this.$route.query;
           let payload = {machineId:machineId,orderNo:orderNo};
           let res = await machineResetFun(payload);
           this.$toast({message: '复位成功' });
@@ -128,7 +128,6 @@ export default {
     },
     machineBoot(id){ //设备启动
       MessageBox.confirm(`您确定要启动${this.detail.machineName}？`,'').then(async () => {
-        let query = this.$route.query;
         let payload = {orderId:id};
         let res = await machineBootFun(payload);
         this.$toast({message: '启动成功' });
@@ -141,7 +140,6 @@ export default {
         message: '确定发起退款？', 
         closeOnClickModal:false
       }).then(async () => {
-        let query = this.$route.query;
         let payload = {orderNo:orderNo,refundMoney:payPrice};
         let res = await ordeRrefundFun(payload);
         this.$toast({message: '退款成功' });
@@ -164,6 +162,10 @@ export default {
     }
   },
   components:{
+  },
+  beforeRouteLeave (to, from, next) {
+    next();
+    this.$router.replace({name: 'order',query:{searchData: this.query.searchData,tableId: this.query.tableId,tableIdtitle:this.query.tableIdtitle,orderStatus: this.query.orderStatus,titleIndex:this.query.titleIndex}});//返回键要返回的路由
   }
 };
 </script>
