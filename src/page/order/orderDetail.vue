@@ -73,12 +73,12 @@
         </section>
         <section class="detail-list">
           <div>
-            <span class="title">退款时间：</span><span class="content">{{detail.refundTime}}</span>
+            <span class="title">退款时间：</span><span class="content">{{detail.refundTime?detail.refundTime:''}}</span>
           </div>
         </section>
         <section class="detail-list">
           <div>
-            <span class="title">备注：</span><span class="content">{{detail.refundRemark.replace(',null','')}}</span>
+            <span class="title">备注：</span><span class="content">{{detail.refundRemark?detail.refundRemark:''}}</span>
           </div>
         </section>
     </div>
