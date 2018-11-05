@@ -103,6 +103,7 @@ export default {
     this.machineName =  this.$route.query ? this.$route.query.machineName : '';
     this.machineId = this.$route.query ? this.$route.query.machineId : '';
     this.date = this.$route.query ? this.$route.query.time:'';
+    this._getList();
   }
 };
 </script>

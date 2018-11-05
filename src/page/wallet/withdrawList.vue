@@ -39,6 +39,7 @@ export default {
   mounted() {
   },
   created(){
+    this. _getList();
   },
   methods: {
     async _getList(){

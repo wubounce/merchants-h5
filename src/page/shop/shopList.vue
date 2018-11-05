@@ -74,6 +74,9 @@ export default {
        lessTen:true
     };
   },
+  created(){
+    this._getList();
+  },
   methods: {
     toAddShop() {
       this.$router.push({
@@ -98,11 +101,6 @@ export default {
       this.$router.push({name:'shopSearch'});
     },
   },
-  created() {
-  },
-  mounted() {
-    
-  }
 };
 </script>
 

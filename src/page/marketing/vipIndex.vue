@@ -80,11 +80,6 @@ export default {
         centeredSlides: true,
         spaceBetween: 0,
         loopAdditionalSlides: 100,
-        on:{
-          // slideChangeTransitionEnd:()=>{
-          //     this.typeListId = this.swiper.activeIndex;
-          // } 
-        },                
       },
     };
   },
@@ -92,6 +87,7 @@ export default {
     
   },
   created(){
+    this._getList();
   },
   methods: {
     async _getList(){
@@ -105,14 +101,6 @@ export default {
       this.$router.push({name:'addvip'});
     }
   },
-  filters:{
-    replace(value){
-     return parseFloat(value*10).toString().length >= 2? parseFloat(value*10).toFixed(1):parseFloat(value*10);
-    },
-    tofixd(value){
-     return Number(value).toFixed(0);
-    }
-  }
 };
 </script>
 <style type="text/css" lang="scss" scoped>

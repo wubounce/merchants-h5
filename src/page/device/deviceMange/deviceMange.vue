@@ -190,6 +190,9 @@
        return Number(value).toFixed(2);
       }
     },
+    created() {
+      this._getList();
+    },
     methods: {
       selectShopClick(index) { //筛选店铺选中
         if(this.selectIndex != index) {
@@ -430,9 +433,6 @@
         });
       },
     },
-    created() {
-    },
-    
     components: {
 
     }

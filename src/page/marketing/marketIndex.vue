@@ -57,6 +57,7 @@ export default {
     this.wrapperHeight = document.documentElement.clientHeight-42;
   },
   created(){
+    this._getList();
   },
   methods: {
     async _getList(){
@@ -91,11 +92,6 @@ export default {
       this.$router.push({name:'addMarket'});
     }
   },
-  filters:{
-    tofixd(value){
-     return Number(value).toFixed(1);
-    }
-  }
 };
 </script>
 <style lang="scss" scoped>

@@ -21,7 +21,6 @@ export default {
   computed: {
   },
   created () {
-    this._getList();
   },
   mounted () {
   },

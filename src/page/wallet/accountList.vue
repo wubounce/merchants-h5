@@ -72,7 +72,7 @@ export default {
   mounted() {
   },
   created(){
-    
+    this._getList();
   },
   methods: {
     titleClick: function(index) {

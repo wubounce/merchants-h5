@@ -56,6 +56,13 @@ export default {
             total:''
         };
     },
+    created() {
+        this.allMoney = this.$route.query ? this.$route.query.allMoney : '';
+        this.shopName =  this.$route.query ? this.$route.query.shopName : '';
+        this.shopId = this.$route.query ? this.$route.query.shopId : '';
+        this.date = this.$route.query ? this.$route.query.time:'';
+        this._getList();
+    },
     methods: {
         async _getList() {
             let obj = {
@@ -99,12 +106,6 @@ export default {
             return moment(value).format('HH:mm:ss');
         }
     },
-    created() {
-        this.allMoney = this.$route.query ? this.$route.query.allMoney : '';
-        this.shopName =  this.$route.query ? this.$route.query.shopName : '';
-        this.shopId = this.$route.query ? this.$route.query.shopId : '';
-        this.date = this.$route.query ? this.$route.query.time:'';
-    }
 };
 </script>
 <style type="text/css" lang="scss" scoped>

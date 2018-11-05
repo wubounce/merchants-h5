@@ -58,6 +58,7 @@ export default {
     created() {
         this.date = this.$route.query.dateName;
         this.todayMoney = this.$route.query ? this.$route.query.todayMoney : '';
+        this._getList();
     },
     methods: {
         async _getList() {

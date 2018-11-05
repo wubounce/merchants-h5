@@ -40,14 +40,11 @@ import PagerMixin from '@/mixins/pagerMixin';
       return {
 				list:[],
 				noData:false,
-				//分页
-				wrapperHeight: 0,//容器高度
-				page: 1,//页码
-				pageSize:10,
-				total:null,
-				allLoaded: false//数据是否加载完毕
       };
-    },
+		},
+		created() {
+       this._getList();
+		},
     methods: {
       async _getList() {
        let obj = {
@@ -67,12 +64,6 @@ import PagerMixin from '@/mixins/pagerMixin';
 				}
       }
     },
-    created() {
-      
-	},
-	mounted() {
-
-	}
   };
 </script>
 

@@ -82,6 +82,7 @@ export default {
       this.shopName =  this.$route.query ? this.$route.query.shopName : '';
       this.shopId = this.$route.query ? this.$route.query.shopId : '';
       this.date = this.$route.query ? this.$route.query.time:'';
+      this._getList();
     }
 };
 </script>

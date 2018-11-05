@@ -138,6 +138,7 @@
       };
     },
     created() {
+      this._getList();
     },
     methods:{
       titleClick(index=null) {

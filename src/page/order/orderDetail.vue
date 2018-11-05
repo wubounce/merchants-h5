@@ -164,8 +164,12 @@ export default {
   components:{
   },
   beforeRouteLeave (to, from, next) {
-    next();
-    this.$router.replace({name: 'order',query:{searchData: this.query.searchData,tableId: this.query.tableId,tableIdtitle:this.query.tableIdtitle,orderStatus: this.query.orderStatus,titleIndex:this.query.titleIndex}});//返回键要返回的路由
+    if(to.name === 'order'){
+      next();
+      this.$router.replace({name: 'order',query:{searchData: this.query.searchData,tableId: this.query.tableId,tableIdtitle:this.query.tableIdtitle,orderStatus: this.query.orderStatus,titleIndex:this.query.titleIndex}});//返回键要返回的路由
+    }else {
+      next();
+    }
   }
 };
 </script>
