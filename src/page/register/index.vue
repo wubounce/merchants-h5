@@ -58,7 +58,7 @@
         if (this.validatePhone()) {
           let res = await checkPhoneFun({phone:this.register.phone});
           if(res.exist) {
-            this.$toast({message: "该号码已注册，请更换手机号" });
+            this.$toast({message: "该号码已注册，请更换手机号", position: 'top'});
           }
         }
       },
@@ -80,10 +80,10 @@
       },
       validatePhone() { //验证手机
         if (this.register.phone === '') {
-          this.$toast({message: "请输入手机号码" });
+          this.$toast({message: "请输入手机号码"});
           return false;
         }else if(!validatPhone(this.register.phone)) {
-          this.$toast({message: "请输入正确的手机号码" });
+          this.$toast({message: "请输入正确的手机号码"});
           return false;
         } 
         return true;
@@ -93,7 +93,7 @@
           this.$toast({message: "请输入用户名"});
           return false;
         }else if(!validatName(this.register.name)) {
-          this.$toast({message: "用户名2-20个字符，支持中文和英文" });
+          this.$toast({message: "用户名2-20个字符，支持中文和英文"});
           return false;
         }
         return true;
@@ -103,7 +103,7 @@
           this.$toast({message: "请输入密码"});
           return false;
         }else if(!validatPwd(this.register.code)) {
-          this.$toast({message: "密码6-20个字符，只支持数字和英文" });
+          this.$toast({message: "密码6-20个字符，只支持数字和英文"});
           return false;
         }
         return true;
@@ -114,7 +114,7 @@
           this.$toast({message: "请输入密码"});
           return false;
         }else if (!validatPwd(this.register.sureCode)) {
-          this.$toast({message: "密码6-20个字符，只支持数字和英文" });
+          this.$toast({message: "密码6-20个字符，只支持数字和英文"});
           return false;
         }else if (this.register.code !== this.register.sureCode){
           this.$toast({message: "两次输入的密码不一致"});

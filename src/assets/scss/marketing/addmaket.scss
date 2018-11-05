@@ -5,8 +5,10 @@
     padding: 0 0.4rem;
     background: #fff;
     p {
-      height: 1.6rem;
-      line-height: 1.6rem;
+      height: 0.6rem;
+      line-height: 0.6rem;
+      padding-top: 0.51rem;
+      padding-bottom: 0.49rem;
       font-size: 16px;
       color: #333;
       border-bottom:1px solid #f9f8ff;
@@ -76,10 +78,7 @@
     }
   }
 .discount-input {
-  height: 1.6rem;
-  line-height: 1.6rem;
-  padding-top: 0.51rem;
-  padding-bottom: 0.49rem;
+  height: 0.6rem;
   text-align: right;
   width:4.27rem;
 }
