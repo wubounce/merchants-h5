@@ -157,7 +157,7 @@ export default {
       if(Number(this.fullDiscount) > 99){
         this.$toast({message: "满减金额输入不能超过99"});
       }
-      if(Number(this.fullDiscount) < Number(this.couponPirce)){
+      if(Number(this.fullDiscount) !== 0 && Number(this.fullDiscount) < Number(this.couponPirce)){
         this.$toast({message: "满减金额不能小于补偿面额"});
       }
     },
