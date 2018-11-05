@@ -151,13 +151,13 @@ export default {
       }
     },
     checkFullDiscount(){
-      if(!validatPrice(this.fullDiscount)){
-        this.$toast({message: "满减金额必须等于或大于0，支持两位小数"});
+      if(!validatPrice(this.fullDiscount) || Number(this.fullDiscount) === 0){
+        this.$toast({message: "满减金额必须大于0，支持两位小数"});
       }
       if(Number(this.fullDiscount) > 99){
         this.$toast({message: "满减金额输入不能超过99"});
       }
-      if(Number(this.fullDiscount).toFixed(2)<this.couponPirce){
+      if(Number(this.fullDiscount) < Number(this.couponPirce)){
         this.$toast({message: "满减金额不能小于补偿面额"});
       }
     },
@@ -170,19 +170,20 @@ export default {
         this.$toast({message: "补偿面额需大于0，支持两位小数"});
         return false;
       }
-       if(Number(this.couponPirce) > 99){
+      if(Number(this.couponPirce) > 99){
         this.$toast({message: "补偿面额输入不能超过99"});
         return false;
       }
-      if(!validatPrice(this.fullDiscount)){
-        this.$toast({message: "满减金额必须等于或大于0，支持两位小数"});
+      if(!validatPrice(this.fullDiscount) || Number(this.fullDiscount) === 0){
+        this.$toast({message: "满减金额必须大于0，支持两位小数"});
          return false;
       }
       if(Number(this.fullDiscount) > 99){
         this.$toast({message: "满减金额输入不能超过99"});
         return false;
       }
-      if(Number(this.fullDiscount).toFixed(2)<this.couponPirce){
+
+      if(Number(this.fullDiscount) < Number(this.couponPirce)){
         this.$toast({message: "满减金额不能小于补偿面额"});
          return false;
       }
