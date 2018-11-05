@@ -291,7 +291,7 @@ export default new Router({
       path: '/compensate',
       name: 'compensate',
       component: () => import ('@/page/order/compensate'),
-      meta: {title: '补偿券'},
+      meta: {title: '补偿券发放'},
     },
 
     //店铺管理

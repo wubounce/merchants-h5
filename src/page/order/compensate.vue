@@ -39,8 +39,8 @@
         <p>补偿券数量：<span>{{couponNum}} 张</span></p>
       </div>
       <div class="grant-footer">
+        <span class="cancel" @click="confirmVisible=false">取消</span>
         <span class="comfirm" @click="todocompensate">确定</span>
-        <span @click="confirmVisible=false">取消</span>
       </div>
     </div>
   </div>
@@ -228,9 +228,6 @@ export default {
    .conpenates {
        padding:0 0.41rem;
    }
-   .addvip-con {
-      line-height: 1.6rem;
-   }
    .suctract {
       color: #1890ff;
       font-size: 18px;
@@ -281,8 +278,10 @@ export default {
         width: 50%;
         font-size: 16px;
       }
-      .comfirm {
+      .cancel {
         border-right: 1px solid #ddd;
+      }
+      .comfirm {
         color: #1890ff;
       }
     }
