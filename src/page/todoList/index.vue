@@ -52,7 +52,6 @@ import PagerMixin from '@/mixins/pagerMixin';
 					pageSize: this.pageSize
 				};
 				let res = await listBatchStartFun(obj);
-			
 				//判断该账号是否存在店铺
 				if(res.total == 0) {
 					this.noData = true;
