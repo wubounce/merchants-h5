@@ -329,14 +329,8 @@
           functionJson: JSON.stringify(arr)
         };
         let res = await deviceAddorEditFun(obj);
-        let instance = this.$toast({
-          message: '编辑成功',
-          iconClass: 'mint-toast-icon mintui mintui-success'
-        });
-        setTimeout(() => {
-          instance.close();
-          this.$router.push({name:'deviceMange'});
-          }, 2000);
+        this.$toast("编辑设备成功");
+        this.$router.push({name:'deviceMange'});
       },
 
       toFunctionSeting() { //切换到功能列表

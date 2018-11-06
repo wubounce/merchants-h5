@@ -76,41 +76,21 @@ export default {
                     };
                     let res = await machineStartFun(payload);
                     this.$router.go(-1);
-                    this.$toast({
-                      message: '启动成功',
-                      position: "middle",
-                      duration: 3000
-                    });
+                    this.$toast({message: '启动成功'});
                 });
-              break;
+                break;
               case '运行':
-                this.$toast({
-                  message: '设备运行中，请先复位',
-                  position: "middle",
-                  duration: 3000
-                });
-              break;
+                this.$toast({message: '设备运行中，请先复位'});
+                break;
               case '预约':
-                this.$toast({
-                  message: '设备已被预约，请先复位',
-                  position: "middle",
-                  duration: 3000
-                });
-              break;
+                this.$toast({message: '设备已被预约，请先复位'});
+                break;
               case '故障':
-                this.$toast({
-                  message: '设备故障，启动失败',
-                  position: "middle",
-                  duration: 3000
-                });
-              break;
+                this.$toast({message: '设备故障，启动失败'});
+                break;
               case '离线':
-                this.$toast({
-                  message: '设备离线，启动失败',
-                  position: "middle",
-                  duration: 3000
-                });
-              break;
+                this.$toast({message: '设备离线，启动失败'});
+                break;
             }
            });
        },

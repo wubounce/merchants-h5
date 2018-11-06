@@ -57,7 +57,7 @@
               <router-link tag="div" :to="{ name: 'deviceDetail', query:{machineId:item.machineId}}" class="device-list" v-for="(item,index) in list" :key="index">
                 <section class="item-hd">
                   <span class="item-title "><b>{{item.machineName}}</b></span>
-                  <span class="state">{{item.machineState}}</span>
+                  <span class="state">{{item.machineState | deviceStatus}}</span>
                 </section>
                 <section class="item-bd">
                   <span>店铺</span>
@@ -70,7 +70,7 @@
                   </p>
                   <router-link tag="p" class="item-ft-right" :to="{ name: 'deviceMonthFlow', query:{allMoney:item.profit,machineId:item.machineId,machineName:item.machineName,}}">
                     <span>总收益</span>
-                    <span>{{item.profit | keepTwoNum}}</span>
+                    <span>{{item.profit | tofixd}}</span>
                     <span class="iconfont icon-nextx"></span>
                   </router-link>
                 </section>
@@ -148,17 +148,18 @@
 <script>
   import Api from '@/utils/Api';
   import Web from '@/utils/Web';
+  import { deviceStatus } from '@/utils/mapping';
   import PagerMixin from '@/mixins/pagerMixin';
   import { deviceListFun , countDeviceFun , getShopFun , getlistParentTypeFun , getlistSubTypeFun , typeListFun , listSubTypeAllFun } from '@/service/device';
   export default {
     mixins: [PagerMixin],
     data() {
       return {
+        pageSize:20,
         isShow: true,
         isShow2: false,
         selectIndex: -1,
         selectDeviceTypeIndex: -1,
-        pageSize: 10,
         selectModelIndex: -1,
         selectCommunicationIndex: -1,
         popupShop: '',
@@ -185,10 +186,10 @@
         hiddenPageHeight: 4.67,
       };
     },
-    filters: { //过滤器，过滤2位小数
-      keepTwoNum(value) {
-       return Number(value).toFixed(2);
-      }
+    filters: {
+      deviceStatus: (value)=>{
+        return deviceStatus(value);
+      },
     },
     created() {
       this._getList();
@@ -293,18 +294,16 @@
       },
       popSure() { //筛选确定
         this.page = 1;
-        this.payload = {machineState:this.index,shopId:this.popShopId,parentTypeId:this.popDeviceTypeId,subTypeId:this.popDeviceModelId,communicateType:this.popCommunicationType,page:this.page,pageSize: this.pageSize};
         this.list = [];
         this.popupVisible = false;
-        this._getList(this.payload);
+        this._getList();
       },
       titleClick(index) { //顶部状态选择
         this.list = [];
         this.page = 1; //从第一页起 
         this.allLoaded = false;//下拉刷新时解除上拉加载的禁用
         this.index = index;
-        this.payload = {machineState:this.index,shopId:this.popShopId,parentTypeId:this.popDeviceTypeId,subTypeId:this.popDeviceModelId,communicateType:this.popCommunicationType,page:this.page,pageSize: this.pageSize};
-        this._getList(this.payload);
+        this._getList();
 
       },
       toAddItem() { //右下按钮点击弹出
@@ -392,45 +391,14 @@
         this.modelFlag = !this.modelFlag;
         this.deviceModelArr = (this.modelFlag && this.deviceModelArrAll.length>0)?this.deviceModelArrAll.slice(0,4):this.deviceModelArrAll;
       },  
-      async _getList(object)  { //获取设备
-        let payload = object ? object : {machineState: this.index,page:this.page,pageSize: this.pageSize};
+      async _getList()  { //获取设备
+        let payload = {machineState:this.index,shopId:this.popShopId,parentTypeId:this.popDeviceTypeId,subTypeId:this.popDeviceModelId,communicateType:this.popCommunicationType,page:this.page,pageSize: this.pageSize};
         let res = await deviceListFun(payload);
         this.titleArr = res.count;
         this.list = res.page.items?[...this.list,...res.page.items]:[];
         this.total = res.page.total;
         this.hasNoData = this.list.length<= 0 ? true: false;
         this.noMore = this.page>1?true: false;
-        this.list.forEach(item=>{
-          switch(item.machineState){
-          case 1:
-          item.machineState = "空闲";
-          break;
-          case 2:
-          item.machineState = "运行";
-          break;
-          case 3:
-          item.machineState = "预约";
-          break;
-          case 4:
-          item.machineState = "故障";
-          break;
-          case 5:
-          item.machineState = "参数设置";
-          break;
-          case 6:
-          item.machineState = "自检";
-          break;
-          case 7:
-          item.machineState = "预约";
-          break;
-          case 8:
-          item.machineState = "离线";
-          break;
-          case 16:
-          item.machineState = "超时未工作";
-          break;
-          }
-        });
       },
     },
     components: {

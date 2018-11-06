@@ -150,14 +150,8 @@ export default {
           let query = this.$route.query;
           let payload = {machineParentTypeId:query.parentTypeId,shopId:query.shopId,standardFunctionId:this.functionId,startTime:this.startTime};
           let res = await batchStartOnFun(payload);
-          let instance = this.$toast({
-            message: '设置成功',
-            iconClass: 'mint-toast-icon mintui mintui-success'
-          });
-          setTimeout(() => {
-            instance.close();
-            this.$router.push({name:'todolist'});
-          }, 2000);
+          this.$toast({message: '设置成功'});
+          this.$router.push({name:'todolist'});
         }else{
           this.$toast("请设置启动时间");
         }
@@ -166,11 +160,7 @@ export default {
         //判断启动时间是否小于当前时间
         let nowDate = new Date();
         if(this.pickerValue <= nowDate) {
-          this.$toast({
-              message: '启动时间不得小于等于当前时间',
-              position: "middle",
-              duration: 3000
-            });
+          this.$toast({message: '启动时间不得小于等于当前时间'});
         }
         else {
           let date = moment(data).format('YYYY-MM-DD HH:mm');

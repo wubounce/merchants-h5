@@ -613,14 +613,8 @@
           waterLevel: this.fromdata.waterLevel
         };
         let res = await deviceAddorEditFun(obj);
-        let instance = this.$toast({
-          message: '新增设备成功',
-          iconClass: 'mint-toast-icon mintui mintui-success'
-        });
-        setTimeout(() => {
-          instance.close();
-          this.$router.push({name:'deviceMange'});
-        }, 2000);
+        this.$toast("新增设备成功");
+        this.$router.push({name:'deviceMange'});
       },
       toFunctionSeting() { //切换到功能列表
         if(!this.fromdata.company && !this.fromdata.communicateType) {

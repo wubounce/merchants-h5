@@ -510,16 +510,9 @@ export default {
               organization: this.organization
             };
             let res = await addOrEditShopFun(obj);
-            
             //成功后的操作
-            let instance = this.$toast({
-              message: '编辑成功',
-              iconClass: 'mint-toast-icon mintui mintui-success'
-            });
-            setTimeout(() => {
-              instance.close();
-              }, 1000);
-              this.$router.go(-2);
+            this.$toast({message: '编辑成功'});
+            this.$route.query.issearch == true ? this.$router.go(-3) : this.$router.go(-2);
             //上面是传值
           }
           else {
@@ -551,16 +544,9 @@ export default {
             organization: this.organization
           };
           let res = await addOrEditShopFun(obj);
-          
           //成功后的操作
-          let instance = this.$toast({
-            message: '编辑成功',
-            iconClass: 'mint-toast-icon mintui mintui-success'
-          });
-          setTimeout(() => {
-            instance.close();
-            }, 1000);
-            this.$route.query.issearch == true ? this.$router.go(-3) : this.$router.go(-2);
+          this.$toast({message: '编辑成功'});
+          this.$route.query.issearch == true ? this.$router.go(-3) : this.$router.go(-2);
         }
         
       }else if(!this.list[0].value) {

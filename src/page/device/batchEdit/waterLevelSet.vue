@@ -76,15 +76,9 @@ export default {
           waterLevel: this.waterLevel
         };
         let res = await batchEditFun(obj);
-        let instance = this.$toast({
-          message: '批量修改成功',
-          iconClass: 'mint-toast-icon mintui mintui-success'
-        });
-        setTimeout(() => {
-          instance.close();
-          this.$router.push({name:'deviceMange'});
-          }, 2000);
-        } 
+        this.$toast("批量修改成功");
+        this.$router.push({name:'deviceMange'});
+      } 
     },
 
 };

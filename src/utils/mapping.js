@@ -2,8 +2,7 @@
  * 数据映射类
  */
 
-//========= 机器 ==========//
-// 机器状态
+// 首页机器状态
 export const MachineStatus = (ststus)=>{
 	switch (ststus){
 		case 'idle':
@@ -23,7 +22,7 @@ export const MachineStatus = (ststus)=>{
 	}
 };
 
-// 通信类型
+// 首页通信类型
 export const communicateType = (ststus)=>{
 	switch (ststus){
 		case 0:
@@ -31,6 +30,34 @@ export const communicateType = (ststus)=>{
 		case 1:
 		  return '串口';
 		 default:
+  			return ststus;
+	}
+};
+
+
+
+// 设备状态类型
+export const deviceStatus = (ststus)=>{
+	switch (ststus){
+		case 1:
+			return '空闲';
+		case 2:
+		 	 return '运行 ';
+		case 3:
+		  	return '预约';
+		case 4:
+		  	return '故障';
+		case 5:
+		 	return '参数设置';
+		case 6:
+		 	return '自检';
+		case 7:
+		 	return '预约';
+		case 8:
+		 	return '离线';
+		case 16:
+		 	return '超时未工作';
+		default:
   			return ststus;
 	}
 };
