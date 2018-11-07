@@ -177,7 +177,6 @@ export default {
     historyPicker(value) {
       if (value) {
         this.historyCurrent = value;
-        console.log(this.historyCurrent);
         this.list = [];
         this.page = 1;
         this.allLoaded = false;//下拉刷新时解除上拉加载的禁用
