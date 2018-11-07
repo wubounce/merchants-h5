@@ -37,7 +37,7 @@
                     <div class="con-type"><span class="iconfont icon-iconfontmoshi"></span>{{item.machineFunctionName}}<span style="padding-left:0.13rem;padding-right:0.19rem" v-if="item.isESource === 0">|</span><span v-if="item.isESource === 0">时长{{item.markMinutes}}分钟</span><div class="order-action" v-if="item.isReserve === 1">预约</div></div>
                   </section>
                   </router-link>
-                  <section class="listaction" v-if="item.orderStatus === 2"> 
+                  <section class="listaction" v-if="item.orderStatus === 2 && !historyCurrent.id"> 
                       <mt-button @click="orderRefund(item.orderNo,item.payPrice)" v-has="'mer:order:refund'" :disabled="refundDisabled">退款</mt-button>
                       <span v-if="item.shopState === 2">
                         <mt-button @click="gocompensate(item.orderNo,item.phone,item.shopName,item.shopId,item.parentTypeName,item.markPrice)" v-has="'mer:order:compensate'">补偿</mt-button>
@@ -177,6 +177,7 @@ export default {
     historyPicker(value) {
       if (value) {
         this.historyCurrent = value;
+        console.log(this.historyCurrent);
         this.list = [];
         this.page = 1;
         this.allLoaded = false;//下拉刷新时解除上拉加载的禁用

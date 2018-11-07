@@ -82,9 +82,8 @@
           </div>
         </section>
     </div>
-
-
-     <section class="listaction" v-cloak v-if="detail.orderStatus === 2"> 
+    
+     <section class="listaction" v-cloak v-if="detail.orderStatus === 2&&!$route.query.tableId"> 
       <mt-button @click="orderRefund(detail.orderNo,detail.payPrice)" v-has="'mer:order:refund,mer:order:info'" :disabled="refundDisabled">退款</mt-button>
       <span v-if="detail.shopState === 2">
         <mt-button @click="gocompensate(detail.orderNo,detail.phone,detail.shopName,detail.shopId,detail.parentTypeName,detail.markPrice)" v-has="'mer:order:compensate'">补偿</mt-button>
