@@ -12,6 +12,12 @@
   url('DINCond-Regular.otf') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
   url('DINCond-Regular.otf') format('svg'); /* iOS 4.1- */
 }
+@font-face {font-family: letterFont;
+  src: url('HYQuanTangShiJ.ttf'); /* IE9*/
+  src: url('HYQuanTangShiJ.ttf') format('embedded-opentype'), /* IE6-IE8 */
+  url('HYQuanTangShiJ.ttf') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
+  url('HYQuanTangShiJ.ttf') format('svg'); /* iOS 4.1- */
+}
 
 
 

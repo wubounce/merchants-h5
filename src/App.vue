@@ -5,11 +5,13 @@
     </keep-alive>
     <router-view v-if="!$route.meta.keepAlive" />
     <!-- <router-view /> -->
+    <thanks-letter></thanks-letter>
   </div>
 </template>
 
 <script>
   import Web from '@/utils/Web';
+  import ThanksLetter from '@/components/activity/thanksLetter';
   export default {
     name: 'App',
     data() {
@@ -32,6 +34,10 @@
       '$route' () {
         this.initWechat();
       }
+    },
+    components:{
+      ThanksLetter
+
     },
   };
 

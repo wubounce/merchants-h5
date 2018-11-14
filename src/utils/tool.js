@@ -18,6 +18,11 @@ export const setMenu = (menu) => localStorage.setItem(menuKey, JSON.stringify(me
 export const getMenu = () => JSON.parse(localStorage.getItem(menuKey));
 export const removeMenu = () => localStorage.removeItem(menuKey);
 
+const ActivityTypeKey = 'ActivityType';
+export const setActivityType = (ActivityType) => localStorage.setItem(ActivityTypeKey, JSON.stringify(ActivityType));
+export const getActivityType = () => JSON.parse(localStorage.getItem(ActivityTypeKey));
+export const removeActivityType = () => localStorage.removeItem(ActivityTypeKey);
+
 const navTabKey = 'navTabIndex';
 export const setNavTabIndex = (navTab) => sessionStorage.setItem(navTabKey,navTab);
 export const getNavTabIndex = () => sessionStorage.getItem(navTabKey);
