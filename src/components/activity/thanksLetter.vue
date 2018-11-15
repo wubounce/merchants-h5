@@ -110,7 +110,8 @@ export default {
             .modal{
                 position: absolute;
                 top: 1.6533rem;
-                left: .3733rem;
+                left:50%;
+                transform: translate(-50%);
                 width: 9.1733rem;
                 height: 10.8133rem;
                 background-image: url(../../../static/image/activity/modal_bg.png);
