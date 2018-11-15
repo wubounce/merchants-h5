@@ -9,7 +9,7 @@
                     <div class="font" v-if="isFontFhow">
                         <div class="letter-top"></div>
                         <div class="font-center">
-                            <div class="font-con">
+                            <div class="font-con" @touchmove='touchmoveShow'>
                                 <p class="textIndentNone">尊敬的运营商伙伴:</p>
                                 <p>您们好！</p>
                                 <p>我是企鹅科技的创始人，许光磊。今天是企鹅共享洗衣一周岁的生日！很开心能在这样的日子和大家一起分享这一年我们取得的成绩！</p>
@@ -46,6 +46,7 @@ export default {
         isNoticeShow:false,
         isModalShow:true,
         isFontFhow:false,
+        isScroll:false,
     };
   },
   created(){
@@ -70,6 +71,9 @@ export default {
       //关闭当前弹窗，
       closeNotice(){
           let vm = this;
+          if(vm.isScroll){
+              _hmt.push(['_trackEvent', 'scroll', 'scroll', 'activity']);
+          }
           _hmt.push(['_trackEvent', 'close', 'click', 'activity']);
           vm.isNoticeShow = false;
           document.body.style.height = 'auto';
@@ -78,9 +82,12 @@ export default {
       },
       //进入活动详情
       showFont(){
-          _hmt.push(['_trackEvent', 'button', 'click', 'activity']);
+          _hmt.push(['_trackEvent', 'open', 'click', 'activity']);
           this.isFontFhow = true;
           this.isModalShow = false;
+      },
+       touchmoveShow(e){
+          this.isScroll = true;
       }
   }
 };
@@ -159,13 +166,13 @@ export default {
                         width: 100%;
                         height: 100%;
                         padding: 0 .5067rem;
-                        overflow-y: auto;
+                        overflow-y: scroll;
                         position: relative;                       
                         p{ 
                             font-size: .4267rem;
                             color: #7B2F04;
                             text-indent: 2em;
-                            line-height: .8rem;
+                            line-height: .6667rem;
                             text-align: justify;
                             font-family: letterFont;
                             letter-spacing: .0133rem;
