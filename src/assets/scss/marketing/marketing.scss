@@ -52,11 +52,11 @@
         width: 8.19rem;
         font-size: 16px;
         color: #1890FF;
+        font-size: 16px;
+        color:#333;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
-       font-size: 16px;
-       color:#333;
       }
     }
     .dis-con-machine {
@@ -74,6 +74,11 @@
         padding-left: 0.27rem;
         font-size: 16px;
         color: #333;
+        i {
+          font-style: normal;
+          font-size: 12px;
+          color: #1890FF;
+        }
       }
       .discount {
         text-align: center;

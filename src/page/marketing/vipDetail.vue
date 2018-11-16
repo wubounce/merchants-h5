@@ -3,43 +3,18 @@
  <div class="permissions" v-if="$store.getters.has('mer:marketing:vip:info')">暂无相关页面权限</div>
   <div v-else>
     <div class="addvip-header">
-      <p>所属店铺<span class="addvip-con">
-        <span v-for="(items,index) in detail.shopList" :key="index">{{items.shopName}}<i v-if="index !== (detail.shopList.length-1)">,</i></span>
-      </span>
-      </p>
-    </div>
-
-    <div class="card-wrap">
-      <p class="addvip-type"><span>VIP年卡</span></p>
-      <div class="add-card-header"></div>
-      <div class="add-card">
-        <p>卡售价<span>{{detail.yearCardPrice | tofixd}}元</span></p>
-        <p>VIP折扣<span>{{detail.yearCardDiscount?detail.yearCardDiscount:''}}%</span></p>
-        <p>每{{detail.yearLimitType === 2 ? '周':'日'}}限用次数<span>{{detail.yearCardLimitTime}}次</span></p>
-      </div>
-      <div class="crrow"></div>
+      <p>所属店铺<span class="addvip-con"><span v-for="(items,index) in detail.shopList" :key="index">{{items.shopName}}<i v-if="index !== (detail.shopList.length-1)">,</i></span></span></p>
+      <p>卡折扣<span class="addvip-con">8.5折</span></p>
+      <p>每日限用次数<span class="addvip-con">8.5次</span></p>
     </div>
     <div class="card-wrap">
-      <p class="addvip-type"><span>VIP半年卡</span></p>
-      <div class="add-card-header"></div>
-      <div class="add-card">
-        <p>卡售价<span>{{detail.halfYearCardPrice | tofixd}}元</span></p>
-        <p>VIP折扣<span>{{detail.halfYearCardDiscount?detail.halfYearCardDiscount:''}}%</span></p>
-        <p>每{{detail.halfLimitType === 2 ? '周':'日'}}限用次数<span>{{detail.halfYearCardLimitTime}}次</span></p>
-      </div>
-      <div class="crrow"></div>
+      <p class="addvip-type"><span>销售方式</span></p>
     </div>
-    <div class="card-wrap">
-      <p class="addvip-type"><span>VIP季卡</span></p>
-      <div class="add-card-header"></div>
-      <div class="add-card">
-        <p>卡售价<span>{{detail.seasonCardPrice | tofixd}}元</span></p>
-        <p>VIP折扣<span>{{detail.seasonCardDiscount?detail.seasonCardDiscount:''}}%</span></p>
-        <p>每{{detail.seasonLimitType === 2 ? '周':'日'}}限用次数<span>{{detail.seasonCardLimitTime}}次</span></p>
-      </div>
-      <div class="crrow"></div>
+     <div class="addvip-header">
+      <p>3个月<span class="addvip-con">30元</span></p>
+      <p>6个月<span class="addvip-con">30元</span></p>
+      <p>12个月<span class="addvip-con">30元</span></p>
     </div>
-
     <div class="create-wrap">
       <p>创建人：{{detail.createUserName}}</p>
       <p>创建时间： {{detail.createTime}}</p>

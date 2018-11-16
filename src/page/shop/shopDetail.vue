@@ -43,11 +43,14 @@
         <p class="shop-item"><span>VIP数量</span><span>{{shopdetail.vipCount}}个</span></p>
 
         <!-- 第四模块 -->
+        <p class="shop-item title" style="margin-top: 0.27rem;"><span>客服电话</span><span>xxxxxxxxxxxxxx</span></p>
+
+        <!-- 第五模块 -->
         <p class="shop-info second-p"><span>创建人：</span><span>{{shopdetail.createUser}}</span></p>
         <p class="shop-info createTime"><span>创建时间：</span><span>{{shopdetail.createTime}}</span></p>
         <p class="blank"></p>
 
-        <!-- 第五模块 -->
+        <!-- 第六模块 -->
         <p class="about-button">
           <Buttonbottom btn-type="small" btn-color="spe" id="delete" @confirm="isDeleteOrNot(shopdetail.shopId)" v-has="'mer:shop:delete'">删除</Buttonbottom>
     			<Buttonbottom btn-type="small" btn-color="spe" id="edit" @confirm="goShopEdit()" v-has="'mer:shop:update'">编辑</Buttonbottom>

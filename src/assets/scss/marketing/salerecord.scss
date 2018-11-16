@@ -1,0 +1,130 @@
+.sarch-wrap{
+background: #ffffff;
+padding: 0.27rem 0 0.27rem 0.27rem;
+overflow: hidden;
+.search {
+    -webkit-box-shadow: 0px 0.053333rem 0.133333rem 0px rgba(186, 192, 210, 0.3);
+    box-shadow: 0px 0.053333rem 0.133333rem 0px rgba(186, 192, 210, 0.3);
+    border-radius: 0.133333rem;
+    font-size: 16px;
+    width: 6.67rem;
+    height: 1.17rem;
+    float: left;
+    form {
+        display: inline-block;
+        width: 100%;
+        position: relative;
+    }
+    input {
+        display: inline-block;
+        width: 3.6rem;
+        font-size: 14px;
+        height: 1.17rem;
+        padding-top: 0.4rem;
+        padding-bottom: 0.3rem;
+    }
+
+    .icon-IconSearch {
+        color: #999999;
+        padding-left: 0.4rem;
+        padding-right: 0.27rem;
+    }
+    .select-back {
+        line-height: 1.17rem;
+        padding-right: 0.27rem;
+        padding-left: 0.27rem;
+        color: #1890FF;
+        border-left:1px solid rgba(216,216,216,1);
+    }
+    .guanbi {
+        position: absolute;
+        font-size: 16px;
+        color: #999;
+        right: 1.52rem;
+        top: 0.36rem;
+    }
+}
+    .sale-shop {
+        float: left;
+        width:2.53rem;
+        text-align: center;
+        height: 1.17rem;
+        line-height: 1.17rem;
+        background:rgba(255,255,255,1);
+        -webkit-box-shadow: 0px 0.053333rem 0.133333rem 0px rgba(186, 192, 210, 0.3);
+        box-shadow: 0px 0.053333rem 0.133333rem 0px rgba(186, 192, 210, 0.3);
+        border-radius: 0.133333rem;
+        font-size: 16px;
+        margin-left: 0.27rem;
+    }
+    
+}
+.total {
+    height: 0.93rem;
+    line-height: 0.93rem;
+    font-size: 12px;
+    color: #999;
+    padding:0 0.4rem;
+    .icon-rili {
+        color: #1890FF;
+        float: right;
+    }
+}
+.recored-list {
+    padding:0.27rem 0.4rem;
+    font-size: 14px;
+    color: #999;
+    background: #fff;
+    margin-top: 0.27rem;
+    >p {
+        line-height: 0.49rem;
+        span {
+            color: #232628;
+            margin-left: 0.4rem;
+        }
+        .time {
+            margin-left: 0.8rem;
+            color: #999;
+        }
+        .money {
+            margin: 0;
+            color: #1890FF;
+            font-size: 18px;
+        }
+    }
+    .middle-shop {
+        margin: 0.13rem 0;
+    }
+}
+.recored-list:nth-child(1){
+    margin:0;
+  }
+
+  .calendar-dialog-body .footer{
+    display: flex;
+    padding: 0.4rem 0;
+    >div {
+      width: 50%;
+      text-align: center;
+    }
+    .ca-coupon-btn {
+      display: inline-block;
+      padding: 0;
+      width:2.13rem;
+      height:0.8rem;  
+      background:rgba(24,144,255,1);
+      border-radius:0.11rem;
+      font-size: 14px;
+      color: #fff;
+      text-align: center;
+      line-height: 0.8rem;
+    }
+    .reset {
+      background: #fff;
+      border:1px solid #ddd;
+      color: #999;
+    }
+    .mint-button--default {
+      box-shadow: none;
+    }
+  }

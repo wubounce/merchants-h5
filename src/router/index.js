@@ -152,12 +152,6 @@ export default new Router({
       meta: {title: '设备搜索'},
     },
     {
-      path: '/batchFuntionSet',
-      name: 'batchFuntionSet',
-      component: () => import ('@/page/device/batchFuntionSet/batchFuntionSet'),
-      meta: {title: '批量设置'},
-    },
-    {
       path: '/addDevice',
       name: 'addDevice',
       component: () => import ('@/page/device/addDevice/addDevice'),
@@ -390,6 +384,8 @@ export default new Router({
     { path: '/vipDetail', name: 'vipDetail', component: () => import('@/page/marketing/vipDetail'),meta: {title: 'VIP卡详情'} },
     { path: '/editVip', name: 'editVip', component: () => import('@/page/marketing/editVip'),meta: {title: 'VIP卡修改'} },
     { path: '/couponDetail', name: 'couponDetail', component: () => import('@/page/marketing/couponDetail'),meta: {title: '优惠券详情'} },
+    { path: '/salerecord', name: 'saleRecord', component: () => import('@/page/marketing/saleRecord'),meta: {title: 'VIP售卡记录'} },
+    { path: '/seniormember', name: 'seniorMember', component: () => import('@/page/marketing/seniorMember'),meta: {title: '会员列表'} },
     
     //设置
     {

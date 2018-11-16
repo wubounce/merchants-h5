@@ -2,53 +2,25 @@
 <div class="addvip">
   <div class="addvip-header">
     <p  @click="shopVisible = true;" style="cursor: pointer;">所属店铺<span class="order-action add-shop-overflow-icon iconfont icon-nextx"></span><span class="addvip-con add-shop-overflow">{{checkshoptxt?checkshoptxt:''}}</span></p>
+    <p>卡折扣<span class="tag">元</span><input type="number" v-model="vipform.yearCardPrice"></p>
+    <p>{{yearLimitTypeCurrentTag.label}}<i class="iconfont icon-xiangxiajiantou" @click="yearLimitTypeVisble = true;"></i><span class="tag">次</span><input type="number" pattern="\d*" class="num"  v-model.number="vipform.yearCardLimitTime"></p>
+    <div class="tips">
+      <p>提示：</p>
+      <p>1.用户购买此卡可在所有适用店铺内使用</p>
+      <p>2.建议卡折扣不超过限时优惠活动折扣。</p>
+      <p>3.每日/每周使用次数不填写或填写0，则不限制次数。</p>
+    </div>
   </div>
-  
   <form class="addvip-from" ref="vipForm" :model="vipform">
     <div class="add-vip-list-wrap">
-      <div class="car-shop">VIP卡类型<span>VIP年卡</span></div>
-      <div class="card-wrap">
-        <div class="add-card-header"></div>
-        <div class="add-card">
-          <p>卡售价<span>元</span><input type="number" placeholder="请填写卡售价…" v-model="vipform.yearCardPrice"></p>
-          <p>VIP折扣<span>%</span><input type="number" pattern="\d*" placeholder="请填写折扣数…" v-model="vipform.yearCardDiscount"></p>
-          <p>{{yearLimitTypeCurrentTag.label}}<i class="iconfont icon-xiangxiajiantou" @click="yearLimitTypeVisble = true;"></i><span>次</span><input type="number" pattern="\d*" class="num"  v-model.number="vipform.yearCardLimitTime"></p>
-        </div>
-        <div class="tips">
-          <p>提示：</p>
-          <p>1.建议VIP折扣价不超过特惠活动价。</p>
-          <p>2.每日限用次数不填写或填写0，则不限制次数。</p>
-        </div>
-        <div class="crrow"></div>
-      </div>
-    </div>
-    <div class="add-vip-list-wrap">
-      <div class="car-shop">VIP卡类型<span>VIP半年卡</span></div>
-      <div class="card-wrap">
-        <div class="add-card-header"></div>
-        <div class="add-card">
-          <p>卡售价<span>元</span><input type="number" placeholder="请填写卡售价…" v-model="vipform.halfYearCardPrice"></p>
-          <p>VIP折扣<span>%</span><input type="number" pattern="\d*" placeholder="请填写折扣数…" v-model="vipform.halfYearCardDiscount"></p>
-          <p class="por-border">{{halfLimitTypeCurrentTag.label}}<i class="iconfont icon-xiangxiajiantou" @click="halfLimitTypeVisble = true;"></i><span>次</span><input type="number" pattern="\d*" class="num" v-model.number="vipform.halfYearCardLimitTime"></p>
-        </div>
-        <div class="crrow"></div>
-      </div>
-    </div>
-    <div class="add-vip-list-wrap">
-      <div class="car-shop">VIP卡类型<span>VIP季卡</span></div>
-      <div class="card-wrap">
-        <div class="add-card-header"></div>
-        <div class="add-card">
-          <p>卡售价<span>元</span><input type="number" placeholder="请填写卡售价…" v-model="vipform.seasonCardPrice"></p>
-          <p>VIP折扣<span>%</span><input type="number" pattern="\d*" placeholder="请填写折扣数…" v-model="vipform.seasonCardDiscount"></p>
-          <p class="por-border">{{seasonLimitTypeCurrentTag.label}}<i class="iconfont icon-xiangxiajiantou" @click="seasonLimitTypeVisble = true;"></i><span>次</span><input type="number" pattern="\d*" v-model.number="vipform.seasonCardLimitTime" class="num"></p>
-        </div>
-        <div class="crrow"></div>
+      <div class="car-shop">销售方式</div>
+       <div class="addvip-header">
+        <p>3个月<span class="tag">元</span><input type="number" v-model="vipform.yearCardPrice"></p>
+        <p>6个月<span class="tag">元</span><input type="number" v-model="vipform.yearCardPrice"></p>
+        <p>12个月<span class="tag">元</span><input type="number" v-model="vipform.yearCardPrice"></p>
       </div>
     </div>
   </form>
-  
-  
   <div class="confirm" @click="addvip">提交</div>
    <!-- 选择店铺 -->
   <mt-popup v-model="shopVisible" position="bottom" :closeOnClickModal="false">
@@ -70,13 +42,8 @@
     </section>
   </mt-popup>
 
-  <!-- 年卡限制类型 -->
+  <!-- 限用类型-->
   <selectpickr :visible="yearLimitTypeVisble" :slots="LimitTypeSlots"  :title="'限用类型'" :valueKey="keyname" @selectpicker="yearLimitSelectpicker" @onpickstatus="yearLimitSelectpickerstatus"></selectpickr>
-  <!-- 半年限制类型 -->
-  <selectpickr :visible="halfLimitTypeVisble" :slots="LimitTypeSlots"  :title="'限用类型'" :valueKey="keyname" @selectpicker="halfLimitSelectpicker" @onpickstatus="halfLimitSelectpickerstatus"></selectpickr>
-  <!-- 季卡限制类型 -->
-  <selectpickr :visible="seasonLimitTypeVisble" :slots="LimitTypeSlots"  :title="'限用类型'" :valueKey="keyname" @selectpicker="seasonLimitSelectpicker" @onpickstatus="seasonLimitSelectpickerstatus"></selectpickr>
-
 </div>
 </template>
 <script>
@@ -90,11 +57,7 @@ export default {
       shopVisible:false,
       checkshoptxt:'',
       shopIds:[],
-      vipform:{
-        yearCardLimitTime:0,
-        halfYearCardLimitTime:0,
-        seasonCardLimitTime:0
-      },
+       vipform:{},
       LimitTypeSlots:[
         {
           flex: 1,
@@ -109,12 +72,7 @@ export default {
       ],
       keyname:'label',
       yearLimitTypeVisble:false,
-      halfLimitTypeVisble:false,
-      seasonLimitTypeVisble:false,
       yearLimitTypeCurrentTag:{},
-      halfLimitTypeCurrentTag:{},
-      seasonLimitTypeCurrentTag:{},
-     
     };
   },
   mounted() {
@@ -148,28 +106,11 @@ export default {
     yearLimitSelectpickerstatus(data){
       this.yearLimitTypeVisble = data;
     },
-    halfLimitSelectpicker(data){
-      this.halfLimitTypeCurrentTag = data;
-    },
-    halfLimitSelectpickerstatus(data){
-      this.halfLimitTypeVisble = data;
-    },
-    seasonLimitSelectpicker(data){
-      this.seasonLimitTypeCurrentTag = data;
-    },
-    seasonLimitSelectpickerstatus(data){
-      this.seasonLimitTypeVisble = data;
-    },
     async addvip(){
       if (this.shopIds.length <=0 ) {
         this.$toast({message: "请输入选择店铺" });
         return false;
       }
-      if ((!this.vipform.yearCardPrice || !this.vipform.yearCardDiscount) && (!this.vipform.halfYearCardPrice || !this.vipform.halfYearCardDiscount)&&(!this.vipform.seasonCardPrice || !this.vipform.seasonCardDiscount)) {
-        this.$toast({message: "请完整填写至少一种vip卡信息" });
-        return false;
-      }
-
       if ((this.vipform.yearCardPrice&& !validatCradPrice(this.vipform.yearCardPrice))) {
         this.$toast({message: "年卡售价请输入1-999之间的整数" });
         return false;
@@ -207,8 +148,6 @@ export default {
         this.$toast({message: "季卡每日限用次数请输入整数" });
         return false;
       }
-
-
       let paylod = Object.assign({},this.vipform,{shopIds:this.shopIds.join(',')});
       paylod.yearCardLimitTime =  paylod.yearCardLimitTime ?  paylod.yearCardLimitTime:0;
       paylod.halfYearCardLimitTime =  paylod.halfYearCardLimitTime ?  paylod.halfYearCardLimitTime:0;
