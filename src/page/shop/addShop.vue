@@ -1,12 +1,12 @@
 <template>
   <section class="personal">
-    <ul class="personal-list">
+    <div class="personal-list">
       <p class="shopname-p"><span>店铺名称</span><span><input  @change="blur" type="text" class='addressInput' v-model="shopName"  placeholder="请填写店铺名称"></span></p>
-      <li class="personal-item" @click="chooseShopType">店铺类型<span>{{shopTypeName}}</span></li>
+      <p class="personal-item" @click="chooseShopType">店铺类型<span>{{shopTypeName}}</span></p>
       <place :area='areaValue' @chooseArea='getThreeArea'></place>
-      <li class="personal-item" @click="chooseMap">小区/大厦/学校<span>{{school}}</span></li>
+      <p class="personal-item" @click="chooseMap">小区/大厦/学校<span>{{school}}</span></p>
       <p class="shopname-p"><span>详细地址</span><span><input  type="text" class='addressInput' v-model="address"  placeholder="请填写详细地址"></span></p>
-    </ul>
+    </div>
     <div class="second">
       <p class="isReserve device">
         <span>预约功能</span>
@@ -18,7 +18,13 @@
           <input  v-model="orderLimitMinutes" :disabled="noEdit" :placeholder="placeholdercontent"  maxlength='1'>
         </span>
       </p>
-      <li class="business" @click="chooseTime">营业时间<span>{{addBusinessTime}}</span></li>
+      <p class="business" @click="chooseTime">营业时间<span>{{addBusinessTime}}</span></p>
+    </div>
+    <div class="second">
+        <p class="reserveTime tel-hot">
+          <span style="width: 22%">客服电话</span>
+          <span><input v-model="hotTel" placeholder="请填写客服电话" ></span>
+        </p>
     </div>
     <p class="blank"></p>
     <button class="submit" @click="submit">提交</button>
@@ -53,6 +59,7 @@ export default {
       arrName:[],
       address:'',
       machineName:'',
+      hotTel:'',
       lastMachine: [],
       machineTypeIds:'',
       machineArray: [],

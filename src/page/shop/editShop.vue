@@ -24,6 +24,12 @@
       </p>
       <li class="business" @click="chooseTime">营业时间<span>{{addBusinessTime}}</span></li>
     </div>
+    <div class="second">
+        <p class="reserveTime tel-hot">
+          <span style="width: 22%">客服电话</span>
+          <span><input v-model="hotTel" placeholder="请填写客服电话" ></span>
+        </p>
+    </div>
     <p class="blank"></p>
     <button  class="submit" @click="submit">提交</button>
 
@@ -69,6 +75,7 @@ export default {
       placeholdercontent:'开启预约功能后可填',
       address:'',
       machineName:'',
+      hotTel:'',
       lastMachine: '',    // 修改bug
       machineTypeIds:'',
       machineArray: [],
