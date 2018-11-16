@@ -412,6 +412,8 @@ export default new Router({
     { path: '/realNameGet', name: 'realNameGet', component: () => import('@/page/setting/realNameGet'),meta: {title: '实名认证详情'}, },
     { path: '/contact', name: 'contact', component: () => import('@/page/contact/index'),meta: {title: '联系客服'}, },
     { path: '/cooperation', name: 'cooperation', component: () => import('@/page/cooperation/index'),meta: {title: '合作热线'}, },
+    { path: '/helpcenter', name: 'helpcenter', component: () => import('@/page/helpCenter/helpCenter'),meta: {title: '帮助中心'}, },
+    { path: '/helpdetail', name: 'helpdetail', component: () => import('@/page/helpCenter/detail'),meta: {title: '帮助中心详情'}, },
     {
       path: '/success',
       name: 'success',

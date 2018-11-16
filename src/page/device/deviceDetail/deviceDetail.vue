@@ -94,7 +94,7 @@
       <div style="width:100%;height:1.73rem;"></div>
       <div class="about-button">
         <span v-has="'mer:machine:clean'"><button btn-type="small" btn-color="spe" class="ft-btn" @click="deviceTZJ" v-show="tzjShow && machineState==='空闲'">桶自洁</button></span>
-        <span v-has="'mer:machine:reset'"><button btn-type="small" btn-color="spe" class="ft-btn" @click="deviceRest" v-show="(machineState==='运行' && deviceDetail.subTypeName !== '通用脉冲充电桩') || (machineState==='预约' && deviceDetail.subTypeName !== '通用脉冲充电桩')">复位</button></span>
+        <span v-has="'mer:machine:reset'"><button btn-type="small" btn-color="spe" class="ft-btn" @click="deviceRest" v-show="(machineState !=='离线' && deviceDetail.subTypeName !== '通用脉冲充电桩') || (machineState==='预约' && deviceDetail.subTypeName !== '通用脉冲充电桩')">复位</button></span>
         <span v-has="'mer:machine:start'"><button btn-type="small" btn-color="spe" class="ft-btn" @click="deviceStart" v-show="machineState==='空闲' && deviceDetail.subTypeName !== '通用脉冲充电桩'">启动</button></span>
         <span v-has="'mer:machine:update'"><button btn-type="small" btn-color="spe" class="ft-btn" @click="deviceEdit">编辑</button></span>
       </div>
@@ -483,9 +483,8 @@
       justify-content: flex-end;
       .ft-btn {
         margin: 0.3rem 0;
-        width: 2.33rem;
-        line-height: 0.9rem;
-        height: 0.9rem;
+        width: 1.7rem;
+        height: 0.8rem;
         border-radius: 5px;
         margin-right: 0.3rem;
         color: #1890FF;
