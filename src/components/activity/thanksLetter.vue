@@ -57,14 +57,9 @@ export default {
       modalShow(){  
         setTimeout(() => {
             if(getActivityType() != 1) {
-            
                 this.isNoticeShow = true;
-                document.body.style.height = '100%';
-                document.body.style['overflow-y'] = 'hidden';
             }else{
                 this.isNoticeShow = false;
-                document.body.style.height = 'auto';
-                document.body.style['overflow-y'] = 'auto';
             } 
         },1000);		
       },
@@ -76,8 +71,6 @@ export default {
           }
           _hmt.push(['_trackEvent', 'close', 'click', 'activity']);
           vm.isNoticeShow = false;
-          document.body.style.height = 'auto';
-           document.body.style['overflow-y'] = 'auto';
           setActivityType(1);                  
       },
       //进入活动详情
@@ -89,7 +82,16 @@ export default {
        touchmoveShow(e){
           this.isScroll = true;
       }
-  }
+  },
+  watch: {
+    isNoticeShow: function () {
+      if (this.isNoticeShow) {
+        this.ModalHelper.afterOpen();
+      } else {
+        this.ModalHelper.beforeClose();
+      }
+    },
+  },
 };
 </script>
 <style lang="scss" scoped>
