@@ -195,6 +195,48 @@
       this._getList();
     },
     methods: {
+      async _getList()  { //获取设备
+        let payload = {machineState:this.index,shopId:this.popShopId,parentTypeId:this.popDeviceTypeId,subTypeId:this.popDeviceModelId,communicateType:this.popCommunicationType,page:this.page,pageSize: this.pageSize};
+        let res = await deviceListFun(payload);
+        this.titleArr = res.count;
+        this.list = res.page.items?[...this.list,...res.page.items]:[];
+        this.total = res.page.total;
+        this.hasNoData = this.list.length<= 0 ? true: false;
+        this.noMore = this.page>1?true: false;
+      },
+      rightPopup() {  //筛选框弹出
+        this.getPopupShop(this.shopFlag);
+        if(!this.popDeviceTypeId && !this.popShopId) this.getlistParentType({onlyMine: true});
+        if(!this.popDeviceModelId && !this.popDeviceTypeId && !this.popShopId) this.getlistSubTypeAll(this.subFlag);
+        this.popupVisible = true;
+      },
+      async getPopupShop(flag) {  //获取店铺
+        let res = await getShopFun();
+        this.popupShop = flag?res.slice(0,4):res;
+      },
+      async getlistParentType(payload) {  //获取设备类型     
+        let res = await getlistParentTypeFun(payload);
+        this.deviceTypeArr = res;
+        this.initialParentTypeId = res[0]?res[0].id:"";
+      },
+      async getlistSubTypeAll(flag,object) { //获取所有设备型号（与设备型号无关）
+        let res = await listSubTypeAllFun(object);
+        this.deviceModelArrAll = res;
+        this.deviceModelArr = flag?res.slice(0,4):res;
+      },
+      async getlistSubType(payload,flag) { //该类型下的设备型号
+        let res= await getlistSubTypeFun(payload);
+        this.deviceModelArrAll = res;
+        this.deviceModelArr = flag?res.slice(0,4):res;
+      },
+      allShopList() { //点击全部切换
+        this.shopFlag = !this.shopFlag;
+        this.getPopupShop(this.shopFlag);
+      },
+      allModelList() { //点击全部切换
+        this.modelFlag = !this.modelFlag;
+        this.deviceModelArr = (this.modelFlag && this.deviceModelArrAll.length>0)?this.deviceModelArrAll.slice(0,4):this.deviceModelArrAll;
+      },  
       selectShopClick(index) { //筛选店铺选中
         if(this.selectIndex != index) {
           this.selectIndex = index;
@@ -304,7 +346,6 @@
         this.allLoaded = false;//下拉刷新时解除上拉加载的禁用
         this.index = index;
         this._getList();
-
       },
       toAddItem() { //右下按钮点击弹出
         this.isShow = !this.isShow;
@@ -314,18 +355,11 @@
         this.isShow2 = !this.isShow2;
         this.isShow = !this.isShow;
       },
-      rightPopup() {  //筛选框弹出
-        this.getPopupShop(this.shopFlag);
-        if(!this.popDeviceTypeId && !this.popShopId) this.getlistParentType({onlyMine: true});
-        if(!this.popDeviceModelId && !this.popDeviceTypeId && !this.popShopId) this.getlistSubTypeAll(this.subFlag);
-        this.popupVisible = true;
-      },
       offlineTipClick() { //红字提示语关闭
         this.offlineTip = false;
         this.hiddenPageHeight = 3.5;
       },
       revenueBill(index) { //设备收益
-        console.log(index);
         this.$router.push({
           name: "deviceSearch",
           query: ({imei:nqt})
@@ -364,46 +398,7 @@
         let r = url.match(reg);  //匹配目标参数
         if (r != null) return unescape(r[2]); return null; //返回参数值
       },
-      async getPopupShop(flag) {  //获取店铺
-        let res = await getShopFun();
-        this.popupShop = flag?res.slice(0,4):res;
-      },
-      allShopList() { //展示全部店铺
-        this.shopFlag = !this.shopFlag;
-        this.getPopupShop(this.shopFlag);
-      },
-      async getlistParentType(payload) {  //获取设备类型     
-        let res = await getlistParentTypeFun(payload);
-        this.deviceTypeArr = res;
-        this.initialParentTypeId = res[0]?res[0].id:"";
-      },
-      async getlistSubTypeAll(flag,object) { //获取所有设备型号（与设备型号无关）
-        let res = await listSubTypeAllFun(object);
-        this.deviceModelArrAll = res;
-        this.deviceModelArr = flag?res.slice(0,4):res;
-      },
-      async getlistSubType(payload,flag) { //该类型下的设备型号
-        let res= await getlistSubTypeFun(payload);
-        this.deviceModelArrAll = res;
-        this.deviceModelArr = flag?res.slice(0,4):res;
-      },
-      allModelList() { //展示全部店铺
-        this.modelFlag = !this.modelFlag;
-        this.deviceModelArr = (this.modelFlag && this.deviceModelArrAll.length>0)?this.deviceModelArrAll.slice(0,4):this.deviceModelArrAll;
-      },  
-      async _getList()  { //获取设备
-        let payload = {machineState:this.index,shopId:this.popShopId,parentTypeId:this.popDeviceTypeId,subTypeId:this.popDeviceModelId,communicateType:this.popCommunicationType,page:this.page,pageSize: this.pageSize};
-        let res = await deviceListFun(payload);
-        this.titleArr = res.count;
-        this.list = res.page.items?[...this.list,...res.page.items]:[];
-        this.total = res.page.total;
-        this.hasNoData = this.list.length<= 0 ? true: false;
-        this.noMore = this.page>1?true: false;
-      },
     },
-    components: {
-
-    }
   };
 
 </script>

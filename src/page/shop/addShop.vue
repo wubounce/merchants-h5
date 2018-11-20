@@ -23,7 +23,7 @@
     <div class="second">
         <p class="reserveTime tel-hot">
           <span style="width: 22%">客服电话</span>
-          <span><input type="number" pattern="\d*" v-model="hotTel" placeholder="请填写客服电话" ></span>
+          <span><input type="number" pattern="\d*" v-model="serviceTelephone" placeholder="请填写客服电话" ></span>
         </p>
     </div>
     <p class="blank"></p>
@@ -47,6 +47,7 @@
 import place from '@/components/Area/Area';
 import { MessageBox } from 'mint-ui';
 import { addOrEditShopFun , shopTypeListFun , areaListFun , listParentTypeFun , manageListFun } from '@/service/shop';
+import { validatServiceTelephone } from '@/utils/validate';
 export default {
   data() {
     return {
@@ -59,7 +60,7 @@ export default {
       arrName:[],
       address:'',
       machineName:'',
-      hotTel:'',
+      serviceTelephone:'',
       lastMachine: [],
       machineTypeIds:'',
       machineArray: [],
@@ -378,127 +379,59 @@ export default {
 
     // 提交按钮
     async submit() {
-      //console.log(this.lng);
-      if(this.shopName!=false && this.shopType!=false && this.provinceId != false && this.cityId !=false && this.provinceId != false && this.address != false && this.lat !=false && this.lng != false && this.lat !=undefined && this.lng != undefined && this.addBusinessTime != false) {
-        if(this.orderLimitMinutes) {
-          //在判断
-          let reg=/^[1-9]+\d*$/;
-          //console.log(reg.test(this.orderLimitMinutes));
-          if(reg.test(this.orderLimitMinutes) &&parseInt(this.orderLimitMinutes) >0 && parseInt(this.orderLimitMinutes) <10) {
-            //传值
-            let changeisReserve = (this.isReserve==true)? 0 :1;
-            let obj = {
-              shopId: this.$route.query.shopId,
-              shopName: this.shopName,
-              shopType: this.shopType,
-              provinceId: this.provinceId,
-              cityId: this.cityId,
-              districtId: this.districtId,
-              address: this.address,
-              lat:this.lat,
-              lng:this.lng,
-              //machineTypeIds: this.machineTypeIdsArray,
-              isReserve: changeisReserve,
-              orderLimitMinutes: this.orderLimitMinutes,
-              workTime: this.addBusinessTime,
-              organization: this.organization
-            };
-            let res = await addOrEditShopFun(obj);
-            
-            //成功后的操作
-            let instance = this.$toast({
-              message: '添加成功',
-              iconClass: 'mint-toast-icon mintui mintui-success'
-            });
-            setTimeout(() => {
-              instance.close();
-              }, 1000);
-              this.$router.go(-1);
-            //上面是传值
-          }
-          else {
-            //提示
-            this.$toast({
-              message:'请填写1到9的数字',
-              position:'middle',
-              duration:3000
-            });
-          }
-        }
-        else {
-          //直接传值
-          let changeisReserve = (this.isReserve==true)? 0 :1;
-          let obj = {
-            shopId: this.$route.query.shopId,
-            shopName: this.shopName,
-            shopType: this.shopType,
-            provinceId: this.provinceId,
-            cityId: this.cityId,
-            districtId: this.districtId,
-            address: this.address,
-            lat:this.lat,
-            lng:this.lng,
-            isReserve: changeisReserve,
-            orderLimitMinutes: this.orderLimitMinutes,
-            workTime: this.addBusinessTime,
-            organization: this.organization
-          };
-          let res = await addOrEditShopFun(obj);
-          
-          //成功后的操作
-          let instance = this.$toast({
-            message: '添加成功',
-            iconClass: 'mint-toast-icon mintui mintui-success'
-          });
-          setTimeout(() => {
-            instance.close();
-            }, 1000);
-            this.$router.go(-1);
-        }
-      }else if(!this.shopName) {
-        this.$toast({
-            message: '请填写店铺名称',
-            position: 'middle',
-            duration: 3000
-          });
-      }else if(!this.shopType) {
-        this.$toast({
-            message: '请填写店铺类型',
-            position: 'middle',
-            duration: 3000
-          });
-      }else if(!this.provinceId || !this.cityId || !this.districtId) {
-        this.$toast({
-            message: '请选择所在地区',
-            position: 'middle',
-            duration: 3000
-          });
-      }else if(!this.lat || !this.lng) {
-        this.$toast({
-            message: '请选择小区/大厦/学校等具体地点',
-            position: 'middle',
-            duration: 3000
-          });
-      }else if(!this.address) {
-        this.$toast({
-            message: '请填写详细地址',
-            position: 'middle',
-            duration: 3000
-          });
-      }else if(this.isReserve == true && !this.orderLimitMinutes ) {
-        this.$toast({
-            message: '预约时长为空',
-            position: 'middle',
-            duration: 3000
-          });
+      if(!this.shopName) {
+        this.$toast({message: '请填写店铺名称'});
+        return false;
       }
-      else if(!this.addBusinessTime) {
-        this.$toast({
-            message: '请选择营业时间',
-            position: 'middle',
-            duration: 3000
-          });
+      if(!this.shopType) {
+        this.$toast({message: '请填写店铺类型'});
+        return false;
       }
+      if(!this.provinceId || !this.cityId || !this.districtId) {
+        this.$toast({message: '请选择所在地区'});
+        return false;
+      }
+      if(!this.lat || !this.lng) {
+        this.$toast({message: '请选择小区/大厦/学校等具体地点'});
+        return false;
+      }
+      if(!this.address) {
+        this.$toast({message: '请填写详细地址'});
+        return false;
+      }
+      let reg=/^[1-9]+\d*$/;
+      if(this.isReserve == true && !reg.test(this.orderLimitMinutes)) {
+        this.$toast({message: '预约时长请填写1到9的数字'});
+        return false;
+      }
+      if(!this.addBusinessTime) {
+        this.$toast({message: '请选择营业时间'});
+        return false;
+      }
+      if(!validatServiceTelephone(this.serviceTelephone)) {
+        this.$toast({message: '请选择填写正确的客服电话'});
+        return false;
+      }
+      let changeisReserve = (this.isReserve==true)? 0 :1;
+      let obj = {
+        shopId: this.$route.query.shopId,
+        shopName: this.shopName,
+        shopType: this.shopType,
+        provinceId: this.provinceId,
+        cityId: this.cityId,
+        districtId: this.districtId,
+        address: this.address,
+        lat:this.lat,
+        lng:this.lng,
+        isReserve: changeisReserve,
+        orderLimitMinutes: this.orderLimitMinutes,
+        workTime: this.addBusinessTime,
+        organization: this.organization,
+        serviceTelephone:this.serviceTelephone
+      };
+      let res = await addOrEditShopFun(obj);
+      this.$toast({ message: '添加成功'});
+      this.$router.go(-1);
     }
   },
   created() {

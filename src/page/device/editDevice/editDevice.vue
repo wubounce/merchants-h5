@@ -30,7 +30,7 @@
             </li>
              <li @click="checkWaterLevel" v-show="waterLevelShow">
               <span class="field-title">水位设置</span>
-              <p class="select"><span>{{fromdata.waterLevel}}</span></p>
+              <p class="select"><span>{{fromdata.waterLevel.name}}</span></p>
             </li>
             <li @click="toFunctionSeting">
               <span class="field-title">功能设置</span>
@@ -73,7 +73,7 @@
     <!-- 店铺-->
     <selectpickr :visible="companyVisible" :slots="slotsShop" :valueKey="shopname" @selectpicker="machineselectpickerShop" @onpickstatus="machineselectpickertatusShop" :title="'选择店铺'"> </selectpickr>
     <!-- 水位-->
-    <selectpickr :visible="waterLevelVisible" :slots="slotsWaterLevel" :valueKey="shopname" @selectpicker="machineselectpickerWaterLevel" @onpickstatus="machineselectpickertatusWaterLevel" :title="'水位设置'"> </selectpickr> 
+    <selectpickr :visible="waterLevelVisible" :slots="slotsWaterLevel" :valueKey="waterValueKey" @selectpicker="machineselectpickerWaterLevel" @onpickstatus="machineselectpickertatusWaterLevel" :title="'水位设置'"> </selectpickr> 
   </section>
 </template>
 
@@ -113,10 +113,16 @@
           name:'店铺类型'
         }
         ],
+        waterValueKey:'name',
         slotsWaterLevel: [
         {
           flex: 1,
-          values: ['极低水位','低水位','中水位','高水位'],
+          values: [
+            {value:'1',name:'极低水位'},
+            {value:'2',name:'低水位'},
+            {value:'3',name:'中水位'},
+            {value:'4',name:'高水位'},
+          ],
           className: 'shop-type',
           textAlign: 'center',
           position:'bottom',
@@ -134,7 +140,10 @@
           company: "",
           communicateType: "",
           ver: "",
-          waterLevel: "未设置",
+          waterLevel: {
+            name: "未设置",
+            value: ""
+          },
           shopType: {
             name:"",
             id:""
@@ -262,7 +271,8 @@
         this.fromdata.imei = res.imei?res.imei:"点击扫描模块上二维码";
         this.functionList = res.functionList;
         this.waterLevelShow = res.subTypeName === "海尔5/6/7公斤波轮SXB60-51U7/SXB70-51U7"?true:false; //水位功能隐藏
-        this.fromdata.waterLevel = res.waterLevel?res.waterLevel:"未设置";     
+        let waterBak = this.slotsWaterLevel[0].values.find(item=>Number(item.value)===Number(res.waterLevel));
+        this.fromdata.waterLevel = waterBak?waterBak:{value: "",name: "未设置"};     
         this.functionList.forEach(item=>{
           item.ifOpen=item.ifOpen === "0"?(!!item.ifOpen) : (!item.ifOpen);
         });
@@ -274,42 +284,25 @@
       async submit() {  //提交
         console.log("11");
         if(!this.fromdata.machineName) {
-          let instance = this.$toast({
-            message: '请填写机器名称'
-            });
-          setTimeout(() => {
-            instance.close();
-            }, 2000);
+          this.$toast({message: '请填写机器名称'});
           return false;
         }
         if(!this.fromdata.shopType.id) {
-          let instance = this.$toast({
-            message: '请选择所属店铺'
-          });
-          setTimeout(() => {
-            instance.close();
-            }, 2000);
+          this.$toast({message: '请选择所属店铺'});
           return false;
         }
         if(this.fromdata.nqt== "点击扫描设备上二维码") {
-          let instance = this.$toast({
-            message: '请扫描设备上的NQT码'
-          });
-          setTimeout(() => {
-            instance.close();
-            }, 2000);
+          this.$toast({message: '请扫描设备上的NQT码'});
           return false;
         }
         if(this.fromdata.imei== "点击扫描模块上二维码") {
-          let instance = this.$toast({
-            message: '请扫描模块上的IMEI码'
-          });
-          setTimeout(() => {
-            instance.close();
-            }, 2000);
+          this.$toast({message: '请扫描模块上的IMEI码'});
           return false;
         }
-
+        if(!this.fromdata.waterLevel.value) {
+          this.$toast({message: '请选择水位'});
+          return false;
+        }
         let arr= [].concat(JSON.parse(JSON.stringify(this.functionList))); 
         arr.forEach(item=>{
           return item.ifOpen=item.ifOpen?0:1;
@@ -326,6 +319,7 @@
           ver: this.fromdata.ver,
           imei: this.fromdata.imei,
           functionTempletType: this.fromdata.functionTempletType,
+          waterLevel:this.fromdata.waterLevel.value,
           functionJson: JSON.stringify(arr)
         };
         let res = await deviceAddorEditFun(obj);

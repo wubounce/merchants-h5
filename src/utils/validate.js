@@ -95,3 +95,11 @@ export const validatPrice = (str)=>{
   const reg = /^[0-9]{1}\d*(\.\d{1,2})?$/;
   return reg.test(str);
 };
+/**
+ * 添加客服电费座机和手机号校验
+ * 
+ */
+export const validatServiceTelephone = (str)=>{
+  const reg = /^((0\d{2,3}-\d{7,8})|(1\d{10}))$/;
+  return reg.test(str);
+};

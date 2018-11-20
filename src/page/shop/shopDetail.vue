@@ -43,7 +43,7 @@
         <p class="shop-item"><span>VIP数量</span><span>{{shopdetail.vipCount}}个</span></p>
 
         <!-- 第四模块 -->
-        <p class="shop-item title" style="margin-top: 0.27rem;"><span>客服电话</span><span>xxxxxxxxxxxxxx</span></p>
+        <p class="shop-item title" style="margin-top: 0.27rem;"><span>客服电话</span><span>{{shopdetail.serviceTelephone}}</span></p>
 
         <!-- 第五模块 -->
         <p class="shop-info second-p"><span>创建人：</span><span>{{shopdetail.createUser}}</span></p>
@@ -64,6 +64,9 @@ import { MessageBox } from 'mint-ui';
 import { shopDetailFun } from '@/service/shop';
 import { deleteShopFun } from '@/service/shop';
 export default {
+  components:{
+    Buttonbottom
+  },
   data() {
     return {
       //shopId:this.$route.query.shopId,
@@ -78,8 +81,15 @@ export default {
       cityName:'',
       districtName:'',
       organization:'',
-      address:''
+      address:'',
+      query:{}
     };
+  },
+  mounted() {
+  },
+  created() {
+    this.query = this.$route.query?this.$route.query:{};
+    this.getShopDetail();
   },
   methods:{
     isDeleteOrNot(id) {
@@ -144,13 +154,13 @@ export default {
       }
     }
   },
-  created() {
-    this.getShopDetail();
-  },
-  mounted() {
-  },
-  components:{
-    Buttonbottom
+  beforeRouteLeave (to, from, next) {
+    if(to.name === 'shopSearch'){
+      next();
+      this.$router.replace({name: 'shopSearch',query:{searchData: this.query.searchData}});//返回键要返回的路由
+    }else {
+      next();
+    }
   }
 };
 </script>

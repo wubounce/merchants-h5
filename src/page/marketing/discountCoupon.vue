@@ -18,21 +18,21 @@
         </section>
       </div>
       <div class="device-status">
-        <div  @click="titleClick(null)">
-          <p :class="{current:titleIndex === null}">全部</p>
-          <span :class="{current:titleIndex === null}">{{titleArr.all}}</span>
+        <div  @click="titleClick(0,null)">
+          <p :class="{current:titleIndex === 0}">全部</p>
+          <span :class="{current:titleIndex === 0}">{{titleArr.all}}</span>
         </div>
-        <div @click="titleClick(0)">
-          <p :class="{current: titleIndex === 0}">未使用</p>
-          <span :class="{current: titleIndex === 0}">{{titleArr.notUse+titleArr.locked}}</span>
+        <div @click="titleClick(1,0)">
+          <p :class="{current: titleIndex === 1}">未使用</p>
+          <span :class="{current: titleIndex === 1}">{{titleArr.notUse+titleArr.locked}}</span>
         </div>
-        <div @click="titleClick(1)">
-          <p :class="{current: titleIndex === 1}">已使用</p>
-          <span :class="{current: titleIndex === 1}">{{titleArr.used}}</span>
+        <div @click="titleClick(2,1)">
+          <p :class="{current: titleIndex === 2}">已使用</p>
+          <span :class="{current: titleIndex === 2}">{{titleArr.used}}</span>
         </div>
-        <div @click="titleClick(2)">
-          <p :class="{current: titleIndex === 2}">已过期</p>
-          <span :class="{current: titleIndex === 2}">{{titleArr.expired}}</span>
+        <div @click="titleClick(3,2)">
+          <p :class="{current: titleIndex === 3}">已过期</p>
+          <span :class="{current: titleIndex === 3}">{{titleArr.expired}}</span>
         </div>
       </div>
     </div>
@@ -44,7 +44,7 @@
           <div class="coupon-content">
             <ul>
               <li class="list" v-for="(item,index) in list" :key="index">
-                <router-link :to="{name:'couponDetail',query:{id:item.id}}">
+                <router-link :to="{name:'couponDetail',query:{id:item.id,searchData:searchData,status:status,titleIndex:titleIndex,startDate:startDate,endDate:endDate}}">
                   <div class="price-content">
                     <span :class="['yang',{'expieed':item.status ===2||item.status ===1}]">¥</span><span :class="['inter',{'expieed':item.status ===2||item.status ===1}]">{{item.firstMOney}}</span><span :class="['float',{'expieed':item.status ===2||item.status ===1}]">.{{item.secondMOney}}</span>
                   </div>
@@ -102,7 +102,7 @@
           used:'',
           expired:''
         },
-        titleIndex:null,
+        titleIndex:0,
         status:'',//状态
         noOrderList:false,
         nosearchList:false,
@@ -138,12 +138,21 @@
       };
     },
     created() {
+      let query = this.$route.query?this.$route.query:{};
+      this.searchData = query.searchData?query.searchData:'';
+      this.status = query.status?query.status:'';
+      this.titleIndex = query.titleIndex? Number(query.titleIndex):0;
+      this.startDate = query.startDate?query.startDate:[];
+      this.endDate = query.endDate?query.endDate:[];
+      if(this.startDate.length>0&&this.endDate.length>0){
+        this.calendar.value = [this.startDate,this.endDate];
+      }
       this._getList();
     },
     methods:{
-      titleClick(index=null) {
+      titleClick(index=0,status=null) {
         this.titleIndex = index;
-        this.status = index;
+        this.status = status;
         this.repeatlist();
       },
       repeatlist(){
@@ -203,6 +212,7 @@
         this.endDate = [],
         this.isreset=false;
         this.noOrderList = false;
+        this.calendar.value = [];
         this. repeatlist();
       },
       async searchVoucher(e){ //搜索

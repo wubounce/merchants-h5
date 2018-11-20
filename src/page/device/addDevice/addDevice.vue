@@ -38,7 +38,7 @@
             </li>
              <li @click="waterLevelSeting" v-show="waterLevelShow">
               <span class="field-title">水位设置</span>
-              <p class="select"><span>{{fromdata.waterLevel}}</span></p>
+              <p class="select"><span>{{fromdata.waterLevel.name}}</span></p>
             </li>
             <li @click="toFunctionSeting">
               <span class="field-title">功能设置</span>
@@ -82,7 +82,7 @@
     <selectpickr :visible="parentType" :slots="slotsFirst" :valueKey="firstname" @selectpicker="machineselectpickerFirst" @onpickstatus="machineselectpickertatusFirst" :title="'设备类型'"> </selectpickr>
     <selectpickr :visible="subType" :slots="slotsFun" :valueKey="firstname" @selectpicker="machineselectpickerFun" @onpickstatus="machineselectpickertatusFun" :title="'设备型号'"> </selectpickr>
      <!-- 水位-->
-    <selectpickr :visible="waterLevelVisible" :slots="slotsWaterLevel" :valueKey="shopname" @selectpicker="machineselectpickerWaterLevel" @onpickstatus="machineselectpickertatusWaterLevel" :title="'水位设置'"> </selectpickr> 
+    <selectpickr :visible="waterLevelVisible" :slots="slotsWaterLevel" :valueKey="waterValueKey" @selectpicker="machineselectpickerWaterLevel" @onpickstatus="machineselectpickertatusWaterLevel" :title="'水位设置'"> </selectpickr> 
     <!--型号-->
     <mt-popup v-model="subType2" position="bottom" :closeOnClickModal="true">
       <div class="resp-shop">
@@ -161,39 +161,45 @@
         codeIsDisable: false,
         subTypeName: '',
         slotsShop: [
-        {
-          flex: 1,
-          values: [],
-          className: 'shop-type',
-          textAlign: 'center',
-          position:'bottom',
-          name:'店铺类型'
-        }
+          {
+            flex: 1,
+            values: [],
+            className: 'shop-type',
+            textAlign: 'center',
+            position:'bottom',
+            name:'店铺类型'
+          }
         ],
          slotsFirst: [
-        {
-          flex: 1,
-          values: [],
-          className: 'shop-type',
-          textAlign: 'center',
-          position:'bottom',
-          name:'设备类型'
-        }
+          {
+            flex: 1,
+            values: [],
+            className: 'shop-type',
+            textAlign: 'center',
+            position:'bottom',
+            name:'设备类型'
+          }
         ],
-         slotsFun: [
-        {
-          flex: 1,
-          values: [],
-          className: 'shop-type',
-          textAlign: 'center',
-          position:'bottom',
-          name:'设备型号'
-        }
+        slotsFun: [
+          {
+            flex: 1,
+            values: [],
+            className: 'shop-type',
+            textAlign: 'center',
+            position:'bottom',
+            name:'设备型号'
+          }
         ],
+        waterValueKey:'name',
         slotsWaterLevel: [
         {
           flex: 1,
-          values: ['极低水位','低水位','中水位','高水位'],
+          values: [
+            {value:'1',name:'极低水位'},
+            {value:'2',name:'低水位'},
+            {value:'3',name:'中水位'},
+            {value:'4',name:'高水位'},
+          ],
           className: 'shop-type',
           textAlign: 'center',
           position:'bottom',
@@ -210,7 +216,7 @@
           secondClass: "",
           communicateType: "",
           smCommunicateType: "",
-          waterLevel: "中水位",
+          waterLevel: {value:'3',name:'中水位'},
           shopType: {
             name:"",
             id:""
@@ -288,21 +294,21 @@
           this.$toast({message: "NQT与设备型号通信类型不符" });
           return false;
         } else {
-        if(this.fromdata.secondType.name !== data.name){
-          this.fromdata.secondType.id = data.id;
-          this.fromdata.secondType.name = data.name;
-          this.fromdata.secondType.communicateType = data.communicateType;
-          this.functionSetList = [];
-          this.keepFunctionArr = [];
-          this.fromdata.functionType.name = "未设置";
-          this.subTypeName = "";
-          this.waterLevelShow = false;
-        }else {
-          this.fromdata.secondType.id = data.id;
-          this.fromdata.secondType.name = data.name;
-          this.fromdata.secondType.communicateType = data.communicateType;
-        }
-        this.waterLevelShow = data.name == "海尔5/6/7公斤波轮SXB60-51U7/SXB70-51U7"?true:false; //水位功能隐藏
+          if(this.fromdata.secondType.name !== data.name){
+            this.fromdata.secondType.id = data.id;
+            this.fromdata.secondType.name = data.name;
+            this.fromdata.secondType.communicateType = data.communicateType;
+            this.functionSetList = [];
+            this.keepFunctionArr = [];
+            this.fromdata.functionType.name = "未设置";
+            this.subTypeName = "";
+            this.waterLevelShow = false;
+          }else {
+            this.fromdata.secondType.id = data.id;
+            this.fromdata.secondType.name = data.name;
+            this.fromdata.secondType.communicateType = data.communicateType;
+          }
+          this.waterLevelShow = data.name == "海尔5/6/7公斤波轮SXB60-51U7/SXB70-51U7"?true:false; //水位功能隐藏
         }
       },
       machineselectpickertatusFun(data){
@@ -333,7 +339,7 @@
         } else {
           this.fromdata.secondType.id = this.secondOffTypeList[index].id;
           this.subTypeName = this.secondOffTypeList[index].name;
-          this.waterLevelShow = this.secondOnTypeList[index].name === "海尔5/6/7公斤波轮SXB60-51U7/SXB70-51U7"?true:false;//水位功能隐藏
+          this.waterLevelShow = this.secondOffTypeList[index].name === "海尔5/6/7公斤波轮SXB60-51U7/SXB70-51U7"?true:false;//水位功能隐藏
           this.fromdata.secondType.communicateType = this.secondOffTypeList[index].communicateType;
           this.functionSetList = [];
           this.keepFunctionArr = [];
@@ -523,75 +529,35 @@
       },
       async submit() {  //提交
         if(!this.fromdata.machineName) {
-          let instance = this.$toast({
-            message: '请填写机器名称'
-          });
-          setTimeout(() => {
-            instance.close();
-            }, 2000);
+          this.$toast({message: '请填写机器名称'});
           return false;
         }
         if(!this.fromdata.shopType.id) {
-          let instance = this.$toast({
-            message: '请选择所属店铺'
-          });
-          setTimeout(() => {
-            instance.close();
-            }, 2000);
+          this.$toast({message: '请选择所属店铺'});
           return false;
         }
         if(!this.fromdata.firstType.id) {
-          let instance = this.$toast({
-            message: '请选择设备类型'
-          });
-          setTimeout(() => {
-            instance.close();
-            }, 2000);
+          this.$toast({message: '请选择设备类型'});
           return false;
         }
         if(!this.fromdata.secondType.id) {
-           let instance = this.$toast({
-            message: '请选择设备型号'
-          });
-          setTimeout(() => {
-            instance.close();
-            }, 2000);
+           this.$toast({message: '请选择设备型号'});
           return false;
         }
         if(this.fromdata.nqt== "点击扫描设备上二维码") {
-          let instance = this.$toast({
-            message: '请扫描设备上的NQT码'
-          });
-          setTimeout(() => {
-            instance.close();
-            }, 2000);
+          this.$toast({message: '请扫描设备上的NQT码'});
           return false;
         }
         if(this.fromdata.imei== "点击扫描模块上二维码") {
-          let instance = this.$toast({
-            message: '请扫描模块上的IMEI码'
-          });
-          setTimeout(() => {
-            instance.close();
-            }, 2000);
+          this.$toast({message: '请扫描模块上的IMEI码'});
           return false;
         }
         if(this.fromdata.functionType.name === "未设置") {
-          let instance = this.$toast({
-            message: '请设置功能列表'
-          });
-          setTimeout(() => {
-            instance.close();
-            }, 2000);
+          this.$toast({message: '请设置功能列表'});
           return false;
         }
         if(Number(this.fromdata.secondType.communicateType)!== Number(this.fromdata.smCommunicateType)){
-          let instance = this.$toast({
-            message: '您扫描的NQT和选择的设备型号不一致'
-          });
-          setTimeout(() => {
-            instance.close();
-            }, 2000);
+          this.$toast({message: '您扫描的NQT和选择的设备型号不一致'});
           return false;
         }
         let arr= [].concat(JSON.parse(JSON.stringify(this.functionSetList))); 
@@ -610,7 +576,7 @@
           imei: this.fromdata.imei,
           functionTempletType: this.functionTempletType,
           functionJson: JSON.stringify(arr),
-          waterLevel: this.fromdata.waterLevel
+          waterLevel: this.fromdata.waterLevel.value
         };
         let res = await deviceAddorEditFun(obj);
         this.$toast("新增设备成功");
@@ -707,19 +673,6 @@
        this.modelShow = true;
        this.title = "新增设备";
       },
-      stop(){
-        var mo=function(e){e.preventDefault();};
-        document.body.style.overflow='hidden';
-        document.addEventListener("touchmove",mo,false);//禁止页面滑动
-      },
-      /***取消滑动限制***/
-      move(){
-        var mo=function(e){e.preventDefault();};
-        document.body.style.overflow='';//出现滚动条
-        document.removeEventListener("touchmove",mo,false);
-      }
-
-
     },
     watch: {
       subType: function () {
@@ -1044,6 +997,7 @@
     .all-list {
       height: 9rem;
       overflow-y: scroll;
+      -webkit-overflow-scrolling: touch;
       .mint-checklist-label {
         text-align: center;
         height: 1.33rem;

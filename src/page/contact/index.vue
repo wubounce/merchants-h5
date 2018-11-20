@@ -14,6 +14,10 @@
 <script>
   import Web from '@/utils/Web';
   export default {
+    beforeRouteEnter(to, from, next) {
+        window.location.href = ysf.url();                                         
+        return;
+    },
     data() {
       return {
         imgShow:'../../../static/image/user/wechat.png',

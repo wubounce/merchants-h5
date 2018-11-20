@@ -25,7 +25,7 @@
         <div class="meber-list" v-for="(item,index) in list" :key="index">
             <div class="momber-wrap">
               <div class="name">
-                <router-link :to="{name:'detailMember',query:{ id:item.id,issearch:true }}">
+                <router-link :to="{name:'detailMember',query:{ id:item.id,issearch:true,searchData:searchData }}">
                   <p>{{item.userName}}</p><p class="phonenum">{{item.phone}}</p>
                 </router-link>
               </div>
@@ -33,7 +33,7 @@
                 <div class="right"><mt-switch v-model="item.isLock" class="check-switch" @change="lockOperator(item.id,item.isLock)"></mt-switch></div>
               </div>
             </div>
-            <router-link :to="{name:'detailMember',query:{ id:item.id,issearch:true }}">
+            <router-link :to="{name:'detailMember',query:{ id:item.id,issearch:true,searchData:searchData }}">
               <div class="action-prme">
                 <p class="memberdesc">权限：<span v-for="(items,index) in item.list" :key="index">{{items.name}}<i v-if="index !== (item.list.length-1)">,</i></span></p>
                 <span class="forward iconfont icon-nextx"></span>
@@ -71,6 +71,7 @@ import {delay } from "@/utils/tool";
     },
     mounted() {
       this.$refs.inputText.focus();
+      this.searchData = this.$route.query?this.$route.query.searchData:'';
     },
     created() {
     },
