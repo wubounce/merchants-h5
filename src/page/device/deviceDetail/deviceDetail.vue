@@ -57,7 +57,7 @@
               </li>
               <li v-show="waterLevelShow">
                 <span class="field-title">水位置设置</span>
-                <p>waterLevel</p>
+                <p>{{deviceDetail.waterLevel | waterStatus}}</p>
               </li>
               <li>
                 <span class="field-title">功能设置</span>
@@ -106,7 +106,7 @@
 
 <script>
   import { MessageBox } from 'mint-ui';
-  import { deviceStatus } from '@/utils/mapping';
+  import { deviceStatus, waterStatus } from '@/utils/mapping';
   import { detailDeviceListFun,deleteDeviceFun,manageResetDeviceFun,tzjDeviceFun } from '@/service/device';
   export default {
     data() {
@@ -134,8 +134,11 @@
       };
     },
    filters: { 
-     deviceStatus: (value)=>{
+      deviceStatus: (value)=>{
         return deviceStatus(value);
+      },
+      waterStatus: (value)=>{
+        return waterStatus(Number(value));
       },
     },
     created() {
@@ -149,7 +152,7 @@
         this.deviceDetail= res;
         if(res.waterLevel) {
           this.waterLevelShow = true;
-          this.waterLevel = es.waterLevel;
+          this.waterLevel = res.waterLevel;
         }
         if(res.comment) {
           this.$toast("设备功能不存在，请删除设备重新绑定");
@@ -207,32 +210,16 @@
               });
             break;
             case 2:
-              this.$toast({
-                message: '设备运行中，请先复位',
-                position: "middle",
-                duration: 3000
-              });
+              this.$toast({message: '设备运行中，请先复位'});
             break;
             case 3:
-              this.$toast({
-                message: '设备已被预约，请先复位',
-                position: "middle",
-                duration: 3000
-              });
+              this.$toast({message: '设备已被预约，请先复位'});
             break;
             case 4:
-              this.$toast({
-                message: '设备故障，启动失败',
-                position: "middle",
-                duration: 3000
-              });
+              this.$toast({message: '设备故障，启动失败'});
             break;
             case 8:
-              this.$toast({
-                message: '设备离线，启动失败',
-                position: "middle",
-                duration: 3000
-              });
+              this.$toast({message: '设备离线，启动失败'});
             break;
           }
         });
