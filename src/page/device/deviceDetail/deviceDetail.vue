@@ -183,7 +183,7 @@
         let comment = res.comment;
         if(res.waterLevel) {
           this.waterLevelShow = true;
-          this.waterLevel = es.waterLevel;
+          this.waterLevel = res.waterLevel;
         }
         if(comment) {
           this.$toast("设备功能不存在，请删除设备重新绑定");
