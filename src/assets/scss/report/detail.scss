@@ -1,13 +1,17 @@
 .shop-title {
-  height: 1.05rem;
-  line-height: 1.05rem;
+  overflow: hidden;
   color: #999;
   font-size: 14px;
   background: #fff;
-  padding: 0 0.4rem;
+  padding: 0.2rem 0.4rem;
   border-bottom: 1px solid #f9f8ff;
   margin-bottom: 0.28rem;
-  span {
+  .shopName {
+    width:7rem;
+    display: block;
+    float: left;
+  }
+  .date {
     float: right;
   }
 }
