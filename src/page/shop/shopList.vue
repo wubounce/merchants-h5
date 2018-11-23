@@ -40,7 +40,7 @@
                       <div class="text-value">{{item.machineCount}}<span class="little-font">台</span></div>
                     </router-link>
                   </div>
-                  <div class="kindof" v-if="!$store.getters.has('mer:shop:profit')">
+                  <div class="kindof" v-if="!$store.getters.has('mer:shop:profit')" >
                     <router-link :to="{ name: 'shopMonthFlow', query:{allMoney:item.profit,shopId:item.shopId,shopName:item.shopName}}">
                       <div class="text">总收益<span class="order-action iconfont icon-nextx"></span></div>
                       <div class="text-value">{{ item.profit | tofixd }}<span class="little-font">元</span></div>
@@ -106,4 +106,7 @@ export default {
 
 <style lang="scss" scoped>
 @import '../../assets/scss/shop/shopList';
+.bottom .kindof:last-child {
+  border:none
+}
 </style>
