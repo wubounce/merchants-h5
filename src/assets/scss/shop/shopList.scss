@@ -37,14 +37,9 @@ section {
             display: flex;
             justify-content: center;
             .kindof {
-              width: 35%;
+              flex: 1;
               text-align: center;
-              &:nth-child(2) {
-                .text, .text-value {
-                  border-left: 1px solid #F8F8F8;
-                  border-right: 1px solid #F8F8F8;
-                }
-              }
+              border-left: 1px solid #F8F8F8;
               .text {
                 color: #999999;
                 font-size: 14px;

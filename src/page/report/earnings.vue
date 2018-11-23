@@ -32,9 +32,9 @@
         <span class="report-table-order">订单数量</span>
         <span class="report-table-order">订单金额</span>
        </div>
-      <div class="listcon tableearn-list" v-for="(item,index) in  listdata" :key="index" @click="goDetail(item.date)">
+      <div class="listcon tableearn-list" v-for="(item,index) in  listdata" :key="index" @click="goDetail(item.date,item.count)">
          <div class="detail">
-          <span class="listtime report-table-date">{{item.date}}</span>
+          <span :class="['listtime','report-table-date',{'noclick':Number(item.count)<=0}]">{{item.date}}</span>
           <span  class="report-table-order">{{item.count}}</span>
           <span  class="report-table-order">{{item.money | tofixd}}</span>
         </div>
@@ -235,12 +235,16 @@ export default {
       this.calendar.show=false;
       this.dayReportFun();
     },
-    goDetail(date){
-      let shopId = this.currentTags?this.currentTags.shopId:'';
-      if (shopId) {
-        this.$router.push({name:'reportdetail', query:{date:date,type:1,shopId:shopId,dateLevel:this.dateLevel}});
-      } else {
-        this.$router.push({name:'reportShopDetail', query:{date:date,type:1,dateLevel:this.dateLevel}});
+    goDetail(date,count){
+      if(Number(count)<=0){
+        return false;
+      }else {
+        let shopId = this.currentTags?this.currentTags.shopId:'';
+        if (shopId) {
+          this.$router.push({name:'reportdetail', query:{date:date,type:1,shopId:shopId,dateLevel:this.dateLevel}});
+        } else {
+          this.$router.push({name:'reportShopDetail', query:{date:date,type:1,dateLevel:this.dateLevel}});
+        }
       }
       
     },

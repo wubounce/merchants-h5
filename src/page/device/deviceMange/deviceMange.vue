@@ -68,7 +68,7 @@
                     <span>类型</span>
                     <span>{{item.machineTypeName}}</span>
                   </p>
-                  <router-link tag="p" class="item-ft-right" :to="{ name: 'deviceMonthFlow', query:{allMoney:item.profit,machineId:item.machineId,machineName:item.machineName,}}">
+                  <router-link v-if="!$store.getters.has('mer:machine:profit')" tag="p" class="item-ft-right" :to="{ name: 'deviceMonthFlow', query:{allMoney:item.profit,machineId:item.machineId,machineName:item.machineName,}}">
                     <span>总收益</span>
                     <span>{{item.profit | tofixd}}</span>
                     <span class="iconfont icon-nextx"></span>
