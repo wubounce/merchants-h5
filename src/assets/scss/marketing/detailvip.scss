@@ -8,7 +8,6 @@
       overflow: hidden;
       padding: 0.51rem 0;
       font-size: 16px;
-      color: #333;
       border-bottom:1px solid #f9f8ff;
     }
     p:last-child{
@@ -16,10 +15,51 @@
     }
     .addvip-con {
       text-align: right;
-      color: #999;
+      color: #333333;
       padding-left: 0.27rem;
-      float: right;
-      width: 75%;
+      width: 65%;
+    }
+    .limitcount-p{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: #999999;
+    }
+    .limitcount-shop{
+      overflow: hidden;
+      padding: 0.51rem 0;
+      
+      border-bottom:1px solid #f9f8ff;
+      .set-shop{
+        display: flex;
+        color: #999999;
+        font-size: 16px;
+      }
+      .addvip-con{
+        width: 65%;
+        text-align: left;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+      .remove-space{
+        width: 7rem;
+        white-space:normal;
+        overflow: auto;
+        text-overflow: initial;
+      }
+      .vip-text{
+        font-size: 14px;
+        color: #1890FF;
+      }
+      .to-up{
+        float: right;
+        height: .53rem;
+        line-height: .53rem;
+        .icon-xiangshangjiantou{
+          color: #BAC0D2;
+        }
+      }
     }
   }
   .card-wrap {

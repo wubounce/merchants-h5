@@ -5,7 +5,7 @@
                 <div class="search">
                     <form action="" target="frameFile" v-on:submit.prevent="">
                         <span class="iconfont icon-IconSearch"></span>
-                        <input type="number" pattern="\d*" value='搜索'v-model.trim="searchData" @keyup.enter="searchVoucher" @input="clearSearch" placeholder="输入用户手机号" class="serch">
+                        <input type="number" pattern="\d*" value='搜索' v-model.trim="searchData" @keyup.enter="searchVoucher" @input="clearSearch" placeholder="输入用户手机号" class="serch">
                         <span class="guanbi iconfont icon-guanbi" v-if="iscolsed" @click="doclearSearch"></span>
                         <iframe name='frameFile' style="display: none;"></iframe>
                         <span class="select-back" @click="searchVoucher">搜索</span>

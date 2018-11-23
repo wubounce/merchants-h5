@@ -7,11 +7,12 @@ const timeMarketListApi = 'timeMarket/list';                                    
 const addOruPdateApi = 'timeMarket/saveTimeMarket';                                     // 添加/更新时段营销 method 'post'
 const delMarketApi = 'timeMarket/deleteTimeMarket';                                     // 删除时段营销 method 'post'
 const DetailMarketApi = 'timeMarket/timeMarketDetail';                                  // 时段营销详情 method 'post'
-const vipListApi = 'shop/vip/list';                                                     // 店铺vip卡列表 method 'post'
-const vipDetailApi = 'shop/vip/detail';                                                 // 店铺vip卡详情 method 'post'
-const addOrUpdateVipApi = 'shop/vip/save';                                              // 店铺vip卡新增或修改 method 'post'
-const delVipApi = 'shop/vip/hidden';                                                    // 店铺vip卡删除 method 'post'
-const vipShopsApi = 'shop/vip/shops';                                                   //vip卡-可选择的店铺
+const vipListApi = 'shopCard/listByPage';                                                     // 店铺vip卡列表 method 'post'
+const vipDetailApi = 'shopCard/detail';                                                 // 店铺vip卡详情 method 'post'
+const addVipApi = 'shopCard/add';                                              // 店铺vip卡新增 method 'post'
+const updateVipApi = 'shopCard/update';                                                 // 店铺vip卡修改 method 'post'
+const delVipApi = 'shopCard/delete';                                                    // 店铺vip卡删除 method 'post'
+const vipShopsApi = 'shopCard/nonRelaShops';                                                   //vip卡-可选择的店铺
 const updataeStatusApi = '/timeMarket/updateTimeStatus';                                //修改营销停用启用状态
 const marketlistParentTypeId = '/timeMarket/listParentTypeId';                          //vip卡-可选择的店铺
 
@@ -34,8 +35,10 @@ export const vipListFun = (payload) => fetch.post(vipListApi,  payload);
 export const vipDetailFun = (payload) => fetch.post(vipDetailApi,  payload);
 
 
-//店铺vip卡新增或修改
-export const addOrUpdateVipFun = (payload) => fetch.post(addOrUpdateVipApi,  payload);
+//店铺vip卡新增
+export const addVipFun = (payload) => fetch.post(addVipApi,  payload);
+//店铺vip卡修改
+export const updateVipFun = (payload) => fetch.post(updateVipApi,  payload);
 
 //店铺vip卡删除
 export const delVipFun = (payload) => fetch.post(delVipApi,  payload);

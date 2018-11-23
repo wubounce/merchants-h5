@@ -12,20 +12,21 @@
           <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded"  @translate-change="translateChange" :auto-fill="false" ref="loadmore">
               <div class="discoun-list" v-for="(item,index) in list" :key="index">
                 <div class="discoun-content">
-                  <router-link :to="{name:'vipDetail', query:{shopVipId:item.shopVipId}}">
+                  <router-link :to="{name:'vipDetail', query:{shopVipId:item.cardId}}">
                     <div class="dis-con-title">
                       <p class="shop-name">店铺</p>
-                      <p class="dis-con-shop">所属店铺<span v-for="(items,index) in item.shopList" :key="index">{{items.shopName}}<i v-if="index !== (item.shopList.length-1)">、</i></span></p>
+                      <p class="dis-con-shop"><span v-for="(items,index) in item.shopTipVOS" :key="index">{{items.shopName}}<i v-if="index !== (item.shopTipVOS.length-1)">、</i></span></p>
                       <p><span class="iconfont icon-nextx"></span></p>
                     </div>
                     <div class="dis-con-machine">
                       <div class="machine">
                         <span>折扣优惠</span>
-                        <span class="machine-type">8.5<i>折</i></span>
+                        <span class="machine-type">{{item.cardDiscount.toFixed(1)}}<i>折</i></span>
                       </div>
                       <div class="machine discount">
                         <span>限用次数</span>
-                        <span class="discount-num">3次<i>/日</i></span>
+                        <span v-if="item.limitCount > 0" class="discount-num">{{item.limitCount}}次<i v-if="item.limitType === 1">/日</i><i v-if="item.limitType === 2">/周</i></span>
+                        <span v-if="item.limitCount === 0" class="discount-num">无限制</span>
                       </div>
                     </div>
                   </router-link>
@@ -74,6 +75,7 @@ import PagerMixin from '@/mixins/pagerMixin';
     async _getList(){
       let payload = {page:this.page,pageSize: this.pageSize};
       let res = await vipListFun(payload);
+      console.log(res);
       this.list = res.items?[...this.list,...res.items]:[];  //分页添加
       this.list.length <= 0 ? this.noList = true:this.noList = false;
       this.total = res.total;
