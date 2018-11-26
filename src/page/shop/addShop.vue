@@ -466,6 +466,7 @@ export default {
         this.isReserve = true; // 预约功能
         this.orderLimitMinutes = ''; // 预约时间
         this.addBusinessTime = ''; // 营业时间
+        this.serviceTelephone = '';
         this.slotsTime[0].defaultIndex = 0;
         this.slotsTime[2].defaultIndex = 0;
         this.slotsTime[4].defaultIndex = 23;
