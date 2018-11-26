@@ -1,7 +1,7 @@
 <template>
 <div class="addvip">
   <div class="addvip-header">
-    <p  @click="shopVisible = true;" style="cursor: pointer;">所属店铺<span class="order-action add-shop-overflow-icon iconfont icon-nextx"></span><span class="addvip-con add-shop-overflow">{{checkshoptxt?checkshoptxt:''}}</span></p>
+    <p  @click="shopVisible = true;" style="cursor: pointer;">适用店铺<span class="order-action add-shop-overflow-icon iconfont icon-nextx"></span><span class="addvip-con add-shop-overflow">{{checkshoptxt?checkshoptxt:''}}</span></p>
     <p>卡折扣<span class="tag">折</span><input type="number" v-model="vipform.cardDiscount"></p>
     <p>{{yearLimitTypeCurrentTag.label}}<i class="iconfont icon-xiangxiajiantou" @click="yearLimitTypeVisble = true;"></i><span class="tag">次</span><input type="number" pattern="\d*" class="num"  v-model.number="vipform.limitCount"></p>
     <div class="tips">
@@ -14,7 +14,7 @@
   <form class="addvip-from" ref="vipForm" :model="vipform">
     <div class="add-vip-list-wrap">
       <div class="car-shop">销售方式</div>
-       <div class="addvip-header" v-for="(item,index) in vipform.saleDesc" :key="index">
+       <div class="addvip-header addvip-price" v-for="(item,index) in vipform.saleDesc" :key="index">
         <p>{{item.timeInterval}}个月<span class="tag">元</span><input type="number" v-model="item.price"></p>
        </div>
     </div>
@@ -56,6 +56,7 @@ export default {
       checkshoptxt:'',
       shopIds:[],
       vipform:{
+        limitCount: 0,
         saleDesc:[
           {
             timeInterval: 3,
@@ -120,7 +121,7 @@ export default {
     async addvip(){
       let flag  = true;
       if (this.shopIds.length <=0 ) {
-        this.$toast({message: "请输入选择店铺" });
+        this.$toast({message: "请选择适用店铺" });
         flag = false;
         return flag;
       }
