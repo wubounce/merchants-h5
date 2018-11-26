@@ -12,9 +12,9 @@
                 <input type="text" v-model="fromdata.machineName">
               </p>
             </li>
-            <li @click="checkDeviceSelect">
+            <li>
               <span class="field-title">所属店铺</span>
-              <p class="select"><span>{{fromdata.shopType.name}}</span></p>
+              <p class="select-1" style="color:#999"><span>{{fromdata.shopType.name}}</span></p>
             </li>
             <li>
               <span class="field-title">NQT</span>
