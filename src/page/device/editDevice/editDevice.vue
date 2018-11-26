@@ -349,6 +349,7 @@
         let reg = /^\+?[1-9][0-9]*$/; //非0正整数
         let reg1 = /^[0-9]+([.]{1}[0-9]{1,2})?$/; //可以0带二位小数的正整数
         let reg2 = /^[1-9]+([.]{1}[0-9]{1,2})?$/; //不可以0带二位小数的正整数
+        let reg4 = /^([1-9]\d{0,1})$/; //1-99
         for(let i = 0;i < len;i++){
           let item = this.functionList[i];
           if(item.ifOpen === false){
@@ -378,14 +379,14 @@
             flag2 = false;
             break;
           }
-          if(Number(this.fromdata.communicateType)=== 0 && !reg.test(Number(item.functionCode))){
+          if(Number(this.fromdata.communicateType)=== 0 && !reg4.test(Number(item.functionCode))){
             flag3 = false;
-            this.$toast("脉冲填写格式错误，请填写非0非空正整数");
+            this.$toast("脉冲填写格式错误，请输入1-99之间的数字");
             break;
           }
           if(Number(this.fromdata.communicateType)=== 0 && String(item.functionCode).indexOf('.')>-1){
             flag3 = false;
-            this.$toast("脉冲填写格式错误，请填写非0非空正整数");
+            this.$toast("脉冲填写格式错误，请输入1-99之间的数字");
             break;
           }                             
         }

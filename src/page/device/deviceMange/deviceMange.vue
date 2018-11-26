@@ -70,7 +70,7 @@
                   </p>
                   <router-link v-if="!$store.getters.has('mer:machine:profit')" tag="p" class="item-ft-right" :to="{ name: 'deviceMonthFlow', query:{allMoney:item.profit,machineId:item.machineId,machineName:item.machineName,}}">
                     <span>总收益</span>
-                    <span>{{item.profit | tofixd}}</span>
+                    <span>{{item.profit | tofixd}}</span><span class="little-font" style="font-size: 8px;color:#1890FF; ">元</span>
                     <span class="iconfont icon-nextx"></span>
                   </router-link>
                 </section>

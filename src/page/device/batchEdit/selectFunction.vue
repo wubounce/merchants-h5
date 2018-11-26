@@ -126,52 +126,6 @@ export default {
           event.returnValue = false; 
         }
       },
-      checkData(val,index,name,flag) {
-        let reg = /^\+?[1-9][0-9]*$/;  //验证非0整数
-        let reg1 = /^[0-9]+([.]{1}[0-9]{1,2})?$/;  //验证非0正整数和带一位小数字非0正整数
-        if(flag ===0 && !reg.test(val)) {
-          if(!val){
-            this.$toast("输入内容不能为空");
-            this.nullDisable = true;
-          }else{
-          this.$toast("耗时格式有误");
-          this.timeIsDisable= true;
-          }
-        }else{
-          this.timeIsDisable= false;
-          this.nullDisable = false;
-        }
-        if(flag ===1 && !reg1.test(val)) {
-          if(!val){
-            this.$toast("输入内容不能为空");
-            this.nullDisable = true;
-          }else{
-          this.$toast("价格格式有误");
-          this.priceIsDisable = true;
-          }
-        }else{
-          this.priceIsDisable = false;
-          this.nullDisable = false;
-        }
-        if(flag ===2 && !reg.test(val)) {
-          if(!val){
-            this.$toast("输入内容不能为空");
-            this.nullDisable = true;
-          }else{
-          this.$toast("脉冲格式有误");
-          this.codeIsDisable = true;
-          }
-        }else{
-          this.codeIsDisable= false;
-          this.nullDisable = false;
-        }
-        if(this.nullDisable || this.timeIsDisable || this.priceIsDisable || this.codeIsDisable){
-          this.isDisable = true;
-          return false;
-        }else{
-          this.isDisable = false;
-        }
-      },
       async checkFunctionSetClass() { //获取功能列表
         let query = this.$route.query;
         let obj ={
@@ -215,6 +169,7 @@ export default {
         let reg = /^(?!0)\d{1,3}$/; //非0正整数
         let reg1 = /^[0-9]+([.]{1}[0-9]{1,2})?$/; //可以0带二位小数的正整数
         let reg2 = /^[1-9]+([.]{1}[0-9]{1,2})?$/; //不可以0带二位小数的正整数
+        let reg4 = /^([1-9]\d{0,1})$/; //1-99
         for(let i = 0;i < len;i++){
           let item = this.funTypeList[i];
           if(item.ifOpen === false){
@@ -244,14 +199,15 @@ export default {
             flag2 = false;
             break;
           }
-          if(Number(this.communicateType) === 0 && !reg.test(Number(item.functionCode))){
+          if(Number(this.communicateType) === 0 && !reg4.test(Number(item.functionCode))){
+            console.log(123236554);
             flag3 = false;
-            this.$toast("脉冲填写格式错误，请填写非0非空正整数");
+            this.$toast("脉冲填写格式错误，请输入1-99之间的数字");
             break;
           }
           if(Number(this.communicateType)=== 0 && String(item.functionCode).indexOf('.')>-1){
             flag3 = false;
-            this.$toast("脉冲填写格式错误，请填写非0非空正整数");
+            this.$toast("脉冲填写格式错误，请输入1-99之间的数字");
             break;
           }
           if(count == len){

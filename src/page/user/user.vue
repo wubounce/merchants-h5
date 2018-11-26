@@ -36,7 +36,7 @@
         </li>
         <li>
             <router-link to="helpcenter" class="item">
-                <div class="item-left"><span class="usericon iconfont icon-rexian"></span><span>帮助中心</span></div>
+                <div class="item-left"><span class="usericon iconfont icon-bangzhuzhongxin"></span><span>帮助中心</span></div>
                 <div class="item-right"><span class="go iconfont icon-nextx"></span></div>
             </router-link>
         </li>
