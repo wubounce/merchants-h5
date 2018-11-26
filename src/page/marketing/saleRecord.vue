@@ -14,21 +14,25 @@
                 <div class="sale-shop"  @click="popupVisible=true;">{{currentTags?currentTags.shopName:'全部店铺'}}<span class="iconfont icon-xiangxiajiantou select-back"></span></div>
             </section>
             <div class="total">
-                <span>共230条记录</span>
+                <span>共{{total}}条记录</span>
                 <span @click="openByDialog" class="iconfont icon-rili"></span>
             </div>
         </div>
-        <div class="record-wrap">
-            <div class="recored-list">
-                <p>VIP用户<span>18948788872</span></p>
-                <p class="middle-shop">售卡店铺<span>UCC国际洗衣店</span></p>
-                <p>购买时间<span>2018-10-29 09:33:23</span><span class="time">3个月<span class="money">30</span>元</span></p>
-            </div>
-            <div class="recored-list">
-                <p>VIP用户<span>18948788872</span></p>
-                <p class="middle-shop">售卡店铺<span>UCC国际洗衣店</span></p>
-                <p>购买时间<span>2018-10-29 09:33:23</span><span class="time">3个月<span class="money">30</span>元</span></p>
-            </div>
+        <div class="no-order" v-if="nosearchList"><p>未找到符合的结果</p></div>
+        <div class="no-order" v-if="noOrderList"><p>暂无记录</p></div>
+        <div class="page-top">
+            <div class="page-loadmore-wrapper" ref="wrapper" :style="{overflowY:scrollShow}">
+                <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded"  @translate-change="translateChange" :auto-fill="false" ref="loadmore">
+                    <div class="record-wrap">
+                        <div class="recored-list" v-for="(item,index) in list" :key="index">
+                            <p>VIP用户<span>{{item.userName}}</span></p>
+                            <p class="middle-shop">售卡店铺<span>{{item.shopName}}</span></p>
+                            <p>购买时间<span>{{item.soldCardDate}}</span><span class="time">{{item.timeInterval}}个月<span class="money">{{item.price}}</span>元</span></p>
+                        </div>
+                    </div>
+                    <div v-if="allLoaded" class="nomore-data">没有更多了</div>
+                </mt-loadmore>
+            </div> 
         </div>
          <!-- 选择店铺 -->
         <selectpickr :visible="popupVisible" :slots="shopSlots" :valueKey="shopName" :title="'店铺'" @selectpicker="shopselectpicker" @onpickstatus="shopselectpickertatus"></selectpickr>
@@ -51,7 +55,7 @@
 </template>
 
 <script type='text/ecmascript-6'>
-  import { voucherListFun } from '@/service/voucher';
+  import { vipCardListFun } from '@/service/voucher';
   import PagerMixin from '@/mixins/pagerMixin';
   import calendar from '@/components/vue-calendar/calendar.vue';
   import selectpickr from '@/components/selectPicker';
@@ -64,6 +68,7 @@
         pageSize:20,
         list:[],
         searchData:'',
+        shopId: '',
         shopName:'shopName',
         currentTags:null,
          popupVisible:false,
@@ -119,20 +124,20 @@
         },
         async _getList() {
             if (this.searchData !== '') {
-            // 去掉特殊字符和空格
-            this.searchData = this.searchData.replace(validatReplace, '');
+                // 去掉特殊字符和空格
+                this.searchData = this.searchData.replace(validatReplace, '');
             }
-            let payload =  {phone:this.searchData,startDate:this.startDate.join('-'),endDate:this.endDate.join('-'),page:this.page,pageSize:this.pageSize};
-            let res = await voucherListFun(payload);
+            let payload =  {userPhone:this.searchData,shopId:this.shopId ,startDate:this.startDate.join('-'),endDate:this.endDate.join('-'),page:this.page,pageSize:this.pageSize};
+            let res = await vipCardListFun(payload);
             this.titleArr = res.count;
-            this.list = res.page?[...this.list,...res.page.items]:[];  //分页添加
-            this.total = res.page.total;
+            this.list = res.items?[...this.list,...res.items]:[];  //分页添加
+            this.total = res.total;
             if (this.searchData || (this.startDate.length > 0 && this.endDate.length > 0)) {
-            this.noOrderList = false;
-            this.nosearchList = this.list.length<= 0 ? true: false;
+                this.noOrderList = false;
+                this.nosearchList = this.list.length<= 0 ? true: false;
             }else {
-            this.nosearchList = false;
-            this.noOrderList = this.list.length<= 0 ? true: false;
+                this.nosearchList = false;
+                this.noOrderList = this.list.length<= 0 ? true: false;
             }
         },
         openByDialog(){
@@ -154,25 +159,41 @@
             }
             this.calendar.show=false;
             this.noOrderList = false;
+            this.page  = 1;
+            this.list = [];
+            this.allLoaded = false;//下拉刷新时解除上拉加载的禁用
             this._getList();
         },
         shopselectpicker(data){
-            console.log(data);
             this.currentTags = data;
+            this.shopId = data.shopId;
+            this.page  = 1;
+            this.list = [];
+            this.allLoaded = false;//下拉刷新时解除上拉加载的禁用
             this._getList();
         },
         shopselectpickertatus(data){
             this.popupVisible = data;
         },
         resetDate(){
+            this.page = 1;
+            this.allLoaded = false;//下拉刷新时解除上拉加载的禁用
             this.calendar.show=false;
-            this.startDate = [],
-            this.endDate = [],
+            this.startDate = [];
+            this.endDate = [];
             this.isreset=false;
             this.noOrderList = false;
-            this. repeatlist();
+            this.searchData = '';
+            this.shopId = '';
+            this.currentTags = null;
+            this.iscolsed = false;
+            this.list = [];
+            this._getList();
         },
         async searchVoucher(e){ //搜索
+            this.page  = 1;
+            this.list = [];
+            this.allLoaded = false;//下拉刷新时解除上拉加载的禁用
             this.noOrderList = false;
             var keyCode = window.event? e.keyCode:e.which;
             if(keyCode =='13'){
@@ -185,14 +206,12 @@
         clearSearch(){ //清除搜索
             this.iscolsed = true;
             if(this.searchData.length <= 0 ){
-            this.iscolsed = false;
-            this. repeatlist();
+                this.iscolsed = false;
+                this.resetDate();
             }
         },
         doclearSearch(){
-            this.searchData = '';
-            this.iscolsed = false;
-            this. repeatlist();
+            this.resetDate();
         }
     },
     components:{
