@@ -12,9 +12,9 @@
                 <input type="text" v-model="fromdata.machineName">
               </p>
             </li>
-            <li @click="checkDeviceSelect">
+            <li>
               <span class="field-title">所属店铺</span>
-              <p class="select"><span>{{fromdata.shopType.name}}</span></p>
+              <p class="select-1" style="color:#999"><span>{{fromdata.shopType.name}}</span></p>
             </li>
             <li>
               <span class="field-title">NQT</span>
@@ -270,7 +270,7 @@
         this.fromdata.nqt = res.nqt?res.nqt:"点击扫描设备上二维码";
         this.fromdata.imei = res.imei?res.imei:"点击扫描模块上二维码";
         this.functionList = res.functionList;
-        this.waterLevelShow = res.subTypeName === "海尔5/6/7公斤波轮SXB60-51U7/SXB70-51U7"?true:false; //水位功能隐藏
+        //this.waterLevelShow = res.subTypeName === "海尔5/6/7公斤波轮SXB60-51U7/SXB70-51U7"?true:false; //水位功能隐藏
         let waterBak = this.slotsWaterLevel[0].values.find(item=>Number(item.value)===Number(res.waterLevel));
         this.fromdata.waterLevel = waterBak?waterBak:{value: "",name: "未设置"};     
         this.functionList.forEach(item=>{
@@ -299,10 +299,10 @@
           this.$toast({message: '请扫描模块上的IMEI码'});
           return false;
         }
-        if(!this.fromdata.waterLevel.value) {
-          this.$toast({message: '请选择水位'});
-          return false;
-        }
+        // if(!this.fromdata.waterLevel.value) {
+        //   this.$toast({message: '请选择水位'});
+        //   return false;
+        // }
         let arr= [].concat(JSON.parse(JSON.stringify(this.functionList))); 
         arr.forEach(item=>{
           return item.ifOpen=item.ifOpen?0:1;
@@ -319,7 +319,7 @@
           ver: this.fromdata.ver,
           imei: this.fromdata.imei,
           functionTempletType: this.fromdata.functionTempletType,
-          waterLevel:this.fromdata.waterLevel.value,
+          // waterLevel:this.fromdata.waterLevel.value,
           functionJson: JSON.stringify(arr)
         };
         let res = await deviceAddorEditFun(obj);
