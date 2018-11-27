@@ -26,7 +26,7 @@
         <p class="shop-item"><span>营业时间</span><span>{{shopdetail.workTime}}</span></p>
         <p class="shop-item"><span>限时优惠</span><span>{{shopdetail.isDiscount === true ? '已设置' : '未设置'}}</span></p>
         <p class="shop-item">
-          <span>已设置 VIP卡</span>
+          <span>VIP卡</span>
           <span>{{shopdetail.hasVip === false ? '未设置' : '已设置' }}</span>
         </p>
         <p class="shop-item"><span>VIP数量</span><span>{{shopdetail.vipCount}}个</span></p>
