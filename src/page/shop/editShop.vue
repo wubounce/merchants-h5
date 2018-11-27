@@ -523,7 +523,7 @@ export default {
         return false;
       }
       if(!validatServiceTelephone(this.serviceTelephone)) {
-        this.$toast({message: '请选择填写正确的客服电话'});
+        this.$toast({message: '请填写正确的客服电话'});
         return false;
       }
       let changeisReserve = (this.isReserve==true)? 0 :1;

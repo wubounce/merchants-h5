@@ -267,8 +267,6 @@
       transform: translate(-50%,-50%);
       width: 55%;
   }
-</style>
-<style>
   @media screen and (max-width: 360px) {
     input::-webkit-input-placeholder {
       color: #999;
@@ -290,7 +288,7 @@
       font-size: 14px;
     }
     .sarch-wrap .search input {
-      width: 5.4rem !important;
+      width: 5.3rem !important;
     }
     .select-back {
       font-size: 14px;
