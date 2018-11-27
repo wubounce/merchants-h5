@@ -1,7 +1,7 @@
 <template>
   <section class="vip-wrap page-loadmore-height">
-    <div class="permissions" v-if="$store.getters.has('mer:marketing:vip:list')">暂无相关页面权限</div>
-    <div class="page-loadmore-height" v-else>
+    <div class="permissions" v-if="!$store.getters.has('mer:marketing:vip:list')">暂无相关页面权限</div>
+    <div class="page-loadmore-height" v-if="$store.getters.has('mer:marketing:vip:list')">
       <div class="heder">
         <span class="sale-card"><router-link :to="{name:'saleRecord'}">售卡记录<span>></span></router-link></span>
         <span class="vip"><router-link :to="{name:'seniorMember'}">会员列表<span>></span></router-link></span>
@@ -75,7 +75,6 @@ import PagerMixin from '@/mixins/pagerMixin';
     async _getList(){
       let payload = {page:this.page,pageSize: this.pageSize};
       let res = await vipListFun(payload);
-      console.log(res);
       this.list = res.items?[...this.list,...res.items]:[];  //分页添加
       this.list.length <= 0 ? this.noList = true:this.noList = false;
       this.total = res.total;

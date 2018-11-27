@@ -7,14 +7,14 @@ const user = {
   },
   getters:{
     has: (state) => (value) => {
-      let isExist = true;
+      let isExist = false;
       let buttonpermsStr = getMenu();
       if(buttonpermsStr==undefined || buttonpermsStr==null){
         return false;
       }
       for(let i=0;i<buttonpermsStr.length;i++){
         if(buttonpermsStr[i].perms.includes(String(value))){
-          isExist = false;
+          isExist = true;
           break;
         }
       }

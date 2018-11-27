@@ -1,7 +1,7 @@
 <template>
 <div class="addvip">
- <div class="permissions" v-if="$store.getters.has('mer:marketing:vip:info')">暂无相关页面权限</div>
-  <div v-else>
+ <div class="permissions" v-if="!$store.getters.has('mer:marketing:vip:info')">暂无相关页面权限</div>
+  <div v-if="$store.getters.has('mer:marketing:vip:info')">
     <div class="addvip-header">
       <div class="limitcount-shop">
         <p class="set-shop">

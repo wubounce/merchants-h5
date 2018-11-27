@@ -1,7 +1,7 @@
 <template>
 <div class="addmarket">
-  <div class="permissions" v-if="$store.getters.has('mer:marketing:update')">暂无相关页面权限</div>
-  <div v-else>
+  <div class="permissions" v-if="!$store.getters.has('mer:marketing:update')">暂无相关页面权限</div>
+  <div v-else v-if="$store.getters.has('mer:marketing:update')">
     <div class="addvip-header">
       <p @click="shopVisible=true">所属店铺<span class="order-action add-shop-overflow-icon iconfont icon-nextx"></span><span class="addvip-con add-shop-overflow">{{checkshoptxt?checkshoptxt:''}}</span></p>
       <p @click="opencheckedMachine">设备类型<span class="order-action add-shop-overflow-icon iconfont icon-nextx"></span><span class="addvip-con add-shop-overflow">{{machineCurrent?machineCurrent.parentTypeName:''}}</span></p>

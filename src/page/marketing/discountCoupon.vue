@@ -1,7 +1,7 @@
 <template>
 <section class="discountCoupon  page-loadmore-height">
-  <div class="permissions" v-if="$store.getters.has('mer:voucher')">暂无相关页面权限</div>
-  <div class="page-loadmore-height" v-else>
+  <div class="permissions" v-if="!$store.getters.has('mer:voucher')">暂无相关页面权限{{$store.getters.has('mer:voucher')}}</div>
+  <div class="page-loadmore-height"  v-if="$store.getters.has('mer:voucher')">
     <div class="discountCoupon-head">
       <div class="search-header">
         <section class="sarch-wrap">

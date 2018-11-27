@@ -1,7 +1,7 @@
 <template>
   <section class="personal">
-    <div class="permissions" v-if="$store.getters.has('mer:shop:info')">暂无相关页面权限</div>
-    <div v-else>
+    <div class="permissions" v-if="!$store.getters.has('mer:shop:info')">暂无相关页面权限</div>
+    <div v-if="$store.getters.has('mer:shop:info')">
         <!-- 第一模块 -->
         <p class="shop-item title"><span>累计收益</span><span>{{shopdetail.profit | tofixd}} 元</span></p>
 

@@ -1,7 +1,7 @@
 <template>
 <div class="order-detail">
-<div class="permissions" v-cloak v-if="$store.getters.has('mer:order:info')">暂无相关页面权限</div>
-  <div v-else>
+<div class="permissions" v-cloak v-if="!$store.getters.has('mer:order:info')">暂无相关页面权限</div>
+  <div v-if="$store.getters.has('mer:order:info')">
     <div class="order-status">{{detail.orderStatus | orserStatus}}</div>
     <div class="order-detil-info">
       <div class="order-title">{{detail.shopName}}</div>

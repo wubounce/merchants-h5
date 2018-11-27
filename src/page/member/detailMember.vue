@@ -1,7 +1,7 @@
 <template>
 <div class="addmember">
- <div class="permissions" v-if="$store.getters.has('mer:person:info')">暂无相关页面权限</div>
-  <div v-else>
+ <div class="permissions" v-if="!$store.getters.has('mer:person:info')">暂无相关页面权限</div>
+  <div v-if="$store.getters.has('mer:person:info')">
     <div class="add-form">
       <div class="input-group">
         <div class="form-title">手机号码</div>
