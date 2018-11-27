@@ -22,22 +22,23 @@
   <div class="confirm" @click="addvip">提交</div>
    <!-- 选择店铺 -->
   <mt-popup v-model="shopVisible" position="bottom" :closeOnClickModal="false">
-    <div class="resp-shop">
-      <span class="quxi" @click="cancelCheckshop">取消</span>
-      <span class="shop">店铺</span>
-      <span class="qued" @click="getcheckshop">确定</span>
-    </div>
-    <section class="resp-shop-wrap">
-      <div class="all-list">
-        <label class="mint-checklist-label" v-for="(item,index) in shoplist" :key="index">
-          <span class="mint-checkbox is-right">
-            <input type="checkbox" class="mint-checkbox-input" v-model="shopIds" :value="item.shopId"> 
-            <span class="mint-checkbox-core"></span>
-          </span> 
-          <p class="mint-checkbox-label shopname">{{item.shopName}}</p>
-        </label>
+      <div class="resp-shop">
+        <span class="quxi" @click="cancelCheckshop">取消</span>
+        <span class="shop">店铺</span>
+        <span class="qued" @click="getcheckshop">确定</span>
       </div>
-    </section>
+      <section class="resp-shop-wrap">
+        <div class="all-list">
+          <label v-show="shoplist.length" class="mint-checklist-label" v-for="(item,index) in shoplist" :key="index">
+            <span class="mint-checkbox is-right">
+              <input type="checkbox" class="mint-checkbox-input" v-model="shopIds" :value="item.shopId"> 
+              <span class="mint-checkbox-core"></span>
+            </span> 
+            <p class="mint-checkbox-label shopname">{{item.shopName}}</p>
+          </label>
+          <div class="no-shoplist" v-show="!shoplist.length">暂无可选店铺</div>
+        </div>
+      </section>
   </mt-popup>
 
   <!-- 限用类型-->

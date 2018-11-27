@@ -29,13 +29,14 @@
     </div>
     <section class="resp-shop-wrap">
       <div class="all-list">
-        <label class="mint-checklist-label" v-for="(item,index) in shoplist" :key="index">
+        <label v-show="shoplist.length" class="mint-checklist-label" v-for="(item,index) in shoplist" :key="index">
           <span class="mint-checkbox is-right">
             <input type="checkbox" class="mint-checkbox-input" v-model="shopIds" :value="item.shopId"> 
             <span class="mint-checkbox-core"></span>
           </span> 
           <p class="mint-checkbox-label shopname">{{item.shopName}}</p>
         </label>
+        <div class="no-shoplist" v-show="!shoplist.length">暂无可选店铺</div>
       </div>
     </section>
   </mt-popup>
