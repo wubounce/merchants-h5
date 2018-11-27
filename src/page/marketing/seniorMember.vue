@@ -26,7 +26,7 @@
                         <div class="recored-list" v-for="(item,index) in list" :key="index">
                             <p>VIP用户<span>{{item.userPhone}}</span></p>
                             <p class="middle-shop">售卡店铺<span>{{item.shopName}}</span></p>
-                            <p>购买时间<span>{{item.soldCardDate}}</span><span class="time">{{item.timeInterval}}个月<span class="money">{{item.price}}</span>元</span></p>
+                            <p>购买时间<span>{{item.soldCardDate}}</span></p>
                         </div>
                     </div>
                     <div v-if="allLoaded" class="nomore-data">没有更多了</div>
@@ -86,6 +86,14 @@
             let res = await vipMemberListFun(payload);
             this.titleArr = res.count;
             this.list = res.items?[...this.list,...res.items]:[];  //分页添加
+            this.list = this.list.map(item => {
+            	let data = {
+            		userPhone: item.userPhone,
+            		shopName: item.shopName,
+            		soldCardDate: moment(this.soldCardDate).format('YYYY-MM-DD')
+            	};
+            	return data;
+        	});
             this.total = res.total;
             if (this.searchData || this.currentTags) {
                 this.noOrderList = false;
