@@ -156,7 +156,7 @@ export default {
         flag = false;
         return flag;
       }
-      if ((this.vipform.limitCount && !validatVipLimit(this.vipform.limitCount) || parseFloat(this.vipform.limitCount) >= 999)) {
+      if ((this.vipform.limitCount && !validatVipLimit(this.vipform.limitCount) || parseFloat(this.vipform.limitCount) > 999)) {
         this.$toast({message: "请填写0-999数字" });
         flag = false;
         return flag;
