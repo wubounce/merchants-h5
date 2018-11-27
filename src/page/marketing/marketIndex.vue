@@ -1,11 +1,11 @@
 <template>
 <div class="marketing page-loadmore-height">
-  <div class="permissions" v-if="$store.getters.has('mer:marketing:list')">暂无相关页面权限</div>
-  <div class="page-loadmore-height" v-else>
+  <div class="permissions" v-if="!$store.getters.has('mer:marketing:list')">暂无相关页面权限</div>
+  <div class="page-loadmore-height" v-if="$store.getters.has('mer:marketing:list')">
     <div class="no-discount-list" v-if="noList">未设置限时优惠活动</div>
     <div class="page-loadmore-wrapper" ref="wrapper" :style="{overflowY:scrollShow}">
       <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" @translate-change="translateChange" :auto-fill="false" ref="loadmore">
-    		<div class="discoun-list" v-for="(item,index) in list" :key="index">
+        <div class="discoun-list" v-for="(item,index) in list" :key="index">
               <span class="discountag" v-if="item.expired === 2"><img src="../../../static/image/market/overdue@2x.png"></span>
               <p class="time">优惠期<span :class="{'expired-discount':item.expired === 2 }">{{item.noDiscountStart}}</span>至<span :class="{'expired-discount':item.expired === 2}">{{item.noDiscountEnd}}</span>
                 <mt-switch class="check-switch" v-model="item.status" @change="updataeStatus(item.id,item.status,item)" v-if="item.expired !== 2"></mt-switch>
@@ -28,7 +28,7 @@
                   </div>
                 </router-link>
               </div>
-    		</div>
+        </div>
         <div v-if="allLoaded" class="nomore-data">没有更多了</div>
       </mt-loadmore>
     </div>

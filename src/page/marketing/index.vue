@@ -1,19 +1,19 @@
  <template>
 <div class="marketing-mang-wrap page-loadmore-height">
   <section class="tab-title">
-  	<div @click="tabclick(0)" v-if="!$store.getters.has('mer:marketing:list')"><span :class="{tabcurrent:tabindex === 0}" >限时优惠</span></div>
-    <div @click="tabclick(1)" v-if="!$store.getters.has('mer:marketing:vip:list')"><span :class="{tabcurrent:tabindex === 1}" >VIP</span></div>
-    <div @click="tabclick(2)" v-if="!$store.getters.has('mer:voucher')"><span :class="{tabcurrent:tabindex === 2}" >优惠券记录</span></div>
+  	<div @click="tabclick(0)" v-if="$store.getters.has('mer:marketing:list')"><span :class="{tabcurrent:tabindex === 0}" >限时优惠</span></div>
+    <div @click="tabclick(1)" v-if="$store.getters.has('mer:marketing:vip:list')"><span :class="{tabcurrent:tabindex === 1}" >VIP</span></div>
+    <div @click="tabclick(2)" v-if="$store.getters.has('mer:voucher')"><span :class="{tabcurrent:tabindex === 2}" >优惠券记录</span></div>
   </section>
   <section class="tab-contont page-loadmore-height">
   	<div class="discount-wrap page-loadmore-height" v-if="tabindex === 0">
       <market></market>
   	</div>
-  	<div class="VIP-wrap page-loadmore-height"  v-if="tabindex === 1">
-      <vip></vip>
+  	<div class="discount-wrap page-loadmore-height" v-if="tabindex === 1">
+       <vip></vip>
   	</div>
-    <div class="VIP-wrap page-loadmore-height"  v-if="tabindex === 2">
-      <discountCoupon></discountCoupon>
+  	<div class="discount-wrap page-loadmore-height" v-if="tabindex === 2">
+      <discount-coupon></discount-coupon>
   	</div>
   </section>
 </div>
@@ -30,12 +30,22 @@ export default {
   },
   data() {
     return {
-      tabtitle:['限时优惠','VIP','优惠券记录'],
+      tabtitle:[
+        { title:'限时优惠',per:'mer:marketing:list'},
+        { title:'VIP', per:'mer:marketing:vip:list'},
+        {title:'优惠券记录',per:'mer:voucher'},
+      ],
       tabindex:0,
     };
   },
   mounted() {
-    
+    if(this.$store.getters.has('mer:marketing:list')){
+      this.tabindex = 0;
+    }else if(this.$store.getters.has('mer:marketing:vip:list')){
+      this.tabindex = 1;
+    }else if(this.$store.getters.has('mer:voucher')){
+      this.tabindex = 2;
+    }
   },
   created(){
     let query = this.$route.query ? this.$route.query : {};

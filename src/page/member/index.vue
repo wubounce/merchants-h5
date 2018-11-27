@@ -1,7 +1,7 @@
 <template>
 <div class="member page-loadmore-height">
-  <div class="permissions" v-if="$store.getters.has('mer:person:list')">暂无相关页面权限</div>
-  <div class="page-loadmore-height" v-else>
+  <div class="permissions" v-if="!$store.getters.has('mer:person:list')">暂无相关页面权限</div>
+  <div class="page-loadmore-height" v-if="$store.getters.has('mer:person:list')">
     <div class="search-header">
       <section class="sarch-wrap">
         <div class="search">

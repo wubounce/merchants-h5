@@ -1,7 +1,7 @@
 <template>
   <section class="page-loadmore-height ">
-    <div class="permissions" v-if="$store.getters.has('mer:machine:list')">暂无相关页面权限</div>
-    <div v-else class="page-loadmore-height ">
+    <div class="permissions" v-if="!$store.getters.has('mer:machine:list')">暂无相关页面权限</div>
+    <div class="page-loadmore-height"  v-if="$store.getters.has('mer:machine:list')">
       <div class="search-header">
         <div class="search"> 
           <div class="search-input">
@@ -68,7 +68,7 @@
                     <span>类型</span>
                     <span>{{item.machineTypeName}}</span>
                   </p>
-                  <router-link v-if="!$store.getters.has('mer:machine:profit')" tag="p" class="item-ft-right" :to="{ name: 'deviceMonthFlow', query:{allMoney:item.profit,machineId:item.machineId,machineName:item.machineName,}}">
+                  <router-link v-if="$store.getters.has('mer:machine:profit')" tag="p" class="item-ft-right" :to="{ name: 'deviceMonthFlow', query:{allMoney:item.profit,machineId:item.machineId,machineName:item.machineName,}}">
                     <span>总收益</span>
                     <span>{{item.profit | tofixd}}</span><span class="little-font" style="font-size: 8px;color:#1890FF; ">元</span>
                     <span class="iconfont icon-nextx"></span>

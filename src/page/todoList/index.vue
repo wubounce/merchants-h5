@@ -1,7 +1,7 @@
 <template>
   <section class="todolist">
-  <div class="permissions" v-if="$store.getters.has('mer:schedule:list')">暂无相关页面权限</div>
-  <div v-else class="page-loadmore-height">
+  <div class="permissions" v-if="!$store.getters.has('mer:schedule:list')">暂无相关页面权限</div>
+  <div class="page-loadmore-height" v-if="$store.getters.has('mer:schedule:list')">
 		<div class="top">
 				<p class="shop-item title" >批量定时启动设备</p>
 		</div>

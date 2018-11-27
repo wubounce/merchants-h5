@@ -1,7 +1,7 @@
 <template>
   <section>
-    <div class="permissions" v-if="$store.getters.has('mer:machine:info')">暂无相关页面权限</div>
-    <div v-else>
+    <div class="permissions" v-if="!$store.getters.has('mer:machine:info')">暂无相关页面权限</div>
+    <div v-if="$store.getters.has('mer:machine:info')">
       <section>
         <ul class="device-detail">
           <li class="device-detail-hd">
@@ -93,9 +93,9 @@
       </ul>
       <div style="width:100%;height:1.73rem;"></div>
       <div class="about-button">
-        <span v-has="'mer:machine:clean'"><button btn-type="small" btn-color="spe" class="ft-btn" @click="deviceTZJ" v-show="deviceDetail.hasTzj && deviceDetail.machineState===1">桶自洁</button></span>
+        <span v-has="'mer:machine:clean'"><button btn-type="small" btn-color="spe" class="ft-btn" @click="deviceTZJ" v-show="deviceDetail.hasTzj && deviceDetail.machineState===1||deviceDetail.hasTzj && deviceDetail.machineState===4">桶自洁</button></span>
         <span v-has="'mer:machine:reset'"><button btn-type="small" btn-color="spe" class="ft-btn" @click="deviceRest" v-show="(deviceDetail.machineState !==8 && deviceDetail.subTypeName !== '通用脉冲充电桩')">复位</button></span>
-        <span v-has="'mer:machine:start'"><button btn-type="small" btn-color="spe" class="ft-btn" @click="deviceStart" v-show="deviceDetail.machineState===1 && deviceDetail.subTypeName !== '通用脉冲充电桩'">启动</button></span>
+        <span v-has="'mer:machine:start'"><button btn-type="small" btn-color="spe" class="ft-btn" @click="deviceStart" v-show="deviceDetail.machineState===1 && deviceDetail.subTypeName !== '通用脉冲充电桩'||deviceDetail.machineState===4 && deviceDetail.subTypeName !== '通用脉冲充电桩'">启动</button></span>
         <span v-has="'mer:machine:update'"><button btn-type="small" btn-color="spe" class="ft-btn" @click="deviceEdit">编辑</button></span>
       </div>
       </section>

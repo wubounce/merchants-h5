@@ -1,7 +1,7 @@
 <template>
 <div class="addmarket">
-  <div class="permissions" v-if="$store.getters.has('mer:marketing:info')">暂无相关页面权限</div>
-  <div v-else>
+  <div class="permissions" v-if="!$store.getters.has('mer:marketing:info')">暂无相关页面权限</div>
+  <div v-if="$store.getters.has('mer:marketing:info')">
     <div class="addvip-header">
       <p>所属店铺<span class="add-market-shop"><span v-for="(item,index) in detail.shop" :key="index">{{item.name}}<i v-if="index !== (detail.shop.length-1)">,</i></span></span></p>
       
