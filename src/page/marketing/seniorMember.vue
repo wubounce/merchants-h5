@@ -6,9 +6,9 @@
                     <form action="" target="frameFile" v-on:submit.prevent="">
                         <span class="iconfont icon-IconSearch"></span>
                         <input type="number" pattern="\d*" value='搜索' v-model.trim="searchData" @keyup.enter="searchVoucher" @input="clearSearch" placeholder="输入用户手机号" class="serch">
-                        <span class="guanbi iconfont icon-guanbi" v-if="iscolsed" @click="doclearSearch"></span>
+                        <span class="guanbi iconfont icon-guanbi member-guanbi" v-if="iscolsed" @click="doclearSearch"></span>
                         <iframe name='frameFile' style="display: none;"></iframe>
-                        <span class="select-back" @click="searchVoucher">搜索</span>
+                        <!-- <span class="select-back" @click="searchVoucher">搜索</span> -->
                     </form>
                 </div>
                 <div class="sale-shop"  @click="popupVisible=true;">{{currentTags?currentTags.shopName:'全部店铺'}}<span class="iconfont icon-xiangxiajiantou select-back"></span></div>
@@ -44,6 +44,16 @@
   import selectpickr from '@/components/selectPicker';
   import { validatReplace } from '@/utils/validate';
   import { dayReportFun, shopListFun } from '@/service/report';
+
+  // 节流函数
+  const delay = (function() {
+    let timer = 0;
+    return function(callback, ms) {
+        clearTimeout(timer);
+        timer = setTimeout(callback, ms);
+    };
+  })();
+
   export default {
     mixins: [PagerMixin],
     data () {
@@ -90,7 +100,7 @@
             	let data = {
             		userPhone: item.userPhone,
             		shopName: item.shopName,
-            		soldCardDate: moment(this.soldCardDate).format('YYYY-MM-DD')
+            		soldCardDate: moment(item.soldCardDate).format('YYYY-MM-DD')
             	};
             	return data;
         	});
@@ -114,42 +124,64 @@
         shopselectpickertatus(data){
             this.popupVisible = data;
         },
-        async searchVoucher(e){ //搜索
+        async fetchData(val) {
             this.page  = 1;
             this.list = [];
             this.allLoaded = false;//下拉刷新时解除上拉加载的禁用
             this.noOrderList = false;
-            var keyCode = window.event? e.keyCode:e.which;
-            if(keyCode =='13'){
-                this._getList();
-            document.activeElement.blur();
-            }else {
-                this._getList();
-            }
+            await this._getList();
         },
-        repeatlist(){
-            this.page  = 1;
-            this.allLoaded = false;//下拉刷新时解除上拉加载的禁用
-            this.noOrderList = false;
-            this.searchData = '';
-            this.currentTags = null;
-            this.shopId = '';
-            this.list = [];
-            this.iscolsed = false;
-            this._getList();
-        },
+        // async searchVoucher(e){ //搜索
+        //     this.page  = 1;
+        //     this.list = [];
+        //     this.allLoaded = false;//下拉刷新时解除上拉加载的禁用
+        //     this.noOrderList = false;
+        //     var keyCode = window.event? e.keyCode:e.which;
+        //     if(keyCode =='13'){
+        //         this._getList();
+        //     document.activeElement.blur();
+        //     }else {
+        //         this._getList();
+        //     }
+        // },
         clearSearch(){ //清除搜索
             this.iscolsed = true;
             if(this.searchData.length <= 0 ){
-            this.iscolsed = false;
-            this.repeatlist();
+                this.page  = 1;
+                this.list = [];
+                this.allLoaded = false;//下拉刷新时解除上拉加载的禁用
+                this.noOrderList = false;
+                this.searchData = '';
+                this.iscolsed = false;
+                this._getList();
             }
         },
         doclearSearch(){
+            this.page  = 1;
+            this.list = [];
+            this.allLoaded = false;//下拉刷新时解除上拉加载的禁用
+            this.noOrderList = false;
+            this.searchData = '';
             this.iscolsed = false;
-            this.repeatlist();
+            this._getList();
         }
+        
     },
+    watch: {
+		searchData (v) {
+            delay(() => {
+                this.fetchData();
+            }, 300);
+            
+            // var keyCode = window.event? e.keyCode:e.which;
+            // if(keyCode =='13'){
+            //     this._getList();
+            //      document.activeElement.blur();
+            // }else {
+            //     this._getList();
+            // }
+		}
+	},
     components:{
        selectpickr,
     }

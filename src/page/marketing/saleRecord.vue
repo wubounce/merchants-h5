@@ -178,16 +178,12 @@
         resetDate(){
             this.page = 1;
             this.allLoaded = false;//下拉刷新时解除上拉加载的禁用
+            this.noOrderList = false;
+            this.list = [];
             this.calendar.show=false;
             this.startDate = [];
             this.endDate = [];
             this.isreset=false;
-            this.noOrderList = false;
-            this.searchData = '';
-            this.shopId = '';
-            this.currentTags = null;
-            this.iscolsed = false;
-            this.list = [];
             this._getList();
         },
         async searchVoucher(e){ //搜索
@@ -206,12 +202,23 @@
         clearSearch(){ //清除搜索
             this.iscolsed = true;
             if(this.searchData.length <= 0 ){
+                this.page = 1;
+                this.allLoaded = false;//下拉刷新时解除上拉加载的禁用
+                this.noOrderList = false;
+                this.list = [];
+                this.searchData = '';
                 this.iscolsed = false;
-                this.resetDate();
+                this._getList();
             }
         },
         doclearSearch(){
-            this.resetDate();
+            this.page = 1;
+            this.allLoaded = false;//下拉刷新时解除上拉加载的禁用
+            this.noOrderList = false;
+            this.list = [];
+            this.searchData = '';
+            this.iscolsed = false;
+            this._getList();
         }
     },
     components:{
