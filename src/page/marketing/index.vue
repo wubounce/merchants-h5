@@ -30,26 +30,26 @@ export default {
   },
   data() {
     return {
-      tabtitle:[
-        { title:'限时优惠',per:'mer:marketing:list'},
-        { title:'VIP', per:'mer:marketing:vip:list'},
-        {title:'优惠券记录',per:'mer:voucher'},
-      ],
       tabindex:0,
     };
   },
   mounted() {
-    if(this.$store.getters.has('mer:marketing:list')){
-      this.tabindex = 0;
-    }else if(this.$store.getters.has('mer:marketing:vip:list')){
-      this.tabindex = 1;
-    }else if(this.$store.getters.has('mer:voucher')){
-      this.tabindex = 2;
+    let query = this.$route.query ? this.$route.query : {};
+    if(query.tabindex){
+      this.tabindex = Number(query.tabindex);
+    }else {
+      if(this.$store.getters.has('mer:marketing:list')){
+        this.tabindex = 0;
+      }else if(this.$store.getters.has('mer:marketing:vip:list')){
+        this.tabindex = 1;
+      }else if(this.$store.getters.has('mer:voucher')){
+        this.tabindex = 2;
+      }
     }
+    
   },
   created(){
-    let query = this.$route.query ? this.$route.query : {};
-    this.tabindex = query.tabindex ? Number(query.tabindex) : 0;
+    
   },
   methods: {
     tabclick(index){

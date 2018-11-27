@@ -75,7 +75,6 @@ import PagerMixin from '@/mixins/pagerMixin';
     async _getList(){
       let payload = {page:this.page,pageSize: this.pageSize};
       let res = await vipListFun(payload);
-      console.log(res);
       this.list = res.items?[...this.list,...res.items]:[];  //分页添加
       this.list.length <= 0 ? this.noList = true:this.noList = false;
       this.total = res.total;
