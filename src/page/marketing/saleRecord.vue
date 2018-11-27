@@ -25,7 +25,7 @@
                 <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded"  @translate-change="translateChange" :auto-fill="false" ref="loadmore">
                     <div class="record-wrap">
                         <div class="recored-list" v-for="(item,index) in list" :key="index">
-                            <p>VIP用户<span>{{item.userName}}</span></p>
+                            <p>VIP用户<span>{{item.userPhone}}</span></p>
                             <p class="middle-shop">售卡店铺<span>{{item.shopName}}</span></p>
                             <p>购买时间<span>{{item.soldCardDate}}</span><span class="time">{{item.timeInterval}}个月<span class="money">{{item.price}}</span>元</span></p>
                         </div>
@@ -146,10 +146,10 @@
         },
         selectDateCom(){
             let startTime = this.startDate.join('');  
-            let temp =  moment(this.startDate).add('months',5).format('YYYYMMDD');  //从开始时间起六个月间隔
+            let temp =  moment(this.startDate).add('months',11).format('YYYYMMDD');  //从开始时间起六个月间隔
             let endTime =  this.endDate.join('');  
             if(endTime>temp){
-            this.tooltip = '只支持查询跨度6个月内记录';
+            this.tooltip = '只支持查询跨度12个月内记录';
             setTimeout(()=>{
                 this.tooltip = '';
             },3000);

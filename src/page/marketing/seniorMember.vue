@@ -24,7 +24,7 @@
                 <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded"  @translate-change="translateChange" :auto-fill="false" ref="loadmore">
                     <div class="record-wrap">
                         <div class="recored-list" v-for="(item,index) in list" :key="index">
-                            <p>VIP用户<span>{{item.userName}}</span></p>
+                            <p>VIP用户<span>{{item.userPhone}}</span></p>
                             <p class="middle-shop">售卡店铺<span>{{item.shopName}}</span></p>
                             <p>购买时间<span>{{item.soldCardDate}}</span><span class="time">{{item.timeInterval}}个月<span class="money">{{item.price}}</span>元</span></p>
                         </div>
