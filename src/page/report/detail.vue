@@ -21,7 +21,6 @@
     <div class="tooltip" v-show="tooltip" :style="{top:positiontop+'px'}"> 
       <div class="ivu-tooltip-inner">{{tooltip}}</div>
     </div>
-  </div>
 </div>
 </template>
 <script>

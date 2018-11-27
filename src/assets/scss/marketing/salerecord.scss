@@ -148,3 +148,19 @@ overflow: hidden;
     line-height: 100%;
     padding-top: 4rem;
   }
+  .ivu-tooltip-inner {
+    padding: 0.2rem 0.4rem;
+    color: #fff;
+    text-align: left;
+    text-decoration: none;
+    background: rgba(0, 0, 0, 0.65);
+    border-radius: 0.08rem;
+    word-wrap: break-word;
+    word-break: break-all;
+    font-size: 14px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    width: 55%;
+}
