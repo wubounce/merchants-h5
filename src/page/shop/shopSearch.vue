@@ -47,7 +47,7 @@
               </router-link>
             </div>
             <div class="kindof">
-              <router-link :to="{ name: 'shopMonthFlow', query:{allMoney:item.profit,shopId:item.shopId,shopName:item.shopName}}">
+              <router-link :to="{ name: 'shopMonthFlow', query:{allMoney:item.profit,shopId:item.shopId,shopName:item.shopName,issearch:true,searchData:searchData}}">
                 <div class="text">总收益<span class="order-action iconfont icon-nextx"></span></div>
                 <div class="text-value">{{ item.profit | tofixd }}<span class="little-font">元</span></div>
               </router-link>
