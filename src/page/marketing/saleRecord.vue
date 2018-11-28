@@ -132,7 +132,7 @@
             this.titleArr = res.count;
             this.list = res.items?[...this.list,...res.items]:[];  //分页添加
             this.total = res.total;
-            if (this.searchData || (this.startDate.length > 0 && this.endDate.length > 0)) {
+            if (this.searchData || (this.startDate.length > 0 && this.endDate.length > 0) || this.currentTags) {
                 this.noOrderList = false;
                 this.nosearchList = this.list.length<= 0 ? true: false;
             }else {
@@ -146,7 +146,7 @@
         },
         selectDateCom(){
             let startTime = this.startDate.join('');  
-            let temp =  moment(this.startDate).add('months',11).format('YYYYMMDD');  //从开始时间起六个月间隔
+            let temp =  moment(this.startDate).add('months',11).format('YYYYMMDD');  //从开始时间起12个月间隔
             let endTime =  this.endDate.join('');  
             if(endTime>temp){
             this.tooltip = '只支持查询跨度12个月内记录';
