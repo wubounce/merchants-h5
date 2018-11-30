@@ -112,6 +112,6 @@ export const validatPrice = (str)=>{
  * 
  */
 export const validatServiceTelephone = (str)=>{
-  const reg = /^((0\d{2,3}-\d{7,8})|(1\d{10}))$/;
+  const reg = /^\d{1,}$/;
   return reg.test(str);
 };
