@@ -21,7 +21,7 @@
                     <div class="dis-con-machine">
                       <div class="machine">
                         <span>折扣优惠</span>
-                        <span class="machine-type">{{item.cardDiscount.toFixed(1)}}<i>折</i></span>
+                        <span class="machine-type">{{(item.cardDiscount * 10).toFixed(1)}}<i>折</i></span>
                       </div>
                       <div class="machine discount">
                         <span>限用次数</span>

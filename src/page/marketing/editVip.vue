@@ -98,7 +98,7 @@ export default {
         this.shopIds.push(item.shopId);
       });
       this.checkshoptxt = beshop.join(',');
-      this.vipform.cardDiscount = res.cardDiscount ? res.cardDiscount : '';
+      this.vipform.cardDiscount = res.cardDiscount ? res.cardDiscount * 10 : '';
       this.vipform.limitType = res.limitType ? res.limitType : '';
       this.vipform.limitCount = res.limitCount;
       this.vipform.saleDesc = res.saleDescVOList ? res.saleDescVOList : '';
