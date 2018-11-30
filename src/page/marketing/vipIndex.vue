@@ -91,7 +91,7 @@ import PagerMixin from '@/mixins/pagerMixin';
   .vip-wrap {
     .machine-type {
       color: #1890FF !important;
-      font-size: 18px !important;
+      font-size: .48rem !important;
     }
     .page-top {
       padding-top: 0.93rem;
@@ -106,7 +106,7 @@ import PagerMixin from '@/mixins/pagerMixin';
   .heder {
     height: 0.93rem;
     line-height: 0.93rem;
-    font-size: 12px;
+    font-size: .32rem;
     color: #1890FF;
     text-align: right;
     position: fixed;

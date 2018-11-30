@@ -15,10 +15,11 @@
     input {
         display: block;
         width: 0.67rem;
-        text-align: right;
+        text-align: center;
         float: right;
         margin-right: 0.16rem;
         border-bottom: 1px solid #C9E5FF;
+        border-radius: 0;
         color: #1890FF;
     }
     .tag {
@@ -49,7 +50,7 @@
 .addvip-price{
   >p {
     input {
-      width: 1.47rem;
+      width: 1.5rem;
     }
   }
 }

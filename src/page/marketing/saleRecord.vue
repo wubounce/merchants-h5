@@ -27,7 +27,7 @@
                         <div class="recored-list" v-for="(item,index) in list" :key="index">
                             <p>VIP用户<span>{{item.userPhone}}</span></p>
                             <p class="middle-shop">售卡店铺<span>{{item.shopName}}</span></p>
-                            <p>购买时间<span>{{item.soldCardDate}}</span><span class="time">{{item.timeInterval}}个月<span class="money">{{item.price}}</span>元</span></p>
+                            <p>购买时间<span>{{item.soldCardDate}}</span><span class="time">{{item.timeInterval}}个月&nbsp;<span class="money">{{item.price}}</span>元</span></p>
                         </div>
                     </div>
                     <div v-if="allLoaded" class="nomore-data">没有更多了</div>

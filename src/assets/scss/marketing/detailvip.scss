@@ -7,7 +7,7 @@
     >p {
       overflow: hidden;
       padding: 0.51rem 0;
-      font-size: 16px;
+      font-size: .4267rem;
       border-bottom:1px solid #f9f8ff;
     }
     p:last-child{
@@ -16,8 +16,7 @@
     .addvip-con {
       text-align: right;
       color: #333333;
-      padding-left: 0.27rem;
-      width: 65%;
+      padding-left: .4333rem;
     }
     .limitcount-p{
       display: flex;
@@ -33,23 +32,25 @@
       .set-shop{
         display: flex;
         color: #999999;
-        font-size: 16px;
+        font-size: .4267rem;
       }
       .addvip-con{
-        width: 65%;
+        width: 5.56rem;
         text-align: left;
         overflow: hidden;
         text-overflow: ellipsis;
         white-space: nowrap;
+        padding-right: .2rem;
       }
       .remove-space{
-        width: 7rem;
+        width: 6.96rem;
         white-space:normal;
         overflow: auto;
         text-overflow: initial;
+        padding-right: 0;
       }
       .vip-text{
-        font-size: 14px;
+        font-size: .3733rem;
         color: #1890FF;
       }
       .to-up{
@@ -66,7 +67,7 @@
     margin: 0.4rem 0.4rem 0.27rem;
   }
   .addvip-type {
-    font-size: 14px;
+    font-size: .3733rem;
     color: #999;
   }
   .create-wrap {
@@ -84,7 +85,7 @@
     background: #fff;
     position: fixed;
     bottom: 0;
-    font-size: 14px;
+    font-size: .32rem;
     padding: 0.28rem 0;
     > span {
       float: right;

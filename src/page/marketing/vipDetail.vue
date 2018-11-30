@@ -6,8 +6,8 @@
       <div class="limitcount-shop">
         <p class="set-shop">
           <span>适用店铺</span>
-          <span class="addvip-con" :class="{'remove-space': !isShowMoreShop}"><span>{{shopNames}}</span></span>
-          <span @click="toDown" v-if="isShowMoreShop && isShow"><span class="vip-text">全部</span><i class="iconfont icon-xiangxiajiantou"></i></span>
+          <span class="addvip-con" :class="{'remove-space': !isShowMoreShop}">{{shopNames}}</span>
+          <span class="all-shop" @click="toDown" v-if="isShowMoreShop && isShow"><span class="vip-text">全部</span><i class="iconfont icon-xiangxiajiantou"></i></span>
         </p>
         <p @click="toDown" class="to-up" v-if="!isShowMoreShop"><span class="vip-text">收起</span><i class="iconfont icon-xiangshangjiantou"></i></p>
       </div>
@@ -62,7 +62,8 @@ export default {
       });
       if(this.shopNames){
         this.shopNames = this.shopNames.substring(0,this.shopNames.length-1);
-        if(this.shopNames.length < 15){
+        console.log('shopNames>>' + this.shopNames.length);
+        if(this.shopNames.length <= 22){
           this.isShow = false;
         } else{
           this.isShow = true;
