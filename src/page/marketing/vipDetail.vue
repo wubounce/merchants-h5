@@ -57,7 +57,7 @@ export default {
       let res = await vipDetailFun(payload);
       this.detail = res;
       this.detail.createTime = this.detail.createTime ? moment(this.detail.createTime).format('YYYY-MM-DD HH:mm:ss') : '';
-      this.detail.cardDiscount = res.cardDiscount * 10;
+      this.detail.cardDiscount = (res.cardDiscount * 10).toFixed(1);
       this.detail.shopTipVOS.map(item => {
         this.shopNames += item.shopName + '、';
       });
