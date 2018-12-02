@@ -27,7 +27,7 @@
     <div class="second">
         <p class="reserveTime tel-hot">
           <span style="width: 22%">客服电话</span>
-          <span><input type="number" v-model="serviceTelephone" placeholder="请填写客服电话" ></span>
+          <span><input type="text" v-model="serviceTelephone" placeholder="请填写客服电话" ></span>
         </p>
     </div>
     <p class="blank"></p>
