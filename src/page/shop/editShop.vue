@@ -27,7 +27,7 @@
     <div class="second">
         <p class="reserveTime tel-hot">
           <span style="width: 22%">客服电话</span>
-          <span><input type="number" v-model="serviceTelephone" placeholder="请填写客服电话" ></span>
+          <span><input type="text" v-model="serviceTelephone" placeholder="请填写客服电话" ></span>
         </p>
     </div>
     <p class="blank"></p>
@@ -522,7 +522,11 @@ export default {
         this.$toast({message: '请选择营业时间'});
         return false;
       }
-      if(!this.serviceTelephone||!validatServiceTelephone(this.serviceTelephone)) {
+     if(!this.serviceTelephone) {
+        this.$toast({message: '请填写客服电话'});
+        return false;
+      }
+      if(!validatServiceTelephone(this.serviceTelephone)) {
         this.$toast({message: '客服电话需为纯数字'});
         return false;
       }
