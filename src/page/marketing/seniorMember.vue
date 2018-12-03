@@ -1,5 +1,5 @@
 <template>
-    <section>
+    <section class="page-loadmore-height">
         <div class="search-header">
             <section class="sarch-wrap">
                 <div class="search">
