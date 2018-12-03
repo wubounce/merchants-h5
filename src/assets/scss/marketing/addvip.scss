@@ -9,7 +9,7 @@
     line-height: 0.6rem;
     padding-top: 0.51rem;
     padding-bottom: 0.49rem;
-    font-size: 16px;
+    font-size: .4267rem;
     color: #333;
     border-bottom:1px solid #f9f8ff;
     input {
@@ -40,7 +40,7 @@
     background: #fff;
     padding: 0.49rem 0 0.35rem 0;
     p {
-      font-size: 12px;
+      font-size: .32rem;
       color: #999;
       line-height: 0.53rem;
     }
@@ -55,7 +55,7 @@
   }
 }
 .car-shop {
-  font-size: 14px;
+  font-size: .3733rem;
   color: #999;
   padding-top: 0.4rem;
   padding-bottom: 0.27rem;
@@ -77,7 +77,7 @@
   line-height: 1.33rem;
   background:rgba(24,144,255,1);
   text-align: center;
-  font-size: 18px;
+  font-size: .48rem;
   color: #fff;
   position: fixed;
   bottom: 0;
@@ -91,14 +91,14 @@
   padding: 0 0.4rem;
   >span {
     flex: 1;
-    font-size: 15px;
+    font-size: .4rem;
   }
   .quxi {
     color: #999;
   }
   .shop {
     text-align: center;
-    font-size: 16px;
+    font-size: .4267rem;
   }
   .qued {
     text-align:right;
@@ -107,7 +107,7 @@
   }
   .resp-shop-wrap {
   .shopname {
-    font-size: 15px;
+    font-size: .4rem;
     color: #333;
   }
   .all-list {
@@ -119,6 +119,6 @@
 .no-shoplist{
   text-align: center;
   color: #999;
-  font-size: 15px;
+  font-size: .4rem;
   padding-top: 3rem;
 }
