@@ -1,33 +1,35 @@
 <template>
   <div class="contant">
-    <div class="erweima">
-      <img  :src="imgShow">
-    </div>
-    <p class="gaunzhu">{{msg}}</p>
-    <div class="work-time">
-      <p>服务时间：周一至周日 08:00-22:30</p>
-      <p>我们会尽快回复您的问题</p>
-    </div>
+    
   </div>
 </template>
 
 <script>
   import Web from '@/utils/Web';
+  import { getOperatorFun } from '@/service/user';
   export default {
     data() {
       return {
-        imgShow:'../../../static/image/user/wechat.png',
-        msg:'关注公众号联系“在线客服”',
+        
       };
     },
     created() {
-        if(Web.getUA() != 'wechat') {
-            this.imgShow = '../../../static/image/user/alipay.jpg';
-            this.msg = '关注生活号发送消息联系客服';
-        }
+     this.getOperator();
     },
     methods: {
-     
+     getOperator(){
+        getOperatorFun().then(res=>{
+           ysf.config({
+              uid: res.id,
+              name: res.realName,
+              mobile: res.phone,
+              qtype: 1162005,
+              success: function(){     // 成功回调
+                  window.location.replace (ysf.url());     
+              },
+          });
+        });
+      }
     },
     components: {
     }

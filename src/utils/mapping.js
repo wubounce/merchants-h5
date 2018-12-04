@@ -61,6 +61,21 @@ export const deviceStatus = (ststus)=>{
   			return ststus;
 	}
 };
+// 设备水位
+export const waterStatus = (ststus)=>{
+	switch (ststus){
+		case 1:
+			return '极低水位';
+		case 2:
+		 	 return '低水位 ';
+		case 3:
+		  	return '中水位';
+		case 4:
+		  	return '高水位';
+		default:
+  			return ststus;
+	}
+};
 
 // 订单状态类型
 export const orderStatus = (ststus)=>{

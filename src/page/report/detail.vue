@@ -1,6 +1,6 @@
 <template>
 <div class="report-detail" v-title="title">
-    <div class="shop-title">{{shopName}}<span>{{date}}</span></div>
+    <div class="shop-title"><span class="shopName">{{shopName}}</span><span class="date">{{date}}</span></div>
     <div class="tabledata">
         <div class="listcon">
           <span class="report-table-name">设备名称</span>
@@ -21,7 +21,6 @@
     <div class="tooltip" v-show="tooltip" :style="{top:positiontop+'px'}"> 
       <div class="ivu-tooltip-inner">{{tooltip}}</div>
     </div>
-  </div>
 </div>
 </template>
 <script>

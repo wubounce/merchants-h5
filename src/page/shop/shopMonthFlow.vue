@@ -37,6 +37,7 @@ export default {
             listdata:[],
             shopName:'',
             shopId:'',
+            query:{},
         };
     },
     methods: {
@@ -47,10 +48,19 @@ export default {
         },
     },
     created() {
-        this.allMoney = this.$route.query ? this.$route.query.allMoney : '';
-        this.shopName =  this.$route.query ? this.$route.query.shopName : '';
-        this.shopId = this.$route.query ? this.$route.query.shopId : '';
+        this.query = this.$route.query?this.$route.query:{};
+        this.allMoney = this.query.allMoney;
+        this.shopName =  this.query.shopName;
+        this.shopId = this.query.shopId;
         this.getTotalIncome();
+    },
+    beforeRouteLeave (to, from, next) {
+        if(to.name === 'shopSearch'){
+            next();
+            this.$router.replace({name: 'shopSearch',query:{searchData: this.query.searchData}});//返回键要返回的路由
+        }else {
+            next();
+        }
     }
 };
 </script>

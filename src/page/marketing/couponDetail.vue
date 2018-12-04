@@ -33,15 +33,17 @@
   export default {
     data () {
       return {
-        data:{}
+        query:{},
+        data:{},
       };
     },
     created() {
+      this.query = this.$route.query?this.$route.query:{};
       this.getDetail();
     },
     methods:{
       async getDetail(){
-        let payload = {id:this.$route.query?this.$route.query.id:''};
+        let payload = {id:this.query.id};
         let res = await voucherDetailFun(payload);
         this.data = res;
         let temp = this.data.faceValue.split('.');
@@ -50,6 +52,14 @@
         this.data.startDate = moment(res.startDate).format('YYYY.MM.DD');
         this.data.endDate = moment(res.endDate).format('YYYY.MM.DD');
         this.data.createTime = moment(res.createTime).format('YYYY.MM.DD  HH:mm:ss');
+      }
+    },
+    beforeRouteLeave (to, from, next) {
+      if(to.name === 'marketing'){
+        next();
+        this.$router.replace({name: 'marketing',query:{tabindex:2,searchData: this.query.searchData,status: this.query.status,titleIndex:this.query.titleIndex,startDate:this.query.startDate,endDate:this.query.endDate}});//返回键要返回的路由
+      }else {
+        next();
       }
     }
   };

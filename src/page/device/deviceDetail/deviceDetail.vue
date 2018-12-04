@@ -1,12 +1,12 @@
 <template>
   <section>
-    <div class="permissions" v-if="$store.getters.has('mer:machine:info')">暂无相关页面权限</div>
-    <div v-else>
+    <div class="permissions" v-if="!$store.getters.has('mer:machine:info')">暂无相关页面权限</div>
+    <div v-if="$store.getters.has('mer:machine:info')">
       <section>
         <ul class="device-detail">
           <li class="device-detail-hd">
             <p>累计收益</p>
-            <p>{{deviceDetail.profit?deviceDetail.profit :'0.00' | keepTwoNum}}</p>
+            <p>{{deviceDetail.profit?deviceDetail.profit :'0.00' | tofixd}}</p>
           </li>
           <!-- 表单模块部分  -->
           <li class="device-detail-item">
@@ -41,7 +41,7 @@
               </li>
               <li>
                 <span class="field-title">状态</span>
-                <p>{{machineState}}</p>
+                <p>{{deviceDetail.machineState | deviceStatus}}</p>
               </li>
               <li>
                 <span class="field-title">NQT</span>
@@ -57,7 +57,7 @@
               </li>
               <li v-show="waterLevelShow">
                 <span class="field-title">水位置设置</span>
-                <p>waterLevel</p>
+                <p>{{deviceDetail.waterLevel | waterStatus}}</p>
               </li>
               <li>
                 <span class="field-title">功能设置</span>
@@ -77,12 +77,12 @@
               </div>
             </section>
             <section class="fun-item-bd">
-              <p v-for="(item,index) in functionList " :key="index">
+              <p v-for="(item,index) in deviceDetail.functionList " :key="index">
                 <span>{{item.functionName}}</span>
                 <span>{{item.needMinutes}}</span>
                 <span>{{item.functionPrice}}</span>
                 <span v-show="functionCodeShow">{{item.functionCode}}</span>
-                <span>{{item.ifOpen}}</span>
+                <span>{{item.ifOpen === 0? "开启":"关闭"}}</span>
               </p>
             </section>
           </div>
@@ -93,9 +93,9 @@
       </ul>
       <div style="width:100%;height:1.73rem;"></div>
       <div class="about-button">
-        <span v-has="'mer:machine:clean'"><button btn-type="small" btn-color="spe" class="ft-btn" @click="deviceTZJ" v-show="tzjShow && machineState==='空闲'">桶自洁</button></span>
-        <span v-has="'mer:machine:reset'"><button btn-type="small" btn-color="spe" class="ft-btn" @click="deviceRest" v-show="(machineState==='运行' && deviceDetail.subTypeName !== '通用脉冲充电桩') || (machineState==='预约' && deviceDetail.subTypeName !== '通用脉冲充电桩')">复位</button></span>
-        <span v-has="'mer:machine:start'"><button btn-type="small" btn-color="spe" class="ft-btn" @click="deviceStart" v-show="machineState==='空闲' && deviceDetail.subTypeName !== '通用脉冲充电桩'">启动</button></span>
+        <span v-has="'mer:machine:clean'"><button btn-type="small" btn-color="spe" class="ft-btn" @click="deviceTZJ" v-show="deviceDetail.hasTzj && deviceDetail.machineState===1||deviceDetail.hasTzj && deviceDetail.machineState===4">桶自洁</button></span>
+        <span v-has="'mer:machine:reset'"><button btn-type="small" btn-color="spe" class="ft-btn" @click="deviceRest" v-show="(deviceDetail.machineState !==8 && deviceDetail.subTypeName !== '通用脉冲充电桩')">复位</button></span>
+        <span v-has="'mer:machine:start'"><button btn-type="small" btn-color="spe" class="ft-btn" @click="deviceStart" v-show="deviceDetail.machineState===1 && deviceDetail.subTypeName !== '通用脉冲充电桩'||deviceDetail.machineState===4 && deviceDetail.subTypeName !== '通用脉冲充电桩'">启动</button></span>
         <span v-has="'mer:machine:update'"><button btn-type="small" btn-color="spe" class="ft-btn" @click="deviceEdit">编辑</button></span>
       </div>
       </section>
@@ -106,50 +106,17 @@
 
 <script>
   import { MessageBox } from 'mint-ui';
+  import { deviceStatus, waterStatus } from '@/utils/mapping';
   import { detailDeviceListFun,deleteDeviceFun,manageResetDeviceFun,tzjDeviceFun } from '@/service/device';
   export default {
     data() {
       return {
         deviceDetail: [],
-        tzjShow: false,
         functionSetListShow: true,
         functionCodeShow: false,
         waterLevelShow: false,
         waterLevel: '',
-        machineState:"",
         tongxin: '',
-        fromdata: {
-          machineName: "",
-          firstClass: "",
-          secondClass: "",
-          cumuIncome: '5000元',
-          shopName: "",
-          companyType: {
-            name: "",
-            value: ""
-          },
-          functionType: {
-            name: "",
-            value: ""
-          },
-          nqt: "",
-          imei: ""
-        },
-        selectListA: [{
-            name: "huiren",
-            value: "huiren"
-          },
-          {
-            name: "youfang",
-            value: "youfang"
-          }
-        ],
-        functionList: [{
-          fuctionName: '白色特脏 赃污',
-          time: 25,
-          price: 8,
-          status: '开启'
-        }],
         functionListTitle: [
           ['功能'],
           ['耗时', '/分'],
@@ -162,36 +129,33 @@
           ['原价', '/元'],
           ['脉冲数'],
           ['状态']
-        ]
+        ],
+        query:{},
       };
     },
-    filters: { //过滤器，过滤2位小数
-      keepTwoNum(value) {
-       if(value){
-         return Number(value).toFixed(2);
-       }else{
-         return value;
-       }
-      }
+   filters: { 
+      deviceStatus: (value)=>{
+        return deviceStatus(value);
+      },
+      waterStatus: (value)=>{
+        return waterStatus(Number(value));
+      },
+    },
+    created() {
+      this.query = this.$route.query?this.$route.query:{};
+      this.getDetailDevice();
     },
     methods: {
       async getDetailDevice() {  //获取数据
         let payload = { machineId: this.$route.query.machineId} ;     
         let res = await detailDeviceListFun(payload);
         this.deviceDetail= res;
-        this.functionList = res.functionList;
-        let comment = res.comment;
         if(res.waterLevel) {
           this.waterLevelShow = true;
           this.waterLevel = res.waterLevel;
         }
-        if(comment) {
+        if(res.comment) {
           this.$toast("设备功能不存在，请删除设备重新绑定");
-        }
-        if(res.hasTzj) { //判断是否有筒自洁功能
-          this.tzjShow = true;
-        }else {
-          this.tzjShow = false;
         }
         if(res.communicateType === 1){
           this.tongxin = "串口";
@@ -200,39 +164,7 @@
           this.functionCodeShow = true;
           this.functionListTitle = this.functionListTitle2;
         }
-        this.functionList.forEach(item=>{
-          item.ifOpen=item.ifOpen === 0? "开启":"关闭";
-        });
-          switch(res.machineState){
-          case 1:
-          this.machineState = "空闲";
-          break;
-          case 2:
-          this.machineState = "运行";
-          break;
-          case 3:
-          this.machineState = "预约";
-          break;
-          case 4:
-          this.machineState = "故障";
-          break;
-          case 5:
-          this.machineState = "参数设置";
-          break;
-          case 6:
-          this.machineState = "自检";
-          break;
-          case 7:
-          this.machineState = "预约";
-          break;
-          case 8:
-          this.machineState = "离线";
-          break;
-          case 16:
-          this.machineState = "超时未工作";
-          break;
-        }
-        return Promise.resolve();
+        return Promise.resolve(res.machineState);
       }, 
       functionSetListShowClick() {
         this.functionSetListShow =!this.functionSetListShow;
@@ -268,8 +200,8 @@
       // 进入启动页
       deviceStart() {
         this.getDetailDevice().then( data =>{
-          switch(this.machineState) {
-            case '空闲': 
+          switch(data) {
+            case 1: 
               this.$router.push({
                 name: 'deviceStart',
                 query:{
@@ -277,42 +209,29 @@
                 }
               });
             break;
-            case '运行':
-              this.$toast({
-                message: '设备运行中，请先复位',
-                position: "middle",
-                duration: 3000
-              });
+            case 2:
+              this.$toast({message: '设备运行中，请先复位'});
             break;
-            case '预约':
-              this.$toast({
-                message: '设备已被预约，请先复位',
-                position: "middle",
-                duration: 3000
-              });
+            case 3:
+              this.$toast({message: '设备已被预约，请先复位'});
             break;
-            case '故障':
-              this.$toast({
-                message: '设备故障，启动失败',
-                position: "middle",
-                duration: 3000
-              });
+            case 4:
+              this.$toast({message: '设备故障，启动失败'});
             break;
-            case '离线':
-              this.$toast({
-                message: '设备离线，启动失败',
-                position: "middle",
-                duration: 3000
-              });
+            case 8:
+              this.$toast({message: '设备离线，启动失败'});
             break;
           }
         });
       }
     },
-    created() {
-      this.getDetailDevice();
-    },
-    components: {
+    beforeRouteLeave (to, from, next) {
+      if(to.name === 'deviceSearch'){
+        next();
+        this.$router.replace({name: 'deviceSearch',query:{keyword: this.query.keyword}});//返回键要返回的路由
+      }else {
+        next();
+      }
     }
   };
 
@@ -483,9 +402,8 @@
       justify-content: flex-end;
       .ft-btn {
         margin: 0.3rem 0;
-        width: 2.33rem;
-        line-height: 0.9rem;
-        height: 0.9rem;
+        width: 2rem;
+        height: 0.8rem;
         border-radius: 5px;
         margin-right: 0.3rem;
         color: #1890FF;

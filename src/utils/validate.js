@@ -61,6 +61,18 @@ export const validatDiscount = (str) => {
   const reg = /^([1-9]\d{0,1}|100)$/;
   return reg.test(str);
 };
+
+/* 折扣 */
+export const validatVipDiscount = (str) => {
+  const reg = /^((0\.[1-9]{1})|(([1-9]{1})(\.\d{1})?))$/ ;
+  return reg.test(str);
+};
+/* 销售价格 */
+export const validatVipPrice = (str) => {
+  const reg = /^\d*(\.\d{1,2})?$/;
+  return reg.test(str);
+};
+
 /*价格*/
 export const validatCradPrice = (str)=>{
   const reg = /^[1-9]\d{0,2}$/;
@@ -93,5 +105,13 @@ export const validatEmail = (str)=>{
  */
 export const validatPrice = (str)=>{
   const reg = /^[0-9]{1}\d*(\.\d{1,2})?$/;
+  return reg.test(str);
+};
+/**
+ * 添加客服电费座机和手机号校验
+ * 
+ */
+export const validatServiceTelephone = (str)=>{
+  const reg = /^\d{1,}$/;
   return reg.test(str);
 };

@@ -152,12 +152,6 @@ export default new Router({
       meta: {title: '设备搜索'},
     },
     {
-      path: '/batchFuntionSet',
-      name: 'batchFuntionSet',
-      component: () => import ('@/page/device/batchFuntionSet/batchFuntionSet'),
-      meta: {title: '批量设置'},
-    },
-    {
       path: '/addDevice',
       name: 'addDevice',
       component: () => import ('@/page/device/addDevice/addDevice'),
@@ -390,6 +384,8 @@ export default new Router({
     { path: '/vipDetail', name: 'vipDetail', component: () => import('@/page/marketing/vipDetail'),meta: {title: 'VIP卡详情'} },
     { path: '/editVip', name: 'editVip', component: () => import('@/page/marketing/editVip'),meta: {title: 'VIP卡修改'} },
     { path: '/couponDetail', name: 'couponDetail', component: () => import('@/page/marketing/couponDetail'),meta: {title: '优惠券详情'} },
+    { path: '/salerecord', name: 'saleRecord', component: () => import('@/page/marketing/saleRecord'),meta: {title: 'VIP售卡记录'} },
+    { path: '/seniormember', name: 'seniorMember', component: () => import('@/page/marketing/seniorMember'),meta: {title: '会员列表'} },
     
     //设置
     {
@@ -414,8 +410,10 @@ export default new Router({
     { path: '/setAlipay', name: 'setAlipay', component: () => import('@/page/setting/setAlipay'),meta: {title: '绑定支付宝账户'}, },
     { path: '/realName', name: 'realName', component: () => import('@/page/setting/realName'),meta: {title: '实名认证'}, },
     { path: '/realNameGet', name: 'realNameGet', component: () => import('@/page/setting/realNameGet'),meta: {title: '实名认证详情'}, },
-    { path: '/contact', name: 'contact', component: () => import('@/page/contact/index'),meta: {title: '联系客服'}, },
+    { path: '/contact', name: 'contact', component: () => import('@/page/contact/index'),meta: {title: '在线客服'}, },
     { path: '/cooperation', name: 'cooperation', component: () => import('@/page/cooperation/index'),meta: {title: '合作热线'}, },
+    { path: '/helpcenter', name: 'helpcenter', component: () => import('@/page/helpCenter/helpCenter'),meta: {title: '帮助中心'}, },
+    { path: '/helpdetail', name: 'helpdetail', component: () => import('@/page/helpCenter/detail'),meta: {title: '帮助中心详情'}, },
     {
       path: '/success',
       name: 'success',

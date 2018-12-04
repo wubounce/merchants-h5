@@ -1,7 +1,7 @@
 <template>
 <div class="addmember">
- <div class="permissions" v-if="$store.getters.has('mer:person:info')">暂无相关页面权限</div>
-  <div v-else>
+ <div class="permissions" v-if="!$store.getters.has('mer:person:info')">暂无相关页面权限</div>
+  <div v-if="$store.getters.has('mer:person:info')">
     <div class="add-form">
       <div class="input-group">
         <div class="form-title">手机号码</div>
@@ -48,14 +48,15 @@ export default {
     return {
       detail:{},
       permissionsData:[],
+      query:{},
     };
   },
   mounted() {
     removeMember();//清除localStorage
   },
   created(){
-    let query = this.$route.query;
-    this.getOperatorInfo(query.id);
+    this.query = this.$route.query?this.$route.query:{};
+    this.getOperatorInfo(this.query.id);
   },
   methods: {
     async getOperatorInfo(id){
@@ -65,15 +66,20 @@ export default {
     },
     deldelMember(id){
       MessageBox.confirm(`确认删除？`,'').then(async () => {
-        let query = this.$route.query;
-        let payload = {id:query.id};
+        let payload = {id:this.query.id};
         let res = await delOperatorFun(payload);
         this.$toast({message: '删除成功' });
-        this.$route.query.issearch == true ? this.$router.go(-2) : this.$router.go(-1);
+        this.query.issearch == true ? this.$router.go(-2) : this.$router.go(-1);
       });
     }
   },
-  components:{
+  beforeRouteLeave (to, from, next) {
+    if(to.name === 'memeberSearch'){
+      next();
+      this.$router.replace({name: 'memeberSearch',query:{searchData: this.query.searchData}});//返回键要返回的路由
+    }else {
+      next();
+    }
   }
 };
 </script>

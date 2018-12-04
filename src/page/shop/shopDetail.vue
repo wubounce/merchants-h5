@@ -1,7 +1,7 @@
 <template>
   <section class="personal">
-    <div class="permissions" v-if="$store.getters.has('mer:shop:info')">暂无相关页面权限</div>
-    <div v-else>
+    <div class="permissions" v-if="!$store.getters.has('mer:shop:info')">暂无相关页面权限</div>
+    <div v-if="$store.getters.has('mer:shop:info')">
         <!-- 第一模块 -->
         <p class="shop-item title"><span>累计收益</span><span>{{shopdetail.profit | tofixd}} 元</span></p>
 
@@ -24,30 +24,22 @@
         <p class="shop-item"><span>预约功能</span><span>{{shopdetail.isReserve == 0? '已开通' : '未开通'}}</span></p>
         <p class="shop-item"><span>预约时长(分钟)</span><span>{{shopdetail.orderLimitMinutes}}</span></p>
         <p class="shop-item"><span>营业时间</span><span>{{shopdetail.workTime}}</span></p>
-        <p class="shop-item"><span>限时优惠</span><span>{{shopdetail.isDiscount ==true ? '已设置' : '未设置'}}</span></p>
+        <p class="shop-item"><span>限时优惠</span><span>{{shopdetail.isDiscount === true ? '已设置' : '未设置'}}</span></p>
         <p class="shop-item">
-          <span>已设置 VIP卡</span>
-          <span>
-            {{shopdetail.hasVip == false ? '暂无' : '' }}
-            {{shopdetail.seasonCard == true ? '季卡' : '' }}
-            <!-- 拥有季卡和半年卡 -->
-            {{shopdetail.seasonCard == true && shopdetail.halfYearCard == true  ? '、' : '' }}
-            {{shopdetail.halfYearCard == true ? '半年卡' : '' }}
-            <!-- 拥有半年卡和年卡 -->
-            {{shopdetail.yearCard == true && shopdetail.halfYearCard == true  ? '、' : '' }}
-            <!-- 拥有季卡和年卡 -->
-            {{shopdetail.yearCard == true && shopdetail.seasonCard == true &&  shopdetail.halfYearCard == false ? '、' : '' }}
-            {{shopdetail.yearCard == true ? '年卡' : '' }}
-          </span>
+          <span>VIP卡</span>
+          <span>{{shopdetail.hasVip === false ? '未设置' : '已设置' }}</span>
         </p>
         <p class="shop-item"><span>VIP数量</span><span>{{shopdetail.vipCount}}个</span></p>
 
         <!-- 第四模块 -->
+        <p class="shop-item title" style="margin-top: 0.27rem;"><span>客服电话</span><span>{{shopdetail.serviceTelephone}}</span></p>
+
+        <!-- 第五模块 -->
         <p class="shop-info second-p"><span>创建人：</span><span>{{shopdetail.createUser}}</span></p>
         <p class="shop-info createTime"><span>创建时间：</span><span>{{shopdetail.createTime}}</span></p>
         <p class="blank"></p>
 
-        <!-- 第五模块 -->
+        <!-- 第六模块 -->
         <p class="about-button">
           <Buttonbottom btn-type="small" btn-color="spe" id="delete" @confirm="isDeleteOrNot(shopdetail.shopId)" v-has="'mer:shop:delete'">删除</Buttonbottom>
     			<Buttonbottom btn-type="small" btn-color="spe" id="edit" @confirm="goShopEdit()" v-has="'mer:shop:update'">编辑</Buttonbottom>
@@ -61,6 +53,9 @@ import { MessageBox } from 'mint-ui';
 import { shopDetailFun } from '@/service/shop';
 import { deleteShopFun } from '@/service/shop';
 export default {
+  components:{
+    Buttonbottom
+  },
   data() {
     return {
       //shopId:this.$route.query.shopId,
@@ -75,8 +70,15 @@ export default {
       cityName:'',
       districtName:'',
       organization:'',
-      address:''
+      address:'',
+      query:{}
     };
+  },
+  mounted() {
+  },
+  created() {
+    this.query = this.$route.query?this.$route.query:{};
+    this.getShopDetail();
   },
   methods:{
     isDeleteOrNot(id) {
@@ -141,13 +143,13 @@ export default {
       }
     }
   },
-  created() {
-    this.getShopDetail();
-  },
-  mounted() {
-  },
-  components:{
-    Buttonbottom
+  beforeRouteLeave (to, from, next) {
+    if(to.name === 'shopSearch'){
+      next();
+      this.$router.replace({name: 'shopSearch',query:{searchData: this.query.searchData}});//返回键要返回的路由
+    }else {
+      next();
+    }
   }
 };
 </script>

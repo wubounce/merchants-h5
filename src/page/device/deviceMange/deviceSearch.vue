@@ -22,11 +22,11 @@
     </div>
 
     <div class="selectedItem">     
-      <router-link tag="div" :to="{ name: 'deviceDetail', query:{machineId:item.machineId}}" class="device-list" v-for="(item,index) in list" :key="index">
+      <router-link tag="div" :to="{ name: 'deviceDetail', query:{machineId:item.machineId,keyword:keyword}}" class="device-list" v-for="(item,index) in list" :key="index">
         <div class="line"></div>
         <section class="item-hd">
           <span class="item-title"><b>{{item.machineName}}</b></span>
-          <span class="state">{{item.machineState}}</span>
+          <span class="state">{{item.machineState | deviceStatus}}</span>
         </section>
         <section class="item-bd">
           <span>店铺</span>
@@ -37,9 +37,9 @@
             <span>类型</span>
             <span>{{item.machineTypeName}}</span>
           </p>
-          <router-link tag="p" class="item-ft-right" :to="{ name: 'deviceMonthFlow', query:{allMoney:item.profit,machineId:item.machineId,machineName:item.machineName,}}">
+          <router-link tag="p" class="item-ft-right" :to="{ name: 'deviceMonthFlow', query:{allMoney:item.profit,machineId:item.machineId,machineName:item.machineName,keyword:keyword}}">
             <span>总收益</span>
-            <span>{{item.profit | keepTwoNum}}</span>
+            <span>{{item.profit | tofixd}}</span>
             <span class="iconfont icon-nextx"></span>
           </router-link>
         </section>
@@ -54,6 +54,8 @@ import Api from '@/utils/Api';
 import Web from '@/utils/Web';
 import { validatReplace } from '@/utils/validate';
 import { listByNameOrlmeiFun,deviceListFun } from '@/service/device';
+import { deviceStatus } from '@/utils/mapping';
+
   /* eslint-disable */
 import {delay } from "@/utils/tool";
   export default {
@@ -69,10 +71,18 @@ import {delay } from "@/utils/tool";
         isSelectItem: true
       };
     },
-    filters: { //过滤器，过滤2位小数
-      keepTwoNum(value) {
-       return Number(value).toFixed(2);
-      }
+    filters: { 
+     deviceStatus: (value)=>{
+        return deviceStatus(value);
+      },
+    },
+    mounted() {
+      this.$refs.inputText.focus();
+    },
+    created() {
+      let query = this.$route.query;
+      this.keyword = query.keyword;
+      if(query.imei)this.search(query.imei);
     },
     methods: {
       async _getList(id)  {
@@ -80,37 +90,6 @@ import {delay } from "@/utils/tool";
         let payload = {machineState:machineState ,machineId: id};
         let res = await deviceListFun(payload);
         this.list = res.page.items;
-        this.list.forEach(item=>{
-          switch(item.machineState){
-          case 1:
-            item.machineState = "空闲";
-            break;
-          case 2:
-            item.machineState = "运行";
-            break;
-          case 3:
-            item.machineState = "预约";
-            break;
-          case 4:
-            item.machineState = "故障";
-            break;
-          case 5:
-            item.machineState = "参数设置";
-            break;
-          case 6:
-            item.machineState = "自检";
-            break;
-          case 7:
-            item.machineState = "预约";
-            break;
-          case 8:
-            item.machineState = "离线";
-            break;
-          case 16:
-            item.machineState = "超时未工作";
-            break;
-          }
-        });
       },
       goBack() {
         this.$router.go(-1);
@@ -155,16 +134,6 @@ import {delay } from "@/utils/tool";
         return !this.searchList.length;
       }
     },
-
-    created() {
-      let query = this.$route.query;
-      if(query.imei)this.search(query.imei);
-    },
-
-    mounted() {
-      this.$refs.inputText.focus();
-    },
-
     watch: {
       keyword: function (newVal) {
         if (newVal) {

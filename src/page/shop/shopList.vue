@@ -1,7 +1,7 @@
 <template>
 	<section>
-    <div class="permissions" v-if="$store.getters.has('mer:shop:list')">暂无相关页面权限</div>
-    <div v-else class="page-loadmore-height">
+    <div class="permissions" v-if="!$store.getters.has('mer:shop:list')">暂无相关页面权限</div>
+    <div class="page-loadmore-height" v-if="$store.getters.has('mer:shop:list')">
       <div class="search-header">
         <section class="sarch-wrap">
           <div class="search">
@@ -40,7 +40,7 @@
                       <div class="text-value">{{item.machineCount}}<span class="little-font">台</span></div>
                     </router-link>
                   </div>
-                  <div class="kindof">
+                  <div class="kindof" v-if="$store.getters.has('mer:shop:profit')" >
                     <router-link :to="{ name: 'shopMonthFlow', query:{allMoney:item.profit,shopId:item.shopId,shopName:item.shopName}}">
                       <div class="text">总收益<span class="order-action iconfont icon-nextx"></span></div>
                       <div class="text-value">{{ item.profit | tofixd }}<span class="little-font">元</span></div>
@@ -106,4 +106,7 @@ export default {
 
 <style lang="scss" scoped>
 @import '../../assets/scss/shop/shopList';
+.bottom .kindof:last-child {
+  border:none
+}
 </style>

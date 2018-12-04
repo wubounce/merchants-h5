@@ -1,7 +1,7 @@
 <template>
   <section class="todolist">
-  <div class="permissions" v-if="$store.getters.has('mer:schedule:info')">暂无相关页面权限</div>
-    <div v-else>
+  <div class="permissions" v-if="!$store.getters.has('mer:schedule:info')">暂无相关页面权限</div>
+    <div v-if="$store.getters.has('mer:schedule:info')">
       <!-- 第一模块 -->
       <p class="todo-item first-todo-item"><span>所属店铺</span><span>{{ item.shopName }}</span></p>
       <p class="todo-item"><span>设备类型</span><span>{{item.machineTypeName}}</span></p>

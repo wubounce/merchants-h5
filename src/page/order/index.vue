@@ -1,7 +1,7 @@
 <template>
 <div class="order-wrap">
-  <div class="permissions" v-if="$store.getters.has('mer:order:list')">暂无相关页面权限</div>
-  <div v-else>
+  <div class="permissions" v-if="!$store.getters.has('mer:order:list')">暂无相关页面权限</div>
+  <div v-if="$store.getters.has('mer:order:list')">
     <div class="search-header">
       <section class="sarch-wrap">
         <div class="search">

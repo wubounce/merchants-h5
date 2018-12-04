@@ -37,6 +37,7 @@ export default {
       listdata:[],
       machineName:'',
       machinepId:'',
+      query:{},
     };
   },
   methods: {
@@ -47,10 +48,19 @@ export default {
     },
   },
   created() {
-    this.allMoney = this.$route.query ? this.$route.query.allMoney : '';
-    this.machineName =  this.$route.query ? this.$route.query.machineName : '';
-    this.machineId = this.$route.query ? this.$route.query.machineId : '';
+    this.query = this.$route.query?this.$route.query:{};
+    this.allMoney = this.query.allMoney;
+    this.machineName =  this.query.machineName;
+    this.machineId = this.query.machineId;
     this.getTotalIncome();
+  },
+   beforeRouteLeave (to, from, next) {
+      if(to.name === 'deviceSearch'){
+          next();
+          this.$router.replace({name: 'deviceSearch',query:{keyword: this.query.keyword}});//返回键要返回的路由
+      }else {
+          next();
+      }
   }
 };
 </script>
