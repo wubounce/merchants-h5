@@ -1,5 +1,5 @@
 <template>
-  <section class="vip-wrap page-loadmore-height">
+  <section class="vip-index vip-wrap page-loadmore-height">
     <div class="permissions" v-if="!$store.getters.has('mer:marketing:vip:list')">暂无相关页面权限</div>
     <div class="page-loadmore-height" v-if="$store.getters.has('mer:marketing:vip:list')">
       <div class="heder">
@@ -88,6 +88,14 @@ import PagerMixin from '@/mixins/pagerMixin';
 
 <style lang='scss' scoped type='text/css'>
   @import '../../assets/scss/marketing/marketing';
+  .vip-index{
+    .page-top {
+      padding-top: 2.64rem;
+      height: 100%;
+      -webkit-box-sizing: border-box;
+      box-sizing: border-box;
+    }
+  }
   .vip-wrap {
     .machine-type {
       color: #1890FF !important;

@@ -1,5 +1,5 @@
 <template>
-    <section>
+    <section class="page-loadmore-height">
         <div class="search-header">
             <section class="sarch-wrap">
                 <div class="search">
@@ -25,7 +25,7 @@
                     <div class="record-wrap">
                         <div class="recored-list" v-for="(item,index) in list" :key="index">
                             <p>VIP用户<span>{{item.userPhone}}</span></p>
-                            <p class="middle-shop">售卡店铺<span>{{item.shopName}}</span></p>
+                            <!-- <p class="middle-shop">售卡店铺<span>{{item.shopName}}</span></p> -->
                             <p>购买时间<span>{{item.soldCardDate}}</span></p>
                         </div>
                     </div>

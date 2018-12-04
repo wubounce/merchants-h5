@@ -1,5 +1,5 @@
 <template>
-    <section>
+    <section class="page-loadmore-height">
         <div class="search-header">
             <section class="sarch-wrap">
                 <div class="search">
@@ -14,7 +14,7 @@
                 <div class="sale-shop"  @click="popupVisible=true;">{{currentTags?currentTags.shopName:'全部店铺'}}<span class="iconfont icon-xiangxiajiantou select-back"></span></div>
             </section>
             <div class="total">
-                <span>共{{total}}条记录</span>
+                <span>共{{total}}条记录</span> 
                 <span @click="openByDialog" class="iconfont icon-rili"></span>
             </div>
         </div>
