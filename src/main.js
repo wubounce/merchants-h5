@@ -1,11 +1,7 @@
 import 'babel-polyfill';
-import 'url-search-params-polyfill';
 import 'lib-flexible';
 import './assets/iconfont/iconfont.css';
 import './assets/iconfont/indexfont.css';
-import Es6Promise from 'es6-promise';
-Es6Promise.polyfill();
-
 import App from './App';
 import router from './router';
 import store from './store';
