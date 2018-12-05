@@ -1,32 +1,11 @@
 <template>
     <section class="help-wrap">
         <ul class="help-con">
-            <li>
-                <router-link :to="{name:'helpdetail'}">
-                    <span class="title">支付成功后显示脉冲设备不允许启动、或时间为0、或功能与支付金额不符怎么办？</span><span class="iconfont icon-nextx"></span>
+            <li v-for="(item,index) in list" :key="index">
+                <router-link :to="{name:'helpdetail',query:{id:item.id}}">
+                    <span class="title">{{item.questionTitle}}</span><span class="iconfont icon-nextx"></span>
                 </router-link>
             </li>
-            <li>
-                <router-link :to="{name:'helpdetail'}">
-                    <span class="title">支付成功后显示脉冲设备不允许启动、或时间为0、或功能与支付金额不符怎么办？</span><span class="iconfont icon-nextx"></span>
-                </router-link>
-            </li>
-            <li>
-                <router-link :to="{name:'helpdetail'}">
-                    <span class="title">支付成功后显示脉冲设备不允许启动、或时间为0、或功能与支付金额不符怎么办？</span><span class="iconfont icon-nextx"></span>
-                </router-link>
-            </li>
-            <li>
-                <router-link :to="{name:'helpdetail'}">
-                    <span class="title">支付成功后显示脉冲设备不允许启动、或时间为0、或功能与支付金额不符怎么办？</span><span class="iconfont icon-nextx"></span>
-                </router-link>
-            </li>
-            <li>
-                <router-link :to="{name:'helpdetail'}">
-                    <span class="title">支付成功后显示脉冲设备不允许启动、或时间为0、或功能与支付金额不符怎么办？</span><span class="iconfont icon-nextx"></span>
-                </router-link>
-            </li>
-            
         </ul>
     </section>
 </template>
@@ -45,7 +24,7 @@ import { helpListFun } from '@/service/help';
     methods:{
         async getlist(){
             let res = await helpListFun();
-            console.log(res);
+            this.list = res.items;
         }
     }
   };
@@ -68,7 +47,7 @@ import { helpListFun } from '@/service/help';
         }
         .title {
             display: block;
-            width: 90%;
+            width: 94%;
             overflow: hidden;
             white-space: nowrap;
             text-overflow: ellipsis;

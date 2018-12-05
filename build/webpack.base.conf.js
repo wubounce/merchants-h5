@@ -43,6 +43,8 @@ module.exports = {
   output: {
     path: config.build.assetsRoot,
     filename: '[name].js',
+    // 需要配置的地方
+    chunkFilename: '[name].js',
     publicPath: process.env.NODE_ENV === 'production'
       ? config.build.assetsPublicPath
       : config.dev.assetsPublicPath
@@ -73,10 +75,22 @@ module.exports = {
       },
       {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
+        loader: 'file-loader',
+        options: {
+          limit: 10000,
+          // name: process.env.NODE_ENV === 'production' ? '[name].[ext]':utils.assetsPath('image/[name].[hash:7].[ext]'),
+          name: '[name].[ext]',
+          publicPath: 'https://static.qiekj.com/merchants-h5/'
+        }
+      },
+      {
+        test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
         loader: 'url-loader',
         options: {
           limit: 10000,
-          name: utils.assetsPath('img/[name].[hash:7].[ext]')
+          // name: utils.assetsPath('img/[name].[hash:7].[ext]')
+          name: '[name].[ext]',
+          publicPath: 'https://static.qiekj.com/merchants-h5/'
         }
       },
       {

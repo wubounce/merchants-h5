@@ -229,6 +229,9 @@
       if(to.name === 'deviceSearch'){
         next();
         this.$router.replace({name: 'deviceSearch',query:{keyword: this.query.keyword}});//返回键要返回的路由
+      }else if(to.name === 'deviceMange') {
+        next();
+        this.$router.replace({name: 'deviceMange',query:{popShopId:this.query.popShopId,popDeviceTypeId:this.query.popDeviceTypeId,popDeviceModelId:this.query.popDeviceModelId,popCommunicationType:this.query.popCommunicationType,selectIndex:this.query.selectIndex,selectDeviceTypeIndex:this.query.selectDeviceTypeIndex,selectModelIndex:this.query.selectModelIndex,selectCommunicationIndex:this.query.selectCommunicationIndex,filterBack:this.query.filterBack}});//返回键要返回的路由
       }else {
         next();
       }

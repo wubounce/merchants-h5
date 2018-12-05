@@ -54,7 +54,7 @@
         <div class="page-loadmore-wrapper" ref="wrapper" :style="{overflowY:scrollShow}">
           <mt-loadmore :top-method="loadTop" :bottom-method="loadBottom" :bottom-all-loaded="allLoaded" @translate-change="translateChange" :auto-fill="false" ref="loadmore">
             <div>
-              <router-link tag="div" :to="{ name: 'deviceDetail', query:{machineId:item.machineId}}" class="device-list" v-for="(item,index) in list" :key="index">
+              <router-link tag="div" :to="{ name: 'deviceDetail', query:{machineId:item.machineId,popShopId:popShopId,popDeviceTypeId:popDeviceTypeId,popDeviceModelId:popDeviceModelId,popCommunicationType:popCommunicationType,selectIndex:selectIndex,selectDeviceTypeIndex:selectDeviceTypeIndex,selectModelIndex:selectModelIndex,selectCommunicationIndex:selectCommunicationIndex,filterBack:filterBack}}" class="device-list" v-for="(item,index) in list" :key="index">
                 <section class="item-hd">
                   <span class="item-title "><b>{{item.machineName}}</b></span>
                   <span class="state">{{item.machineState | deviceStatus}}</span>
@@ -68,7 +68,7 @@
                     <span>类型</span>
                     <span>{{item.machineTypeName}}</span>
                   </p>
-                  <router-link v-if="$store.getters.has('mer:machine:profit')" tag="p" class="item-ft-right" :to="{ name: 'deviceMonthFlow', query:{allMoney:item.profit,machineId:item.machineId,machineName:item.machineName,}}">
+                  <router-link v-if="$store.getters.has('mer:machine:profit')" tag="p" class="item-ft-right" :to="{ name: 'deviceMonthFlow', query:{allMoney:item.profit,machineId:item.machineId,machineName:item.machineName,popShopId:popShopId,popDeviceTypeId:popDeviceTypeId,popDeviceModelId:popDeviceModelId,popCommunicationType:popCommunicationType,selectIndex:selectIndex,selectDeviceTypeIndex:selectDeviceTypeIndex,selectModelIndex:selectModelIndex,selectCommunicationIndex:selectCommunicationIndex,filterBack:filterBack}}">
                     <span>总收益</span>
                     <span>{{item.profit | tofixd}}</span><span class="little-font" style="font-size: 8px;color:#1890FF; ">元</span>
                     <span class="iconfont icon-nextx"></span>
@@ -166,6 +166,8 @@
         initialParentTypeId: '',
         popupVisible: false,
         popShopId: '',
+        popDeviceTypeId:'',
+        popDeviceModelId:'',
         popCommunicationType: '',
         titleArr: [],
         index: null,
@@ -184,6 +186,7 @@
         subFlag: true,
         offlineTip:true,
         hiddenPageHeight: 4.67,
+        filterBack:false //返回筛选展示
       };
     },
     filters: {
@@ -192,6 +195,38 @@
       },
     },
     created() {
+      let query = this.$route.query?this.$route.query:{};
+      this.filterBack = query.filterBack;
+      this.popShopId=query.popShopId;
+      this.popDeviceTypeId=query.popDeviceTypeId;
+      this.popDeviceModelId=query.popDeviceModelId;
+      this.popCommunicationType=query.popCommunicationType;
+      this.selectIndex=query.selectIndex;
+      this.selectDeviceTypeIndex=query.selectDeviceTypeIndex;
+      this.selectModelIndex=query.selectModelIndex;
+      this.selectCommunicationIndex=query.selectCommunicationIndex;
+      if(this.filterBack==true){ //是否是筛选返回
+        if(Number(this.selectIndex)>3){
+          this.shopFlag = false;
+        }else {
+          this.shopFlag = true;
+        }
+        if(Number(this.selectModelIndex)>3){
+          this.modelFlag = false;
+        }else {
+          this.modelFlag = true;
+        }
+        if(this.popShopId){
+          this.getPopupShop(this.shopFlag);
+          let payload = {shopId: this.popShopId}; //得到shopid
+          this.getlistParentType(payload); //获取设备类型
+        }
+        if(this.popDeviceTypeId){
+          let payloadt = this.popShopId?{shopId: this.popShopId,parentTypeId: this.popDeviceTypeId}:{parentTypeId: this.popDeviceTypeId,onlyMine: true};
+          this.getlistSubType(payloadt,this.modelFlag);
+        }
+        
+      }
       this._getList();
     },
     methods: {
@@ -205,9 +240,11 @@
         this.noMore = this.page>1?true: false;
       },
       rightPopup() {  //筛选框弹出
-        this.getPopupShop(this.shopFlag);
-        if(!this.popDeviceTypeId && !this.popShopId) this.getlistParentType({onlyMine: true});
-        if(!this.popDeviceModelId && !this.popDeviceTypeId && !this.popShopId) this.getlistSubTypeAll(this.subFlag);
+        if(this.$route.query.filterBack != true){
+          this.getPopupShop(this.shopFlag);
+          if(!this.popDeviceTypeId && !this.popShopId) this.getlistParentType({onlyMine: true});
+          if(!this.popDeviceModelId && !this.popDeviceTypeId && !this.popShopId) this.getlistSubTypeAll(this.subFlag);
+        }
         this.popupVisible = true;
       },
       async getPopupShop(flag) {  //获取店铺
@@ -326,6 +363,8 @@
         this.popCommunicationType = '';
         this.shopFlag = true,
         this.modelFlag = true,
+        this.filterBack = false; //返回筛选展示
+        this.popupVisible = false;
         this.list = [];
         this.payload = null;
         this.page = 1;
@@ -338,6 +377,7 @@
         this.page = 1;
         this.list = [];
         this.popupVisible = false;
+        this.filterBack = true; //返回筛选展示
         this._getList();
       },
       titleClick(index) { //顶部状态选择

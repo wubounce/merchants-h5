@@ -9,7 +9,7 @@ export default new Router({
     {
       path: '/login',
       name: 'login',
-      component: () => import ('@/page/login'),
+      component: () => import (/* webpackChunkName: 'login' */'@/page/login'),
       meta: {title: '登录'}
     },
     {

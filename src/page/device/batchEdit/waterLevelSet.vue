@@ -16,7 +16,7 @@
     <ul class="functionChoice">
        <li class="item" v-for="(item,index) in waterLevelArr" :class="{selected:index==selectIndex}" :key="index" @click="selectClick(index,item)">
           <div></div>
-          <div>{{item}}</div>
+          <div>{{item.name}}</div>
           <div class="select"><span class="iconfont" :class="{'icon-xuanze':index==selectIndex}"></span></div>
         </li>
     </ul>
@@ -36,7 +36,12 @@ export default {
         currIndex: 4,
         selectIndex: -1,
         waterLevel: '',
-        waterLevelArr: ['极低水位','低水位','中水位','高水位'],
+        waterLevelArr: [
+          {value:'1',name:'极低水位'},
+          {value:'2',name:'低水位'},
+          {value:'3',name:'中水位'},
+          {value:'4',name:'高水位'},
+        ],
         hdTitleArr: [
           "1.请选择相应店铺",
           "2.请选择设备类型",
@@ -64,20 +69,25 @@ export default {
       };
     },
     methods: {
-      selectClick: function (index,name,id) {
+      selectClick: function (index,item) {
         this.selectIndex = index;
-        this.waterLevel= name;
+        this.waterLevel= item.value;
       },
       async goNext() { 
-        let query = this.$route.query;     
-        let obj ={
-          subTypeId: query.subTypeId,
-          shopId: query.shopId,
-          waterLevel: this.waterLevel
-        };
-        let res = await batchEditFun(obj);
-        this.$toast("批量修改成功");
-        this.$router.push({name:'deviceMange'});
+        if(this.waterLevel){
+          let query = this.$route.query;     
+          let obj ={
+            subTypeId: query.subTypeId,
+            shopId: query.shopId,
+            waterLevel: this.waterLevel
+          };
+          let res = await batchEditFun(obj);
+          this.$toast("批量修改成功");
+          this.$router.push({name:'deviceMange'});
+        }else{
+           this.$toast("请选择水位");
+        }
+        
       } 
     },
 

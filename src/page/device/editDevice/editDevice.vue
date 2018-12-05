@@ -299,9 +299,11 @@
           this.$toast({message: '请扫描模块上的IMEI码'});
           return false;
         }
-        if(!this.fromdata.waterLevel.value) {
-          this.$toast({message: '请选择水位'});
-          return false;
+        if(this.waterLevelShow){
+          if(!this.fromdata.waterLevel.value) {
+            this.$toast({message: '请选择水位'});
+            return false;
+          }
         }
         let arr= [].concat(JSON.parse(JSON.stringify(this.functionList))); 
         arr.forEach(item=>{
