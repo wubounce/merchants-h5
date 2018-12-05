@@ -191,5 +191,4 @@
 
 <style lang='scss' scoped type='text/css'>
  @import '../../assets/scss/marketing/salerecord';
-
 </style>
