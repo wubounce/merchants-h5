@@ -81,9 +81,15 @@ overflow: hidden;
     font-size: .32rem;
     color: #999;
     padding:0 0.4rem;
+    .totalPrice {
+        margin-left: 1.33rem;
+    }
     .icon-rili {
         color: #1890FF;
         float: right;
+    }
+    .num {
+        margin-left: 0.2rem;
     }
 }
 

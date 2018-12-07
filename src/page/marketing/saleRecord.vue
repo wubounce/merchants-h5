@@ -14,7 +14,8 @@
                 <div class="sale-shop"  @click="popupVisible=true;">{{currentTags?currentTags.shopName:'全部店铺'}}<span class="iconfont icon-xiangxiajiantou select-back"></span></div>
             </section>
             <div class="total">
-                <span>共{{total}}条记录</span> 
+                <span>售卡数<span class="num">{{total}}</span></span> 
+                <span class="totalPrice">总金额<span class="num">{{totalPrice}}</span></span> 
                 <span @click="openByDialog" class="iconfont icon-rili"></span>
             </div>
         </div>
