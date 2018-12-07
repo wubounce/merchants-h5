@@ -363,8 +363,6 @@
         this.popCommunicationType = '';
         this.shopFlag = true,
         this.modelFlag = true,
-        this.filterBack = false; //返回筛选展示
-        this.popupVisible = false;
         this.list = [];
         this.payload = null;
         this.page = 1;
@@ -377,7 +375,11 @@
         this.page = 1;
         this.list = [];
         this.popupVisible = false;
-        this.filterBack = true; //返回筛选展示
+        if(!this.popShopId&&!this.popDeviceTypeId&&!this.popDeviceModelId&&!this.popCommunicationType){
+          this.filterBack = false; //返回筛选展示
+        }else {
+          this.filterBack = true; //返回筛选展示
+        }
         this._getList();
       },
       titleClick(index) { //顶部状态选择
