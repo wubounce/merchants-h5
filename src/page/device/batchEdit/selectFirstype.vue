@@ -59,7 +59,7 @@ import { getlistParentTypeFun } from '@/service/device';
             text: "型号"
           },
           {
-            text: "功能"
+            text: "设置"
           }
         ],
         currIndex: 1,

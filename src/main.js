@@ -59,7 +59,43 @@ router.afterEach(route => {
         }
     }
 });
+//系统错误捕获
+const errorHandler = (error, vm)=>{
+    var logger = new window.Tracker('cn-shanghai.log.aliyuncs.com','qiekj-web-log','merchant-h5');
+    logger.push('appName', '商家端');
+    logger.push('error', error);
+    logger.logger();
+    return true;
+  };
+  Vue.config.errorHandler = errorHandler;
+  Vue.prototype.$throw = function (error) {
+    return errorHandler(error, this);
+  };
+  
+  // window error捕获的错误
+  window.onerror = (msg, url, line, col, error) => {
+    var logger = new window.Tracker('cn-shanghai.log.aliyuncs.com','qiekj-web-log','merchant-h5');
+    logger.push('appName', '商家端');
+    logger.push('msg', msg);
+    logger.push('url', url);
+    logger.push('line', line);
+    logger.push('col', col);
+    logger.push('error', error);
+    logger.logger();
+    return true;
+  };
 
+  // promise rejecttion 错误捕获，promise错误需要单独捕获
+  window.addEventListener('unhandledrejection', e => {
+    var logger = new window.Tracker('cn-shanghai.log.aliyuncs.com','qiekj-web-log','merchant-h5');
+    logger.push('appName', '商家端');
+    logger.push('info', e.reason);
+    logger.push('url', e.reason.config.url);
+    logger.push('data', e.reason.config.data);
+    logger.push('OS', e.path[0].AP.ua);
+    logger.logger();
+    return true;
+  });
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
