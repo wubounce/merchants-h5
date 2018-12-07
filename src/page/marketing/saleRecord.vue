@@ -68,6 +68,7 @@
       return {
         pageSize:20,
         list:[],
+        totalPrice:'',
         searchData:'',
         shopId: '',
         shopName:'shopName',
@@ -133,6 +134,7 @@
             this.titleArr = res.count;
             this.list = res.items?[...this.list,...res.items]:[];  //分页添加
             this.total = res.total;
+            this.totalPrice = res.totalPrice;
             if (this.searchData || (this.startDate.length > 0 && this.endDate.length > 0) || this.currentTags) {
                 this.noOrderList = false;
                 this.nosearchList = this.list.length<= 0 ? true: false;
