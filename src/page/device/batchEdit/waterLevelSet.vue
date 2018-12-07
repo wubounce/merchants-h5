@@ -10,7 +10,7 @@
     <ul>
       <li class="bat-hd">
         <span>{{hdTitleArr[currIndex]}}</span>
-        <div>{{waterLevel}}</div>
+        <div>{{waterLevel.name}}</div>
       </li>
     </ul>
     <ul class="functionChoice">
@@ -35,7 +35,7 @@ export default {
       return {
         currIndex: 4,
         selectIndex: -1,
-        waterLevel: '',
+        waterLevel: {},
         waterLevelArr: [
           {value:'1',name:'极低水位'},
           {value:'2',name:'低水位'},
@@ -71,7 +71,7 @@ export default {
     methods: {
       selectClick: function (index,item) {
         this.selectIndex = index;
-        this.waterLevel= item.value;
+        this.waterLevel= item;
       },
       async goNext() { 
         if(this.waterLevel){
@@ -79,7 +79,7 @@ export default {
           let obj ={
             subTypeId: query.subTypeId,
             shopId: query.shopId,
-            waterLevel: this.waterLevel
+            waterLevel: this.waterLevel.value
           };
           let res = await batchEditFun(obj);
           this.$toast("批量修改成功");
