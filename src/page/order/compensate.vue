@@ -94,7 +94,7 @@ export default {
       let index = null;
       let name = null;
       let current = null;
-      this.machineSlots[0].values.every((item,index) => {
+      this.machineSlots[0].values.forEach((item,index) => {
         if(item.name === this.query.parentTypeName){
           falg = true;
           index = item.index;
@@ -196,7 +196,8 @@ export default {
         compensateMoney:this.couponPirce,
         conditionMoney:this.fullDiscount,
         validDays:this.expiredDate,
-        compensateNumber:this.couponNum
+        compensateNumber:this.couponNum,
+        memberId:this.query.memberId,
       };
       let res = await compensateFun(payload);
       this.$toast({message: '发放成功' });
