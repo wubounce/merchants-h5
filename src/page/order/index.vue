@@ -74,7 +74,7 @@ export default {
         {value:'',lable:'全部'},
         {value:'0',lable:'待支付'},
         {value:'2',lable:'已支付'},
-        {value:'1',lable:'已失效'},
+        {value:'1',lable:'支付超时'},
         {value:'5',lable:'已退款'}
       ],
       list:[],
