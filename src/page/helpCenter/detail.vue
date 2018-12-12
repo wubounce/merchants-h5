@@ -42,12 +42,12 @@ import { detailFun } from '@/service/help';
             padding: .29rem .38rem;
             border-bottom: 1px solid #f9f8ff;
             line-height: .5rem;
-            color: #8A8FAB;
+            color: #666;
         }
     }
     .help-detail{
         margin: 0.29rem;
-        color: #25265E;
+        color: #999;
         font-size: 14px;
         line-height: .45rem;        
         p{
