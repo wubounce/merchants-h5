@@ -57,7 +57,8 @@
               </li>
               <li v-show="waterLevelShow">
                 <span class="field-title">水位置设置</span>
-                <p>{{deviceDetail.waterLevel | waterStatus}}</p>
+                <p v-if="deviceDetail.subTypeName==='海尔5/6/7公斤波轮SXB60-51U7/SXB70-51U7'&&deviceDetail.waterLevel">{{deviceDetail.waterLevel | waterStatus}}</p>
+                <p v-if="deviceDetail.subTypeName==='海尔5/6/7公斤波轮SXB60-51U7/SXB70-51U7'&&!deviceDetail.waterLevel">可设置</p>
               </li>
               <li>
                 <span class="field-title">功能设置</span>
@@ -115,7 +116,6 @@
         functionSetListShow: true,
         functionCodeShow: false,
         waterLevelShow: false,
-        waterLevel: '',
         tongxin: '',
         functionListTitle: [
           ['功能'],
@@ -150,9 +150,8 @@
         let payload = { machineId: this.$route.query.machineId} ;     
         let res = await detailDeviceListFun(payload);
         this.deviceDetail= res;
-        if(res.waterLevel) {
+        if(res.subTypeName === '海尔5/6/7公斤波轮SXB60-51U7/SXB70-51U7') {
           this.waterLevelShow = true;
-          this.waterLevel = res.waterLevel;
         }
         if(res.comment) {
           this.$toast("设备功能不存在，请删除设备重新绑定");

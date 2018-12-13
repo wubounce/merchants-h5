@@ -4,6 +4,7 @@ import router from '@/router';
 const user = {
   state: {
     menu:[],
+    userInfo: {}
   },
   getters:{
     has: (state) => (value) => {
@@ -25,12 +26,19 @@ const user = {
     setMenu: (state, menu) => {
       state.menu = menu;
     },
+    setUserInfo: (state, userInfo) => {
+      state.userInfo = userInfo;
+    }
   },
 
   actions: {
     // 登录
     login({ commit }, token) {
       setToken(token);
+    },
+    // 获取用户信息
+    getUser ({ commit, state }) {
+      commit('setUserInfo', userInfo);
     },
     // 前端 登出
     LogOut({ commit }) {

@@ -141,7 +141,7 @@
           communicateType: "",
           ver: "",
           waterLevel: {
-            name: "未设置",
+            name: "可设置",
             value: ""
           },
           shopType: {
@@ -272,7 +272,7 @@
         this.functionList = res.functionList;
         this.waterLevelShow = res.subTypeName === "海尔5/6/7公斤波轮SXB60-51U7/SXB70-51U7"?true:false; //水位功能隐藏
         let waterBak = this.slotsWaterLevel[0].values.find(item=>Number(item.value)===Number(res.waterLevel));
-        this.fromdata.waterLevel = waterBak?waterBak:{value: "",name: "未设置"};     
+        this.fromdata.waterLevel = waterBak?waterBak:{value: "",name: "可设置"};     
         this.functionList.forEach(item=>{
           item.ifOpen=item.ifOpen === "0"?(!!item.ifOpen) : (!item.ifOpen);
         });
