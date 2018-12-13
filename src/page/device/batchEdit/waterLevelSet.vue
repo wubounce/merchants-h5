@@ -85,7 +85,7 @@ export default {
           this.$toast("批量修改成功");
           this.$router.push({name:'deviceMange'});
         }else{
-           this.$toast("请选择水位");
+           this.$toast("请设置水位");
         }
         
       } 

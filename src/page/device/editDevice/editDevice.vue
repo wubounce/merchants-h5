@@ -301,7 +301,7 @@
         }
         if(this.waterLevelShow){
           if(!this.fromdata.waterLevel.value) {
-            this.$toast({message: '请选择水位'});
+            this.$toast({message: '请设置水位'});
             return false;
           }
         }
