@@ -205,7 +205,7 @@
       this.selectDeviceTypeIndex=query.selectDeviceTypeIndex;
       this.selectModelIndex=query.selectModelIndex;
       this.selectCommunicationIndex=query.selectCommunicationIndex;
-      if(this.filterBack==true){ //是否是筛选返回
+      if(query.filterBack==true){ //是否是筛选返回
         if(Number(this.selectIndex)>3){
           this.shopFlag = false;
         }else {
@@ -216,14 +216,19 @@
         }else {
           this.modelFlag = true;
         }
-        if(this.popShopId){
-          this.getPopupShop(this.shopFlag);
-          let payload = {shopId: this.popShopId}; //得到shopid
-          this.getlistParentType(payload); //获取设备类型
+        
+        this.getPopupShop(this.shopFlag);
+
+        if(query.popShopId){
+          this.getlistParentType({shopId: this.popShopId}); //获取设备类型
+        }else {
+          this.getlistParentType({onlyMine: true});
         }
-        if(this.popDeviceTypeId){
+        if(query.popDeviceTypeId){
           let payloadt = this.popShopId?{shopId: this.popShopId,parentTypeId: this.popDeviceTypeId}:{parentTypeId: this.popDeviceTypeId,onlyMine: true};
           this.getlistSubType(payloadt,this.modelFlag);
+        }else{
+           this.getlistSubTypeAll(this.subFlag);
         }
         
       }
