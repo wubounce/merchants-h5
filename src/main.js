@@ -1,5 +1,4 @@
 import 'babel-polyfill';
-import 'url-search-params-polyfill';
 import 'lib-flexible';
 import './assets/iconfont/iconfont.css';
 import './assets/iconfont/indexfont.css';
