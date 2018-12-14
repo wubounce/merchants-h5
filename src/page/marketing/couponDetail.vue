@@ -67,8 +67,6 @@
 
 <style lang='scss' scoped type='text/css'>
   @import '../../assets/scss/marketing/couponDetail';
-</style>
-<style>
   @media screen and (max-width: 360px) {
     .coupondetail-wrap .detail-wrap .title {
       width: 2.8rem !important;

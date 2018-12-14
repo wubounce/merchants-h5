@@ -111,8 +111,6 @@ export default {
 </script>
 <style type="text/css" lang="scss" scoped>
   @import "../../assets/scss/management";
-</style>
-<style>
   @media screen and (max-width: 360px) {
     .order-mang {
       bottom: -0.27rem !important;

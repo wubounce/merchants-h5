@@ -400,7 +400,7 @@
       justify-content: flex-end;
       .ft-btn {
         margin: 0.3rem 0;
-        width: 2rem;
+        width: 2.2rem;
         height: 0.8rem;
         border-radius: 5px;
         margin-right: 0.3rem;
