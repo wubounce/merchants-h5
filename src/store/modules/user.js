@@ -1,6 +1,5 @@
-import { getToken, setToken, setNavTabIndex, setMenu, removeMenu, getMenu, removeToken, removeMember } from '@/utils/tool';
-import { menuSelectFun } from '@/service/member';
-import router from '@/router';
+import { getMenu, removeToken } from '@/utils/tool';
+
 const user = {
   state: {
     menu:[],
@@ -32,18 +31,11 @@ const user = {
   },
 
   actions: {
-    // 登录
-    login({ commit }, token) {
-      setToken(token);
-    },
-    // 获取用户信息
-    getUser ({ commit, state }) {
-      commit('setUserInfo', userInfo);
-    },
     // 前端 登出
     LogOut({ commit }) {
       return new Promise(resolve => {
         commit('setMenu', []);
+        commit('userInfo', {});
         removeToken();
         resolve();
       });

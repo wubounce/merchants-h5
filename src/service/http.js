@@ -1,9 +1,9 @@
 import axios from 'axios';
 import { Indicator, MessageBox, Toast } from 'mint-ui';
-import store from '../store';
 import { getToken, filterData, get_sign } from '@/utils/tool';
 import qs from 'qs';
 import router from '@/router';
+import store from '@/store';
 
 // 创建axios实例
 const http = axios.create({
@@ -36,7 +36,7 @@ http.interceptors.request.use(config => {
   let _timestamp = (new Date()).getTime();
   if (token) {
     // 阻止转义
-    config.data = config.data ? config.data + `&token=${token}`:`token=${token}`;
+    config.data = config.data ? config.data + `&token=${token}&uid=${store.state.user.userInfo.id}`:`&token=${token}&uid=${store.state.user.userInfo.id}`;
     if(config.url == '/batchExecutePlan/updateBatchStart' || config.url == '/batchExecutePlan/add' ) {
       config.data = config.data.split('+').join(' ');
     }

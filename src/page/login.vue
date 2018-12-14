@@ -65,7 +65,7 @@
 <script>
 import store from '@/store';
 import { mapState, mapActions, mapMutations } from 'vuex';
-import { getToken, removeToken, setMenu, removeMenu, removeNavTabIndex,setNavTabIndex, getNavTabIndex, setPhoneCode, getPhoneCode, getIsRemember, setIsRemember, getUserNameKey, setUserNameKey, removeMember } from '@/utils/tool';
+import { setToken, getToken, removeToken, setMenu, removeMenu, removeNavTabIndex,setNavTabIndex, getNavTabIndex, setPhoneCode, getPhoneCode, getIsRemember, setIsRemember, getUserNameKey, setUserNameKey } from '@/utils/tool';
 import { login, codeLogin, sendLoginCodeFun} from '@/service/login';
 import JsEncrypt from 'jsencrypt';
 import { menuSelectFun } from '@/service/member';
@@ -80,13 +80,12 @@ export default {
           next(localData);
         } else {
           menuSelectFun().then((data) => {
-            store.commit('setMenu', data);
             setMenu(data);
             let pac = data.find(item=>item.name === '首页' || item.name === '报表');
             let url = data.length >0 ? data[0].url:'user';
             let path = pac ? pac.url : url;
             setNavTabIndex('/'+ path);
-             next(path);
+            next(path);
           });
         }
         return;
@@ -131,18 +130,10 @@ export default {
       this.isCheckCLass = getIsRemember() ? getIsRemember(): 'icon-weixuan';
       this.form.phone = getPhoneCode() ? getPhoneCode()[0]:'';
     },
-     computed: {
-        ...mapState({
-            firstRoute: state => state.user.firstRoute
-        }),
+    computed: {
+        
     },
     methods: {
-      ...mapActions([
-        'login','getMenu'
-      ]),
-      ...mapMutations([ 
-          'setMenu',
-      ]),
       checkoutLogin() {
         this.loginPwd = !this.loginPwd;
       },
@@ -198,7 +189,7 @@ export default {
             code: code
             };
             let res = await codeLogin(payload);
-            this.login(res.token);
+            setToken(res.token);
             this.iphoneArr = [this.form.phone,...this.iphoneArr];
             this.iphoneArr = Array.from(new Set([...this.iphoneArr]));//去重
             setPhoneCode(this.iphoneArr); //保存登录过的手机号
@@ -206,7 +197,6 @@ export default {
               this.$router.push({name:'bindPhone'});     
             }else {
               menuSelectFun().then((data) => {
-                this.setMenu(data);
                 setMenu(data);
                 let pac = data.find(item=>item.name === '首页' || item.name === '报表');
                 let url = data.length >0 ? data[0].url:'user';
@@ -227,7 +217,7 @@ export default {
             userName:userName
           };
           let res = await login(payload);
-          this.login(res.token);
+          setToken(res.token);
           let remPassword = this.isCheckCLass === 'icon-yixuan'?this.form.password:'';
           let obj = {
             password:remPassword,
@@ -245,7 +235,6 @@ export default {
             this.$router.push({name:'bindPhone'});     
           }else {
             menuSelectFun().then((data) => {
-              this.setMenu(data);
               setMenu(data);
               let pac = data.find(item=>item.name === '首页' || item.name === '报表');
               let url = data.length >0 ? data[0].url:'user';
