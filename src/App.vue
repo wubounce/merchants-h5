@@ -10,25 +10,17 @@
 
 <script>
   import Web from '@/utils/Web';
-  import { getOperatorFun } from '@/service/user';
-  import { mapState, mapActions, mapMutations } from 'vuex';
-
   export default {
     name: 'App',
     data() {
       return {};
     },
     mounted(){
-      this.getOperator();
+      // document.body.addEventListener('touchmove', function (e) {
+      //     e.preventDefault();// 阻止默认的处理方式(阻止下拉滑动的效果)
+      // }, {passive: false}); // passive 参数不能省略，用来兼容ios和android
     },
     methods: {
-      ...mapMutations([ 
-          'setUserInfo',
-      ]),
-      async getOperator(){
-          let res = await getOperatorFun();
-          this.setUserInfo(res);
-      },
       // 如果是微信，在每次路由改变的时候，重新获取config
       initWechat() {
         if (Web.getUA() === 'wechat') {

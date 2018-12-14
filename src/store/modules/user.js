@@ -1,5 +1,5 @@
 import { getMenu, removeToken } from '@/utils/tool';
-
+import { getOperatorFun } from '@/service/user';
 const user = {
   state: {
     menu:[],
@@ -32,10 +32,17 @@ const user = {
 
   actions: {
     // 前端 登出
+    SetMenu({ commit }) {
+      getOperatorFun().then(res=>{
+        commit('setMenu', res);
+        resolve();
+      });
+    },
+    // 前端 登出
     LogOut({ commit }) {
       return new Promise(resolve => {
         commit('setMenu', []);
-        commit('userInfo', {});
+        commit('setUserInfo', {});
         removeToken();
         resolve();
       });

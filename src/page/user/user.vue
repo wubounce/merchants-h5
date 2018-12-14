@@ -1,7 +1,7 @@
 <template>
 <div class="user-wrapper">
     <header>
-        <p class="guide"><a href="https://static.qiekj.com/merchants-h5/B-user-guide.pdf" target="_self"><span class="iconfont icon-zhinan"></span>平台指南</a></p>
+        <p class="guide"><a href="../../../static/B-user-guide.pdf" target="_self"><span class="iconfont icon-zhinan"></span>平台指南</a></p>
         <div class="user-info">
             <div class="pic">
                 <img :src="userInfo.headImage" v-if="userInfo.headImage">
@@ -34,12 +34,12 @@
                 <div class="item-right"><span class="go iconfont icon-nextx"></span></div>
             </router-link>
         </li>
-        <li>
+        <!-- <li>
             <router-link to="helpcenter" class="item">
                 <div class="item-left"><span class="usericon iconfont icon-bangzhuzhongxin"></span><span>帮助中心</span></div>
                 <div class="item-right"><span class="go iconfont icon-nextx"></span></div>
             </router-link>
-        </li>
+        </li> -->
     </ul>
     <ul class="user-list">
         <li>
@@ -53,25 +53,26 @@
 </template>
 <script>
 import { getOperatorFun } from '@/service/user';
-import { mapState } from 'vuex';
 export default {
-    data() {
-        return {
-        };
-    },
-    computed: {
-        ...mapState({
-            userInfo: state => state.user.userInfo
-        }),
-    },
-    created(){
-        
-    },
-    methods: {
-        
-    },
-    components:{
+  data() {
+    return {
+      userInfo:{}
+    };
+  },
+  mounted() {
+      
+  },
+  created(){
+    this.getOperator();
+  },
+  methods: {
+    async getOperator(){
+        let res = await getOperatorFun();
+        this.userInfo = res;
     }
+  },
+  components:{
+  }
 };
 </script>
 <style lang="scss" scoped>
