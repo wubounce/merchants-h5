@@ -123,7 +123,6 @@ export default {
       // 每次登录之前清理缓存数据
       removeToken();
       removeNavTabIndex();
-      removeMember();
       removeMenu();
       this.form.userName = getUserNameKey() ? getUserNameKey()[0].userName:''; //最新一个用户名
       this.form.password = getUserNameKey() ? getUserNameKey()[0].password:'';

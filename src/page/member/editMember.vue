@@ -52,7 +52,7 @@
 import { mapState } from 'vuex';
 import { validatPhone, validatName } from '@/utils/validate';
 import { shopListFun, getOperatorInfoFun, updateOperatorInfoFun, permsMenuFun } from '@/service/member';
-import { getTrees, setMember, getMember, removeMember, delay } from '@/utils/tool';
+import { getTrees, delay } from '@/utils/tool';
 export default {
   data() {
     return {

@@ -42,7 +42,7 @@
 <script>
 import { MessageBox } from 'mint-ui';
 import { getOperatorInfoFun, delOperatorFun } from '@/service/member';
-import { getTrees, removeMember} from '@/utils/tool';
+import { getTrees} from '@/utils/tool';
 export default {
   data() {
     return {
@@ -52,7 +52,6 @@ export default {
     };
   },
   mounted() {
-    removeMember();//清除localStorage
   },
   created(){
     this.query = this.$route.query?this.$route.query:{};

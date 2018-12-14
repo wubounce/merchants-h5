@@ -43,12 +43,6 @@ export const setIsRemember = (navTab) => localStorage.setItem(IsRememberKey,JSON
 export const getIsRemember  = () => JSON.parse(localStorage.getItem(IsRememberKey));
 export const removeIsRemember  = () => localStorage.removeItem(IsRememberKey);
 
-
-const MemberKey = 'member';
-export const setMember = (data) => sessionStorage.setItem(MemberKey,JSON.stringify(data));
-export const getMember = () => JSON.parse(sessionStorage.getItem(MemberKey));
-export const removeMember = () => sessionStorage.removeItem(MemberKey);
-
 const EmailKey = 'email';
 export const setEmail = (data) => localStorage.setItem(EmailKey,data);
 export const getEmail = () => localStorage.getItem(EmailKey);

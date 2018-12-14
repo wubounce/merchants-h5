@@ -63,7 +63,7 @@
 <script type="text/javascript">
 import { listByShopNameFun, manageListFun } from '@/service/shop';
 import { memberIsLock } from '@/utils/mapping';
-import { getTrees, setMember, removeMember } from '@/utils/tool';
+import { getTrees } from '@/utils/tool';
 import { validatReplace } from '@/utils/validate';
 import PagerMixin from '@/mixins/pagerMixin';
 import {delay } from "@/utils/tool";
