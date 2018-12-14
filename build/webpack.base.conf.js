@@ -25,7 +25,6 @@ module.exports = {
     axios: ['axios'],
     jsencrypt: ['jsencrypt'],
     sha1: ['sha1'],
-    vueamap:['vue-amap'],
     app: ["babel-polyfill", "./src/main.js"]
   },
   externals: {// 这里需要将vue和vue-router公开出去，供全局使用，这里小写的(即冒号左边的)vue和vue-router是我们引入资源时对应的名字，冒号右面的是由库的主人暴露出来的全局方法名

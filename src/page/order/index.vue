@@ -38,11 +38,11 @@
                   </section>
                   </router-link>
                   <section class="listaction" v-if="item.orderStatus === 2 && !historyCurrent.id"> 
-                      <mt-button @click="orderRefund(item.orderNo,item.payPrice)" v-has="'mer:order:refund'" :disabled="refundDisabled">退款</mt-button>
+                      <mt-button @click="orderRefund(item.orderNo,item.payPrice,item.userId)" v-has="'mer:order:refund'" :disabled="refundDisabled">退款</mt-button>
                       <span v-if="item.shopState === 2">
-                        <mt-button @click="gocompensate(item.orderNo,item.phone,item.shopName,item.shopId,item.parentTypeName,item.markPrice)" v-has="'mer:order:compensate'">补偿</mt-button>
+                        <mt-button @click="gocompensate(item.orderNo,item.phone,item.shopName,item.shopId,item.parentTypeName,item.markPrice,item.userId)" v-has="'mer:order:compensate'">补偿</mt-button>
                       </span>
-                      <mt-button @click="machineBoot(item.id,item.machineName)" v-if="item.isESource === 0 || item.isESource === null" v-has="'mer:order:start'">启动</mt-button>
+                      <mt-button @click="machineBoot(item.id,item.machineName,item.userId)" v-if="item.isESource === 0 || item.isESource === null" v-has="'mer:order:start'">启动</mt-button>
                       <mt-button @click="machineReset(item.orderNo,item.machineId,item.machineName)"  v-if="item.isESource === 0 || item.isESource === null" v-has="'mer:order:reset'">复位</mt-button>
                   </section>
                 </div>
@@ -198,23 +198,23 @@ export default {
       });
       
     },
-    machineBoot(id,machineName){ //设备启动
+    machineBoot(id,machineName,memberId){ //设备启动
       MessageBox.confirm(`您确定要启动${machineName}？`,'').then(async () => {
         let query = this.$route.query;
-        let payload = {orderId:id};
+        let payload = {orderId:id,memberId:memberId};
         let res = await machineBootFun(payload);
         this.$toast({message: '启动成功' });
       });
       
     },
-    orderRefund(oederno,payPrice){ //退款
+    orderRefund(oederno,payPrice,memberId){ //退款
       this.refundDisabled = true;
       MessageBox.confirm('',{ 
         message: '确定发起退款？', 
         closeOnClickModal:false
       }).then(async () => {
         let query = this.$route.query;
-        let payload = {orderNo:oederno,refundMoney:payPrice};
+        let payload = {orderNo:oederno,refundMoney:payPrice,memberId:memberId};
         let res = await ordeRrefundFun(payload);
         this.refundDisabled = false;
         this.$toast({message: '退款成功' });
@@ -225,8 +225,8 @@ export default {
          this.refundDisabled = false;
       });
     },
-    gocompensate(orderno,phone,shopName,shopId,parentTypeName,markPrice){
-      this.$router.push({name:'compensate',query:{orderno:orderno,phone:phone,shopName:shopName,shopId:shopId,parentTypeName:parentTypeName,markPrice:markPrice}});
+    gocompensate(orderno,phone,shopName,shopId,parentTypeName,markPrice,memberId){
+      this.$router.push({name:'compensate',query:{orderno:orderno,phone:phone,shopName:shopName,shopId:shopId,parentTypeName:parentTypeName,markPrice:markPrice,memberId:memberId}});
     }
   },
   filters: {

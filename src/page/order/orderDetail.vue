@@ -84,11 +84,11 @@
     </div>
     
      <section class="listaction" v-cloak v-if="detail.orderStatus === 2&&!$route.query.tableId"> 
-      <mt-button @click="orderRefund(detail.orderNo,detail.payPrice)" v-has="'mer:order:refund,mer:order:info'" :disabled="refundDisabled">退款</mt-button>
+      <mt-button @click="orderRefund(detail.orderNo,detail.payPrice,detail.userId)" v-has="'mer:order:refund,mer:order:info'" :disabled="refundDisabled">退款</mt-button>
       <span v-if="detail.shopState === 2">
-        <mt-button @click="gocompensate(detail.orderNo,detail.phone,detail.shopName,detail.shopId,detail.parentTypeName,detail.markPrice)" v-has="'mer:order:compensate'">补偿</mt-button>
+        <mt-button @click="gocompensate(detail.orderNo,detail.phone,detail.shopName,detail.shopId,detail.parentTypeName,detail.markPrice,detail.userId)" v-has="'mer:order:compensate'">补偿</mt-button>
       </span>
-      <mt-button @click="machineBoot(detail.id)" v-has="'mer:order:start,mer:order:info'" v-if="detail.isESource === 0 || detail.isESource === null">启动</mt-button>
+      <mt-button @click="machineBoot(detail.id,detail.userId)" v-has="'mer:order:start,mer:order:info'" v-if="detail.isESource === 0 || detail.isESource === null">启动</mt-button>
       <mt-button @click="machineReset(detail.orderNo,detail.machineId)" v-has="'mer:order:reset,mer:order:info'" v-if="detail.isESource === 0 || detail.isESource === null">复位</mt-button>
     </section>
   </div>
@@ -127,21 +127,21 @@ export default {
       });
       
     },
-    machineBoot(id){ //设备启动
+    machineBoot(id,memberId){ //设备启动
       MessageBox.confirm(`您确定要启动${this.detail.machineName}？`,'').then(async () => {
-        let payload = {orderId:id};
+        let payload = {orderId:id,memberId:memberId};
         let res = await machineBootFun(payload);
         this.$toast({message: '启动成功' });
       });
       
     },
-    orderRefund(orderNo,payPrice){ //退款
+    orderRefund(orderNo,payPrice,memberId){ //退款
       this.refundDisabled = true;
       MessageBox.confirm('',{ 
         message: '确定发起退款？', 
         closeOnClickModal:false
       }).then(async () => {
-        let payload = {orderNo:orderNo,refundMoney:payPrice};
+        let payload = {orderNo:orderNo,refundMoney:payPrice,memberId:memberId};
         let res = await ordeRrefundFun(payload);
         this.$toast({message: '退款成功' });
         this.$router.push({name:'order'});
@@ -150,8 +150,8 @@ export default {
          this.refundDisabled = false;
       });
     },
-    gocompensate(orderno,phone,shopName,shopId,parentTypeName,markPrice){//补偿
-      this.$router.push({name:'compensate',query:{orderno:orderno,phone:phone,shopName:shopName,shopId:shopId,parentTypeName:parentTypeName,markPrice:markPrice}});
+    gocompensate(orderno,phone,shopName,shopId,parentTypeName,markPrice,memberId){//补偿
+      this.$router.push({name:'compensate',query:{orderno:orderno,phone:phone,shopName:shopName,shopId:shopId,parentTypeName:parentTypeName,markPrice:markPrice,memberId:memberId}});
     }
   },
   filters: {

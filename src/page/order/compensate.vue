@@ -196,7 +196,8 @@ export default {
         compensateMoney:this.couponPirce,
         conditionMoney:this.fullDiscount,
         validDays:this.expiredDate,
-        compensateNumber:this.couponNum
+        compensateNumber:this.couponNum,
+        memberId:this.query.memberId,
       };
       let res = await compensateFun(payload);
       this.$toast({message: '发放成功' });
