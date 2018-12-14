@@ -564,6 +564,7 @@
         arr.forEach(item=>{
           return item.ifOpen=item.ifOpen?0:1;
         });
+
         let obj = {
           machineName: this.fromdata.machineName,
           shopId: this.fromdata.shopType.id,
@@ -576,8 +577,10 @@
           imei: this.fromdata.imei,
           functionTempletType: this.functionTempletType,
           functionJson: JSON.stringify(arr),
-          waterLevel: this.fromdata.waterLevel.value
         };
+        if(this.subTypeName=== "海尔5/6/7公斤波轮SXB60-51U7/SXB70-51U7"){
+          obj.waterLevel = this.fromdata.waterLevel.value;
+        }
         let res = await deviceAddorEditFun(obj);
         this.$toast("新增设备成功");
         this.$router.push({name:'deviceMange'});

@@ -321,9 +321,11 @@
           ver: this.fromdata.ver,
           imei: this.fromdata.imei,
           functionTempletType: this.fromdata.functionTempletType,
-          waterLevel:this.fromdata.waterLevel.value,
           functionJson: JSON.stringify(arr)
         };
+        if(this.fromdata.secondType.name=== "海尔5/6/7公斤波轮SXB60-51U7/SXB70-51U7"){
+          obj.waterLevel = this.fromdata.waterLevel.value;
+        }
         let res = await deviceAddorEditFun(obj);
         this.$toast("编辑设备成功");
         this.$router.push({name:'deviceMange'});
