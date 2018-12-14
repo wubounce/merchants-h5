@@ -36,7 +36,11 @@ http.interceptors.request.use(config => {
   let _timestamp = (new Date()).getTime();
   if (token) {
     // 阻止转义
-    config.data = config.data ? config.data + `&token=${token}&uid=${store.state.user.userInfo.id}`:`&token=${token}&uid=${store.state.user.userInfo.id}`;
+    if(store.state.user.userInfo){
+      config.data = config.data ? config.data + `&token=${token}&uid=${store.state.user.userInfo.id}`:`&token=${token}&uid=${store.state.user.userInfo.id}`;
+    }else {
+      config.data = config.data ? config.data + `&token=${token}`:`&token=${token}`;
+    }
     if(config.url == '/batchExecutePlan/updateBatchStart' || config.url == '/batchExecutePlan/add' ) {
       config.data = config.data.split('+').join(' ');
     }

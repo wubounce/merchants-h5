@@ -21,6 +21,9 @@ router.beforeEach((to, from, next) => {
   MessageBox.close();
   Indicator.close();
   if (getToken()) {
+      if(!store.state.user.userInfo){
+        store.dispatch('getUserInfo').then(() => {});
+      } 
       next();
       if (typeof localStorage === 'object') {
         try {

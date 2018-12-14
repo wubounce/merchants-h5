@@ -18,8 +18,8 @@
 </div>
 </template>
 <script>
-import Button from "@/components/Button/Button";
 import { mapActions } from 'vuex';
+import Button from "@/components/Button/Button";
 export default {
   data() {
     return {
@@ -32,7 +32,9 @@ export default {
  
   },
   methods: {
-    ...mapActions(['LogOut']),
+    ...mapActions([
+        'LogOut'
+      ]),
     logOut () {
       this.LogOut();
       this.$router.push({name:'login'});

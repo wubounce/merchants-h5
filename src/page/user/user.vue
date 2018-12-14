@@ -52,27 +52,24 @@
 </div>
 </template>
 <script>
-import { getOperatorFun } from '@/service/user';
+import { mapState } from 'vuex';
 export default {
-  data() {
-    return {
-      userInfo:{}
-    };
-  },
-  mounted() {
-      
-  },
-  created(){
-    this.getOperator();
-  },
-  methods: {
-    async getOperator(){
-        let res = await getOperatorFun();
-        this.userInfo = res;
+    data() {
+        return {
+        };
+    },
+    mounted() {
+    },
+    computed: {
+        ...mapState({
+            userInfo: state => state.user.userInfo
+        }),
+    },
+    methods: {
+
+    },
+    components:{
     }
-  },
-  components:{
-  }
 };
 </script>
 <style lang="scss" scoped>

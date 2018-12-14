@@ -134,6 +134,9 @@ export default {
         
     },
     methods: {
+      ...mapActions([
+        'getUserInfo'
+      ]),
       checkoutLogin() {
         this.loginPwd = !this.loginPwd;
       },
@@ -190,6 +193,7 @@ export default {
             };
             let res = await codeLogin(payload);
             setToken(res.token);
+            this.getUserInfo();
             this.iphoneArr = [this.form.phone,...this.iphoneArr];
             this.iphoneArr = Array.from(new Set([...this.iphoneArr]));//去重
             setPhoneCode(this.iphoneArr); //保存登录过的手机号
@@ -218,6 +222,7 @@ export default {
           };
           let res = await login(payload);
           setToken(res.token);
+          this.getUserInfo();
           let remPassword = this.isCheckCLass === 'icon-yixuan'?this.form.password:'';
           let obj = {
             password:remPassword,

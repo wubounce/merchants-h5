@@ -1,9 +1,9 @@
-import { getMenu, removeToken } from '@/utils/tool';
+import { getMenu, removeToken, removeNavTabIndex, removeMenu } from '@/utils/tool';
 import { getOperatorFun } from '@/service/user';
 const user = {
   state: {
     menu:[],
-    userInfo: {}
+    userInfo: null
   },
   getters:{
     has: (state) => (value) => {
@@ -31,19 +31,23 @@ const user = {
   },
 
   actions: {
-    // 前端 登出
-    SetMenu({ commit }) {
-      getOperatorFun().then(res=>{
-        commit('setMenu', res);
-        resolve();
+    // 获取用户信息
+    getUserInfo({ commit }){
+      return new Promise(resolve =>{
+        getOperatorFun().then((res) => {
+              commit("setUserInfo", res);
+              resolve(res);
+          });
       });
-    },
+  },
     // 前端 登出
     LogOut({ commit }) {
       return new Promise(resolve => {
         commit('setMenu', []);
         commit('setUserInfo', {});
         removeToken();
+        removeNavTabIndex();
+        removeMenu();
         resolve();
       });
     }
