@@ -248,9 +248,7 @@ export default {
 </script>
 <style lang="scss" scoped>
  @import "../../assets/scss/order/order.scss";
-</style>
-<style>
-  @media screen and (max-width: 360px) {
+ @media screen and (max-width: 360px) {
     input::-webkit-input-placeholder {
       color: #999;
       font-size: 12px;
@@ -287,3 +285,4 @@ export default {
     }
   }
 </style>
+
