@@ -25,7 +25,6 @@ module.exports = {
     axios: ['axios'],
     jsencrypt: ['jsencrypt'],
     sha1: ['sha1'],
-    vueawesomeswiper:['vue-awesome-swiper'],
     vueamap:['vue-amap'],
     app: ["babel-polyfill", "./src/main.js"]
   },
