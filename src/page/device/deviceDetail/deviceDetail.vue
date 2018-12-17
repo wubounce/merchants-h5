@@ -55,10 +55,10 @@
                   {{deviceDetail.imei}}
                 </p>
               </li>
-              <li v-show="waterLevelShow">
+              <!-- <li v-show="waterLevelShow">
                 <span class="field-title">水位置设置</span>
                 <p>{{deviceDetail.waterLevel | waterStatus}}</p>
-              </li>
+              </li> -->
               <li>
                 <span class="field-title">功能设置</span>
                 <p>已设置</p>

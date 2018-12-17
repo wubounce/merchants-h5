@@ -522,10 +522,6 @@ export default {
         this.$toast({message: '请选择营业时间'});
         return false;
       }
-     if(!this.serviceTelephone) {
-        this.$toast({message: '请填写客服电话'});
-        return false;
-      }
       if(!validatServiceTelephone(this.serviceTelephone)) {
         this.$toast({message: '客服电话需为纯数字'});
         return false;
