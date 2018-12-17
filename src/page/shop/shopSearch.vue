@@ -84,8 +84,8 @@ import {delay } from "@/utils/tool";
      
     },
     mounted() {
-      this.$refs.inputText.focus();
       this.searchData = this.$route.query?this.$route.query.searchData:'';
+      this.$refs.inputText.focus();
     },
     created() {
     },
