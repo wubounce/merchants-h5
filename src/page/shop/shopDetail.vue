@@ -146,7 +146,7 @@ export default {
   beforeRouteLeave (to, from, next) {
     if(to.name === 'shopSearch'){
       next();
-      this.$router.replace({name: 'shopSearch',query:{searchData: this.query.searchData}});//返回键要返回的路由
+      this.$router.replace({name: 'shopSearch',query:{searchData: this.query.searchData,shopId: this.query.shopId}});//返回键要返回的路由
     }else {
       next();
     }
