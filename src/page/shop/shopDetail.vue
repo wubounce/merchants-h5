@@ -100,7 +100,6 @@ export default {
       });
     },
     async getShopDetail() {
-      console.log(13123123);
       let payload = { shopId: this.$route.query.shopId };
       let res = await shopDetailFun(payload);
       this.shopdetail = res;
