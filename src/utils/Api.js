@@ -5,7 +5,7 @@
 
 const Api = {
   // 获取config 接口
-  WECHAT_SIGN: '/common/getWxConfig' //TODO
+  WECHAT_SIGN: 'https://userapi.qiekj.com/wechat/sign' //TODO
 };
 
 export default Api;
