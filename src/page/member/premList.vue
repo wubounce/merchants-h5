@@ -62,11 +62,8 @@ export default {
     addPermissions(){
       this.parentIds = Array.from(new Set([...this.parentIds]));
       this.checkpermissionslist = Array.from(new Set([...this.checkpermissionslist]));
-
       this.query.checkpermissionslist = this.checkpermissionslist;
       this.query.parentIds = this.parentIds;
-      setMember(this.query);
-
       let query = this.$route.query;
       if (query.updateOperatorId) {
         this.$router.replace({name:'editMember',query:{updateOperatorId:query.updateOperatorId,checkpermissionslist:this.checkpermissionslist.join(','),parentIds:this.parentIds.join(',')}});
