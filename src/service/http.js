@@ -16,9 +16,9 @@ const http = axios.create({
 // http.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 // request拦截器
 http.interceptors.request.use(config => {
-  if(store.state.user.userInfo){
-    config.headers.uid = store.state.user.userInfo.id;
-  }
+  // if(store.state.user.userInfo){
+  //   config.headers.uid = store.state.user.userInfo.id;
+  // }
   //由于省市区三级联动调用三次接口，避免闪屏现象，如下操作
   let urlWhite = [ 'area/list','/common/uploadFile','operator/updateOperator','operator/checkPhone'];
   if(urlWhite.indexOf(config.url) === -1) {
