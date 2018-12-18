@@ -1,5 +1,6 @@
 import { getMenu, removeToken, removeNavTabIndex, removeMenu } from '@/utils/tool';
 import { getOperatorFun } from '@/service/user';
+import router from '@/router';
 const user = {
   state: {
     menu:[],
@@ -44,7 +45,7 @@ const user = {
     LogOut({ commit }) {
       return new Promise(resolve => {
         commit('setMenu', []);
-        commit('setUserInfo', {});
+        commit('setUserInfo', null);
         removeToken();
         removeNavTabIndex();
         removeMenu();

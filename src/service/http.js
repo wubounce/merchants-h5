@@ -16,6 +16,9 @@ const http = axios.create({
 // http.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded';
 // request拦截器
 http.interceptors.request.use(config => {
+  if(store.state.user.userInfo){
+    config.headers.uid = store.state.user.userInfo.id;
+  }
   //由于省市区三级联动调用三次接口，避免闪屏现象，如下操作
   let urlWhite = [ 'area/list','/common/uploadFile','operator/updateOperator','operator/checkPhone'];
   if(urlWhite.indexOf(config.url) === -1) {
@@ -35,12 +38,8 @@ http.interceptors.request.use(config => {
   let token = getToken();
   let _timestamp = (new Date()).getTime();
   if (token) {
+    config.data = config.data ? config.data + `&token=${token}`:`token=${token}`;
     // 阻止转义
-    if(store.state.user.userInfo){
-      config.data = config.data ? config.data + `&token=${token}&uid=${store.state.user.userInfo.id}`:`&token=${token}&uid=${store.state.user.userInfo.id}`;
-    }else {
-      config.data = config.data ? config.data + `&token=${token}`:`&token=${token}`;
-    }
     if(config.url == '/batchExecutePlan/updateBatchStart' || config.url == '/batchExecutePlan/add' ) {
       config.data = config.data.split('+').join(' ');
     }
