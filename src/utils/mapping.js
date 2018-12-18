@@ -83,7 +83,7 @@ export const orderStatus = (ststus)=>{
 		case 0:
 			return '未支付';
 		case 1:
-		  	return '已失效';
+		  	return '支付超时';
 		case 2:
 		 	 return '已支付 ';
 		case 3:
