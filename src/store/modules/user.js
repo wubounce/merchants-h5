@@ -1,9 +1,10 @@
 import { getToken, setToken, setNavTabIndex, setMenu, removeMenu, getMenu, removeToken, removeMember } from '@/utils/tool';
-import { menuSelectFun } from '@/service/member';
+import { getOperatorFun } from '@/service/user';
 import router from '@/router';
 const user = {
   state: {
     menu:[],
+    userInfo: null
   },
   getters:{
     has: (state) => (value) => {
@@ -25,6 +26,9 @@ const user = {
     setMenu: (state, menu) => {
       state.menu = menu;
     },
+    setUserInfo: (state, userInfo) => {
+      state.userInfo = userInfo;
+    }
   },
 
   actions: {
@@ -32,10 +36,20 @@ const user = {
     login({ commit }, token) {
       setToken(token);
     },
+    // 获取用户信息
+    getUserInfo({ commit }){
+      return new Promise(resolve =>{
+        getOperatorFun().then((res) => {
+              commit("setUserInfo", res);
+              resolve(res);
+          });
+      });
+  },
     // 前端 登出
     LogOut({ commit }) {
       return new Promise(resolve => {
         commit('setMenu', []);
+        commit('setUserInfo', null);
         removeToken();
         resolve();
       });
