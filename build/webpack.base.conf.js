@@ -23,7 +23,6 @@ module.exports = {
   context: path.resolve(__dirname, '../'),
   entry: {
     axios: ['axios'],
-    jsencrypt: ['jsencrypt'],
     sha1: ['sha1'],
     app: ["babel-polyfill", "./src/main.js"]
   },
@@ -37,6 +36,7 @@ module.exports = {
     'mint-ui': 'MINT',
     'moment': 'moment',
     'echarts': 'echarts',
+    'jsencrypt': 'JSEncrypt',
   },
   output: {
     path: config.build.assetsRoot,
