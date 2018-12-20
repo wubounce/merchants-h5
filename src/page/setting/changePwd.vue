@@ -20,6 +20,7 @@
 </template>
 
 <script>
+  import { mapActions } from 'vuex';
   import { updatePwdFun } from '@/service/resetPwd';
   import { validatPwd } from '@/utils/validate';
   import { removeToken, removeNavTabIndex } from '@/utils/tool';
@@ -37,6 +38,9 @@
     created(){
     },
     methods: {
+      ...mapActions([
+        'LogOut'
+      ]),
       validate() {
         if (this.reset.oldPassword === '') {
           this.$toast({message: "请输入旧密码" });
@@ -77,8 +81,7 @@
           let payload = Object.assign({},this.reset);
           delete payload.checkpassword;
           let res = await updatePwdFun(payload);
-          removeNavTabIndex();
-          removeToken();
+          this.LogOut();
           this.$router.push({name:'login'});
         }
       },
