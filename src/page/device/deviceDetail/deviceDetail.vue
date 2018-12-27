@@ -56,12 +56,12 @@
                 </p>
               </li>
               <li v-show="deviceDetail.subTypeName==='海尔5/6/7公斤波轮SXB60-51U7/SXB70-51U7'">
-                <span class="field-title">水位置设置</span>
+                <span class="field-title">水位设置</span>
                 <p v-if="deviceDetail.subTypeName==='海尔5/6/7公斤波轮SXB60-51U7/SXB70-51U7'&&deviceDetail.waterLevel">{{deviceDetail.waterLevel | waterStatus}}</p>
                 <p v-if="deviceDetail.subTypeName==='海尔5/6/7公斤波轮SXB60-51U7/SXB70-51U7'&&!deviceDetail.waterLevel">可设置</p>
               </li>
               <li v-show="waterLevelShow">
-                <span class="field-title">水位置设置</span>
+                <span class="field-title">水位设置</span>
                 <p>{{deviceDetail.waterLevel | waterStatus}}</p>
               </li>
               <li>
