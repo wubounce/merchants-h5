@@ -196,16 +196,16 @@
     },
     created() {
       let query = this.$route.query?this.$route.query:{};
-      this.filterBack = query.filterBack;
-      this.popShopId=query.popShopId;
-      this.popDeviceTypeId=query.popDeviceTypeId;
-      this.popDeviceModelId=query.popDeviceModelId;
-      this.popCommunicationType=query.popCommunicationType;
-      this.selectIndex=query.selectIndex;
-      this.selectDeviceTypeIndex=query.selectDeviceTypeIndex;
-      this.selectModelIndex=query.selectModelIndex;
-      this.selectCommunicationIndex=query.selectCommunicationIndex;
-      if(query.filterBack==true){ //是否是筛选返回
+      if(Boolean(query.filterBack)===true){ //是否是筛选返回
+        this.filterBack = query.filterBack;
+        this.popShopId=query.popShopId;
+        this.popDeviceTypeId=query.popDeviceTypeId;
+        this.popDeviceModelId=query.popDeviceModelId;
+        this.popCommunicationType=query.popCommunicationType;
+        this.selectIndex=query.selectIndex;
+        this.selectDeviceTypeIndex=query.selectDeviceTypeIndex;
+        this.selectModelIndex=query.selectModelIndex;
+        this.selectCommunicationIndex=query.selectCommunicationIndex;
         if(Number(this.selectIndex)>3){
           this.shopFlag = false;
         }else {
@@ -228,9 +228,9 @@
           let payloadt = this.popShopId?{shopId: this.popShopId,parentTypeId: this.popDeviceTypeId}:{parentTypeId: this.popDeviceTypeId,onlyMine: true};
           this.getlistSubType(payloadt,this.modelFlag);
         }else{
-           this.getlistSubTypeAll(this.subFlag);
+          this.getlistSubTypeAll(this.subFlag);
+
         }
-        
       }
       this._getList();
     },
