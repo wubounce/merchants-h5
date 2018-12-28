@@ -15,7 +15,7 @@
             </section>
             <div class="total">
                 <span>售卡数<span class="num">{{total}}</span></span> 
-                <span class="totalPrice">总金额<span class="num">{{totalPrice}}</span></span> 
+                <span class="totalPrice">总金额<span class="num">¥{{totalPrice}}</span></span> 
                 <span @click="openByDialog" class="iconfont icon-rili"></span>
             </div>
         </div>
