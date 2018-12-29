@@ -578,7 +578,7 @@
           functionTempletType: this.functionTempletType,
           functionJson: JSON.stringify(arr),
         };
-        if(this.subTypeName=== "海尔5/6/7公斤波轮SXB60-51U7/SXB70-51U7"){
+        if(this.waterLevelShow){
           obj.waterLevel = this.fromdata.waterLevel.value;
         }
         let res = await deviceAddorEditFun(obj);
