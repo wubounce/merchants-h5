@@ -47,7 +47,8 @@ export default {
     async menuSelect(){
       let res = await permsMenuFun(); //拼接权限菜单
       this.allMenu = res;
-      this.permissionsData = getTrees(res,0);
+      this.permissionsData = getTrees(res,0).filter(item=>item.name !== '营销管理'); //兼容app
+      console.log(this.permissionsData);
       this.query = this.$route.query ? this.$route.query :{};
       this.checkpermissionslist = this.query.checkpermissionslist ? this.query.checkpermissionslist.split(',').map(Number): [];
       this.parentIds = this.query.parentIds ? this.query.parentIds.split(',').map(Number): [];
