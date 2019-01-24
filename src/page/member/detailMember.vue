@@ -61,7 +61,7 @@ export default {
     async getOperatorInfo(id){
       let res = await getOperatorInfoFun({id:id});
       this.detail = res;
-      this.permissionsData = getTrees(res.list,0);
+      this.permissionsData = getTrees(res.list,0).filter(item=>item.name !== '营销管理'); //兼容app;
     },
     deldelMember(id){
       MessageBox.confirm(`确认删除？`,'').then(async () => {
