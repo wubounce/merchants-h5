@@ -32,14 +32,15 @@ export default {
   },
   methods: {
     godownload () {
-      var u = navigator.userAgent, app = navigator.appVersion;
-      var isAndroid = u.indexOf('Android') > -1 || u.indexOf('Linux') > -1; //g
-      var isIOS = !!u.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/); //ios终端
-      if (isAndroid) {
+      const ua = window.navigator.userAgent.toLowerCase();
+
+      if (/(Android)/i.test(navigator.userAgent)) {
         this.android = true;
-        this.browser = true;
+        if (ua.match(/MicroMessenger/i) == 'micromessenger' || ua.match(/AlipayClient/i) == 'alipayclient') {
+          this.browser = true;
+        }
       }
-      if (isIOS) {
+      if (/(iPhone|iPad|iPod|iOS)/i.test(navigator.userAgent)) {
         this.ios = true;
       }
     }

@@ -82,6 +82,7 @@ import { calMax, calMin } from '@/utils/tool';
 import selectpickr from '@/components/selectPicker';
 import { ParentTypeFun, countMachineFun, totalProfitFun, timeProfitFun, typeProfitFun } from '@/service/index';
 import { MachineStatus, communicateType } from '@/utils/mapping';
+import { getNoticeType, setNoticeType, removeNoticeType } from '@/utils/tool';
 export default {
   props: {
     width: {
@@ -171,10 +172,17 @@ export default {
     this.ProfitDate();
     this.getThisMonth();
     this.getThisDay();
+    if (getNoticeType() != 1) {
+      this.noticeShow = true;
+    } else {
+      this.noticeShow = false;
+    }
+
   },
   methods: {
     closeNotice () {
       this.noticeShow = false;
+      setNoticeType(1);
     },
     //获取本月
     getThisMonth () {
@@ -706,6 +714,13 @@ export default {
     },
     equipmentVisible: function () {
       if (this.equipmentVisible) {
+        this.ModalHelper.afterOpen();
+      } else {
+        this.ModalHelper.beforeClose();
+      }
+    },
+    noticeShow: function () {
+      if (this.noticeShow) {
         this.ModalHelper.afterOpen();
       } else {
         this.ModalHelper.beforeClose();
