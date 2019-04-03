@@ -36,7 +36,7 @@ export default {
 
       if (/(Android)/i.test(navigator.userAgent)) {
         this.android = true;
-        if (ua.match(/MicroMessenger/i) == 'micromessenger' || ua.match(/AlipayClient/i) == 'alipayclient') {
+        if (ua.match(/MicroMessenger/i) == 'micromessenger') {
           this.browser = true;
         }
       }
