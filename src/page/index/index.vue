@@ -68,7 +68,7 @@
         </div>
         <div class=" apply">
           <p class="apply-title">亲爱的商户，您好！</p>
-          <p class="apply-con">为了给您更好、更高效的管理体验，企鹅商家版App现已全面上线，我们也将在<span>2019年4月18日</span>正式下线手机网页版的企鹅商家管理平台。您可以点击首页顶部立即下载按钮下载最新版本企鹅商家版App。感谢您对企鹅共享的支持！</p>
+          <p class="apply-con">为了给您更好、更高效的管理体验，企鹅商家版App现已全面上线，我们也将在<span>2019年4月18日</span>正式下线手机网页版的企鹅商家管理平台。点击下方【立即下载】按钮即可下载最新版本企鹅商家版APP。感谢您对企鹅共享的支持！</p>
           <p class="godowload"><a href="https://bm.qiekj.com/downloadapp"><img class="dowload_phone" src="https://static.qiekj.com/merchants-h5/phone.png" alt="立即下载">立即下载</a></p>
         </div>
       </div>
