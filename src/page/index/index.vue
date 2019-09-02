@@ -69,9 +69,7 @@
         <div class=" apply">
           <p class="apply-title">亲爱的商户，您好！</p>
           <p class="apply-con">为了给您更好、更高效的管理体验，企鹅商家版App现已全面上线，我们也将在<span>2019年4月18日</span>正式下线手机网页版的企鹅商家管理平台。您可以点击首页顶部立即下载按钮下载最新版本企鹅商家版App。感谢您对企鹅共享的支持！</p>
-        </div>
-        <div class="icon-wrapper" @click="closeNotice">
-          <img src="../../../static/image/activity/del@2x.png" alt="">
+          <p class="godowload"><a href="https://bm.qiekj.com/downloadapp"><img class="dowload_phone" src="https://static.qiekj.com/merchants-h5/phone.png" alt="立即下载">立即下载</a></p>
         </div>
       </div>
     </div>
@@ -102,7 +100,7 @@ export default {
       default: '4.453333rem'
     }
   },
-  data () {
+  data() {
     return {
       noticeShow: true,
       offlineTip: true,
@@ -118,7 +116,8 @@ export default {
       equipmentcurrentTags: null,
       distributioncurrentTags: null,
       distributionVisible: false,
-      equipmentSlots: [ //设备类型
+      equipmentSlots: [
+        //设备类型
         {
           flex: 1,
           values: [],
@@ -127,7 +126,8 @@ export default {
         }
       ],
       allmMachine: null,
-      distributionSlots: [ //收益分布
+      distributionSlots: [
+        //收益分布
         {
           flex: 1,
           values: [],
@@ -145,12 +145,8 @@ export default {
       piefunDatatitle: [],
       allMoney: null, //总收益
       monthMoney: null, //当月收益
-      todayMoney: null,//今日收益
-      lineSearchTime: [
-        { value: 0, lable: '今天' },
-        { value: 1, lable: '7天' },
-        { value: 2, lable: '30天' }
-      ],
+      todayMoney: null, //今日收益
+      lineSearchTime: [{ value: 0, lable: '今天' }, { value: 1, lable: '7天' }, { value: 2, lable: '30天' }],
       lineSearchIndex: 0,
       pieSearchIndex: 0,
 
@@ -162,10 +158,10 @@ export default {
       thisDay: '' //今日
     };
   },
-  mounted () {
+  mounted() {
     this.initChart();
   },
-  created () {
+  created() {
     this.ParentTypeFun();
     this.countMachine();
     this.totalProfitFun();
@@ -177,25 +173,25 @@ export default {
     } else {
       this.noticeShow = false;
     }
-
   },
   methods: {
-    closeNotice () {
+    closeNotice() {
       this.noticeShow = false;
       setNoticeType(1);
     },
     //获取本月
-    getThisMonth () {
+    getThisMonth() {
       let date = new Date();
       this.thisMonth = moment(date).format('YYYY-MM');
     },
     //获取今天
-    getThisDay () {
+    getThisDay() {
       let date = new Date();
       this.thisDay = moment(date).format('YYYY-MM-DD');
       this.fromMonth = false;
     },
-    async ParentTypeFun () { //获取设备类型
+    async ParentTypeFun() {
+      //获取设备类型
       let res = await ParentTypeFun({ onlyMine: true });
       res = res.length > 0 ? res : [];
       this.parentTypList = res;
@@ -207,7 +203,8 @@ export default {
       this.equipmentSlots[0].values = [{ name: '全部' }, ...res];
       this.distributionSlots[0].values = [...res];
     },
-    async countMachine (parentTypeId = "") { //设备监控
+    async countMachine(parentTypeId = '') {
+      //设备监控
       let res = await countMachineFun({ parentTypeId: parentTypeId });
       this.barseriesData = [];
       this.barxAxisData = [];
@@ -217,16 +214,18 @@ export default {
         this.barseriesData.push(res[i]);
         this.barxAxisData.push(MachineStatus(i));
       }
-      this.barMax = calMax(this.barseriesData) > 0 ? calMax(this.barseriesData) : 1;//Y轴最大值
+      this.barMax = calMax(this.barseriesData) > 0 ? calMax(this.barseriesData) : 1; //Y轴最大值
       this.barchart.setOption(this.barOChartOPtion);
     },
-    async totalProfitFun () { //总收益
+    async totalProfitFun() {
+      //总收益
       let res = await totalProfitFun();
       this.allMoney = res.allMoney; //总收益
       this.monthMoney = res.monthMoney; //当月收益
-      this.todayMoney = res.todayMoney;//今日收益
+      this.todayMoney = res.todayMoney; //今日收益
     },
-    async ProfitDate (parentTypeId = "", type = 0) { //收益数据
+    async ProfitDate(parentTypeId = '', type = 0) {
+      //收益数据
       let res = await timeProfitFun({ parentTypeId: parentTypeId, type: type });
       this.lineseriesData = [];
       this.linexAxisData = [];
@@ -237,15 +236,14 @@ export default {
         } else {
           this.linexAxisData.push(item.time);
         }
-
       });
-      this.lineMax = calMax(this.lineseriesData) > 0 ? calMax(this.lineseriesData) : 1;//Y轴最大值
+      this.lineMax = calMax(this.lineseriesData) > 0 ? calMax(this.lineseriesData) : 1; //Y轴最大值
       this.lineMin = calMin(this.lineseriesData);
       // 把配置和数据放这里
       this.linechart.setOption(this.lineChartOption);
-
     },
-    async typeProfitData (parentTypeId = this.washingMachineId, type = 0) { //收益分布
+    async typeProfitData(parentTypeId = this.washingMachineId, type = 0) {
+      //收益分布
       let res = await typeProfitFun({ parentTypeId: parentTypeId, type: type });
       let communicateTypeData = res ? res.communicateType : [];
       if (communicateTypeData.length > 0) {
@@ -256,14 +254,16 @@ export default {
           });
         });
       } else {
-        this.pietypeData.push({
-          value: 0,
-          name: '脉冲'
-        },
+        this.pietypeData.push(
+          {
+            value: 0,
+            name: '脉冲'
+          },
           {
             value: 0,
             name: '串口'
-          });
+          }
+        );
       }
       let machineTypeData = res ? res.machineType : [];
       if (machineTypeData.length > 0) {
@@ -273,7 +273,7 @@ export default {
           this.piefunDatatitle.push({
             name: item.type,
             icon: 'circle',
-            textStyle: { fontWeight: 'normal', color: '#999', fontSize: 12, padding: 0 },
+            textStyle: { fontWeight: 'normal', color: '#999', fontSize: 12, padding: 0 }
           });
         });
 
@@ -283,10 +283,12 @@ export default {
         other.forEach(item => {
           otherNum += item.sum;
         });
-        other = [{
-          sum: otherNum,
-          type: '其他'
-        }];
+        other = [
+          {
+            sum: otherNum,
+            type: '其他'
+          }
+        ];
         this.piefunData = [];
         let machineType = [...fristFour, ...other];
         machineType.forEach(item => {
@@ -300,7 +302,7 @@ export default {
         this.piefunDatatitle.push({
           name: '功能模式占比',
           icon: 'circle',
-          textStyle: { fontWeight: 'normal', color: '#999', fontSize: 12, padding: 0 },
+          textStyle: { fontWeight: 'normal', color: '#999', fontSize: 12, padding: 0 }
         });
         this.piefunData.push({
           value: 0,
@@ -310,18 +312,19 @@ export default {
       // 把配置和数据放这里
       this.pietypechart.setOption(this.pietypeChartOPtion);
       this.piefunchart.setOption(this.piefunChartOption);
-
     },
-    ortId (k, h) { //最大值排序
+    ortId(k, h) {
+      //最大值排序
       return h.sum - k.sum;
     },
-    initChart () {
+    initChart() {
       this.linechart = echarts.init(document.getElementById('line'));
       this.barchart = echarts.init(document.getElementById('bar'));
       this.pietypechart = echarts.init(document.getElementById('pietype'));
       this.piefunchart = echarts.init(document.getElementById('piefun'));
     },
-    machineselectpicker (data) { //收益收据选择设备类型搜索
+    machineselectpicker(data) {
+      //收益收据选择设备类型搜索
       this.machinecurrentTags = data;
       this.linexAxisData = [];
       this.lineseriesData = [];
@@ -329,10 +332,11 @@ export default {
       let parentTypeId = this.machinecurrentTags ? this.machinecurrentTags.id : null;
       this.ProfitDate(parentTypeId, type);
     },
-    machineselectpickertatus (data) {
+    machineselectpickertatus(data) {
       this.machineVisible = data;
     },
-    lineTimeSearch: function (index) { //收益收据选择时间搜索
+    lineTimeSearch: function(index) {
+      //收益收据选择时间搜索
       this.linexAxisData = [];
       this.lineseriesData = [];
       this.lineSearchIndex = index;
@@ -340,17 +344,19 @@ export default {
       let parentTypeId = this.machinecurrentTags ? this.machinecurrentTags.id : null;
       this.ProfitDate(parentTypeId, type);
     },
-    distributionselectpicker (data) { //收益分布选择设备类型搜索
+    distributionselectpicker(data) {
+      //收益分布选择设备类型搜索
       this.distributioncurrentTags = data;
       this.pietypeData = [];
       this.piefunData = [];
       let type = this.lineSearchTime[this.pieSearchIndex].value;
       this.typeProfitData(this.distributioncurrentTags.id, type);
     },
-    distributionselectpickertatus (data) {
+    distributionselectpickertatus(data) {
       this.distributionVisible = data;
     },
-    pieTimeSearch: function (index) { //收益分布选择时间搜索
+    pieTimeSearch: function(index) {
+      //收益分布选择时间搜索
       this.pietypeData = [];
       this.piefunData = [];
       this.pieSearchIndex = index;
@@ -358,18 +364,19 @@ export default {
       let parentTypeId = this.distributioncurrentTags ? this.distributioncurrentTags.id : this.washingMachineId;
       this.typeProfitData(parentTypeId, type);
     },
-    equipmentselectpicker (data) { //切换设备监控图表
+    equipmentselectpicker(data) {
+      //切换设备监控图表
       this.equipmentcurrentTags = data;
       this.barxAxisData = [];
       this.barseriesData = [];
       this.countMachine(this.equipmentcurrentTags.id);
     },
-    equipmentselectpickertatus (data) {
+    equipmentselectpickertatus(data) {
       this.equipmentVisible = data;
-    },
+    }
   },
   computed: {
-    lineChartOption () {
+    lineChartOption() {
       let opt = {
         tooltip: {
           trigger: 'axis',
@@ -379,183 +386,195 @@ export default {
               backgroundColor: '#6a7985'
             }
           },
-          formatter: function (data) {
+          formatter: function(data) {
             let reg = /^(\d{1,2})(:)?(\d{1,2})$/;
             if (reg.test(data[0].name)) {
-              let time = data[0].name.replace(':00', ':59'); data[0].name = `${data[0].name}-${time}`;
+              let time = data[0].name.replace(':00', ':59');
+              data[0].name = `${data[0].name}-${time}`;
             }
             return `${data[0].name}<br/>${data[0].marker}${data[0].seriesName}：${data[0].value.toFixed(2)}元`;
-          },
+          }
         },
         grid: {
           y: 10,
           x: 10,
           x2: 20,
           y2: 10,
-          containLabel: true,
+          containLabel: true
         },
-        dataZoom: [{
-          type: 'inside'
-        }],
-        xAxis: [{
-          type: 'category',
-          boundaryGap: false,
-          offset: 8,
-          data: this.linexAxisData,
-          axisLabel: {
-            textStyle: { color: '#999' },
-          },
-          axisLine: {
-            show: false,
-            lineStyle: {
-              color: '#e6e6e6',
-              type: 'solid'
-            }
-          },
-          axisTick: { length: 5 },
-
-        }],
-        yAxis: [{
-          type: 'value',
-          offset: 10,
-          min: this.lineMin,
-          max: this.lineMax,
-          splitNumber: 4,
-          interval: (this.lineMax - this.lineMin) / 4,
-          axisLine: {
-            show: false,
-            lineStyle: {
-              color: '#e6e6e6'
-            }
-          },
-          axisTick: {
-            show: false
-          },
-          axisLabel: {
-            textStyle: { color: '#999' },
-            formatter: function (value) {
-              return value.toFixed(2);
-            }
-          },
-          splitLine: {
-            show: true,
-            lineStyle: {
-              color: '#e6e6e6',
-              type: 'soild'
-            }
+        dataZoom: [
+          {
+            type: 'inside'
           }
-        }],
-        series: [{
-          symbol: 'circle',
-          data: this.lineseriesData,
-          name: '收益',
-          type: 'line',
-          itemStyle: {
-            normal: {
-              color: "#1890ff",
+        ],
+        xAxis: [
+          {
+            type: 'category',
+            boundaryGap: false,
+            offset: 8,
+            data: this.linexAxisData,
+            axisLabel: {
+              textStyle: { color: '#999' }
+            },
+            axisLine: {
+              show: false,
               lineStyle: {
-                color: "#1890ff"
+                color: '#e6e6e6',
+                type: 'solid'
+              }
+            },
+            axisTick: { length: 5 }
+          }
+        ],
+        yAxis: [
+          {
+            type: 'value',
+            offset: 10,
+            min: this.lineMin,
+            max: this.lineMax,
+            splitNumber: 4,
+            interval: (this.lineMax - this.lineMin) / 4,
+            axisLine: {
+              show: false,
+              lineStyle: {
+                color: '#e6e6e6'
+              }
+            },
+            axisTick: {
+              show: false
+            },
+            axisLabel: {
+              textStyle: { color: '#999' },
+              formatter: function(value) {
+                return value.toFixed(2);
+              }
+            },
+            splitLine: {
+              show: true,
+              lineStyle: {
+                color: '#e6e6e6',
+                type: 'soild'
               }
             }
-          },
-          areaStyle: {
-            normal: {
-              color: new echarts.graphic.LinearGradient(0, 0, 0, 1,
-                [
-                  { offset: 0, color: '#1890ff' },
-                  { offset: 1, color: '#fff' }
-                ]
-              )
+          }
+        ],
+        series: [
+          {
+            symbol: 'circle',
+            data: this.lineseriesData,
+            name: '收益',
+            type: 'line',
+            itemStyle: {
+              normal: {
+                color: '#1890ff',
+                lineStyle: {
+                  color: '#1890ff'
+                }
+              }
+            },
+            areaStyle: {
+              normal: {
+                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{ offset: 0, color: '#1890ff' }, { offset: 1, color: '#fff' }])
+              }
             }
           }
-        }]
+        ]
       };
       return opt;
     },
-    barOChartOPtion () {
+    barOChartOPtion() {
       let opt = {
         color: ['#3398DB'],
         tooltip: {
           trigger: 'axis',
-          axisPointer: { // 坐标轴指示器，坐标轴触发有效
+          axisPointer: {
+            // 坐标轴指示器，坐标轴触发有效
             type: 'shadow', // 默认为直线，可选为：'line' | 'shadow'
-            shadowStyle: {                       // 阴影指示器样式设置
-              width: '10px',                   // 阴影大小
-              color: 'rgba(150,150,150,0.3)'  // 阴影颜色
+            shadowStyle: {
+              // 阴影指示器样式设置
+              width: '10px', // 阴影大小
+              color: 'rgba(150,150,150,0.3)' // 阴影颜色
             }
           },
-          formatter: function (data) {
+          formatter: function(data) {
             return `${data[0].marker}${data[0].name}：${data[0].value}`;
-          },
+          }
         },
         grid: {
           y: 5,
           x: 0,
           x2: 20,
           y2: 5,
-          containLabel: true,
+          containLabel: true
         },
-        xAxis: [{
-          type: 'category',
-          data: this.barxAxisData,
-          axisTick: {
-            alignWithLabel: true
-          },
-          axisLabel: {
-            textStyle: { color: '#999' },
-            interval: 0
-          },
-          axisLine: {
-            show: false,
-            lineStyle: {
-              color: '#e6e6e6',
-              type: 'solid'
+        xAxis: [
+          {
+            type: 'category',
+            data: this.barxAxisData,
+            axisTick: {
+              alignWithLabel: true
+            },
+            axisLabel: {
+              textStyle: { color: '#999' },
+              interval: 0
+            },
+            axisLine: {
+              show: false,
+              lineStyle: {
+                color: '#e6e6e6',
+                type: 'solid'
+              }
             }
-          },
-        }],
-        yAxis: [{
-          type: 'value',
-          splitLine: {
-            show: true,
-            lineStyle: {
-              color: '#e6e6e6',
-              type: 'soild'
-            }
-          },
-          axisLine: {
-            show: false,
-            lineStyle: {
-              color: '#e6e6e6'
-            }
-          },
-          axisTick: {
-            show: false
-          },
-          axisLabel: {
-            textStyle: { color: '#999' }
-          },
-          min: 0,
-          max: this.barMax,
-          splitNumber: 5,
-          interval: this.barMax / 4,
-        }],
-        series: [{
-          name: '设备监控',
-          type: 'bar',
-          barWidth: 24,
-          data: this.barseriesData
-        }]
+          }
+        ],
+        yAxis: [
+          {
+            type: 'value',
+            splitLine: {
+              show: true,
+              lineStyle: {
+                color: '#e6e6e6',
+                type: 'soild'
+              }
+            },
+            axisLine: {
+              show: false,
+              lineStyle: {
+                color: '#e6e6e6'
+              }
+            },
+            axisTick: {
+              show: false
+            },
+            axisLabel: {
+              textStyle: { color: '#999' }
+            },
+            min: 0,
+            max: this.barMax,
+            splitNumber: 5,
+            interval: this.barMax / 4
+          }
+        ],
+        series: [
+          {
+            name: '设备监控',
+            type: 'bar',
+            barWidth: 24,
+            data: this.barseriesData
+          }
+        ]
       };
       return opt;
     },
-    pietypeChartOPtion () {
+    pietypeChartOPtion() {
       let opt = {
         tooltip: {
           trigger: 'item',
-          formatter: function (data) {
+          formatter: function(data) {
             return `${data.marker}${data.name}：${data.percent}%`;
           },
-          position: function (p) {   //其中p为当前鼠标的位置
+          position: function(p) {
+            //其中p为当前鼠标的位置
             return [p[0] + 10, p[1] - 10];
           }
         },
@@ -566,15 +585,18 @@ export default {
           bottom: '40%',
           itemWidth: 6,
           itemHeight: 6,
-          data: [{
-            name: '脉冲',
-            icon: 'circle',
-            textStyle: { fontWeight: 'normal', color: '#999', fontSize: 12 },
-          }, {
-            name: '串口',
-            icon: 'circle',
-            textStyle: { fontWeight: 'normal', color: '#999', fontSize: 12 }
-          }]
+          data: [
+            {
+              name: '脉冲',
+              icon: 'circle',
+              textStyle: { fontWeight: 'normal', color: '#999', fontSize: 12 }
+            },
+            {
+              name: '串口',
+              icon: 'circle',
+              textStyle: { fontWeight: 'normal', color: '#999', fontSize: 12 }
+            }
+          ]
         },
         series: [
           {
@@ -586,25 +608,25 @@ export default {
               normal: {
                 show: true,
                 position: 'outside',
-                formatter: function (data) {
+                formatter: function(data) {
                   // let num = Math.round(data.percent);
                   // return num>0 ?`${num}%`:'';
                   return '';
                 },
                 color: '#333'
-              },
+              }
             },
             labelLine: {
               normal: {
                 show: false,
                 length: 10,
-                length2: 0,
+                length2: 0
               }
             },
             data: this.pietypeData,
             itemStyle: {
               normal: {
-                color: function (data) {
+                color: function(data) {
                   if (data.name === '脉冲') {
                     if (data.value > 0) {
                       return '#3BA1FF';
@@ -618,7 +640,6 @@ export default {
                       return '#ccc';
                     }
                   }
-
                 }
               }
             }
@@ -627,17 +648,17 @@ export default {
       };
       return opt;
     },
-    piefunChartOption () {
+    piefunChartOption() {
       let opt = {
         tooltip: {
           trigger: 'item',
           // formatter: "{a} <br/>{b}: {c} ({d}%)"//模板变量有 {a}、{b}、{c}、{d}，分别表示系列名，数据名，数据值，百分比。{d}数据会根据value值计算百分比
-          formatter: function (data) {
+          formatter: function(data) {
             return `${data.marker}${data.name}：${data.percent}%`;
-          },
+          }
         },
         grid: {
-          top: '60%',//距离下边距
+          top: '60%' //距离下边距
         },
         legend: {
           orient: 'horizontal',
@@ -649,7 +670,7 @@ export default {
           itemWidth: 6, //图表大小
           itemHeight: 6,
           data: this.piefunDatatitle,
-          textStyle: { fontSize: 12 },
+          textStyle: { fontSize: 12 }
         },
         series: [
           {
@@ -661,23 +682,23 @@ export default {
               normal: {
                 show: true,
                 position: 'outside',
-                formatter: function (data) {
+                formatter: function(data) {
                   return '';
                 },
                 color: '#333'
-              },
+              }
             },
             labelLine: {
               normal: {
                 show: false,
                 length: 10,
-                length2: 0,
+                length2: 0
               }
             },
             data: this.piefunData,
             itemStyle: {
               normal: {
-                color: function (data) {
+                color: function(data) {
                   if (data.value > 0) {
                     if (data.name === '其他') {
                       return '#A878EA';
@@ -690,7 +711,7 @@ export default {
                   }
                 }
               }
-            },
+            }
           }
         ]
       };
@@ -698,34 +719,34 @@ export default {
     }
   },
   watch: {
-    machineVisible: function () {
+    machineVisible: function() {
       if (this.machineVisible) {
         this.ModalHelper.afterOpen();
       } else {
         this.ModalHelper.beforeClose();
       }
     },
-    distributionVisible: function () {
+    distributionVisible: function() {
       if (this.distributionVisible) {
         this.ModalHelper.afterOpen();
       } else {
         this.ModalHelper.beforeClose();
       }
     },
-    equipmentVisible: function () {
+    equipmentVisible: function() {
       if (this.equipmentVisible) {
         this.ModalHelper.afterOpen();
       } else {
         this.ModalHelper.beforeClose();
       }
     },
-    noticeShow: function () {
+    noticeShow: function() {
       if (this.noticeShow) {
         this.ModalHelper.afterOpen();
       } else {
         this.ModalHelper.beforeClose();
       }
-    },
+    }
   },
   components: {
     selectpickr
@@ -733,7 +754,7 @@ export default {
 };
 </script>
 <style type="text/css" lang="scss" scoped>
-@import "../../assets/scss/index/index";
+@import '../../assets/scss/index/index';
 .notice-head {
   height: 1.33rem;
   a,
@@ -790,6 +811,27 @@ export default {
     img {
       width: 100%;
       height: 100%;
+    }
+  }
+  .godowload {
+    text-align: center;
+    a {
+      margin: 0.2667rem auto;
+      display: flex;
+      width: 4.96rem;
+      height: 1.1733rem;
+      line-height: 1.1733rem;
+      background: rgba(32, 136, 255, 1);
+      border-radius: 0.5867rem;
+      border: none;
+      color: #fff;
+      font-size: 16px;
+      text-align: center;
+    }
+    .dowload_phone {
+      width: 0.3467rem;
+      height: 0.5467rem;
+      margin: 0.31rem 0.24rem 0 1.3333rem;
     }
   }
 }
