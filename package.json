@@ -15,7 +15,7 @@
     "build-pre": "cross-env NODE_ENV=preview node build/build.js --env=preview"
   },
   "dependencies": {
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "babel-polyfill": "^6.26.0",
     "exif-js": "^2.3.0",
     "js-cookie": "^2.2.0",
